@@ -1,14 +1,259 @@
 @import "tailwindcss";
 
-/* ── Design tokens & thème complet ajoutés à l'Étape 2 ── */
+/* ── Variante dark basée sur data-theme (géré par ThemeContext) ── */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+/* ════════════════════════════════════════════════════════
+   TOKENS STATIQUES — ne changent pas avec le thème
+   ════════════════════════════════════════════════════════ */
+@theme {
+  /* Typographie */
+  --font-display: 'Outfit', sans-serif;
+  --font-sans:    'DM Sans', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+
+  /* Coins arrondis — généreux mais pas bulle */
+  --radius-sm:   0.5rem;    /* 8px  — inputs, badges */
+  --radius:      0.75rem;   /* 12px — cartes, boutons */
+  --radius-lg:   1rem;      /* 16px — modals, bottom sheets */
+  --radius-xl:   1.5rem;    /* 24px — FAB, avatars */
+  --radius-full: 9999px;
+
+  /* Ombres chaudes (teinte stone — jamais grises froides) */
+  --shadow-xs: 0 1px 2px rgba(28, 25, 23, 0.04);
+  --shadow-sm: 0 1px 3px rgba(28, 25, 23, 0.06), 0 1px 2px rgba(28, 25, 23, 0.04);
+  --shadow-md: 0 4px 8px rgba(28, 25, 23, 0.08), 0 2px 4px rgba(28, 25, 23, 0.04);
+  --shadow-lg: 0 12px 24px rgba(28, 25, 23, 0.10), 0 4px 8px rgba(28, 25, 23, 0.05);
+  --shadow-xl: 0 20px 40px rgba(28, 25, 23, 0.12);
+
+  /* Easing spring pour les animations FAB / bottom sheet */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ════════════════════════════════════════════════════════
+   TOKENS DYNAMIQUES — référencent les variables CSS
+   qui changent avec [data-theme="dark"]
+   ════════════════════════════════════════════════════════ */
+@theme inline {
+  /* ── Primaire — Indigo vibrant ── */
+  --color-primary-50:  var(--color-primary-50);
+  --color-primary-100: var(--color-primary-100);
+  --color-primary-200: var(--color-primary-200);
+  --color-primary-300: var(--color-primary-300);
+  --color-primary-400: var(--color-primary-400);
+  --color-primary:     var(--color-primary);
+  --color-primary-600: var(--color-primary-600);
+  --color-primary-700: var(--color-primary-700);
+
+  /* ── Accent — Ambre doré ── */
+  --color-accent-50:  var(--color-accent-50);
+  --color-accent-100: var(--color-accent-100);
+  --color-accent-200: var(--color-accent-200);
+  --color-accent:     var(--color-accent);
+  --color-accent-600: var(--color-accent-600);
+
+  /* ── Terracotta — touch africaine ── */
+  --color-terra:       var(--color-terra);
+  --color-terra-light: var(--color-terra-light);
+  --color-terra-50:    var(--color-terra-50);
+
+  /* ── Sémantiques ── */
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-danger:  var(--color-danger);
+  --color-info:    var(--color-info);
+
+  /* ── Surfaces ── */
+  --color-app:      var(--color-bg-app);      /* bg-app      */
+  --color-card:     var(--color-bg-card);     /* bg-card      */
+  --color-elevated: var(--color-bg-elevated); /* bg-elevated  */
+  --color-subtle:   var(--color-bg-subtle);   /* bg-subtle    */
+  --color-inset:    var(--color-bg-inset);    /* bg-inset     */
+
+  /* ── Texte ── */
+  --color-ink:     var(--color-text-primary);   /* text-ink     */
+  --color-dim:     var(--color-text-secondary); /* text-dim     */
+  --color-ghost:   var(--color-text-tertiary);  /* text-ghost   */
+  --color-inverse: var(--color-text-inverse);   /* text-inverse */
+
+  /* ── Bordures ── */
+  --color-edge:        var(--color-border);        /* border-edge       */
+  --color-edge-strong: var(--color-border-strong); /* border-edge-strong */
+}
+
+/* ════════════════════════════════════════════════════════
+   VARIABLES CSS — Thème clair (source de vérité)
+   ════════════════════════════════════════════════════════ */
+:root {
+  /* ── Primaire — Indigo ── */
+  --color-primary-50:  #EEF2FF;
+  --color-primary-100: #E0E7FF;
+  --color-primary-200: #C7D2FE;
+  --color-primary-300: #A5B4FC;
+  --color-primary-400: #818CF8;
+  --color-primary:     #6366F1;
+  --color-primary-600: #4F46E5;
+  --color-primary-700: #4338CA;
+
+  /* ── Accent — Ambre doré ── */
+  --color-accent-50:  #FFFBEB;
+  --color-accent-100: #FEF3C7;
+  --color-accent-200: #FDE68A;
+  --color-accent:     #F59E0B;
+  --color-accent-600: #D97706;
+
+  /* ── Terracotta ── */
+  --color-terra:       #C2410C;
+  --color-terra-light: #EA580C;
+  --color-terra-50:    #FFF7ED;
+
+  /* ── Sémantiques ── */
+  --color-success: #059669;
+  --color-warning: #D97706;
+  --color-danger:  #DC2626;
+  --color-info:    #6366F1;
+
+  /* ── Surfaces — fond légèrement chaud, jamais blanc pur ── */
+  --color-bg-app:      #FAFAF9;
+  --color-bg-card:     #FFFFFF;
+  --color-bg-elevated: #FFFFFF;
+  --color-bg-subtle:   #F5F5F4;
+  --color-bg-inset:    #E7E5E4;
+
+  /* ── Texte — jamais noir pur ── */
+  --color-text-primary:   #1C1917;
+  --color-text-secondary: #57534E;
+  --color-text-tertiary:  #A8A29E;
+  --color-text-inverse:   #FAFAF9;
+
+  /* ── Bordures ── */
+  --color-border:        #E7E5E4;
+  --color-border-strong: #D6D3D1;
+
+  /* ── Transitions ── */
+  --transition-fast:   150ms ease;
+  --transition-base:   200ms ease;
+  --transition-slow:   300ms ease-out;
+  --transition-spring: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── Navigation mobile ── */
+  --bottom-nav-height: 4rem;
+  --safe-area-bottom:  env(safe-area-inset-bottom, 0px);
+}
+
+/* ════════════════════════════════════════════════════════
+   THÈME SOMBRE — overrides via data-theme="dark"
+   ════════════════════════════════════════════════════════ */
+[data-theme="dark"] {
+  --color-bg-app:      #1C1917;
+  --color-bg-card:     #292524;
+  --color-bg-elevated: #44403C;
+  --color-bg-subtle:   #292524;
+  --color-bg-inset:    #1C1917;
+
+  --color-text-primary:   #FAFAF9;
+  --color-text-secondary: #D6D3D1;
+  --color-text-tertiary:  #78716C;
+  --color-text-inverse:   #1C1917;
+
+  --color-border:        #44403C;
+  --color-border-strong: #57534E;
+}
+
+/* ════════════════════════════════════════════════════════
+   BASE STYLES
+   ════════════════════════════════════════════════════════ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
+  font-family: 'DM Sans', sans-serif;
+  background-color: var(--color-bg-app);
+  color: var(--color-text-primary);
   -webkit-tap-highlight-color: transparent;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overscroll-behavior: none;
 }
 
 #root {
   min-height: 100svh;
+}
+
+/* ════════════════════════════════════════════════════════
+   CLASSES UTILITAIRES GLOBALES
+   ════════════════════════════════════════════════════════ */
+
+/* Fond tissé — texture subtile rappelant le tissage */
+.app-background {
+  background-color: var(--color-bg-app);
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h20v20H0z' fill='none'/%3E%3Cpath d='M0 10h20M10 0v20' stroke='%23e7e5e4' stroke-width='0.3'/%3E%3C/svg%3E");
+  background-size: 20px 20px;
+}
+
+[data-theme="dark"] .app-background {
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h20v20H0z' fill='none'/%3E%3Cpath d='M0 10h20M10 0v20' stroke='%2344403C' stroke-width='0.3'/%3E%3C/svg%3E");
+}
+
+/* Padding bas qui compense la bottom nav + safe area iOS */
+.pb-safe {
+  padding-bottom: calc(var(--bottom-nav-height) + var(--safe-area-bottom));
+}
+
+/* Scrollbar iOS-style fine */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+/* ════════════════════════════════════════════════════════
+   ANIMATIONS
+   ════════════════════════════════════════════════════════ */
+
+/* Entrée de page : fade + slide-up */
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Slide depuis la droite (page détail) */
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(100%); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Bottom sheet */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(100%); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Shimmer skeleton */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-page-enter {
+  animation: page-enter var(--transition-slow) both;
+}
+
+.animate-slide-up {
+  animation: slide-up 300ms var(--ease-spring) both;
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-subtle) 25%,
+    var(--color-bg-inset) 50%,
+    var(--color-bg-subtle) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
 }
