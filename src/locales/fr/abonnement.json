@@ -1,0 +1,43 @@
+{
+  "titre": "Abonnement",
+  "statut": {
+    "actif": "Actif",
+    "expire": "Expiré",
+    "en_attente": "En attente"
+  },
+  "niveaux": {
+    "gratuit": { "nom": "Gratuit",  "description": "Pour démarrer" },
+    "starter": { "nom": "Starter",  "description": "Pour les petits ateliers" },
+    "pro":     { "nom": "Pro",      "description": "Pour les ateliers établis" },
+    "magnat":  { "nom": "Magnat",   "description": "Pour les grands ateliers" }
+  },
+  "expiration": {
+    "dans": "Expire dans {{jours}} jour",
+    "dans_plural": "Expire dans {{jours}} jours",
+    "aujourd_hui": "Expire aujourd'hui",
+    "expire": "Expiré"
+  },
+  "paiement": {
+    "titre": "Payer mon abonnement",
+    "sous_titre": "Choisissez votre plan",
+    "mensuel": "Mensuel",
+    "annuel": "Annuel",
+    "economie": "Économisez 2 mois",
+    "payer": "Payer {{montant}} XOF",
+    "securise": "Paiement sécurisé"
+  },
+  "code": {
+    "titre": "Code d'activation",
+    "sous_titre": "Entrez votre code reçu par l'administrateur",
+    "placeholder": "XXXXXXXXXXXXXXXX",
+    "activer": "Activer",
+    "succes": "Abonnement activé avec succès !"
+  },
+  "quotas": {
+    "clients": "Clients",
+    "commandes": "Commandes/mois",
+    "illimite": "Illimité",
+    "utilises": "{{utilises}} / {{limite}} utilisés",
+    "depasse": "Quota dépassé"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "titre": "Commandes",
+  "nouvelle": "Nouvelle commande",
+  "recherche_placeholder": "Rechercher une commande…",
+  "vide": {
+    "titre": "Aucune commande en cours",
+    "description": "Créez votre première commande pour commencer",
+    "action": "Créer une commande"
+  },
+  "onglets": {
+    "en_cours": "En cours",
+    "livrees": "Livrées",
+    "toutes": "Toutes"
+  },
+  "statut": {
+    "en_cours": "En cours",
+    "essai": "Essai",
+    "livre": "Livré",
+    "annule": "Annulé",
+    "en_retard": "En retard"
+  },
+  "formulaire": {
+    "titre_ajout": "Nouvelle commande",
+    "titre_modification": "Modifier la commande",
+    "client": "Client",
+    "client_placeholder": "Sélectionner un client",
+    "vetement": "Vêtement",
+    "vetement_placeholder": "Sélectionner un vêtement",
+    "date_livraison": "Date de livraison",
+    "montant": "Montant total (XOF)",
+    "avance": "Avance reçue (XOF)",
+    "reste": "Reste à payer",
+    "notes": "Notes",
+    "notes_placeholder": "Instructions spéciales, tissus, couleurs…",
+    "photo_tissu": "Photo du tissu",
+    "enregistrer": "Enregistrer",
+    "creer": "Créer la commande"
+  },
+  "detail": {
+    "client": "Client",
+    "vetement": "Vêtement",
+    "date_commande": "Date de commande",
+    "date_livraison": "Livraison prévue",
+    "montant": "Montant total",
+    "avance": "Avance versée",
+    "reste": "Reste à payer",
+    "progression": "Progression",
+    "tissu": "Photo du tissu"
+  },
+  "indicateurs": {
+    "en_retard": "En retard",
+    "dans_48h": "Livraison dans 48h",
+    "en_cours": "En cours"
+  },
+  "actions": {
+    "changer_statut": "Changer le statut",
+    "marquer_livre": "Marquer comme livré",
+    "marquer_essai": "Passer en essai",
+    "reprendre": "Remettre en cours",
+    "annuler": "Annuler la commande"
+  }
+}

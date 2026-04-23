@@ -1,0 +1,37 @@
+{
+  "titre": "Équipe",
+  "nouveau_membre": "Ajouter un membre",
+  "vide": {
+    "titre": "Aucun membre dans l'équipe",
+    "description": "Invitez des assistants pour vous aider à gérer l'atelier",
+    "action": "Ajouter un membre"
+  },
+  "roles": {
+    "proprietaire": "Propriétaire",
+    "assistant": "Assistant",
+    "membre": "Membre"
+  },
+  "permissions": {
+    "proprietaire": "Accès complet",
+    "assistant": "Création & modification",
+    "membre": "Lecture seule"
+  },
+  "formulaire": {
+    "titre": "Ajouter un membre",
+    "prenom": "Prénom",
+    "nom": "Nom",
+    "telephone": "Téléphone",
+    "role": "Rôle dans l'atelier",
+    "ajouter": "Ajouter le membre"
+  },
+  "actions": {
+    "modifier_role": "Modifier le rôle",
+    "revoquer": "Révoquer l'accès"
+  },
+  "revoquer_confirm": {
+    "titre": "Révoquer l'accès de {{nom}} ?",
+    "message": "Cette personne ne pourra plus accéder à votre atelier.",
+    "confirmer": "Révoquer",
+    "annuler": "Annuler"
+  }
+}

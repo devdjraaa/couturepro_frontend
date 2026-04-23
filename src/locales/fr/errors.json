@@ -1,0 +1,18 @@
+{
+  "reseau": "Erreur de connexion. Vérifiez votre réseau.",
+  "serveur": "Erreur serveur. Réessayez plus tard.",
+  "non_autorise": "Vous n'êtes pas autorisé à effectuer cette action.",
+  "non_trouve": "Élément introuvable.",
+  "session_expiree": "Votre session a expiré. Reconnectez-vous.",
+  "quota_depasse": "Quota atteint. Passez à un abonnement supérieur.",
+  "quota_clients": "Limite de clients atteinte pour votre abonnement.",
+  "quota_commandes": "Limite de commandes mensuelle atteinte.",
+  "code_invalide": "Code d'activation invalide ou déjà utilisé.",
+  "telephone_existe": "Ce numéro de téléphone est déjà utilisé.",
+  "mot_de_passe_invalide": "Numéro ou mot de passe incorrect.",
+  "otp_invalide": "Code incorrect. Vérifiez et réessayez.",
+  "otp_expire": "Ce code a expiré. Demandez-en un nouveau.",
+  "champ_requis": "Ce champ est requis.",
+  "format_invalide": "Format invalide.",
+  "inconnu": "Une erreur inattendue s'est produite."
+}

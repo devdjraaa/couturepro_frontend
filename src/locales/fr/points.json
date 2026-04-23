@@ -1,0 +1,26 @@
+{
+  "titre": "Points de fidélité",
+  "solde": "Solde actuel",
+  "point_one": "{{count}} point",
+  "point_other": "{{count}} points",
+  "historique": {
+    "titre": "Historique",
+    "gagnes": "Points gagnés",
+    "utilises": "Points utilisés",
+    "vide": "Aucun historique de points"
+  },
+  "conversion": {
+    "titre": "Convertir mes points",
+    "sous_titre": "{{points}} points = {{jours}} jours d'abonnement",
+    "convertir": "Convertir",
+    "confirmer": "Confirmer la conversion",
+    "pas_assez": "Pas assez de points",
+    "succes": "Conversion effectuée !"
+  },
+  "comment_gagner": {
+    "titre": "Comment gagner des points ?",
+    "paiement": "1 000 XOF payé = 1 point",
+    "parrainage": "Parrainage d'un atelier = 50 points",
+    "fidelite": "Chaque mois actif = 5 points"
+  }
+}

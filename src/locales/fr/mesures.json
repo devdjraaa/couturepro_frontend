@@ -1,0 +1,34 @@
+{
+  "titre": "Mesures",
+  "nouvelle": "Nouvelles mesures",
+  "vide": {
+    "titre": "Aucune mesure",
+    "description": "Enregistrez les mesures de vos clients",
+    "action": "Prendre les mesures"
+  },
+  "formulaire": {
+    "titre": "Mesures de {{nom}}",
+    "vetement": "Vêtement concerné",
+    "enregistrer": "Enregistrer les mesures",
+    "exporter_pdf": "Exporter en PDF"
+  },
+  "champs": {
+    "poitrine": "Poitrine",
+    "taille": "Taille",
+    "hanches": "Hanches",
+    "epaules": "Épaules",
+    "longueur_dos": "Longueur dos",
+    "longueur_manches": "Longueur manches",
+    "tour_bras": "Tour de bras",
+    "tour_cou": "Tour de cou",
+    "longueur_robe": "Longueur robe",
+    "longueur_jupe": "Longueur jupe",
+    "longueur_pantalon": "Longueur pantalon",
+    "tour_cuisse": "Tour de cuisse",
+    "entrejambe": "Entrejambe"
+  },
+  "unite": "cm",
+  "date": "Prises le",
+  "exporter": "Exporter PDF",
+  "historique": "Historique des mesures"
+}

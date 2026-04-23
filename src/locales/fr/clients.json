@@ -1,0 +1,57 @@
+{
+  "titre": "Clients",
+  "nouveau": "Nouveau client",
+  "recherche_placeholder": "Rechercher un client…",
+  "vide": {
+    "titre": "Votre carnet est vierge",
+    "description": "Ajoutez votre premier client pour commencer",
+    "action": "Ajouter un client"
+  },
+  "onglets": {
+    "tous": "Tous",
+    "vip": "VIP",
+    "reguliers": "Réguliers"
+  },
+  "type_profil": {
+    "vip": "VIP",
+    "regulier": "Régulier",
+    "occasionnel": "Occasionnel"
+  },
+  "formulaire": {
+    "titre_ajout": "Nouveau client",
+    "titre_modification": "Modifier le client",
+    "prenom": "Prénom",
+    "prenom_placeholder": "ex: Aminata",
+    "nom": "Nom",
+    "nom_placeholder": "ex: Diallo",
+    "telephone": "Téléphone",
+    "telephone_placeholder": "+221 77 000 00 00",
+    "email": "Email (optionnel)",
+    "type_profil": "Type de profil",
+    "avatar": "Photo de profil",
+    "notes": "Notes",
+    "notes_placeholder": "Informations utiles sur ce client…",
+    "enregistrer": "Enregistrer",
+    "ajouter": "Ajouter le client"
+  },
+  "detail": {
+    "commandes": "Commandes",
+    "mesures": "Mesures",
+    "informations": "Informations",
+    "aucune_commande": "Aucune commande pour ce client",
+    "aucune_mesure": "Aucune mesure enregistrée"
+  },
+  "actions": {
+    "modifier": "Modifier",
+    "archiver": "Archiver",
+    "supprimer": "Supprimer",
+    "nouvelle_commande": "Nouvelle commande",
+    "nouvelles_mesures": "Prendre les mesures"
+  },
+  "supprimer_confirm": {
+    "titre": "Supprimer ce client ?",
+    "message": "Cette action supprimera définitivement {{nom}} et toutes ses données associées.",
+    "confirmer": "Supprimer",
+    "annuler": "Annuler"
+  }
+}

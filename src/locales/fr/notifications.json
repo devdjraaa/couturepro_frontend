@@ -1,0 +1,23 @@
+{
+  "titre": "Notifications",
+  "vide": {
+    "titre": "Aucune notification",
+    "description": "Vous êtes à jour !"
+  },
+  "marquer_lu": "Marquer comme lu",
+  "tout_marquer_lu": "Tout marquer comme lu",
+  "types": {
+    "commande": "Commande",
+    "abonnement": "Abonnement",
+    "systeme": "Système",
+    "paiement": "Paiement"
+  },
+  "messages": {
+    "commande_retard": "La commande de {{client}} est en retard",
+    "commande_livraison_48h": "Livraison de {{client}} dans 48h",
+    "abonnement_expire_bientot": "Votre abonnement expire dans {{jours}} jours",
+    "abonnement_expire": "Votre abonnement a expiré",
+    "paiement_valide": "Paiement de {{montant}} XOF confirmé",
+    "paiement_echoue": "Échec du paiement. Réessayez."
+  }
+}

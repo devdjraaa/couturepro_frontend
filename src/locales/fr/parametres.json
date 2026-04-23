@@ -1,0 +1,40 @@
+{
+  "titre": "Paramètres",
+  "sections": {
+    "compte": "Mon compte",
+    "atelier": "Mon atelier",
+    "apparence": "Apparence",
+    "communications": "Communications",
+    "support": "Support",
+    "a_propos": "À propos"
+  },
+  "profil": {
+    "titre": "Mon profil",
+    "photo": "Photo de profil",
+    "modifier_photo": "Modifier la photo",
+    "enregistrer": "Enregistrer le profil"
+  },
+  "theme": {
+    "titre": "Apparence",
+    "clair": "Thème clair",
+    "sombre": "Thème sombre",
+    "systeme": "Suivre le système"
+  },
+  "communications": {
+    "titre": "Communications",
+    "whatsapp": "WhatsApp",
+    "whatsapp_description": "Envoyez des messages automatiques à vos clients",
+    "template_livraison": "Message de livraison",
+    "template_retard": "Message de retard",
+    "configurer": "Configurer",
+    "tester": "Envoyer un message test"
+  },
+  "a_propos": {
+    "titre": "À propos",
+    "version": "Version {{version}}",
+    "cgu": "Conditions d'utilisation",
+    "confidentialite": "Politique de confidentialité",
+    "support": "Contacter le support",
+    "signaler_bug": "Signaler un problème"
+  }
+}

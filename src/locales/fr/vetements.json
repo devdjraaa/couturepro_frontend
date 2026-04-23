@@ -1,0 +1,27 @@
+{
+  "titre": "Vêtements",
+  "nouveau": "Nouveau vêtement",
+  "vide": {
+    "titre": "Aucun vêtement créé",
+    "description": "Définissez vos types de vêtements et leurs mesures",
+    "action": "Créer un vêtement"
+  },
+  "formulaire": {
+    "titre_ajout": "Nouveau vêtement",
+    "titre_modification": "Modifier le vêtement",
+    "nom": "Nom du vêtement",
+    "nom_placeholder": "ex: Boubou grand bazin",
+    "description": "Description (optionnel)",
+    "libelles_mesures": "Mesures requises",
+    "libelle_placeholder": "ex: Poitrine, Longueur…",
+    "ajouter_libelle": "Ajouter une mesure",
+    "enregistrer": "Enregistrer",
+    "ajouter": "Créer le vêtement"
+  },
+  "supprimer_confirm": {
+    "titre": "Supprimer ce vêtement ?",
+    "message": "Les commandes et mesures associées ne seront pas supprimées.",
+    "confirmer": "Supprimer",
+    "annuler": "Annuler"
+  }
+}
