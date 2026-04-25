@@ -18,7 +18,12 @@ export const pointsService = {
       }
     }
     const { data } = await api.get('/fidelite')
-    return data
+    // Laravel paginate() retourne { data: [], total:... } — on normalise en tableau
+    const rawHistorique = data.historique
+    const historique = Array.isArray(rawHistorique) ? rawHistorique : (rawHistorique?.data ?? [])
+    // seuil_conversion = 0 quand aucun config → fallback 10 000 pts
+    const seuil_conversion = data.seuil_conversion || 10000
+    return { ...data, historique, seuil_conversion }
   },
 
   // Convertit le solde complet en 31 jours de bonus (pas de paramètre points)

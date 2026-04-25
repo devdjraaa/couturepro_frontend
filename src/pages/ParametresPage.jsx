@@ -80,8 +80,8 @@ function AbonnementTab() {
     <div className="space-y-4">
       <QuotaBar />
       <div className="space-y-3">
-        <PlanCard niveau="gratuit" isCurrent={abonnement?.niveau === 'gratuit'} />
-        <PlanCard niveau="pro"     isCurrent={abonnement?.niveau === 'pro'}     />
+        <PlanCard plan="gratuit" isCurrent={abonnement?.niveau === 'gratuit'} />
+        <PlanCard plan="pro"     isCurrent={abonnement?.niveau === 'pro'}     />
       </div>
     </div>
   )
@@ -141,10 +141,10 @@ export default function ParametresPage() {
 
         <div className="pt-2 border-t border-edge space-y-2">
           <Link
-            to="/support"
+            to="/parametres/theme"
             className="flex items-center justify-between w-full px-4 py-3 rounded-xl bg-card border border-edge text-sm text-ink hover:bg-subtle transition-colors"
           >
-            <span>Support &amp; aide</span>
+            <span>Apparence &amp; thème</span>
             <span className="text-ghost text-xs">›</span>
           </Link>
           <Link
@@ -152,6 +152,13 @@ export default function ParametresPage() {
             className="flex items-center justify-between w-full px-4 py-3 rounded-xl bg-card border border-edge text-sm text-ink hover:bg-subtle transition-colors"
           >
             <span>Communications WhatsApp</span>
+            <span className="text-ghost text-xs">›</span>
+          </Link>
+          <Link
+            to="/support"
+            className="flex items-center justify-between w-full px-4 py-3 rounded-xl bg-card border border-edge text-sm text-ink hover:bg-subtle transition-colors"
+          >
+            <span>Support &amp; aide</span>
             <span className="text-ghost text-xs">›</span>
           </Link>
         </div>

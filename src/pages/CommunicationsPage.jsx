@@ -1,24 +1,24 @@
 import { useState, useEffect } from 'react'
 import { MessageCircle } from 'lucide-react'
-import { useAtelierParametres, useUpdateAtelier } from '@/hooks/useParametres'
+import { useCommunications, useUpdateCommunications } from '@/hooks/useParametres'
 import { AppLayout } from '@/components/layout'
 import { Button, Skeleton } from '@/components/ui'
 
 export default function CommunicationsPage() {
-  const { data: atelier, isLoading } = useAtelierParametres()
-  const updateAtelier = useUpdateAtelier()
+  const { data: config, isLoading } = useCommunications()
+  const update = useUpdateCommunications()
 
   const [enabled, setEnabled] = useState(false)
   const [success, setSuccess] = useState(false)
 
   useEffect(() => {
-    if (atelier) setEnabled(atelier.whatsapp_notifications_enabled ?? false)
-  }, [atelier])
+    if (config) setEnabled(config.whatsapp_enabled ?? false)
+  }, [config])
 
   const handleSave = async () => {
     setSuccess(false)
     try {
-      await updateAtelier.mutateAsync({ whatsapp_notifications_enabled: enabled })
+      await update.mutateAsync({ whatsapp_enabled: enabled })
       setSuccess(true)
     } catch (_) {}
   }
@@ -69,9 +69,9 @@ export default function CommunicationsPage() {
           </p>
         </div>
 
-        {updateAtelier.isError && (
+        {update.isError && (
           <p className="text-sm text-danger px-1">
-            {updateAtelier.error?.message ?? 'Impossible de sauvegarder pour l\'instant.'}
+            {update.error?.message ?? 'Impossible de sauvegarder pour l\'instant.'}
           </p>
         )}
         {success && (
@@ -80,9 +80,9 @@ export default function CommunicationsPage() {
 
         <Button
           className="w-full"
-          loading={updateAtelier.isPending}
+          loading={update.isPending}
           onClick={handleSave}
-          disabled={enabled === (atelier?.whatsapp_notifications_enabled ?? false)}
+          disabled={enabled === (config?.whatsapp_enabled ?? false)}
         >
           Enregistrer
         </Button>

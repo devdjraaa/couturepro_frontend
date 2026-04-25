@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { HelpCircle, Plus } from 'lucide-react'
+import { useState, useRef } from 'react'
+import { HelpCircle, Plus, Image, X } from 'lucide-react'
 import { useTickets, useCreerTicket } from '@/hooks/useTicket'
 import { AppLayout } from '@/components/layout'
 import { Button, Input, Select, Skeleton, EmptyState } from '@/components/ui'
@@ -9,6 +9,7 @@ const CATEGORIES = [
   { value: 'technique',   label: 'Problème technique' },
   { value: 'facturation', label: 'Facturation'         },
   { value: 'compte',      label: 'Mon compte'          },
+  { value: 'abonnement',  label: 'Abonnement'          },
   { value: 'autre',       label: 'Autre'               },
 ]
 
@@ -28,17 +29,40 @@ export default function SupportPage() {
   const creer = useCreerTicket()
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState({ sujet: '', message: '', categorie: 'technique' })
+  const [photo, setPhoto] = useState(null)
+  const [preview, setPreview] = useState(null)
   const [error, setError] = useState('')
+  const fileRef = useRef()
 
   const set = key => e => setForm(f => ({ ...f, [key]: e.target.value }))
+
+  const handlePhoto = e => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setPhoto(file)
+    setPreview(URL.createObjectURL(file))
+  }
+
+  const removePhoto = () => {
+    setPhoto(null)
+    setPreview(null)
+    if (fileRef.current) fileRef.current.value = ''
+  }
 
   const handleSubmit = async e => {
     e.preventDefault()
     setError('')
     try {
-      await creer.mutateAsync(form)
+      const payload = new FormData()
+      payload.append('sujet',     form.sujet)
+      payload.append('message',   form.message)
+      payload.append('categorie', form.categorie)
+      if (photo) payload.append('photo', photo)
+
+      await creer.mutateAsync(payload)
       setShowForm(false)
       setForm({ sujet: '', message: '', categorie: 'technique' })
+      removePhoto()
     } catch (err) {
       setError(err?.message || 'Erreur lors de la création du ticket')
     }
@@ -77,9 +101,42 @@ export default function SupportPage() {
                 required
               />
             </div>
+
+            <div>
+              <label className="block text-xs font-medium text-dim mb-2">Photo (optionnel)</label>
+              {preview ? (
+                <div className="relative w-full rounded-xl overflow-hidden border border-edge">
+                  <img src={preview} alt="capture" className="w-full max-h-40 object-cover" />
+                  <button
+                    type="button"
+                    onClick={removePhoto}
+                    className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/50 flex items-center justify-center"
+                  >
+                    <X size={14} className="text-white" />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => fileRef.current?.click()}
+                  className="w-full border border-dashed border-edge rounded-xl p-4 flex flex-col items-center gap-2 text-dim hover:border-primary hover:text-primary transition-colors"
+                >
+                  <Image size={20} />
+                  <span className="text-xs">Ajouter une capture d'écran</span>
+                </button>
+              )}
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handlePhoto}
+              />
+            </div>
+
             {error && <p className="text-sm text-danger">{error}</p>}
             <div className="flex gap-3">
-              <Button type="button" variant="ghost" className="flex-1" onClick={() => setShowForm(false)}>
+              <Button type="button" variant="ghost" className="flex-1" onClick={() => { setShowForm(false); removePhoto() }}>
                 Annuler
               </Button>
               <Button type="submit" loading={creer.isPending} className="flex-1">

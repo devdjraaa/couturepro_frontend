@@ -8,7 +8,7 @@ import {
   CommandesPage, CommandeDetailPage,
   CataloguePage, EquipePage, PointsPage,
   NotificationsPage, ParametresPage, CommunicationsPage,
-  SupportPage,
+  SupportPage, ThemePage,
 } from '@/pages'
 import { ROUTES } from '@/constants/routes'
 
@@ -83,7 +83,7 @@ export default function App() {
           <Route path={ROUTES.PARAMETRES}       element={<ParametresPage />}     />
           <Route path={ROUTES.PROFIL}           element={<PlaceholderPage title="Mon profil" />} />
           <Route path={ROUTES.COMMUNICATIONS}   element={<CommunicationsPage />} />
-          <Route path={ROUTES.THEME}            element={<PlaceholderPage title="Thème" />} />
+          <Route path={ROUTES.THEME}            element={<ThemePage />}                       />
           <Route path={ROUTES.APROPOS}          element={<PlaceholderPage title="À propos" />} />
           <Route path={ROUTES.PHOTOS_VIP}       element={<PlaceholderPage title="Photos VIP" />} />
           <Route path={ROUTES.HISTORIQUE}       element={<PlaceholderPage title="Historique" />} />

@@ -39,6 +39,22 @@ export function useUpdateAtelier() {
   })
 }
 
+export function useCommunications() {
+  return useQuery({
+    queryKey: ['parametres', 'communications'],
+    queryFn: () => parametresService.getCommunications(),
+    staleTime: QUERY_STALE_TIME,
+  })
+}
+
+export function useUpdateCommunications() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (payload) => parametresService.updateCommunications(payload),
+    onSuccess: (data) => queryClient.setQueryData(['parametres', 'communications'], data),
+  })
+}
+
 export function useChangerMotDePasse() {
   return useMutation({
     mutationFn: (payload) => parametresService.changerMotDePasse(payload),

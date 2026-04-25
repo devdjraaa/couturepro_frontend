@@ -10,9 +10,14 @@ export const notificationService = {
       await delay()
       return [...mockNotifications].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
     }
-    const { data } = await api.get('/notifications')
-    const list = Array.isArray(data) ? data : (data.data ?? [])
-    return list.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+    try {
+      const { data } = await api.get('/notifications')
+      const list = Array.isArray(data) ? data : (data.data ?? [])
+      return list.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+    } catch (err) {
+      if (err.code === 'non_trouve') return []
+      throw err
+    }
   },
 
   async countNonLues() {
@@ -31,7 +36,7 @@ export const notificationService = {
       if (notif) notif.lu = true
       return
     }
-    await api.post('/notifications/mark-as-read', { ids: [id] })
+    try { await api.post('/notifications/mark-as-read', { ids: [id] }) } catch { /* route absente */ }
   },
 
   async marquerToutesLues() {
@@ -40,6 +45,6 @@ export const notificationService = {
       mockNotifications.forEach(n => { n.lu = true })
       return
     }
-    await api.post('/notifications/mark-as-read', { all: true })
+    try { await api.post('/notifications/mark-as-read', { all: true }) } catch { /* route absente */ }
   },
 }

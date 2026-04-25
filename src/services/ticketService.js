@@ -27,7 +27,12 @@ export const ticketService = {
       await delay()
       return [...mockTickets].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
     }
-    const { data } = await api.get('/support/tickets')
-    return data
+    try {
+      const { data } = await api.get('/support/tickets')
+      return Array.isArray(data) ? data : (data?.data ?? [])
+    } catch (err) {
+      if (err.code === 'non_trouve') return []
+      throw err
+    }
   },
 }

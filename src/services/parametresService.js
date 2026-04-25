@@ -5,7 +5,6 @@ import { mockUser, mockAtelier } from './mockData'
 const delay = (ms = 300) => new Promise(r => setTimeout(r, ms))
 
 export const parametresService = {
-  // Profil = données du proprietaire via /auth/me
   async getProfil() {
     if (isMock()) {
       await delay()
@@ -22,8 +21,12 @@ export const parametresService = {
       Object.assign(mockUser, payload)
       return mockUser
     }
-    // TODO: endpoint PUT /parametres/profil à implémenter
-    throw { code: 'non_disponible', message: 'Modification du profil en cours de déploiement.' }
+    const { data } = await api.put('/parametres/profil', {
+      nom:       payload.nom,
+      telephone: payload.telephone,
+      email:     payload.email,
+    })
+    return data
   },
 
   async getAtelier() {
@@ -41,8 +44,30 @@ export const parametresService = {
       Object.assign(mockAtelier, payload)
       return mockAtelier
     }
-    // TODO: endpoint PUT /parametres/atelier à implémenter
-    throw { code: 'non_disponible', message: 'Modification de l\'atelier en cours de déploiement.' }
+    const { data } = await api.put('/parametres/atelier', {
+      nom:     payload.nom,
+      adresse: payload.adresse,
+      ville:   payload.ville,
+    })
+    return data
+  },
+
+  async getCommunications() {
+    if (isMock()) {
+      await delay()
+      return { confirmation_commande: false, rappel_livraison_j2: false, commande_prete: false, whatsapp_enabled: false }
+    }
+    const { data } = await api.get('/parametres/communications')
+    return data
+  },
+
+  async updateCommunications(payload) {
+    if (isMock()) {
+      await delay()
+      return payload
+    }
+    const { data } = await api.put('/parametres/communications', payload)
+    return data
   },
 
   async changerMotDePasse(payload) {
@@ -50,7 +75,10 @@ export const parametresService = {
       await delay()
       return
     }
-    // TODO: endpoint PUT /parametres/mot-de-passe à implémenter
-    throw { code: 'non_disponible', message: 'Changement de mot de passe en cours de déploiement.' }
+    const { data } = await api.put('/parametres/mot-de-passe', {
+      ancien:  payload.ancien,
+      nouveau: payload.nouveau,
+    })
+    return data
   },
 }
