@@ -1,0 +1,15 @@
+export const ADMIN_KEYS = {
+  me:           ['admin', 'me'],
+  ateliers:     ['admin', 'ateliers'],
+  atelier:      (id) => ['admin', 'ateliers', id],
+  atelierFid:   (id) => ['admin', 'ateliers', id, 'fidelite'],
+  plans:        ['admin', 'plans'],
+  plan:         (id) => ['admin', 'plans', id],
+  transactions: ['admin', 'transactions'],
+  paiements:    ['admin', 'paiements'],
+  tickets:      ['admin', 'tickets'],
+  ticket:       (id) => ['admin', 'tickets', id],
+  offres:       ['admin', 'offres'],
+  listeNoire:   ['admin', 'liste-noire'],
+  audit:        ['admin', 'audit'],
+}

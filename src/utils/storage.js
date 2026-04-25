@@ -22,6 +22,12 @@ export function setAtelierId(id)  { localStorage.setItem(KEYS.ATELIER_ID, id) }
 export function getLang()         { return localStorage.getItem(KEYS.LANG) || 'fr' }
 export function setLang(lang)     { localStorage.setItem(KEYS.LANG, lang) }
 
+// ── Token admin (séparé du token proprietaire) ──
+const ADMIN_TOKEN_KEY = 'cp_admin_token'
+export function getAdminToken()        { return localStorage.getItem(ADMIN_TOKEN_KEY) }
+export function setAdminToken(token)   { localStorage.setItem(ADMIN_TOKEN_KEY, token) }
+export function clearAdminToken()      { localStorage.removeItem(ADMIN_TOKEN_KEY) }
+
 // ── Réinitialisation complète (déconnexion) ──
 export function clearAll() {
   Object.values(KEYS).forEach((key) => localStorage.removeItem(key))
