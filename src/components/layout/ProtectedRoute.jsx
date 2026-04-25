@@ -1,6 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import { useAuth } from '@/contexts'
 import { Spinner } from '@/components/ui'
+import SubscriptionWall from './SubscriptionWall'
 
 export default function ProtectedRoute() {
   const { user, isLoading } = useAuth()
@@ -15,5 +16,10 @@ export default function ProtectedRoute() {
 
   if (!user) return <Navigate to="/login" replace />
 
-  return <Outlet />
+  return (
+    <>
+      <Outlet />
+      <SubscriptionWall />
+    </>
+  )
 }

@@ -19,13 +19,6 @@ export function useInviterMembre() {
   })
 }
 
-export function useUpdateRoleMembre() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: ({ id, role }) => equipeService.updateRole(id, role),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.equipe }),
-  })
-}
 
 export function useRemoveMembre() {
   const queryClient = useQueryClient()
