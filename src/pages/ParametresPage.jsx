@@ -7,6 +7,7 @@ import {
   useChangerMotDePasse,
 } from '@/hooks/useParametres'
 import { useAbonnement, usePlans, useInitierPaiementAbonnement } from '@/hooks/useAbonnement'
+import { useCountdown } from '@/hooks/useCountdown'
 import { AppLayout } from '@/components/layout'
 import { QuotaBar, PlanCard } from '@/components/abonnement'
 import { TabBar, Input, Button, Skeleton } from '@/components/ui'
@@ -74,6 +75,25 @@ function AtelierTab() {
   )
 }
 
+function CountdownDisplay({ targetDate, statut }) {
+  const cd = useCountdown(targetDate)
+
+  if (!cd) return null
+  if (cd.expired || statut === 'expire') {
+    return <span className="text-sm font-semibold text-danger">Expiré</span>
+  }
+
+  const isUrgent = cd.days <= 1
+  const color    = isUrgent ? 'text-danger' : cd.days <= 5 ? 'text-warning' : 'text-ink'
+  const pad = n => String(n).padStart(2, '0')
+
+  return (
+    <span className={`text-sm font-mono font-semibold tabular-nums ${color}`}>
+      {cd.days > 0 && `${cd.days}j `}{pad(cd.hours)}:{pad(cd.minutes)}:{pad(cd.seconds)}
+    </span>
+  )
+}
+
 function AbonnementTab() {
   const { data: abonnement } = useAbonnement()
   const { data: plans = [] } = usePlans()
@@ -93,6 +113,13 @@ function AbonnementTab() {
     gele:   'Suspendu',
   }
 
+  const statutColor = {
+    actif:  'text-success',
+    essai:  'text-primary',
+    expire: 'text-danger',
+    gele:   'text-warning',
+  }
+
   return (
     <div className="space-y-5">
       <QuotaBar />
@@ -106,21 +133,28 @@ function AbonnementTab() {
           </div>
           <div className="flex justify-between px-4 py-3">
             <span className="text-sm text-dim">Statut</span>
-            <span className="text-sm font-semibold text-ink">{statutLabel[abonnement.statut] ?? abonnement.statut}</span>
+            <span className={`text-sm font-semibold ${statutColor[abonnement.statut] ?? 'text-ink'}`}>
+              {statutLabel[abonnement.statut] ?? abonnement.statut}
+            </span>
           </div>
-          {abonnement.jours_restants != null && (
-            <div className="flex justify-between px-4 py-3">
-              <span className="text-sm text-dim">Jours restants</span>
-              <span className={`text-sm font-semibold ${abonnement.jours_restants <= 5 ? 'text-danger' : 'text-ink'}`}>
-                {abonnement.jours_restants} jour{abonnement.jours_restants !== 1 ? 's' : ''}
-              </span>
+          {abonnement.timestamp_expiration && abonnement.statut !== 'expire' && (
+            <div className="flex justify-between items-center px-4 py-3">
+              <span className="text-sm text-dim">Temps restant</span>
+              <CountdownDisplay
+                targetDate={abonnement.timestamp_expiration}
+                statut={abonnement.statut}
+              />
             </div>
           )}
           {abonnement.timestamp_expiration && (
             <div className="flex justify-between px-4 py-3">
-              <span className="text-sm text-dim">Expire le</span>
-              <span className="text-sm font-semibold text-ink">
-                {new Date(abonnement.timestamp_expiration).toLocaleDateString('fr-FR')}
+              <span className="text-sm text-dim">
+                {abonnement.statut === 'expire' ? 'Expiré le' : 'Expire le'}
+              </span>
+              <span className="text-sm text-ink">
+                {new Date(abonnement.timestamp_expiration).toLocaleDateString('fr-FR', {
+                  day: '2-digit', month: 'long', year: 'numeric',
+                })}
               </span>
             </div>
           )}

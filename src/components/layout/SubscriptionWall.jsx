@@ -1,13 +1,18 @@
 import { Lock } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Button } from '@/components/ui'
 import { useSubscriptionGate } from '@/hooks/useSubscriptionGate'
 
+// Pages où le wall ne doit pas s'afficher (l'utilisateur doit pouvoir s'abonner)
+const EXEMPT_PATHS = ['/parametres', '/paiement/retour']
+
 export default function SubscriptionWall() {
-  const navigate = useNavigate()
+  const navigate  = useNavigate()
+  const { pathname } = useLocation()
   const { isBlocked, isLoading, reason } = useSubscriptionGate()
 
   if (isLoading || !isBlocked) return null
+  if (EXEMPT_PATHS.some(p => pathname.startsWith(p))) return null
 
   const message =
     reason === 'gele'

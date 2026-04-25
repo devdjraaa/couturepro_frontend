@@ -7,7 +7,8 @@ export function useAbonnement() {
   return useQuery({
     queryKey: QUERY_KEYS.abonnement,
     queryFn: () => abonnementService.getCurrent(),
-    staleTime: QUERY_STALE_TIME,
+    staleTime: 30_000,          // toujours frais après 30 s
+    refetchInterval: 60_000,    // poll toutes les 60 s pour détecter l'expiration
   })
 }
 

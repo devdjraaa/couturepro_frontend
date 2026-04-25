@@ -11,6 +11,8 @@ import {
   SupportPage, SupportTicketDetailPage, ThemePage,
 } from '@/pages'
 import PaiementRetourPage from '@/pages/PaiementRetourPage'
+import { FeatureGate } from '@/components/abonnement'
+import { AppLayout } from '@/components/layout'
 import { ROUTES } from '@/constants/routes'
 
 // Pages admin
@@ -87,7 +89,13 @@ export default function App() {
           <Route path={ROUTES.COMMUNICATIONS}   element={<CommunicationsPage />} />
           <Route path={ROUTES.THEME}            element={<ThemePage />}                       />
           <Route path={ROUTES.APROPOS}          element={<PlaceholderPage title="À propos" />} />
-          <Route path={ROUTES.PHOTOS_VIP}       element={<PlaceholderPage title="Photos VIP" />} />
+          <Route path={ROUTES.PHOTOS_VIP}       element={
+            <AppLayout showBack title="Photos VIP">
+              <div className="p-4">
+                <FeatureGate featureKey="photos_vip" featureName="Photos VIP" />
+              </div>
+            </AppLayout>
+          } />
           <Route path={ROUTES.HISTORIQUE}       element={<PlaceholderPage title="Historique" />} />
           <Route path={ROUTES.FAQ}              element={<PlaceholderPage title="FAQ" />} />
           <Route path={ROUTES.CONTACT}          element={<PlaceholderPage title="Contact" />} />
