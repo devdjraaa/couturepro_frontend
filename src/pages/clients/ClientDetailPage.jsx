@@ -40,9 +40,10 @@ export default function ClientDetailPage() {
   const whatsappRappel = useWhatsappRappel()
 
   const clientCommandes = allCommandes.filter(c => c.client_id === clientId)
-  const selectedMesure    = mesures.find(m => m.vetement_id === selectedVetementId)
-  const selectedVetement  = vetements.find(v => v.id === selectedVetementId)
-  const libelles          = selectedVetement?.libelles_mesures ?? []
+  const selectedMesure   = mesures.find(m => m.vetement_id === selectedVetementId)
+  const selectedVetement = vetements.find(v => v.id === selectedVetementId)
+  const rawLibelles      = selectedVetement?.libelles_mesures
+  const libelles         = Array.isArray(rawLibelles) ? rawLibelles : []
 
   const handleUpdate = async data => {
     await updateClient.mutateAsync({ id: clientId, ...data })

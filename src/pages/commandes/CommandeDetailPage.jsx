@@ -70,7 +70,7 @@ export default function CommandeDetailPage() {
 
   if (!commande) return null
 
-  const restant = commande.montant - (commande.avance ?? 0)
+  const restant = (commande.prix ?? 0) - (commande.acompte ?? 0)
 
   return (
     <AppLayout
@@ -90,9 +90,9 @@ export default function CommandeDetailPage() {
             <p className="font-semibold text-ink truncate">{commande.client_nom}</p>
             <p className="text-sm text-dim">{commande.vetement_nom}</p>
           </div>
-          {commande.date_livraison && (
+          {commande.date_livraison_prevue && (
             <p className="text-xs text-ghost shrink-0">
-              {formatDate(commande.date_livraison)}
+              {formatDate(commande.date_livraison_prevue)}
             </p>
           )}
         </div>
@@ -107,11 +107,11 @@ export default function CommandeDetailPage() {
         <div className="bg-card border border-edge rounded-2xl divide-y divide-edge">
           <div className="flex justify-between px-4 py-3">
             <span className="text-sm text-dim">Montant total</span>
-            <span className="text-sm font-semibold text-ink">{formatCurrency(commande.montant)}</span>
+            <span className="text-sm font-semibold text-ink">{formatCurrency(commande.prix ?? 0)}</span>
           </div>
           <div className="flex justify-between px-4 py-3">
             <span className="text-sm text-dim">Avance versée</span>
-            <span className="text-sm font-semibold text-success">{formatCurrency(commande.avance ?? 0)}</span>
+            <span className="text-sm font-semibold text-success">{formatCurrency(commande.acompte ?? 0)}</span>
           </div>
           <div className="flex justify-between px-4 py-3">
             <span className="text-sm text-dim">Reste à payer</span>
@@ -158,10 +158,10 @@ export default function CommandeDetailPage() {
           )}
         </div>
 
-        {commande.notes && (
+        {commande.note_interne && (
           <div className="bg-subtle rounded-xl px-4 py-3">
             <p className="text-xs text-dim mb-1">Notes</p>
-            <p className="text-sm text-ink">{commande.notes}</p>
+            <p className="text-sm text-ink">{commande.note_interne}</p>
           </div>
         )}
 

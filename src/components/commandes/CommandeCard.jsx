@@ -4,8 +4,8 @@ import { formatDate, isDatePast } from '@/utils/formatDate'
 import { cn } from '@/utils/cn'
 
 export default function CommandeCard({ commande, onClick }) {
-  const restant = commande.montant - (commande.avance ?? 0)
-  const isLate = isDatePast(commande.date_livraison) && commande.statut === 'en_cours'
+  const restant = (commande.prix ?? 0) - (commande.acompte ?? 0)
+  const isLate = isDatePast(commande.date_livraison_prevue) && commande.statut === 'en_cours'
 
   return (
     <Card onClick={onClick} className="p-4 space-y-3">
@@ -22,10 +22,10 @@ export default function CommandeCard({ commande, onClick }) {
 
       <div className="flex items-center justify-between text-xs">
         <span className={cn('text-ghost', isLate && 'text-danger font-medium')}>
-          {formatDate(commande.date_livraison)}
+          {formatDate(commande.date_livraison_prevue)}
         </span>
         <div className="text-right font-mono">
-          <span className="font-semibold text-ink">{formatCurrency(commande.montant)}</span>
+          <span className="font-semibold text-ink">{formatCurrency(commande.prix ?? 0)}</span>
           {restant > 0 && (
             <span className="ml-1.5 text-warning">−{formatCurrency(restant)}</span>
           )}

@@ -5,24 +5,25 @@ const toLabel = (key) =>
   key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
 
 export default function MesureForm({ libelles = [], initialData, onSubmit, isLoading }) {
-  const [form, setForm] = useState(() => ({
-    ...Object.fromEntries(
-      libelles.map(k => [k, initialData?.[k] != null ? String(initialData[k]) : ''])
-    ),
-    notes: initialData?.notes ?? '',
-  }))
+  const safeLibelles = Array.isArray(libelles) ? libelles : []
+
+  const [form, setForm] = useState(() => {
+    const champs = initialData && typeof initialData === 'object' ? initialData : {}
+    const entries = safeLibelles.map(k => [k, champs[k] != null ? String(champs[k]) : ''])
+    return { ...Object.fromEntries(entries), notes: champs.notes ?? '' }
+  })
 
   const set = (key) => (e) => setForm(f => ({ ...f, [key]: e.target.value }))
 
   const handleSubmit = (e) => {
     e.preventDefault()
     const data = Object.fromEntries(
-      libelles.map(k => [k, form[k] !== '' ? Number(form[k]) : null])
+      safeLibelles.map(k => [k, form[k] !== '' ? Number(form[k]) : null])
     )
-    onSubmit({ ...data, notes: form.notes })
+    onSubmit({ ...data, notes: form.notes || undefined })
   }
 
-  if (libelles.length === 0) {
+  if (safeLibelles.length === 0) {
     return (
       <div className="p-5 text-center text-sm text-dim">
         Ce vêtement n'a pas encore de champs de mesures configurés.
@@ -33,14 +34,14 @@ export default function MesureForm({ libelles = [], initialData, onSubmit, isLoa
   return (
     <form onSubmit={handleSubmit} className="p-5 space-y-5">
       <div className="grid grid-cols-2 gap-3">
-        {libelles.map(key => (
+        {safeLibelles.map(key => (
           <Input
             key={key}
-            label={toLabel(key)}
+            label={toLabel(String(key))}
             type="number"
             step="0.5"
             min="0"
-            value={form[key]}
+            value={form[key] ?? ''}
             onChange={set(key)}
             suffix="cm"
             placeholder="0"
@@ -49,7 +50,7 @@ export default function MesureForm({ libelles = [], initialData, onSubmit, isLoa
       </div>
       <Input
         label="Notes"
-        value={form.notes}
+        value={form.notes ?? ''}
         onChange={set('notes')}
         placeholder="Remarques sur la morphologie…"
       />
