@@ -4,6 +4,7 @@ import { Edit2, Trash2, ClipboardList } from 'lucide-react'
 import { useClient, useUpdateClient, useDeleteClient, useToggleVip } from '@/hooks/useClients'
 import { useMesures, useSaveMesures } from '@/hooks/useMesures'
 import { useCommandes } from '@/hooks/useCommandes'
+import { useVetements } from '@/hooks/useVetements'
 import { AppLayout } from '@/components/layout'
 import { ClientForm } from '@/components/clients'
 import { MesureForm, MesureDisplay } from '@/components/mesures'
@@ -20,20 +21,23 @@ const TABS = [
 export default function ClientDetailPage() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const clientId = Number(id)
+  const clientId = id
   const [activeTab, setActiveTab] = useState('infos')
   const [showEdit, setShowEdit] = useState(false)
   const [editingMesures, setEditingMesures] = useState(false)
+  const [selectedVetementId, setSelectedVetementId] = useState(null)
 
   const { data: client, isLoading } = useClient(clientId)
-  const { data: mesures } = useMesures(clientId)
+  const { data: mesures = [] } = useMesures(clientId)
   const { data: allCommandes = [] } = useCommandes()
+  const { data: vetements = [] } = useVetements()
   const updateClient = useUpdateClient()
   const deleteClient = useDeleteClient()
   const toggleVip = useToggleVip()
-  const saveMesures = useSaveMesures(clientId)
+  const saveMesures = useSaveMesures(clientId, selectedVetementId)
 
   const clientCommandes = allCommandes.filter(c => c.client_id === clientId)
+  const selectedMesure = mesures.find(m => m.vetement_id === selectedVetementId)
 
   const handleUpdate = async data => {
     await updateClient.mutateAsync({ id: clientId, ...data })
@@ -51,6 +55,11 @@ export default function ClientDetailPage() {
     setEditingMesures(false)
   }
 
+  const handleSelectVetement = vetementId => {
+    setSelectedVetementId(vetementId || null)
+    setEditingMesures(false)
+  }
+
   if (isLoading) {
     return (
       <AppLayout showBack title="Client">
@@ -63,6 +72,8 @@ export default function ClientDetailPage() {
   }
 
   if (!client) return null
+
+  const isVip = client.type_profil === 'vip'
 
   return (
     <AppLayout
@@ -79,8 +90,8 @@ export default function ClientDetailPage() {
         <Avatar name={client.nom} size="lg" />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h1 className="font-bold text-ink truncate">{client.nom}</h1>
-            {client.profil === 'vip' && <Badge color="accent" size="sm">VIP</Badge>}
+            <h1 className="font-bold text-ink truncate">{client.prenom} {client.nom}</h1>
+            {isVip && <Badge color="accent" size="sm">VIP</Badge>}
           </div>
           {client.telephone && <p className="text-sm text-dim">{client.telephone}</p>}
           <p className="text-xs text-ghost mt-0.5">Client depuis {formatDate(client.created_at)}</p>
@@ -89,7 +100,7 @@ export default function ClientDetailPage() {
           onClick={() => toggleVip.mutate(client.id)}
           className="text-xs text-dim underline shrink-0"
         >
-          {client.profil === 'vip' ? 'Retirer VIP' : '→ VIP'}
+          {isVip ? 'Retirer VIP' : '→ VIP'}
         </button>
       </div>
 
@@ -106,12 +117,12 @@ export default function ClientDetailPage() {
                 </div>
               )}
               <div className="flex justify-between px-4 py-3">
-                <span className="text-sm text-dim">Commandes</span>
-                <span className="text-sm text-ink font-medium">{client.commandes_count ?? 0}</span>
+                <span className="text-sm text-dim">Type de profil</span>
+                <span className="text-sm text-ink font-medium capitalize">{client.type_profil}</span>
               </div>
               <div className="flex justify-between px-4 py-3">
-                <span className="text-sm text-dim">Points fidélité</span>
-                <span className="text-sm text-ink font-medium">{client.points ?? 0} pts</span>
+                <span className="text-sm text-dim">Commandes</span>
+                <span className="text-sm text-ink font-medium">{client.commandes_count ?? clientCommandes.length}</span>
               </div>
               {client.notes && (
                 <div className="px-4 py-3">
@@ -130,34 +141,47 @@ export default function ClientDetailPage() {
         )}
 
         {activeTab === 'mesures' && (
-          <div>
-            {editingMesures ? (
-              <div>
-                <MesureForm
-                  initialData={mesures}
-                  onSubmit={handleSaveMesures}
-                  isLoading={saveMesures.isPending}
+          <div className="space-y-4">
+            <select
+              value={selectedVetementId ?? ''}
+              onChange={e => handleSelectVetement(e.target.value)}
+              className="w-full border border-edge rounded-xl px-3 py-2 text-sm bg-card text-ink"
+            >
+              <option value="">Choisir un vêtement…</option>
+              {vetements.map(v => (
+                <option key={v.id} value={v.id}>{v.nom}</option>
+              ))}
+            </select>
+
+            {selectedVetementId && (
+              editingMesures ? (
+                <div>
+                  <MesureForm
+                    initialData={selectedMesure?.champs}
+                    onSubmit={handleSaveMesures}
+                    isLoading={saveMesures.isPending}
+                  />
+                  <button
+                    onClick={() => setEditingMesures(false)}
+                    className="w-full text-sm text-dim py-2 mt-2"
+                  >
+                    Annuler
+                  </button>
+                </div>
+              ) : selectedMesure ? (
+                <div>
+                  <MesureDisplay mesures={selectedMesure.champs} />
+                  <Button variant="secondary" className="mt-4 w-full" onClick={() => setEditingMesures(true)}>
+                    Modifier les mesures
+                  </Button>
+                </div>
+              ) : (
+                <EmptyState
+                  title="Aucune mesure"
+                  description="Enregistrez les mesures de ce client pour ce vêtement"
+                  action={<Button onClick={() => setEditingMesures(true)}>Ajouter les mesures</Button>}
                 />
-                <button
-                  onClick={() => setEditingMesures(false)}
-                  className="w-full text-sm text-dim py-2 mt-2"
-                >
-                  Annuler
-                </button>
-              </div>
-            ) : mesures ? (
-              <div>
-                <MesureDisplay mesures={mesures} />
-                <Button variant="secondary" className="mt-4 w-full" onClick={() => setEditingMesures(true)}>
-                  Modifier les mesures
-                </Button>
-              </div>
-            ) : (
-              <EmptyState
-                title="Aucune mesure"
-                description="Enregistrez les mesures de ce client"
-                action={<Button onClick={() => setEditingMesures(true)}>Ajouter les mesures</Button>}
-              />
+              )
             )}
           </div>
         )}

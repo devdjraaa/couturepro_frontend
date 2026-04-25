@@ -48,6 +48,8 @@ export function AuthProvider({ children }) {
   }, [])
 
   const login = useCallback(async (payload) => {
+    // authService.login normalise la réponse vers { user, atelier }
+    // payload attendu: { telephone, password }
     const { user, atelier } = await authService.login(payload)
     setUser(user)
     setAtelier(atelier)

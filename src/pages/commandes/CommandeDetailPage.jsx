@@ -18,7 +18,7 @@ const MODE_OPTIONS = [
 export default function CommandeDetailPage() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const commandeId = Number(id)
+  const commandeId = id
   const [showEdit, setShowEdit] = useState(false)
   const [showPaiement, setShowPaiement] = useState(false)
   const [paiementForm, setPaiementForm] = useState({ montant: '', mode_paiement: 'especes' })

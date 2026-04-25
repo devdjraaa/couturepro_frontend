@@ -14,12 +14,14 @@ export const MIN_SEARCH_LENGTH   = 2
 export const TOAST_DURATION_MS   = 3000
 export const OTP_RESEND_DELAY_S  = 60
 
-// Quotas par niveau d'abonnement (miroir backend)
+// Quotas par niveau_cle (miroir backend — clés de la table niveaux_config)
+// -1 = illimité ; les limites réelles sont dans config_snapshot de l'abonnement
 export const QUOTA_LIMITS = {
-  gratuit: { clients: 10,  commandes_par_mois: 20  },
-  starter: { clients: 50,  commandes_par_mois: 100 },
-  pro:     { clients: -1,  commandes_par_mois: -1  }, // -1 = illimité
-  magnat:  { clients: -1,  commandes_par_mois: -1  },
+  gratuit:           { clients: 10,  commandes_par_mois: 20  },
+  standard_mensuel:  { clients: 50,  commandes_par_mois: 100 },
+  premium_mensuel:   { clients: -1,  commandes_par_mois: -1  },
+  standard_annuel:   { clients: 50,  commandes_par_mois: 100 },
+  premium_annuel:    { clients: -1,  commandes_par_mois: -1  },
 }
 
 // Prix des abonnements (XOF)

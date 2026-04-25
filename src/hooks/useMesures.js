@@ -3,6 +3,7 @@ import { mesureService } from '@/services/mesureService'
 import { QUERY_STALE_TIME } from '@/constants/config'
 import { QUERY_KEYS } from './queryKeys'
 
+// Retourne le tableau complet des mesures d'un client (une par vetement_id)
 export function useMesures(clientId) {
   return useQuery({
     queryKey: QUERY_KEYS.mesures(clientId),
@@ -12,12 +13,25 @@ export function useMesures(clientId) {
   })
 }
 
-export function useSaveMesures(clientId) {
+// Crée ou met à jour la mesure d'un client pour un vêtement donné
+// Usage: const save = useSaveMesures(clientId, vetementId)
+//        save.mutate({ poitrine: 92, taille: 70, ... })
+export function useSaveMesures(clientId, vetementId) {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (payload) => mesureService.save(clientId, payload),
-    onSuccess: (data) => {
-      queryClient.setQueryData(QUERY_KEYS.mesures(clientId), data)
+    mutationFn: (champs) => mesureService.save(clientId, vetementId, champs),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.mesures(clientId) })
+    },
+  })
+}
+
+export function useDeleteMesure(clientId) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (mesureId) => mesureService.delete(mesureId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.mesures(clientId) })
     },
   })
 }

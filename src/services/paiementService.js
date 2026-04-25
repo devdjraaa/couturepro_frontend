@@ -1,43 +1,42 @@
-import api from './api'
 import { USE_MOCKS } from '@/constants/config'
-import { mockCommandes } from './mockData'
 
 const delay = (ms = 300) => new Promise(r => setTimeout(r, ms))
 
+// Les paiements de commandes (avance/solde) ne sont pas encore dans le backend API
+// Le backend gère uniquement les paiements d'abonnement via /paiements/initier
+// Voir abonnementService pour les paiements d'abonnement
+
 const mockPaiements = [
-  { id: 1, commande_id: 1,  client_nom: 'Rokhaya Mbaye',    montant: 30000, type: 'avance', mode: 'especes',       created_at: '2026-04-05T09:10:00Z' },
-  { id: 2, commande_id: 3,  client_nom: 'Mariama Bah',      montant: 38000, type: 'solde',  mode: 'mobile_money',  created_at: '2026-04-12T08:15:00Z' },
-  { id: 3, commande_id: 5,  client_nom: 'Mariama Bah',      montant: 35000, type: 'solde',  mode: 'especes',       created_at: '2026-04-15T16:05:00Z' },
-  { id: 4, commande_id: 11, client_nom: 'Aminata Coulibaly', montant: 12000, type: 'solde', mode: 'especes',       created_at: '2026-03-28T14:10:00Z' },
-  { id: 5, commande_id: 10, client_nom: 'Rokhaya Mbaye',    montant: 42000, type: 'solde',  mode: 'mobile_money',  created_at: '2026-04-10T15:05:00Z' },
+  { id: 'p-001', commande_id: 'cmd-001', montant: 30000, type: 'avance', mode: 'especes',      created_at: '2026-04-05T09:10:00Z' },
+  { id: 'p-002', commande_id: 'cmd-005', montant: 35000, type: 'solde',  mode: 'mobile_money', created_at: '2026-04-15T16:05:00Z' },
+  { id: 'p-003', commande_id: 'cmd-010', montant: 42000, type: 'solde',  mode: 'mobile_money', created_at: '2026-04-10T15:05:00Z' },
 ]
 
 export const paiementService = {
-  async getAll({ page = 1, per_page = 20 } = {}) {
+  async getAll({ page = 1, per_page = 20, commande_id } = {}) {
     if (USE_MOCKS) {
       await delay()
-      const sorted = [...mockPaiements].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-      return { data: sorted, total: sorted.length, page, per_page }
+      let list = [...mockPaiements]
+      if (commande_id) list = list.filter(p => p.commande_id === commande_id)
+      return list.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
     }
-    const { data } = await api.get('/paiements', { params: { page, per_page } })
-    return data
+    return []
   },
 
+  // Enregistre un paiement partiel sur une commande (mock seulement)
   async enregistrer(commandeId, payload) {
     if (USE_MOCKS) {
       await delay()
-      const commande = mockCommandes.find(c => c.id === Number(commandeId))
-      if (commande) commande.avance = Math.min(commande.montant, commande.avance + payload.montant)
       const newPaiement = {
-        id: mockPaiements.length + 1,
-        commande_id: Number(commandeId),
+        id: 'p-' + Date.now(),
+        commande_id: commandeId,
         ...payload,
         created_at: new Date().toISOString(),
       }
       mockPaiements.push(newPaiement)
       return newPaiement
     }
-    const { data } = await api.post(`/commandes/${commandeId}/paiements`, payload)
-    return data
+    // TODO: endpoint backend POST /commandes/{id}/paiements à implémenter
+    throw { code: 'non_disponible', message: 'Enregistrement de paiement en cours de déploiement.' }
   },
 }

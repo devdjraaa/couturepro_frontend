@@ -9,7 +9,6 @@ import { TabBar, EmptyState, Skeleton, BottomSheet, FloatingActionButton } from 
 const STATUT_TABS = [
   { key: 'tous',     label: 'Tous'     },
   { key: 'en_cours', label: 'En cours' },
-  { key: 'essai',    label: 'Essai'    },
   { key: 'livre',    label: 'Livré'    },
   { key: 'annule',   label: 'Annulé'   },
 ]

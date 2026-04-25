@@ -3,6 +3,7 @@ import { pointsService } from '@/services/pointsService'
 import { QUERY_STALE_TIME } from '@/constants/config'
 import { QUERY_KEYS } from './queryKeys'
 
+// Retourne { solde_pts, seuil_conversion, bonus_actif, bonus_jours_restants, historique }
 export function usePoints() {
   return useQuery({
     queryKey: QUERY_KEYS.points,
@@ -11,21 +12,13 @@ export function usePoints() {
   })
 }
 
-export function useHistoriquePoints(params = {}) {
-  return useQuery({
-    queryKey: [...QUERY_KEYS.pointsHistory, params],
-    queryFn: () => pointsService.getHistorique(params),
-    staleTime: QUERY_STALE_TIME,
-  })
-}
-
+// Convertit le solde complet en 31 jours de bonus (pas de paramètre points)
 export function useConvertirPoints() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (points) => pointsService.convertir(points),
+    mutationFn: () => pointsService.convertir(),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.points })
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.pointsHistory })
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.abonnement })
     },
   })

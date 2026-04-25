@@ -1,53 +1,39 @@
-import { useState } from 'react'
 import { Gift } from 'lucide-react'
-import { useHistoriquePoints, useConvertirPoints } from '@/hooks/usePoints'
-import { useAtelier } from '@/contexts'
+import { usePoints, useConvertirPoints } from '@/hooks/usePoints'
 import { AppLayout } from '@/components/layout'
 import { PointsSummary } from '@/components/points'
-import { Button, Input, Skeleton, EmptyState } from '@/components/ui'
+import { Button, Skeleton, EmptyState } from '@/components/ui'
 import { formatDate } from '@/utils/formatDate'
 import { POINTS_VERS_JOURS } from '@/constants/config'
 
 export default function PointsPage() {
-  const { points } = useAtelier()
-  const [montant, setMontant] = useState('')
-  const { data: historique = [], isLoading } = useHistoriquePoints()
+  const { data, isLoading } = usePoints()
   const convertir = useConvertirPoints()
 
-  const maxConvertible = Math.floor((points ?? 0) / POINTS_VERS_JOURS) * POINTS_VERS_JOURS
-  const joursObtenus = Math.floor(Number(montant) / POINTS_VERS_JOURS)
-
-  const handleConvertir = async e => {
-    e.preventDefault()
-    if (!montant || Number(montant) < POINTS_VERS_JOURS) return
-    await convertir.mutateAsync(Number(montant))
-    setMontant('')
-  }
+  const solde = data?.solde_pts ?? 0
+  const seuil = data?.seuil_conversion ?? POINTS_VERS_JOURS
+  const historique = data?.historique ?? []
+  const joursObtenus = Math.floor(solde / POINTS_VERS_JOURS)
 
   return (
     <AppLayout title="Fidélité">
       <div className="p-4 space-y-6">
         <PointsSummary />
 
-        {maxConvertible >= POINTS_VERS_JOURS && (
+        {solde >= seuil && (
           <div className="bg-card border border-edge rounded-2xl p-4 space-y-3">
             <p className="text-sm font-semibold text-ink">Convertir des points</p>
             <p className="text-xs text-dim">{POINTS_VERS_JOURS} points = 1 jour d'abonnement offert</p>
-            <form onSubmit={handleConvertir} className="flex gap-3">
-              <Input
-                type="number"
-                min={POINTS_VERS_JOURS}
-                max={maxConvertible}
-                step={POINTS_VERS_JOURS}
-                value={montant}
-                onChange={e => setMontant(e.target.value)}
-                placeholder={String(POINTS_VERS_JOURS)}
-                className="flex-1"
-              />
-              <Button type="submit" loading={convertir.isPending} disabled={joursObtenus < 1}>
-                {joursObtenus > 0 ? `+${joursObtenus} j` : 'Convertir'}
-              </Button>
-            </form>
+            <p className="text-xs text-dim font-semibold">
+              {joursObtenus} jour{joursObtenus > 1 ? 's' : ''} disponible{joursObtenus > 1 ? 's' : ''}
+            </p>
+            <Button
+              loading={convertir.isPending}
+              onClick={() => convertir.mutate()}
+              className="w-full"
+            >
+              Convertir mes points
+            </Button>
           </div>
         )}
 

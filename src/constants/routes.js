@@ -1,10 +1,11 @@
 export const ROUTES = {
   // Auth (public)
   LOGIN:            '/login',
-  REGISTER:         '/inscription',
+  REGISTER:         '/register',
   OTP:              '/verification',
   FORGOT_PASSWORD:  '/mot-de-passe-oublie',
   RECOVER_ACCOUNT:  '/recuperer-compte',
+  ONBOARDING:       '/onboarding',
 
   // App (protégées)
   DASHBOARD:        '/',
@@ -15,13 +16,14 @@ export const ROUTES = {
 
   // Commandes
   COMMANDES:        '/commandes',
+  COMMANDE_NEW:     '/commandes/new',
   COMMANDE_DETAIL:  '/commandes/:id',
 
-  // Mesures
-  MESURES:          '/mesures',
+  // Vêtements (CataloguePage)
+  VETEMENTS:        '/catalogue',
 
-  // Vêtements
-  VETEMENTS:        '/vetements',
+  // Mesures (accessibles via ClientDetailPage — pas de page standalone)
+  MESURES:          '/mesures',
 
   // Abonnement
   ABONNEMENT:       '/abonnement',

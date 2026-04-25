@@ -54,6 +54,18 @@ export function useDeleteClient() {
   })
 }
 
+export function useArchiverClient() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (id) => clientService.archiver(id),
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.clients })
+      queryClient.removeQueries({ queryKey: QUERY_KEYS.client(id) })
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.quota })
+    },
+  })
+}
+
 export function useToggleVip() {
   const queryClient = useQueryClient()
   return useMutation({

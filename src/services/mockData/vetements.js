@@ -1,14 +1,49 @@
+// Structure miroir de la réponse GET /vetements (Vetement model du backend)
+// libelles_mesures: tableau de chaînes (noms des champs de mesure)
 export const mockVetements = [
-  { id: 1,  nom: 'Boubou',              description: 'Tenue traditionnelle ample',              actif: true  },
-  { id: 2,  nom: 'Robe',               description: 'Robe standard ou de soirée',               actif: true  },
-  { id: 3,  nom: 'Tailleur',           description: 'Ensemble veste + jupe ou pantalon',         actif: true  },
-  { id: 4,  nom: 'Ensemble',           description: 'Haut + bas assortis',                       actif: true  },
-  { id: 5,  nom: 'Pantalon',           description: 'Pantalon seul',                             actif: true  },
-  { id: 6,  nom: 'Chemise',            description: 'Chemise ou blouse',                         actif: true  },
-  { id: 7,  nom: 'Kabà',               description: 'Robe droite traditionnelle brodée',          actif: true  },
-  { id: 8,  nom: 'Robe de mariée',     description: 'Robe nuptiale sur mesure',                  actif: true  },
-  { id: 9,  nom: 'Jupe',               description: 'Jupe droite, évasée ou portefeuille',       actif: true  },
-  { id: 10, nom: 'Tenue traditionnelle', description: 'Tenue de cérémonie traditionnelle',       actif: true  },
-  { id: 11, nom: 'Ensemble cérémoniel', description: 'Ensemble complet pour grande cérémonie',   actif: true  },
-  { id: 12, nom: 'Manteau',            description: 'Manteau ou veste longue',                   actif: false },
+  {
+    id: 'v-001', nom: 'Boubou',
+    libelles_mesures: ['longueur_totale', 'tour_de_poitrine', 'tour_de_taille', 'tour_de_hanches', 'longueur_manche', 'epaules'],
+    is_systeme: true, is_archived: false,
+  },
+  {
+    id: 'v-002', nom: 'Robe',
+    libelles_mesures: ['longueur_robe', 'tour_de_poitrine', 'tour_de_taille', 'tour_de_hanches', 'longueur_manche', 'epaules', 'tour_de_bras'],
+    is_systeme: true, is_archived: false,
+  },
+  {
+    id: 'v-003', nom: 'Tailleur',
+    libelles_mesures: ['longueur_veste', 'longueur_jupe', 'tour_de_poitrine', 'tour_de_taille', 'tour_de_hanches', 'epaules'],
+    is_systeme: true, is_archived: false,
+  },
+  {
+    id: 'v-004', nom: 'Ensemble',
+    libelles_mesures: ['longueur_haut', 'longueur_bas', 'tour_de_poitrine', 'tour_de_taille', 'tour_de_hanches'],
+    is_systeme: true, is_archived: false,
+  },
+  {
+    id: 'v-005', nom: 'Pantalon',
+    libelles_mesures: ['longueur_pantalon', 'tour_de_taille', 'tour_de_hanches', 'tour_de_cuisse', 'entrejambe'],
+    is_systeme: true, is_archived: false,
+  },
+  {
+    id: 'v-006', nom: 'Chemise / Blouse',
+    libelles_mesures: ['longueur_dos', 'tour_de_poitrine', 'tour_de_taille', 'epaules', 'longueur_manche', 'tour_de_cou'],
+    is_systeme: true, is_archived: false,
+  },
+  {
+    id: 'v-007', nom: 'Kabà',
+    libelles_mesures: ['longueur_totale', 'tour_de_poitrine', 'tour_de_taille', 'tour_de_hanches', 'epaules'],
+    is_systeme: true, is_archived: false,
+  },
+  {
+    id: 'v-008', nom: 'Robe de mariée',
+    libelles_mesures: ['longueur_robe', 'tour_de_poitrine', 'tour_de_taille', 'tour_de_hanches', 'longueur_manche', 'epaules', 'longueur_traine'],
+    is_systeme: true, is_archived: false,
+  },
+  {
+    id: 'v-009', nom: 'Jupe',
+    libelles_mesures: ['longueur_jupe', 'tour_de_taille', 'tour_de_hanches'],
+    is_systeme: true, is_archived: false,
+  },
 ]

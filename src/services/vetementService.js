@@ -8,7 +8,7 @@ export const vetementService = {
   async getAll() {
     if (USE_MOCKS) {
       await delay()
-      return mockVetements.filter(v => v.actif)
+      return mockVetements.filter(v => !v.is_archived)
     }
     const { data } = await api.get('/vetements')
     return data
@@ -18,9 +18,11 @@ export const vetementService = {
     if (USE_MOCKS) {
       await delay()
       const newVetement = {
-        id: Math.max(...mockVetements.map(v => v.id)) + 1,
+        id: String(Date.now()),
         ...payload,
-        actif: true,
+        is_systeme:  false,
+        is_archived: false,
+        created_at:  new Date().toISOString(),
       }
       mockVetements.push(newVetement)
       return newVetement
@@ -32,7 +34,7 @@ export const vetementService = {
   async update(id, payload) {
     if (USE_MOCKS) {
       await delay()
-      const idx = mockVetements.findIndex(v => v.id === Number(id))
+      const idx = mockVetements.findIndex(v => v.id === id || v.id === Number(id))
       if (idx === -1) throw { code: 'non_trouve' }
       mockVetements[idx] = { ...mockVetements[idx], ...payload }
       return mockVetements[idx]
@@ -41,11 +43,12 @@ export const vetementService = {
     return data
   },
 
+  // Le backend archive (soft-delete) — is_archived → true
   async delete(id) {
     if (USE_MOCKS) {
       await delay()
-      const idx = mockVetements.findIndex(v => v.id === Number(id))
-      if (idx !== -1) mockVetements[idx].actif = false
+      const idx = mockVetements.findIndex(v => v.id === id || v.id === Number(id))
+      if (idx !== -1) mockVetements[idx].is_archived = true
       return
     }
     await api.delete(`/vetements/${id}`)

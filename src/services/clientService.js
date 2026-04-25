@@ -5,27 +5,32 @@ import { mockClients } from './mockData'
 const delay = (ms = 300) => new Promise(r => setTimeout(r, ms))
 
 export const clientService = {
-  async getAll({ search = '', profil = '', page = 1, per_page = 20 } = {}) {
+  async getAll({ search = '', type_profil = '' } = {}) {
     if (USE_MOCKS) {
       await delay()
       let list = [...mockClients]
       if (search) {
         const q = search.toLowerCase()
         list = list.filter(c =>
-          c.nom.toLowerCase().includes(q) || c.telephone.includes(q)
+          c.nom.toLowerCase().includes(q) ||
+          c.prenom?.toLowerCase().includes(q) ||
+          c.telephone?.includes(q)
         )
       }
-      if (profil) list = list.filter(c => c.profil === profil)
-      return { data: list, total: list.length, page, per_page }
+      if (type_profil) list = list.filter(c => c.type_profil === type_profil)
+      return list.filter(c => !c.is_archived)
     }
-    const { data } = await api.get('/clients', { params: { search, profil, page, per_page } })
+    const params = {}
+    if (search)      params.search      = search
+    if (type_profil) params.type_profil = type_profil
+    const { data } = await api.get('/clients', { params })
     return data
   },
 
   async getById(id) {
     if (USE_MOCKS) {
       await delay()
-      const client = mockClients.find(c => c.id === Number(id))
+      const client = mockClients.find(c => c.id === id || c.id === Number(id))
       if (!client) throw { code: 'non_trouve' }
       return client
     }
@@ -37,14 +42,9 @@ export const clientService = {
     if (USE_MOCKS) {
       await delay()
       const newClient = {
-        id: Math.max(...mockClients.map(c => c.id)) + 1,
+        id: String(Date.now()),
         ...payload,
-        profil: 'occasionnel',
-        points: 0,
-        commandes_count: 0,
-        commandes_actives: 0,
-        derniere_commande: null,
-        photo_url: null,
+        is_archived: false,
         created_at: new Date().toISOString(),
       }
       mockClients.push(newClient)
@@ -57,7 +57,7 @@ export const clientService = {
   async update(id, payload) {
     if (USE_MOCKS) {
       await delay()
-      const idx = mockClients.findIndex(c => c.id === Number(id))
+      const idx = mockClients.findIndex(c => c.id === id || c.id === Number(id))
       if (idx === -1) throw { code: 'non_trouve' }
       mockClients[idx] = { ...mockClients[idx], ...payload }
       return mockClients[idx]
@@ -69,22 +69,39 @@ export const clientService = {
   async delete(id) {
     if (USE_MOCKS) {
       await delay()
-      const idx = mockClients.findIndex(c => c.id === Number(id))
+      const idx = mockClients.findIndex(c => c.id === id || c.id === Number(id))
       if (idx !== -1) mockClients.splice(idx, 1)
       return
     }
     await api.delete(`/clients/${id}`)
   },
 
+  async archiver(id) {
+    if (USE_MOCKS) {
+      await delay()
+      const client = mockClients.find(c => c.id === id || c.id === Number(id))
+      if (!client) throw { code: 'non_trouve' }
+      client.is_archived = true
+      client.archived_at = new Date().toISOString()
+      return client
+    }
+    const { data } = await api.post(`/clients/${id}/archiver`)
+    return data
+  },
+
   async toggleVip(id) {
     if (USE_MOCKS) {
       await delay()
-      const client = mockClients.find(c => c.id === Number(id))
+      const client = mockClients.find(c => c.id === id || c.id === Number(id))
       if (!client) throw { code: 'non_trouve' }
-      client.profil = client.profil === 'vip' ? 'regulier' : 'vip'
+      // Dans le mock : bascule entre 'vip' et 'regulier' via type_profil fictif
+      client.type_profil = client.type_profil === 'vip' ? 'mixte' : 'vip'
       return client
     }
-    const { data } = await api.post(`/clients/${id}/toggle-vip`)
+    // Pas de concept VIP dans le backend — bascule via update
+    const client = await this.getById(id)
+    const newProfil = client.type_profil === 'vip' ? 'mixte' : 'vip'
+    const { data } = await api.put(`/clients/${id}`, { type_profil: newProfil })
     return data
   },
 }

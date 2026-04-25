@@ -2,13 +2,30 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts'
 import { AuthLayout } from '@/components/layout'
-import { Input, Button } from '@/components/ui'
+import { Input, Button, Select } from '@/components/ui'
+
+const QUESTIONS_SECRETE = [
+  { value: 'Quel est le nom de votre premier animal de compagnie ?', label: 'Nom de votre premier animal de compagnie ?' },
+  { value: 'Quel est le prénom de votre meilleure amie d\'enfance ?', label: 'Prénom de votre meilleure amie d\'enfance ?' },
+  { value: 'Quelle est la ville où vous êtes né(e) ?', label: 'Ville de naissance ?' },
+  { value: 'Quel est le nom de votre école primaire ?', label: 'Nom de votre école primaire ?' },
+]
 
 export default function RegisterPage() {
   const navigate = useNavigate()
   const { register, verifyOtp, resendOtp } = useAuth()
   const [step, setStep] = useState('form') // 'form' | 'otp'
-  const [form, setForm] = useState({ nom: '', telephone: '', nom_atelier: '', password: '' })
+  const [form, setForm] = useState({
+    nom: '',
+    prenom: '',
+    telephone: '',
+    email: '',
+    nom_atelier: '',
+    password: '',
+    password_confirmation: '',
+    question_secrete: QUESTIONS_SECRETE[0].value,
+    reponse_secrete: '',
+  })
   const [otp, setOtp] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -18,6 +35,10 @@ export default function RegisterPage() {
   const handleRegister = async e => {
     e.preventDefault()
     setError('')
+    if (form.password !== form.password_confirmation) {
+      setError('Les mots de passe ne correspondent pas')
+      return
+    }
     setLoading(true)
     try {
       await register(form)
@@ -76,19 +97,36 @@ export default function RegisterPage() {
   return (
     <AuthLayout subtitle="Créez votre atelier en ligne">
       <form onSubmit={handleRegister} className="space-y-4">
-        <Input
-          label="Votre nom"
-          value={form.nom}
-          onChange={set('nom')}
-          placeholder="Aminata Diallo"
-          required
-        />
+        <div className="grid grid-cols-2 gap-3">
+          <Input
+            label="Prénom"
+            value={form.prenom}
+            onChange={set('prenom')}
+            placeholder="Aminata"
+            required
+          />
+          <Input
+            label="Nom"
+            value={form.nom}
+            onChange={set('nom')}
+            placeholder="Diallo"
+            required
+          />
+        </div>
         <Input
           label="Téléphone"
           type="tel"
           value={form.telephone}
           onChange={set('telephone')}
           placeholder="+225 07 00 00 00 00"
+          required
+        />
+        <Input
+          label="Email"
+          type="email"
+          value={form.email}
+          onChange={set('email')}
+          placeholder="aminata@atelier.com"
           required
         />
         <Input
@@ -104,6 +142,28 @@ export default function RegisterPage() {
           value={form.password}
           onChange={set('password')}
           placeholder="••••••••"
+          required
+        />
+        <Input
+          label="Confirmer le mot de passe"
+          type="password"
+          value={form.password_confirmation}
+          onChange={set('password_confirmation')}
+          placeholder="••••••••"
+          required
+        />
+        <Select
+          label="Question secrète"
+          value={form.question_secrete}
+          onChange={set('question_secrete')}
+          options={QUESTIONS_SECRETE}
+          required
+        />
+        <Input
+          label="Réponse secrète"
+          value={form.reponse_secrete}
+          onChange={set('reponse_secrete')}
+          placeholder="Votre réponse"
           required
         />
         {error && <p className="text-sm text-danger text-center">{error}</p>}

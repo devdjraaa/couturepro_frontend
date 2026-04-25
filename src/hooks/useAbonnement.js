@@ -3,6 +3,7 @@ import { abonnementService } from '@/services/abonnementService'
 import { QUERY_STALE_TIME } from '@/constants/config'
 import { QUERY_KEYS } from './queryKeys'
 
+// Retourne l'abonnement courant (via atelier_maitre.abonnement dans /auth/me)
 export function useAbonnement() {
   return useQuery({
     queryKey: QUERY_KEYS.abonnement,
@@ -11,25 +12,31 @@ export function useAbonnement() {
   })
 }
 
-export function useAbonnementHistory() {
-  return useQuery({
-    queryKey: QUERY_KEYS.abonnementHistory,
-    queryFn: () => abonnementService.getHistory(),
-    staleTime: QUERY_STALE_TIME,
+// Lance un paiement FedaPay pour un nouveau niveau d'abonnement
+// payload: { niveau_cle: 'standard_mensuel', provider?: 'fedapay' }
+// Retourne: { paiement_id, checkout_url, expires_at, montant, devise }
+export function useInitierPaiementAbonnement() {
+  return useMutation({
+    mutationFn: ({ niveau_cle, provider }) =>
+      abonnementService.initierPaiement(niveau_cle, provider),
   })
 }
 
-export function useUpgradeAbonnement() {
+// Vérifie le statut d'un paiement en cours
+export function useStatusPaiement() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ niveau, periodicite }) => abonnementService.upgrade(niveau, periodicite),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.abonnement })
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.quota })
+    mutationFn: (paiementId) => abonnementService.statusPaiement(paiementId),
+    onSuccess: (data) => {
+      if (data.statut === 'valide') {
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.abonnement })
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.quota })
+      }
     },
   })
 }
 
+// Activation manuelle par code admin (TODO: endpoint backend à implémenter)
 export function useActivateCode() {
   const queryClient = useQueryClient()
   return useMutation({

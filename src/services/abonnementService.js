@@ -5,47 +5,50 @@ import { mockAtelier } from './mockData'
 const delay = (ms = 300) => new Promise(r => setTimeout(r, ms))
 
 export const abonnementService = {
+  // Retourne les infos d'abonnement embarquées dans l'atelier (via /auth/me)
   async getCurrent() {
     if (USE_MOCKS) {
       await delay()
       return mockAtelier.abonnement
     }
-    const { data } = await api.get('/abonnement')
-    return data
+    // L'abonnement est retourné via /auth/me (atelier_maitre.abonnement)
+    // Cette méthode est gardée pour un accès direct si besoin ultérieur
+    const { data } = await api.get('/auth/me')
+    return data.atelier_maitre?.abonnement ?? null
   },
 
-  async upgrade(niveau, periodicite = 'mensuel') {
+  // Lance un paiement d'abonnement via FedaPay
+  // payload: { niveau_cle: 'standard_mensuel', provider?: 'fedapay' }
+  async initierPaiement(niveau_cle, provider = 'fedapay') {
     if (USE_MOCKS) {
       await delay(800)
-      return { checkout_url: '#mock-payment', reference: 'REF-' + Date.now() }
+      return { checkout_url: '#mock-payment', paiement_id: 'mock-' + Date.now() }
     }
-    const { data } = await api.post('/abonnement/upgrade', { niveau, periodicite })
+    const { data } = await api.post('/paiements/initier', { niveau_cle, provider })
     return data
   },
 
+  // Vérifie le statut d'un paiement d'abonnement
+  async statusPaiement(paiementId) {
+    if (USE_MOCKS) {
+      await delay()
+      return { paiement_id: paiementId, statut: 'valide' }
+    }
+    const { data } = await api.get(`/paiements/${paiementId}/status`)
+    return data
+  },
+
+  // TODO: activation par code admin — endpoint backend à implémenter
   async activateCode(code) {
     if (USE_MOCKS) {
       await delay()
       if (code === 'PROMO-2026') {
-        mockAtelier.abonnement.niveau = 'starter'
+        mockAtelier.abonnement.niveau_cle = 'standard_mensuel'
         return mockAtelier.abonnement
       }
       throw { code: 'code_invalide' }
     }
-    const { data } = await api.post('/abonnement/activate', { code })
-    return data
-  },
-
-  async getHistory() {
-    if (USE_MOCKS) {
-      await delay()
-      return [
-        { id: 1, niveau: 'pro',     periodicite: 'mensuel', montant: 5000, statut: 'valide', created_at: '2026-04-01T10:00:00Z' },
-        { id: 2, niveau: 'starter', periodicite: 'mensuel', montant: 2500, statut: 'valide', created_at: '2026-03-01T10:00:00Z' },
-        { id: 3, niveau: 'gratuit', periodicite: null,       montant: 0,    statut: 'valide', created_at: '2025-01-15T08:00:00Z' },
-      ]
-    }
-    const { data } = await api.get('/abonnement/historique')
+    const { data } = await api.post('/abonnement/activer-code', { code })
     return data
   },
 }
