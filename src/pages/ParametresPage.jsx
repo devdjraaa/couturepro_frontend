@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useAuth } from '@/contexts'
 import {
   useProfil, useUpdateProfil,
@@ -138,8 +139,25 @@ export default function ParametresPage() {
         {activeTab === 'abonnement' && <AbonnementTab />}
         {activeTab === 'securite'   && <SecuriteTab />}
 
+        <div className="pt-2 border-t border-edge space-y-2">
+          <Link
+            to="/support"
+            className="flex items-center justify-between w-full px-4 py-3 rounded-xl bg-card border border-edge text-sm text-ink hover:bg-subtle transition-colors"
+          >
+            <span>Support &amp; aide</span>
+            <span className="text-ghost text-xs">›</span>
+          </Link>
+          <Link
+            to="/parametres/communications"
+            className="flex items-center justify-between w-full px-4 py-3 rounded-xl bg-card border border-edge text-sm text-ink hover:bg-subtle transition-colors"
+          >
+            <span>Communications WhatsApp</span>
+            <span className="text-ghost text-xs">›</span>
+          </Link>
+        </div>
+
         {activeTab === 'profil' && (
-          <div className="pt-4 border-t border-edge">
+          <div className="pt-2">
             <Button variant="danger" className="w-full" onClick={logout}>
               Se déconnecter
             </Button>

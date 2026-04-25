@@ -49,6 +49,7 @@ export const ROUTES = {
   HISTORIQUE:  '/historique',
   FAQ:         '/faq',
   CONTACT:     '/contact',
+  SUPPORT:     '/support',
 }
 
 // Helpers pour les routes dynamiques

@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { Edit2, Trash2, CreditCard, MessageCircle } from 'lucide-react'
+import { useParams, useNavigate, Link } from 'react-router-dom'
+import { Edit2, Trash2, CreditCard, MessageCircle, Ruler } from 'lucide-react'
 import { useCommande, useUpdateCommande, useUpdateStatutCommande, useDeleteCommande } from '@/hooks/useCommandes'
 import { usePaiements, useEnregistrerPaiement } from '@/hooks/usePaiements'
 import { useWhatsappRappel } from '@/hooks/useWhatsapp'
@@ -163,6 +163,16 @@ export default function CommandeDetailPage() {
             <p className="text-xs text-dim mb-1">Notes</p>
             <p className="text-sm text-ink">{commande.notes}</p>
           </div>
+        )}
+
+        {commande.client_id && (
+          <Link
+            to={`/clients/${commande.client_id}`}
+            state={{ tab: 'mesures' }}
+            className="flex items-center gap-2 text-primary text-sm py-2"
+          >
+            <Ruler size={16} /> Voir les mesures du client
+          </Link>
         )}
 
         <button

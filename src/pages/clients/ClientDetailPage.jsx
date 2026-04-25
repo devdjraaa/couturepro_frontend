@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { Edit2, Trash2, ClipboardList, MessageCircle } from 'lucide-react'
 import { useClient, useUpdateClient, useDeleteClient, useToggleVip } from '@/hooks/useClients'
 import { useMesures, useSaveMesures } from '@/hooks/useMesures'
@@ -22,8 +22,9 @@ const TABS = [
 export default function ClientDetailPage() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
   const clientId = id
-  const [activeTab, setActiveTab] = useState('infos')
+  const [activeTab, setActiveTab] = useState(location.state?.tab ?? 'infos')
   const [showEdit, setShowEdit] = useState(false)
   const [editingMesures, setEditingMesures] = useState(false)
   const [selectedVetementId, setSelectedVetementId] = useState(null)

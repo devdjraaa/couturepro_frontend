@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom'
-import { Home, Users, ClipboardList, Scissors, Settings, Bell, Star, Users2, LogOut } from 'lucide-react'
+import { Home, Users, ClipboardList, Scissors, Settings, Bell, Star, Users2, LogOut, HelpCircle } from 'lucide-react'
 import { cn } from '@/utils/cn'
 import { useAuth } from '@/contexts'
 import { Avatar } from '@/components/ui'
@@ -14,6 +14,7 @@ const NAV_ITEMS = [
   { to: '/points',        icon: Star,          label: 'Fidélité'                  },
   { to: '/notifications', icon: Bell,          label: 'Notifications'             },
   { to: '/parametres',    icon: Settings,      label: 'Paramètres'                },
+  { to: '/support',       icon: HelpCircle,    label: 'Support'                   },
 ]
 
 export default function Sidebar() {

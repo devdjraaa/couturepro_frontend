@@ -1,4 +1,4 @@
-import { Gift } from 'lucide-react'
+import { Gift, RefreshCw } from 'lucide-react'
 import { usePoints, useConvertirPoints } from '@/hooks/usePoints'
 import { AppLayout } from '@/components/layout'
 import { PointsSummary } from '@/components/points'
@@ -6,14 +6,29 @@ import { Button, Skeleton, EmptyState } from '@/components/ui'
 import { formatDate } from '@/utils/formatDate'
 import { POINTS_VERS_JOURS } from '@/constants/config'
 
+const SEUIL_DEFAUT = 10000
+
 export default function PointsPage() {
-  const { data, isLoading } = usePoints()
+  const { data, isLoading, isError, refetch } = usePoints()
   const convertir = useConvertirPoints()
 
   const solde = data?.solde_pts ?? 0
-  const seuil = data?.seuil_conversion ?? POINTS_VERS_JOURS
+  const seuil = data?.seuil_conversion ?? SEUIL_DEFAUT
   const historique = data?.historique ?? []
   const joursObtenus = Math.floor(solde / POINTS_VERS_JOURS)
+
+  if (isError) {
+    return (
+      <AppLayout title="Fidélité">
+        <div className="flex flex-col items-center justify-center gap-4 p-8 text-center">
+          <p className="text-sm text-dim">Impossible de charger vos points de fidélité.</p>
+          <Button variant="secondary" icon={RefreshCw} onClick={refetch}>
+            Réessayer
+          </Button>
+        </div>
+      </AppLayout>
+    )
+  }
 
   return (
     <AppLayout title="Fidélité">

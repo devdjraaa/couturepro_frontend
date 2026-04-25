@@ -8,6 +8,7 @@ import {
   CommandesPage, CommandeDetailPage,
   CataloguePage, EquipePage, PointsPage,
   NotificationsPage, ParametresPage, CommunicationsPage,
+  SupportPage,
 } from '@/pages'
 import { ROUTES } from '@/constants/routes'
 
@@ -88,6 +89,7 @@ export default function App() {
           <Route path={ROUTES.HISTORIQUE}       element={<PlaceholderPage title="Historique" />} />
           <Route path={ROUTES.FAQ}              element={<PlaceholderPage title="FAQ" />} />
           <Route path={ROUTES.CONTACT}          element={<PlaceholderPage title="Contact" />} />
+          <Route path={ROUTES.SUPPORT}          element={<SupportPage />}                     />
         </Route>
 
         <Route path="*" element={<Navigate to={ROUTES.DASHBOARD} replace />} />
