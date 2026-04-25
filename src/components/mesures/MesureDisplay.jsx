@@ -1,21 +1,21 @@
 const toLabel = (key) =>
   key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
 
-export default function MesureDisplay({ libelles = [], mesures }) {
+export default function MesureDisplay({ mesures }) {
   if (!mesures) return null
 
-  const filled = libelles.filter(k => mesures[k] != null)
+  const entries = Object.entries(mesures).filter(([k, v]) => k !== 'notes' && v != null)
 
   return (
     <div className="p-5">
-      {filled.length === 0 ? (
+      {entries.length === 0 ? (
         <p className="text-sm text-ghost text-center py-4">Aucune mesure enregistrée</p>
       ) : (
         <div className="grid grid-cols-2 gap-x-6 gap-y-3">
-          {filled.map(key => (
+          {entries.map(([key, value]) => (
             <div key={key} className="flex items-center justify-between border-b border-edge pb-2">
               <span className="text-xs text-dim">{toLabel(key)}</span>
-              <span className="text-sm font-semibold text-ink font-mono">{mesures[key]} cm</span>
+              <span className="text-sm font-semibold text-ink font-mono">{value} cm</span>
             </div>
           ))}
         </div>
