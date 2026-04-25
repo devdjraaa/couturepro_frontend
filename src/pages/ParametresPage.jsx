@@ -170,6 +170,7 @@ function AbonnementTab() {
               key={plan.cle}
               plan={plan}
               isCurrent={abonnement?.niveau_cle === plan.cle}
+              abonnementStatut={abonnement?.statut}
               onUpgrade={handleUpgrade}
               isLoading={initierPaiement.isPending}
             />

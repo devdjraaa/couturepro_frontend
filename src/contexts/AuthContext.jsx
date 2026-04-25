@@ -59,6 +59,13 @@ export function AuthProvider({ children }) {
     setDemoMode(!!atelier?.is_demo)
   }, [])
 
+  const equipeLogin = useCallback(async (payload) => {
+    const { user } = await authService.equipeLogin(payload)
+    setUser(user)
+    setAtelier(null)
+    setDemoMode(false)
+  }, [])
+
   const logout = useCallback(async () => {
     await authService.logout()
     setUser(null)
@@ -103,6 +110,7 @@ export function AuthProvider({ children }) {
       role: user?.role ?? null,
       // actions
       login,
+      equipeLogin,
       logout,
       register,
       verifyOtp,

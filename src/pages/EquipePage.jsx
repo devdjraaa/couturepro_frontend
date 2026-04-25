@@ -1,25 +1,66 @@
 import { useState } from 'react'
-import { UserPlus, Users } from 'lucide-react'
+import { UserPlus, Users, Copy, CheckCheck } from 'lucide-react'
 import { useEquipe, useInviterMembre, useRemoveMembre } from '@/hooks/useEquipe'
 import { usePlanLimit } from '@/hooks/usePlanFeature'
 import { useAuth } from '@/contexts'
 import { AppLayout } from '@/components/layout'
 import { MembreCard } from '@/components/equipe'
 import { EmptyState, Skeleton, BottomSheet, Button, Input, Select } from '@/components/ui'
+
 const ROLE_OPTIONS = [
   { value: 'assistant', label: 'Assistant' },
   { value: 'membre',    label: 'Membre'    },
 ]
 
+function CodeAccesModal({ membre, onClose }) {
+  const [copied, setCopied] = useState(false)
+
+  const copy = () => {
+    navigator.clipboard.writeText(membre.code_acces)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 p-4">
+      <div className="bg-surface border border-border rounded-2xl w-full max-w-sm p-6 space-y-4">
+        <div className="text-center">
+          <p className="font-semibold text-content">Membre ajouté ✓</p>
+          <p className="text-sm text-content-secondary mt-1">
+            Transmettez ce code d'accès à <strong>{membre.prenom} {membre.nom}</strong>.
+            Il servira d'identifiant et de mot de passe initial.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3 bg-background border border-border rounded-xl px-4 py-3">
+          <span className="flex-1 font-mono text-lg font-bold text-content tracking-widest text-center">
+            {membre.code_acces}
+          </span>
+          <button onClick={copy} className="text-content-secondary hover:text-content transition-colors shrink-0">
+            {copied ? <CheckCheck size={18} className="text-success" /> : <Copy size={18} />}
+          </button>
+        </div>
+
+        <p className="text-xs text-content-secondary text-center">
+          Le membre se connecte via <strong>Accès assistant</strong> sur la page de connexion.
+        </p>
+
+        <Button className="w-full" onClick={onClose}>Compris</Button>
+      </div>
+    </div>
+  )
+}
+
 export default function EquipePage() {
   const { can } = useAuth()
   const [showInvite, setShowInvite] = useState(false)
-  const [form, setForm] = useState({ nom: '', prenom: '', role: 'assistant' })
+  const [newMembre, setNewMembre] = useState(null)
+  const [form, setForm] = useState({ nom: '', prenom: '', telephone: '', role: 'assistant' })
   const [apiError, setApiError] = useState('')
   const { data: membres = [], isLoading } = useEquipe()
   const inviter = useInviterMembre()
   const remove  = useRemoveMembre()
-  const { max }   = usePlanLimit('max_membres', membres.length)
+  const { max } = usePlanLimit('max_membres', membres.length)
 
   const set = key => e => setForm(f => ({ ...f, [key]: e.target.value }))
 
@@ -27,9 +68,10 @@ export default function EquipePage() {
     e.preventDefault()
     setApiError('')
     try {
-      await inviter.mutateAsync(form)
+      const created = await inviter.mutateAsync(form)
       setShowInvite(false)
-      setForm({ nom: '', prenom: '', role: 'assistant' })
+      setForm({ nom: '', prenom: '', telephone: '', role: 'assistant' })
+      setNewMembre(created)
     } catch (err) {
       setApiError(err?.response?.data?.message ?? 'Une erreur est survenue.')
     }
@@ -66,7 +108,7 @@ export default function EquipePage() {
           <EmptyState
             icon={Users}
             title="Aucun membre"
-            description="Invitez des collaborateurs pour gérer l'atelier ensemble"
+            description="Ajoutez des collaborateurs pour gérer l'atelier ensemble"
           />
         ) : (
           membres.map(m => (
@@ -74,12 +116,17 @@ export default function EquipePage() {
           ))
         )}
 
-        {max !== null && max > 0 && (
+        {max !== null && max > 0 && membres.length > 0 && (
           <p className="text-xs text-content-secondary text-center pt-2">
             {membres.length} / {max} membre{max > 1 ? 's' : ''}
           </p>
         )}
       </div>
+
+      {/* Modal code d'accès après création */}
+      {newMembre && (
+        <CodeAccesModal membre={newMembre} onClose={() => setNewMembre(null)} />
+      )}
 
       <BottomSheet isOpen={showInvite} onClose={() => setShowInvite(false)} title="Ajouter un membre">
         <form onSubmit={handleInvite} className="p-5 space-y-4">
@@ -87,6 +134,13 @@ export default function EquipePage() {
             <Input label="Nom" value={form.nom} onChange={set('nom')} placeholder="Koné" required />
             <Input label="Prénom" value={form.prenom} onChange={set('prenom')} placeholder="Kadiatou" required />
           </div>
+          <Input
+            label="Téléphone"
+            type="tel"
+            value={form.telephone}
+            onChange={set('telephone')}
+            placeholder="+225 07 00 00 00 00"
+          />
           <Select label="Rôle" value={form.role} onChange={set('role')} options={ROLE_OPTIONS} />
           {apiError && <p className="text-sm text-danger">{apiError}</p>}
           <div className="flex gap-3 pt-2">
