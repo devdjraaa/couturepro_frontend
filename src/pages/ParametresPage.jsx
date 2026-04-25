@@ -6,7 +6,7 @@ import {
   useAtelierParametres, useUpdateAtelier,
   useChangerMotDePasse,
 } from '@/hooks/useParametres'
-import { useAbonnement } from '@/hooks/useAbonnement'
+import { useAbonnement, usePlans, useInitierPaiementAbonnement } from '@/hooks/useAbonnement'
 import { AppLayout } from '@/components/layout'
 import { QuotaBar, PlanCard } from '@/components/abonnement'
 import { TabBar, Input, Button, Skeleton } from '@/components/ui'
@@ -76,12 +76,71 @@ function AtelierTab() {
 
 function AbonnementTab() {
   const { data: abonnement } = useAbonnement()
+  const { data: plans = [] } = usePlans()
+  const initierPaiement = useInitierPaiementAbonnement()
+
+  const handleUpgrade = async (niveau_cle) => {
+    const result = await initierPaiement.mutateAsync({ niveau_cle })
+    if (result?.checkout_url && result.checkout_url !== '#mock-payment') {
+      window.open(result.checkout_url, '_blank')
+    }
+  }
+
+  const statutLabel = {
+    actif:  'Actif',
+    essai:  'Période d\'essai',
+    expire: 'Expiré',
+    gele:   'Suspendu',
+  }
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <QuotaBar />
-      <div className="space-y-3">
-        <PlanCard plan="gratuit" isCurrent={abonnement?.niveau === 'gratuit'} />
-        <PlanCard plan="pro"     isCurrent={abonnement?.niveau === 'pro'}     />
+
+      {/* Statut actuel */}
+      {abonnement && (
+        <div className="bg-card border border-edge rounded-2xl divide-y divide-edge">
+          <div className="flex justify-between px-4 py-3">
+            <span className="text-sm text-dim">Plan actuel</span>
+            <span className="text-sm font-semibold text-ink">{abonnement.niveau_label ?? abonnement.niveau_cle ?? '—'}</span>
+          </div>
+          <div className="flex justify-between px-4 py-3">
+            <span className="text-sm text-dim">Statut</span>
+            <span className="text-sm font-semibold text-ink">{statutLabel[abonnement.statut] ?? abonnement.statut}</span>
+          </div>
+          {abonnement.jours_restants != null && (
+            <div className="flex justify-between px-4 py-3">
+              <span className="text-sm text-dim">Jours restants</span>
+              <span className={`text-sm font-semibold ${abonnement.jours_restants <= 5 ? 'text-danger' : 'text-ink'}`}>
+                {abonnement.jours_restants} jour{abonnement.jours_restants !== 1 ? 's' : ''}
+              </span>
+            </div>
+          )}
+          {abonnement.timestamp_expiration && (
+            <div className="flex justify-between px-4 py-3">
+              <span className="text-sm text-dim">Expire le</span>
+              <span className="text-sm font-semibold text-ink">
+                {new Date(abonnement.timestamp_expiration).toLocaleDateString('fr-FR')}
+              </span>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Plans disponibles */}
+      <div>
+        <p className="text-xs font-semibold text-dim uppercase tracking-wide mb-3">Plans disponibles</p>
+        <div className="grid grid-cols-2 gap-3">
+          {plans.map(plan => (
+            <PlanCard
+              key={plan.cle}
+              plan={plan}
+              isCurrent={abonnement?.niveau_cle === plan.cle}
+              onUpgrade={handleUpgrade}
+              isLoading={initierPaiement.isPending}
+            />
+          ))}
+        </div>
       </div>
     </div>
   )

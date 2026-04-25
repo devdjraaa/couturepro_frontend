@@ -4,6 +4,15 @@ import { mockCommandes } from './mockData'
 
 const delay = (ms = 300) => new Promise(r => setTimeout(r, ms))
 
+const toFormData = (payload) => {
+  const fd = new FormData()
+  const fields = ['client_id', 'vetement_id', 'prix', 'acompte', 'date_livraison_prevue', 'note_interne', 'description', 'statut']
+  fields.forEach(k => { if (payload[k] != null && payload[k] !== '') fd.append(k, payload[k]) })
+  if (payload.urgence != null) fd.append('urgence', payload.urgence ? '1' : '0')
+  if (payload.photo_tissu instanceof File) fd.append('photo_tissu', payload.photo_tissu)
+  return fd
+}
+
 export const commandeService = {
   async getAll({ statut = '', client_id = null } = {}) {
     if (isMock()) {
@@ -38,6 +47,7 @@ export const commandeService = {
       const newCommande = {
         id: String(Date.now()),
         ...payload,
+        photo_tissu_url: payload.photo_tissu instanceof File ? URL.createObjectURL(payload.photo_tissu) : null,
         statut: 'en_cours',
         date_commande: new Date().toISOString().split('T')[0],
         created_at: new Date().toISOString(),
@@ -46,7 +56,8 @@ export const commandeService = {
       mockCommandes.push(newCommande)
       return newCommande
     }
-    const { data } = await api.post('/commandes', payload)
+    const body = toFormData(payload)
+    const { data } = await api.post('/commandes', body)
     return data
   },
 
@@ -58,7 +69,9 @@ export const commandeService = {
       mockCommandes[idx] = { ...mockCommandes[idx], ...payload, updated_at: new Date().toISOString() }
       return mockCommandes[idx]
     }
-    const { data } = await api.put(`/commandes/${id}`, payload)
+    const fd = toFormData(payload)
+    fd.append('_method', 'PUT')
+    const { data } = await api.post(`/commandes/${id}`, fd)
     return data
   },
 

@@ -10,6 +10,7 @@ import {
   NotificationsPage, ParametresPage, CommunicationsPage,
   SupportPage, SupportTicketDetailPage, ThemePage,
 } from '@/pages'
+import PaiementRetourPage from '@/pages/PaiementRetourPage'
 import { ROUTES } from '@/constants/routes'
 
 // Pages admin
@@ -63,6 +64,7 @@ export default function App() {
         <Route path={ROUTES.OTP}             element={<PlaceholderPage title="Vérification OTP" />} />
         <Route path={ROUTES.FORGOT_PASSWORD} element={<PlaceholderPage title="Mot de passe oublié" />} />
         <Route path={ROUTES.RECOVER_ACCOUNT} element={<PlaceholderPage title="Récupérer mon compte" />} />
+        <Route path="/paiement/retour"       element={<PaiementRetourPage />} />
 
         {/* ── Routes protégées proprietaire ───────────────────────────── */}
         <Route element={<ProtectedRoute />}>

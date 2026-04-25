@@ -1,60 +1,33 @@
-import { Check } from 'lucide-react'
 import { cn } from '@/utils/cn'
 import { Button } from '@/components/ui'
 import { formatCurrency } from '@/utils/formatCurrency'
 
-const PLANS = {
-  gratuit: {
-    label: 'Gratuit',
-    prix: 0,
-    features: ['10 clients max', '10 commandes / mois', 'Mesures de base', '1 utilisateur'],
-  },
-  pro: {
-    label: 'Pro',
-    prix: 9900,
-    features: [
-      'Clients illimités',
-      'Commandes illimitées',
-      "Équipe jusqu'à 5 membres",
-      'Programme fidélité clients',
-      'Support prioritaire',
-    ],
-  },
-}
-
 export default function PlanCard({ plan, isCurrent, onUpgrade, isLoading }) {
-  const data = PLANS[plan] ?? PLANS.gratuit
+  const dureeLabel = plan.duree_jours >= 365 ? '/ an' : '/ mois'
 
   return (
     <div className={cn(
-      'bg-card border rounded-2xl p-5',
-      isCurrent ? 'border-primary shadow-md' : 'border-edge',
+      'bg-card border rounded-2xl p-4',
+      isCurrent ? 'border-primary ring-1 ring-primary/20' : 'border-edge',
     )}>
-      <div className="flex items-start justify-between mb-4">
-        <div>
-          <p className="text-xs font-semibold text-ghost uppercase tracking-wider">{data.label}</p>
-          <p className="text-2xl font-bold font-display text-ink mt-0.5">
-            {data.prix === 0 ? 'Gratuit' : formatCurrency(data.prix)}
-            {data.prix > 0 && <span className="text-sm font-normal text-dim"> / mois</span>}
-          </p>
-        </div>
+      <div className="flex items-start justify-between mb-1">
+        <p className="text-sm font-semibold text-ink">{plan.label}</p>
         {isCurrent && (
-          <span className="text-xs bg-primary/10 text-primary px-2.5 py-1 rounded-full font-semibold shrink-0">
-            Actuel
+          <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-semibold shrink-0">
+            Actif
           </span>
         )}
       </div>
-      <ul className="space-y-2 mb-5">
-        {data.features.map(f => (
-          <li key={f} className="flex items-center gap-2 text-sm text-dim">
-            <Check size={14} className="text-success shrink-0" />
-            {f}
-          </li>
-        ))}
-      </ul>
+      <p className="text-xl font-bold text-ink">
+        {formatCurrency(Number(plan.prix_xof))}
+        <span className="text-xs font-normal text-dim ml-1">{dureeLabel}</span>
+      </p>
+      {plan.description_courte && (
+        <p className="text-xs text-ghost mt-0.5 mb-3">{plan.description_courte}</p>
+      )}
       {!isCurrent && (
-        <Button onClick={onUpgrade} loading={isLoading} className="w-full">
-          Passer au Pro
+        <Button variant="secondary" onClick={() => onUpgrade(plan.cle)} loading={isLoading} className="w-full mt-2">
+          Choisir ce plan
         </Button>
       )}
     </div>

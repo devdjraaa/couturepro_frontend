@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { Edit2, Trash2, CreditCard, MessageCircle, Ruler } from 'lucide-react'
+import { Edit2, Trash2, CreditCard, MessageCircle, Ruler, AlertTriangle } from 'lucide-react'
 import { useCommande, useUpdateCommande, useUpdateStatutCommande, useDeleteCommande } from '@/hooks/useCommandes'
 import { usePaiements, useEnregistrerPaiement } from '@/hooks/usePaiements'
 import { useWhatsappRappel } from '@/hooks/useWhatsapp'
@@ -70,7 +70,7 @@ export default function CommandeDetailPage() {
 
   if (!commande) return null
 
-  const restant = (commande.prix ?? 0) - (commande.acompte ?? 0)
+  const restant = Math.max(0, (Number(commande.prix) ?? 0) - (Number(commande.acompte) ?? 0))
 
   return (
     <AppLayout
@@ -83,6 +83,14 @@ export default function CommandeDetailPage() {
       }
     >
       <div className="p-4 space-y-4">
+        {/* Urgence */}
+        {commande.urgence && (
+          <div className="flex items-center gap-2 bg-warning/10 border border-warning/30 rounded-xl px-4 py-2.5">
+            <AlertTriangle size={15} className="text-warning shrink-0" />
+            <span className="text-sm font-semibold text-warning">Commande urgente</span>
+          </div>
+        )}
+
         {/* Client + vêtement */}
         <div className="bg-card border border-edge rounded-2xl p-4 flex items-center gap-3">
           <Avatar name={commande.client_nom} size="md" />
@@ -91,11 +99,29 @@ export default function CommandeDetailPage() {
             <p className="text-sm text-dim">{commande.vetement_nom}</p>
           </div>
           {commande.date_livraison_prevue && (
-            <p className="text-xs text-ghost shrink-0">
-              {formatDate(commande.date_livraison_prevue)}
-            </p>
+            <p className="text-xs text-ghost shrink-0">{formatDate(commande.date_livraison_prevue)}</p>
           )}
         </div>
+
+        {/* Photo tissu */}
+        {commande.photo_tissu_url && (
+          <div>
+            <p className="text-xs font-semibold text-dim uppercase tracking-wide mb-2">Tissu</p>
+            <img
+              src={commande.photo_tissu_url}
+              alt="tissu"
+              className="w-full rounded-2xl object-cover max-h-56 border border-edge"
+            />
+          </div>
+        )}
+
+        {/* Description */}
+        {commande.description && (
+          <div className="bg-card border border-edge rounded-2xl px-4 py-3">
+            <p className="text-xs text-dim mb-1">Description</p>
+            <p className="text-sm text-ink whitespace-pre-wrap">{commande.description}</p>
+          </div>
+        )}
 
         {/* Statut */}
         <div>
@@ -122,13 +148,10 @@ export default function CommandeDetailPage() {
         {/* Historique paiements */}
         {paiements.length > 0 && (
           <div>
-            <p className="text-xs font-semibold text-dim uppercase tracking-wide mb-2">Paiements</p>
+            <p className="text-xs font-semibold text-dim uppercase tracking-wide mb-2">Historique des paiements</p>
             <div className="space-y-2">
               {paiements.map(p => (
-                <div
-                  key={p.id}
-                  className="bg-card border border-edge rounded-xl flex justify-between items-center px-4 py-3"
-                >
+                <div key={p.id} className="bg-card border border-edge rounded-xl flex justify-between items-center px-4 py-3">
                   <div>
                     <p className="text-sm font-medium text-ink">{formatCurrency(p.montant)}</p>
                     <p className="text-xs text-ghost">{p.mode_paiement} · {formatDate(p.created_at)}</p>
@@ -160,25 +183,18 @@ export default function CommandeDetailPage() {
 
         {commande.note_interne && (
           <div className="bg-subtle rounded-xl px-4 py-3">
-            <p className="text-xs text-dim mb-1">Notes</p>
+            <p className="text-xs text-dim mb-1">Note interne</p>
             <p className="text-sm text-ink">{commande.note_interne}</p>
           </div>
         )}
 
         {commande.client_id && (
-          <Link
-            to={`/clients/${commande.client_id}`}
-            state={{ tab: 'mesures' }}
-            className="flex items-center gap-2 text-primary text-sm py-2"
-          >
+          <Link to={`/clients/${commande.client_id}`} state={{ tab: 'mesures' }} className="flex items-center gap-2 text-primary text-sm py-2">
             <Ruler size={16} /> Voir les mesures du client
           </Link>
         )}
 
-        <button
-          onClick={handleDelete}
-          className="flex items-center gap-2 text-danger text-sm py-2"
-        >
+        <button onClick={handleDelete} className="flex items-center gap-2 text-danger text-sm py-2">
           <Trash2 size={16} /> Supprimer cette commande
         </button>
       </div>
@@ -211,17 +227,8 @@ export default function CommandeDetailPage() {
             options={MODE_OPTIONS}
           />
           <div className="flex gap-3 pt-2">
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={() => setShowPaiement(false)}
-              className="flex-1"
-            >
-              Annuler
-            </Button>
-            <Button type="submit" loading={enregistrerPaiement.isPending} className="flex-1">
-              Confirmer
-            </Button>
+            <Button type="button" variant="ghost" onClick={() => setShowPaiement(false)} className="flex-1">Annuler</Button>
+            <Button type="submit" loading={enregistrerPaiement.isPending} className="flex-1">Confirmer</Button>
           </div>
         </form>
       </BottomSheet>

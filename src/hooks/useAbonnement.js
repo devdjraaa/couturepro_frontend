@@ -3,12 +3,19 @@ import { abonnementService } from '@/services/abonnementService'
 import { QUERY_STALE_TIME } from '@/constants/config'
 import { QUERY_KEYS } from './queryKeys'
 
-// Retourne l'abonnement courant (via atelier_maitre.abonnement dans /auth/me)
 export function useAbonnement() {
   return useQuery({
     queryKey: QUERY_KEYS.abonnement,
     queryFn: () => abonnementService.getCurrent(),
     staleTime: QUERY_STALE_TIME,
+  })
+}
+
+export function usePlans() {
+  return useQuery({
+    queryKey: ['abonnement', 'plans'],
+    queryFn: () => abonnementService.getPlans(),
+    staleTime: 30 * 60 * 1000,
   })
 }
 
