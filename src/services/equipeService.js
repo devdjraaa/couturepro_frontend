@@ -1,4 +1,4 @@
-import { USE_MOCKS } from '@/constants/config'
+import { isMock } from '@/services/mockFlag'
 import { mockEquipe } from './mockData'
 
 const delay = (ms = 300) => new Promise(r => setTimeout(r, ms))
@@ -6,7 +6,7 @@ const delay = (ms = 300) => new Promise(r => setTimeout(r, ms))
 // Pas d'endpoint /equipe dans l'API publique backend (TODO)
 export const equipeService = {
   async getAll() {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       return mockEquipe.filter(m => m.actif)
     }
@@ -14,7 +14,7 @@ export const equipeService = {
   },
 
   async invite(payload) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       const newMembre = {
         id: String(Date.now()),
@@ -29,7 +29,7 @@ export const equipeService = {
   },
 
   async updateRole(membreId, role) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       const membre = mockEquipe.find(m => m.id === membreId)
       if (!membre) throw { code: 'non_trouve' }
@@ -40,7 +40,7 @@ export const equipeService = {
   },
 
   async remove(membreId) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       const membre = mockEquipe.find(m => m.id === membreId)
       if (membre) membre.actif = false

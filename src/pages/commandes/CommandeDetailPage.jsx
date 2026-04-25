@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Edit2, Trash2, CreditCard } from 'lucide-react'
+import { Edit2, Trash2, CreditCard, MessageCircle } from 'lucide-react'
 import { useCommande, useUpdateCommande, useUpdateStatutCommande, useDeleteCommande } from '@/hooks/useCommandes'
 import { usePaiements, useEnregistrerPaiement } from '@/hooks/usePaiements'
+import { useWhatsappRappel } from '@/hooks/useWhatsapp'
 import { AppLayout } from '@/components/layout'
 import { CommandeForm, StatutSelector } from '@/components/commandes'
 import { Avatar, Button, BottomSheet, Skeleton, Input, Select } from '@/components/ui'
@@ -29,6 +30,7 @@ export default function CommandeDetailPage() {
   const updateStatut = useUpdateStatutCommande()
   const deleteCommande = useDeleteCommande()
   const enregistrerPaiement = useEnregistrerPaiement()
+  const whatsappRappel = useWhatsappRappel()
 
   const handleStatut = statut => updateStatut.mutate({ id: commandeId, statut })
 
@@ -137,11 +139,24 @@ export default function CommandeDetailPage() {
           </div>
         )}
 
-        {restant > 0 && (
-          <Button icon={CreditCard} className="w-full" onClick={() => setShowPaiement(true)}>
-            Enregistrer un paiement
-          </Button>
-        )}
+        <div className="flex gap-2">
+          {restant > 0 && (
+            <Button icon={CreditCard} className="flex-1" onClick={() => setShowPaiement(true)}>
+              Paiement
+            </Button>
+          )}
+          {commande.client_id && (
+            <Button
+              variant="secondary"
+              icon={MessageCircle}
+              className={restant > 0 ? '' : 'w-full'}
+              loading={whatsappRappel.isPending}
+              onClick={() => whatsappRappel.mutate(commande.client_id)}
+            >
+              WhatsApp
+            </Button>
+          )}
+        </div>
 
         {commande.notes && (
           <div className="bg-subtle rounded-xl px-4 py-3">

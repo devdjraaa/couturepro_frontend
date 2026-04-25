@@ -56,3 +56,24 @@ export function useAjusterFidelite(atelierId) {
     },
   })
 }
+
+export function useSetDemoMode(atelierId) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (isDemo) => ateliersAdminService.setDemoMode(atelierId, isDemo),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ADMIN_KEYS.atelier(atelierId) })
+      qc.invalidateQueries({ queryKey: ADMIN_KEYS.ateliers })
+    },
+  })
+}
+
+export function useSetTrialDuration(atelierId) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (payload) => ateliersAdminService.setTrialDuration(atelierId, payload),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ADMIN_KEYS.atelier(atelierId) })
+    },
+  })
+}

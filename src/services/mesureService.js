@@ -1,5 +1,5 @@
 import api from './api'
-import { USE_MOCKS } from '@/constants/config'
+import { isMock } from '@/services/mockFlag'
 import { mockMesures } from './mockData'
 
 const delay = (ms = 300) => new Promise(r => setTimeout(r, ms))
@@ -7,7 +7,7 @@ const delay = (ms = 300) => new Promise(r => setTimeout(r, ms))
 export const mesureService = {
   // Retourne un tableau de mesures pour un client (une mesure par type de vêtement)
   async getByClient(clientId) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       const mesures = mockMesures[clientId] ?? []
       return Array.isArray(mesures) ? mesures : [mesures]
@@ -19,7 +19,7 @@ export const mesureService = {
   // Crée ou met à jour une mesure pour un client + type de vêtement donné
   // champs = objet { poitrine: 92, tour_de_taille: 70, ... }
   async save(clientId, vetementId, champs) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       if (!mockMesures[clientId]) mockMesures[clientId] = []
       const list = Array.isArray(mockMesures[clientId]) ? mockMesures[clientId] : [mockMesures[clientId]]
@@ -51,7 +51,7 @@ export const mesureService = {
   },
 
   async delete(mesureId) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       Object.keys(mockMesures).forEach(cid => {
         const list = mockMesures[cid]

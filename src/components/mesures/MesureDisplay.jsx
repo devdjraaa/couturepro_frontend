@@ -1,21 +1,10 @@
-const FIELDS = [
-  { key: 'poitrine',          label: 'Poitrine'       },
-  { key: 'tour_de_taille',    label: 'Tour de taille' },
-  { key: 'hanches',           label: 'Hanches'        },
-  { key: 'longueur_dos',      label: 'Longueur dos'   },
-  { key: 'epaules',           label: 'Épaules'        },
-  { key: 'longueur_manche',   label: 'Lg. manche'     },
-  { key: 'tour_de_bras',      label: 'Tour de bras'   },
-  { key: 'longueur_robe',     label: 'Lg. robe'       },
-  { key: 'tour_de_cuisse',    label: 'Tour cuisse'    },
-  { key: 'longueur_pantalon', label: 'Lg. pantalon'   },
-  { key: 'tour_de_cou',       label: 'Tour de cou'    },
-]
+const toLabel = (key) =>
+  key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
 
-export default function MesureDisplay({ mesures }) {
+export default function MesureDisplay({ libelles = [], mesures }) {
   if (!mesures) return null
 
-  const filled = FIELDS.filter(f => mesures[f.key] != null)
+  const filled = libelles.filter(k => mesures[k] != null)
 
   return (
     <div className="p-5">
@@ -23,9 +12,9 @@ export default function MesureDisplay({ mesures }) {
         <p className="text-sm text-ghost text-center py-4">Aucune mesure enregistrée</p>
       ) : (
         <div className="grid grid-cols-2 gap-x-6 gap-y-3">
-          {filled.map(({ key, label }) => (
+          {filled.map(key => (
             <div key={key} className="flex items-center justify-between border-b border-edge pb-2">
-              <span className="text-xs text-dim">{label}</span>
+              <span className="text-xs text-dim">{toLabel(key)}</span>
               <span className="text-sm font-semibold text-ink font-mono">{mesures[key]} cm</span>
             </div>
           ))}

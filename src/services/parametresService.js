@@ -1,5 +1,5 @@
 import api from './api'
-import { USE_MOCKS } from '@/constants/config'
+import { isMock } from '@/services/mockFlag'
 import { mockUser, mockAtelier } from './mockData'
 
 const delay = (ms = 300) => new Promise(r => setTimeout(r, ms))
@@ -7,7 +7,7 @@ const delay = (ms = 300) => new Promise(r => setTimeout(r, ms))
 export const parametresService = {
   // Profil = données du proprietaire via /auth/me
   async getProfil() {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       return mockUser
     }
@@ -17,7 +17,7 @@ export const parametresService = {
   },
 
   async updateProfil(payload) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       Object.assign(mockUser, payload)
       return mockUser
@@ -27,7 +27,7 @@ export const parametresService = {
   },
 
   async getAtelier() {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       return mockAtelier
     }
@@ -36,7 +36,7 @@ export const parametresService = {
   },
 
   async updateAtelier(payload) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       Object.assign(mockAtelier, payload)
       return mockAtelier
@@ -46,7 +46,7 @@ export const parametresService = {
   },
 
   async changerMotDePasse(payload) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       return
     }

@@ -1,5 +1,5 @@
 import api from './api'
-import { USE_MOCKS } from '@/constants/config'
+import { isMock } from '@/services/mockFlag'
 
 const delay = (ms = 400) => new Promise(r => setTimeout(r, ms))
 
@@ -7,7 +7,7 @@ const mockTickets = []
 
 export const ticketService = {
   async creer(payload) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       const ticket = {
         id: mockTickets.length + 1,
@@ -23,7 +23,7 @@ export const ticketService = {
   },
 
   async getAll() {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       return [...mockTickets].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
     }

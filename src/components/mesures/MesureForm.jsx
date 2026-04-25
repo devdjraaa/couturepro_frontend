@@ -1,29 +1,15 @@
 import { useState } from 'react'
 import { Input, Button } from '@/components/ui'
 
-const FIELDS = [
-  { key: 'poitrine',          label: 'Poitrine'       },
-  { key: 'tour_de_taille',    label: 'Tour de taille' },
-  { key: 'hanches',           label: 'Hanches'        },
-  { key: 'longueur_dos',      label: 'Longueur dos'   },
-  { key: 'epaules',           label: 'Épaules'        },
-  { key: 'longueur_manche',   label: 'Lg. manche'     },
-  { key: 'tour_de_bras',      label: 'Tour de bras'   },
-  { key: 'longueur_robe',     label: 'Lg. robe'       },
-  { key: 'tour_de_cuisse',    label: 'Tour cuisse'    },
-  { key: 'longueur_pantalon', label: 'Lg. pantalon'   },
-  { key: 'tour_de_cou',       label: 'Tour de cou'    },
-]
+const toLabel = (key) =>
+  key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
 
-export default function MesureForm({ initialData, onSubmit, isLoading }) {
+export default function MesureForm({ libelles = [], initialData, onSubmit, isLoading }) {
   const [form, setForm] = useState(() => ({
-    ...Object.fromEntries(FIELDS.map(f => [f.key, ''])),
-    notes: '',
-    ...initialData,
-    // normalise les valeurs numériques en string pour les inputs
     ...Object.fromEntries(
-      FIELDS.map(f => [f.key, initialData?.[f.key] != null ? String(initialData[f.key]) : ''])
+      libelles.map(k => [k, initialData?.[k] != null ? String(initialData[k]) : ''])
     ),
+    notes: initialData?.notes ?? '',
   }))
 
   const set = (key) => (e) => setForm(f => ({ ...f, [key]: e.target.value }))
@@ -31,18 +17,26 @@ export default function MesureForm({ initialData, onSubmit, isLoading }) {
   const handleSubmit = (e) => {
     e.preventDefault()
     const data = Object.fromEntries(
-      FIELDS.map(f => [f.key, form[f.key] !== '' ? Number(form[f.key]) : null])
+      libelles.map(k => [k, form[k] !== '' ? Number(form[k]) : null])
     )
     onSubmit({ ...data, notes: form.notes })
+  }
+
+  if (libelles.length === 0) {
+    return (
+      <div className="p-5 text-center text-sm text-dim">
+        Ce vêtement n'a pas encore de champs de mesures configurés.
+      </div>
+    )
   }
 
   return (
     <form onSubmit={handleSubmit} className="p-5 space-y-5">
       <div className="grid grid-cols-2 gap-3">
-        {FIELDS.map(({ key, label }) => (
+        {libelles.map(key => (
           <Input
             key={key}
-            label={label}
+            label={toLabel(key)}
             type="number"
             step="0.5"
             min="0"

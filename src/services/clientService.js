@@ -1,12 +1,12 @@
 import api from './api'
-import { USE_MOCKS } from '@/constants/config'
+import { isMock } from '@/services/mockFlag'
 import { mockClients } from './mockData'
 
 const delay = (ms = 300) => new Promise(r => setTimeout(r, ms))
 
 export const clientService = {
   async getAll({ search = '', type_profil = '' } = {}) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       let list = [...mockClients]
       if (search) {
@@ -28,7 +28,7 @@ export const clientService = {
   },
 
   async getById(id) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       const client = mockClients.find(c => c.id === id || c.id === Number(id))
       if (!client) throw { code: 'non_trouve' }
@@ -39,7 +39,7 @@ export const clientService = {
   },
 
   async create(payload) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       const newClient = {
         id: String(Date.now()),
@@ -55,7 +55,7 @@ export const clientService = {
   },
 
   async update(id, payload) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       const idx = mockClients.findIndex(c => c.id === id || c.id === Number(id))
       if (idx === -1) throw { code: 'non_trouve' }
@@ -67,7 +67,7 @@ export const clientService = {
   },
 
   async delete(id) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       const idx = mockClients.findIndex(c => c.id === id || c.id === Number(id))
       if (idx !== -1) mockClients.splice(idx, 1)
@@ -77,7 +77,7 @@ export const clientService = {
   },
 
   async archiver(id) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       const client = mockClients.find(c => c.id === id || c.id === Number(id))
       if (!client) throw { code: 'non_trouve' }
@@ -90,7 +90,7 @@ export const clientService = {
   },
 
   async toggleVip(id) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       const client = mockClients.find(c => c.id === id || c.id === Number(id))
       if (!client) throw { code: 'non_trouve' }

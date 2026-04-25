@@ -1,12 +1,12 @@
 import api from './api'
-import { USE_MOCKS } from '@/constants/config'
+import { isMock } from '@/services/mockFlag'
 import { mockVetements } from './mockData'
 
 const delay = (ms = 300) => new Promise(r => setTimeout(r, ms))
 
 export const vetementService = {
   async getAll() {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       return mockVetements.filter(v => !v.is_archived)
     }
@@ -15,7 +15,7 @@ export const vetementService = {
   },
 
   async create(payload) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       const newVetement = {
         id: String(Date.now()),
@@ -32,7 +32,7 @@ export const vetementService = {
   },
 
   async update(id, payload) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       const idx = mockVetements.findIndex(v => v.id === id || v.id === Number(id))
       if (idx === -1) throw { code: 'non_trouve' }
@@ -45,7 +45,7 @@ export const vetementService = {
 
   // Le backend archive (soft-delete) — is_archived → true
   async delete(id) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       const idx = mockVetements.findIndex(v => v.id === id || v.id === Number(id))
       if (idx !== -1) mockVetements[idx].is_archived = true

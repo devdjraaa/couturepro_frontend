@@ -1,12 +1,12 @@
 import api from './api'
-import { USE_MOCKS } from '@/constants/config'
+import { isMock } from '@/services/mockFlag'
 import { mockCommandes } from './mockData'
 
 const delay = (ms = 300) => new Promise(r => setTimeout(r, ms))
 
 export const commandeService = {
   async getAll({ statut = '', client_id = null } = {}) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       let list = [...mockCommandes]
       if (statut)    list = list.filter(c => c.statut === statut)
@@ -22,7 +22,7 @@ export const commandeService = {
   },
 
   async getById(id) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       const commande = mockCommandes.find(c => c.id === id || c.id === Number(id))
       if (!commande) throw { code: 'non_trouve' }
@@ -33,7 +33,7 @@ export const commandeService = {
   },
 
   async create(payload) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       const newCommande = {
         id: String(Date.now()),
@@ -51,7 +51,7 @@ export const commandeService = {
   },
 
   async update(id, payload) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       const idx = mockCommandes.findIndex(c => c.id === id || c.id === Number(id))
       if (idx === -1) throw { code: 'non_trouve' }
@@ -63,7 +63,7 @@ export const commandeService = {
   },
 
   async updateStatut(id, statut) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       const idx = mockCommandes.findIndex(c => c.id === id || c.id === Number(id))
       if (idx === -1) throw { code: 'non_trouve' }
@@ -76,7 +76,7 @@ export const commandeService = {
   },
 
   async delete(id) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       const idx = mockCommandes.findIndex(c => c.id === id || c.id === Number(id))
       if (idx !== -1) mockCommandes.splice(idx, 1)
@@ -86,7 +86,7 @@ export const commandeService = {
   },
 
   async getStats() {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay(200)
       const actives = mockCommandes.filter(c => c.statut === 'en_cours')
       return {

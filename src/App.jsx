@@ -7,7 +7,7 @@ import {
   ClientsPage, ClientDetailPage,
   CommandesPage, CommandeDetailPage,
   CataloguePage, EquipePage, PointsPage,
-  NotificationsPage, ParametresPage,
+  NotificationsPage, ParametresPage, CommunicationsPage,
 } from '@/pages'
 import { ROUTES } from '@/constants/routes'
 
@@ -81,7 +81,7 @@ export default function App() {
           <Route path={ROUTES.NOTIFICATIONS}    element={<NotificationsPage />}  />
           <Route path={ROUTES.PARAMETRES}       element={<ParametresPage />}     />
           <Route path={ROUTES.PROFIL}           element={<PlaceholderPage title="Mon profil" />} />
-          <Route path={ROUTES.COMMUNICATIONS}   element={<PlaceholderPage title="Communications" />} />
+          <Route path={ROUTES.COMMUNICATIONS}   element={<CommunicationsPage />} />
           <Route path={ROUTES.THEME}            element={<PlaceholderPage title="Thème" />} />
           <Route path={ROUTES.APROPOS}          element={<PlaceholderPage title="À propos" />} />
           <Route path={ROUTES.PHOTOS_VIP}       element={<PlaceholderPage title="Photos VIP" />} />

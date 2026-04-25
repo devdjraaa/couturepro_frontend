@@ -30,6 +30,9 @@ export const mockAtelier = {
   // Champ pratique pour pointsService mock
   solde_pts: 285,
   historique: [],
+  // Paramètres communications
+  whatsapp_notifications_enabled: false,
+  numero_whatsapp_atelier: '',
 }
 
 export const mockAuth = {

@@ -30,4 +30,15 @@ export const ateliersAdminService = {
     const { data } = await adminApi.post(`/ateliers/${id}/fidelite/ajuster`, payload)
     return data
   },
+
+  async setDemoMode(id, isDemo) {
+    const { data } = await adminApi.post(`/ateliers/${id}/demo`, { is_demo: isDemo })
+    return data
+  },
+
+  // unite: 'minutes' | 'heures' | 'jours'
+  async setTrialDuration(id, payload) {
+    const { data } = await adminApi.post(`/ateliers/${id}/trial`, payload)
+    return data
+  },
 }

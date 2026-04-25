@@ -38,8 +38,8 @@ export function AtelierProvider({ children }) {
       commandesRestantes,
       peutAjouterClient,
       peutAjouterCommande,
-      points: atelier.points ?? 0,
-      joursPoints: Math.floor((atelier.points ?? 0) / 10),
+      points: atelier.solde_pts ?? atelier.points ?? 0,
+      joursPoints: Math.floor((atelier.solde_pts ?? atelier.points ?? 0) / 10),
       prix: ABONNEMENT_PRIX[niveau] ?? null,
     }
   }, [atelier])

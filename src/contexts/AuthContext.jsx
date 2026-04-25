@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { authService } from '@/services/authService'
 import { getToken } from '@/utils/storage'
+import { setDemoMode } from '@/services/mockFlag'
 
 // ── Permissions par rôle ──────────────────────────────────────────────────────
 const ROLE_PERMISSIONS = {
@@ -42,23 +43,27 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     if (!getToken()) { setIsLoading(false); return }
     authService.getMe()
-      .then(({ user, atelier }) => { setUser(user); setAtelier(atelier) })
+      .then(({ user, atelier }) => {
+        setUser(user)
+        setAtelier(atelier)
+        setDemoMode(!!atelier?.is_demo)
+      })
       .catch(() => { /* token invalide — clearAll déjà appelé par l'intercepteur */ })
       .finally(() => setIsLoading(false))
   }, [])
 
   const login = useCallback(async (payload) => {
-    // authService.login normalise la réponse vers { user, atelier }
-    // payload attendu: { telephone, password }
     const { user, atelier } = await authService.login(payload)
     setUser(user)
     setAtelier(atelier)
+    setDemoMode(!!atelier?.is_demo)
   }, [])
 
   const logout = useCallback(async () => {
     await authService.logout()
     setUser(null)
     setAtelier(null)
+    setDemoMode(false)
   }, [])
 
   const register = useCallback((payload) => authService.register(payload), [])
@@ -67,6 +72,7 @@ export function AuthProvider({ children }) {
     const { user, atelier } = await authService.verifyOtp(payload)
     setUser(user)
     setAtelier(atelier)
+    setDemoMode(!!atelier?.is_demo)
   }, [])
 
   const resendOtp = useCallback((telephone) => authService.resendOtp(telephone), [])

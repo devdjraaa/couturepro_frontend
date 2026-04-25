@@ -1,4 +1,5 @@
-import { USE_MOCKS, QUOTA_LIMITS } from '@/constants/config'
+import { QUOTA_LIMITS } from '@/constants/config'
+import { isMock } from '@/services/mockFlag'
 import { mockAtelier, mockClients, mockCommandes } from './mockData'
 
 const delay = (ms = 200) => new Promise(r => setTimeout(r, ms))
@@ -7,7 +8,7 @@ const delay = (ms = 200) => new Promise(r => setTimeout(r, ms))
 // En mode réel, on retourne null : l'UI affiche les quotas uniquement si disponibles
 export const quotaService = {
   async getUsage() {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       const niveau = mockAtelier.abonnement.niveau_cle ?? 'standard_mensuel'
       const limits = QUOTA_LIMITS[niveau] ?? QUOTA_LIMITS.gratuit

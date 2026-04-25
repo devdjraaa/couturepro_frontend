@@ -1,11 +1,12 @@
 import { Bell } from 'lucide-react'
-import { useNotifications, useMarquerToutesLues } from '@/hooks/useNotifications'
+import { useNotifications, useMarquerLue, useMarquerToutesLues } from '@/hooks/useNotifications'
 import { AppLayout } from '@/components/layout'
 import { NotificationItem } from '@/components/notifications'
 import { Skeleton, EmptyState } from '@/components/ui'
 
 export default function NotificationsPage() {
   const { data: notifications = [], isLoading } = useNotifications()
+  const marquerLue = useMarquerLue()
   const marquerToutesLues = useMarquerToutesLues()
 
   const nonLues = notifications.filter(n => !n.lu)
@@ -37,7 +38,11 @@ export default function NotificationsPage() {
           />
         ) : (
           notifications.map(n => (
-            <NotificationItem key={n.id} notification={n} />
+            <NotificationItem
+              key={n.id}
+              notification={n}
+              onPress={notif => { if (!notif.lu) marquerLue.mutate(notif.id) }}
+            />
           ))
         )}
       </div>

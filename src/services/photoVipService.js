@@ -1,4 +1,4 @@
-import { USE_MOCKS } from '@/constants/config'
+import { isMock } from '@/services/mockFlag'
 import { mockClients } from './mockData'
 
 const delay = (ms = 600) => new Promise(r => setTimeout(r, ms))
@@ -7,7 +7,7 @@ const delay = (ms = 600) => new Promise(r => setTimeout(r, ms))
 // L'upload vers le serveur est une feature future (TODO backend)
 export const photoVipService = {
   async upload(clientId, file) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       const client = mockClients.find(c => c.id === clientId)
       if (client) client.photo_url = URL.createObjectURL(file)
@@ -18,7 +18,7 @@ export const photoVipService = {
   },
 
   async delete(clientId) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay(300)
       const client = mockClients.find(c => c.id === clientId)
       if (client) client.photo_url = null

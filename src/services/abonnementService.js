@@ -1,5 +1,5 @@
 import api from './api'
-import { USE_MOCKS } from '@/constants/config'
+import { isMock } from '@/services/mockFlag'
 import { mockAtelier } from './mockData'
 
 const delay = (ms = 300) => new Promise(r => setTimeout(r, ms))
@@ -7,7 +7,7 @@ const delay = (ms = 300) => new Promise(r => setTimeout(r, ms))
 export const abonnementService = {
   // Retourne les infos d'abonnement embarquées dans l'atelier (via /auth/me)
   async getCurrent() {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       return mockAtelier.abonnement
     }
@@ -20,7 +20,7 @@ export const abonnementService = {
   // Lance un paiement d'abonnement via FedaPay
   // payload: { niveau_cle: 'standard_mensuel', provider?: 'fedapay' }
   async initierPaiement(niveau_cle, provider = 'fedapay') {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay(800)
       return { checkout_url: '#mock-payment', paiement_id: 'mock-' + Date.now() }
     }
@@ -30,7 +30,7 @@ export const abonnementService = {
 
   // Vérifie le statut d'un paiement d'abonnement
   async statusPaiement(paiementId) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       return { paiement_id: paiementId, statut: 'valide' }
     }
@@ -40,7 +40,7 @@ export const abonnementService = {
 
   // TODO: activation par code admin — endpoint backend à implémenter
   async activateCode(code) {
-    if (USE_MOCKS) {
+    if (isMock()) {
       await delay()
       if (code === 'PROMO-2026') {
         mockAtelier.abonnement.niveau_cle = 'standard_mensuel'

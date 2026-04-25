@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Edit2, Trash2, ClipboardList } from 'lucide-react'
+import { Edit2, Trash2, ClipboardList, MessageCircle } from 'lucide-react'
 import { useClient, useUpdateClient, useDeleteClient, useToggleVip } from '@/hooks/useClients'
 import { useMesures, useSaveMesures } from '@/hooks/useMesures'
 import { useCommandes } from '@/hooks/useCommandes'
 import { useVetements } from '@/hooks/useVetements'
+import { useWhatsappRappel } from '@/hooks/useWhatsapp'
 import { AppLayout } from '@/components/layout'
 import { ClientForm } from '@/components/clients'
 import { MesureForm, MesureDisplay } from '@/components/mesures'
@@ -35,9 +36,12 @@ export default function ClientDetailPage() {
   const deleteClient = useDeleteClient()
   const toggleVip = useToggleVip()
   const saveMesures = useSaveMesures(clientId, selectedVetementId)
+  const whatsappRappel = useWhatsappRappel()
 
   const clientCommandes = allCommandes.filter(c => c.client_id === clientId)
-  const selectedMesure = mesures.find(m => m.vetement_id === selectedVetementId)
+  const selectedMesure    = mesures.find(m => m.vetement_id === selectedVetementId)
+  const selectedVetement  = vetements.find(v => v.id === selectedVetementId)
+  const libelles          = selectedVetement?.libelles_mesures ?? []
 
   const handleUpdate = async data => {
     await updateClient.mutateAsync({ id: clientId, ...data })
@@ -131,6 +135,17 @@ export default function ClientDetailPage() {
                 </div>
               )}
             </div>
+            {client.telephone && (
+              <Button
+                variant="secondary"
+                icon={MessageCircle}
+                className="w-full"
+                loading={whatsappRappel.isPending}
+                onClick={() => whatsappRappel.mutate(client.id)}
+              >
+                Rappeler sur WhatsApp
+              </Button>
+            )}
             <button
               onClick={handleDelete}
               className="flex items-center gap-2 text-danger text-sm py-2"
@@ -157,6 +172,7 @@ export default function ClientDetailPage() {
               editingMesures ? (
                 <div>
                   <MesureForm
+                    libelles={libelles}
                     initialData={selectedMesure?.champs}
                     onSubmit={handleSaveMesures}
                     isLoading={saveMesures.isPending}
@@ -170,7 +186,7 @@ export default function ClientDetailPage() {
                 </div>
               ) : selectedMesure ? (
                 <div>
-                  <MesureDisplay mesures={selectedMesure.champs} />
+                  <MesureDisplay libelles={libelles} mesures={selectedMesure.champs} />
                   <Button variant="secondary" className="mt-4 w-full" onClick={() => setEditingMesures(true)}>
                     Modifier les mesures
                   </Button>
