@@ -1,6 +1,8 @@
 import { useState, useRef } from 'react'
-import { HelpCircle, Plus, Image, X } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { HelpCircle, Plus, Image, X, ChevronRight } from 'lucide-react'
 import { useTickets, useCreerTicket } from '@/hooks/useTicket'
+import { toSupportTicket } from '@/constants/routes'
 import { AppLayout } from '@/components/layout'
 import { Button, Input, Select, Skeleton, EmptyState } from '@/components/ui'
 import { formatDate } from '@/utils/formatDate'
@@ -25,6 +27,7 @@ const STATUT_LABELS = {
 }
 
 export default function SupportPage() {
+  const navigate = useNavigate()
   const { data: tickets = [], isLoading } = useTickets()
   const creer = useCreerTicket()
   const [showForm, setShowForm] = useState(false)
@@ -159,19 +162,26 @@ export default function SupportPage() {
         ) : (
           <div className="space-y-2">
             {tickets.map(t => (
-              <div key={t.id} className="bg-card border border-edge rounded-xl px-4 py-3">
+              <button
+                key={t.id}
+                onClick={() => navigate(toSupportTicket(t.id))}
+                className="w-full bg-card border border-edge rounded-xl px-4 py-3 text-left hover:bg-subtle transition-colors"
+              >
                 <div className="flex items-start justify-between gap-2">
                   <p className="text-sm font-medium text-ink truncate flex-1">{t.sujet}</p>
-                  <span className={`text-xs font-semibold shrink-0 ${STATUT_COLORS[t.statut] ?? 'text-dim'}`}>
-                    {STATUT_LABELS[t.statut] ?? t.statut}
-                  </span>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <span className={`text-xs font-semibold ${STATUT_COLORS[t.statut] ?? 'text-dim'}`}>
+                      {STATUT_LABELS[t.statut] ?? t.statut}
+                    </span>
+                    <ChevronRight size={14} className="text-ghost" />
+                  </div>
                 </div>
                 <p className="text-xs text-ghost mt-0.5">
                   {CATEGORIES.find(c => c.value === t.categorie)?.label ?? t.categorie}
                   {' · '}
                   {formatDate(t.created_at)}
                 </p>
-              </div>
+              </button>
             ))}
           </div>
         )}

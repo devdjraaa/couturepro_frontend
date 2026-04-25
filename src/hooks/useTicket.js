@@ -11,10 +11,27 @@ export function useTickets() {
   })
 }
 
+export function useTicket(id) {
+  return useQuery({
+    queryKey: [...QUERY_KEYS.tickets, id],
+    queryFn: () => ticketService.getById(id),
+    enabled: !!id,
+    staleTime: QUERY_STALE_TIME,
+  })
+}
+
 export function useCreerTicket() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (payload) => ticketService.creer(payload),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.tickets }),
+  })
+}
+
+export function useRepondreTicket(ticketId) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (payload) => ticketService.repondre(ticketId, payload),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [...QUERY_KEYS.tickets, ticketId] }),
   })
 }

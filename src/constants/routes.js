@@ -49,8 +49,11 @@ export const ROUTES = {
   HISTORIQUE:  '/historique',
   FAQ:         '/faq',
   CONTACT:     '/contact',
-  SUPPORT:     '/support',
+  SUPPORT:          '/support',
+  SUPPORT_TICKET:   '/support/tickets/:id',
 }
+
+export const toSupportTicket = (id) => `/support/tickets/${id}`
 
 // Helpers pour les routes dynamiques
 export const toClientDetail    = (id) => `/clients/${id}`

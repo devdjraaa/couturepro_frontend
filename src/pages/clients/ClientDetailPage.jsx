@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useParams, useNavigate, useLocation } from 'react-router-dom'
-import { Edit2, Trash2, ClipboardList, MessageCircle } from 'lucide-react'
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom'
+import { Edit2, Trash2, ClipboardList, MessageCircle, Settings } from 'lucide-react'
 import { useClient, useUpdateClient, useDeleteClient, useToggleVip } from '@/hooks/useClients'
 import { useMesures, useSaveMesures } from '@/hooks/useMesures'
 import { useCommandes } from '@/hooks/useCommandes'
@@ -158,47 +158,73 @@ export default function ClientDetailPage() {
 
         {activeTab === 'mesures' && (
           <div className="space-y-4">
-            <select
-              value={selectedVetementId ?? ''}
-              onChange={e => handleSelectVetement(e.target.value)}
-              className="w-full border border-edge rounded-xl px-3 py-2 text-sm bg-card text-ink"
-            >
-              <option value="">Choisir un vêtement…</option>
-              {vetements.map(v => (
-                <option key={v.id} value={v.id}>{v.nom}</option>
-              ))}
-            </select>
+            {vetements.length === 0 ? (
+              <EmptyState
+                icon={Settings}
+                title="Aucun type de vêtement"
+                description="Configurez d'abord vos types de vêtements dans le catalogue pour pouvoir enregistrer des mesures."
+                action={
+                  <Link to="/catalogue">
+                    <Button variant="secondary">Aller au catalogue</Button>
+                  </Link>
+                }
+              />
+            ) : (
+              <>
+                <select
+                  value={selectedVetementId ?? ''}
+                  onChange={e => handleSelectVetement(e.target.value)}
+                  className="w-full border border-edge rounded-xl px-3 py-2 text-sm bg-card text-ink"
+                >
+                  <option value="">Choisir un vêtement…</option>
+                  {vetements.map(v => (
+                    <option key={v.id} value={v.id}>{v.nom}</option>
+                  ))}
+                </select>
 
-            {selectedVetementId && (
-              editingMesures ? (
-                <div>
-                  <MesureForm
-                    libelles={libelles}
-                    initialData={selectedMesure?.champs}
-                    onSubmit={handleSaveMesures}
-                    isLoading={saveMesures.isPending}
-                  />
-                  <button
-                    onClick={() => setEditingMesures(false)}
-                    className="w-full text-sm text-dim py-2 mt-2"
-                  >
-                    Annuler
-                  </button>
-                </div>
-              ) : selectedMesure ? (
-                <div>
-                  <MesureDisplay libelles={libelles} mesures={selectedMesure.champs} />
-                  <Button variant="secondary" className="mt-4 w-full" onClick={() => setEditingMesures(true)}>
-                    Modifier les mesures
-                  </Button>
-                </div>
-              ) : (
-                <EmptyState
-                  title="Aucune mesure"
-                  description="Enregistrez les mesures de ce client pour ce vêtement"
-                  action={<Button onClick={() => setEditingMesures(true)}>Ajouter les mesures</Button>}
-                />
-              )
+                {selectedVetementId && libelles.length === 0 && (
+                  <div className="bg-card border border-edge rounded-2xl p-4 text-center space-y-3">
+                    <p className="text-sm text-dim">Ce vêtement n'a pas encore de champs de mesures configurés.</p>
+                    <Link to="/catalogue">
+                      <Button variant="secondary" icon={Settings} className="mx-auto">
+                        Configurer dans le catalogue
+                      </Button>
+                    </Link>
+                  </div>
+                )}
+
+                {selectedVetementId && libelles.length > 0 && (
+                  editingMesures ? (
+                    <div>
+                      <MesureForm
+                        libelles={libelles}
+                        initialData={selectedMesure?.champs}
+                        onSubmit={handleSaveMesures}
+                        isLoading={saveMesures.isPending}
+                      />
+                      <button
+                        onClick={() => setEditingMesures(false)}
+                        className="w-full text-sm text-dim py-2 mt-2"
+                      >
+                        Annuler
+                      </button>
+                    </div>
+                  ) : selectedMesure ? (
+                    <div>
+                      <MesureDisplay libelles={libelles} mesures={selectedMesure.champs} />
+                      <Button variant="secondary" className="mt-4 w-full" onClick={() => setEditingMesures(true)}>
+                        Modifier les mesures
+                      </Button>
+                    </div>
+                  ) : (
+                    <EmptyState
+                      title="Aucune mesure"
+                      description="Enregistrez les mesures de ce client pour ce vêtement"
+                      action={<Button onClick={() => setEditingMesures(true)}>Ajouter les mesures</Button>}
+                    />
+                  )
+                )}
+              </>
             )}
           </div>
         )}

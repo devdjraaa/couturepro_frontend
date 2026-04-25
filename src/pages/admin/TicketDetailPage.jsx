@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useParams } from 'react-router-dom'
+import { Image, X } from 'lucide-react'
 import { AdminLayout, AdminBadge } from '@/components/admin'
 import { useAdminTicket, useRepondreTicket, useFermerTicket, useRouvrirTicket } from '@/hooks/admin/useTickets'
 import { formatDate } from '@/utils/formatDate'
@@ -11,14 +12,36 @@ export default function TicketDetailPage() {
   const fermer   = useFermerTicket()
   const rouvrir  = useRouvrirTicket()
 
-  const [contenu, setContenu]       = useState('')
-  const [isInterne, setIsInterne]   = useState(false)
+  const [contenu, setContenu]     = useState('')
+  const [isInterne, setIsInterne] = useState(false)
+  const [photo, setPhoto]         = useState(null)
+  const [preview, setPreview]     = useState(null)
+  const fileRef = useRef()
+
+  const handlePhoto = e => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setPhoto(file)
+    setPreview(URL.createObjectURL(file))
+  }
+
+  const removePhoto = () => {
+    setPhoto(null)
+    setPreview(null)
+    if (fileRef.current) fileRef.current.value = ''
+  }
 
   const handleRepondre = async e => {
     e.preventDefault()
     if (!contenu.trim()) return
-    await repondre.mutateAsync({ contenu, is_note_interne: isInterne })
+    const payload = new FormData()
+    payload.append('contenu', contenu)
+    payload.append('is_note_interne', isInterne ? '1' : '0')
+    if (photo) payload.append('photo', photo)
+    await repondre.mutateAsync(payload)
     setContenu('')
+    setIsInterne(false)
+    removePhoto()
   }
 
   if (isLoading) return <AdminLayout title="Ticket"><p className="text-sm text-gray-400">Chargement…</p></AdminLayout>
@@ -70,13 +93,20 @@ export default function TicketDetailPage() {
                     <span className="text-xs text-gray-400">{formatDate(msg.created_at)}</span>
                   </div>
                   <p className="text-gray-700 whitespace-pre-wrap">{msg.contenu}</p>
+                  {msg.pj_url && (
+                    <img
+                      src={msg.pj_url}
+                      alt="capture"
+                      className="mt-2 rounded-lg max-h-48 object-cover w-full"
+                    />
+                  )}
                 </div>
               ))}
             </div>
 
             {/* Répondre */}
             {ticket.statut !== 'ferme' && (
-              <form onSubmit={handleRepondre} className="mt-4 space-y-2">
+              <form onSubmit={handleRepondre} className="mt-4 space-y-3">
                 <textarea
                   value={contenu}
                   onChange={e => setContenu(e.target.value)}
@@ -84,6 +114,37 @@ export default function TicketDetailPage() {
                   rows={4}
                   className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-400 resize-none"
                 />
+
+                {/* Photo */}
+                {preview ? (
+                  <div className="relative rounded-lg overflow-hidden border border-gray-200">
+                    <img src={preview} alt="capture" className="w-full max-h-32 object-cover" />
+                    <button
+                      type="button"
+                      onClick={removePhoto}
+                      className="absolute top-2 right-2 w-6 h-6 rounded-full bg-black/50 flex items-center justify-center"
+                    >
+                      <X size={12} className="text-white" />
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => fileRef.current?.click()}
+                    className="flex items-center gap-2 text-xs text-gray-400 hover:text-indigo-600 transition-colors"
+                  >
+                    <Image size={14} />
+                    Joindre une capture d'écran
+                  </button>
+                )}
+                <input
+                  ref={fileRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handlePhoto}
+                />
+
                 <div className="flex justify-between items-center">
                   <label className="flex items-center gap-2 text-xs text-gray-500 cursor-pointer">
                     <input type="checkbox" checked={isInterne} onChange={e => setIsInterne(e.target.checked)} />
