@@ -35,8 +35,8 @@ export default function CommandeForm({ initialData, onSubmit, onCancel, isLoadin
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 p-5">
-      <Select label="Client" value={form.client_id} onChange={set('client_id')} options={clientOptions} required />
-      <Select label="Type de vêtement" value={form.vetement_id} onChange={set('vetement_id')} options={vetOptions} required />
+      <Select label="Client" value={form.client_id} onChange={set('client_id')} options={clientOptions} placeholder="Choisir un client…" required />
+      <Select label="Modèle / vêtement" value={form.vetement_id} onChange={set('vetement_id')} options={vetOptions} placeholder="Choisir un modèle…" required />
       <div className="grid grid-cols-2 gap-3">
         <Input label="Prix (XOF)" type="number" min="0" value={form.prix}    onChange={set('prix')}    placeholder="25000" required />
         <Input label="Acompte (XOF)" type="number" min="0" value={form.acompte} onChange={set('acompte')} placeholder="0" />

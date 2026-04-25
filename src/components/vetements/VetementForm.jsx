@@ -1,97 +1,75 @@
-import { useState } from 'react'
-import { X, Plus } from 'lucide-react'
+import { useState, useRef } from 'react'
+import { ImagePlus, X } from 'lucide-react'
 import { Input, Button } from '@/components/ui'
-
-const toSlug = (str) =>
-  str.trim().toLowerCase()
-    .normalize('NFD').replace(/[̀-ͯ]/g, '')
-    .replace(/\s+/g, '_')
-    .replace(/[^a-z0-9_]/g, '')
-
-const toDisplay = (slug) =>
-  slug.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
 
 export default function VetementForm({ initialData, onSubmit, onCancel, isLoading }) {
   const [nom, setNom] = useState(initialData?.nom ?? '')
-  const [libelles, setLibelles] = useState(
-    Array.isArray(initialData?.libelles_mesures) ? initialData.libelles_mesures : []
-  )
-  const [newLabel, setNewLabel] = useState('')
+  const [image, setImage] = useState(null)
+  const [preview, setPreview] = useState(initialData?.image_url ?? null)
+  const fileRef = useRef(null)
 
-  const addLabel = () => {
-    const slug = toSlug(newLabel)
-    if (!slug || libelles.includes(slug)) { setNewLabel(''); return }
-    setLibelles(prev => [...prev, slug])
-    setNewLabel('')
+  const handleFile = (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setImage(file)
+    setPreview(URL.createObjectURL(file))
   }
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') { e.preventDefault(); addLabel() }
+  const clearImage = () => {
+    setImage(null)
+    setPreview(null)
+    if (fileRef.current) fileRef.current.value = ''
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onSubmit({ nom: nom.trim(), libelles_mesures: libelles })
+    onSubmit({ nom: nom.trim(), image: image ?? undefined })
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5 p-5">
       <Input
-        label="Nom du vêtement"
+        label="Nom du modèle"
         value={nom}
         onChange={e => setNom(e.target.value)}
-        placeholder="Boubou grand, Robe de soirée…"
+        placeholder="Robe de soirée, Boubou grand…"
         required
         autoFocus
       />
 
       <div>
-        <label className="block text-sm font-medium text-ink mb-2">
-          Champs de mesures
-          <span className="ml-1 text-xs text-ghost font-normal">(ex : Poitrine, Taille, Hanches)</span>
-        </label>
-
-        {libelles.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-3">
-            {libelles.map(slug => (
-              <span
-                key={slug}
-                className="inline-flex items-center gap-1.5 text-xs bg-primary/10 text-primary px-2.5 py-1.5 rounded-full"
-              >
-                {toDisplay(slug)}
-                <button
-                  type="button"
-                  onClick={() => setLibelles(prev => prev.filter(l => l !== slug))}
-                  className="hover:text-danger transition-colors"
-                >
-                  <X size={11} />
-                </button>
-              </span>
-            ))}
+        <p className="text-sm font-medium text-ink mb-2">Photo du modèle</p>
+        {preview ? (
+          <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden border border-edge">
+            <img src={preview} alt="aperçu" className="w-full h-full object-cover" />
+            <button
+              type="button"
+              onClick={clearImage}
+              className="absolute top-2 right-2 w-7 h-7 bg-black/50 rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors"
+            >
+              <X size={14} />
+            </button>
           </div>
-        )}
-
-        <div className="flex gap-2">
-          <Input
-            value={newLabel}
-            onChange={e => setNewLabel(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Ex : Tour de poitrine…"
-          />
-          <Button
+        ) : (
+          <button
             type="button"
-            variant="secondary"
-            icon={Plus}
-            onClick={addLabel}
-            disabled={!newLabel.trim()}
-            className="shrink-0"
+            onClick={() => fileRef.current?.click()}
+            className="w-full aspect-[4/3] rounded-xl border-2 border-dashed border-edge flex flex-col items-center justify-center gap-2 text-ghost hover:border-primary hover:text-primary transition-colors"
           >
-            Ajouter
-          </Button>
-        </div>
-        <p className="text-xs text-ghost mt-1.5">
-          Tapez un nom et appuyez sur Entrée pour l'ajouter.
-        </p>
+            <ImagePlus size={28} />
+            <span className="text-xs">Ajouter une photo</span>
+          </button>
+        )}
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleFile}
+        />
+        {!preview && (
+          <p className="text-xs text-ghost mt-1.5">JPG, PNG, WebP — max 4 Mo</p>
+        )}
       </div>
 
       <div className="flex gap-3 pt-1">

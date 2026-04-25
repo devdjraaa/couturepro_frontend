@@ -28,24 +28,28 @@ export default function CataloguePage() {
 
   return (
     <AppLayout title="Catalogue">
-      <div className="p-4 space-y-2">
+      <div className="p-4">
         {isLoading ? (
-          [...Array(4)].map((_, i) => <Skeleton key={i} className="h-16 rounded-2xl" />)
+          <div className="space-y-2">
+            {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-20 rounded-2xl" />)}
+          </div>
         ) : vetements.length === 0 ? (
           <EmptyState
             icon={Scissors}
             title="Catalogue vide"
-            description="Ajoutez les types de vêtements que vous confectionnez"
+            description="Ajoutez les modèles de vêtements que vous confectionnez"
           />
         ) : (
-          vetements.map(v => (
-            <VetementCard
-              key={v.id}
-              vetement={v}
-              onEdit={vet => setEditing(vet)}
-              onDelete={handleDelete}
-            />
-          ))
+          <div className="space-y-2">
+            {vetements.map(v => (
+              <VetementCard
+                key={v.id}
+                vetement={v}
+                onEdit={vet => setEditing(vet)}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
         )}
       </div>
 

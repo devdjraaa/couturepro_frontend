@@ -4,6 +4,13 @@ import { mockVetements } from './mockData'
 
 const delay = (ms = 300) => new Promise(r => setTimeout(r, ms))
 
+const toFormData = (payload) => {
+  const fd = new FormData()
+  if (payload.nom) fd.append('nom', payload.nom)
+  if (payload.image instanceof File) fd.append('image', payload.image)
+  return fd
+}
+
 export const vetementService = {
   async getAll() {
     if (isMock()) {
@@ -20,6 +27,7 @@ export const vetementService = {
       const newVetement = {
         id: String(Date.now()),
         ...payload,
+        image_url: payload.image instanceof File ? URL.createObjectURL(payload.image) : null,
         is_systeme:  false,
         is_archived: false,
         created_at:  new Date().toISOString(),
@@ -27,7 +35,7 @@ export const vetementService = {
       mockVetements.push(newVetement)
       return newVetement
     }
-    const { data } = await api.post('/vetements', payload)
+    const { data } = await api.post('/vetements', toFormData(payload))
     return data
   },
 
@@ -36,14 +44,20 @@ export const vetementService = {
       await delay()
       const idx = mockVetements.findIndex(v => v.id === id || v.id === Number(id))
       if (idx === -1) throw { code: 'non_trouve' }
-      mockVetements[idx] = { ...mockVetements[idx], ...payload }
+      mockVetements[idx] = {
+        ...mockVetements[idx],
+        ...payload,
+        image_url: payload.image instanceof File ? URL.createObjectURL(payload.image) : mockVetements[idx].image_url,
+      }
       return mockVetements[idx]
     }
-    const { data } = await api.put(`/vetements/${id}`, payload)
+    // PHP ne parse pas FormData sur PUT — on utilise POST + _method=PUT
+    const fd = toFormData(payload)
+    fd.append('_method', 'PUT')
+    const { data } = await api.post(`/vetements/${id}`, fd)
     return data
   },
 
-  // Le backend archive (soft-delete) — is_archived → true
   async delete(id) {
     if (isMock()) {
       await delay()

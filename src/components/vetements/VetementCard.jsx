@@ -13,10 +13,18 @@ export default function VetementCard({ vetement, onEdit, onDelete }) {
   }, [open])
 
   return (
-    <div className="bg-card border border-edge rounded-xl flex items-center gap-3 p-4">
-      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-        <Scissors size={18} className="text-primary" />
-      </div>
+    <div className="bg-card border border-edge rounded-xl flex items-center gap-3 p-3">
+      {vetement.image_url ? (
+        <img
+          src={vetement.image_url}
+          alt={vetement.nom}
+          className="w-14 h-14 rounded-lg object-cover shrink-0 bg-subtle"
+        />
+      ) : (
+        <div className="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+          <Scissors size={20} className="text-primary" />
+        </div>
+      )}
       <p className="flex-1 text-sm font-medium text-ink truncate">{vetement.nom}</p>
       <div className="relative" ref={menuRef}>
         <button
