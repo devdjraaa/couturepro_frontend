@@ -51,7 +51,6 @@ export const abonnementService = {
     return data
   },
 
-  // TODO: activation par code admin — endpoint backend à implémenter
   async activateCode(code) {
     if (isMock()) {
       await delay()

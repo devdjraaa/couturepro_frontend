@@ -8,14 +8,15 @@ const PROFIL_STYLES = {
 }
 
 export default function ClientCard({ client, onClick }) {
-  const profil = PROFIL_STYLES[client.profil] ?? PROFIL_STYLES.occasionnel
+  const profil = PROFIL_STYLES[client.type_profil ?? client.profil] ?? PROFIL_STYLES.occasionnel
+  const fullName = `${client.prenom ?? ''} ${client.nom}`.trim()
 
   return (
     <Card onClick={onClick} className="flex items-center gap-3 p-4">
-      <Avatar name={client.nom} size="md" />
+      <Avatar nom={fullName} avatar_index={client.avatar_index} size="md" />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <p className="text-sm font-semibold text-ink truncate">{client.nom}</p>
+          <p className="text-sm font-semibold text-ink truncate">{fullName}</p>
           <span className={cn(
             'text-[10px] font-semibold px-1.5 py-0.5 rounded-full border shrink-0',
             profil.className,

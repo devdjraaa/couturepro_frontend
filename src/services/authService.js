@@ -53,4 +53,31 @@ export const authService = {
     const { data } = await api.get('/auth/me')
     return normalizeMe(data)
   },
+
+  // Récupération de compte (5 étapes)
+  async recuperationEtape1({ email }) {
+    const { data } = await api.post('/auth/recuperation/initier', { email })
+    return data // { message, demande_id }
+  },
+
+  async recuperationEtape2({ demande_id, code }) {
+    const { data } = await api.post('/auth/recuperation/verifier-otp', { demande_id, code })
+    return data
+  },
+
+  async recuperationEtape3({ demande_id, telephone_nouveau }) {
+    const { data } = await api.post('/auth/recuperation/nouveau-telephone', { demande_id, telephone_nouveau })
+    return data
+  },
+
+  async recuperationEtape4({ demande_id, code }) {
+    const { data } = await api.post('/auth/recuperation/verifier-otp-nouveau', { demande_id, code })
+    return data
+  },
+
+  async recuperationEtape5({ demande_id, password, password_confirmation }) {
+    const { data } = await api.post('/auth/recuperation/nouveau-mot-de-passe', { demande_id, password, password_confirmation })
+    if (data.token) setToken(data.token)
+    return data
+  },
 }

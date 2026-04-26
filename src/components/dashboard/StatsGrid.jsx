@@ -1,4 +1,5 @@
-import { Users, ClipboardList, TrendingUp, Clock } from 'lucide-react'
+import { Users, ClipboardList, TrendingUp, Clock, AlertTriangle, Timer } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { useClients } from '@/hooks/useClients'
 import { useCommandeStats } from '@/hooks/useCommandes'
 import { formatCurrency } from '@/utils/formatCurrency'
@@ -12,9 +13,12 @@ const COLOR_MAP = {
   accent:  'bg-accent/10  text-accent-600',
 }
 
-function StatCard({ icon: Icon, label, value, sub, color = 'primary', isLoading }) {
+function StatCard({ icon: Icon, label, value, sub, color = 'primary', isLoading, onClick }) {
   return (
-    <div className="bg-card border border-edge rounded-2xl p-4">
+    <div
+      className={cn('bg-card border border-edge rounded-2xl p-4', onClick && 'cursor-pointer active:opacity-70')}
+      onClick={onClick}
+    >
       <div className={cn('w-9 h-9 rounded-xl flex items-center justify-center mb-3', COLOR_MAP[color])}>
         <Icon size={18} />
       </div>
@@ -29,40 +33,94 @@ function StatCard({ icon: Icon, label, value, sub, color = 'primary', isLoading 
   )
 }
 
+function AlertRow({ icon: Icon, label, count, variant, onClick }) {
+  const isDanger = variant === 'danger'
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        'flex items-center gap-3 w-full border rounded-xl px-4 py-3',
+        isDanger ? 'border-danger/30 bg-danger/5' : 'border-warning/30 bg-warning/5',
+      )}
+    >
+      <Icon size={16} className={isDanger ? 'text-danger' : 'text-warning'} />
+      <span className={cn('text-sm font-medium flex-1 text-left', isDanger ? 'text-danger' : 'text-warning')}>
+        {label}
+      </span>
+      <span className={cn(
+        'text-xs font-bold px-2 py-0.5 rounded-full',
+        isDanger ? 'bg-danger/15 text-danger' : 'bg-warning/15 text-warning',
+      )}>
+        {count}
+      </span>
+    </button>
+  )
+}
+
 export default function StatsGrid() {
+  const navigate = useNavigate()
   const { data: clients = [],  isLoading: loadingClients } = useClients()
   const { data: stats,         isLoading: loadingStats   } = useCommandeStats()
 
   return (
-    <div className="grid grid-cols-2 gap-3">
-      <StatCard
-        icon={Users}
-        label="Clients"
-        value={clients.length}
-        isLoading={loadingClients}
-      />
-      <StatCard
-        icon={ClipboardList}
-        label="En cours"
-        value={stats?.en_cours ?? 0}
-        sub={`${stats?.essai ?? 0} en essayage`}
-        color="warning"
-        isLoading={loadingStats}
-      />
-      <StatCard
-        icon={TrendingUp}
-        label="Encaissé"
-        value={stats ? formatCurrency(stats.total_encaisse) : '—'}
-        color="success"
-        isLoading={loadingStats}
-      />
-      <StatCard
-        icon={Clock}
-        label="En attente"
-        value={stats ? formatCurrency(stats.total_restant) : '—'}
-        color="accent"
-        isLoading={loadingStats}
-      />
+    <div className="space-y-3">
+      {/* Alertes urgentes */}
+      {!loadingStats && (stats?.en_retard > 0 || stats?.dans_48h > 0) && (
+        <div className="space-y-2">
+          {stats.en_retard > 0 && (
+            <AlertRow
+              icon={AlertTriangle}
+              label={`${stats.en_retard} commande${stats.en_retard > 1 ? 's' : ''} en retard`}
+              count={stats.en_retard}
+              variant="danger"
+              onClick={() => navigate('/commandes?alerte=retard')}
+            />
+          )}
+          {stats.dans_48h > 0 && (
+            <AlertRow
+              icon={Timer}
+              label={`${stats.dans_48h} livraison${stats.dans_48h > 1 ? 's' : ''} dans 48h`}
+              count={stats.dans_48h}
+              variant="warning"
+              onClick={() => navigate('/commandes?alerte=48h')}
+            />
+          )}
+        </div>
+      )}
+
+      {/* Grille 2×2 */}
+      <div className="grid grid-cols-2 gap-3">
+        <StatCard
+          icon={Users}
+          label="Clients"
+          value={clients.length}
+          isLoading={loadingClients}
+          onClick={() => navigate('/clients')}
+        />
+        <StatCard
+          icon={ClipboardList}
+          label="En cours"
+          value={stats?.en_cours ?? 0}
+          color="warning"
+          isLoading={loadingStats}
+          onClick={() => navigate('/commandes')}
+        />
+        <StatCard
+          icon={TrendingUp}
+          label="Encaissé"
+          value={stats ? formatCurrency(stats.total_encaisse) : '—'}
+          color="success"
+          isLoading={loadingStats}
+        />
+        <StatCard
+          icon={Clock}
+          label="En attente"
+          value={stats ? formatCurrency(stats.total_restant) : '—'}
+          color="accent"
+          isLoading={loadingStats}
+        />
+      </div>
     </div>
   )
 }

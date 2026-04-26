@@ -8,33 +8,38 @@ const sizes = {
   xl: 'w-16 h-16 text-xl',
 }
 
-const PALETTE = [
-  'bg-indigo-100 text-indigo-700',
-  'bg-amber-100 text-amber-700',
-  'bg-emerald-100 text-emerald-700',
-  'bg-rose-100 text-rose-700',
-  'bg-sky-100 text-sky-700',
-  'bg-violet-100 text-violet-700',
-  'bg-orange-100 text-orange-700',
-  'bg-teal-100 text-teal-700',
+// 7 palettes correspondant aux avatar_index 0–6
+export const AVATAR_PALETTES = [
+  { bg: 'bg-indigo-100', text: 'text-indigo-700', emoji: '👗' },
+  { bg: 'bg-amber-100',  text: 'text-amber-700',  emoji: '✂️' },
+  { bg: 'bg-emerald-100',text: 'text-emerald-700',emoji: '🧵' },
+  { bg: 'bg-rose-100',   text: 'text-rose-700',   emoji: '👒' },
+  { bg: 'bg-sky-100',    text: 'text-sky-700',     emoji: '🪡' },
+  { bg: 'bg-violet-100', text: 'text-violet-700',  emoji: '🧶' },
+  { bg: 'bg-orange-100', text: 'text-orange-700',  emoji: '👔' },
 ]
 
 function hashName(name = '') {
-  return [...name].reduce((acc, c) => acc + c.charCodeAt(0), 0) % PALETTE.length
+  return [...name].reduce((acc, c) => acc + c.charCodeAt(0), 0) % AVATAR_PALETTES.length
 }
 
 function initials(nom = '') {
   const parts = nom.trim().split(/\s+/)
   if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase()
-  return nom.slice(0, 2).toUpperCase()
+  return (nom.slice(0, 2) || '?').toUpperCase()
 }
 
-export default function Avatar({ nom = '', photo_url, size = 'md', className }) {
+// Accepte nom ou name (compat)
+export default function Avatar({ nom, name, photo_url, avatar_index, size = 'md', className }) {
+  const label = nom ?? name ?? ''
+  const paletteIndex = avatar_index != null ? Number(avatar_index) % AVATAR_PALETTES.length : hashName(label)
+  const palette = AVATAR_PALETTES[paletteIndex]
+
   if (photo_url) {
     return (
       <img
         src={photo_url}
-        alt={nom}
+        alt={label}
         className={cn('rounded-full object-cover shrink-0', sizes[size], className)}
       />
     )
@@ -42,15 +47,16 @@ export default function Avatar({ nom = '', photo_url, size = 'md', className }) 
 
   return (
     <div
-      aria-label={nom}
+      aria-label={label}
       className={cn(
         'rounded-full flex items-center justify-center font-display font-semibold shrink-0',
         sizes[size],
-        PALETTE[hashName(nom)],
+        palette.bg,
+        palette.text,
         className,
       )}
     >
-      {initials(nom)}
+      {avatar_index != null ? palette.emoji : initials(label)}
     </div>
   )
 }

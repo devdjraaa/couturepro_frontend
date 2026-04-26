@@ -99,29 +99,32 @@ export const commandeService = {
   },
 
   async getStats() {
-    if (isMock()) {
-      await delay(200)
-      const actives = mockCommandes.filter(c => c.statut === 'en_cours')
+    const computeStats = (list) => {
+      const actives     = list.filter(c => c.statut === 'en_cours')
+      const nonTerminee = list.filter(c => !['livre', 'annule'].includes(c.statut))
+      const now         = Date.now()
+      const h48         = now + 48 * 60 * 60 * 1000
+
       return {
-        en_cours:       mockCommandes.filter(c => c.statut === 'en_cours').length,
-        livre:          mockCommandes.filter(c => c.statut === 'livre').length,
-        annule:         mockCommandes.filter(c => c.statut === 'annule').length,
-        total_encaisse: mockCommandes
-          .filter(c => c.statut !== 'annule')
-          .reduce((s, c) => s + (c.acompte ?? 0), 0),
-        total_restant:  actives
-          .reduce((s, c) => s + Math.max(0, (c.prix ?? 0) - (c.acompte ?? 0)), 0),
+        en_cours:       actives.length,
+        livre:          list.filter(c => c.statut === 'livre').length,
+        annule:         list.filter(c => c.statut === 'annule').length,
+        total_encaisse: list.filter(c => c.statut !== 'annule').reduce((s, c) => s + Number(c.acompte ?? 0), 0),
+        total_restant:  actives.reduce((s, c) => s + Math.max(0, Number(c.prix ?? 0) - Number(c.acompte ?? 0)), 0),
+        en_retard:      nonTerminee.filter(c => c.date_livraison_prevue && new Date(c.date_livraison_prevue).getTime() < now).length,
+        dans_48h:       nonTerminee.filter(c => {
+          if (!c.date_livraison_prevue) return false
+          const t = new Date(c.date_livraison_prevue).getTime()
+          return t >= now && t <= h48
+        }).length,
       }
     }
-    // Pas d'endpoint /commandes/stats — calcul côté client
-    const { data: list } = await api.get('/commandes')
-    const actives = list.filter(c => c.statut === 'en_cours')
-    return {
-      en_cours:       list.filter(c => c.statut === 'en_cours').length,
-      livre:          list.filter(c => c.statut === 'livre').length,
-      annule:         list.filter(c => c.statut === 'annule').length,
-      total_encaisse: list.filter(c => c.statut !== 'annule').reduce((s, c) => s + Number(c.acompte ?? 0), 0),
-      total_restant:  actives.reduce((s, c) => s + Math.max(0, Number(c.prix ?? 0) - Number(c.acompte ?? 0)), 0),
+
+    if (isMock()) {
+      await delay(200)
+      return computeStats(mockCommandes)
     }
+    const { data: list } = await api.get('/commandes')
+    return computeStats(list)
   },
 }

@@ -25,34 +25,41 @@ export default function VetementCard({ vetement, onEdit, onDelete }) {
           <Scissors size={20} className="text-primary" />
         </div>
       )}
-      <p className="flex-1 text-sm font-medium text-ink truncate">{vetement.nom}</p>
-      <div className="relative" ref={menuRef}>
-        <button
-          type="button"
-          onClick={() => setOpen(o => !o)}
-          className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-subtle transition-colors"
-        >
-          <MoreHorizontal size={16} className="text-dim" />
-        </button>
-        {open && (
-          <div className="absolute right-0 top-full mt-1 bg-card border border-edge rounded-xl shadow-md z-10 overflow-hidden min-w-[130px]">
-            <button
-              type="button"
-              onClick={() => { setOpen(false); onEdit?.(vetement) }}
-              className="w-full text-left px-4 py-2.5 text-sm text-ink hover:bg-subtle"
-            >
-              Modifier
-            </button>
-            <button
-              type="button"
-              onClick={() => { setOpen(false); onDelete?.(vetement.id) }}
-              className="w-full text-left px-4 py-2.5 text-sm text-danger hover:bg-danger/5"
-            >
-              Supprimer
-            </button>
-          </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-ink truncate">{vetement.nom}</p>
+        {vetement.is_systeme && (
+          <span className="text-[10px] text-ghost bg-subtle px-1.5 py-0.5 rounded font-medium">Modèle</span>
         )}
       </div>
+      {!vetement.is_systeme && (
+        <div className="relative" ref={menuRef}>
+          <button
+            type="button"
+            onClick={() => setOpen(o => !o)}
+            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-subtle transition-colors"
+          >
+            <MoreHorizontal size={16} className="text-dim" />
+          </button>
+          {open && (
+            <div className="absolute right-0 top-full mt-1 bg-card border border-edge rounded-xl shadow-md z-10 overflow-hidden min-w-[130px]">
+              <button
+                type="button"
+                onClick={() => { setOpen(false); onEdit?.(vetement) }}
+                className="w-full text-left px-4 py-2.5 text-sm text-ink hover:bg-subtle"
+              >
+                Modifier
+              </button>
+              <button
+                type="button"
+                onClick={() => { setOpen(false); onDelete?.(vetement.id) }}
+                className="w-full text-left px-4 py-2.5 text-sm text-danger hover:bg-danger/5"
+              >
+                Supprimer
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }

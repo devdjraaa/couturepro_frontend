@@ -106,10 +106,10 @@ export default function LoginPage() {
           <Button type="submit" className="w-full" loading={loading}>
             Se connecter
           </Button>
-          <p className="text-center text-sm text-content-secondary">
-            Pas encore inscrit ?{' '}
+          <div className="flex justify-between text-sm text-content-secondary">
             <Link to="/register" className="text-primary font-medium">Créer un compte</Link>
-          </p>
+            <Link to="/mot-de-passe-oublie" className="text-dim hover:text-ink">Mot de passe oublié ?</Link>
+          </div>
         </form>
       ) : (
         <form onSubmit={handleEquipeLogin} className="space-y-4">

@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom'
 import { Home, Users, ClipboardList, Scissors, Settings } from 'lucide-react'
 import { cn } from '@/utils/cn'
 import { useNotificationsCount } from '@/hooks/useNotifications'
+import { useCommandeStats } from '@/hooks/useCommandes'
 
 const NAV_ITEMS = [
   { to: '/',           icon: Home,          label: 'Accueil',   end: true },
@@ -12,7 +13,9 @@ const NAV_ITEMS = [
 ]
 
 export default function BottomNavigation() {
-  const { data: notifCount = 0 } = useNotificationsCount()
+  const { data: notifCount = 0 }  = useNotificationsCount()
+  const { data: cmdStats }        = useCommandeStats()
+  const retardCount = cmdStats?.en_retard ?? 0
 
   return (
     <nav
@@ -40,6 +43,11 @@ export default function BottomNavigation() {
                   {to === '/' && notifCount > 0 && (
                     <span className="absolute -top-1 -right-1.5 min-w-4 h-4 bg-danger text-inverse text-[10px] font-bold rounded-full flex items-center justify-center px-0.5 leading-none">
                       {notifCount > 9 ? '9+' : notifCount}
+                    </span>
+                  )}
+                  {to === '/commandes' && retardCount > 0 && (
+                    <span className="absolute -top-1 -right-1.5 min-w-4 h-4 bg-danger text-inverse text-[10px] font-bold rounded-full flex items-center justify-center px-0.5 leading-none">
+                      {retardCount > 9 ? '9+' : retardCount}
                     </span>
                   )}
                 </div>

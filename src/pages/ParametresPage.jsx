@@ -6,7 +6,7 @@ import {
   useAtelierParametres, useUpdateAtelier,
   useChangerMotDePasse,
 } from '@/hooks/useParametres'
-import { useAbonnement, usePlans, useInitierPaiementAbonnement } from '@/hooks/useAbonnement'
+import { useAbonnement, usePlans, useInitierPaiementAbonnement, useActivateCode } from '@/hooks/useAbonnement'
 import { useCountdown } from '@/hooks/useCountdown'
 import { AppLayout } from '@/components/layout'
 import { QuotaBar, PlanCard } from '@/components/abonnement'
@@ -94,6 +94,48 @@ function CountdownDisplay({ targetDate, statut }) {
   )
 }
 
+function ActiverCodeSection() {
+  const activerCode = useActivateCode()
+  const [code, setCode]     = useState('')
+  const [success, setSuccess] = useState('')
+  const [error, setError]   = useState('')
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    setError('')
+    setSuccess('')
+    try {
+      const res = await activerCode.mutateAsync(code.trim().toUpperCase())
+      setSuccess(res?.message ?? 'Abonnement activé !')
+      setCode('')
+    } catch (err) {
+      setError(err?.message || 'Code invalide ou déjà utilisé')
+    }
+  }
+
+  return (
+    <div className="bg-card border border-edge rounded-2xl p-4 space-y-3">
+      <p className="text-sm font-semibold text-ink">Activer un code</p>
+      <p className="text-xs text-dim">Vous avez reçu un code d'activation ? Saisissez-le ici.</p>
+      <form onSubmit={handleSubmit} className="flex gap-2">
+        <Input
+          value={code}
+          onChange={e => setCode(e.target.value.toUpperCase())}
+          placeholder="XXXX-XXXX-XXXX"
+          className="font-mono tracking-widest flex-1"
+          maxLength={14}
+          required
+        />
+        <Button type="submit" loading={activerCode.isPending} className="shrink-0">
+          Activer
+        </Button>
+      </form>
+      {error   && <p className="text-sm text-danger">{error}</p>}
+      {success && <p className="text-sm text-success">{success}</p>}
+    </div>
+  )
+}
+
 function AbonnementTab() {
   const { data: abonnement } = useAbonnement()
   const { data: plans = [] } = usePlans()
@@ -160,6 +202,9 @@ function AbonnementTab() {
           )}
         </div>
       )}
+
+      {/* Activation par code */}
+      <ActiverCodeSection />
 
       {/* Plans disponibles */}
       <div>

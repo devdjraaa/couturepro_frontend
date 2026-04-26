@@ -5,6 +5,8 @@ import { useClient, useUpdateClient, useDeleteClient, useToggleVip } from '@/hoo
 import { useMesures, useSaveMesures } from '@/hooks/useMesures'
 import { useCommandes } from '@/hooks/useCommandes'
 import { useWhatsappRappel } from '@/hooks/useWhatsapp'
+import { useAuth } from '@/contexts'
+import { usePlanFeature } from '@/hooks/usePlanFeature'
 import { AppLayout } from '@/components/layout'
 import { ClientForm } from '@/components/clients'
 import { MesureForm, MesureDisplay } from '@/components/mesures'
@@ -20,6 +22,7 @@ const TABS = [
 
 export default function ClientDetailPage() {
   const { id } = useParams()
+  const { atelier } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const clientId = id
@@ -35,6 +38,7 @@ export default function ClientDetailPage() {
   const toggleVip = useToggleVip()
   const saveMesures = useSaveMesures(clientId)
   const whatsappRappel = useWhatsappRappel()
+  const { available: whatsappAvailable } = usePlanFeature('facture_whatsapp')
 
   const clientCommandes = allCommandes.filter(c => c.client_id === clientId)
 
@@ -81,7 +85,7 @@ export default function ClientDetailPage() {
     >
       {/* Header */}
       <div className="bg-card border-b border-edge px-4 py-4 flex items-center gap-4">
-        <Avatar name={client.nom} size="lg" />
+        <Avatar nom={`${client.prenom ?? ''} ${client.nom}`.trim()} avatar_index={client.avatar_index} size="lg" />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             <h1 className="font-bold text-ink truncate">{client.prenom} {client.nom}</h1>
@@ -125,7 +129,7 @@ export default function ClientDetailPage() {
                 </div>
               )}
             </div>
-            {client.telephone && (
+            {client.telephone && whatsappAvailable && (
               <Button
                 variant="secondary"
                 icon={MessageCircle}
@@ -163,7 +167,11 @@ export default function ClientDetailPage() {
               </div>
             ) : mesure ? (
               <div>
-                <MesureDisplay mesures={mesure.champs} />
+                <MesureDisplay
+                  mesures={mesure.champs}
+                  clientNom={`${client.prenom ?? ''} ${client.nom}`.trim()}
+                  atelierNom={atelier?.nom}
+                />
                 <Button variant="secondary" className="mt-4 w-full" onClick={() => setEditingMesures(true)}>
                   Modifier les mesures
                 </Button>

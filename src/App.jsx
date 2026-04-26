@@ -10,7 +10,15 @@ import {
   NotificationsPage, ParametresPage, CommunicationsPage,
   SupportPage, SupportTicketDetailPage, ThemePage,
 } from '@/pages'
-import PaiementRetourPage from '@/pages/PaiementRetourPage'
+import PaiementRetourPage     from '@/pages/PaiementRetourPage'
+import OtpPage                from '@/pages/auth/OtpPage'
+import ForgotPasswordPage     from '@/pages/auth/ForgotPasswordPage'
+import RecoverAccountPage     from '@/pages/auth/RecoverAccountPage'
+import ProfilPage             from '@/pages/ProfilPage'
+import AProposPage            from '@/pages/AProposPage'
+import FAQPage                from '@/pages/FAQPage'
+import ContactPage            from '@/pages/ContactPage'
+import HistoriquePage         from '@/pages/HistoriquePage'
 import { FeatureGate } from '@/components/abonnement'
 import { AppLayout } from '@/components/layout'
 import { ROUTES } from '@/constants/routes'
@@ -35,6 +43,9 @@ const PlaceholderPage = ({ title }) => (
     {title} — page à implémenter
   </div>
 )
+
+// Redirections vers ParametresPage pour l'abonnement
+const AbonnementRedirect = () => <Navigate to={`${ROUTES.PARAMETRES}?tab=abonnement`} replace />
 
 export default function App() {
   return (
@@ -63,9 +74,9 @@ export default function App() {
         <Route path={ROUTES.LOGIN}           element={<LoginPage />}      />
         <Route path={ROUTES.REGISTER}        element={<RegisterPage />}   />
         <Route path={ROUTES.ONBOARDING}      element={<OnboardingPage />} />
-        <Route path={ROUTES.OTP}             element={<PlaceholderPage title="Vérification OTP" />} />
-        <Route path={ROUTES.FORGOT_PASSWORD} element={<PlaceholderPage title="Mot de passe oublié" />} />
-        <Route path={ROUTES.RECOVER_ACCOUNT} element={<PlaceholderPage title="Récupérer mon compte" />} />
+        <Route path={ROUTES.OTP}             element={<OtpPage />}             />
+        <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPasswordPage />}  />
+        <Route path={ROUTES.RECOVER_ACCOUNT} element={<RecoverAccountPage />}  />
         <Route path="/paiement/retour"       element={<PaiementRetourPage />} />
 
         {/* ── Routes protégées proprietaire ───────────────────────────── */}
@@ -80,15 +91,15 @@ export default function App() {
           <Route path={ROUTES.COMMANDES}        element={<CommandesPage />}      />
 
           <Route path={ROUTES.VETEMENTS}        element={<CataloguePage />}      />
-          <Route path={ROUTES.ABONNEMENT}       element={<PlaceholderPage title="Abonnement" />} />
+          <Route path={ROUTES.ABONNEMENT}       element={<AbonnementRedirect />} />
           <Route path={ROUTES.POINTS}           element={<PointsPage />}         />
           <Route path={ROUTES.EQUIPE}           element={<EquipePage />}         />
           <Route path={ROUTES.NOTIFICATIONS}    element={<NotificationsPage />}  />
           <Route path={ROUTES.PARAMETRES}       element={<ParametresPage />}     />
-          <Route path={ROUTES.PROFIL}           element={<PlaceholderPage title="Mon profil" />} />
+          <Route path={ROUTES.PROFIL}           element={<ProfilPage />}          />
           <Route path={ROUTES.COMMUNICATIONS}   element={<CommunicationsPage />} />
           <Route path={ROUTES.THEME}            element={<ThemePage />}                       />
-          <Route path={ROUTES.APROPOS}          element={<PlaceholderPage title="À propos" />} />
+          <Route path={ROUTES.APROPOS}          element={<AProposPage />}         />
           <Route path={ROUTES.PHOTOS_VIP}       element={
             <AppLayout showBack title="Photos VIP">
               <div className="p-4">
@@ -96,9 +107,9 @@ export default function App() {
               </div>
             </AppLayout>
           } />
-          <Route path={ROUTES.HISTORIQUE}       element={<PlaceholderPage title="Historique" />} />
-          <Route path={ROUTES.FAQ}              element={<PlaceholderPage title="FAQ" />} />
-          <Route path={ROUTES.CONTACT}          element={<PlaceholderPage title="Contact" />} />
+          <Route path={ROUTES.HISTORIQUE}       element={<HistoriquePage />}      />
+          <Route path={ROUTES.FAQ}              element={<FAQPage />}             />
+          <Route path={ROUTES.CONTACT}          element={<ContactPage />}         />
           <Route path={ROUTES.SUPPORT}          element={<SupportPage />}                     />
           <Route path={ROUTES.SUPPORT_TICKET}   element={<SupportTicketDetailPage />}         />
         </Route>
