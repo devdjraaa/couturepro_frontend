@@ -2,8 +2,10 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Building2, CreditCard, TicketCheck,
   Gift, ShieldBan, ClipboardList, Bell, Star, LogOut, Layers,
+  Settings, Sun, Moon, Monitor,
 } from 'lucide-react'
 import { useAdminAuth } from '@/contexts'
+import { useTheme } from '@/contexts'
 
 const NAV = [
   { to: '/admin',               icon: LayoutDashboard, label: 'Dashboard',     end: true },
@@ -17,6 +19,24 @@ const NAV = [
   { to: '/admin/audit',         icon: ClipboardList,   label: 'Audit'          },
   { to: '/admin/notifications', icon: Bell,            label: 'Notifications'  },
 ]
+
+function ThemeToggle() {
+  const { theme, toggleTheme, resolvedTheme } = useTheme()
+
+  const Icon = theme === 'light' ? Sun : theme === 'dark' ? Moon : Monitor
+  const next = theme === 'light' ? 'Sombre' : theme === 'dark' ? 'Système' : 'Clair'
+
+  return (
+    <button
+      onClick={toggleTheme}
+      title={`Passer en mode ${next}`}
+      className="flex items-center gap-2 text-xs text-gray-400 hover:text-white transition-colors"
+    >
+      <Icon size={13} />
+      {resolvedTheme === 'dark' ? 'Mode sombre' : 'Mode clair'}
+    </button>
+  )
+}
 
 export default function AdminSidebar() {
   const { admin, logout } = useAdminAuth()
@@ -56,10 +76,21 @@ export default function AdminSidebar() {
         ))}
       </nav>
 
-      {/* Admin info + logout */}
-      <div className="px-4 py-3 border-t border-gray-700">
-        <p className="text-xs text-gray-400 truncate">{admin?.prenom} {admin?.nom}</p>
-        <p className="text-xs text-gray-500 truncate mb-2">{admin?.role}</p>
+      {/* Admin info + actions */}
+      <div className="px-4 py-3 border-t border-gray-700 space-y-2">
+        <NavLink
+          to="/admin/parametres"
+          className={({ isActive }) =>
+            `flex items-center gap-2 text-xs transition-colors ${
+              isActive ? 'text-indigo-400' : 'text-gray-400 hover:text-white'
+            }`
+          }
+        >
+          <Settings size={13} />
+          <span className="truncate">{admin?.prenom} {admin?.nom}</span>
+        </NavLink>
+        <p className="text-xs text-gray-600 truncate pl-5">{admin?.role}</p>
+        <ThemeToggle />
         <button
           onClick={handleLogout}
           className="flex items-center gap-2 text-xs text-gray-400 hover:text-red-400 transition-colors"

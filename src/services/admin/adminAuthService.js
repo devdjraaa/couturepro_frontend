@@ -17,4 +17,9 @@ export const adminAuthService = {
     const { data } = await adminApi.get('/auth/me')
     return data
   },
+
+  async changePassword({ ancien, nouveau }) {
+    const { data } = await adminApi.put('/auth/change-password', { ancien, nouveau })
+    return data
+  },
 }
