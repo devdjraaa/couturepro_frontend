@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, Scissors } from 'lucide-react'
+import { Plus, Scissors, Info } from 'lucide-react'
 import { useVetements, useCreateVetement, useUpdateVetement, useDeleteVetement } from '@/hooks/useVetements'
 import { AppLayout } from '@/components/layout'
 import { VetementCard, VetementForm } from '@/components/vetements'
@@ -26,30 +26,68 @@ export default function CataloguePage() {
     await deleteVetement.mutateAsync(vetementId)
   }
 
+  const mesModeles = vetements.filter(v => !v.is_systeme)
+  const modelesSysteme = vetements.filter(v => v.is_systeme)
+
   return (
     <AppLayout title="Catalogue">
-      <div className="p-4">
+      <div className="p-4 space-y-5">
         {isLoading ? (
           <div className="space-y-2">
             {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-20 rounded-2xl" />)}
           </div>
-        ) : vetements.length === 0 ? (
-          <EmptyState
-            icon={Scissors}
-            title="Catalogue vide"
-            description="Ajoutez les modèles de vêtements que vous confectionnez"
-          />
         ) : (
-          <div className="space-y-2">
-            {vetements.map(v => (
-              <VetementCard
-                key={v.id}
-                vetement={v}
-                onEdit={vet => setEditing(vet)}
-                onDelete={handleDelete}
-              />
-            ))}
-          </div>
+          <>
+            {/* Mon catalogue */}
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <p className="text-xs font-semibold text-dim uppercase tracking-wide">Mon catalogue</p>
+                <span className="text-xs text-ghost">{mesModeles.length} modèle{mesModeles.length !== 1 ? 's' : ''}</span>
+              </div>
+              {mesModeles.length === 0 ? (
+                <EmptyState
+                  icon={Scissors}
+                  title="Catalogue vide"
+                  description="Ajoutez vos propres modèles de vêtements"
+                />
+              ) : (
+                <div className="space-y-2">
+                  {mesModeles.map(v => (
+                    <VetementCard
+                      key={v.id}
+                      vetement={v}
+                      onEdit={vet => setEditing(vet)}
+                      onDelete={handleDelete}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Modèles système */}
+            {modelesSysteme.length > 0 && (
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <p className="text-xs font-semibold text-dim uppercase tracking-wide">Gabarits système</p>
+                  <span className="text-xs text-ghost">{modelesSysteme.length} modèle{modelesSysteme.length !== 1 ? 's' : ''}</span>
+                </div>
+                <div className="flex items-start gap-2 bg-subtle rounded-xl px-3 py-2 mb-2">
+                  <Info size={13} className="text-ghost mt-0.5 shrink-0" />
+                  <p className="text-xs text-ghost">Ces gabarits sont disponibles pour tous les ateliers. Ils ne sont pas modifiables.</p>
+                </div>
+                <div className="space-y-2">
+                  {modelesSysteme.map(v => (
+                    <VetementCard
+                      key={v.id}
+                      vetement={v}
+                      onEdit={undefined}
+                      onDelete={undefined}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
 

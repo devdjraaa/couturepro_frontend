@@ -1,14 +1,17 @@
 import { useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { Edit2, Trash2, CreditCard, MessageCircle, Ruler, AlertTriangle } from 'lucide-react'
+import { Edit2, Trash2, CreditCard, MessageCircle, Ruler, AlertTriangle, Download, Send } from 'lucide-react'
 import { useCommande, useUpdateCommande, useUpdateStatutCommande, useDeleteCommande } from '@/hooks/useCommandes'
 import { usePaiements, useEnregistrerPaiement } from '@/hooks/usePaiements'
 import { useWhatsappRappel } from '@/hooks/useWhatsapp'
+import { useAuth } from '@/contexts'
+import { usePlanFeature } from '@/hooks/usePlanFeature'
 import { AppLayout } from '@/components/layout'
 import { CommandeForm, StatutSelector } from '@/components/commandes'
 import { Avatar, Button, BottomSheet, Skeleton, Input, Select } from '@/components/ui'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { formatDate } from '@/utils/formatDate'
+import { exportRelevePdf } from '@/utils/exportRelevePdf'
 
 const MODE_OPTIONS = [
   { value: 'especes',      label: 'Espèces'      },
@@ -19,10 +22,13 @@ const MODE_OPTIONS = [
 export default function CommandeDetailPage() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { atelier } = useAuth()
   const commandeId = id
   const [showEdit, setShowEdit] = useState(false)
   const [showPaiement, setShowPaiement] = useState(false)
   const [paiementForm, setPaiementForm] = useState({ montant: '', mode_paiement: 'especes' })
+  const [whatsappUrl, setWhatsappUrl] = useState(null)
+  const [exportingPdf, setExportingPdf] = useState(false)
 
   const { data: commande, isLoading } = useCommande(commandeId)
   const { data: paiements = [] } = usePaiements({ commande_id: commandeId })
@@ -31,6 +37,7 @@ export default function CommandeDetailPage() {
   const deleteCommande = useDeleteCommande()
   const enregistrerPaiement = useEnregistrerPaiement()
   const whatsappRappel = useWhatsappRappel()
+  const { available: whatsappFactureAvailable } = usePlanFeature('facture_whatsapp')
 
   const handleStatut = statut => updateStatut.mutate({ id: commandeId, statut })
 
@@ -47,13 +54,31 @@ export default function CommandeDetailPage() {
 
   const handlePaiement = async e => {
     e.preventDefault()
-    await enregistrerPaiement.mutateAsync({
+    const result = await enregistrerPaiement.mutateAsync({
       commandeId,
       montant: Number(paiementForm.montant),
       mode_paiement: paiementForm.mode_paiement,
     })
     setShowPaiement(false)
     setPaiementForm({ montant: '', mode_paiement: 'especes' })
+    if (result?.whatsapp_url) {
+      setWhatsappUrl(result.whatsapp_url)
+    }
+  }
+
+  const handleDownloadReleve = async () => {
+    if (!commande || paiements.length === 0) return
+    setExportingPdf(true)
+    try {
+      await exportRelevePdf({
+        commande,
+        paiements,
+        clientNom: commande.client_nom ?? '',
+        atelierNom: atelier?.nom ?? 'Couture Pro',
+      })
+    } finally {
+      setExportingPdf(false)
+    }
   }
 
   if (isLoading) {
@@ -148,7 +173,17 @@ export default function CommandeDetailPage() {
         {/* Historique paiements */}
         {paiements.length > 0 && (
           <div>
-            <p className="text-xs font-semibold text-dim uppercase tracking-wide mb-2">Historique des paiements</p>
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-xs font-semibold text-dim uppercase tracking-wide">Historique des paiements</p>
+              <button
+                onClick={handleDownloadReleve}
+                disabled={exportingPdf}
+                className="flex items-center gap-1 text-xs text-primary font-medium disabled:opacity-50"
+              >
+                <Download size={12} />
+                {exportingPdf ? 'Export…' : 'Relevé PDF'}
+              </button>
+            </div>
             <div className="space-y-2">
               {paiements.map(p => (
                 <div key={p.id} className="bg-card border border-edge rounded-xl flex justify-between items-center px-4 py-3">
@@ -158,6 +193,27 @@ export default function CommandeDetailPage() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* Notification WhatsApp après paiement */}
+        {whatsappUrl && (
+          <div className="bg-[#25d366]/10 border border-[#25d366]/30 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-semibold text-ink">Relevé prêt</p>
+              <p className="text-xs text-dim">Envoyer le relevé au client sur WhatsApp</p>
+            </div>
+            <div className="flex gap-2 shrink-0">
+              <Button
+                variant="secondary"
+                icon={Send}
+                className="text-xs"
+                onClick={() => { window.open(whatsappUrl, '_blank'); setWhatsappUrl(null) }}
+              >
+                Envoyer
+              </Button>
+              <button onClick={() => setWhatsappUrl(null)} className="text-xs text-ghost">Ignorer</button>
             </div>
           </div>
         )}
@@ -226,6 +282,9 @@ export default function CommandeDetailPage() {
             onChange={e => setPaiementForm(f => ({ ...f, mode_paiement: e.target.value }))}
             options={MODE_OPTIONS}
           />
+          {whatsappFactureAvailable && (
+            <p className="text-xs text-dim">Un relevé WhatsApp sera proposé après confirmation.</p>
+          )}
           <div className="flex gap-3 pt-2">
             <Button type="button" variant="ghost" onClick={() => setShowPaiement(false)} className="flex-1">Annuler</Button>
             <Button type="submit" loading={enregistrerPaiement.isPending} className="flex-1">Confirmer</Button>

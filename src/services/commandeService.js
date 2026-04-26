@@ -6,7 +6,7 @@ const delay = (ms = 300) => new Promise(r => setTimeout(r, ms))
 
 const toFormData = (payload) => {
   const fd = new FormData()
-  const fields = ['client_id', 'vetement_id', 'prix', 'acompte', 'date_livraison_prevue', 'note_interne', 'description', 'statut']
+  const fields = ['client_id', 'vetement_id', 'prix', 'acompte', 'mode_paiement_acompte', 'date_livraison_prevue', 'note_interne', 'description', 'statut']
   fields.forEach(k => { if (payload[k] != null && payload[k] !== '') fd.append(k, payload[k]) })
   if (payload.urgence != null) fd.append('urgence', payload.urgence ? '1' : '0')
   if (payload.photo_tissu instanceof File) fd.append('photo_tissu', payload.photo_tissu)

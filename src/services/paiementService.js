@@ -26,7 +26,7 @@ export const paiementService = {
       await delay()
       const p = { id: 'p-' + Date.now(), commande_id: commandeId, ...payload, created_at: new Date().toISOString() }
       mockPaiements.push(p)
-      return p
+      return { paiement: p, whatsapp_url: null }
     }
     const { data } = await api.post(`/commandes/${commandeId}/paiements`, payload)
     return data

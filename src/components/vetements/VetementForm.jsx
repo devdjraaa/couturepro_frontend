@@ -1,30 +1,43 @@
 import { useState, useRef } from 'react'
 import { ImagePlus, X } from 'lucide-react'
 import { Input, Button } from '@/components/ui'
+import { cn } from '@/utils/cn'
+
+const MAX_IMAGES = 5
 
 export default function VetementForm({ initialData, onSubmit, onCancel, isLoading }) {
   const [nom, setNom] = useState(initialData?.nom ?? '')
-  const [image, setImage] = useState(null)
-  const [preview, setPreview] = useState(initialData?.image_url ?? null)
+  const [previews, setPreviews] = useState(initialData?.images_urls ?? (initialData?.image_url ? [initialData.image_url] : []))
+  const [files, setFiles] = useState([])
   const fileRef = useRef(null)
 
-  const handleFile = (e) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setImage(file)
-    setPreview(URL.createObjectURL(file))
+  const handleFiles = (e) => {
+    const selected = Array.from(e.target.files ?? [])
+    const remaining = MAX_IMAGES - previews.length
+    const toAdd = selected.slice(0, remaining)
+    if (toAdd.length === 0) return
+
+    setFiles(prev => [...prev, ...toAdd])
+    setPreviews(prev => [...prev, ...toAdd.map(f => URL.createObjectURL(f))])
+    if (fileRef.current) fileRef.current.value = ''
   }
 
-  const clearImage = () => {
-    setImage(null)
-    setPreview(null)
-    if (fileRef.current) fileRef.current.value = ''
+  const removeImage = (index) => {
+    setPreviews(prev => prev.filter((_, i) => i !== index))
+    setFiles(prev => {
+      const existingCount = (initialData?.images_urls?.length ?? (initialData?.image_url ? 1 : 0))
+      const fileIndex = index - existingCount
+      if (fileIndex < 0) return prev
+      return prev.filter((_, i) => i !== fileIndex)
+    })
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onSubmit({ nom: nom.trim(), image: image ?? undefined })
+    onSubmit({ nom: nom.trim(), images: files.length > 0 ? files : undefined })
   }
+
+  const canAddMore = previews.length < MAX_IMAGES
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5 p-5">
@@ -38,37 +51,63 @@ export default function VetementForm({ initialData, onSubmit, onCancel, isLoadin
       />
 
       <div>
-        <p className="text-sm font-medium text-ink mb-2">Photo du modèle</p>
-        {preview ? (
-          <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden border border-edge">
-            <img src={preview} alt="aperçu" className="w-full h-full object-cover" />
-            <button
-              type="button"
-              onClick={clearImage}
-              className="absolute top-2 right-2 w-7 h-7 bg-black/50 rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors"
-            >
-              <X size={14} />
-            </button>
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-sm font-medium text-ink">Photos du modèle</p>
+          <span className="text-xs text-ghost">{previews.length}/{MAX_IMAGES}</span>
+        </div>
+
+        {previews.length > 0 && (
+          <div className="grid grid-cols-3 gap-2 mb-2">
+            {previews.map((src, i) => (
+              <div key={i} className="relative aspect-square rounded-xl overflow-hidden border border-edge">
+                <img src={src} alt={`photo ${i + 1}`} className="w-full h-full object-cover" />
+                <button
+                  type="button"
+                  onClick={() => removeImage(i)}
+                  className="absolute top-1 right-1 w-6 h-6 bg-black/60 rounded-full flex items-center justify-center text-white hover:bg-black/80 transition-colors"
+                >
+                  <X size={12} />
+                </button>
+              </div>
+            ))}
+            {canAddMore && (
+              <button
+                type="button"
+                onClick={() => fileRef.current?.click()}
+                className={cn(
+                  'aspect-square rounded-xl border-2 border-dashed border-edge',
+                  'flex flex-col items-center justify-center gap-1 text-ghost',
+                  'hover:border-primary hover:text-primary transition-colors',
+                )}
+              >
+                <ImagePlus size={20} />
+                <span className="text-[10px]">Ajouter</span>
+              </button>
+            )}
           </div>
-        ) : (
+        )}
+
+        {previews.length === 0 && (
           <button
             type="button"
             onClick={() => fileRef.current?.click()}
             className="w-full aspect-[4/3] rounded-xl border-2 border-dashed border-edge flex flex-col items-center justify-center gap-2 text-ghost hover:border-primary hover:text-primary transition-colors"
           >
             <ImagePlus size={28} />
-            <span className="text-xs">Ajouter une photo</span>
+            <span className="text-xs">Ajouter des photos</span>
           </button>
         )}
+
         <input
           ref={fileRef}
           type="file"
           accept="image/*"
+          multiple
           className="hidden"
-          onChange={handleFile}
+          onChange={handleFiles}
         />
-        {!preview && (
-          <p className="text-xs text-ghost mt-1.5">JPG, PNG, WebP — max 4 Mo</p>
+        {previews.length === 0 && (
+          <p className="text-xs text-ghost mt-1.5">JPG, PNG, WebP — max 4 Mo par photo — {MAX_IMAGES} photos max</p>
         )}
       </div>
 

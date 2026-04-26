@@ -7,7 +7,11 @@ const delay = (ms = 300) => new Promise(r => setTimeout(r, ms))
 const toFormData = (payload) => {
   const fd = new FormData()
   if (payload.nom) fd.append('nom', payload.nom)
-  if (payload.image instanceof File) fd.append('image', payload.image)
+  if (payload.images && payload.images.length > 0) {
+    payload.images.forEach(img => { if (img instanceof File) fd.append('images[]', img) })
+  } else if (payload.image instanceof File) {
+    fd.append('image', payload.image)
+  }
   return fd
 }
 
@@ -24,10 +28,12 @@ export const vetementService = {
   async create(payload) {
     if (isMock()) {
       await delay()
+      const firstImg = payload.images?.[0] ?? payload.image
       const newVetement = {
         id: String(Date.now()),
         ...payload,
-        image_url: payload.image instanceof File ? URL.createObjectURL(payload.image) : null,
+        image_url: firstImg instanceof File ? URL.createObjectURL(firstImg) : null,
+        images_urls: payload.images?.filter(f => f instanceof File).map(f => URL.createObjectURL(f)) ?? [],
         is_systeme:  false,
         is_archived: false,
         created_at:  new Date().toISOString(),
@@ -44,10 +50,12 @@ export const vetementService = {
       await delay()
       const idx = mockVetements.findIndex(v => v.id === id || v.id === Number(id))
       if (idx === -1) throw { code: 'non_trouve' }
+      const firstImg = payload.images?.[0] ?? payload.image
       mockVetements[idx] = {
         ...mockVetements[idx],
         ...payload,
-        image_url: payload.image instanceof File ? URL.createObjectURL(payload.image) : mockVetements[idx].image_url,
+        image_url: firstImg instanceof File ? URL.createObjectURL(firstImg) : mockVetements[idx].image_url,
+        images_urls: payload.images?.filter(f => f instanceof File).map(f => URL.createObjectURL(f)) ?? mockVetements[idx].images_urls,
       }
       return mockVetements[idx]
     }

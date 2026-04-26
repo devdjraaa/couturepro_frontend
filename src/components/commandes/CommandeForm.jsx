@@ -5,20 +5,27 @@ import { useClients } from '@/hooks/useClients'
 import { useVetements } from '@/hooks/useVetements'
 import { cn } from '@/utils/cn'
 
+const MODE_PAIEMENT_OPTIONS = [
+  { value: 'especes',      label: 'Espèces'      },
+  { value: 'mobile_money', label: 'Mobile Money' },
+  { value: 'virement',     label: 'Virement'     },
+]
+
 export default function CommandeForm({ initialData, onSubmit, onCancel, isLoading }) {
   const { data: clients = [] } = useClients()
   const { data: vetements = [] } = useVetements()
   const fileRef = useRef(null)
 
   const [form, setForm] = useState({
-    client_id:             initialData?.client_id                        ?? '',
-    vetement_id:           initialData?.vetement_id                      ?? '',
-    prix:                  String(initialData?.prix                      ?? ''),
-    acompte:               String(initialData?.acompte                   ?? ''),
-    date_livraison_prevue: initialData?.date_livraison_prevue?.slice(0, 10) ?? '',
-    note_interne:          initialData?.note_interne                     ?? '',
-    description:           initialData?.description                      ?? '',
-    urgence:               initialData?.urgence                          ?? false,
+    client_id:              initialData?.client_id                        ?? '',
+    vetement_id:            initialData?.vetement_id                      ?? '',
+    prix:                   String(initialData?.prix                      ?? ''),
+    acompte:                String(initialData?.acompte                   ?? ''),
+    mode_paiement_acompte:  initialData?.mode_paiement_acompte            ?? 'especes',
+    date_livraison_prevue:  initialData?.date_livraison_prevue?.slice(0, 10) ?? '',
+    note_interne:           initialData?.note_interne                     ?? '',
+    description:            initialData?.description                      ?? '',
+    urgence:                initialData?.urgence                          ?? false,
   })
   const [photoTissu, setPhotoTissu] = useState(null)
   const [photoPreview, setPhotoPreview] = useState(initialData?.photo_tissu_url ?? null)
@@ -40,16 +47,18 @@ export default function CommandeForm({ initialData, onSubmit, onCancel, isLoadin
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    const acompte = form.acompte !== '' ? Number(form.acompte) : 0
     onSubmit({
-      client_id:             form.client_id,
-      vetement_id:           form.vetement_id,
-      prix:                  Number(form.prix),
-      acompte:               form.acompte !== '' ? Number(form.acompte) : 0,
-      date_livraison_prevue: form.date_livraison_prevue || undefined,
-      note_interne:          form.note_interne || undefined,
-      description:           form.description || undefined,
-      urgence:               form.urgence,
-      photo_tissu:           photoTissu ?? undefined,
+      client_id:              form.client_id,
+      vetement_id:            form.vetement_id,
+      prix:                   Number(form.prix),
+      acompte,
+      mode_paiement_acompte:  acompte > 0 ? form.mode_paiement_acompte : undefined,
+      date_livraison_prevue:  form.date_livraison_prevue || undefined,
+      note_interne:           form.note_interne || undefined,
+      description:            form.description || undefined,
+      urgence:                form.urgence,
+      photo_tissu:            photoTissu ?? undefined,
     })
   }
 
@@ -65,6 +74,14 @@ export default function CommandeForm({ initialData, onSubmit, onCancel, isLoadin
         <Input label="Prix (XOF)" type="number" min="0" value={form.prix}    onChange={set('prix')}    placeholder="25000" required />
         <Input label="Acompte (XOF)" type="number" min="0" value={form.acompte} onChange={set('acompte')} placeholder="0" />
       </div>
+      {Number(form.acompte) > 0 && !initialData && (
+        <Select
+          label="Mode de paiement de l'acompte"
+          value={form.mode_paiement_acompte}
+          onChange={set('mode_paiement_acompte')}
+          options={MODE_PAIEMENT_OPTIONS}
+        />
+      )}
 
       <Input label="Date de livraison" type="date" value={form.date_livraison_prevue} onChange={set('date_livraison_prevue')} />
 
