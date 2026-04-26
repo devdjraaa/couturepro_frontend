@@ -11,7 +11,7 @@
 2. [Ce qui est implémenté](#2-ce-qui-est-implémenté)
 3. [Ce qui reste — Phase 1 MVP (priorité immédiate)](#3-ce-qui-reste--phase-1-mvp)
 4. [Nouvelles fonctionnalités identifiées (Phase 1.5)](#4-nouvelles-fonctionnalités-identifiées--phase-15)
-5. [Phase 2 — Module Caisse + Multi-tenant](#5-phase-2--module-caisse--multi-tenant)
+5. [Phase 2 — Module Caisse](#5-phase-2--module-caisse)
 6. [Phase 3 — Mobile Capacitor + Sync offline](#6-phase-3--mobile-capacitor--sync-offline)
 
 ---
@@ -228,7 +228,7 @@ Les 3 modules WhatsApp du CDC doivent se déclencher au bon moment :
 **Backend**
 - Nouvelle table `permissions_equipe` : `atelier_id`, `role` (assistant/membre), `ressource` (clients/commandes/mesures/catalogue/paiements), `action` (create/update/delete/view`), `autorise` (boolean)
 - Migration + seeder avec les valeurs par défaut du CDC §4.3
-- `EquipeMembreController` : charger les permissions dans la réponse `GET /auth/me`
+- `EquipeMembreController` : charger es permissions dans la réponse `GET /auth/me`
 - Middleware ou helper `can()` côté backend qui vérifie `permissions_equipe`
 
 **Frontend**
@@ -283,7 +283,7 @@ Les 3 modules WhatsApp du CDC doivent se déclencher au bon moment :
 
 ---
 
-## 5. Phase 2 — Module Caisse + Multi-tenant
+## 5. Phase 2 — Module Caisse
 
 ---
 
@@ -314,34 +314,6 @@ Les 3 modules WhatsApp du CDC doivent se déclencher au bon moment :
 - Lien dans la navigation (visible selon plan)
 
 **Effort estimé** : 3 jours
-
----
-
-### 5.2 Multi-tenant — Wildcard Subdomains
-
-> Architecture recommandée au lieu du toggle "Mode Multi-Ateliers"
-
-**Vision** : chaque atelier a son sous-domaine `ateliernom.couturepro.com`. L'app est la même, le tenant est détecté depuis `window.location.hostname`.
-
-**DNS** : wildcard `*.couturepro.com` → même VPS Laravel.
-
-**Ce qu'il faut faire** :
-
-**Backend**
-- Middleware `DetectTenant` : extrait `{slug}` depuis `Host: slug.couturepro.com`, charge l'atelier correspondant, injecte dans `app('tenant')`
-- `Atelier.slug` : nouveau champ unique (slugifié depuis `nom`)
-- Migration : ajouter `slug` à `ateliers`
-- Toutes les routes protégées : scoper les données sur le tenant courant (déjà fait via `atelier_id`)
-- `POST /ateliers` (super-admin) : créer un nouveau tenant + provisionner
-
-**Frontend**
-- `App.jsx` : détecter `window.location.hostname`, extraire le sous-domaine, stocker dans contexte
-- `api.js` : `baseURL` dynamique selon le sous-domaine détecté
-- Page d'accueil `couturepro.com` (landing) : séparée de l'app SPA
-
-**Impact** : l'isolation multi-tenant est déjà assurée par `atelier_id`. Le wildcard subdomain est un changement d'URL et de routing, pas de logique métier.
-
-**Effort estimé** : 2 jours (backend middleware + migration + frontend URL detection)
 
 ---
 
@@ -409,7 +381,6 @@ Mutation (create/update/delete)
 | 🟡 P2 | 4.3 — Super Admin crée des admins de bas niveau | 1.5 | 1j |
 | 🟡 P2 | 4.4 — Atelier maître gère ses sous-ateliers | 1.5 | 2j |
 | 🟢 P3 | 5.1 — Module Caisse (gated + seeder) | 2 | 3j |
-| 🟢 P3 | 5.2 — Multi-tenant wildcard subdomains | 2 | 2j |
 | 🔵 P4 | 6.1 — Intégration Capacitor (plugins natifs) | 3 | 3j |
 | 🔵 P4 | 6.2 — Sync offline-first frontend | 3 | 3j |
 
