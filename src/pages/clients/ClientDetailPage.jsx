@@ -71,7 +71,7 @@ export default function ClientDetailPage() {
 
   if (!client) return null
 
-  const isVip = client.type_profil === 'vip'
+  const isVip = !!client.is_vip
 
   return (
     <AppLayout
@@ -115,8 +115,8 @@ export default function ClientDetailPage() {
                 </div>
               )}
               <div className="flex justify-between px-4 py-3">
-                <span className="text-sm text-dim">Type de profil</span>
-                <span className="text-sm text-ink font-medium capitalize">{client.type_profil}</span>
+                <span className="text-sm text-dim">Type</span>
+                <span className="text-sm text-ink font-medium capitalize">{client.type_profil ?? '—'}</span>
               </div>
               <div className="flex justify-between px-4 py-3">
                 <span className="text-sm text-dim">Commandes</span>

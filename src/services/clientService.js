@@ -94,14 +94,10 @@ export const clientService = {
       await delay()
       const client = mockClients.find(c => c.id === id || c.id === Number(id))
       if (!client) throw { code: 'non_trouve' }
-      // Dans le mock : bascule entre 'vip' et 'regulier' via type_profil fictif
-      client.type_profil = client.type_profil === 'vip' ? 'mixte' : 'vip'
+      client.is_vip = !client.is_vip
       return client
     }
-    // Pas de concept VIP dans le backend — bascule via update
-    const client = await this.getById(id)
-    const newProfil = client.type_profil === 'vip' ? 'mixte' : 'vip'
-    const { data } = await api.put(`/clients/${id}`, { type_profil: newProfil })
+    const { data } = await api.post(`/clients/${id}/toggle-vip`)
     return data
   },
 }

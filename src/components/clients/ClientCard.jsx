@@ -1,15 +1,16 @@
 import { cn } from '@/utils/cn'
 import { Avatar, Card } from '@/components/ui'
 
-const PROFIL_STYLES = {
-  vip:         { label: 'VIP',       className: 'bg-accent/10 text-accent-600 border-accent/20' },
-  regulier:    { label: 'Régulier',  className: 'bg-primary/10 text-primary border-primary/20' },
-  occasionnel: { label: 'Occasion.', className: 'bg-subtle text-ghost border-edge' },
+const TYPE_LABELS = {
+  femme:  'Femme',
+  homme:  'Homme',
+  enfant: 'Enfant',
+  mixte:  'Mixte',
 }
 
 export default function ClientCard({ client, onClick }) {
-  const profil = PROFIL_STYLES[client.type_profil ?? client.profil] ?? PROFIL_STYLES.occasionnel
   const fullName = `${client.prenom ?? ''} ${client.nom}`.trim()
+  const typeLabel = TYPE_LABELS[client.type_profil] ?? client.type_profil ?? ''
 
   return (
     <Card onClick={onClick} className="flex items-center gap-3 p-4">
@@ -17,17 +18,19 @@ export default function ClientCard({ client, onClick }) {
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <p className="text-sm font-semibold text-ink truncate">{fullName}</p>
-          <span className={cn(
-            'text-[10px] font-semibold px-1.5 py-0.5 rounded-full border shrink-0',
-            profil.className,
-          )}>
-            {profil.label}
-          </span>
+          {client.is_vip && (
+            <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full border bg-accent/10 text-accent-600 border-accent/20 shrink-0">
+              VIP
+            </span>
+          )}
+          {typeLabel && (
+            <span className="text-[10px] text-ghost shrink-0">{typeLabel}</span>
+          )}
         </div>
         <p className="text-xs text-ghost mt-0.5">{client.telephone}</p>
       </div>
       <div className="text-right shrink-0">
-        <p className="text-xs text-dim">{client.commandes_count} cmd</p>
+        <p className="text-xs text-dim">{client.commandes_count ?? 0} cmd</p>
         {client.points > 0 && (
           <p className="text-xs text-accent-600 font-medium">{client.points} pts</p>
         )}

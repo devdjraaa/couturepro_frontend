@@ -4,9 +4,10 @@ import { AVATAR_PALETTES } from '@/components/ui/Avatar'
 import { cn } from '@/utils/cn'
 
 const PROFIL_OPTIONS = [
-  { value: 'regulier',    label: 'Régulier' },
-  { value: 'vip',         label: 'VIP' },
-  { value: 'occasionnel', label: 'Occasionnel' },
+  { value: 'mixte',   label: 'Mixte'   },
+  { value: 'femme',   label: 'Femme'   },
+  { value: 'homme',   label: 'Homme'   },
+  { value: 'enfant',  label: 'Enfant'  },
 ]
 
 export default function ClientForm({ initialData, onSubmit, onCancel, isLoading }) {
@@ -14,7 +15,7 @@ export default function ClientForm({ initialData, onSubmit, onCancel, isLoading 
     nom:          initialData?.nom          ?? '',
     prenom:       initialData?.prenom       ?? '',
     telephone:    initialData?.telephone    ?? '',
-    type_profil:  initialData?.type_profil  ?? initialData?.profil ?? 'regulier',
+    type_profil:  initialData?.type_profil  ?? 'mixte',
     notes:        initialData?.notes        ?? '',
     avatar_index: initialData?.avatar_index ?? null,
   })
