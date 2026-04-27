@@ -80,7 +80,15 @@ export default function PlanCard({ plan, isCurrent, abonnementStatut, onUpgrade,
             ? <FeatureRow label={`${limitLabel(cfg.max_photos_vip_par_mois)} photos VIP / mois`} value={true} />
             : <FeatureRow label="Photos VIP" value={false} />
           }
-          <FeatureRow label="Factures WhatsApp" value={cfg.facture_whatsapp} />
+          {cfg.facture_whatsapp
+            ? <FeatureRow
+                label={cfg.max_factures_par_mois === null
+                  ? 'Factures WhatsApp illimitées'
+                  : `${cfg.max_factures_par_mois} factures WhatsApp / mois`}
+                value={true}
+              />
+            : <FeatureRow label="Factures WhatsApp" value={false} />
+          }
           <FeatureRow label="Sauvegarde auto"   value={cfg.sauvegarde_auto} />
           <FeatureRow label="Module caisse"     value={cfg.module_caisse} />
         </ul>

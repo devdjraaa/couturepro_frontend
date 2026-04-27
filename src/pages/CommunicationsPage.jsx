@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { MessageCircle } from 'lucide-react'
 import { useCommunications, useUpdateCommunications } from '@/hooks/useParametres'
+import { useAbonnement } from '@/hooks/useAbonnement'
 import { AppLayout } from '@/components/layout'
 import { Button, Skeleton } from '@/components/ui'
 import { cn } from '@/utils/cn'
@@ -43,9 +44,12 @@ function Toggle({ checked, onChange, disabled }) {
 export default function CommunicationsPage() {
   const { data: config, isLoading } = useCommunications()
   const update = useUpdateCommunications()
+  const { data: abonnement } = useAbonnement()
 
   const [form, setForm]       = useState(DEFAULTS)
   const [success, setSuccess] = useState(false)
+
+  const quotaFactures = abonnement?.quota_factures ?? null
 
   useEffect(() => {
     if (config) setForm({ ...DEFAULTS, ...config })
@@ -118,6 +122,28 @@ export default function CommunicationsPage() {
             <p className="text-xs text-ghost text-center mt-2">Activez les rappels WhatsApp pour configurer</p>
           )}
         </div>
+
+        {/* Quota factures WhatsApp — visible uniquement pour Premium+ */}
+        {quotaFactures && (
+          <div className="bg-card border border-edge rounded-2xl px-4 py-3">
+            <p className="text-xs font-semibold text-dim uppercase tracking-wide mb-2">Factures WhatsApp ce mois</p>
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex-1 bg-edge rounded-full h-2 overflow-hidden">
+                <div
+                  className="h-2 rounded-full bg-primary transition-all"
+                  style={{
+                    width: quotaFactures.max === null
+                      ? '0%'
+                      : `${Math.min(100, Math.round((quotaFactures.utilise / quotaFactures.max) * 100))}%`,
+                  }}
+                />
+              </div>
+              <p className="text-xs text-dim shrink-0">
+                {quotaFactures.utilise} / {quotaFactures.max === null ? '∞' : quotaFactures.max}
+              </p>
+            </div>
+          </div>
+        )}
 
         {update.isError && (
           <p className="text-sm text-danger px-1">
