@@ -135,7 +135,7 @@ export default function RecoverAccountPage() {
       {step === 3 && (
         <form onSubmit={handleStep3} className="space-y-4">
           <p className="text-sm text-content-secondary text-center">
-            Entrez votre nouveau numéro de téléphone. Un code de confirmation vous sera envoyé.
+            Entrez votre nouveau numéro de téléphone. Un code de confirmation sera envoyé à votre adresse email <strong>{email}</strong>.
           </p>
           <Input
             label="Nouveau numéro"
@@ -152,7 +152,7 @@ export default function RecoverAccountPage() {
       {step === 4 && (
         <form onSubmit={handleStep4} className="space-y-4">
           <p className="text-sm text-content-secondary text-center">
-            Entrez le code reçu sur <strong>{tel}</strong>.
+            Un code a été envoyé à votre adresse email <strong>{email}</strong> pour confirmer le numéro <strong>{tel}</strong>.
           </p>
           <Input
             label="Code de confirmation"
