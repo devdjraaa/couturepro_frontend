@@ -1,3 +1,5 @@
+import { useAuth } from '@/contexts'
+
 const frFormatter = new Intl.NumberFormat('fr-FR', {
   minimumFractionDigits: 0,
   maximumFractionDigits: 0,
@@ -25,4 +27,11 @@ export function calculerReste(montant, avance = 0) {
 export function pourcentageAvance(montant, avance) {
   if (!montant || montant === 0) return 0
   return Math.min(100, Math.round(((avance || 0) / montant) * 100))
+}
+
+// Hook React — retourne un formatter qui utilise la devise de l'atelier connecté
+export function useFormatCurrency() {
+  const { atelier } = useAuth()
+  const devise = atelier?.devise ?? 'XOF'
+  return (amount) => formatCurrency(amount, devise)
 }

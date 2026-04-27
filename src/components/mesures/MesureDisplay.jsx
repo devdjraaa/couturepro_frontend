@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Download } from 'lucide-react'
+import { useAuth } from '@/contexts'
 import { exportMesuresPdf } from '@/utils/exportMesuresPdf'
 
 const toLabel = (key) =>
@@ -7,6 +8,8 @@ const toLabel = (key) =>
 
 export default function MesureDisplay({ mesures, clientNom, atelierNom }) {
   const [exporting, setExporting] = useState(false)
+  const { atelier } = useAuth()
+  const uniteMesure = atelier?.unite_mesure ?? 'cm'
 
   if (!mesures) return null
 
@@ -31,7 +34,7 @@ export default function MesureDisplay({ mesures, clientNom, atelierNom }) {
             {entries.map(([key, value]) => (
               <div key={key} className="flex items-center justify-between border-b border-edge pb-2">
                 <span className="text-xs text-dim">{toLabel(key)}</span>
-                <span className="text-sm font-semibold text-ink font-mono">{value} cm</span>
+                <span className="text-sm font-semibold text-ink font-mono">{value} {uniteMesure}</span>
               </div>
             ))}
           </div>

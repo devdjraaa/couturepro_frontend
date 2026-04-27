@@ -60,3 +60,19 @@ export function useChangerMotDePasse() {
     mutationFn: (payload) => parametresService.changerMotDePasse(payload),
   })
 }
+
+export function usePreferences() {
+  return useQuery({
+    queryKey: ['parametres', 'preferences'],
+    queryFn: () => parametresService.getPreferences(),
+    staleTime: QUERY_STALE_TIME,
+  })
+}
+
+export function useUpdatePreferences() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (payload) => parametresService.updatePreferences(payload),
+    onSuccess: (data) => queryClient.setQueryData(['parametres', 'preferences'], data),
+  })
+}

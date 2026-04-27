@@ -1,22 +1,40 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/contexts'
 import {
   useProfil, useUpdateProfil,
   useAtelierParametres, useUpdateAtelier,
   useChangerMotDePasse,
+  usePreferences, useUpdatePreferences,
 } from '@/hooks/useParametres'
 import { useAbonnement, usePlans, useInitierPaiementAbonnement, useActivateCode } from '@/hooks/useAbonnement'
 import { useCountdown } from '@/hooks/useCountdown'
 import { AppLayout } from '@/components/layout'
 import { QuotaBar, PlanCard } from '@/components/abonnement'
-import { TabBar, Input, Button, Skeleton } from '@/components/ui'
+import { TabBar, Input, Select, Button, Skeleton } from '@/components/ui'
 
 const TABS = [
-  { key: 'profil',     label: 'Profil'     },
-  { key: 'atelier',    label: 'Atelier'    },
-  { key: 'abonnement', label: 'Abonnement' },
-  { key: 'securite',   label: 'Sécurité'   },
+  { key: 'profil',       label: 'Profil'       },
+  { key: 'atelier',      label: 'Atelier'      },
+  { key: 'preferences',  label: 'Préférences'  },
+  { key: 'abonnement',   label: 'Abonnement'   },
+  { key: 'securite',     label: 'Sécurité'     },
+]
+
+const DEVISES = [
+  { value: 'XOF', label: 'FCFA (XOF)'            },
+  { value: 'GNF', label: 'Franc Guinéen (GNF)'   },
+  { value: 'XAF', label: 'Franc CFA CEMAC (XAF)' },
+  { value: 'EUR', label: 'Euro (EUR)'             },
+  { value: 'USD', label: 'Dollar (USD)'           },
+  { value: 'GHS', label: 'Cedi (GHS)'             },
+  { value: 'NGN', label: 'Naira (NGN)'            },
+  { value: 'MAD', label: 'Dirham (MAD)'           },
+]
+
+const UNITES = [
+  { value: 'cm',     label: 'Centimètres (cm)' },
+  { value: 'pouces', label: 'Pouces (in)'       },
 ]
 
 function ProfilTab() {
@@ -40,6 +58,49 @@ function ProfilTab() {
       <Input label="Nom" value={current?.nom ?? ''} onChange={set('nom')} required />
       <Input label="Téléphone" type="tel" value={current?.telephone ?? ''} onChange={set('telephone')} required />
       <Input label="Email" type="email" value={current?.email ?? ''} onChange={set('email')} />
+      <Button type="submit" loading={update.isPending} className="w-full">
+        Enregistrer
+      </Button>
+    </form>
+  )
+}
+
+function PreferencesTab() {
+  const { data: prefs, isLoading } = usePreferences()
+  const update  = useUpdatePreferences()
+  const { refreshAtelier } = useAuth()
+  const [form, setForm]     = useState({ devise: 'XOF', unite_mesure: 'cm' })
+  const [success, setSuccess] = useState(false)
+
+  useEffect(() => {
+    if (prefs) setForm({ devise: prefs.devise ?? 'XOF', unite_mesure: prefs.unite_mesure ?? 'cm' })
+  }, [prefs])
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    setSuccess(false)
+    await update.mutateAsync(form)
+    await refreshAtelier()
+    setSuccess(true)
+  }
+
+  if (isLoading) return <Skeleton className="h-40 rounded-2xl" />
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <Select
+        label="Devise"
+        value={form.devise}
+        onChange={e => setForm(f => ({ ...f, devise: e.target.value }))}
+        options={DEVISES}
+      />
+      <Select
+        label="Unité de mesure"
+        value={form.unite_mesure}
+        onChange={e => setForm(f => ({ ...f, unite_mesure: e.target.value }))}
+        options={UNITES}
+      />
+      {success && <p className="text-sm text-success">Préférences enregistrées.</p>}
       <Button type="submit" loading={update.isPending} className="w-full">
         Enregistrer
       </Button>
@@ -273,10 +334,11 @@ export default function ParametresPage() {
     <AppLayout title="Paramètres">
       <TabBar tabs={TABS} activeTab={activeTab} onChange={setActiveTab} />
       <div className="p-4 space-y-4">
-        {activeTab === 'profil'     && <ProfilTab />}
-        {activeTab === 'atelier'    && <AtelierTab />}
-        {activeTab === 'abonnement' && <AbonnementTab />}
-        {activeTab === 'securite'   && <SecuriteTab />}
+        {activeTab === 'profil'      && <ProfilTab />}
+        {activeTab === 'atelier'     && <AtelierTab />}
+        {activeTab === 'preferences' && <PreferencesTab />}
+        {activeTab === 'abonnement'  && <AbonnementTab />}
+        {activeTab === 'securite'    && <SecuriteTab />}
 
         <div className="pt-2 border-t border-edge space-y-2">
           <Link

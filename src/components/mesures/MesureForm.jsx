@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { X, Plus } from 'lucide-react'
+import { useAuth } from '@/contexts'
 import { Input, Button } from '@/components/ui'
 
 const SUGGESTIONS = [
@@ -13,6 +14,8 @@ const toSlug = (str) =>
     .replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '')
 
 export default function MesureForm({ initialData, onSubmit, isLoading }) {
+  const { atelier } = useAuth()
+  const uniteMesure = atelier?.unite_mesure ?? 'cm'
   const [fields, setFields] = useState(() => {
     const champs = initialData && typeof initialData === 'object' ? initialData : {}
     return Object.entries(champs)
@@ -59,7 +62,7 @@ export default function MesureForm({ initialData, onSubmit, isLoading }) {
                 min="0"
                 value={value}
                 onChange={e => setValue(key, e.target.value)}
-                suffix="cm"
+                suffix={uniteMesure}
                 placeholder="0"
               />
               <button

@@ -3,9 +3,13 @@ import { setToken, clearAll } from '@/utils/storage'
 
 function normalizeMe(data) {
   const { atelier_maitre, ...proprietaire } = data
+  const params  = atelier_maitre?.parametres_atelier ?? {}
+  const atelier = atelier_maitre
+    ? { ...atelier_maitre, devise: params.devise ?? 'XOF', unite_mesure: params.unite_mesure ?? 'cm' }
+    : null
   return {
     user:    { ...proprietaire, role: 'proprietaire' },
-    atelier: atelier_maitre ?? null,
+    atelier,
   }
 }
 

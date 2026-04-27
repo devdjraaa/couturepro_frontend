@@ -81,4 +81,28 @@ export const parametresService = {
     })
     return data
   },
+
+  async getPreferences() {
+    if (isMock()) {
+      await delay()
+      return {
+        devise:       mockAtelier.abonnement?.config ? 'XOF' : 'XOF',
+        unite_mesure: 'cm',
+      }
+    }
+    const { data } = await api.get('/parametres/preferences')
+    return data
+  },
+
+  async updatePreferences(payload) {
+    if (isMock()) {
+      await delay()
+      return payload
+    }
+    const { data } = await api.put('/parametres/preferences', {
+      devise:       payload.devise,
+      unite_mesure: payload.unite_mesure,
+    })
+    return data
+  },
 }
