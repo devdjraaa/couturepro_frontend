@@ -23,7 +23,21 @@ export function useClient(id) {
 export function useCreateClient() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (payload) => clientService.create(payload),
+    mutationFn: (payload) => {
+      const cached = queryClient.getQueryData([...QUERY_KEYS.clients, {}]) ?? []
+      const nom    = payload.nom?.toLowerCase().trim() ?? ''
+      const prenom = payload.prenom?.toLowerCase().trim() ?? ''
+      const exists = cached.some(c =>
+        c.nom.toLowerCase().trim() === nom &&
+        (c.prenom?.toLowerCase().trim() ?? '') === prenom,
+      )
+      if (exists) {
+        const err = new Error(`Un client nommé "${payload.prenom ? payload.prenom + ' ' : ''}${payload.nom}" existe déjà.`)
+        err.code = 'doublon'
+        throw err
+      }
+      return clientService.create(payload)
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.clients })
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.quota })

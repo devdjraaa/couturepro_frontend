@@ -11,7 +11,9 @@ import { AppLayout } from '@/components/layout'
 import { ClientForm } from '@/components/clients'
 import { MesureForm, MesureDisplay } from '@/components/mesures'
 import { CommandeCard } from '@/components/commandes'
-import { TabBar, Avatar, Badge, Button, BottomSheet, Skeleton, EmptyState } from '@/components/ui'
+import { TabBar, Badge, Button, BottomSheet, Skeleton, EmptyState } from '@/components/ui'
+import { ClientAvatar } from '@/components/clients'
+import { saveClientPhoto, deleteClientPhoto } from '@/utils/clientPhotoStorage'
 import { formatDate } from '@/utils/formatDate'
 
 const TABS = [
@@ -42,8 +44,10 @@ export default function ClientDetailPage() {
 
   const clientCommandes = allCommandes.filter(c => c.client_id === clientId)
 
-  const handleUpdate = async data => {
+  const handleUpdate = async ({ _photo, ...data }) => {
     await updateClient.mutateAsync({ id: clientId, ...data })
+    if (_photo === '__remove__') deleteClientPhoto(clientId)
+    else if (_photo) saveClientPhoto(clientId, _photo)
     setShowEdit(false)
   }
 
@@ -85,7 +89,7 @@ export default function ClientDetailPage() {
     >
       {/* Header */}
       <div className="bg-card border-b border-edge px-4 py-4 flex items-center gap-4">
-        <Avatar nom={`${client.prenom ?? ''} ${client.nom}`.trim()} avatar_index={client.avatar_index} size="lg" />
+        <ClientAvatar client={client} size="lg" />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             <h1 className="font-bold text-ink truncate">{client.prenom} {client.nom}</h1>

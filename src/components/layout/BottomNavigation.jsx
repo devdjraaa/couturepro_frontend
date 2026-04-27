@@ -15,7 +15,7 @@ const NAV_ITEMS = [
 export default function BottomNavigation() {
   const { data: notifCount = 0 }  = useNotificationsCount()
   const { data: cmdStats }        = useCommandeStats()
-  const retardCount = cmdStats?.en_retard ?? 0
+  const alertCount = (cmdStats?.en_retard ?? 0) + (cmdStats?.dans_48h ?? 0)
 
   return (
     <nav
@@ -45,9 +45,9 @@ export default function BottomNavigation() {
                       {notifCount > 9 ? '9+' : notifCount}
                     </span>
                   )}
-                  {to === '/commandes' && retardCount > 0 && (
+                  {to === '/commandes' && alertCount > 0 && (
                     <span className="absolute -top-1 -right-1.5 min-w-4 h-4 bg-danger text-inverse text-[10px] font-bold rounded-full flex items-center justify-center px-0.5 leading-none">
-                      {retardCount > 9 ? '9+' : retardCount}
+                      {alertCount > 9 ? '9+' : alertCount}
                     </span>
                   )}
                 </div>

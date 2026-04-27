@@ -5,6 +5,7 @@ import { useClients, useCreateClient } from '@/hooks/useClients'
 import { AppLayout } from '@/components/layout'
 import { ClientCard, ClientForm } from '@/components/clients'
 import { SearchBar, EmptyState, Skeleton, BottomSheet, FloatingActionButton } from '@/components/ui'
+import { saveClientPhoto, deleteClientPhoto } from '@/utils/clientPhotoStorage'
 
 export default function ClientsPage() {
   const navigate = useNavigate()
@@ -18,9 +19,19 @@ export default function ClientsPage() {
     c.telephone?.includes(search)
   )
 
-  const handleCreate = async data => {
-    await createClient.mutateAsync(data)
-    setShowSheet(false)
+  const [doublonError, setDoublonError] = useState(null)
+
+  const handleCreate = async ({ _photo, ...data }) => {
+    setDoublonError(null)
+    try {
+      const client = await createClient.mutateAsync(data)
+      if (_photo === '__remove__') deleteClientPhoto(client.id)
+      else if (_photo) saveClientPhoto(client.id, _photo)
+      setShowSheet(false)
+    } catch (err) {
+      if (err.code === 'doublon') setDoublonError(err.message)
+      else throw err
+    }
   }
 
   return (
@@ -53,10 +64,19 @@ export default function ClientsPage() {
 
       <FloatingActionButton icon={Plus} onClick={() => setShowSheet(true)} />
 
-      <BottomSheet isOpen={showSheet} onClose={() => setShowSheet(false)} title="Nouveau client">
+      <BottomSheet
+        isOpen={showSheet}
+        onClose={() => { setShowSheet(false); setDoublonError(null) }}
+        title="Nouveau client"
+      >
+        {doublonError && (
+          <p className="mx-5 mt-3 text-sm text-danger bg-danger/8 rounded-xl px-4 py-2.5">
+            {doublonError}
+          </p>
+        )}
         <ClientForm
           onSubmit={handleCreate}
-          onCancel={() => setShowSheet(false)}
+          onCancel={() => { setShowSheet(false); setDoublonError(null) }}
           isLoading={createClient.isPending}
         />
       </BottomSheet>

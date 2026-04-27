@@ -1,5 +1,6 @@
 import { cn } from '@/utils/cn'
-import { Avatar, Card } from '@/components/ui'
+import { Card } from '@/components/ui'
+import ClientAvatar from './ClientAvatar'
 
 const TYPE_LABELS = {
   femme:  'Femme',
@@ -14,7 +15,7 @@ export default function ClientCard({ client, onClick }) {
 
   return (
     <Card onClick={onClick} className="flex items-center gap-3 p-4">
-      <Avatar nom={fullName} avatar_index={client.avatar_index} size="md" />
+      <ClientAvatar client={client} size="md" />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <p className="text-sm font-semibold text-ink truncate">{fullName}</p>
