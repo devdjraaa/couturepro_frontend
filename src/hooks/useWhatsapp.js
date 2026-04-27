@@ -9,3 +9,12 @@ export function useWhatsappRappel() {
     },
   })
 }
+
+export function useWhatsappCommandePrete() {
+  return useMutation({
+    mutationFn: (commandeId) => whatsappService.getCommandePrete(commandeId),
+    onSuccess: ({ lien }) => {
+      window.open(lien, '_blank', 'noopener,noreferrer')
+    },
+  })
+}

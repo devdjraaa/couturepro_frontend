@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react'
 import { MessageCircle } from 'lucide-react'
 import { useCommunications, useUpdateCommunications } from '@/hooks/useParametres'
-import { usePlanFeature } from '@/hooks/usePlanFeature'
 import { AppLayout } from '@/components/layout'
-import { FeatureGate } from '@/components/abonnement'
 import { Button, Skeleton } from '@/components/ui'
 import { cn } from '@/utils/cn'
 
@@ -45,7 +43,6 @@ function Toggle({ checked, onChange, disabled }) {
 export default function CommunicationsPage() {
   const { data: config, isLoading } = useCommunications()
   const update = useUpdateCommunications()
-  const { available: whatsappAvailable, isLoading: loadingFeature } = usePlanFeature('facture_whatsapp')
 
   const [form, setForm]       = useState(DEFAULTS)
   const [success, setSuccess] = useState(false)
@@ -80,10 +77,6 @@ export default function CommunicationsPage() {
   return (
     <AppLayout showBack title="Communications">
       <div className="p-4 space-y-5">
-        {/* Feature gate WhatsApp */}
-        {!loadingFeature && !whatsappAvailable && (
-          <FeatureGate featureKey="facture_whatsapp" featureName="Rappels WhatsApp" variant="card" />
-        )}
         {/* Master toggle */}
         <div className="bg-card border border-edge rounded-2xl p-4">
           <div className="flex items-center justify-between gap-3">
@@ -96,7 +89,7 @@ export default function CommunicationsPage() {
                 <p className="text-xs text-dim mt-0.5">Bouton manuel depuis les fiches</p>
               </div>
             </div>
-            <Toggle checked={form.whatsapp_enabled} onChange={set('whatsapp_enabled')} disabled={!whatsappAvailable && !loadingFeature} />
+            <Toggle checked={form.whatsapp_enabled} onChange={set('whatsapp_enabled')} />
           </div>
           <p className="text-xs text-dim bg-subtle rounded-xl px-3 py-2 mt-3 leading-relaxed">
             Aucun coût d'API — vous rédigez et envoyez vous-même le message depuis WhatsApp.

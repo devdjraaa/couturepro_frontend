@@ -6,7 +6,6 @@ import { useMesures, useSaveMesures } from '@/hooks/useMesures'
 import { useCommandes } from '@/hooks/useCommandes'
 import { useWhatsappRappel } from '@/hooks/useWhatsapp'
 import { useAuth } from '@/contexts'
-import { usePlanFeature } from '@/hooks/usePlanFeature'
 import { AppLayout } from '@/components/layout'
 import { ClientForm } from '@/components/clients'
 import { MesureForm, MesureDisplay } from '@/components/mesures'
@@ -40,7 +39,6 @@ export default function ClientDetailPage() {
   const toggleVip = useToggleVip()
   const saveMesures = useSaveMesures(clientId)
   const whatsappRappel = useWhatsappRappel()
-  const { available: whatsappAvailable } = usePlanFeature('facture_whatsapp')
 
   const clientCommandes = allCommandes.filter(c => c.client_id === clientId)
 
@@ -133,7 +131,7 @@ export default function ClientDetailPage() {
                 </div>
               )}
             </div>
-            {client.telephone && whatsappAvailable && (
+            {client.telephone && (
               <Button
                 variant="secondary"
                 icon={MessageCircle}

@@ -3,7 +3,8 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import { Edit2, Trash2, CreditCard, MessageCircle, Ruler, AlertTriangle, Download, Send } from 'lucide-react'
 import { useCommande, useUpdateCommande, useUpdateStatutCommande, useDeleteCommande } from '@/hooks/useCommandes'
 import { usePaiements, useEnregistrerPaiement } from '@/hooks/usePaiements'
-import { useWhatsappRappel } from '@/hooks/useWhatsapp'
+import { useWhatsappRappel, useWhatsappCommandePrete } from '@/hooks/useWhatsapp'
+import { useCommunications } from '@/hooks/useParametres'
 import { useAuth } from '@/contexts'
 import { usePlanFeature } from '@/hooks/usePlanFeature'
 import { AppLayout } from '@/components/layout'
@@ -37,9 +38,16 @@ export default function CommandeDetailPage() {
   const deleteCommande = useDeleteCommande()
   const enregistrerPaiement = useEnregistrerPaiement()
   const whatsappRappel = useWhatsappRappel()
+  const whatsappPrete = useWhatsappCommandePrete()
+  const { data: commsConfig } = useCommunications()
   const { available: whatsappFactureAvailable } = usePlanFeature('facture_whatsapp')
 
-  const handleStatut = statut => updateStatut.mutate({ id: commandeId, statut })
+  const handleStatut = async statut => {
+    await updateStatut.mutateAsync({ id: commandeId, statut })
+    if (statut === 'livre' && commsConfig?.whatsapp_enabled && commsConfig?.commande_prete) {
+      whatsappPrete.mutate(commandeId)
+    }
+  }
 
   const handleUpdate = async data => {
     await updateCommande.mutateAsync({ id: commandeId, ...data })

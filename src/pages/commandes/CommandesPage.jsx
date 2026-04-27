@@ -2,6 +2,8 @@ import { useState, useEffect, useMemo } from 'react'
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 import { Plus, ClipboardList, X, AlertTriangle, Timer } from 'lucide-react'
 import { useCommandes, useCreateCommande } from '@/hooks/useCommandes'
+import { useCommunications } from '@/hooks/useParametres'
+import { whatsappService } from '@/services/whatsappService'
 import { AppLayout } from '@/components/layout'
 import { CommandeCard, CommandeForm } from '@/components/commandes'
 import { TabBar, EmptyState, Skeleton, BottomSheet, FloatingActionButton } from '@/components/ui'
@@ -28,6 +30,7 @@ export default function CommandesPage() {
 
   const { data: commandes = [], isLoading } = useCommandes()
   const createCommande = useCreateCommande()
+  const { data: commsConfig } = useCommunications()
 
   const filtered = useMemo(() => {
     const now = Date.now()
@@ -65,6 +68,11 @@ export default function CommandesPage() {
   const handleCreate = async data => {
     const cmd = await createCommande.mutateAsync(data)
     setShowSheet(false)
+    if (commsConfig?.whatsapp_enabled && commsConfig?.confirmation_commande && cmd?.id) {
+      whatsappService.getConfirmationCommande(cmd.id)
+        .then(({ lien }) => window.open(lien, '_blank', 'noopener,noreferrer'))
+        .catch(() => {})
+    }
     navigate(`/commandes/${cmd.id}`)
   }
 
