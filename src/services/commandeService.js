@@ -4,6 +4,12 @@ import { mockCommandes } from './mockData'
 
 const delay = (ms = 300) => new Promise(r => setTimeout(r, ms))
 
+const flattenCommande = (c) => ({
+  ...c,
+  client_nom:   c.client   ? `${c.client.prenom ?? ''} ${c.client.nom ?? ''}`.trim() : '',
+  vetement_nom: c.vetement?.nom ?? '',
+})
+
 const toFormData = (payload) => {
   const fd = new FormData()
   const fields = ['client_id', 'vetement_id', 'prix', 'acompte', 'mode_paiement_acompte', 'date_livraison_prevue', 'note_interne', 'description', 'statut']
@@ -21,7 +27,7 @@ export const commandeService = {
       if (statut)    list = list.filter(c => c.statut === statut)
       if (client_id) list = list.filter(c => c.client_id === client_id || c.client_id === Number(client_id))
       list.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-      return list
+      return list.map(flattenCommande)
     }
     const params = {}
     if (statut)    params.statut    = statut
@@ -35,7 +41,7 @@ export const commandeService = {
       await delay()
       const commande = mockCommandes.find(c => c.id === id || c.id === Number(id))
       if (!commande) throw { code: 'non_trouve' }
-      return commande
+      return flattenCommande(commande)
     }
     const { data } = await api.get(`/commandes/${id}`)
     return data

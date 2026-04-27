@@ -27,8 +27,11 @@ export default function NotificationItem({ notification, onPress }) {
       </div>
       <div className="flex-1 min-w-0">
         <p className={cn('text-sm leading-snug', notification.lu ? 'text-dim' : 'text-ink font-medium')}>
-          {notification.message}
+          {notification.titre}
         </p>
+        {notification.contenu && (
+          <p className="text-xs text-dim leading-snug mt-0.5">{notification.contenu}</p>
+        )}
         <p className="text-xs text-ghost mt-0.5">{formatRelative(notification.created_at)}</p>
       </div>
       {!notification.lu && (

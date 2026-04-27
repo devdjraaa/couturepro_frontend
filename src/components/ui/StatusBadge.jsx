@@ -1,9 +1,17 @@
-import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
 import { STATUT_COLORS } from '@/constants/enums'
 
+const STATUT_LABELS = {
+  en_cours:  'En cours',
+  livre:     'Livré',
+  annule:    'Annulé',
+  essai:     'Essai',
+  actif:     'Actif',
+  expire:    'Expiré',
+  en_retard: 'En retard',
+}
+
 export default function StatusBadge({ statut, className }) {
-  const { t } = useTranslation()
   const colors = STATUT_COLORS[statut] ?? STATUT_COLORS.en_cours
 
   return (
@@ -17,7 +25,7 @@ export default function StatusBadge({ statut, className }) {
       )}
     >
       <span className={cn('w-1.5 h-1.5 rounded-full shrink-0', colors.dot)} />
-      {t(`commandes.statut.${statut}`, { defaultValue: statut })}
+      {STATUT_LABELS[statut] ?? statut}
     </span>
   )
 }

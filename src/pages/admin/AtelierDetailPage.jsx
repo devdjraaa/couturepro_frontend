@@ -139,39 +139,52 @@ export default function AtelierDetailPage() {
           </div>
 
           {/* Durée d'essai */}
-          <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <h2 className="font-semibold text-gray-700 text-sm mb-3">Durée d'essai</h2>
-            <p className="text-xs text-gray-400 mb-3">
-              Redéfinit la durée d'essai pour cet atelier (défaut : 14 jours).
-            </p>
-            <form onSubmit={handleSetTrial} className="space-y-2">
-              <div className="flex gap-2">
-                <input
-                  type="number"
-                  min="1"
-                  value={trialForm.duree}
-                  onChange={e => { setTrialSaved(false); setTrialForm(f => ({ ...f, duree: e.target.value })) }}
-                  className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-400"
-                  required
-                />
-                <select
-                  value={trialForm.unite}
-                  onChange={e => { setTrialSaved(false); setTrialForm(f => ({ ...f, unite: e.target.value })) }}
-                  className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-400"
-                >
-                  {UNITE_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                </select>
+          {(() => {
+            const trialLocked = atelier.abonnement?.statut === 'actif'
+            return (
+              <div className={`bg-white border rounded-xl p-5 ${trialLocked ? 'border-gray-100 opacity-60' : 'border-gray-200'}`}>
+                <h2 className="font-semibold text-gray-700 text-sm mb-3">Durée d'essai</h2>
+                {trialLocked ? (
+                  <p className="text-xs text-amber-600 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
+                    Abonnement actif — la durée d'essai n'est plus applicable.
+                  </p>
+                ) : (
+                  <>
+                    <p className="text-xs text-gray-400 mb-3">
+                      Redéfinit la durée d'essai pour cet atelier (défaut : 14 jours).
+                    </p>
+                    <form onSubmit={handleSetTrial} className="space-y-2">
+                      <div className="flex gap-2">
+                        <input
+                          type="number"
+                          min="1"
+                          value={trialForm.duree}
+                          onChange={e => { setTrialSaved(false); setTrialForm(f => ({ ...f, duree: e.target.value })) }}
+                          className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-400"
+                          required
+                        />
+                        <select
+                          value={trialForm.unite}
+                          onChange={e => { setTrialSaved(false); setTrialForm(f => ({ ...f, unite: e.target.value })) }}
+                          className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-400"
+                        >
+                          {UNITE_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                        </select>
+                      </div>
+                      {trialSaved && <p className="text-xs text-green-600">Durée d'essai mise à jour.</p>}
+                      <button
+                        type="submit"
+                        disabled={setTrial.isPending}
+                        className="w-full bg-indigo-600 text-white text-sm py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50"
+                      >
+                        {setTrial.isPending ? 'Enregistrement…' : 'Appliquer'}
+                      </button>
+                    </form>
+                  </>
+                )}
               </div>
-              {trialSaved && <p className="text-xs text-green-600">Durée d'essai mise à jour.</p>}
-              <button
-                type="submit"
-                disabled={setTrial.isPending}
-                className="w-full bg-indigo-600 text-white text-sm py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50"
-              >
-                {setTrial.isPending ? 'Enregistrement…' : 'Appliquer'}
-              </button>
-            </form>
-          </div>
+            )
+          })()}
 
           <div className="bg-white border border-gray-200 rounded-xl p-5">
             <h2 className="font-semibold text-gray-700 text-sm mb-4">Points fidélité</h2>

@@ -4,6 +4,7 @@ import { useVetements, useCreateVetement, useUpdateVetement, useDeleteVetement }
 import { AppLayout } from '@/components/layout'
 import { VetementCard, VetementForm } from '@/components/vetements'
 import { EmptyState, Skeleton, BottomSheet, FloatingActionButton } from '@/components/ui'
+import { isMock } from '@/services/mockFlag'
 
 export default function CataloguePage() {
   const [editing, setEditing] = useState(null) // null | 'new' | vetement object
@@ -64,8 +65,8 @@ export default function CataloguePage() {
               )}
             </div>
 
-            {/* Modèles système */}
-            {modelesSysteme.length > 0 && (
+            {/* Modèles système — uniquement en mode démo */}
+            {isMock() && modelesSysteme.length > 0 && (
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <p className="text-xs font-semibold text-dim uppercase tracking-wide">Gabarits système</p>
