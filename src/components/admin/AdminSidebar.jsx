@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Building2, CreditCard, TicketCheck,
   Gift, ShieldBan, ClipboardList, Bell, Star, LogOut, Layers,
-  Settings, Sun, Moon, Monitor,
+  Settings, Sun, Moon, Monitor, Users,
 } from 'lucide-react'
 import { useAdminAuth } from '@/contexts'
 import { useTheme } from '@/contexts'
@@ -18,6 +18,10 @@ const NAV = [
   { to: '/admin/liste-noire',   icon: ShieldBan,       label: 'Liste noire'    },
   { to: '/admin/audit',         icon: ClipboardList,   label: 'Audit'          },
   { to: '/admin/notifications', icon: Bell,            label: 'Notifications'  },
+]
+
+const NAV_SUPER = [
+  { to: '/admin/admins', icon: Users, label: 'Admins' },
 ]
 
 function ThemeToggle() {
@@ -39,7 +43,7 @@ function ThemeToggle() {
 }
 
 export default function AdminSidebar() {
-  const { admin, logout } = useAdminAuth()
+  const { admin, logout, isSuperAdmin } = useAdminAuth()
   const navigate = useNavigate()
 
   const handleLogout = async () => {
@@ -57,7 +61,7 @@ export default function AdminSidebar() {
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto py-4 space-y-0.5 px-2">
-        {NAV.map(({ to, icon: Icon, label, end }) => (
+        {[...NAV, ...(isSuperAdmin ? NAV_SUPER : [])].map(({ to, icon: Icon, label, end }) => (
           <NavLink
             key={to}
             to={to}

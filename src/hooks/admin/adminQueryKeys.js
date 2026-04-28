@@ -12,4 +12,5 @@ export const ADMIN_KEYS = {
   offres:       ['admin', 'offres'],
   listeNoire:   ['admin', 'liste-noire'],
   audit:        ['admin', 'audit'],
+  admins:       ['admin', 'admins'],
 }
