@@ -48,7 +48,7 @@ export const authService = {
     const { data } = await api.post('/auth/equipe/login', { code_acces, password, device_id })
     setToken(data.token)
     return {
-      user:    { ...data.membre, role: data.membre.role },
+      user:    { ...data.membre, role: data.membre.role, permissions: data.permissions ?? [] },
       atelier: null,
     }
   },

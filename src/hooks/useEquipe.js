@@ -19,11 +19,29 @@ export function useInviterMembre() {
   })
 }
 
-
 export function useRemoveMembre() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (id) => equipeService.remove(id),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.equipe }),
+  })
+}
+
+export function usePermissions(role) {
+  return useQuery({
+    queryKey: ['equipe', 'permissions', role],
+    queryFn: () => equipeService.getPermissions(role),
+    staleTime: QUERY_STALE_TIME,
+    enabled: !!role,
+  })
+}
+
+export function useUpdatePermissions() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ role, permissions }) => equipeService.updatePermissions(role, permissions),
+    onSuccess: (_, { role }) => {
+      queryClient.invalidateQueries({ queryKey: ['equipe', 'permissions', role] })
+    },
   })
 }

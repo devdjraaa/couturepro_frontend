@@ -98,7 +98,12 @@ export function AuthProvider({ children }) {
 
   const can = useCallback((permission) => {
     if (!user) return false
-    return ROLE_PERMISSIONS[user.role]?.includes(permission) ?? false
+    // Proprietaire : permissions statiques complètes
+    if (user.role === 'proprietaire') {
+      return ROLE_PERMISSIONS.proprietaire.includes(permission)
+    }
+    // Membres d'équipe : permissions dynamiques chargées au login
+    return Array.isArray(user.permissions) && user.permissions.includes(permission)
   }, [user])
 
   return (

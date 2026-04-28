@@ -4,12 +4,17 @@ import { useEquipe, useInviterMembre, useRemoveMembre } from '@/hooks/useEquipe'
 import { usePlanLimit } from '@/hooks/usePlanFeature'
 import { useAuth } from '@/contexts'
 import { AppLayout } from '@/components/layout'
-import { MembreCard } from '@/components/equipe'
+import { MembreCard, PermissionsGrid } from '@/components/equipe'
 import { EmptyState, Skeleton, BottomSheet, Button, Input, Select } from '@/components/ui'
 
 const ROLE_OPTIONS = [
   { value: 'assistant', label: 'Assistant' },
   { value: 'membre',    label: 'Membre'    },
+]
+
+const TABS = [
+  { key: 'membres',     label: 'Membres'     },
+  { key: 'permissions', label: 'Permissions' },
 ]
 
 function CodeAccesModal({ membre, onClose }) {
@@ -53,6 +58,7 @@ function CodeAccesModal({ membre, onClose }) {
 
 export default function EquipePage() {
   const { can } = useAuth()
+  const [activeTab, setActiveTab] = useState('membres')
   const [showInvite, setShowInvite] = useState(false)
   const [newMembre, setNewMembre] = useState(null)
   const [form, setForm] = useState({ nom: '', prenom: '', telephone: '', role: 'assistant' })
@@ -81,46 +87,71 @@ export default function EquipePage() {
     <AppLayout
       title="Équipe"
       rightAction={
-        can('equipe.manage') && max !== 0 ? (
+        activeTab === 'membres' && can('equipe.manage') && max !== 0 ? (
           <button onClick={() => setShowInvite(true)} className="p-2 text-dim">
             <UserPlus size={18} />
           </button>
         ) : null
       }
     >
+      {/* Onglets */}
+      {can('equipe.manage') && (
+        <div className="flex border-b border-edge px-4">
+          {TABS.map(tab => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+                activeTab === tab.key
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-dim hover:text-ink'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      )}
+
       <div className="p-4 space-y-2">
-        {max === 0 ? (
-          <div className="flex flex-col items-center gap-4 py-10 px-6 text-center bg-surface border border-border rounded-2xl">
-            <Users size={32} className="text-content-secondary" />
-            <div>
-              <p className="font-semibold text-content mb-1">Membres d'équipe non inclus</p>
-              <p className="text-sm text-content-secondary">
-                Votre plan actuel ne permet pas d'ajouter des membres d'équipe. Passez à un plan supérieur pour collaborer.
+        {activeTab === 'membres' && (
+          <>
+            {max === 0 ? (
+              <div className="flex flex-col items-center gap-4 py-10 px-6 text-center bg-surface border border-border rounded-2xl">
+                <Users size={32} className="text-content-secondary" />
+                <div>
+                  <p className="font-semibold text-content mb-1">Membres d'équipe non inclus</p>
+                  <p className="text-sm text-content-secondary">
+                    Votre plan actuel ne permet pas d'ajouter des membres d'équipe. Passez à un plan supérieur pour collaborer.
+                  </p>
+                </div>
+                <Button variant="secondary" onClick={() => window.location.href = '/parametres'}>
+                  Voir les plans
+                </Button>
+              </div>
+            ) : isLoading ? (
+              [...Array(3)].map((_, i) => <Skeleton key={i} className="h-16 rounded-xl" />)
+            ) : membres.length === 0 ? (
+              <EmptyState
+                icon={Users}
+                title="Aucun membre"
+                description="Ajoutez des collaborateurs pour gérer l'atelier ensemble"
+              />
+            ) : (
+              membres.map(m => (
+                <MembreCard key={m.id} membre={m} onRemove={id => remove.mutate(id)} />
+              ))
+            )}
+
+            {max !== null && max > 0 && membres.length > 0 && (
+              <p className="text-xs text-content-secondary text-center pt-2">
+                {membres.length} / {max} membre{max > 1 ? 's' : ''}
               </p>
-            </div>
-            <Button variant="secondary" onClick={() => window.location.href = '/parametres'}>
-              Voir les plans
-            </Button>
-          </div>
-        ) : isLoading ? (
-          [...Array(3)].map((_, i) => <Skeleton key={i} className="h-16 rounded-xl" />)
-        ) : membres.length === 0 ? (
-          <EmptyState
-            icon={Users}
-            title="Aucun membre"
-            description="Ajoutez des collaborateurs pour gérer l'atelier ensemble"
-          />
-        ) : (
-          membres.map(m => (
-            <MembreCard key={m.id} membre={m} onRemove={id => remove.mutate(id)} />
-          ))
+            )}
+          </>
         )}
 
-        {max !== null && max > 0 && membres.length > 0 && (
-          <p className="text-xs text-content-secondary text-center pt-2">
-            {membres.length} / {max} membre{max > 1 ? 's' : ''}
-          </p>
-        )}
+        {activeTab === 'permissions' && <PermissionsGrid />}
       </div>
 
       {/* Modal code d'accès après création */}
