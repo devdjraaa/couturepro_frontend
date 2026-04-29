@@ -19,4 +19,6 @@ export const QUERY_KEYS = {
   mesAteliers:        ['ateliers', 'mes-ateliers'],
   atelierStats:       (id) => ['ateliers', id, 'stats'],
   archives:           ['archives'],
+  caisseStats:        (mois) => ['caisse', 'stats', mois],
+  caisseClients:      ['caisse', 'clients'],
 }
