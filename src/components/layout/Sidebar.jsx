@@ -90,7 +90,7 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="px-5 py-4 border-b border-edge shrink-0">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-primary-600 flex items-center justify-center shrink-0 shadow-md">
+          <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shrink-0">
             <Scissors size={16} className="text-inverse" />
           </div>
           <div className="min-w-0">
