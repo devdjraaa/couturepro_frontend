@@ -667,6 +667,31 @@
       "commande_prete_desc": "Notify the client when their order is ready for pickup"
     }
   },
+  "plans": {
+    "standard_mensuel": "Standard Monthly",
+    "standard_annuel":  "Standard Annual",
+    "premium_mensuel":  "Premium Monthly",
+    "premium_annuel":   "Premium Annual",
+    "magnat_mensuel":   "Magnat Monthly",
+    "magnat_annuel":    "Magnat Annual",
+    "actif":            "Active",
+    "essai":            "Trial",
+    "renouveler":       "Renew",
+    "choisir":          "Choose plan",
+    "par_an":           "/ yr",
+    "par_mois":         "/ mo",
+    "illimite":         "Unlimited",
+    "non_inclus":       "Not included",
+    "clients_mois":     "clients / month",
+    "membres_equipe":   "team members",
+    "photos_vip":       "VIP photos",
+    "photos_vip_mois":  "VIP photos / month",
+    "factures_wa":      "WhatsApp invoices",
+    "factures_wa_mois": "WhatsApp invoices / month",
+    "sauvegarde_auto":  "Auto backup",
+    "module_caisse":    "Cash register module",
+    "sous_ateliers":    "sub-workshops"
+  },
   "caisse": {
     "titre": "Cash Register",
     "mois": "Month",

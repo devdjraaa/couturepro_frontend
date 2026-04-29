@@ -1,13 +1,15 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowLeft, Bell, ChevronDown, Building2, CheckCircle2 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
 import { useAuth } from '@/contexts'
-import { Avatar } from '@/components/ui'
+import { Avatar, LanguageSwitcher } from '@/components/ui'
 import { useNotificationsCount } from '@/hooks/useNotifications'
 import { useMesAteliers } from '@/hooks/useMesAteliers'
 
 function AtelierSwitcher({ atelier, switchAtelier }) {
+  const { t } = useTranslation()
   const { data: ateliers = [] } = useMesAteliers()
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
@@ -42,7 +44,7 @@ function AtelierSwitcher({ atelier, switchAtelier }) {
               <Building2 size={13} className="text-dim shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-ink truncate">{a.nom}</p>
-                {a.is_maitre && <p className="text-[10px] text-dim">Atelier maître</p>}
+                {a.is_maitre && <AtelierMaitreLabel />}
               </div>
               {a.id === atelier?.id && <CheckCircle2 size={13} className="text-primary shrink-0" />}
             </button>
@@ -51,6 +53,11 @@ function AtelierSwitcher({ atelier, switchAtelier }) {
       )}
     </div>
   )
+}
+
+function AtelierMaitreLabel() {
+  const { t } = useTranslation()
+  return <p className="text-[10px] text-dim">{t('parametres.ateliers_tab.maitre')}</p>
 }
 
 export default function Header({ title, showBack = false, onBack, rightAction, className }) {
@@ -98,6 +105,7 @@ export default function Header({ title, showBack = false, onBack, rightAction, c
         {/* Right */}
         <div className="flex items-center gap-1 shrink-0">
           {rightAction}
+          <LanguageSwitcher variant="badge" />
           <button
             type="button"
             onClick={() => navigate('/notifications')}

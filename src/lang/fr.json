@@ -667,6 +667,31 @@
       "commande_prete_desc": "Informer le client quand sa commande est prête à récupérer"
     }
   },
+  "plans": {
+    "standard_mensuel": "Standard Mensuel",
+    "standard_annuel":  "Standard Annuel",
+    "premium_mensuel":  "Premium Mensuel",
+    "premium_annuel":   "Premium Annuel",
+    "magnat_mensuel":   "Magnat Mensuel",
+    "magnat_annuel":    "Magnat Annuel",
+    "actif":            "Actif",
+    "essai":            "Essai",
+    "renouveler":       "Renouveler",
+    "choisir":          "Choisir ce plan",
+    "par_an":           "/ an",
+    "par_mois":         "/ mois",
+    "illimite":         "Illimité",
+    "non_inclus":       "Non inclus",
+    "clients_mois":     "clients / mois",
+    "membres_equipe":   "membres d'équipe",
+    "photos_vip":       "Photos VIP",
+    "photos_vip_mois":  "photos VIP / mois",
+    "factures_wa":      "Factures WhatsApp",
+    "factures_wa_mois": "factures WhatsApp / mois",
+    "sauvegarde_auto":  "Sauvegarde auto",
+    "module_caisse":    "Module caisse",
+    "sous_ateliers":    "sous-ateliers"
+  },
   "caisse": {
     "titre": "Caisse",
     "mois": "Mois",

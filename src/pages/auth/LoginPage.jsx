@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts'
 import { AuthLayout } from '@/components/layout'
-import { Input, Button } from '@/components/ui'
+import { Input, Button, LanguageSwitcher } from '@/components/ui'
 
 function getOrCreateDeviceId() {
   const key = 'cp_device_id'
@@ -65,6 +65,11 @@ export default function LoginPage() {
 
   return (
     <AuthLayout subtitle={t('auth.connexion.sous_titre_login')}>
+      {/* Langue */}
+      <div className="flex justify-end mb-4">
+        <LanguageSwitcher variant="badge" />
+      </div>
+
       {/* Onglets */}
       <div className="flex rounded-xl bg-surface border border-border p-1 mb-5 gap-1">
         {[
