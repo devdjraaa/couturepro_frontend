@@ -7,6 +7,7 @@ const DEFAULT_CONFIG = {
   max_clients_par_mois:    50,
   max_assistants:          0,
   max_membres:             0,
+  max_sous_ateliers:       0,
   max_photos_vip_par_mois: -1,
   max_factures_par_mois:   -1,
   pts_par_client:          1,
@@ -143,6 +144,7 @@ function PlanModal({ initial, onClose, onSubmit, isLoading }) {
                 <NumField label="Factures / mois"    name="max_factures_par_mois"   value={form.config.max_factures_par_mois}   onChange={setCfg} unlimited />
                 <NumField label="Membres équipe"     name="max_membres"             value={form.config.max_membres}             onChange={setCfg} />
                 <NumField label="Assistants"         name="max_assistants"          value={form.config.max_assistants}          onChange={setCfg} />
+                <NumField label="Sous-ateliers"      name="max_sous_ateliers"       value={form.config.max_sous_ateliers ?? 0}  onChange={setCfg} />
               </div>
             </div>
 

@@ -40,6 +40,10 @@ export default function PlanCard({ plan, isCurrent, abonnementStatut, onUpgrade,
     ? illimite
     : cfg.max_membres === 0 ? null : String(cfg.max_membres)
 
+  const sousAteliersCount = cfg.max_sous_ateliers === null || cfg.max_sous_ateliers === -1
+    ? illimite
+    : cfg.max_sous_ateliers === 0 ? null : String(cfg.max_sous_ateliers)
+
   return (
     <div className={cn(
       'bg-card border rounded-2xl p-4 flex flex-col gap-3',
@@ -81,6 +85,11 @@ export default function PlanCard({ plan, isCurrent, abonnementStatut, onUpgrade,
             label={t('plans.membres_equipe')}
             value={membresCount !== null}
             count={membresCount}
+          />
+          <FeatureRow
+            label={t('plans.sous_ateliers')}
+            value={sousAteliersCount !== null}
+            count={sousAteliersCount}
           />
           {cfg.photos_vip ? (
             <FeatureRow
