@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { MessageCircle } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useCommunications, useUpdateCommunications } from '@/hooks/useParametres'
 import { useAbonnement } from '@/hooks/useAbonnement'
 import { AppLayout } from '@/components/layout'
@@ -13,24 +14,6 @@ const DEFAULTS = {
   commande_prete:         false,
 }
 
-const TOGGLES = [
-  {
-    key:   'confirmation_commande',
-    label: 'Confirmation de commande',
-    desc:  'Envoyer un message quand une commande est créée',
-  },
-  {
-    key:   'rappel_livraison_j2',
-    label: 'Rappel J-2 avant livraison',
-    desc:  'Rappeler le client 2 jours avant la date de livraison prévue',
-  },
-  {
-    key:   'commande_prete',
-    label: 'Commande prête',
-    desc:  'Informer le client quand sa commande est prête à récupérer',
-  },
-]
-
 function Toggle({ checked, onChange, disabled }) {
   return (
     <label className={cn('relative cursor-pointer shrink-0', disabled && 'opacity-40 pointer-events-none')}>
@@ -42,6 +25,7 @@ function Toggle({ checked, onChange, disabled }) {
 }
 
 export default function CommunicationsPage() {
+  const { t } = useTranslation()
   const { data: config, isLoading } = useCommunications()
   const update = useUpdateCommunications()
   const { data: abonnement } = useAbonnement()
@@ -50,6 +34,24 @@ export default function CommunicationsPage() {
   const [success, setSuccess] = useState(false)
 
   const quotaFactures = abonnement?.quota_factures ?? null
+
+  const TOGGLES = [
+    {
+      key:   'confirmation_commande',
+      label: t('communications.whatsapp.confirmation_commande'),
+      desc:  t('communications.whatsapp.confirmation_commande_desc'),
+    },
+    {
+      key:   'rappel_livraison_j2',
+      label: t('communications.whatsapp.rappel_j2'),
+      desc:  t('communications.whatsapp.rappel_j2_desc'),
+    },
+    {
+      key:   'commande_prete',
+      label: t('communications.whatsapp.commande_prete'),
+      desc:  t('communications.whatsapp.commande_prete_desc'),
+    },
+  ]
 
   useEffect(() => {
     if (config) setForm({ ...DEFAULTS, ...config })
@@ -70,7 +72,7 @@ export default function CommunicationsPage() {
 
   if (isLoading) {
     return (
-      <AppLayout showBack title="Communications">
+      <AppLayout showBack title={t('communications.titre')}>
         <div className="p-4 space-y-3">
           <Skeleton className="h-40 rounded-2xl" />
         </div>
@@ -79,7 +81,7 @@ export default function CommunicationsPage() {
   }
 
   return (
-    <AppLayout showBack title="Communications">
+    <AppLayout showBack title={t('communications.titre')}>
       <div className="p-4 space-y-5">
         {/* Master toggle */}
         <div className="bg-card border border-edge rounded-2xl p-4">
@@ -89,44 +91,44 @@ export default function CommunicationsPage() {
                 <MessageCircle size={20} className="text-success" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-ink">Rappels WhatsApp</p>
-                <p className="text-xs text-dim mt-0.5">Bouton manuel depuis les fiches</p>
+                <p className="text-sm font-semibold text-ink">{t('communications.whatsapp.rappels')}</p>
+                <p className="text-xs text-dim mt-0.5">{t('communications.whatsapp.bouton_manuel')}</p>
               </div>
             </div>
             <Toggle checked={form.whatsapp_enabled} onChange={set('whatsapp_enabled')} />
           </div>
           <p className="text-xs text-dim bg-subtle rounded-xl px-3 py-2 mt-3 leading-relaxed">
-            Aucun coût d'API — vous rédigez et envoyez vous-même le message depuis WhatsApp.
+            {t('communications.whatsapp.sans_cout')}
           </p>
         </div>
 
         {/* 3 toggles indépendants */}
         <div>
-          <p className="text-xs font-semibold text-dim uppercase tracking-wide mb-2">Messages automatiques</p>
+          <p className="text-xs font-semibold text-dim uppercase tracking-wide mb-2">{t('communications.messages_automatiques')}</p>
           <div className="bg-card border border-edge rounded-2xl divide-y divide-edge">
-            {TOGGLES.map(t => (
-              <div key={t.key} className="flex items-center justify-between px-4 py-4 gap-3">
+            {TOGGLES.map(item => (
+              <div key={item.key} className="flex items-center justify-between px-4 py-4 gap-3">
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-ink">{t.label}</p>
-                  <p className="text-xs text-dim mt-0.5">{t.desc}</p>
+                  <p className="text-sm font-medium text-ink">{item.label}</p>
+                  <p className="text-xs text-dim mt-0.5">{item.desc}</p>
                 </div>
                 <Toggle
-                  checked={form[t.key]}
-                  onChange={set(t.key)}
+                  checked={form[item.key]}
+                  onChange={set(item.key)}
                   disabled={!form.whatsapp_enabled}
                 />
               </div>
             ))}
           </div>
           {!form.whatsapp_enabled && (
-            <p className="text-xs text-ghost text-center mt-2">Activez les rappels WhatsApp pour configurer</p>
+            <p className="text-xs text-ghost text-center mt-2">{t('communications.activer_hint')}</p>
           )}
         </div>
 
-        {/* Quota factures WhatsApp — visible uniquement pour Premium+ */}
+        {/* Quota factures WhatsApp */}
         {quotaFactures && (
           <div className="bg-card border border-edge rounded-2xl px-4 py-3">
-            <p className="text-xs font-semibold text-dim uppercase tracking-wide mb-2">Factures WhatsApp ce mois</p>
+            <p className="text-xs font-semibold text-dim uppercase tracking-wide mb-2">{t('communications.factures_mois')}</p>
             <div className="flex items-center justify-between gap-3">
               <div className="flex-1 bg-edge rounded-full h-2 overflow-hidden">
                 <div
@@ -147,15 +149,15 @@ export default function CommunicationsPage() {
 
         {update.isError && (
           <p className="text-sm text-danger px-1">
-            {update.error?.message ?? 'Impossible de sauvegarder pour l\'instant.'}
+            {update.error?.message ?? t('communications.erreur_sauvegarde')}
           </p>
         )}
         {success && (
-          <p className="text-sm text-success px-1">Préférences enregistrées.</p>
+          <p className="text-sm text-success px-1">{t('communications.succes')}</p>
         )}
 
         <Button className="w-full" loading={update.isPending} onClick={handleSave}>
-          Enregistrer
+          {t('commun.enregistrer')}
         </Button>
       </div>
     </AppLayout>

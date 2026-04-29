@@ -1,0 +1,725 @@
+{
+  "commun": {
+    "enregistrer": "Save",
+    "annuler": "Cancel",
+    "supprimer": "Delete",
+    "modifier": "Edit",
+    "ajouter": "Add",
+    "confirmer": "Confirm",
+    "fermer": "Close",
+    "retour": "Back",
+    "suivant": "Next",
+    "precedent": "Previous",
+    "rechercher": "Search",
+    "voir_tout": "View all",
+    "chargement": "Loading…",
+    "reessayer": "Retry",
+    "actualiser": "Refresh",
+    "aucun_resultat": "No results",
+    "actions": "Actions",
+    "details": "Details",
+    "informations": "Information",
+    "statut": "Status",
+    "date": "Date",
+    "montant": "Amount",
+    "notes": "Notes",
+    "telephone": "Phone",
+    "email": "Email",
+    "nom": "Last name",
+    "prenom": "First name",
+    "description": "Description",
+    "oui": "Yes",
+    "non": "No",
+    "accueil": "Home",
+    "menu": "Menu",
+    "bonjour": "Hello",
+    "hors_ligne": "Offline mode",
+    "hors_ligne_message": "Your data will be synced when you reconnect",
+    "sync_en_cours": "Syncing…",
+    "sync_reussie": "Synced",
+    "optionnel": "optional",
+    "requis": "required",
+    "nouveau": "New",
+    "tout": "All",
+    "aucun": "None"
+  },
+  "erreurs": {
+    "reseau": "Connection error. Check your network.",
+    "serveur": "Server error. Try again later.",
+    "non_autorise": "You are not authorized to perform this action.",
+    "non_trouve": "Item not found.",
+    "session_expiree": "Your session has expired. Please log in again.",
+    "quota_depasse": "Quota reached. Upgrade your plan.",
+    "quota_clients": "Client limit reached for your subscription.",
+    "quota_commandes": "Monthly order limit reached.",
+    "code_invalide": "Invalid or already used activation code.",
+    "telephone_existe": "This phone number is already in use.",
+    "mot_de_passe_invalide": "Incorrect number or password.",
+    "otp_invalide": "Incorrect code. Check and try again.",
+    "otp_expire": "This code has expired. Request a new one.",
+    "champ_requis": "This field is required.",
+    "format_invalide": "Invalid format.",
+    "inconnu": "An unexpected error occurred."
+  },
+  "auth": {
+    "connexion": {
+      "titre": "Sign in",
+      "sous_titre": "Access your Couture Pro workspace",
+      "sous_titre_login": "Sign in to your workshop",
+      "telephone": "Phone number",
+      "telephone_placeholder": "+225 07 00 00 00 00",
+      "mot_de_passe": "Password",
+      "mot_de_passe_oublie": "Forgot password?",
+      "se_connecter": "Sign in",
+      "pas_de_compte": "Don't have an account?",
+      "creer_compte": "Create an account",
+      "onglet_proprietaire": "Owner",
+      "onglet_equipe": "Assistant / Staff",
+      "code_acces": "Access code",
+      "acceder_atelier": "Access workshop",
+      "code_acces_hint": "The initial password is the same as the access code"
+    },
+    "inscription": {
+      "titre": "Create your workshop",
+      "sous_titre": "Join Couture Pro for free",
+      "sous_titre_register": "Create your workshop online",
+      "nom_atelier": "Workshop name",
+      "nom_atelier_placeholder": "Aminata's Atelier",
+      "mot_de_passe": "Password",
+      "confirmer_mot_de_passe": "Confirm password",
+      "creer": "Create my workshop",
+      "creer_compte": "Create my account",
+      "deja_compte": "Already have an account?",
+      "deja_inscrit": "Already registered?",
+      "se_connecter": "Sign in",
+      "question_secrete": "Security question",
+      "reponse_secrete": "Secret answer",
+      "reponse_secrete_placeholder": "Your answer",
+      "mdp_non_concordants": "Passwords do not match"
+    },
+    "otp": {
+      "titre": "Verification",
+      "sous_titre": "Enter the code received by SMS at {{telephone}}",
+      "sous_titre_tel": "Code sent to {{telephone}}",
+      "code": "Verification code",
+      "verifier": "Verify",
+      "renvoyer": "Resend code",
+      "renvoyer_dans": "Resend in {{secondes}}s",
+      "instruction": "Enter the 6-digit code received by SMS.",
+      "renvoye_succes": "Code resent!"
+    },
+    "mot_de_passe_oublie": {
+      "titre": "Forgot password",
+      "sous_titre": "Enter your number to receive a reset code",
+      "sous_titre_mdp": "Recover your account",
+      "instruction": "Enter your email address. You will receive a verification code.",
+      "envoyer": "Send code",
+      "retour_connexion": "Back to sign in"
+    },
+    "recuperer_compte": {
+      "titre": "Recover my account",
+      "sous_titre": "Contact support if you no longer have access to your number",
+      "contacter": "Contact support",
+      "session_expiree": "Session expired",
+      "session_expiree_message": "Your recovery session has expired. Please start over.",
+      "otp_email_instruction": "An OTP code has been sent to {{email}}.",
+      "nouveau_tel_instruction": "Enter your new phone number. A confirmation code will be sent to {{email}}.",
+      "confirmer_tel_instruction": "A code has been sent to {{email}} to confirm the number {{tel}}.",
+      "nouveau_numero": "New number",
+      "code_confirmation": "Confirmation code",
+      "nouveau_mot_de_passe": "New password",
+      "continuer": "Continue",
+      "etape_1": "Verify code",
+      "etape_2": "New number",
+      "etape_3": "Confirm number",
+      "etape_4": "New password"
+    },
+    "onboarding": {
+      "commencer": "Get started",
+      "passer": "Skip",
+      "slide_1_titre": "Welcome to Couture Pro",
+      "slide_1_description": "Manage your tailoring workshop easily from your phone.",
+      "slide_2_titre": "Your clients, organized",
+      "slide_2_description": "Record measurements and orders for each client in seconds.",
+      "slide_3_titre": "Track your orders",
+      "slide_3_description": "Real-time statuses, payments and deliveries — all under control.",
+      "slide_4_titre": "Grow your business",
+      "slide_4_description": "Dashboard, statistics and loyalty program to retain your clients."
+    },
+    "deconnexion": "Sign out",
+    "session_expiree": "Your session has expired. Please sign in again."
+  },
+  "dashboard": {
+    "titre": "Dashboard",
+    "bonjour": "Hello",
+    "commandes_en_cours": "In progress",
+    "commandes_retard": "Late",
+    "livraison_48h": "Due in 48h",
+    "clients_actifs": "Active clients",
+    "revenus_mois": "This month",
+    "voir_commandes": "View orders",
+    "toutes_ateliers": "All",
+    "stats_globales": "Global view",
+    "recentes": "Recent orders"
+  },
+  "clients": {
+    "titre": "Clients",
+    "nouveau": "New client",
+    "recherche_placeholder": "Search a client…",
+    "vide": {
+      "titre": "Your list is empty",
+      "description": "Add your first client to get started",
+      "action": "Add a client"
+    },
+    "onglets": {
+      "tous": "All",
+      "vip": "VIP",
+      "reguliers": "Regular"
+    },
+    "type_profil": {
+      "vip": "VIP",
+      "regulier": "Regular",
+      "occasionnel": "Occasional"
+    },
+    "formulaire": {
+      "titre_ajout": "New client",
+      "titre_modification": "Edit client",
+      "prenom": "First name",
+      "prenom_placeholder": "e.g. Aminata",
+      "nom": "Last name",
+      "nom_placeholder": "e.g. Diallo",
+      "telephone": "Phone",
+      "telephone_placeholder": "+225 07 00 00 00 00",
+      "email": "Email (optional)",
+      "type_profil": "Profile type",
+      "avatar": "Profile picture",
+      "notes": "Notes",
+      "notes_placeholder": "Useful information about this client…",
+      "enregistrer": "Save",
+      "ajouter": "Add client"
+    },
+    "detail": {
+      "commandes": "Orders",
+      "mesures": "Measurements",
+      "informations": "Information",
+      "aucune_commande": "No orders for this client",
+      "aucune_mesure": "No measurements recorded",
+      "tabs": {
+        "infos": "Info",
+        "mesures": "Measurements",
+        "commandes": "Orders"
+      },
+      "depuis": "Client since {{date}}",
+      "type": "Type",
+      "retirer_vip": "Remove VIP",
+      "ajouter_vip": "→ VIP",
+      "rappeler_whatsapp": "Remind on WhatsApp",
+      "supprimer_btn": "Delete this client",
+      "modifier_mesures": "Edit measurements",
+      "ajouter_mesures": "Add measurements",
+      "mesure_vide_description": "Record this client's body measurements",
+      "aucune_commande_titre": "No orders",
+      "aucune_commande_description": "This client has no orders yet"
+    },
+    "actions": {
+      "modifier": "Edit",
+      "archiver": "Archive",
+      "supprimer": "Delete",
+      "nouvelle_commande": "New order",
+      "nouvelles_mesures": "Take measurements",
+      "toggle_vip": "Set as VIP"
+    },
+    "supprimer_confirm": {
+      "titre": "Delete this client?",
+      "message": "This will permanently delete {{nom}} and all associated data.",
+      "confirmer": "Delete",
+      "annuler": "Cancel"
+    },
+    "archiver_confirm": "Archive this client?"
+  },
+  "commandes": {
+    "titre": "Orders",
+    "nouvelle": "New order",
+    "recherche_placeholder": "Search an order…",
+    "vide": {
+      "titre": "No orders in progress",
+      "description": "Create your first order to get started",
+      "action": "Create an order"
+    },
+    "onglets": {
+      "en_cours": "In progress",
+      "livrees": "Delivered",
+      "toutes": "All"
+    },
+    "statut": {
+      "en_cours": "In progress",
+      "essai": "Fitting",
+      "livre": "Delivered",
+      "annule": "Cancelled",
+      "en_retard": "Late"
+    },
+    "formulaire": {
+      "titre_ajout": "New order",
+      "titre_modification": "Edit order",
+      "client": "Client",
+      "client_placeholder": "Select a client",
+      "vetement": "Garment",
+      "vetement_placeholder": "Select a garment",
+      "date_livraison": "Delivery date",
+      "montant": "Total amount (XOF)",
+      "avance": "Deposit received (XOF)",
+      "reste": "Balance due",
+      "notes": "Notes",
+      "notes_placeholder": "Special instructions, fabric, colors…",
+      "photo_tissu": "Fabric photo",
+      "enregistrer": "Save",
+      "creer": "Create order"
+    },
+    "detail": {
+      "client": "Client",
+      "vetement": "Garment",
+      "date_commande": "Order date",
+      "date_livraison": "Expected delivery",
+      "montant": "Total amount",
+      "avance": "Deposit paid",
+      "reste": "Balance due",
+      "progression": "Progress",
+      "tissu": "Fabric photo",
+      "notes": "Internal notes",
+      "paiements": "Payment history",
+      "titre_single": "Order",
+      "urgente": "Urgent order",
+      "tissu_label": "Fabric",
+      "description_label": "Description",
+      "statut_label": "Status",
+      "historique_paiements": "Payment history",
+      "releve_pdf": "PDF Statement",
+      "export_encours": "Export…",
+      "releve_pret": "Statement ready",
+      "envoyer_releve": "Send statement to client on WhatsApp",
+      "envoyer": "Send",
+      "ignorer": "Dismiss",
+      "paiement_btn": "Payment",
+      "voir_mesures": "View client measurements",
+      "supprimer_btn": "Delete this order",
+      "note_interne": "Internal note"
+    },
+    "modes_paiement": {
+      "especes": "Cash",
+      "mobile_money": "Mobile Money",
+      "virement": "Bank transfer"
+    },
+    "paiement_form": {
+      "titre": "Record a payment",
+      "montant": "Amount (XOF)",
+      "mode": "Payment method",
+      "releve_whatsapp": "A WhatsApp statement will be offered after confirmation."
+    },
+    "indicateurs": {
+      "en_retard": "Late",
+      "dans_48h": "Due in 48h",
+      "en_cours": "In progress"
+    },
+    "actions": {
+      "changer_statut": "Change status",
+      "marquer_livre": "Mark as delivered",
+      "marquer_essai": "Set as fitting",
+      "reprendre": "Resume",
+      "annuler": "Cancel order"
+    },
+    "supprimer_confirm": "Delete this order?"
+  },
+  "catalogue": {
+    "titre": "Catalogue",
+    "mon_catalogue": "My catalogue",
+    "gabarits_systeme": "System templates",
+    "nouveau": "New garment",
+    "vide": {
+      "titre": "No garments created",
+      "description": "Define your garment types and their measurements",
+      "action": "Create a garment"
+    },
+    "formulaire": {
+      "titre_ajout": "New garment",
+      "titre_modification": "Edit garment",
+      "nom": "Garment name",
+      "nom_placeholder": "e.g. Grand boubou",
+      "description": "Description (optional)",
+      "libelles_mesures": "Required measurements",
+      "libelle_placeholder": "e.g. Chest, Length…",
+      "ajouter_libelle": "Add measurement",
+      "enregistrer": "Save",
+      "ajouter": "Create garment"
+    },
+    "supprimer_confirm": {
+      "titre": "Delete this garment?",
+      "message": "Associated orders and measurements will not be deleted.",
+      "confirmer": "Delete",
+      "annuler": "Cancel"
+    }
+  },
+  "mesures": {
+    "titre": "Measurements",
+    "nouvelle": "New measurements",
+    "vide": {
+      "titre": "No measurements",
+      "description": "Record your clients' measurements",
+      "action": "Take measurements"
+    },
+    "formulaire": {
+      "titre": "Measurements for {{nom}}",
+      "vetement": "Garment",
+      "enregistrer": "Save measurements",
+      "exporter_pdf": "Export as PDF"
+    },
+    "champs": {
+      "poitrine": "Chest",
+      "taille": "Waist",
+      "hanches": "Hips",
+      "epaules": "Shoulders",
+      "longueur_dos": "Back length",
+      "longueur_manches": "Sleeve length",
+      "tour_bras": "Arm circumference",
+      "tour_cou": "Neck circumference",
+      "longueur_robe": "Dress length",
+      "longueur_jupe": "Skirt length",
+      "longueur_pantalon": "Trouser length",
+      "tour_cuisse": "Thigh circumference",
+      "entrejambe": "Inseam"
+    },
+    "unite": "cm",
+    "date": "Taken on",
+    "exporter": "Export PDF",
+    "historique": "Measurement history"
+  },
+  "equipe": {
+    "titre": "Team",
+    "nouveau_membre": "Add a member",
+    "vide": {
+      "titre": "No team members",
+      "description": "Invite assistants to help you manage the workshop",
+      "action": "Add a member"
+    },
+    "roles": {
+      "proprietaire": "Owner",
+      "assistant": "Assistant",
+      "membre": "Member"
+    },
+    "permissions": {
+      "proprietaire": "Full access",
+      "assistant": "Create & archive",
+      "membre": "Read only"
+    },
+    "formulaire": {
+      "titre": "Add a member",
+      "prenom": "First name",
+      "nom": "Last name",
+      "telephone": "Phone",
+      "role": "Role in the workshop",
+      "ajouter": "Add member"
+    },
+    "actions": {
+      "modifier_role": "Change role",
+      "revoquer": "Revoke access"
+    },
+    "revoquer_confirm": {
+      "titre": "Revoke {{nom}}'s access?",
+      "message": "This person will no longer be able to access your workshop.",
+      "confirmer": "Revoke",
+      "annuler": "Cancel"
+    },
+    "permissions_titre": "Permissions"
+  },
+  "points": {
+    "titre": "Loyalty points",
+    "solde": "Current balance",
+    "point_one": "{{count}} point",
+    "point_other": "{{count}} points",
+    "historique": {
+      "titre": "History",
+      "gagnes": "Points earned",
+      "utilises": "Points used",
+      "vide": "No points history"
+    },
+    "conversion": {
+      "titre": "Redeem my points",
+      "sous_titre": "{{points}} points = {{jours}} days of subscription",
+      "convertir": "Redeem",
+      "confirmer": "Confirm redemption",
+      "pas_assez": "Not enough points",
+      "succes": "Redemption successful!"
+    },
+    "comment_gagner": {
+      "titre": "How to earn points?",
+      "paiement": "1,000 XOF paid = 1 point",
+      "parrainage": "Referral = 50 points",
+      "fidelite": "Each active month = 5 points"
+    },
+    "erreur_chargement": "Unable to load your loyalty points."
+  },
+  "notifications": {
+    "titre": "Notifications",
+    "vide": {
+      "titre": "No notifications",
+      "description": "You're all caught up!"
+    },
+    "marquer_lu": "Mark as read",
+    "tout_marquer_lu": "Mark all as read",
+    "types": {
+      "commande": "Order",
+      "abonnement": "Subscription",
+      "systeme": "System",
+      "paiement": "Payment",
+      "alerte_archive": "Archive"
+    }
+  },
+  "abonnement": {
+    "titre": "Subscription",
+    "statut": {
+      "actif": "Active",
+      "expire": "Expired",
+      "en_attente": "Pending",
+      "essai": "Free trial"
+    },
+    "expiration": {
+      "dans": "Expires in {{jours}} day",
+      "dans_plural": "Expires in {{jours}} days",
+      "aujourd_hui": "Expires today",
+      "expire": "Expired"
+    },
+    "paiement": {
+      "titre": "Pay my subscription",
+      "sous_titre": "Choose your plan",
+      "mensuel": "Monthly",
+      "annuel": "Annual",
+      "economie": "Save 2 months",
+      "payer": "Pay {{montant}} XOF",
+      "securise": "Secure payment"
+    },
+    "code": {
+      "titre": "Activation code",
+      "sous_titre": "Enter your code received from the administrator",
+      "placeholder": "XXXXXXXXXXXXXXXX",
+      "activer": "Activate",
+      "succes": "Subscription activated successfully!"
+    },
+    "quotas": {
+      "clients": "Clients",
+      "commandes": "Orders/month",
+      "illimite": "Unlimited",
+      "utilises": "{{utilises}} / {{limite}} used",
+      "depasse": "Quota exceeded"
+    }
+  },
+  "parametres": {
+    "titre": "Settings",
+    "onglets": {
+      "profil": "Profile",
+      "atelier": "Workshop",
+      "abonnement": "Subscription",
+      "securite": "Security",
+      "preferences": "Preferences",
+      "ateliers": "My workshops"
+    },
+    "profil": {
+      "titre": "My profile",
+      "photo": "Profile picture",
+      "modifier_photo": "Change photo",
+      "enregistrer": "Save profile"
+    },
+    "atelier": {
+      "titre": "My workshop",
+      "nom": "Workshop name",
+      "adresse": "Address",
+      "ville": "City"
+    },
+    "securite": {
+      "titre": "Security",
+      "ancien_mdp": "Current password",
+      "nouveau_mdp": "New password",
+      "confirmer_mdp": "Confirm password",
+      "modifier": "Change password",
+      "succes": "Password changed successfully"
+    },
+    "preferences": {
+      "titre": "Preferences",
+      "devise": "Currency",
+      "unite_mesure": "Unit of measurement",
+      "langue": "Language / Langue",
+      "succes": "Preferences saved."
+    },
+    "abonnement": {
+      "plan_actuel": "Current plan",
+      "temps_restant": "Time remaining",
+      "expire_le": "Expires on",
+      "expire_le_passe": "Expired on",
+      "plans_disponibles": "Available plans",
+      "activer_code_titre": "Activate a code",
+      "activer_code_desc": "Have an activation code? Enter it here.",
+      "activer_btn": "Activate",
+      "active_succes": "Subscription activated!",
+      "code_invalide": "Invalid or already used code",
+      "statuts": {
+        "actif": "Active",
+        "essai": "Trial period",
+        "expire": "Expired",
+        "gele": "Suspended"
+      }
+    },
+    "ateliers_tab": {
+      "non_disponible": "Not available in your plan",
+      "ajouter": "Add",
+      "creer": "Create",
+      "maitre": "Main",
+      "form_nom": "Workshop name",
+      "form_ville": "City"
+    },
+    "theme": {
+      "titre": "Appearance",
+      "clair": "Light theme",
+      "sombre": "Dark theme",
+      "systeme": "Follow system"
+    },
+    "communications": {
+      "titre": "Communications",
+      "whatsapp": "WhatsApp",
+      "whatsapp_description": "Send automatic messages to your clients",
+      "configurer": "Configure",
+      "tester": "Send test message"
+    },
+    "a_propos": {
+      "titre": "About",
+      "version": "Version {{version}}",
+      "cgu": "Terms of use",
+      "confidentialite": "Privacy policy",
+      "support": "Contact support",
+      "signaler_bug": "Report a problem"
+    },
+    "liens": {
+      "support": "Support & help",
+      "communications": "WhatsApp communications",
+      "theme": "Appearance & theme",
+      "a_propos": "About"
+    },
+    "deconnexion": "Sign out"
+  },
+  "theme": {
+    "titre": "Appearance",
+    "sous_titre": "Choose your app theme",
+    "clair": "Light theme",
+    "sombre": "Dark theme",
+    "systeme": "Follow system",
+    "clair_description": "Bright interface, ideal during the day",
+    "sombre_description": "Dark interface, easier on the eyes",
+    "systeme_description": "Adapts to your device preferences"
+  },
+  "support": {
+    "titre": "Support",
+    "nouveau_ticket": "New ticket",
+    "categories": {
+      "technique": "Technical issue",
+      "facturation": "Billing",
+      "compte": "My account",
+      "abonnement": "Subscription",
+      "autre": "Other"
+    },
+    "statuts": {
+      "ouvert": "Open",
+      "en_cours": "In progress",
+      "ferme": "Closed"
+    },
+    "formulaire": {
+      "titre": "Describe your issue",
+      "categorie": "Category",
+      "sujet": "Subject",
+      "sujet_placeholder": "E.g. Unable to create an order",
+      "message": "Message",
+      "message_placeholder": "Describe the issue in detail…",
+      "envoyer": "Submit"
+    },
+    "liste": {
+      "titre": "My requests",
+      "vide": "No tickets",
+      "vide_description": "Your support requests will appear here"
+    }
+  },
+  "communications": {
+    "titre": "Communications",
+    "messages_automatiques": "Automatic messages",
+    "activer_hint": "Enable WhatsApp reminders to configure",
+    "factures_mois": "WhatsApp invoices this month",
+    "succes": "Preferences saved.",
+    "erreur_sauvegarde": "Unable to save at the moment.",
+    "whatsapp": {
+      "titre": "WhatsApp",
+      "description": "Send automatic messages to your clients via WhatsApp",
+      "rappels": "WhatsApp Reminders",
+      "bouton_manuel": "Manual button from client files",
+      "sans_cout": "No API cost — you write and send the message yourself from WhatsApp.",
+      "activer": "Enable WhatsApp notifications",
+      "numero": "Workshop WhatsApp number",
+      "enregistrer": "Save",
+      "confirmation_commande": "Order confirmation",
+      "confirmation_commande_desc": "Send a message when an order is created",
+      "rappel_j2": "Reminder 2 days before delivery",
+      "rappel_j2_desc": "Remind the client 2 days before the expected delivery date",
+      "commande_prete": "Order ready",
+      "commande_prete_desc": "Notify the client when their order is ready for pickup"
+    }
+  },
+  "caisse": {
+    "titre": "Cash Register",
+    "mois": "Month",
+    "total_encaisse": "Total collected",
+    "en_attente": "Pending",
+    "commandes_soldees": "Settled",
+    "commandes_en_cours": "In progress",
+    "modes_paiement": "Collections by method",
+    "soldes_clients": "Client balances",
+    "debiteur_one": "{{count}} debtor",
+    "debiteur_other": "{{count}} debtors",
+    "aucun_solde": "No pending balances",
+    "reste_du": "balance due",
+    "total": "Total",
+    "verse": "Paid",
+    "export_pdf": "PDF",
+    "modes": {
+      "especes": "Cash",
+      "mobile_money": "Mobile Money",
+      "virement": "Bank transfer"
+    }
+  },
+  "archives": {
+    "titre": "Archives",
+    "vide": "No archived items.",
+    "degeler": "Unfreeze",
+    "confirmer_degeler": "Confirm",
+    "annuler": "Cancel",
+    "types": {
+      "client": "Client",
+      "commande": "Order",
+      "mesure": "Measurements"
+    },
+    "note_label": "Note",
+    "archive_le": "Archived on"
+  },
+  "langue": {
+    "titre": "Language",
+    "fr": "Français",
+    "en": "English",
+    "choisir": "Choose language"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "clients": "Clients",
+    "commandes": "Orders",
+    "catalogue": "Catalogue",
+    "equipe": "Team",
+    "points": "Loyalty",
+    "notifications": "Notifications",
+    "parametres": "Settings",
+    "archives": "Archives",
+    "caisse": "Cash Register",
+    "support": "Support"
+  }
+}

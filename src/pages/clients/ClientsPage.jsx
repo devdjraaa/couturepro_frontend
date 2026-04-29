@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Plus, Users } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useClients, useCreateClient } from '@/hooks/useClients'
 import { AppLayout } from '@/components/layout'
 import { ClientCard, ClientForm } from '@/components/clients'
@@ -9,6 +10,7 @@ import { saveClientPhoto, deleteClientPhoto } from '@/utils/clientPhotoStorage'
 
 export default function ClientsPage() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const [search, setSearch] = useState('')
   const [showSheet, setShowSheet] = useState(false)
   const { data: clients = [], isLoading } = useClients()
@@ -35,9 +37,9 @@ export default function ClientsPage() {
   }
 
   return (
-    <AppLayout title="Clients">
+    <AppLayout title={t('clients.titre')}>
       <div className="p-4 space-y-3">
-        <SearchBar value={search} onChange={setSearch} placeholder="Rechercher un client…" />
+        <SearchBar value={search} onChange={setSearch} placeholder={t('clients.recherche_placeholder')} />
 
         {isLoading ? (
           <div className="space-y-3">
@@ -46,8 +48,8 @@ export default function ClientsPage() {
         ) : filtered.length === 0 ? (
           <EmptyState
             icon={Users}
-            title={search ? 'Aucun résultat' : 'Aucun client'}
-            description={search ? 'Essayez un autre nom ou numéro' : 'Ajoutez votre premier client'}
+            title={search ? t('commun.aucun_resultat') : t('clients.vide.titre')}
+            description={search ? '' : t('clients.vide.description')}
           />
         ) : (
           <div className="space-y-2">
@@ -67,7 +69,7 @@ export default function ClientsPage() {
       <BottomSheet
         isOpen={showSheet}
         onClose={() => { setShowSheet(false); setDoublonError(null) }}
-        title="Nouveau client"
+        title={t('clients.formulaire.titre_ajout')}
       >
         {doublonError && (
           <p className="mx-5 mt-3 text-sm text-danger bg-danger/8 rounded-xl px-4 py-2.5">

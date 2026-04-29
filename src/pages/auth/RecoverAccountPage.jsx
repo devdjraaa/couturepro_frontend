@@ -1,14 +1,21 @@
 import { useState } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { authService } from '@/services/authService'
 import { AuthLayout } from '@/components/layout'
 import { Input, Button } from '@/components/ui'
 
-const STEPS = ['Vérifier le code', 'Nouveau numéro', 'Confirmer le numéro', 'Nouveau mot de passe']
-
 export default function RecoverAccountPage() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { t } = useTranslation()
+
+  const STEPS = [
+    t('auth.recuperer_compte.etape_1'),
+    t('auth.recuperer_compte.etape_2'),
+    t('auth.recuperer_compte.etape_3'),
+    t('auth.recuperer_compte.etape_4'),
+  ]
 
   const email      = location.state?.email ?? ''
   const initialId  = location.state?.demande_id ?? null
@@ -26,12 +33,12 @@ export default function RecoverAccountPage() {
 
   if (!email || !demandeId) {
     return (
-      <AuthLayout subtitle="Session expirée">
+      <AuthLayout subtitle={t('auth.recuperer_compte.session_expiree')}>
         <p className="text-sm text-content-secondary text-center mb-4">
-          Votre session de récupération a expiré. Recommencez.
+          {t('auth.recuperer_compte.session_expiree_message')}
         </p>
         <Link to="/mot-de-passe-oublie" className="block w-full text-center text-primary font-medium underline">
-          Réessayer
+          {t('commun.reessayer')}
         </Link>
       </AuthLayout>
     )
@@ -47,7 +54,7 @@ export default function RecoverAccountPage() {
       await authService.recuperationEtape2({ demande_id: demandeId, code: otp1 })
       setStep(3)
     } catch (err) {
-      setError(err?.message || 'Code invalide ou expiré')
+      setError(err?.message || t('erreurs.otp_invalide'))
     } finally {
       setLoading(false)
     }
@@ -61,7 +68,7 @@ export default function RecoverAccountPage() {
       await authService.recuperationEtape3({ demande_id: demandeId, telephone_nouveau: tel })
       setStep(4)
     } catch (err) {
-      setError(err?.message || 'Numéro invalide')
+      setError(err?.message || t('erreurs.format_invalide'))
     } finally {
       setLoading(false)
     }
@@ -75,7 +82,7 @@ export default function RecoverAccountPage() {
       await authService.recuperationEtape4({ demande_id: demandeId, code: otp2 })
       setStep(5)
     } catch (err) {
-      setError(err?.message || 'Code invalide ou expiré')
+      setError(err?.message || t('erreurs.otp_invalide'))
     } finally {
       setLoading(false)
     }
@@ -84,13 +91,13 @@ export default function RecoverAccountPage() {
   const handleStep5 = async e => {
     e.preventDefault()
     setError('')
-    if (password !== confirmPwd) { setError('Les mots de passe ne correspondent pas'); return }
+    if (password !== confirmPwd) { setError(t('auth.inscription.mdp_non_concordants')); return }
     setLoading(true)
     try {
       await authService.recuperationEtape5({ demande_id: demandeId, password, password_confirmation: confirmPwd })
       navigate('/', { replace: true })
     } catch (err) {
-      setError(err?.message || 'Erreur lors de la mise à jour')
+      setError(err?.message || t('erreurs.inconnu'))
     } finally {
       setLoading(false)
     }
@@ -115,10 +122,10 @@ export default function RecoverAccountPage() {
       {step === 2 && (
         <form onSubmit={handleStep2} className="space-y-4">
           <p className="text-sm text-content-secondary text-center">
-            Un code OTP a été envoyé à l'adresse <strong>{email}</strong>.
+            {t('auth.recuperer_compte.otp_email_instruction', { email })}
           </p>
           <Input
-            label="Code de vérification"
+            label={t('auth.otp.code')}
             type="text"
             inputMode="numeric"
             value={otp1}
@@ -128,34 +135,34 @@ export default function RecoverAccountPage() {
             required
             className="text-center tracking-widest font-mono"
           />
-          <Button type="submit" className="w-full" loading={loading}>Vérifier</Button>
+          <Button type="submit" className="w-full" loading={loading}>{t('auth.otp.verifier')}</Button>
         </form>
       )}
 
       {step === 3 && (
         <form onSubmit={handleStep3} className="space-y-4">
           <p className="text-sm text-content-secondary text-center">
-            Entrez votre nouveau numéro de téléphone. Un code de confirmation sera envoyé à votre adresse email <strong>{email}</strong>.
+            {t('auth.recuperer_compte.nouveau_tel_instruction', { email })}
           </p>
           <Input
-            label="Nouveau numéro"
+            label={t('auth.recuperer_compte.nouveau_numero')}
             type="tel"
             value={tel}
             onChange={e => setTel(e.target.value)}
             placeholder="+225 07 00 00 00 00"
             required
           />
-          <Button type="submit" className="w-full" loading={loading}>Continuer</Button>
+          <Button type="submit" className="w-full" loading={loading}>{t('auth.recuperer_compte.continuer')}</Button>
         </form>
       )}
 
       {step === 4 && (
         <form onSubmit={handleStep4} className="space-y-4">
           <p className="text-sm text-content-secondary text-center">
-            Un code a été envoyé à votre adresse email <strong>{email}</strong> pour confirmer le numéro <strong>{tel}</strong>.
+            {t('auth.recuperer_compte.confirmer_tel_instruction', { email, tel })}
           </p>
           <Input
-            label="Code de confirmation"
+            label={t('auth.recuperer_compte.code_confirmation')}
             type="text"
             inputMode="numeric"
             value={otp2}
@@ -165,14 +172,14 @@ export default function RecoverAccountPage() {
             required
             className="text-center tracking-widest font-mono"
           />
-          <Button type="submit" className="w-full" loading={loading}>Vérifier</Button>
+          <Button type="submit" className="w-full" loading={loading}>{t('auth.otp.verifier')}</Button>
         </form>
       )}
 
       {step === 5 && (
         <form onSubmit={handleStep5} className="space-y-4">
           <Input
-            label="Nouveau mot de passe"
+            label={t('auth.recuperer_compte.nouveau_mot_de_passe')}
             type="password"
             value={password}
             onChange={e => setPassword(e.target.value)}
@@ -180,14 +187,14 @@ export default function RecoverAccountPage() {
             required
           />
           <Input
-            label="Confirmer le mot de passe"
+            label={t('auth.inscription.confirmer_mot_de_passe')}
             type="password"
             value={confirmPwd}
             onChange={e => setConfirm(e.target.value)}
             placeholder="••••••••"
             required
           />
-          <Button type="submit" className="w-full" loading={loading}>Enregistrer</Button>
+          <Button type="submit" className="w-full" loading={loading}>{t('commun.enregistrer')}</Button>
         </form>
       )}
     </AuthLayout>

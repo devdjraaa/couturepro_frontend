@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 import { Plus, ClipboardList, X, AlertTriangle, Timer } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useCommandes, useCreateCommande } from '@/hooks/useCommandes'
 import { useCommunications } from '@/hooks/useParametres'
 import { whatsappService } from '@/services/whatsappService'
@@ -8,16 +9,10 @@ import { AppLayout } from '@/components/layout'
 import { CommandeCard, CommandeForm } from '@/components/commandes'
 import { TabBar, EmptyState, Skeleton, BottomSheet, FloatingActionButton } from '@/components/ui'
 
-const STATUT_TABS = [
-  { key: 'tous',     label: 'Tous'     },
-  { key: 'en_cours', label: 'En cours' },
-  { key: 'livre',    label: 'Livré'    },
-  { key: 'annule',   label: 'Annulé'   },
-]
-
 export default function CommandesPage() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { t } = useTranslation()
   const [searchParams, setSearchParams] = useSearchParams()
   const [activeTab, setActiveTab] = useState('tous')
   const [showSheet, setShowSheet] = useState(false)
@@ -53,11 +48,18 @@ export default function CommandesPage() {
     return activeTab === 'tous' ? commandes : commandes.filter(c => c.statut === activeTab)
   }, [commandes, activeTab, alerte])
 
-  const tabsWithCounts = STATUT_TABS.map(t => ({
-    ...t,
-    count: t.key === 'tous'
+  const STATUT_TABS = [
+    { key: 'tous',     label: t('commandes.onglets.toutes')   },
+    { key: 'en_cours', label: t('commandes.statut.en_cours')  },
+    { key: 'livre',    label: t('commandes.statut.livre')     },
+    { key: 'annule',   label: t('commandes.statut.annule')    },
+  ]
+
+  const tabsWithCounts = STATUT_TABS.map(tab => ({
+    ...tab,
+    count: tab.key === 'tous'
       ? undefined
-      : (commandes.filter(c => c.statut === t.key).length || undefined),
+      : (commandes.filter(c => c.statut === tab.key).length || undefined),
   }))
 
   const handleCloseSheet = () => {
@@ -79,7 +81,7 @@ export default function CommandesPage() {
   const clearAlerte = () => setSearchParams({})
 
   return (
-    <AppLayout title="Commandes">
+    <AppLayout title={t('commandes.titre')}>
       {!alerte && <TabBar tabs={tabsWithCounts} activeTab={activeTab} onChange={setActiveTab} />}
 
       {alerte && (
@@ -89,7 +91,7 @@ export default function CommandesPage() {
             : <Timer size={15} />
           }
           <span className="flex-1">
-            {alerte === 'retard' ? 'Commandes en retard' : 'Livraisons dans 48h'}
+            {alerte === 'retard' ? t('commandes.indicateurs.en_retard') : t('commandes.indicateurs.dans_48h')}
           </span>
           <button type="button" onClick={clearAlerte} className="opacity-60 hover:opacity-100">
             <X size={15} />
@@ -103,12 +105,11 @@ export default function CommandesPage() {
         ) : filtered.length === 0 ? (
           <EmptyState
             icon={ClipboardList}
-            title="Aucune commande"
+            title={t('commandes.vide.titre')}
             description={
-              alerte === 'retard' ? 'Aucune commande en retard'
-              : alerte === '48h'  ? 'Aucune livraison dans les 48h'
-              : activeTab === 'tous' ? 'Créez votre première commande'
-              : 'Aucune commande dans ce statut'
+              alerte === 'retard' ? t('commandes.indicateurs.en_retard')
+              : alerte === '48h'  ? t('commandes.indicateurs.dans_48h')
+              : t('commandes.vide.description')
             }
           />
         ) : (
@@ -124,7 +125,7 @@ export default function CommandesPage() {
 
       <FloatingActionButton icon={Plus} onClick={() => setShowSheet(true)} />
 
-      <BottomSheet isOpen={showSheet} onClose={handleCloseSheet} title="Nouvelle commande">
+      <BottomSheet isOpen={showSheet} onClose={handleCloseSheet} title={t('commandes.formulaire.titre_ajout')}>
         <CommandeForm
           onSubmit={handleCreate}
           onCancel={handleCloseSheet}

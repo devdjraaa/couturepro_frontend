@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { Edit2, Trash2, ClipboardList, MessageCircle } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useClient, useUpdateClient, useDeleteClient, useToggleVip } from '@/hooks/useClients'
 import { useMesures, useSaveMesures } from '@/hooks/useMesures'
 import { useCommandes } from '@/hooks/useCommandes'
@@ -15,17 +16,19 @@ import { ClientAvatar } from '@/components/clients'
 import { saveClientPhoto, deleteClientPhoto } from '@/utils/clientPhotoStorage'
 import { formatDate } from '@/utils/formatDate'
 
-const TABS = [
-  { key: 'infos',     label: 'Infos'     },
-  { key: 'mesures',   label: 'Mesures'   },
-  { key: 'commandes', label: 'Commandes' },
-]
-
 export default function ClientDetailPage() {
+  const { t } = useTranslation()
+
+  const TABS = [
+    { key: 'infos',     label: t('clients.detail.tabs.infos')     },
+    { key: 'mesures',   label: t('clients.detail.tabs.mesures')   },
+    { key: 'commandes', label: t('clients.detail.tabs.commandes') },
+  ]
   const { id } = useParams()
   const { atelier } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
+
   const clientId = id
   const [activeTab, setActiveTab] = useState(location.state?.tab ?? 'infos')
   const [showEdit, setShowEdit] = useState(false)
@@ -50,7 +53,7 @@ export default function ClientDetailPage() {
   }
 
   const handleDelete = async () => {
-    if (!confirm('Supprimer ce client et toutes ses données ?')) return
+    if (!confirm(t('clients.supprimer_confirm.message', { nom: `${client?.prenom ?? ''} ${client?.nom ?? ''}`.trim() }))) return
     await deleteClient.mutateAsync(clientId)
     navigate('/clients', { replace: true })
   }
@@ -62,7 +65,7 @@ export default function ClientDetailPage() {
 
   if (isLoading) {
     return (
-      <AppLayout showBack title="Client">
+      <AppLayout showBack title={t('clients.titre')}>
         <div className="p-4 space-y-3">
           <Skeleton className="h-24 rounded-2xl" />
           <Skeleton className="h-48 rounded-2xl" />
@@ -94,13 +97,13 @@ export default function ClientDetailPage() {
             {isVip && <Badge color="accent" size="sm">VIP</Badge>}
           </div>
           {client.telephone && <p className="text-sm text-dim">{client.telephone}</p>}
-          <p className="text-xs text-ghost mt-0.5">Client depuis {formatDate(client.created_at)}</p>
+          <p className="text-xs text-ghost mt-0.5">{t('clients.detail.depuis', { date: formatDate(client.created_at) })}</p>
         </div>
         <button
           onClick={() => toggleVip.mutate(client.id)}
           className="text-xs text-dim underline shrink-0"
         >
-          {isVip ? 'Retirer VIP' : '→ VIP'}
+          {isVip ? t('clients.detail.retirer_vip') : t('clients.detail.ajouter_vip')}
         </button>
       </div>
 
@@ -112,21 +115,21 @@ export default function ClientDetailPage() {
             <div className="bg-card border border-edge rounded-2xl divide-y divide-edge">
               {client.telephone && (
                 <div className="flex justify-between px-4 py-3">
-                  <span className="text-sm text-dim">Téléphone</span>
+                  <span className="text-sm text-dim">{t('commun.telephone')}</span>
                   <span className="text-sm text-ink font-medium">{client.telephone}</span>
                 </div>
               )}
               <div className="flex justify-between px-4 py-3">
-                <span className="text-sm text-dim">Type</span>
+                <span className="text-sm text-dim">{t('clients.detail.type')}</span>
                 <span className="text-sm text-ink font-medium capitalize">{client.type_profil ?? '—'}</span>
               </div>
               <div className="flex justify-between px-4 py-3">
-                <span className="text-sm text-dim">Commandes</span>
+                <span className="text-sm text-dim">{t('clients.detail.tabs.commandes')}</span>
                 <span className="text-sm text-ink font-medium">{client.commandes_count ?? clientCommandes.length}</span>
               </div>
               {client.notes && (
                 <div className="px-4 py-3">
-                  <p className="text-xs text-dim mb-1">Notes</p>
+                  <p className="text-xs text-dim mb-1">{t('commun.notes')}</p>
                   <p className="text-sm text-ink">{client.notes}</p>
                 </div>
               )}
@@ -139,14 +142,14 @@ export default function ClientDetailPage() {
                 loading={whatsappRappel.isPending}
                 onClick={() => whatsappRappel.mutate(client.id)}
               >
-                Rappeler sur WhatsApp
+                {t('clients.detail.rappeler_whatsapp')}
               </Button>
             )}
             <button
               onClick={handleDelete}
               className="flex items-center gap-2 text-danger text-sm py-2"
             >
-              <Trash2 size={16} /> Supprimer ce client
+              <Trash2 size={16} /> {t('clients.detail.supprimer_btn')}
             </button>
           </div>
         )}
@@ -164,7 +167,7 @@ export default function ClientDetailPage() {
                   onClick={() => setEditingMesures(false)}
                   className="w-full text-sm text-dim py-2 mt-2"
                 >
-                  Annuler
+                  {t('commun.annuler')}
                 </button>
               </div>
             ) : mesure ? (
@@ -175,14 +178,14 @@ export default function ClientDetailPage() {
                   atelierNom={atelier?.nom}
                 />
                 <Button variant="secondary" className="mt-4 w-full" onClick={() => setEditingMesures(true)}>
-                  Modifier les mesures
+                  {t('clients.detail.modifier_mesures')}
                 </Button>
               </div>
             ) : (
               <EmptyState
-                title="Aucune mesure"
-                description="Enregistrez les mesures corporelles de ce client"
-                action={<Button onClick={() => setEditingMesures(true)}>Ajouter les mesures</Button>}
+                title={t('mesures.vide.titre')}
+                description={t('clients.detail.mesure_vide_description')}
+                action={<Button onClick={() => setEditingMesures(true)}>{t('clients.detail.ajouter_mesures')}</Button>}
               />
             )}
           </div>
@@ -193,11 +196,11 @@ export default function ClientDetailPage() {
             {clientCommandes.length === 0 ? (
               <EmptyState
                 icon={ClipboardList}
-                title="Aucune commande"
-                description="Ce client n'a pas encore de commande"
+                title={t('clients.detail.aucune_commande_titre')}
+                description={t('clients.detail.aucune_commande_description')}
                 action={
                   <Button onClick={() => navigate('/commandes/new')}>
-                    Nouvelle commande
+                    {t('clients.actions.nouvelle_commande')}
                   </Button>
                 }
               />
@@ -214,7 +217,7 @@ export default function ClientDetailPage() {
         )}
       </div>
 
-      <BottomSheet isOpen={showEdit} onClose={() => setShowEdit(false)} title="Modifier le client">
+      <BottomSheet isOpen={showEdit} onClose={() => setShowEdit(false)} title={t('clients.formulaire.titre_modification')}>
         <ClientForm
           initialData={client}
           onSubmit={handleUpdate}

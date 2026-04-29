@@ -30,10 +30,18 @@
     "description": "Description",
     "oui": "Oui",
     "non": "Non",
+    "accueil": "Accueil",
+    "menu": "Menu",
+    "bonjour": "Bonjour",
     "hors_ligne": "Mode hors ligne",
     "hors_ligne_message": "Vos données seront synchronisées à la reconnexion",
     "sync_en_cours": "Synchronisation…",
-    "sync_reussie": "Synchronisé"
+    "sync_reussie": "Synchronisé",
+    "optionnel": "optionnel",
+    "requis": "requis",
+    "nouveau": "Nouveau",
+    "tout": "Tout",
+    "aucun": "Aucun"
   },
   "erreurs": {
     "reseau": "Erreur de connexion. Vérifiez votre réseau.",
@@ -57,32 +65,86 @@
     "connexion": {
       "titre": "Connexion",
       "sous_titre": "Accédez à votre espace Couture Pro",
+      "sous_titre_login": "Connectez-vous à votre atelier",
       "telephone": "Numéro de téléphone",
       "telephone_placeholder": "+225 07 00 00 00 00",
       "mot_de_passe": "Mot de passe",
       "mot_de_passe_oublie": "Mot de passe oublié ?",
       "se_connecter": "Se connecter",
       "pas_de_compte": "Pas encore de compte ?",
-      "creer_compte": "Créer un compte"
+      "creer_compte": "Créer un compte",
+      "onglet_proprietaire": "Propriétaire",
+      "onglet_equipe": "Assistant / Membre",
+      "code_acces": "Code d'accès",
+      "acceder_atelier": "Accéder à l'atelier",
+      "code_acces_hint": "Le mot de passe initial est identique au code d'accès"
     },
     "inscription": {
       "titre": "Créer votre atelier",
       "sous_titre": "Rejoignez Couture Pro gratuitement",
-      "nom_atelier": "Nom de votre atelier",
-      "nom_atelier_placeholder": "ex: Atelier Aminata",
+      "sous_titre_register": "Créez votre atelier en ligne",
+      "nom_atelier": "Nom de l'atelier",
+      "nom_atelier_placeholder": "Atelier Aminata",
       "mot_de_passe": "Mot de passe",
       "confirmer_mot_de_passe": "Confirmer le mot de passe",
       "creer": "Créer mon atelier",
+      "creer_compte": "Créer mon compte",
       "deja_compte": "Déjà un compte ?",
-      "se_connecter": "Se connecter"
+      "deja_inscrit": "Déjà inscrit ?",
+      "se_connecter": "Se connecter",
+      "question_secrete": "Question secrète",
+      "reponse_secrete": "Réponse secrète",
+      "reponse_secrete_placeholder": "Votre réponse",
+      "mdp_non_concordants": "Les mots de passe ne correspondent pas"
     },
     "otp": {
       "titre": "Vérification",
       "sous_titre": "Entrez le code reçu par SMS au {{telephone}}",
+      "sous_titre_tel": "Code envoyé au {{telephone}}",
       "code": "Code de vérification",
       "verifier": "Vérifier",
       "renvoyer": "Renvoyer le code",
-      "renvoyer_dans": "Renvoyer dans {{secondes}}s"
+      "renvoyer_dans": "Renvoyer dans {{secondes}}s",
+      "instruction": "Entrez le code à 6 chiffres reçu par SMS.",
+      "renvoye_succes": "Code renvoyé !"
+    },
+    "mot_de_passe_oublie": {
+      "titre": "Mot de passe oublié",
+      "sous_titre": "Entrez votre numéro pour recevoir un code de réinitialisation",
+      "sous_titre_mdp": "Récupérer votre compte",
+      "instruction": "Entrez votre adresse email. Vous recevrez un code de vérification.",
+      "envoyer": "Envoyer le code",
+      "retour_connexion": "Retour à la connexion"
+    },
+    "recuperer_compte": {
+      "titre": "Récupérer mon compte",
+      "sous_titre": "Contactez le support si vous n'avez plus accès à votre numéro",
+      "contacter": "Contacter le support",
+      "session_expiree": "Session expirée",
+      "session_expiree_message": "Votre session de récupération a expiré. Recommencez.",
+      "otp_email_instruction": "Un code OTP a été envoyé à l'adresse {{email}}.",
+      "nouveau_tel_instruction": "Entrez votre nouveau numéro. Un code de confirmation sera envoyé à {{email}}.",
+      "confirmer_tel_instruction": "Un code a été envoyé à {{email}} pour confirmer le numéro {{tel}}.",
+      "nouveau_numero": "Nouveau numéro",
+      "code_confirmation": "Code de confirmation",
+      "nouveau_mot_de_passe": "Nouveau mot de passe",
+      "continuer": "Continuer",
+      "etape_1": "Vérifier le code",
+      "etape_2": "Nouveau numéro",
+      "etape_3": "Confirmer le numéro",
+      "etape_4": "Nouveau mot de passe"
+    },
+    "onboarding": {
+      "commencer": "Commencer",
+      "passer": "Passer",
+      "slide_1_titre": "Bienvenue sur Couture Pro",
+      "slide_1_description": "Gérez votre atelier de couture facilement depuis votre téléphone.",
+      "slide_2_titre": "Vos clients, organisés",
+      "slide_2_description": "Enregistrez les mesures et commandes de chaque client en quelques secondes.",
+      "slide_3_titre": "Suivez vos commandes",
+      "slide_3_description": "Statuts en temps réel, paiements et livraisons, tout est sous contrôle.",
+      "slide_4_titre": "Développez votre activité",
+      "slide_4_description": "Tableau de bord, statistiques et programme de fidélité pour fidéliser vos clients."
     },
     "deconnexion": "Se déconnecter",
     "session_expiree": "Votre session a expiré. Reconnectez-vous."
@@ -90,79 +152,187 @@
   "dashboard": {
     "titre": "Tableau de bord",
     "bonjour": "Bonjour",
-    "commandes_en_cours": "Commandes en cours",
+    "commandes_en_cours": "En cours",
     "commandes_retard": "En retard",
-    "livraison_48h": "Livraison dans 48h",
+    "livraison_48h": "Dans 48h",
     "clients_actifs": "Clients actifs",
     "revenus_mois": "Ce mois",
-    "voir_commandes": "Voir les commandes"
+    "voir_commandes": "Voir les commandes",
+    "toutes_ateliers": "Tous",
+    "stats_globales": "Vue globale",
+    "recentes": "Commandes récentes"
   },
   "clients": {
     "titre": "Clients",
     "nouveau": "Nouveau client",
-    "rechercher": "Rechercher un client…",
+    "recherche_placeholder": "Rechercher un client…",
     "vide": {
-      "titre": "Aucun client",
+      "titre": "Votre carnet est vierge",
       "description": "Ajoutez votre premier client pour commencer",
       "action": "Ajouter un client"
     },
-    "detail": {
-      "infos": "Informations",
-      "mesures": "Mesures",
-      "commandes": "Commandes",
-      "voir_mesures": "Voir les mesures"
+    "onglets": {
+      "tous": "Tous",
+      "vip": "VIP",
+      "reguliers": "Réguliers"
+    },
+    "type_profil": {
+      "vip": "VIP",
+      "regulier": "Régulier",
+      "occasionnel": "Occasionnel"
     },
     "formulaire": {
       "titre_ajout": "Nouveau client",
       "titre_modification": "Modifier le client",
       "prenom": "Prénom",
+      "prenom_placeholder": "ex: Aminata",
       "nom": "Nom",
+      "nom_placeholder": "ex: Diallo",
       "telephone": "Téléphone",
+      "telephone_placeholder": "+225 07 00 00 00 00",
       "email": "Email (optionnel)",
-      "type_profil": "Type de client",
-      "notes": "Notes (optionnel)",
-      "enregistrer": "Enregistrer"
+      "type_profil": "Type de profil",
+      "avatar": "Photo de profil",
+      "notes": "Notes",
+      "notes_placeholder": "Informations utiles sur ce client…",
+      "enregistrer": "Enregistrer",
+      "ajouter": "Ajouter le client"
     },
-    "archiver": "Archiver le client",
-    "archiver_confirm": "Archiver ce client ?",
-    "supprimer_confirm": "Supprimer définitivement ce client ?"
+    "detail": {
+      "commandes": "Commandes",
+      "mesures": "Mesures",
+      "informations": "Informations",
+      "aucune_commande": "Aucune commande pour ce client",
+      "aucune_mesure": "Aucune mesure enregistrée",
+      "tabs": {
+        "infos": "Infos",
+        "mesures": "Mesures",
+        "commandes": "Commandes"
+      },
+      "depuis": "Client depuis {{date}}",
+      "type": "Type",
+      "retirer_vip": "Retirer VIP",
+      "ajouter_vip": "→ VIP",
+      "rappeler_whatsapp": "Rappeler sur WhatsApp",
+      "supprimer_btn": "Supprimer ce client",
+      "modifier_mesures": "Modifier les mesures",
+      "ajouter_mesures": "Ajouter les mesures",
+      "mesure_vide_description": "Enregistrez les mesures corporelles de ce client",
+      "aucune_commande_titre": "Aucune commande",
+      "aucune_commande_description": "Ce client n'a pas encore de commande"
+    },
+    "actions": {
+      "modifier": "Modifier",
+      "archiver": "Archiver",
+      "supprimer": "Supprimer",
+      "nouvelle_commande": "Nouvelle commande",
+      "nouvelles_mesures": "Prendre les mesures",
+      "toggle_vip": "Passer en VIP"
+    },
+    "supprimer_confirm": {
+      "titre": "Supprimer ce client ?",
+      "message": "Cette action supprimera définitivement {{nom}} et toutes ses données associées.",
+      "confirmer": "Supprimer",
+      "annuler": "Annuler"
+    },
+    "archiver_confirm": "Archiver ce client ?"
   },
   "commandes": {
     "titre": "Commandes",
     "nouvelle": "Nouvelle commande",
-    "rechercher": "Rechercher une commande…",
+    "recherche_placeholder": "Rechercher une commande…",
     "vide": {
-      "titre": "Aucune commande",
-      "description": "Créez votre première commande",
+      "titre": "Aucune commande en cours",
+      "description": "Créez votre première commande pour commencer",
       "action": "Créer une commande"
     },
-    "statuts": {
+    "onglets": {
       "en_cours": "En cours",
+      "livrees": "Livrées",
+      "toutes": "Toutes"
+    },
+    "statut": {
+      "en_cours": "En cours",
+      "essai": "Essai",
       "livre": "Livré",
-      "annule": "Annulé"
+      "annule": "Annulé",
+      "en_retard": "En retard"
+    },
+    "formulaire": {
+      "titre_ajout": "Nouvelle commande",
+      "titre_modification": "Modifier la commande",
+      "client": "Client",
+      "client_placeholder": "Sélectionner un client",
+      "vetement": "Vêtement",
+      "vetement_placeholder": "Sélectionner un vêtement",
+      "date_livraison": "Date de livraison",
+      "montant": "Montant total (XOF)",
+      "avance": "Avance reçue (XOF)",
+      "reste": "Reste à payer",
+      "notes": "Notes",
+      "notes_placeholder": "Instructions spéciales, tissus, couleurs…",
+      "photo_tissu": "Photo du tissu",
+      "enregistrer": "Enregistrer",
+      "creer": "Créer la commande"
     },
     "detail": {
-      "statut": "Statut",
+      "client": "Client",
+      "vetement": "Vêtement",
+      "date_commande": "Date de commande",
+      "date_livraison": "Livraison prévue",
       "montant": "Montant total",
       "avance": "Avance versée",
       "reste": "Reste à payer",
+      "progression": "Progression",
+      "tissu": "Photo du tissu",
       "notes": "Notes internes",
       "paiements": "Historique paiements",
-      "voir_mesures": "Voir les mesures du client"
+      "titre_single": "Commande",
+      "urgente": "Commande urgente",
+      "tissu_label": "Tissu",
+      "description_label": "Description",
+      "statut_label": "Statut",
+      "historique_paiements": "Historique des paiements",
+      "releve_pdf": "Relevé PDF",
+      "export_encours": "Export…",
+      "releve_pret": "Relevé prêt",
+      "envoyer_releve": "Envoyer le relevé au client sur WhatsApp",
+      "envoyer": "Envoyer",
+      "ignorer": "Ignorer",
+      "paiement_btn": "Paiement",
+      "voir_mesures": "Voir les mesures du client",
+      "supprimer_btn": "Supprimer cette commande",
+      "note_interne": "Note interne"
     },
-    "formulaire": {
-      "client": "Client",
-      "vetement": "Vêtement",
+    "modes_paiement": {
+      "especes": "Espèces",
+      "mobile_money": "Mobile Money",
+      "virement": "Virement"
+    },
+    "paiement_form": {
+      "titre": "Enregistrer un paiement",
       "montant": "Montant (XOF)",
-      "avance": "Avance (XOF)",
-      "date_livraison": "Date de livraison",
-      "notes": "Notes",
-      "enregistrer": "Enregistrer la commande"
+      "mode": "Mode de paiement",
+      "releve_whatsapp": "Un relevé WhatsApp sera proposé après confirmation."
+    },
+    "indicateurs": {
+      "en_retard": "En retard",
+      "dans_48h": "Dans 48h",
+      "en_cours": "En cours"
+    },
+    "actions": {
+      "changer_statut": "Changer le statut",
+      "marquer_livre": "Marquer comme livré",
+      "marquer_essai": "Passer en essai",
+      "reprendre": "Remettre en cours",
+      "annuler": "Annuler la commande"
     },
     "supprimer_confirm": "Supprimer cette commande ?"
   },
   "catalogue": {
     "titre": "Catalogue",
+    "mon_catalogue": "Mon catalogue",
+    "gabarits_systeme": "Gabarits système",
     "nouveau": "Nouveau vêtement",
     "vide": {
       "titre": "Aucun vêtement créé",
@@ -181,7 +351,12 @@
       "enregistrer": "Enregistrer",
       "ajouter": "Créer le vêtement"
     },
-    "supprimer_confirm": "Supprimer ce vêtement ?"
+    "supprimer_confirm": {
+      "titre": "Supprimer ce vêtement ?",
+      "message": "Les commandes et mesures associées ne seront pas supprimées.",
+      "confirmer": "Supprimer",
+      "annuler": "Annuler"
+    }
   },
   "mesures": {
     "titre": "Mesures",
@@ -197,21 +372,43 @@
       "enregistrer": "Enregistrer les mesures",
       "exporter_pdf": "Exporter en PDF"
     },
+    "champs": {
+      "poitrine": "Poitrine",
+      "taille": "Taille",
+      "hanches": "Hanches",
+      "epaules": "Épaules",
+      "longueur_dos": "Longueur dos",
+      "longueur_manches": "Longueur manches",
+      "tour_bras": "Tour de bras",
+      "tour_cou": "Tour de cou",
+      "longueur_robe": "Longueur robe",
+      "longueur_jupe": "Longueur jupe",
+      "longueur_pantalon": "Longueur pantalon",
+      "tour_cuisse": "Tour de cuisse",
+      "entrejambe": "Entrejambe"
+    },
     "unite": "cm",
-    "exporter": "Exporter PDF"
+    "date": "Prises le",
+    "exporter": "Exporter PDF",
+    "historique": "Historique des mesures"
   },
   "equipe": {
     "titre": "Équipe",
     "nouveau_membre": "Ajouter un membre",
     "vide": {
       "titre": "Aucun membre dans l'équipe",
-      "description": "Invitez des assistants pour vous aider",
+      "description": "Invitez des assistants pour vous aider à gérer l'atelier",
       "action": "Ajouter un membre"
     },
     "roles": {
       "proprietaire": "Propriétaire",
       "assistant": "Assistant",
       "membre": "Membre"
+    },
+    "permissions": {
+      "proprietaire": "Accès complet",
+      "assistant": "Création & archivage",
+      "membre": "Lecture seule"
     },
     "formulaire": {
       "titre": "Ajouter un membre",
@@ -220,20 +417,43 @@
       "telephone": "Téléphone",
       "role": "Rôle dans l'atelier",
       "ajouter": "Ajouter le membre"
-    }
+    },
+    "actions": {
+      "modifier_role": "Modifier le rôle",
+      "revoquer": "Révoquer l'accès"
+    },
+    "revoquer_confirm": {
+      "titre": "Révoquer l'accès de {{nom}} ?",
+      "message": "Cette personne ne pourra plus accéder à votre atelier.",
+      "confirmer": "Révoquer",
+      "annuler": "Annuler"
+    },
+    "permissions_titre": "Permissions"
   },
   "points": {
-    "titre": "Fidélité",
+    "titre": "Points de fidélité",
     "solde": "Solde actuel",
+    "point_one": "{{count}} point",
+    "point_other": "{{count}} points",
+    "historique": {
+      "titre": "Historique",
+      "gagnes": "Points gagnés",
+      "utilises": "Points utilisés",
+      "vide": "Aucun historique de points"
+    },
     "conversion": {
       "titre": "Convertir mes points",
       "sous_titre": "{{points}} points = {{jours}} jours d'abonnement",
-      "convertir": "Convertir mes points",
+      "convertir": "Convertir",
+      "confirmer": "Confirmer la conversion",
+      "pas_assez": "Pas assez de points",
       "succes": "Conversion effectuée !"
     },
-    "historique": {
-      "titre": "Historique",
-      "vide": "Aucun historique de points"
+    "comment_gagner": {
+      "titre": "Comment gagner des points ?",
+      "paiement": "1 000 XOF payé = 1 point",
+      "parrainage": "Parrainage d'un atelier = 50 points",
+      "fidelite": "Chaque mois actif = 5 points"
     },
     "erreur_chargement": "Impossible de charger vos points de fidélité."
   },
@@ -244,17 +464,41 @@
       "description": "Vous êtes à jour !"
     },
     "marquer_lu": "Marquer comme lu",
-    "tout_marquer_lu": "Tout marquer comme lu"
+    "tout_marquer_lu": "Tout marquer comme lu",
+    "types": {
+      "commande": "Commande",
+      "abonnement": "Abonnement",
+      "systeme": "Système",
+      "paiement": "Paiement",
+      "alerte_archive": "Archive"
+    }
   },
   "abonnement": {
     "titre": "Abonnement",
-    "statuts": {
+    "statut": {
       "actif": "Actif",
       "expire": "Expiré",
+      "en_attente": "En attente",
       "essai": "Période d'essai"
+    },
+    "expiration": {
+      "dans": "Expire dans {{jours}} jour",
+      "dans_plural": "Expire dans {{jours}} jours",
+      "aujourd_hui": "Expire aujourd'hui",
+      "expire": "Expiré"
+    },
+    "paiement": {
+      "titre": "Payer mon abonnement",
+      "sous_titre": "Choisissez votre plan",
+      "mensuel": "Mensuel",
+      "annuel": "Annuel",
+      "economie": "Économisez 2 mois",
+      "payer": "Payer {{montant}} XOF",
+      "securise": "Paiement sécurisé"
     },
     "code": {
       "titre": "Code d'activation",
+      "sous_titre": "Entrez votre code reçu par l'administrateur",
       "placeholder": "XXXXXXXXXXXXXXXX",
       "activer": "Activer",
       "succes": "Abonnement activé avec succès !"
@@ -262,7 +506,9 @@
     "quotas": {
       "clients": "Clients",
       "commandes": "Commandes/mois",
-      "illimite": "Illimité"
+      "illimite": "Illimité",
+      "utilises": "{{utilises}} / {{limite}} utilisés",
+      "depasse": "Quota dépassé"
     }
   },
   "parametres": {
@@ -271,10 +517,14 @@
       "profil": "Profil",
       "atelier": "Atelier",
       "abonnement": "Abonnement",
-      "securite": "Sécurité"
+      "securite": "Sécurité",
+      "preferences": "Préférences",
+      "ateliers": "Mes ateliers"
     },
     "profil": {
       "titre": "Mon profil",
+      "photo": "Photo de profil",
+      "modifier_photo": "Modifier la photo",
       "enregistrer": "Enregistrer le profil"
     },
     "atelier": {
@@ -291,9 +541,65 @@
       "modifier": "Modifier le mot de passe",
       "succes": "Mot de passe modifié avec succès"
     },
+    "preferences": {
+      "titre": "Préférences",
+      "devise": "Devise",
+      "unite_mesure": "Unité de mesure",
+      "langue": "Langue / Language",
+      "succes": "Préférences enregistrées."
+    },
+    "abonnement": {
+      "plan_actuel": "Plan actuel",
+      "temps_restant": "Temps restant",
+      "expire_le": "Expire le",
+      "expire_le_passe": "Expiré le",
+      "plans_disponibles": "Plans disponibles",
+      "activer_code_titre": "Activer un code",
+      "activer_code_desc": "Vous avez reçu un code d'activation ? Saisissez-le ici.",
+      "activer_btn": "Activer",
+      "active_succes": "Abonnement activé !",
+      "code_invalide": "Code invalide ou déjà utilisé",
+      "statuts": {
+        "actif": "Actif",
+        "essai": "Période d'essai",
+        "expire": "Expiré",
+        "gele": "Suspendu"
+      }
+    },
+    "ateliers_tab": {
+      "non_disponible": "Non disponible dans votre plan",
+      "ajouter": "Ajouter",
+      "creer": "Créer",
+      "maitre": "Maître",
+      "form_nom": "Nom de l'atelier",
+      "form_ville": "Ville"
+    },
+    "theme": {
+      "titre": "Apparence",
+      "clair": "Thème clair",
+      "sombre": "Thème sombre",
+      "systeme": "Suivre le système"
+    },
+    "communications": {
+      "titre": "Communications",
+      "whatsapp": "WhatsApp",
+      "whatsapp_description": "Envoyez des messages automatiques à vos clients",
+      "configurer": "Configurer",
+      "tester": "Envoyer un message test"
+    },
+    "a_propos": {
+      "titre": "À propos",
+      "version": "Version {{version}}",
+      "cgu": "Conditions d'utilisation",
+      "confidentialite": "Politique de confidentialité",
+      "support": "Contacter le support",
+      "signaler_bug": "Signaler un problème"
+    },
     "liens": {
       "support": "Support & aide",
-      "communications": "Communications WhatsApp"
+      "communications": "Communications WhatsApp",
+      "theme": "Apparence & thème",
+      "a_propos": "À propos"
     },
     "deconnexion": "Se déconnecter"
   },
@@ -339,12 +645,81 @@
   },
   "communications": {
     "titre": "Communications",
+    "messages_automatiques": "Messages automatiques",
+    "activer_hint": "Activez les rappels WhatsApp pour configurer",
+    "factures_mois": "Factures WhatsApp ce mois",
+    "succes": "Préférences enregistrées.",
+    "erreur_sauvegarde": "Impossible de sauvegarder pour l'instant.",
     "whatsapp": {
       "titre": "WhatsApp",
       "description": "Envoyez des messages automatiques à vos clients via WhatsApp",
+      "rappels": "Rappels WhatsApp",
+      "bouton_manuel": "Bouton manuel depuis les fiches",
+      "sans_cout": "Aucun coût d'API — vous rédigez et envoyez vous-même le message depuis WhatsApp.",
       "activer": "Activer les notifications WhatsApp",
       "numero": "Numéro WhatsApp de l'atelier",
-      "enregistrer": "Enregistrer"
+      "enregistrer": "Enregistrer",
+      "confirmation_commande": "Confirmation de commande",
+      "confirmation_commande_desc": "Envoyer un message quand une commande est créée",
+      "rappel_j2": "Rappel J-2 avant livraison",
+      "rappel_j2_desc": "Rappeler le client 2 jours avant la date de livraison prévue",
+      "commande_prete": "Commande prête",
+      "commande_prete_desc": "Informer le client quand sa commande est prête à récupérer"
     }
+  },
+  "caisse": {
+    "titre": "Caisse",
+    "mois": "Mois",
+    "total_encaisse": "Total encaissé",
+    "en_attente": "En attente",
+    "commandes_soldees": "Soldées",
+    "commandes_en_cours": "En cours",
+    "modes_paiement": "Encaissements par mode",
+    "soldes_clients": "Soldes clients",
+    "debiteur_one": "{{count}} débiteur",
+    "debiteur_other": "{{count}} débiteurs",
+    "aucun_solde": "Aucun solde en attente",
+    "reste_du": "reste dû",
+    "total": "Total",
+    "verse": "Versé",
+    "export_pdf": "PDF",
+    "modes": {
+      "especes": "Espèces",
+      "mobile_money": "Mobile Money",
+      "virement": "Virement"
+    }
+  },
+  "archives": {
+    "titre": "Archives",
+    "vide": "Aucun élément archivé.",
+    "degeler": "Dégeler",
+    "confirmer_degeler": "Confirmer",
+    "annuler": "Annuler",
+    "types": {
+      "client": "Client",
+      "commande": "Commande",
+      "mesure": "Mesures"
+    },
+    "note_label": "Note",
+    "archive_le": "Archivé le"
+  },
+  "langue": {
+    "titre": "Langue",
+    "fr": "Français",
+    "en": "English",
+    "choisir": "Choisir la langue"
+  },
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "clients": "Clients",
+    "commandes": "Commandes",
+    "catalogue": "Catalogue",
+    "equipe": "Équipe",
+    "points": "Fidélité",
+    "notifications": "Notifications",
+    "parametres": "Paramètres",
+    "archives": "Archives",
+    "caisse": "Caisse",
+    "support": "Support"
   }
 }

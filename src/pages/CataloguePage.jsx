@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Plus, Scissors, Info } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useVetements, useCreateVetement, useUpdateVetement, useDeleteVetement } from '@/hooks/useVetements'
 import { AppLayout } from '@/components/layout'
 import { VetementCard, VetementForm } from '@/components/vetements'
@@ -7,6 +8,7 @@ import { EmptyState, Skeleton, BottomSheet, FloatingActionButton } from '@/compo
 import { isMock } from '@/services/mockFlag'
 
 export default function CataloguePage() {
+  const { t } = useTranslation()
   const [editing, setEditing] = useState(null) // null | 'new' | vetement object
   const { data: vetements = [], isLoading } = useVetements()
   const createVetement = useCreateVetement()
@@ -23,7 +25,7 @@ export default function CataloguePage() {
   }
 
   const handleDelete = async vetementId => {
-    if (!confirm('Supprimer ce vêtement du catalogue ?')) return
+    if (!confirm(t('catalogue.supprimer_confirm.titre'))) return
     await deleteVetement.mutateAsync(vetementId)
   }
 
@@ -31,7 +33,7 @@ export default function CataloguePage() {
   const modelesSysteme = vetements.filter(v => v.is_systeme)
 
   return (
-    <AppLayout title="Catalogue">
+    <AppLayout title={t('catalogue.titre')}>
       <div className="p-4 space-y-5">
         {isLoading ? (
           <div className="space-y-2">
@@ -42,14 +44,14 @@ export default function CataloguePage() {
             {/* Mon catalogue */}
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <p className="text-xs font-semibold text-dim uppercase tracking-wide">Mon catalogue</p>
-                <span className="text-xs text-ghost">{mesModeles.length} modèle{mesModeles.length !== 1 ? 's' : ''}</span>
+                <p className="text-xs font-semibold text-dim uppercase tracking-wide">{t('catalogue.mon_catalogue')}</p>
+                <span className="text-xs text-ghost">{mesModeles.length}</span>
               </div>
               {mesModeles.length === 0 ? (
                 <EmptyState
                   icon={Scissors}
-                  title="Catalogue vide"
-                  description="Ajoutez vos propres modèles de vêtements"
+                  title={t('catalogue.vide.titre')}
+                  description={t('catalogue.vide.description')}
                 />
               ) : (
                 <div className="space-y-2">
@@ -69,8 +71,8 @@ export default function CataloguePage() {
             {isMock() && modelesSysteme.length > 0 && (
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <p className="text-xs font-semibold text-dim uppercase tracking-wide">Gabarits système</p>
-                  <span className="text-xs text-ghost">{modelesSysteme.length} modèle{modelesSysteme.length !== 1 ? 's' : ''}</span>
+                  <p className="text-xs font-semibold text-dim uppercase tracking-wide">{t('catalogue.gabarits_systeme')}</p>
+                  <span className="text-xs text-ghost">{modelesSysteme.length}</span>
                 </div>
                 <div className="flex items-start gap-2 bg-subtle rounded-xl px-3 py-2 mb-2">
                   <Info size={13} className="text-ghost mt-0.5 shrink-0" />
@@ -97,7 +99,7 @@ export default function CataloguePage() {
       <BottomSheet
         isOpen={editing !== null}
         onClose={() => setEditing(null)}
-        title={isNew ? 'Nouveau vêtement' : 'Modifier le vêtement'}
+        title={isNew ? t('catalogue.formulaire.titre_ajout') : t('catalogue.formulaire.titre_modification')}
       >
         <VetementForm
           initialData={isNew ? undefined : editing}

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts'
 import { AuthLayout } from '@/components/layout'
 import { Input, Button } from '@/components/ui'
@@ -16,6 +17,7 @@ function getOrCreateDeviceId() {
 
 export default function LoginPage() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { login, equipeLogin } = useAuth()
   const [tab, setTab]     = useState('proprietaire') // 'proprietaire' | 'equipe'
   const [error, setError] = useState('')
@@ -37,7 +39,7 @@ export default function LoginPage() {
       await login(propForm)
       navigate('/', { replace: true })
     } catch (err) {
-      setError(err?.response?.data?.message || 'Identifiants incorrects')
+      setError(err?.response?.data?.message || t('erreurs.mot_de_passe_invalide'))
     } finally {
       setLoading(false)
     }
@@ -55,31 +57,31 @@ export default function LoginPage() {
       })
       navigate('/', { replace: true })
     } catch (err) {
-      setError(err?.response?.data?.message || 'Code d\'accès ou mot de passe incorrect')
+      setError(err?.response?.data?.message || t('erreurs.mot_de_passe_invalide'))
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <AuthLayout subtitle="Connectez-vous à votre atelier">
+    <AuthLayout subtitle={t('auth.connexion.sous_titre_login')}>
       {/* Onglets */}
       <div className="flex rounded-xl bg-surface border border-border p-1 mb-5 gap-1">
         {[
-          { key: 'proprietaire', label: 'Propriétaire' },
-          { key: 'equipe',       label: 'Assistant / Membre' },
-        ].map(t => (
+          { key: 'proprietaire', label: t('auth.connexion.onglet_proprietaire') },
+          { key: 'equipe',       label: t('auth.connexion.onglet_equipe') },
+        ].map(tab_ => (
           <button
-            key={t.key}
+            key={tab_.key}
             type="button"
-            onClick={() => { setTab(t.key); setError('') }}
+            onClick={() => { setTab(tab_.key); setError('') }}
             className={`flex-1 text-sm py-2 rounded-lg font-medium transition-colors ${
-              tab === t.key
+              tab === tab_.key
                 ? 'bg-primary text-white'
                 : 'text-content-secondary hover:text-content'
             }`}
           >
-            {t.label}
+            {tab_.label}
           </button>
         ))}
       </div>
@@ -87,7 +89,7 @@ export default function LoginPage() {
       {tab === 'proprietaire' ? (
         <form onSubmit={handlePropLogin} className="space-y-4">
           <Input
-            label="Téléphone"
+            label={t('commun.telephone')}
             type="tel"
             value={propForm.telephone}
             onChange={setProp('telephone')}
@@ -95,7 +97,7 @@ export default function LoginPage() {
             required
           />
           <Input
-            label="Mot de passe"
+            label={t('auth.connexion.mot_de_passe')}
             type="password"
             value={propForm.password}
             onChange={setProp('password')}
@@ -104,17 +106,17 @@ export default function LoginPage() {
           />
           {error && <p className="text-sm text-danger text-center">{error}</p>}
           <Button type="submit" className="w-full" loading={loading}>
-            Se connecter
+            {t('auth.connexion.se_connecter')}
           </Button>
           <div className="flex justify-between text-sm text-content-secondary">
-            <Link to="/register" className="text-primary font-medium">Créer un compte</Link>
-            <Link to="/mot-de-passe-oublie" className="text-dim hover:text-ink">Mot de passe oublié ?</Link>
+            <Link to="/register" className="text-primary font-medium">{t('auth.connexion.creer_compte')}</Link>
+            <Link to="/mot-de-passe-oublie" className="text-dim hover:text-ink">{t('auth.connexion.mot_de_passe_oublie')}</Link>
           </div>
         </form>
       ) : (
         <form onSubmit={handleEquipeLogin} className="space-y-4">
           <Input
-            label="Code d'accès"
+            label={t('auth.connexion.code_acces')}
             value={equipeForm.code_acces}
             onChange={setEq('code_acces')}
             placeholder="ex : ABCD1234"
@@ -122,7 +124,7 @@ export default function LoginPage() {
             className="uppercase tracking-widest font-mono"
           />
           <Input
-            label="Mot de passe"
+            label={t('auth.connexion.mot_de_passe')}
             type="password"
             value={equipeForm.password}
             onChange={setEq('password')}
@@ -130,11 +132,11 @@ export default function LoginPage() {
             required
           />
           <p className="text-xs text-content-secondary text-center -mt-2">
-            Le mot de passe initial est identique au code d'accès
+            {t('auth.connexion.code_acces_hint')}
           </p>
           {error && <p className="text-sm text-danger text-center">{error}</p>}
           <Button type="submit" className="w-full" loading={loading}>
-            Accéder à l'atelier
+            {t('auth.connexion.acceder_atelier')}
           </Button>
         </form>
       )}

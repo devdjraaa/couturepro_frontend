@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { UserPlus, Users, Copy, CheckCheck } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useEquipe, useInviterMembre, useRemoveMembre } from '@/hooks/useEquipe'
 import { usePlanLimit } from '@/hooks/usePlanFeature'
 import { useAuth } from '@/contexts'
@@ -7,17 +8,8 @@ import { AppLayout } from '@/components/layout'
 import { MembreCard, PermissionsGrid } from '@/components/equipe'
 import { EmptyState, Skeleton, BottomSheet, Button, Input, Select } from '@/components/ui'
 
-const ROLE_OPTIONS = [
-  { value: 'assistant', label: 'Assistant' },
-  { value: 'membre',    label: 'Membre'    },
-]
-
-const TABS = [
-  { key: 'membres',     label: 'Membres'     },
-  { key: 'permissions', label: 'Permissions' },
-]
-
 function CodeAccesModal({ membre, onClose }) {
+  const { t } = useTranslation()
   const [copied, setCopied] = useState(false)
 
   const copy = () => {
@@ -30,7 +22,7 @@ function CodeAccesModal({ membre, onClose }) {
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 p-4">
       <div className="bg-surface border border-border rounded-2xl w-full max-w-sm p-6 space-y-4">
         <div className="text-center">
-          <p className="font-semibold text-content">Membre ajouté ✓</p>
+          <p className="font-semibold text-content">{t('equipe.formulaire.titre')} ✓</p>
           <p className="text-sm text-content-secondary mt-1">
             Transmettez ce code d'accès à <strong>{membre.prenom} {membre.nom}</strong>.
             Il servira d'identifiant et de mot de passe initial.
@@ -50,7 +42,7 @@ function CodeAccesModal({ membre, onClose }) {
           Le membre se connecte via <strong>Accès assistant</strong> sur la page de connexion.
         </p>
 
-        <Button className="w-full" onClick={onClose}>Compris</Button>
+        <Button className="w-full" onClick={onClose}>{t('commun.confirmer')}</Button>
       </div>
     </div>
   )
@@ -58,6 +50,7 @@ function CodeAccesModal({ membre, onClose }) {
 
 export default function EquipePage() {
   const { can } = useAuth()
+  const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState('membres')
   const [showInvite, setShowInvite] = useState(false)
   const [newMembre, setNewMembre] = useState(null)
@@ -83,9 +76,18 @@ export default function EquipePage() {
     }
   }
 
+  const ROLE_OPTIONS = [
+    { value: 'assistant', label: t('equipe.roles.assistant') },
+    { value: 'membre',    label: t('equipe.roles.membre')    },
+  ]
+  const TABS = [
+    { key: 'membres',     label: t('equipe.titre')            },
+    { key: 'permissions', label: t('equipe.permissions_titre') },
+  ]
+
   return (
     <AppLayout
-      title="Équipe"
+      title={t('equipe.titre')}
       rightAction={
         activeTab === 'membres' && can('equipe.manage') && max !== 0 ? (
           <button onClick={() => setShowInvite(true)} className="p-2 text-dim">
@@ -134,8 +136,8 @@ export default function EquipePage() {
             ) : membres.length === 0 ? (
               <EmptyState
                 icon={Users}
-                title="Aucun membre"
-                description="Ajoutez des collaborateurs pour gérer l'atelier ensemble"
+                title={t('equipe.vide.titre')}
+                description={t('equipe.vide.description')}
               />
             ) : (
               membres.map(m => (
@@ -159,27 +161,27 @@ export default function EquipePage() {
         <CodeAccesModal membre={newMembre} onClose={() => setNewMembre(null)} />
       )}
 
-      <BottomSheet isOpen={showInvite} onClose={() => setShowInvite(false)} title="Ajouter un membre">
+      <BottomSheet isOpen={showInvite} onClose={() => setShowInvite(false)} title={t('equipe.formulaire.titre')}>
         <form onSubmit={handleInvite} className="p-5 space-y-4">
           <div className="grid grid-cols-2 gap-3">
-            <Input label="Nom" value={form.nom} onChange={set('nom')} placeholder="Koné" required />
-            <Input label="Prénom" value={form.prenom} onChange={set('prenom')} placeholder="Kadiatou" required />
+            <Input label={t('equipe.formulaire.nom')} value={form.nom} onChange={set('nom')} placeholder="Koné" required />
+            <Input label={t('equipe.formulaire.prenom')} value={form.prenom} onChange={set('prenom')} placeholder="Kadiatou" required />
           </div>
           <Input
-            label="Téléphone"
+            label={t('equipe.formulaire.telephone')}
             type="tel"
             value={form.telephone}
             onChange={set('telephone')}
             placeholder="+225 07 00 00 00 00"
           />
-          <Select label="Rôle" value={form.role} onChange={set('role')} options={ROLE_OPTIONS} />
+          <Select label={t('equipe.formulaire.role')} value={form.role} onChange={set('role')} options={ROLE_OPTIONS} />
           {apiError && <p className="text-sm text-danger">{apiError}</p>}
           <div className="flex gap-3 pt-2">
             <Button type="button" variant="ghost" onClick={() => setShowInvite(false)} className="flex-1">
-              Annuler
+              {t('commun.annuler')}
             </Button>
             <Button type="submit" loading={inviter.isPending} className="flex-1">
-              Ajouter
+              {t('equipe.formulaire.ajouter')}
             </Button>
           </div>
         </form>

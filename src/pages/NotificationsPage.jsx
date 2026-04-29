@@ -1,10 +1,12 @@
 import { Bell } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useNotifications, useMarquerLue, useMarquerToutesLues } from '@/hooks/useNotifications'
 import { AppLayout } from '@/components/layout'
 import { NotificationItem } from '@/components/notifications'
 import { Skeleton, EmptyState } from '@/components/ui'
 
 export default function NotificationsPage() {
+  const { t } = useTranslation()
   const { data: notifications = [], isLoading } = useNotifications()
   const marquerLue = useMarquerLue()
   const marquerToutesLues = useMarquerToutesLues()
@@ -13,14 +15,14 @@ export default function NotificationsPage() {
 
   return (
     <AppLayout
-      title="Notifications"
+      title={t('notifications.titre')}
       rightAction={
         nonLues.length > 0 ? (
           <button
             onClick={() => marquerToutesLues.mutate()}
             className="text-xs text-primary font-medium px-2 py-1"
           >
-            Tout lire
+            {t('notifications.tout_marquer_lu')}
           </button>
         ) : null
       }
@@ -33,8 +35,8 @@ export default function NotificationsPage() {
         ) : notifications.length === 0 ? (
           <EmptyState
             icon={Bell}
-            title="Aucune notification"
-            description="Vous êtes à jour !"
+            title={t('notifications.vide.titre')}
+            description={t('notifications.vide.description')}
           />
         ) : (
           notifications.map(n => (

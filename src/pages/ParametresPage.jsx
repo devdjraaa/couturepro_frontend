@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Building2, Plus, CheckCircle2 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts'
 import {
   useProfil, useUpdateProfil,
@@ -14,16 +15,7 @@ import { usePlanLimit } from '@/hooks/usePlanFeature'
 import { useCountdown } from '@/hooks/useCountdown'
 import { AppLayout } from '@/components/layout'
 import { QuotaBar, PlanCard } from '@/components/abonnement'
-import { TabBar, Input, Select, Button, Skeleton } from '@/components/ui'
-
-const TABS = [
-  { key: 'profil',       label: 'Profil'       },
-  { key: 'atelier',      label: 'Atelier'      },
-  { key: 'ateliers',     label: 'Mes ateliers' },
-  { key: 'preferences',  label: 'Préférences'  },
-  { key: 'abonnement',   label: 'Abonnement'   },
-  { key: 'securite',     label: 'Sécurité'     },
-]
+import { TabBar, Input, Select, Button, Skeleton, LanguageSwitcher } from '@/components/ui'
 
 const DEVISES = [
   { value: 'XOF', label: 'FCFA (XOF)'            },
@@ -36,12 +28,8 @@ const DEVISES = [
   { value: 'MAD', label: 'Dirham (MAD)'           },
 ]
 
-const UNITES = [
-  { value: 'cm',     label: 'Centimètres (cm)' },
-  { value: 'pouces', label: 'Pouces (in)'       },
-]
-
 function ProfilTab() {
+  const { t } = useTranslation()
   const { data: profil, isLoading } = useProfil()
   const update = useUpdateProfil()
   const [edits, setEdits] = useState(null)
@@ -59,17 +47,22 @@ function ProfilTab() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <Input label="Nom" value={current?.nom ?? ''} onChange={set('nom')} required />
-      <Input label="Téléphone" type="tel" value={current?.telephone ?? ''} onChange={set('telephone')} required />
-      <Input label="Email" type="email" value={current?.email ?? ''} onChange={set('email')} />
+      <Input label={t('commun.nom')} value={current?.nom ?? ''} onChange={set('nom')} required />
+      <Input label={t('commun.telephone')} type="tel" value={current?.telephone ?? ''} onChange={set('telephone')} required />
+      <Input label={t('commun.email')} type="email" value={current?.email ?? ''} onChange={set('email')} />
       <Button type="submit" loading={update.isPending} className="w-full">
-        Enregistrer
+        {t('commun.enregistrer')}
       </Button>
     </form>
   )
 }
 
 function PreferencesTab() {
+  const { t } = useTranslation()
+  const UNITES = [
+    { value: 'cm',     label: 'Centimètres (cm)' },
+    { value: 'pouces', label: 'Pouces (in)'       },
+  ]
   const { data: prefs, isLoading } = usePreferences()
   const update  = useUpdatePreferences()
   const { refreshAtelier } = useAuth()
@@ -93,26 +86,31 @@ function PreferencesTab() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <Select
-        label="Devise"
+        label={t('parametres.preferences.devise')}
         value={form.devise}
         onChange={e => setForm(f => ({ ...f, devise: e.target.value }))}
         options={DEVISES}
       />
       <Select
-        label="Unité de mesure"
+        label={t('parametres.preferences.unite_mesure')}
         value={form.unite_mesure}
         onChange={e => setForm(f => ({ ...f, unite_mesure: e.target.value }))}
         options={UNITES}
       />
-      {success && <p className="text-sm text-success">Préférences enregistrées.</p>}
+      <div>
+        <label className="block text-xs font-medium text-dim mb-2">{t('parametres.preferences.langue')}</label>
+        <LanguageSwitcher />
+      </div>
+      {success && <p className="text-sm text-success">{t('parametres.preferences.succes')}</p>}
       <Button type="submit" loading={update.isPending} className="w-full">
-        Enregistrer
+        {t('commun.enregistrer')}
       </Button>
     </form>
   )
 }
 
 function AtelierTab() {
+  const { t } = useTranslation()
   const { data: atelier, isLoading } = useAtelierParametres()
   const update = useUpdateAtelier()
   const [edits, setEdits] = useState(null)
@@ -130,22 +128,23 @@ function AtelierTab() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <Input label="Nom de l'atelier" value={current?.nom ?? ''} onChange={set('nom')} required />
-      <Input label="Adresse" value={current?.adresse ?? ''} onChange={set('adresse')} />
-      <Input label="Ville" value={current?.ville ?? ''} onChange={set('ville')} />
+      <Input label={t('parametres.atelier.nom')} value={current?.nom ?? ''} onChange={set('nom')} required />
+      <Input label={t('parametres.atelier.adresse')} value={current?.adresse ?? ''} onChange={set('adresse')} />
+      <Input label={t('parametres.atelier.ville')} value={current?.ville ?? ''} onChange={set('ville')} />
       <Button type="submit" loading={update.isPending} className="w-full">
-        Enregistrer
+        {t('commun.enregistrer')}
       </Button>
     </form>
   )
 }
 
 function CountdownDisplay({ targetDate, statut }) {
+  const { t } = useTranslation()
   const cd = useCountdown(targetDate)
 
   if (!cd) return null
   if (cd.expired || statut === 'expire') {
-    return <span className="text-sm font-semibold text-danger">Expiré</span>
+    return <span className="text-sm font-semibold text-danger">{t('parametres.abonnement.statuts.expire')}</span>
   }
 
   const isUrgent = cd.days <= 1
@@ -160,6 +159,7 @@ function CountdownDisplay({ targetDate, statut }) {
 }
 
 function ActiverCodeSection() {
+  const { t } = useTranslation()
   const activerCode = useActivateCode()
   const [code, setCode]     = useState('')
   const [success, setSuccess] = useState('')
@@ -171,17 +171,17 @@ function ActiverCodeSection() {
     setSuccess('')
     try {
       const res = await activerCode.mutateAsync(code.trim().toUpperCase())
-      setSuccess(res?.message ?? 'Abonnement activé !')
+      setSuccess(res?.message ?? t('parametres.abonnement.active_succes'))
       setCode('')
     } catch (err) {
-      setError(err?.message || 'Code invalide ou déjà utilisé')
+      setError(err?.message || t('parametres.abonnement.code_invalide'))
     }
   }
 
   return (
     <div className="bg-card border border-edge rounded-2xl p-4 space-y-3">
-      <p className="text-sm font-semibold text-ink">Activer un code</p>
-      <p className="text-xs text-dim">Vous avez reçu un code d'activation ? Saisissez-le ici.</p>
+      <p className="text-sm font-semibold text-ink">{t('parametres.abonnement.activer_code_titre')}</p>
+      <p className="text-xs text-dim">{t('parametres.abonnement.activer_code_desc')}</p>
       <form onSubmit={handleSubmit} className="flex gap-2">
         <Input
           value={code}
@@ -192,7 +192,7 @@ function ActiverCodeSection() {
           required
         />
         <Button type="submit" loading={activerCode.isPending} className="shrink-0">
-          Activer
+          {t('parametres.abonnement.activer_btn')}
         </Button>
       </form>
       {error   && <p className="text-sm text-danger">{error}</p>}
@@ -202,6 +202,7 @@ function ActiverCodeSection() {
 }
 
 function AbonnementTab() {
+  const { t } = useTranslation()
   const { data: abonnement } = useAbonnement()
   const { data: plans = [] } = usePlans()
   const initierPaiement = useInitierPaiementAbonnement()
@@ -214,10 +215,10 @@ function AbonnementTab() {
   }
 
   const statutLabel = {
-    actif:  'Actif',
-    essai:  'Période d\'essai',
-    expire: 'Expiré',
-    gele:   'Suspendu',
+    actif:  t('parametres.abonnement.statuts.actif'),
+    essai:  t('parametres.abonnement.statuts.essai'),
+    expire: t('parametres.abonnement.statuts.expire'),
+    gele:   t('parametres.abonnement.statuts.gele'),
   }
 
   const statutColor = {
@@ -231,22 +232,21 @@ function AbonnementTab() {
     <div className="space-y-5">
       <QuotaBar />
 
-      {/* Statut actuel */}
       {abonnement && (
         <div className="bg-card border border-edge rounded-2xl divide-y divide-edge">
           <div className="flex justify-between px-4 py-3">
-            <span className="text-sm text-dim">Plan actuel</span>
+            <span className="text-sm text-dim">{t('parametres.abonnement.plan_actuel')}</span>
             <span className="text-sm font-semibold text-ink">{abonnement.niveau_label ?? abonnement.niveau_cle ?? '—'}</span>
           </div>
           <div className="flex justify-between px-4 py-3">
-            <span className="text-sm text-dim">Statut</span>
+            <span className="text-sm text-dim">{t('commun.statut')}</span>
             <span className={`text-sm font-semibold ${statutColor[abonnement.statut] ?? 'text-ink'}`}>
               {statutLabel[abonnement.statut] ?? abonnement.statut}
             </span>
           </div>
           {abonnement.timestamp_expiration && abonnement.statut !== 'expire' && (
             <div className="flex justify-between items-center px-4 py-3">
-              <span className="text-sm text-dim">Temps restant</span>
+              <span className="text-sm text-dim">{t('parametres.abonnement.temps_restant')}</span>
               <CountdownDisplay
                 targetDate={abonnement.timestamp_expiration}
                 statut={abonnement.statut}
@@ -256,7 +256,7 @@ function AbonnementTab() {
           {abonnement.timestamp_expiration && (
             <div className="flex justify-between px-4 py-3">
               <span className="text-sm text-dim">
-                {abonnement.statut === 'expire' ? 'Expiré le' : 'Expire le'}
+                {abonnement.statut === 'expire' ? t('parametres.abonnement.expire_le_passe') : t('parametres.abonnement.expire_le')}
               </span>
               <span className="text-sm text-ink">
                 {new Date(abonnement.timestamp_expiration).toLocaleDateString('fr-FR', {
@@ -268,12 +268,10 @@ function AbonnementTab() {
         </div>
       )}
 
-      {/* Activation par code */}
       <ActiverCodeSection />
 
-      {/* Plans disponibles */}
       <div>
-        <p className="text-xs font-semibold text-dim uppercase tracking-wide mb-3">Plans disponibles</p>
+        <p className="text-xs font-semibold text-dim uppercase tracking-wide mb-3">{t('parametres.abonnement.plans_disponibles')}</p>
         <div className="grid grid-cols-2 gap-3">
           {plans.map(plan => (
             <PlanCard
@@ -292,6 +290,7 @@ function AbonnementTab() {
 }
 
 function MesAteliersTab() {
+  const { t } = useTranslation()
   const { atelier: atelierActif, switchAtelier } = useAuth()
   const { data: ateliers = [], isLoading } = useMesAteliers()
   const create = useCreateSousAtelier()
@@ -310,7 +309,7 @@ function MesAteliersTab() {
       setShowForm(false)
       setForm({ nom: '', ville: '' })
     } catch (err) {
-      setApiError(err?.response?.data?.message ?? 'Une erreur est survenue.')
+      setApiError(err?.response?.data?.message ?? t('erreurs.inconnu'))
     }
   }
 
@@ -330,21 +329,21 @@ function MesAteliersTab() {
             onClick={() => setShowForm(x => !x)}
             className="flex items-center gap-1.5 text-sm text-primary font-medium"
           >
-            <Plus size={15} /> Ajouter
+            <Plus size={15} /> {t('parametres.ateliers_tab.ajouter')}
           </button>
         ) : maxSousAteliers === 0 ? (
-          <span className="text-xs text-ghost">Non disponible dans votre plan</span>
+          <span className="text-xs text-ghost">{t('parametres.ateliers_tab.non_disponible')}</span>
         ) : null}
       </div>
 
       {showForm && (
         <form onSubmit={handleCreate} className="bg-card border border-edge rounded-2xl p-4 space-y-3">
-          <Input label="Nom de l'atelier" value={form.nom} onChange={e => setForm(f => ({ ...f, nom: e.target.value }))} required />
-          <Input label="Ville" value={form.ville} onChange={e => setForm(f => ({ ...f, ville: e.target.value }))} />
+          <Input label={t('parametres.ateliers_tab.form_nom')} value={form.nom} onChange={e => setForm(f => ({ ...f, nom: e.target.value }))} required />
+          <Input label={t('parametres.ateliers_tab.form_ville')} value={form.ville} onChange={e => setForm(f => ({ ...f, ville: e.target.value }))} />
           {apiError && <p className="text-sm text-danger">{apiError}</p>}
           <div className="flex gap-3">
-            <Button type="button" variant="ghost" onClick={() => setShowForm(false)} className="flex-1">Annuler</Button>
-            <Button type="submit" loading={create.isPending} className="flex-1">Créer</Button>
+            <Button type="button" variant="ghost" onClick={() => setShowForm(false)} className="flex-1">{t('commun.annuler')}</Button>
+            <Button type="submit" loading={create.isPending} className="flex-1">{t('parametres.ateliers_tab.creer')}</Button>
           </div>
         </form>
       )}
@@ -365,11 +364,11 @@ function MesAteliersTab() {
                 <div className="flex items-center gap-2">
                   <p className="text-sm font-medium text-ink truncate">{a.nom}</p>
                   {a.is_maitre && (
-                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-medium shrink-0">Maître</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-medium shrink-0">{t('parametres.ateliers_tab.maitre')}</span>
                   )}
                 </div>
                 <p className="text-xs text-dim mt-0.5">
-                  {a.ville ? `${a.ville} · ` : ''}{a.clients_count ?? 0} clients · {a.commandes_count ?? 0} commandes
+                  {a.ville ? `${a.ville} · ` : ''}{a.clients_count ?? 0} {t('clients.titre').toLowerCase()} · {a.commandes_count ?? 0} {t('commandes.titre').toLowerCase()}
                 </p>
               </div>
               {isActive && <CheckCircle2 size={16} className="text-primary shrink-0" />}
@@ -382,6 +381,7 @@ function MesAteliersTab() {
 }
 
 function SecuriteTab() {
+  const { t } = useTranslation()
   const changerMdp = useChangerMotDePasse()
   const [form, setForm] = useState({ ancien: '', nouveau: '', confirmation: '' })
   const [error, setError] = useState('')
@@ -394,7 +394,7 @@ function SecuriteTab() {
     setError('')
     setSuccess(false)
     if (form.nouveau !== form.confirmation) {
-      setError('Les mots de passe ne correspondent pas')
+      setError(t('auth.inscription.mdp_non_concordants'))
       return
     }
     try {
@@ -402,19 +402,19 @@ function SecuriteTab() {
       setSuccess(true)
       setForm({ ancien: '', nouveau: '', confirmation: '' })
     } catch (err) {
-      setError(err.message || 'Erreur lors du changement de mot de passe')
+      setError(err.message || t('erreurs.inconnu'))
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <Input label="Mot de passe actuel" type="password" value={form.ancien} onChange={set('ancien')} required />
-      <Input label="Nouveau mot de passe" type="password" value={form.nouveau} onChange={set('nouveau')} required />
-      <Input label="Confirmation" type="password" value={form.confirmation} onChange={set('confirmation')} required />
+      <Input label={t('parametres.securite.ancien_mdp')} type="password" value={form.ancien} onChange={set('ancien')} required />
+      <Input label={t('parametres.securite.nouveau_mdp')} type="password" value={form.nouveau} onChange={set('nouveau')} required />
+      <Input label={t('parametres.securite.confirmer_mdp')} type="password" value={form.confirmation} onChange={set('confirmation')} required />
       {error   && <p className="text-sm text-danger">{error}</p>}
-      {success && <p className="text-sm text-success">Mot de passe modifié avec succès</p>}
+      {success && <p className="text-sm text-success">{t('parametres.securite.succes')}</p>}
       <Button type="submit" loading={changerMdp.isPending} className="w-full">
-        Modifier le mot de passe
+        {t('parametres.securite.modifier')}
       </Button>
     </form>
   )
@@ -422,10 +422,21 @@ function SecuriteTab() {
 
 export default function ParametresPage() {
   const { logout } = useAuth()
+  const { t } = useTranslation()
+
+  const TABS = [
+    { key: 'profil',       label: t('parametres.onglets.profil')       },
+    { key: 'atelier',      label: t('parametres.onglets.atelier')      },
+    { key: 'ateliers',     label: t('parametres.onglets.ateliers')     },
+    { key: 'preferences',  label: t('parametres.onglets.preferences')  },
+    { key: 'abonnement',   label: t('parametres.onglets.abonnement')   },
+    { key: 'securite',     label: t('parametres.onglets.securite')     },
+  ]
+
   const [activeTab, setActiveTab] = useState('profil')
 
   return (
-    <AppLayout title="Paramètres">
+    <AppLayout title={t('parametres.titre')}>
       <TabBar tabs={TABS} activeTab={activeTab} onChange={setActiveTab} />
       <div className="p-4 space-y-4">
         {activeTab === 'profil'      && <ProfilTab />}
@@ -440,21 +451,21 @@ export default function ParametresPage() {
             to="/parametres/theme"
             className="flex items-center justify-between w-full px-4 py-3 rounded-xl bg-card border border-edge text-sm text-ink hover:bg-subtle transition-colors"
           >
-            <span>Apparence &amp; thème</span>
+            <span>{t('parametres.liens.theme')}</span>
             <span className="text-ghost text-xs">›</span>
           </Link>
           <Link
             to="/parametres/communications"
             className="flex items-center justify-between w-full px-4 py-3 rounded-xl bg-card border border-edge text-sm text-ink hover:bg-subtle transition-colors"
           >
-            <span>Communications WhatsApp</span>
+            <span>{t('parametres.liens.communications')}</span>
             <span className="text-ghost text-xs">›</span>
           </Link>
           <Link
             to="/support"
             className="flex items-center justify-between w-full px-4 py-3 rounded-xl bg-card border border-edge text-sm text-ink hover:bg-subtle transition-colors"
           >
-            <span>Support &amp; aide</span>
+            <span>{t('parametres.liens.support')}</span>
             <span className="text-ghost text-xs">›</span>
           </Link>
         </div>
@@ -462,7 +473,7 @@ export default function ParametresPage() {
         {activeTab === 'profil' && (
           <div className="pt-2">
             <Button variant="danger" className="w-full" onClick={logout}>
-              Se déconnecter
+              {t('auth.deconnexion')}
             </Button>
           </div>
         )}

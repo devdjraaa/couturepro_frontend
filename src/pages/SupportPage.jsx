@@ -1,35 +1,33 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { HelpCircle, Plus, Image, X, ChevronRight } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useTickets, useCreerTicket } from '@/hooks/useTicket'
 import { toSupportTicket } from '@/constants/routes'
 import { AppLayout } from '@/components/layout'
 import { Button, Input, Select, Skeleton, EmptyState } from '@/components/ui'
 import { formatDate } from '@/utils/formatDate'
 
-const CATEGORIES = [
-  { value: 'technique',   label: 'Problème technique' },
-  { value: 'facturation', label: 'Facturation'         },
-  { value: 'compte',      label: 'Mon compte'          },
-  { value: 'abonnement',  label: 'Abonnement'          },
-  { value: 'autre',       label: 'Autre'               },
-]
-
 const STATUT_COLORS = {
   ouvert:   'text-warning',
   en_cours: 'text-primary',
   ferme:    'text-success',
 }
-const STATUT_LABELS = {
-  ouvert:   'Ouvert',
-  en_cours: 'En cours',
-  ferme:    'Fermé',
-}
 
 export default function SupportPage() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { data: tickets = [], isLoading } = useTickets()
   const creer = useCreerTicket()
+
+  const CATEGORIES = [
+    { value: 'technique',   label: t('support.categories.technique')  },
+    { value: 'facturation', label: t('support.categories.facturation') },
+    { value: 'compte',      label: t('support.categories.compte')      },
+    { value: 'abonnement',  label: t('support.categories.abonnement')  },
+    { value: 'autre',       label: t('support.categories.autre')       },
+  ]
+
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState({ sujet: '', message: '', categorie: 'technique' })
   const [photo, setPhoto] = useState(null)
@@ -72,33 +70,33 @@ export default function SupportPage() {
   }
 
   return (
-    <AppLayout showBack title="Support">
+    <AppLayout showBack title={t('support.titre')}>
       <div className="p-4 space-y-4">
         <Button icon={Plus} className="w-full" onClick={() => setShowForm(s => !s)}>
-          Nouveau ticket
+          {t('support.nouveau_ticket')}
         </Button>
 
         {showForm && (
           <form onSubmit={handleSubmit} className="bg-card border border-edge rounded-2xl p-4 space-y-4">
-            <p className="text-sm font-semibold text-ink">Décrire votre problème</p>
+            <p className="text-sm font-semibold text-ink">{t('support.formulaire.titre')}</p>
             <Select
-              label="Catégorie"
+              label={t('support.formulaire.categorie')}
               value={form.categorie}
               onChange={set('categorie')}
               options={CATEGORIES}
             />
             <Input
-              label="Sujet"
+              label={t('support.formulaire.sujet')}
               value={form.sujet}
               onChange={set('sujet')}
-              placeholder="Ex : Impossible de créer une commande"
+              placeholder={t('support.formulaire.sujet_placeholder')}
               required
             />
             <div>
-              <label className="block text-xs font-medium text-dim mb-1">Message</label>
+              <label className="block text-xs font-medium text-dim mb-1">{t('support.formulaire.message')}</label>
               <textarea
                 className="w-full border border-edge rounded-xl p-3 text-sm text-ink bg-transparent resize-none focus:outline-none focus:border-primary min-h-28"
-                placeholder="Décrivez le problème en détail…"
+                placeholder={t('support.formulaire.message_placeholder')}
                 value={form.message}
                 onChange={set('message')}
                 required
@@ -140,46 +138,46 @@ export default function SupportPage() {
             {error && <p className="text-sm text-danger">{error}</p>}
             <div className="flex gap-3">
               <Button type="button" variant="ghost" className="flex-1" onClick={() => { setShowForm(false); removePhoto() }}>
-                Annuler
+                {t('commun.annuler')}
               </Button>
               <Button type="submit" loading={creer.isPending} className="flex-1">
-                Envoyer
+                {t('support.formulaire.envoyer')}
               </Button>
             </div>
           </form>
         )}
 
-        <p className="text-xs font-semibold text-dim uppercase tracking-wide">Mes demandes</p>
+        <p className="text-xs font-semibold text-dim uppercase tracking-wide">{t('support.liste.titre')}</p>
 
         {isLoading ? (
           [...Array(3)].map((_, i) => <Skeleton key={i} className="h-16 rounded-xl mb-2" />)
         ) : tickets.length === 0 ? (
           <EmptyState
             icon={HelpCircle}
-            title="Aucun ticket"
-            description="Vos demandes de support apparaîtront ici"
+            title={t('support.liste.vide')}
+            description={t('support.liste.vide_description')}
           />
         ) : (
           <div className="space-y-2">
-            {tickets.map(t => (
+            {tickets.map(ticket => (
               <button
-                key={t.id}
-                onClick={() => navigate(toSupportTicket(t.id))}
+                key={ticket.id}
+                onClick={() => navigate(toSupportTicket(ticket.id))}
                 className="w-full bg-card border border-edge rounded-xl px-4 py-3 text-left hover:bg-subtle transition-colors"
               >
                 <div className="flex items-start justify-between gap-2">
-                  <p className="text-sm font-medium text-ink truncate flex-1">{t.sujet}</p>
+                  <p className="text-sm font-medium text-ink truncate flex-1">{ticket.sujet}</p>
                   <div className="flex items-center gap-1.5 shrink-0">
-                    <span className={`text-xs font-semibold ${STATUT_COLORS[t.statut] ?? 'text-dim'}`}>
-                      {STATUT_LABELS[t.statut] ?? t.statut}
+                    <span className={`text-xs font-semibold ${STATUT_COLORS[ticket.statut] ?? 'text-dim'}`}>
+                      {t(`support.statuts.${ticket.statut}`, { defaultValue: ticket.statut })}
                     </span>
                     <ChevronRight size={14} className="text-ghost" />
                   </div>
                 </div>
                 <p className="text-xs text-ghost mt-0.5">
-                  {CATEGORIES.find(c => c.value === t.categorie)?.label ?? t.categorie}
+                  {CATEGORIES.find(c => c.value === ticket.categorie)?.label ?? ticket.categorie}
                   {' · '}
-                  {formatDate(t.created_at)}
+                  {formatDate(ticket.created_at)}
                 </p>
               </button>
             ))}

@@ -1,28 +1,30 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Home, Users, ClipboardList, Scissors, Settings, Bell, Star, Users2, LogOut, HelpCircle, Archive, Wallet } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
 import { useAuth } from '@/contexts'
 import { Avatar } from '@/components/ui'
 import { useNotificationsCount } from '@/hooks/useNotifications'
 
 const NAV_ITEMS = [
-  { to: '/',              icon: Home,          label: 'Tableau de bord', end: true },
-  { to: '/clients',       icon: Users,         label: 'Clients'                   },
-  { to: '/commandes',     icon: ClipboardList, label: 'Commandes'                 },
-  { to: '/catalogue',     icon: Scissors,      label: 'Catalogue'                 },
-  { to: '/equipe',        icon: Users2,        label: 'Équipe'                    },
-  { to: '/points',        icon: Star,          label: 'Fidélité'                  },
-  { to: '/notifications', icon: Bell,          label: 'Notifications'             },
-  { to: '/parametres',    icon: Settings,      label: 'Paramètres'                },
-  { to: '/caisse',        icon: Wallet,        label: 'Caisse',   proprietaire: true },
-  { to: '/archives',      icon: Archive,       label: 'Archives', proprietaire: true },
-  { to: '/support',       icon: HelpCircle,    label: 'Support'                   },
+  { to: '/',              icon: Home,          key: 'dashboard', end: true },
+  { to: '/clients',       icon: Users,         key: 'clients'             },
+  { to: '/commandes',     icon: ClipboardList, key: 'commandes'           },
+  { to: '/catalogue',     icon: Scissors,      key: 'catalogue'           },
+  { to: '/equipe',        icon: Users2,        key: 'equipe'              },
+  { to: '/points',        icon: Star,          key: 'points'              },
+  { to: '/notifications', icon: Bell,          key: 'notifications'       },
+  { to: '/parametres',    icon: Settings,      key: 'parametres'          },
+  { to: '/caisse',        icon: Wallet,        key: 'caisse',   proprietaire: true },
+  { to: '/archives',      icon: Archive,       key: 'archives', proprietaire: true },
+  { to: '/support',       icon: HelpCircle,    key: 'support'             },
 ]
 
 export default function Sidebar() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const { data: notifCount = 0 } = useNotificationsCount()
+  const { t } = useTranslation()
 
   return (
     <aside className="hidden lg:flex flex-col w-60 bg-card border-r border-edge shrink-0 sticky top-0 h-screen">
@@ -36,7 +38,7 @@ export default function Sidebar() {
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto py-3 px-3 space-y-0.5">
-        {NAV_ITEMS.filter(item => !item.proprietaire || user?.role === 'proprietaire').map(({ to, icon: Icon, label, end }) => (
+        {NAV_ITEMS.filter(item => !item.proprietaire || user?.role === 'proprietaire').map(({ to, icon: Icon, key, end }) => (
           <NavLink
             key={to}
             to={to}
@@ -51,7 +53,7 @@ export default function Sidebar() {
             {({ isActive }) => (
               <>
                 <Icon size={18} strokeWidth={isActive ? 2.5 : 1.8} className="shrink-0" />
-                <span className="flex-1 truncate">{label}</span>
+                <span className="flex-1 truncate">{t(`nav.${key}`)}</span>
                 {to === '/notifications' && notifCount > 0 && (
                   <span className="text-xs bg-danger text-inverse px-1.5 py-0.5 rounded-full font-semibold leading-none">
                     {notifCount > 9 ? '9+' : notifCount}
@@ -83,7 +85,7 @@ export default function Sidebar() {
             className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-ghost hover:text-danger hover:bg-danger/10 transition-colors mt-1"
           >
             <LogOut size={16} className="shrink-0" />
-            <span>Déconnexion</span>
+            <span>{t('auth.deconnexion')}</span>
           </button>
         </div>
       )}

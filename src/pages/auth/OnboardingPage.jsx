@@ -1,40 +1,22 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Scissors, Users, ClipboardList, TrendingUp } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { OnboardingSlide } from '@/components/onboarding'
 import { Button } from '@/components/ui'
 import { cn } from '@/utils/cn'
 
-const SLIDES = [
-  {
-    icon: Scissors,
-    color: 'primary',
-    title: 'Bienvenue sur Couture Pro',
-    description: 'Gérez votre atelier de couture facilement depuis votre téléphone.',
-  },
-  {
-    icon: Users,
-    color: 'accent',
-    title: 'Vos clients, organisés',
-    description: 'Enregistrez les mesures et commandes de chaque client en quelques secondes.',
-  },
-  {
-    icon: ClipboardList,
-    color: 'success',
-    title: 'Suivez vos commandes',
-    description: 'Statuts en temps réel, paiements et livraisons, tout est sous contrôle.',
-  },
-  {
-    icon: TrendingUp,
-    color: 'terra',
-    title: 'Développez votre activité',
-    description: 'Tableau de bord, statistiques et programme de fidélité pour fidéliser vos clients.',
-  },
-]
-
 export default function OnboardingPage() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const [index, setIndex] = useState(0)
+
+  const SLIDES = [
+    { icon: Scissors,     color: 'primary', title: t('auth.onboarding.slide_1_titre'), description: t('auth.onboarding.slide_1_description') },
+    { icon: Users,        color: 'accent',  title: t('auth.onboarding.slide_2_titre'), description: t('auth.onboarding.slide_2_description') },
+    { icon: ClipboardList,color: 'success', title: t('auth.onboarding.slide_3_titre'), description: t('auth.onboarding.slide_3_description') },
+    { icon: TrendingUp,   color: 'terra',   title: t('auth.onboarding.slide_4_titre'), description: t('auth.onboarding.slide_4_description') },
+  ]
   const isLast = index === SLIDES.length - 1
 
   const next = () => {
@@ -63,14 +45,14 @@ export default function OnboardingPage() {
 
       <div className="w-full max-w-sm space-y-3">
         <Button className="w-full" onClick={next}>
-          {isLast ? 'Commencer' : 'Suivant'}
+          {isLast ? t('auth.onboarding.commencer') : t('commun.suivant')}
         </Button>
         {!isLast && (
           <button
             onClick={() => navigate('/', { replace: true })}
             className="w-full text-sm text-dim py-2"
           >
-            Passer
+            {t('auth.onboarding.passer')}
           </button>
         )}
       </div>

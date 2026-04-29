@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { Edit2, Trash2, CreditCard, MessageCircle, Ruler, AlertTriangle, Download, Send } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useCommande, useUpdateCommande, useUpdateStatutCommande, useDeleteCommande } from '@/hooks/useCommandes'
 import { usePaiements, useEnregistrerPaiement } from '@/hooks/usePaiements'
 import { useWhatsappRappel, useWhatsappCommandePrete } from '@/hooks/useWhatsapp'
@@ -14,13 +15,14 @@ import { formatCurrency } from '@/utils/formatCurrency'
 import { formatDate } from '@/utils/formatDate'
 import { exportRelevePdf } from '@/utils/exportRelevePdf'
 
-const MODE_OPTIONS = [
-  { value: 'especes',      label: 'Espèces'      },
-  { value: 'mobile_money', label: 'Mobile Money' },
-  { value: 'virement',     label: 'Virement'     },
-]
-
 export default function CommandeDetailPage() {
+  const { t } = useTranslation()
+
+  const MODE_OPTIONS = [
+    { value: 'especes',      label: t('commandes.modes_paiement.especes')      },
+    { value: 'mobile_money', label: t('commandes.modes_paiement.mobile_money') },
+    { value: 'virement',     label: t('commandes.modes_paiement.virement')     },
+  ]
   const { id } = useParams()
   const navigate = useNavigate()
   const { atelier } = useAuth()
@@ -55,7 +57,7 @@ export default function CommandeDetailPage() {
   }
 
   const handleDelete = async () => {
-    if (!confirm('Supprimer cette commande ?')) return
+    if (!confirm(t('commandes.supprimer_confirm'))) return
     await deleteCommande.mutateAsync(commandeId)
     navigate('/commandes', { replace: true })
   }
@@ -91,7 +93,7 @@ export default function CommandeDetailPage() {
 
   if (isLoading) {
     return (
-      <AppLayout showBack title="Commande">
+      <AppLayout showBack title={t('commandes.detail.titre_single')}>
         <div className="p-4 space-y-3">
           <Skeleton className="h-24 rounded-2xl" />
           <Skeleton className="h-32 rounded-2xl" />
@@ -108,7 +110,7 @@ export default function CommandeDetailPage() {
   return (
     <AppLayout
       showBack
-      title="Commande"
+      title={t('commandes.detail.titre_single')}
       rightAction={
         <button onClick={() => setShowEdit(true)} className="p-2 text-dim">
           <Edit2 size={18} />
@@ -120,7 +122,7 @@ export default function CommandeDetailPage() {
         {commande.urgence && (
           <div className="flex items-center gap-2 bg-warning/10 border border-warning/30 rounded-xl px-4 py-2.5">
             <AlertTriangle size={15} className="text-warning shrink-0" />
-            <span className="text-sm font-semibold text-warning">Commande urgente</span>
+            <span className="text-sm font-semibold text-warning">{t('commandes.detail.urgente')}</span>
           </div>
         )}
 
@@ -139,7 +141,7 @@ export default function CommandeDetailPage() {
         {/* Photo tissu */}
         {commande.photo_tissu_url && (
           <div>
-            <p className="text-xs font-semibold text-dim uppercase tracking-wide mb-2">Tissu</p>
+            <p className="text-xs font-semibold text-dim uppercase tracking-wide mb-2">{t('commandes.detail.tissu_label')}</p>
             <img
               src={commande.photo_tissu_url}
               alt="tissu"
@@ -151,29 +153,29 @@ export default function CommandeDetailPage() {
         {/* Description */}
         {commande.description && (
           <div className="bg-card border border-edge rounded-2xl px-4 py-3">
-            <p className="text-xs text-dim mb-1">Description</p>
+            <p className="text-xs text-dim mb-1">{t('commandes.detail.description_label')}</p>
             <p className="text-sm text-ink whitespace-pre-wrap">{commande.description}</p>
           </div>
         )}
 
         {/* Statut */}
         <div>
-          <p className="text-xs font-semibold text-dim uppercase tracking-wide mb-2">Statut</p>
+          <p className="text-xs font-semibold text-dim uppercase tracking-wide mb-2">{t('commandes.detail.statut_label')}</p>
           <StatutSelector value={commande.statut} onChange={handleStatut} />
         </div>
 
         {/* Finances */}
         <div className="bg-card border border-edge rounded-2xl divide-y divide-edge">
           <div className="flex justify-between px-4 py-3">
-            <span className="text-sm text-dim">Montant total</span>
+            <span className="text-sm text-dim">{t('commandes.detail.montant')}</span>
             <span className="text-sm font-semibold text-ink">{formatCurrency(commande.prix ?? 0)}</span>
           </div>
           <div className="flex justify-between px-4 py-3">
-            <span className="text-sm text-dim">Avance versée</span>
+            <span className="text-sm text-dim">{t('commandes.detail.avance')}</span>
             <span className="text-sm font-semibold text-success">{formatCurrency(commande.acompte ?? 0)}</span>
           </div>
           <div className="flex justify-between px-4 py-3">
-            <span className="text-sm text-dim">Reste à payer</span>
+            <span className="text-sm text-dim">{t('commandes.detail.reste')}</span>
             <span className="text-sm font-semibold text-ink">{formatCurrency(restant)}</span>
           </div>
         </div>
@@ -182,14 +184,14 @@ export default function CommandeDetailPage() {
         {paiements.length > 0 && (
           <div>
             <div className="flex items-center justify-between mb-2">
-              <p className="text-xs font-semibold text-dim uppercase tracking-wide">Historique des paiements</p>
+              <p className="text-xs font-semibold text-dim uppercase tracking-wide">{t('commandes.detail.historique_paiements')}</p>
               <button
                 onClick={handleDownloadReleve}
                 disabled={exportingPdf}
                 className="flex items-center gap-1 text-xs text-primary font-medium disabled:opacity-50"
               >
                 <Download size={12} />
-                {exportingPdf ? 'Export…' : 'Relevé PDF'}
+                {exportingPdf ? t('commandes.detail.export_encours') : t('commandes.detail.releve_pdf')}
               </button>
             </div>
             <div className="space-y-2">
@@ -209,8 +211,8 @@ export default function CommandeDetailPage() {
         {whatsappUrl && (
           <div className="bg-[#25d366]/10 border border-[#25d366]/30 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
             <div>
-              <p className="text-sm font-semibold text-ink">Relevé prêt</p>
-              <p className="text-xs text-dim">Envoyer le relevé au client sur WhatsApp</p>
+              <p className="text-sm font-semibold text-ink">{t('commandes.detail.releve_pret')}</p>
+              <p className="text-xs text-dim">{t('commandes.detail.envoyer_releve')}</p>
             </div>
             <div className="flex gap-2 shrink-0">
               <Button
@@ -219,9 +221,9 @@ export default function CommandeDetailPage() {
                 className="text-xs"
                 onClick={() => { window.open(whatsappUrl, '_blank'); setWhatsappUrl(null) }}
               >
-                Envoyer
+                {t('commandes.detail.envoyer')}
               </Button>
-              <button onClick={() => setWhatsappUrl(null)} className="text-xs text-ghost">Ignorer</button>
+              <button onClick={() => setWhatsappUrl(null)} className="text-xs text-ghost">{t('commandes.detail.ignorer')}</button>
             </div>
           </div>
         )}
@@ -229,7 +231,7 @@ export default function CommandeDetailPage() {
         <div className="flex gap-2">
           {restant > 0 && (
             <Button icon={CreditCard} className="flex-1" onClick={() => setShowPaiement(true)}>
-              Paiement
+              {t('commandes.detail.paiement_btn')}
             </Button>
           )}
           {commande.client_id && (
@@ -247,23 +249,23 @@ export default function CommandeDetailPage() {
 
         {commande.note_interne && (
           <div className="bg-subtle rounded-xl px-4 py-3">
-            <p className="text-xs text-dim mb-1">Note interne</p>
+            <p className="text-xs text-dim mb-1">{t('commandes.detail.note_interne')}</p>
             <p className="text-sm text-ink">{commande.note_interne}</p>
           </div>
         )}
 
         {commande.client_id && (
           <Link to={`/clients/${commande.client_id}`} state={{ tab: 'mesures' }} className="flex items-center gap-2 text-primary text-sm py-2">
-            <Ruler size={16} /> Voir les mesures du client
+            <Ruler size={16} /> {t('commandes.detail.voir_mesures')}
           </Link>
         )}
 
         <button onClick={handleDelete} className="flex items-center gap-2 text-danger text-sm py-2">
-          <Trash2 size={16} /> Supprimer cette commande
+          <Trash2 size={16} /> {t('commandes.detail.supprimer_btn')}
         </button>
       </div>
 
-      <BottomSheet isOpen={showEdit} onClose={() => setShowEdit(false)} title="Modifier la commande">
+      <BottomSheet isOpen={showEdit} onClose={() => setShowEdit(false)} title={t('commandes.formulaire.titre_modification')}>
         <CommandeForm
           initialData={commande}
           onSubmit={handleUpdate}
@@ -272,10 +274,10 @@ export default function CommandeDetailPage() {
         />
       </BottomSheet>
 
-      <BottomSheet isOpen={showPaiement} onClose={() => setShowPaiement(false)} title="Enregistrer un paiement">
+      <BottomSheet isOpen={showPaiement} onClose={() => setShowPaiement(false)} title={t('commandes.paiement_form.titre')}>
         <form onSubmit={handlePaiement} className="p-5 space-y-4">
           <Input
-            label="Montant (XOF)"
+            label={t('commandes.paiement_form.montant')}
             type="number"
             min="1"
             max={restant}
@@ -285,17 +287,17 @@ export default function CommandeDetailPage() {
             required
           />
           <Select
-            label="Mode de paiement"
+            label={t('commandes.paiement_form.mode')}
             value={paiementForm.mode_paiement}
             onChange={e => setPaiementForm(f => ({ ...f, mode_paiement: e.target.value }))}
             options={MODE_OPTIONS}
           />
           {whatsappFactureAvailable && (
-            <p className="text-xs text-dim">Un relevé WhatsApp sera proposé après confirmation.</p>
+            <p className="text-xs text-dim">{t('commandes.paiement_form.releve_whatsapp')}</p>
           )}
           <div className="flex gap-3 pt-2">
-            <Button type="button" variant="ghost" onClick={() => setShowPaiement(false)} className="flex-1">Annuler</Button>
-            <Button type="submit" loading={enregistrerPaiement.isPending} className="flex-1">Confirmer</Button>
+            <Button type="button" variant="ghost" onClick={() => setShowPaiement(false)} className="flex-1">{t('commun.annuler')}</Button>
+            <Button type="submit" loading={enregistrerPaiement.isPending} className="flex-1">{t('commun.confirmer')}</Button>
           </div>
         </form>
       </BottomSheet>

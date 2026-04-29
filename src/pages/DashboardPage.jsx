@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Plus, Building2, Users, ClipboardList, AlertTriangle } from 'lucide-react'
+import { Plus, Building2, Users, ClipboardList } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { AppLayout } from '@/components/layout'
 import { StatsGrid, RecentCommandes } from '@/components/dashboard'
 import { FloatingActionButton } from '@/components/ui'
@@ -9,6 +10,7 @@ import { useMesAteliers } from '@/hooks/useMesAteliers'
 
 // ── Vue consolidée (propriétaire avec plusieurs ateliers, filtre "Tous") ──────
 function ConsolidatedView({ ateliers, onSelect }) {
+  const { t } = useTranslation()
   const totals = ateliers.reduce(
     (acc, a) => ({
       clients:  acc.clients  + (a.clients_count  ?? 0),
@@ -24,24 +26,24 @@ function ConsolidatedView({ ateliers, onSelect }) {
         <div className="bg-card border border-edge rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-1">
             <Users size={15} className="text-primary" />
-            <span className="text-xs text-dim font-medium">Total clients</span>
+            <span className="text-xs text-dim font-medium">{t('clients.titre')}</span>
           </div>
           <p className="text-2xl font-bold text-ink">{totals.clients}</p>
-          <p className="text-xs text-ghost mt-0.5">tous ateliers</p>
+          <p className="text-xs text-ghost mt-0.5">{t('dashboard.toutes_ateliers').toLowerCase()}</p>
         </div>
         <div className="bg-card border border-edge rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-1">
             <ClipboardList size={15} className="text-warning" />
-            <span className="text-xs text-dim font-medium">Total commandes</span>
+            <span className="text-xs text-dim font-medium">{t('commandes.titre')}</span>
           </div>
           <p className="text-2xl font-bold text-ink">{totals.commandes}</p>
-          <p className="text-xs text-ghost mt-0.5">tous ateliers</p>
+          <p className="text-xs text-ghost mt-0.5">{t('dashboard.toutes_ateliers').toLowerCase()}</p>
         </div>
       </div>
 
       {/* Liste par atelier */}
       <h2 className="text-sm font-semibold text-dim uppercase tracking-wide">
-        Par atelier
+        {t('dashboard.stats_globales')}
       </h2>
       <div className="space-y-2">
         {ateliers.map(a => (
@@ -61,10 +63,10 @@ function ConsolidatedView({ ateliers, onSelect }) {
                 )}
               </div>
               <p className="text-xs text-ghost mt-0.5">
-                {a.clients_count ?? 0} clients · {a.commandes_count ?? 0} commandes
+                {a.clients_count ?? 0} {t('clients.titre').toLowerCase()} · {a.commandes_count ?? 0} {t('commandes.titre').toLowerCase()}
               </p>
             </div>
-            <span className="text-xs text-primary font-medium shrink-0">Voir →</span>
+            <span className="text-xs text-primary font-medium shrink-0">→</span>
           </button>
         ))}
       </div>
@@ -74,6 +76,7 @@ function ConsolidatedView({ ateliers, onSelect }) {
 
 // ── Filtre ateliers ───────────────────────────────────────────────────────────
 function AtelierFilter({ ateliers, activeId, onSelect, onAll, showAll }) {
+  const { t } = useTranslation()
   return (
     <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-none">
       <button
@@ -82,7 +85,7 @@ function AtelierFilter({ ateliers, activeId, onSelect, onAll, showAll }) {
           showAll ? 'bg-primary text-white' : 'bg-subtle text-dim'
         }`}
       >
-        Tous
+        {t('dashboard.toutes_ateliers')}
       </button>
       {ateliers.map(a => (
         <button
@@ -103,6 +106,7 @@ function AtelierFilter({ ateliers, activeId, onSelect, onAll, showAll }) {
 // ── Page principale ───────────────────────────────────────────────────────────
 export default function DashboardPage() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { user, atelier, switchAtelier } = useAuth()
   const { data: ateliers = [] } = useMesAteliers()
 
@@ -115,7 +119,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <AppLayout title="Accueil">
+    <AppLayout title={t('dashboard.titre')}>
       <div className="p-4 space-y-4">
 
         {isMulti && (
@@ -138,7 +142,7 @@ export default function DashboardPage() {
             <StatsGrid />
             <div>
               <h2 className="text-sm font-semibold text-dim uppercase tracking-wide mb-3">
-                Commandes récentes
+                {t('dashboard.recentes')}
               </h2>
               <RecentCommandes />
             </div>

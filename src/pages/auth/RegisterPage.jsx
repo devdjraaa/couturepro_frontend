@@ -1,19 +1,21 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts'
 import { AuthLayout } from '@/components/layout'
 import { Input, Button, Select } from '@/components/ui'
 
-const QUESTIONS_SECRETE = [
-  { value: 'Quel est le nom de votre premier animal de compagnie ?', label: 'Nom de votre premier animal de compagnie ?' },
-  { value: 'Quel est le prénom de votre meilleure amie d\'enfance ?', label: 'Prénom de votre meilleure amie d\'enfance ?' },
-  { value: 'Quelle est la ville où vous êtes né(e) ?', label: 'Ville de naissance ?' },
-  { value: 'Quel est le nom de votre école primaire ?', label: 'Nom de votre école primaire ?' },
-]
-
 export default function RegisterPage() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { register, verifyOtp, resendOtp } = useAuth()
+
+  const QUESTIONS_SECRETE = [
+    { value: 'Quel est le nom de votre premier animal de compagnie ?', label: 'Nom de votre premier animal de compagnie ?' },
+    { value: 'Quel est le prénom de votre meilleure amie d\'enfance ?', label: 'Prénom de votre meilleure amie d\'enfance ?' },
+    { value: 'Quelle est la ville où vous êtes né(e) ?', label: 'Ville de naissance ?' },
+    { value: 'Quel est le nom de votre école primaire ?', label: 'Nom de votre école primaire ?' },
+  ]
   const [step, setStep] = useState('form') // 'form' | 'otp'
   const [form, setForm] = useState({
     nom: '',
@@ -36,7 +38,7 @@ export default function RegisterPage() {
     e.preventDefault()
     setError('')
     if (form.password !== form.password_confirmation) {
-      setError('Les mots de passe ne correspondent pas')
+      setError(t('auth.inscription.mdp_non_concordants'))
       return
     }
     setLoading(true)
@@ -44,7 +46,7 @@ export default function RegisterPage() {
       await register(form)
       setStep('otp')
     } catch (err) {
-      setError(err.message || "Erreur lors de l'inscription")
+      setError(err.message || t('erreurs.inconnu'))
     } finally {
       setLoading(false)
     }
@@ -58,7 +60,7 @@ export default function RegisterPage() {
       await verifyOtp({ telephone: form.telephone, code: otp })
       navigate('/onboarding', { replace: true })
     } catch (err) {
-      setError(err.message || 'Code invalide')
+      setError(err.message || t('erreurs.otp_invalide'))
     } finally {
       setLoading(false)
     }
@@ -66,10 +68,10 @@ export default function RegisterPage() {
 
   if (step === 'otp') {
     return (
-      <AuthLayout subtitle={`Code envoyé au ${form.telephone}`}>
+      <AuthLayout subtitle={t('auth.otp.sous_titre_tel', { telephone: form.telephone })}>
         <form onSubmit={handleVerifyOtp} className="space-y-4">
           <Input
-            label="Code de vérification"
+            label={t('auth.otp.code')}
             type="text"
             inputMode="numeric"
             value={otp}
@@ -80,14 +82,14 @@ export default function RegisterPage() {
           />
           {error && <p className="text-sm text-danger text-center">{error}</p>}
           <Button type="submit" className="w-full" loading={loading}>
-            Vérifier
+            {t('auth.otp.verifier')}
           </Button>
           <button
             type="button"
             onClick={() => resendOtp(form.telephone)}
             className="w-full text-sm text-dim underline py-2"
           >
-            Renvoyer le code
+            {t('auth.otp.renvoyer')}
           </button>
         </form>
       </AuthLayout>
@@ -95,18 +97,18 @@ export default function RegisterPage() {
   }
 
   return (
-    <AuthLayout subtitle="Créez votre atelier en ligne">
+    <AuthLayout subtitle={t('auth.inscription.sous_titre_register')}>
       <form onSubmit={handleRegister} className="space-y-4">
         <div className="grid grid-cols-2 gap-3">
           <Input
-            label="Prénom"
+            label={t('commun.prenom')}
             value={form.prenom}
             onChange={set('prenom')}
             placeholder="Aminata"
             required
           />
           <Input
-            label="Nom"
+            label={t('commun.nom')}
             value={form.nom}
             onChange={set('nom')}
             placeholder="Diallo"
@@ -114,7 +116,7 @@ export default function RegisterPage() {
           />
         </div>
         <Input
-          label="Téléphone"
+          label={t('commun.telephone')}
           type="tel"
           value={form.telephone}
           onChange={set('telephone')}
@@ -122,7 +124,7 @@ export default function RegisterPage() {
           required
         />
         <Input
-          label="Email"
+          label={t('commun.email')}
           type="email"
           value={form.email}
           onChange={set('email')}
@@ -130,14 +132,14 @@ export default function RegisterPage() {
           required
         />
         <Input
-          label="Nom de l'atelier"
+          label={t('auth.inscription.nom_atelier')}
           value={form.nom_atelier}
           onChange={set('nom_atelier')}
           placeholder="Atelier Aminata"
           required
         />
         <Input
-          label="Mot de passe"
+          label={t('auth.inscription.mot_de_passe')}
           type="password"
           value={form.password}
           onChange={set('password')}
@@ -145,7 +147,7 @@ export default function RegisterPage() {
           required
         />
         <Input
-          label="Confirmer le mot de passe"
+          label={t('auth.inscription.confirmer_mot_de_passe')}
           type="password"
           value={form.password_confirmation}
           onChange={set('password_confirmation')}
@@ -153,27 +155,27 @@ export default function RegisterPage() {
           required
         />
         <Select
-          label="Question secrète"
+          label={t('auth.inscription.question_secrete')}
           value={form.question_secrete}
           onChange={set('question_secrete')}
           options={QUESTIONS_SECRETE}
           required
         />
         <Input
-          label="Réponse secrète"
+          label={t('auth.inscription.reponse_secrete')}
           value={form.reponse_secrete}
           onChange={set('reponse_secrete')}
-          placeholder="Votre réponse"
+          placeholder={t('auth.inscription.reponse_secrete_placeholder')}
           required
         />
         {error && <p className="text-sm text-danger text-center">{error}</p>}
         <Button type="submit" className="w-full" loading={loading}>
-          Créer mon compte
+          {t('auth.inscription.creer_compte')}
         </Button>
         <p className="text-center text-sm text-dim">
-          Déjà inscrit ?{' '}
+          {t('auth.inscription.deja_inscrit')}{' '}
           <Link to="/login" className="text-primary font-medium">
-            Se connecter
+            {t('auth.inscription.se_connecter')}
           </Link>
         </p>
       </form>

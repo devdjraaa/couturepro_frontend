@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Download, TrendingUp, Clock, CheckCircle, Wallet } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { AppLayout } from '@/components/layout'
 import { useCaisseStats, useCaisseClients } from '@/hooks/useCaisse'
 import { FeatureGate } from '@/components/abonnement'
@@ -44,6 +45,7 @@ const MODE_LABELS = {
 
 function CaisseContent() {
   const { user } = useAuth()
+  const { t } = useTranslation()
   const [mois, setMois] = useState(MOIS_OPTIONS[0].value)
   const [exporting, setExporting] = useState(false)
 
@@ -89,7 +91,7 @@ function CaisseContent() {
           className="flex items-center gap-2 bg-primary text-white text-sm font-medium px-4 py-2 rounded-xl disabled:opacity-50 shrink-0"
         >
           <Download size={14} />
-          {exporting ? '…' : 'PDF'}
+          {exporting ? '…' : t('caisse.export_pdf')}
         </button>
       </div>
 
@@ -105,7 +107,7 @@ function CaisseContent() {
           <div className="grid grid-cols-2 gap-3">
             <StatCard
               icon={TrendingUp}
-              label="Total encaissé"
+              label={t('caisse.total_encaisse')}
               value={fmt(stats.total_encaisse)}
               bg="bg-green-50"
               textColor="text-green-700"
@@ -113,7 +115,7 @@ function CaisseContent() {
             />
             <StatCard
               icon={Clock}
-              label="En attente"
+              label={t('caisse.en_attente')}
               value={fmt(stats.total_en_attente)}
               bg="bg-amber-50"
               textColor="text-amber-700"
@@ -121,18 +123,16 @@ function CaisseContent() {
             />
             <StatCard
               icon={CheckCircle}
-              label="Soldées"
+              label={t('caisse.commandes_soldees')}
               value={String(stats.nb_commandes_soldees)}
-              sub="commandes"
               bg="bg-primary/5"
               textColor="text-primary"
               iconBg="bg-primary/10"
             />
             <StatCard
               icon={Wallet}
-              label="En cours"
+              label={t('caisse.commandes_en_cours')}
               value={String(stats.nb_commandes_en_cours)}
-              sub="commandes"
               bg="bg-sky-50"
               textColor="text-sky-700"
               iconBg="bg-sky-100"
@@ -142,11 +142,11 @@ function CaisseContent() {
           {/* Modes de paiement */}
           {modes.length > 0 && (
             <div className="bg-card border border-edge rounded-2xl p-4">
-              <p className="text-sm font-semibold text-ink mb-3">Encaissements par mode</p>
+              <p className="text-sm font-semibold text-ink mb-3">{t('caisse.modes_paiement')}</p>
               <div className="space-y-2">
                 {modes.map(([mode, total]) => (
                   <div key={mode} className="flex items-center justify-between">
-                    <span className="text-sm text-dim">{MODE_LABELS[mode] ?? mode}</span>
+                    <span className="text-sm text-dim">{t(`caisse.modes.${mode}`, { defaultValue: mode })}</span>
                     <span className="text-sm font-semibold text-ink">{fmt(total)}</span>
                   </div>
                 ))}
@@ -157,16 +157,18 @@ function CaisseContent() {
           {/* Clients débiteurs */}
           <div>
             <p className="text-sm font-semibold text-ink mb-3">
-              Soldes clients
+              {t('caisse.soldes_clients')}
               {debiteurs.length > 0 && (
-                <span className="ml-2 text-xs font-normal text-dim">{debiteurs.length} débiteur{debiteurs.length > 1 ? 's' : ''}</span>
+                <span className="ml-2 text-xs font-normal text-dim">
+                  {t('caisse.debiteur', { count: debiteurs.length })}
+                </span>
               )}
             </p>
 
             {debiteurs.length === 0 ? (
               <div className="flex flex-col items-center gap-2 py-10 bg-card border border-edge rounded-2xl">
                 <CheckCircle size={28} className="text-green-500" />
-                <p className="text-sm text-dim">Aucun solde en attente</p>
+                <p className="text-sm text-dim">{t('caisse.aucun_solde')}</p>
               </div>
             ) : (
               <div className="space-y-2">
@@ -181,16 +183,16 @@ function CaisseContent() {
                       </div>
                       <div className="text-right shrink-0">
                         <p className="text-sm font-bold text-danger">{fmt(c.solde_restant)}</p>
-                        <p className="text-xs text-ghost">reste dû</p>
+                        <p className="text-xs text-ghost">{t('caisse.reste_du')}</p>
                       </div>
                     </div>
                     <div className="flex gap-4 mt-2 pt-2 border-t border-edge">
                       <div className="flex-1">
-                        <p className="text-[10px] text-ghost uppercase tracking-wide">Total</p>
+                        <p className="text-[10px] text-ghost uppercase tracking-wide">{t('caisse.total')}</p>
                         <p className="text-xs font-medium text-ink">{fmt(c.total_commande)}</p>
                       </div>
                       <div className="flex-1">
-                        <p className="text-[10px] text-ghost uppercase tracking-wide">Versé</p>
+                        <p className="text-[10px] text-ghost uppercase tracking-wide">{t('caisse.verse')}</p>
                         <p className="text-xs font-medium text-green-600">{fmt(c.total_paye)}</p>
                       </div>
                       <div className="flex-1">
@@ -210,9 +212,10 @@ function CaisseContent() {
 }
 
 export default function CaissePage() {
+  const { t } = useTranslation()
   return (
-    <AppLayout title="Caisse" showBack>
-      <FeatureGate featureKey="module_caisse" featureName="Module Caisse">
+    <AppLayout title={t('caisse.titre')} showBack>
+      <FeatureGate featureKey="module_caisse" featureName={t('caisse.titre')}>
         <CaisseContent />
       </FeatureGate>
     </AppLayout>

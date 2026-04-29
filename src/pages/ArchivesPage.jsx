@@ -1,19 +1,21 @@
 import { useState } from 'react'
 import { Archive, RotateCcw, User, ShoppingBag, Ruler } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { AppLayout } from '@/components/layout'
 import { useArchives, useDesarchiver } from '@/hooks/useArchives'
 import { formatDate } from '@/utils/formatDate'
 
-const ENTITY_CONFIG = {
-  client:   { icon: User,        label: 'Client',   color: 'text-blue-500',   bg: 'bg-blue-50'   },
-  commande: { icon: ShoppingBag, label: 'Commande', color: 'text-amber-500',  bg: 'bg-amber-50'  },
-  mesure:   { icon: Ruler,       label: 'Mesures',  color: 'text-purple-500', bg: 'bg-purple-50' },
-}
-
 export default function ArchivesPage() {
+  const { t } = useTranslation()
   const { data: archives = [], isLoading } = useArchives()
   const desarchiver = useDesarchiver()
   const [confirming, setConfirming] = useState(null)
+
+  const ENTITY_CONFIG = {
+    client:   { icon: User,        label: t('archives.types.client'),   color: 'text-blue-500',   bg: 'bg-blue-50'   },
+    commande: { icon: ShoppingBag, label: t('archives.types.commande'), color: 'text-amber-500',  bg: 'bg-amber-50'  },
+    mesure:   { icon: Ruler,       label: t('archives.types.mesure'),   color: 'text-purple-500', bg: 'bg-purple-50' },
+  }
 
   const handleDesarchiver = async (item) => {
     if (confirming !== item.entity_id) {
@@ -25,7 +27,7 @@ export default function ArchivesPage() {
   }
 
   return (
-    <AppLayout title="Archives" showBack>
+    <AppLayout title={t('archives.titre')} showBack>
       <div className="px-4 pb-6 space-y-3 mt-4">
 
         {isLoading && (
@@ -39,7 +41,7 @@ export default function ArchivesPage() {
         {!isLoading && archives.length === 0 && (
           <div className="flex flex-col items-center justify-center py-16 gap-3">
             <Archive size={36} className="text-ghost" />
-            <p className="text-sm text-dim">Aucun élément archivé.</p>
+            <p className="text-sm text-dim">{t('archives.vide')}</p>
           </div>
         )}
 
@@ -74,7 +76,7 @@ export default function ArchivesPage() {
                       onClick={() => setConfirming(null)}
                       className="text-xs text-ghost px-3 py-1.5 rounded-xl border border-edge"
                     >
-                      Annuler
+                      {t('commun.annuler')}
                     </button>
                     <button
                       onClick={() => handleDesarchiver(item)}
@@ -82,7 +84,7 @@ export default function ArchivesPage() {
                       className="flex items-center gap-1.5 text-xs text-white bg-primary px-3 py-1.5 rounded-xl disabled:opacity-50"
                     >
                       <RotateCcw size={11} />
-                      {isPending ? '…' : 'Confirmer'}
+                      {isPending ? '…' : t('archives.confirmer_degeler')}
                     </button>
                   </div>
                 ) : (
@@ -91,7 +93,7 @@ export default function ArchivesPage() {
                     className="flex items-center gap-1.5 text-xs text-primary font-medium"
                   >
                     <RotateCcw size={12} />
-                    Dégeler
+                    {t('archives.degeler')}
                   </button>
                 )}
               </div>

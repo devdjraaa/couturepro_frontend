@@ -1,4 +1,5 @@
 import { Gift, RefreshCw } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { usePoints, useConvertirPoints } from '@/hooks/usePoints'
 import { AppLayout } from '@/components/layout'
 import { PointsSummary } from '@/components/points'
@@ -9,6 +10,7 @@ import { POINTS_VERS_JOURS } from '@/constants/config'
 const SEUIL_DEFAUT = 10000
 
 export default function PointsPage() {
+  const { t } = useTranslation()
   const { data, isLoading, isError, refetch } = usePoints()
   const convertir = useConvertirPoints()
 
@@ -19,11 +21,11 @@ export default function PointsPage() {
 
   if (isError) {
     return (
-      <AppLayout title="Fidélité">
+      <AppLayout title={t('points.titre')}>
         <div className="flex flex-col items-center justify-center gap-4 p-8 text-center">
-          <p className="text-sm text-dim">Impossible de charger vos points de fidélité.</p>
+          <p className="text-sm text-dim">{t('points.erreur_chargement')}</p>
           <Button variant="secondary" icon={RefreshCw} onClick={refetch}>
-            Réessayer
+            {t('commun.reessayer')}
           </Button>
         </div>
       </AppLayout>
@@ -31,14 +33,14 @@ export default function PointsPage() {
   }
 
   return (
-    <AppLayout title="Fidélité">
+    <AppLayout title={t('points.titre')}>
       <div className="p-4 space-y-6">
         <PointsSummary />
 
         {solde >= seuil && (
           <div className="bg-card border border-edge rounded-2xl p-4 space-y-3">
-            <p className="text-sm font-semibold text-ink">Convertir des points</p>
-            <p className="text-xs text-dim">{POINTS_VERS_JOURS} points = 1 jour d'abonnement offert</p>
+            <p className="text-sm font-semibold text-ink">{t('points.conversion.titre')}</p>
+            <p className="text-xs text-dim">{POINTS_VERS_JOURS} {t('points.conversion.sous_titre', { points: POINTS_VERS_JOURS, jours: 1 })}</p>
             <p className="text-xs text-dim font-semibold">
               {joursObtenus} jour{joursObtenus > 1 ? 's' : ''} disponible{joursObtenus > 1 ? 's' : ''}
             </p>
@@ -47,20 +49,20 @@ export default function PointsPage() {
               onClick={() => convertir.mutate()}
               className="w-full"
             >
-              Convertir mes points
+              {t('points.conversion.convertir')}
             </Button>
           </div>
         )}
 
         <div>
-          <p className="text-xs font-semibold text-dim uppercase tracking-wide mb-3">Historique</p>
+          <p className="text-xs font-semibold text-dim uppercase tracking-wide mb-3">{t('points.historique.titre')}</p>
           {isLoading ? (
             [...Array(3)].map((_, i) => <Skeleton key={i} className="h-12 rounded-xl mb-2" />)
           ) : historique.length === 0 ? (
             <EmptyState
               icon={Gift}
-              title="Aucun historique"
-              description="Vos gains de points apparaîtront ici"
+              title={t('points.historique.vide')}
+              description=""
             />
           ) : (
             <div className="space-y-2">

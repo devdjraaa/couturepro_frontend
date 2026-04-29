@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts'
 import { AuthLayout } from '@/components/layout'
 import { Input, Button } from '@/components/ui'
@@ -7,6 +8,7 @@ import { Input, Button } from '@/components/ui'
 export default function OtpPage() {
   const navigate  = useNavigate()
   const location  = useLocation()
+  const { t } = useTranslation()
   const { verifyOtp, resendOtp } = useAuth()
 
   const telephone = location.state?.telephone ?? ''
@@ -28,7 +30,7 @@ export default function OtpPage() {
       await verifyOtp({ telephone, code })
       navigate('/onboarding', { replace: true })
     } catch (err) {
-      setError(err?.message || 'Code invalide ou expiré')
+      setError(err?.message || t('erreurs.otp_invalide'))
     } finally {
       setLoading(false)
     }
@@ -43,13 +45,13 @@ export default function OtpPage() {
   }
 
   return (
-    <AuthLayout subtitle={`Code envoyé au ${telephone}`}>
+    <AuthLayout subtitle={t('auth.otp.sous_titre_tel', { telephone })}>
       <form onSubmit={handleSubmit} className="space-y-4">
         <p className="text-sm text-content-secondary text-center">
-          Entrez le code à 6 chiffres reçu par SMS.
+          {t('auth.otp.instruction')}
         </p>
         <Input
-          label="Code de vérification"
+          label={t('auth.otp.code')}
           type="text"
           inputMode="numeric"
           value={code}
@@ -60,16 +62,16 @@ export default function OtpPage() {
           className="text-center tracking-widest text-lg font-mono"
         />
         {error && <p className="text-sm text-danger text-center">{error}</p>}
-        {resent && <p className="text-sm text-success text-center">Code renvoyé !</p>}
+        {resent && <p className="text-sm text-success text-center">{t('auth.otp.renvoye_succes')}</p>}
         <Button type="submit" className="w-full" loading={loading}>
-          Vérifier
+          {t('auth.otp.verifier')}
         </Button>
         <button
           type="button"
           onClick={handleResend}
           className="w-full text-sm text-content-secondary underline py-2"
         >
-          Renvoyer le code
+          {t('auth.otp.renvoyer')}
         </button>
       </form>
     </AuthLayout>

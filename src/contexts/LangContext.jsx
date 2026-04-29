@@ -4,8 +4,7 @@ import { getLang, setLang as storeLang } from '@/utils/storage'
 
 const LANGUES_DISPO = [
   { code: 'fr', label: 'Français', flag: '🇫🇷' },
-  // Ajouter ici : { code: 'en', label: 'English', flag: '🇬🇧' }
-  // puis créer src/lang/en.json et ajouter la ressource dans i18n.js
+  { code: 'en', label: 'English',  flag: '🇬🇧' },
 ]
 
 const LangContext = createContext(null)
