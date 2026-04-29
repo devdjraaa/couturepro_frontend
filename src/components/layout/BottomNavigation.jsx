@@ -18,14 +18,8 @@ export default function BottomNavigation() {
   const alertCount = (cmdStats?.en_retard ?? 0) + (cmdStats?.dans_48h ?? 0)
 
   return (
-    <nav
-      className="fixed bottom-0 inset-x-0 z-30 bg-card border-t border-edge lg:hidden"
-      style={{
-        paddingBottom: 'var(--safe-area-bottom)',
-        height: 'calc(var(--bottom-nav-height) + var(--safe-area-bottom))',
-      }}
-    >
-      <div className="flex h-[var(--bottom-nav-height)]">
+    <nav className="fixed bottom-0 inset-x-0 z-30 bg-card/95 backdrop-blur-sm border-t border-edge lg:hidden bottom-nav-container">
+      <div className="flex h-bottom-nav">
         {NAV_ITEMS.map(({ to, icon: Icon, label, end }) => (
           <NavLink
             key={to}
@@ -38,20 +32,26 @@ export default function BottomNavigation() {
           >
             {({ isActive }) => (
               <>
-                <div className="relative">
+                {/* Zone icône avec indicateur pill actif */}
+                <div className={cn(
+                  'relative flex items-center justify-center w-12 h-8 rounded-2xl transition-all duration-200',
+                  isActive && 'bg-primary/10',
+                )}>
                   <Icon size={22} strokeWidth={isActive ? 2.5 : 1.8} />
+
                   {to === '/' && notifCount > 0 && (
-                    <span className="absolute -top-1 -right-1.5 min-w-4 h-4 bg-danger text-inverse text-[10px] font-bold rounded-full flex items-center justify-center px-0.5 leading-none">
+                    <span className="absolute -top-1 -right-1 min-w-4 h-4 bg-danger text-inverse text-2xs font-bold rounded-full flex items-center justify-center px-1 leading-none">
                       {notifCount > 9 ? '9+' : notifCount}
                     </span>
                   )}
                   {to === '/commandes' && alertCount > 0 && (
-                    <span className="absolute -top-1 -right-1.5 min-w-4 h-4 bg-danger text-inverse text-[10px] font-bold rounded-full flex items-center justify-center px-0.5 leading-none">
+                    <span className="absolute -top-1 -right-1 min-w-4 h-4 bg-danger text-inverse text-2xs font-bold rounded-full flex items-center justify-center px-1 leading-none">
                       {alertCount > 9 ? '9+' : alertCount}
                     </span>
                   )}
                 </div>
-                <span className="text-[10px] font-medium">{label}</span>
+
+                <span className="text-2xs font-medium">{label}</span>
               </>
             )}
           </NavLink>

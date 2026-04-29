@@ -12,6 +12,10 @@
   --font-sans:    'DM Sans', sans-serif;
   --font-mono:    'JetBrains Mono', monospace;
 
+  /* Tailles de texte custom */
+  --text-2xs: 0.625rem;   /* 10px — badges, labels compacts */
+  --text-xxs: 0.5625rem;  /* 9px  — cas extrêmes uniquement */
+
   /* Coins arrondis — généreux mais pas bulle */
   --radius-sm:   0.5rem;    /* 8px  — inputs, badges */
   --radius:      0.75rem;   /* 12px — cartes, boutons */
@@ -206,10 +210,34 @@ body {
   padding-bottom: calc(var(--bottom-nav-height) + var(--safe-area-bottom));
 }
 
+/* Safe area top — header mobile */
+.pt-safe {
+  padding-top: var(--safe-area-top);
+}
+
+/* Conteneur complet de la barre de navigation basse */
+.bottom-nav-container {
+  padding-bottom: var(--safe-area-bottom);
+  height: calc(var(--bottom-nav-height) + var(--safe-area-bottom));
+}
+
+/* Zone interne de la nav (hors safe area) */
+.h-bottom-nav {
+  height: var(--bottom-nav-height);
+}
+
 /* Scrollbar iOS-style fine */
 .scrollbar-thin {
   scrollbar-width: thin;
   scrollbar-color: var(--color-border) transparent;
+}
+
+/* Scrollbar masquée (carousels mobiles) */
+.scrollbar-none {
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }
 
 /* ════════════════════════════════════════════════════════

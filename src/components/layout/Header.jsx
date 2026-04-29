@@ -29,7 +29,7 @@ function AtelierSwitcher({ atelier, switchAtelier }) {
         className="flex items-center gap-1 text-xs text-dim hover:text-ink px-2 py-0.5 rounded-full bg-subtle/60 transition-colors"
       >
         <Building2 size={10} className="shrink-0" />
-        <span className="font-medium truncate max-w-[140px]">{atelier?.nom ?? '—'}</span>
+        <span className="font-medium truncate max-w-36">{atelier?.nom ?? '—'}</span>
         <ChevronDown size={10} className="shrink-0" />
       </button>
 
@@ -57,7 +57,7 @@ function AtelierSwitcher({ atelier, switchAtelier }) {
 
 function AtelierMaitreLabel() {
   const { t } = useTranslation()
-  return <p className="text-[10px] text-dim">{t('parametres.ateliers_tab.maitre')}</p>
+  return <p className="text-2xs text-dim">{t('parametres.ateliers_tab.maitre')}</p>
 }
 
 export default function Header({ title, showBack = false, onBack, rightAction, className }) {
@@ -73,10 +73,9 @@ export default function Header({ title, showBack = false, onBack, rightAction, c
   return (
     <header
       className={cn(
-        'sticky top-0 z-20 bg-card/80 backdrop-blur-sm border-b border-edge shrink-0',
+        'sticky top-0 z-20 bg-card/80 backdrop-blur-sm border-b border-edge shrink-0 pt-safe',
         className,
       )}
-      style={{ paddingTop: 'var(--safe-area-top)' }}
     >
       <div className="flex items-center gap-3 px-4 h-14">
         {/* Left */}

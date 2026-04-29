@@ -8,15 +8,47 @@ import { FloatingActionButton } from '@/components/ui'
 import { useAuth } from '@/contexts'
 import { useMesAteliers } from '@/hooks/useMesAteliers'
 
+// ── Bannière de bienvenue personnalisée ───────────────────────────────────────
+function GreetingBanner({ user }) {
+  const hour = new Date().getHours()
+  const greeting =
+    hour < 12 ? 'Bonjour' : hour < 18 ? 'Bon après-midi' : 'Bonsoir'
+  const dateStr = new Date().toLocaleDateString('fr-FR', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  })
+  const firstName = user?.nom?.split(' ')[0] ?? ''
+
+  return (
+    <div className="flex items-end justify-between">
+      <div>
+        <p className="text-xs text-ghost capitalize">{dateStr}</p>
+        <h2 className="text-xl font-bold font-display text-ink mt-0.5">
+          {greeting}, {firstName}
+        </h2>
+      </div>
+      {/* Décoration originale — point de couture */}
+      <div className="flex items-center gap-0.5 pb-1 opacity-30">
+        <span className="block h-px w-1.5 bg-primary rounded-full" />
+        <span className="block h-px w-0.5 bg-primary rounded-full" />
+        <span className="block h-px w-1.5 bg-primary rounded-full" />
+        <span className="block h-px w-0.5 bg-primary rounded-full" />
+        <span className="block h-px w-1.5 bg-primary rounded-full" />
+      </div>
+    </div>
+  )
+}
+
 // ── Vue consolidée (propriétaire avec plusieurs ateliers, filtre "Tous") ──────
 function ConsolidatedView({ ateliers, onSelect }) {
   const { t } = useTranslation()
   const totals = ateliers.reduce(
     (acc, a) => ({
-      clients:  acc.clients  + (a.clients_count  ?? 0),
+      clients:   acc.clients   + (a.clients_count   ?? 0),
       commandes: acc.commandes + (a.commandes_count ?? 0),
     }),
-    { clients: 0, commandes: 0 }
+    { clients: 0, commandes: 0 },
   )
 
   return (
@@ -42,7 +74,7 @@ function ConsolidatedView({ ateliers, onSelect }) {
       </div>
 
       {/* Liste par atelier */}
-      <h2 className="text-sm font-semibold text-dim uppercase tracking-wide">
+      <h2 className="text-xs font-semibold text-ghost uppercase tracking-widest px-0.5">
         {t('dashboard.stats_globales')}
       </h2>
       <div className="space-y-2">
@@ -50,23 +82,27 @@ function ConsolidatedView({ ateliers, onSelect }) {
           <button
             key={a.id}
             onClick={() => onSelect(a)}
-            className="w-full bg-card border border-edge rounded-2xl p-4 flex items-center gap-3 text-left hover:border-primary/40 transition-colors"
+            className="w-full bg-card border border-edge rounded-2xl p-4 flex items-center gap-3 text-left hover:border-primary/40 transition-colors active:opacity-75"
           >
-            <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-              <Building2 size={16} className="text-primary" />
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+              <Building2 size={18} className="text-primary" />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-1.5">
-                <p className="text-sm font-medium text-ink truncate">{a.nom}</p>
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-semibold text-ink truncate">{a.nom}</p>
                 {a.is_maitre && (
-                  <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-medium shrink-0">Maître</span>
+                  <span className="text-2xs px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-medium shrink-0">
+                    Maître
+                  </span>
                 )}
               </div>
               <p className="text-xs text-ghost mt-0.5">
-                {a.clients_count ?? 0} {t('clients.titre').toLowerCase()} · {a.commandes_count ?? 0} {t('commandes.titre').toLowerCase()}
+                {a.clients_count ?? 0} {t('clients.titre').toLowerCase()}
+                {' · '}
+                {a.commandes_count ?? 0} {t('commandes.titre').toLowerCase()}
               </p>
             </div>
-            <span className="text-xs text-primary font-medium shrink-0">→</span>
+            <span className="text-sm text-primary font-medium shrink-0">›</span>
           </button>
         ))}
       </div>
@@ -82,7 +118,7 @@ function AtelierFilter({ ateliers, activeId, onSelect, onAll, showAll }) {
       <button
         onClick={onAll}
         className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-          showAll ? 'bg-primary text-white' : 'bg-subtle text-dim'
+          showAll ? 'bg-primary text-inverse' : 'bg-subtle text-dim hover:text-ink'
         }`}
       >
         {t('dashboard.toutes_ateliers')}
@@ -92,7 +128,9 @@ function AtelierFilter({ ateliers, activeId, onSelect, onAll, showAll }) {
           key={a.id}
           onClick={() => onSelect(a)}
           className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-            !showAll && activeId === a.id ? 'bg-primary text-white' : 'bg-subtle text-dim'
+            !showAll && activeId === a.id
+              ? 'bg-primary text-inverse'
+              : 'bg-subtle text-dim hover:text-ink'
           }`}
         >
           {a.is_maitre && <Building2 size={10} />}
@@ -110,7 +148,7 @@ export default function DashboardPage() {
   const { user, atelier, switchAtelier } = useAuth()
   const { data: ateliers = [] } = useMesAteliers()
 
-  const isMulti       = user?.role === 'proprietaire' && ateliers.length > 1
+  const isMulti = user?.role === 'proprietaire' && ateliers.length > 1
   const [showAll, setShowAll] = useState(false)
 
   const handleSelect = (a) => {
@@ -120,7 +158,14 @@ export default function DashboardPage() {
 
   return (
     <AppLayout title={t('dashboard.titre')}>
-      <div className="p-4 space-y-4">
+      <div className="p-4 space-y-5">
+
+        {/* Greeting — uniquement sur mobile (le header desktop suffit) */}
+        {user && (
+          <div className="lg:hidden">
+            <GreetingBanner user={user} />
+          </div>
+        )}
 
         {isMulti && (
           <AtelierFilter
@@ -133,15 +178,12 @@ export default function DashboardPage() {
         )}
 
         {isMulti && showAll ? (
-          <ConsolidatedView
-            ateliers={ateliers}
-            onSelect={handleSelect}
-          />
+          <ConsolidatedView ateliers={ateliers} onSelect={handleSelect} />
         ) : (
           <>
             <StatsGrid />
             <div>
-              <h2 className="text-sm font-semibold text-dim uppercase tracking-wide mb-3">
+              <h2 className="text-xs font-semibold text-ghost uppercase tracking-widest mb-3 px-0.5">
                 {t('dashboard.recentes')}
               </h2>
               <RecentCommandes />
