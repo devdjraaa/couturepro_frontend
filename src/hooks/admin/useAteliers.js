@@ -77,3 +77,22 @@ export function useSetTrialDuration(atelierId) {
     },
   })
 }
+
+export function useAdminSousAteliers(atelierId) {
+  return useQuery({
+    queryKey: ADMIN_KEYS.sousAteliers(atelierId),
+    queryFn: () => ateliersAdminService.getSousAteliers(atelierId),
+    enabled: !!atelierId,
+  })
+}
+
+export function useSetTrialGlobal(atelierId) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (payload) => ateliersAdminService.setTrialGlobal(atelierId, payload),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ADMIN_KEYS.sousAteliers(atelierId) })
+      qc.invalidateQueries({ queryKey: ADMIN_KEYS.atelier(atelierId) })
+    },
+  })
+}

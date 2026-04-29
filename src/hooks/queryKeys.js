@@ -16,4 +16,7 @@ export const QUERY_KEYS = {
   notificationsCount: ['notifications', 'count'],
   quota:              ['quota'],
   tickets:            ['tickets'],
+  mesAteliers:        ['ateliers', 'mes-ateliers'],
+  atelierStats:       (id) => ['ateliers', id, 'stats'],
+  archives:           ['archives'],
 }

@@ -36,9 +36,19 @@ export const ateliersAdminService = {
     return data
   },
 
-  // unite: 'minutes' | 'heures' | 'jours'
   async setTrialDuration(id, payload) {
     const { data } = await adminApi.post(`/ateliers/${id}/trial`, payload)
+    return data
+  },
+
+  async getSousAteliers(id) {
+    const { data } = await adminApi.get(`/ateliers/${id}/sous-ateliers`)
+    return data
+  },
+
+  // payload: { duree, unite, atelier_ids? } — atelier_ids vide = tous
+  async setTrialGlobal(id, payload) {
+    const { data } = await adminApi.post(`/ateliers/${id}/trial-global`, payload)
     return data
   },
 }

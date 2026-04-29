@@ -7,26 +7,29 @@ const GROUPES = [
   {
     label: 'Clients',
     actions: [
-      { perm: 'clients.view',   label: 'Consulter' },
-      { perm: 'clients.create', label: 'Créer'     },
-      { perm: 'clients.edit',   label: 'Modifier'  },
-      { perm: 'clients.delete', label: 'Supprimer' },
+      { perm: 'clients.view',    label: 'Consulter' },
+      { perm: 'clients.create',  label: 'Créer'     },
+      { perm: 'clients.archive', label: 'Archiver'  },
+      { perm: 'clients.edit',    label: 'Modifier'  },
+      { perm: 'clients.delete',  label: 'Supprimer' },
     ],
   },
   {
     label: 'Commandes',
     actions: [
-      { perm: 'commandes.view',   label: 'Consulter' },
-      { perm: 'commandes.create', label: 'Créer'     },
-      { perm: 'commandes.edit',   label: 'Modifier'  },
-      { perm: 'commandes.delete', label: 'Supprimer' },
+      { perm: 'commandes.view',    label: 'Consulter' },
+      { perm: 'commandes.create',  label: 'Créer'     },
+      { perm: 'commandes.archive', label: 'Archiver'  },
+      { perm: 'commandes.edit',    label: 'Modifier'  },
+      { perm: 'commandes.delete',  label: 'Supprimer' },
     ],
   },
   {
     label: 'Mesures',
     actions: [
-      { perm: 'mesures.view', label: 'Consulter' },
-      { perm: 'mesures.edit', label: 'Modifier'  },
+      { perm: 'mesures.view',    label: 'Consulter' },
+      { perm: 'mesures.archive', label: 'Archiver'  },
+      { perm: 'mesures.edit',    label: 'Modifier'  },
     ],
   },
   {

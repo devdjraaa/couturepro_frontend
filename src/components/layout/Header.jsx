@@ -1,13 +1,61 @@
+import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, Bell } from 'lucide-react'
+import { ArrowLeft, Bell, ChevronDown, Building2, CheckCircle2 } from 'lucide-react'
 import { cn } from '@/utils/cn'
 import { useAuth } from '@/contexts'
 import { Avatar } from '@/components/ui'
 import { useNotificationsCount } from '@/hooks/useNotifications'
+import { useMesAteliers } from '@/hooks/useMesAteliers'
+
+function AtelierSwitcher({ atelier, switchAtelier }) {
+  const { data: ateliers = [] } = useMesAteliers()
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const handler = e => { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
+  if (ateliers.length <= 1) return null
+
+  return (
+    <div ref={ref} className="relative flex justify-center pb-1 -mt-1">
+      <button
+        onClick={() => setOpen(x => !x)}
+        className="flex items-center gap-1 text-xs text-dim hover:text-ink px-2 py-0.5 rounded-full bg-subtle/60 transition-colors"
+      >
+        <Building2 size={10} className="shrink-0" />
+        <span className="font-medium truncate max-w-[140px]">{atelier?.nom ?? '—'}</span>
+        <ChevronDown size={10} className="shrink-0" />
+      </button>
+
+      {open && (
+        <div className="absolute top-full mt-1 w-56 bg-card border border-edge rounded-xl shadow-lg z-50 overflow-hidden">
+          {ateliers.map(a => (
+            <button
+              key={a.id}
+              onClick={() => { switchAtelier(a); setOpen(false) }}
+              className="flex items-center gap-2.5 w-full px-3 py-2.5 text-left hover:bg-subtle transition-colors"
+            >
+              <Building2 size={13} className="text-dim shrink-0" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-ink truncate">{a.nom}</p>
+                {a.is_maitre && <p className="text-[10px] text-dim">Atelier maître</p>}
+              </div>
+              {a.id === atelier?.id && <CheckCircle2 size={13} className="text-primary shrink-0" />}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function Header({ title, showBack = false, onBack, rightAction, className }) {
   const navigate = useNavigate()
-  const { user } = useAuth()
+  const { user, atelier, switchAtelier } = useAuth()
   const { data: notifCount = 0 } = useNotificationsCount()
 
   const handleBack = () => {
@@ -37,10 +85,15 @@ export default function Header({ title, showBack = false, onBack, rightAction, c
           <div className="w-9 shrink-0" />
         )}
 
-        {/* Title */}
-        <h1 className="flex-1 text-base font-semibold font-display text-ink truncate text-center">
-          {title ?? 'Couture Pro'}
-        </h1>
+        {/* Title + atelier switcher */}
+        <div className="flex-1 text-center min-w-0">
+          <h1 className="text-base font-semibold font-display text-ink truncate">
+            {title ?? 'Couture Pro'}
+          </h1>
+          {user?.role === 'proprietaire' && atelier && (
+            <AtelierSwitcher atelier={atelier} switchAtelier={switchAtelier} />
+          )}
+        </div>
 
         {/* Right */}
         <div className="flex items-center gap-1 shrink-0">

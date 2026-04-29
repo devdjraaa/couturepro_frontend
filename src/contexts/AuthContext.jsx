@@ -2,13 +2,14 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
 import { authService } from '@/services/authService'
 import { getToken } from '@/utils/storage'
 import { setDemoMode } from '@/services/mockFlag'
+import { setActiveAtelierId } from '@/services/api'
 
 // ── Permissions par rôle ──────────────────────────────────────────────────────
 const ROLE_PERMISSIONS = {
   proprietaire: [
-    'clients.view', 'clients.create', 'clients.edit', 'clients.delete',
-    'commandes.view', 'commandes.create', 'commandes.edit', 'commandes.delete',
-    'mesures.view', 'mesures.edit',
+    'clients.view', 'clients.create', 'clients.archive', 'clients.edit', 'clients.delete',
+    'commandes.view', 'commandes.create', 'commandes.archive', 'commandes.edit', 'commandes.delete',
+    'mesures.view', 'mesures.archive', 'mesures.edit',
     'vetements.manage',
     'equipe.manage',
     'abonnement.manage',
@@ -16,16 +17,18 @@ const ROLE_PERMISSIONS = {
     'points.convert',
     'notifications.view',
   ],
+  // CDC §4.3 — assistant : CREATE + READ + ARCHIVE (pas d'UPDATE ni DELETE)
   assistant: [
-    'clients.view', 'clients.create', 'clients.edit',
-    'commandes.view', 'commandes.create', 'commandes.edit',
-    'mesures.view', 'mesures.edit',
+    'clients.view', 'clients.create', 'clients.archive',
+    'commandes.view', 'commandes.create', 'commandes.archive',
+    'mesures.view', 'mesures.archive',
     'vetements.manage',
     'notifications.view',
   ],
+  // Membre : READ uniquement
   membre: [
     'clients.view',
-    'commandes.view', 'commandes.create',
+    'commandes.view',
     'mesures.view',
     'notifications.view',
   ],
@@ -96,6 +99,13 @@ export function AuthProvider({ children }) {
     setAtelier(prev => prev ? { ...prev, ...partial } : prev)
   }, [])
 
+  // Bascule vers un autre atelier du propriétaire (multi-atelier)
+  const switchAtelier = useCallback((newAtelier) => {
+    const isMaitre = newAtelier.is_maitre
+    setAtelier(newAtelier)
+    setActiveAtelierId(isMaitre ? null : newAtelier.id)
+  }, [])
+
   const can = useCallback((permission) => {
     if (!user) return false
     // Proprietaire : permissions statiques complètes
@@ -123,6 +133,7 @@ export function AuthProvider({ children }) {
       activateCode,
       refreshAtelier,
       updateAtelierLocal,
+      switchAtelier,
       can,
     }}>
       {children}

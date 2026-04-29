@@ -1,10 +1,12 @@
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
+import { Building2, ExternalLink } from 'lucide-react'
 import { AdminLayout, AdminBadge } from '@/components/admin'
 import {
   useAdminAtelier, useGelerAtelier, useDegelerAtelier,
   useAdminAtelierFidelite, useAjusterFidelite,
   useSetDemoMode, useSetTrialDuration,
+  useAdminSousAteliers, useSetTrialGlobal,
 } from '@/hooks/admin/useAteliers'
 import { formatDate } from '@/utils/formatDate'
 
@@ -19,6 +21,94 @@ function InfoRow({ label, value }) {
     <div className="flex justify-between py-2.5 border-b border-gray-100 last:border-0">
       <span className="text-sm text-gray-500">{label}</span>
       <span className="text-sm font-medium text-gray-800">{value ?? '—'}</span>
+    </div>
+  )
+}
+
+function SousAteliersSection({ atelierId }) {
+  const { data: sousAteliers = [], isLoading } = useAdminSousAteliers(atelierId)
+  const setTrialGlobal = useSetTrialGlobal(atelierId)
+  const [globalForm, setGlobalForm] = useState({ duree: '14', unite: 'jours' })
+  const [selected, setSelected] = useState([]) // vide = tous
+  const [globalSaved, setGlobalSaved] = useState(false)
+
+  const handleGlobal = async e => {
+    e.preventDefault()
+    setGlobalSaved(false)
+    await setTrialGlobal.mutateAsync({
+      duree: Number(globalForm.duree),
+      unite: globalForm.unite,
+      atelier_ids: selected.length > 0 ? selected : undefined,
+    })
+    setGlobalSaved(true)
+    setSelected([])
+  }
+
+  const toggle = (id) => setSelected(prev =>
+    prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+  )
+
+  if (isLoading) return <p className="text-sm text-gray-400">Chargement…</p>
+
+  return (
+    <div className="bg-white border border-gray-200 rounded-xl p-5 mt-6">
+      <h2 className="font-semibold text-gray-700 text-sm mb-4 flex items-center gap-2">
+        <Building2 size={14} className="text-gray-400" />
+        Sous-ateliers ({sousAteliers.length})
+      </h2>
+
+      {sousAteliers.length === 0 ? (
+        <p className="text-sm text-gray-400">Aucun sous-atelier pour ce propriétaire.</p>
+      ) : (
+        <>
+          <div className="space-y-2 mb-5">
+            {sousAteliers.map(a => (
+              <div key={a.id} className={`flex items-center gap-3 px-3 py-2.5 rounded-lg border transition-colors ${selected.includes(a.id) ? 'border-indigo-300 bg-indigo-50' : 'border-gray-100 bg-gray-50'}`}>
+                <input
+                  type="checkbox"
+                  checked={selected.includes(a.id)}
+                  onChange={() => toggle(a.id)}
+                  className="w-3.5 h-3.5 accent-indigo-600"
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-800 truncate">{a.nom}</p>
+                  <p className="text-xs text-gray-400">{a.clients_count} clients · {a.commandes_count} commandes · <AdminBadge value={a.abonnement?.statut ?? a.statut} /></p>
+                </div>
+                <Link to={`/admin/ateliers/${a.id}`} className="text-indigo-500 hover:text-indigo-700 shrink-0">
+                  <ExternalLink size={13} />
+                </Link>
+              </div>
+            ))}
+          </div>
+
+          <div className="border-t border-gray-100 pt-4">
+            <p className="text-xs font-medium text-gray-500 mb-2">
+              {selected.length > 0 ? `Appliquer à ${selected.length} atelier(s) sélectionné(s)` : 'Appliquer à tous les sous-ateliers'}
+            </p>
+            <form onSubmit={handleGlobal} className="flex gap-2 items-end">
+              <input
+                type="number" min="1"
+                value={globalForm.duree}
+                onChange={e => { setGlobalSaved(false); setGlobalForm(f => ({ ...f, duree: e.target.value })) }}
+                className="w-20 border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:border-indigo-400"
+                required
+              />
+              <select
+                value={globalForm.unite}
+                onChange={e => setGlobalForm(f => ({ ...f, unite: e.target.value }))}
+                className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:border-indigo-400"
+              >
+                {UNITE_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+              </select>
+              <button type="submit" disabled={setTrialGlobal.isPending}
+                className="flex-1 bg-indigo-600 text-white text-sm px-3 py-1.5 rounded-lg hover:bg-indigo-700 disabled:opacity-50">
+                {setTrialGlobal.isPending ? '…' : 'Appliquer'}
+              </button>
+            </form>
+            {globalSaved && <p className="text-xs text-green-600 mt-1">Période d'essai appliquée.</p>}
+          </div>
+        </>
+      )}
     </div>
   )
 }
@@ -110,6 +200,9 @@ export default function AtelierDetailPage() {
               </div>
             </div>
           )}
+
+          {/* Sous-ateliers (atelier maître uniquement) */}
+          {atelier.is_maitre && <SousAteliersSection atelierId={id} />}
         </div>
 
         {/* Contrôles admin */}

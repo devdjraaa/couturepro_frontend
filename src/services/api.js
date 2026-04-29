@@ -2,6 +2,12 @@ import axios from 'axios'
 import { API_BASE_URL } from '@/constants/config'
 import { getToken, clearAll } from '@/utils/storage'
 
+const ACTIVE_ATELIER_KEY = 'cp_active_atelier'
+export const getActiveAtelierId = () => localStorage.getItem(ACTIVE_ATELIER_KEY)
+export const setActiveAtelierId = (id) => id
+  ? localStorage.setItem(ACTIVE_ATELIER_KEY, id)
+  : localStorage.removeItem(ACTIVE_ATELIER_KEY)
+
 const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 15000,
@@ -14,6 +20,8 @@ const api = axios.create({
 api.interceptors.request.use(config => {
   const token = getToken()
   if (token) config.headers.Authorization = `Bearer ${token}`
+  const activeAtelierId = getActiveAtelierId()
+  if (activeAtelierId) config.headers['X-Atelier-Id'] = activeAtelierId
   if (config.data instanceof FormData) {
     delete config.headers['Content-Type']
   }

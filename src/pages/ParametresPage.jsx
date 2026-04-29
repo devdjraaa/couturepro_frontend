@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { Building2, Plus, CheckCircle2 } from 'lucide-react'
 import { useAuth } from '@/contexts'
 import {
   useProfil, useUpdateProfil,
@@ -8,6 +9,8 @@ import {
   usePreferences, useUpdatePreferences,
 } from '@/hooks/useParametres'
 import { useAbonnement, usePlans, useInitierPaiementAbonnement, useActivateCode } from '@/hooks/useAbonnement'
+import { useMesAteliers, useCreateSousAtelier } from '@/hooks/useMesAteliers'
+import { usePlanLimit } from '@/hooks/usePlanFeature'
 import { useCountdown } from '@/hooks/useCountdown'
 import { AppLayout } from '@/components/layout'
 import { QuotaBar, PlanCard } from '@/components/abonnement'
@@ -16,6 +19,7 @@ import { TabBar, Input, Select, Button, Skeleton } from '@/components/ui'
 const TABS = [
   { key: 'profil',       label: 'Profil'       },
   { key: 'atelier',      label: 'Atelier'      },
+  { key: 'ateliers',     label: 'Mes ateliers' },
   { key: 'preferences',  label: 'Préférences'  },
   { key: 'abonnement',   label: 'Abonnement'   },
   { key: 'securite',     label: 'Sécurité'     },
@@ -287,6 +291,96 @@ function AbonnementTab() {
   )
 }
 
+function MesAteliersTab() {
+  const { atelier: atelierActif, switchAtelier } = useAuth()
+  const { data: ateliers = [], isLoading } = useMesAteliers()
+  const create = useCreateSousAtelier()
+  const [showForm, setShowForm] = useState(false)
+  const [form, setForm] = useState({ nom: '', ville: '' })
+  const [apiError, setApiError] = useState('')
+
+  const sousCount = ateliers.filter(a => !a.is_maitre).length
+  const { allowed: canAdd, max: maxSousAteliers } = usePlanLimit('max_sous_ateliers', sousCount)
+
+  const handleCreate = async e => {
+    e.preventDefault()
+    setApiError('')
+    try {
+      await create.mutateAsync(form)
+      setShowForm(false)
+      setForm({ nom: '', ville: '' })
+    } catch (err) {
+      setApiError(err?.response?.data?.message ?? 'Une erreur est survenue.')
+    }
+  }
+
+  if (isLoading) return <Skeleton className="h-32 rounded-2xl" />
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-dim">
+          {ateliers.length} atelier{ateliers.length > 1 ? 's' : ''}
+          {maxSousAteliers !== null && maxSousAteliers > 0 && (
+            <span className="text-ghost ml-1">({sousCount}/{maxSousAteliers} sous-atelier{maxSousAteliers > 1 ? 's' : ''})</span>
+          )}
+        </p>
+        {canAdd ? (
+          <button
+            onClick={() => setShowForm(x => !x)}
+            className="flex items-center gap-1.5 text-sm text-primary font-medium"
+          >
+            <Plus size={15} /> Ajouter
+          </button>
+        ) : maxSousAteliers === 0 ? (
+          <span className="text-xs text-ghost">Non disponible dans votre plan</span>
+        ) : null}
+      </div>
+
+      {showForm && (
+        <form onSubmit={handleCreate} className="bg-card border border-edge rounded-2xl p-4 space-y-3">
+          <Input label="Nom de l'atelier" value={form.nom} onChange={e => setForm(f => ({ ...f, nom: e.target.value }))} required />
+          <Input label="Ville" value={form.ville} onChange={e => setForm(f => ({ ...f, ville: e.target.value }))} />
+          {apiError && <p className="text-sm text-danger">{apiError}</p>}
+          <div className="flex gap-3">
+            <Button type="button" variant="ghost" onClick={() => setShowForm(false)} className="flex-1">Annuler</Button>
+            <Button type="submit" loading={create.isPending} className="flex-1">Créer</Button>
+          </div>
+        </form>
+      )}
+
+      <div className="space-y-2">
+        {ateliers.map(a => {
+          const isActive = a.id === atelierActif?.id
+          return (
+            <div
+              key={a.id}
+              className={`flex items-center gap-3 p-4 rounded-2xl border transition-colors cursor-pointer ${
+                isActive ? 'border-primary bg-primary/5' : 'border-edge bg-card hover:bg-subtle'
+              }`}
+              onClick={() => switchAtelier(a)}
+            >
+              <Building2 size={18} className={isActive ? 'text-primary' : 'text-dim'} />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-medium text-ink truncate">{a.nom}</p>
+                  {a.is_maitre && (
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-medium shrink-0">Maître</span>
+                  )}
+                </div>
+                <p className="text-xs text-dim mt-0.5">
+                  {a.ville ? `${a.ville} · ` : ''}{a.clients_count ?? 0} clients · {a.commandes_count ?? 0} commandes
+                </p>
+              </div>
+              {isActive && <CheckCircle2 size={16} className="text-primary shrink-0" />}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 function SecuriteTab() {
   const changerMdp = useChangerMotDePasse()
   const [form, setForm] = useState({ ancien: '', nouveau: '', confirmation: '' })
@@ -336,6 +430,7 @@ export default function ParametresPage() {
       <div className="p-4 space-y-4">
         {activeTab === 'profil'      && <ProfilTab />}
         {activeTab === 'atelier'     && <AtelierTab />}
+        {activeTab === 'ateliers'    && <MesAteliersTab />}
         {activeTab === 'preferences' && <PreferencesTab />}
         {activeTab === 'abonnement'  && <AbonnementTab />}
         {activeTab === 'securite'    && <SecuriteTab />}

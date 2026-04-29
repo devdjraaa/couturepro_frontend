@@ -19,6 +19,7 @@ import AProposPage            from '@/pages/AProposPage'
 import FAQPage                from '@/pages/FAQPage'
 import ContactPage            from '@/pages/ContactPage'
 import HistoriquePage         from '@/pages/HistoriquePage'
+import ArchivesPage           from '@/pages/ArchivesPage'
 import { FeatureGate } from '@/components/abonnement'
 import { AppLayout } from '@/components/layout'
 import { ROUTES } from '@/constants/routes'
@@ -112,6 +113,7 @@ export default function App() {
             </AppLayout>
           } />
           <Route path={ROUTES.HISTORIQUE}       element={<HistoriquePage />}      />
+          <Route path="/archives"               element={<ArchivesPage />}        />
           <Route path={ROUTES.FAQ}              element={<FAQPage />}             />
           <Route path={ROUTES.CONTACT}          element={<ContactPage />}         />
           <Route path={ROUTES.SUPPORT}          element={<SupportPage />}                     />
