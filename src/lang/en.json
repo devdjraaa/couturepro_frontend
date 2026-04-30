@@ -160,7 +160,15 @@
     "voir_commandes": "View orders",
     "toutes_ateliers": "All",
     "stats_globales": "Global view",
-    "recentes": "Recent orders"
+    "recentes": "Recent orders",
+    "solde_encaisse": "Collected balance",
+    "mise_a_jour": "Updated just now",
+    "actions_rapides": "Quick actions",
+    "action": {
+      "nouvelle_commande": "New",
+      "nouveau_client": "Client",
+      "paiement": "Payment"
+    }
   },
   "clients": {
     "titre": "Clients",

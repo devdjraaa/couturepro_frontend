@@ -32,6 +32,7 @@ export default function AppLayout({
   onBack,
   rightAction,
   noPadding = false,
+  noMobileHeader = false,
   className,
   children,
 }) {
@@ -42,12 +43,14 @@ export default function AppLayout({
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <ExpiryBanner />
-        <Header
-          title={title}
-          showBack={showBack}
-          onBack={onBack}
-          rightAction={rightAction}
-        />
+        <div className={noMobileHeader ? 'hidden lg:block' : ''}>
+          <Header
+            title={title}
+            showBack={showBack}
+            onBack={onBack}
+            rightAction={rightAction}
+          />
+        </div>
 
         <main
           className={cn(

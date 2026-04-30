@@ -160,7 +160,15 @@
     "voir_commandes": "Voir les commandes",
     "toutes_ateliers": "Tous",
     "stats_globales": "Vue globale",
-    "recentes": "Commandes récentes"
+    "recentes": "Commandes récentes",
+    "solde_encaisse": "Solde encaissé",
+    "mise_a_jour": "Mis à jour à l'instant",
+    "actions_rapides": "Actions rapides",
+    "action": {
+      "nouvelle_commande": "Nouvelle",
+      "nouveau_client": "Client",
+      "paiement": "Paiement"
+    }
   },
   "clients": {
     "titre": "Clients",

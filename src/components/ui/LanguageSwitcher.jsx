@@ -3,6 +3,21 @@ import { useLang } from '@/contexts'
 export default function LanguageSwitcher({ variant = 'pills' }) {
   const { langue, setLangue, languesDispo } = useLang()
 
+  // Variante hero : badge blanc sur fond primary (header dashboard mobile)
+  if (variant === 'hero') {
+    const other = languesDispo.find(l => l.code !== langue) ?? languesDispo[0]
+    return (
+      <button
+        type="button"
+        onClick={() => setLangue(other.code)}
+        className="text-2xs font-bold text-inverse bg-inverse/20 hover:bg-inverse/30 px-2 py-1 rounded-lg transition-colors"
+        title={other.label}
+      >
+        {langue.toUpperCase()}
+      </button>
+    )
+  }
+
   // Compact badge: affiche la langue cible (cliquer = basculer)
   if (variant === 'badge') {
     const other = languesDispo.find(l => l.code !== langue) ?? languesDispo[0]

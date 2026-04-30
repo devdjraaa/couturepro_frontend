@@ -19,16 +19,18 @@ function StatCard({ icon: Icon, label, value, sub, color = 'primary', isLoading,
       className={cn('bg-card border border-edge rounded-2xl p-4', onClick && 'cursor-pointer active:opacity-70')}
       onClick={onClick}
     >
-      <div className={cn('w-9 h-9 rounded-xl flex items-center justify-center mb-3', COLOR_MAP[color])}>
-        <Icon size={18} />
+      <div className="flex items-center gap-2 mb-2.5">
+        <div className={cn('w-8 h-8 rounded-xl flex items-center justify-center shrink-0', COLOR_MAP[color])}>
+          <Icon size={16} />
+        </div>
+        <p className="text-xs text-dim font-medium leading-tight">{label}</p>
       </div>
       {isLoading ? (
         <Skeleton className="h-7 w-20 mb-1 rounded-lg" />
       ) : (
-        <p className="text-xl font-bold font-display text-ink">{value}</p>
+        <p className="text-2xl font-bold font-display text-ink leading-none">{value}</p>
       )}
-      <p className="text-xs text-dim mt-0.5">{label}</p>
-      {sub && <p className="text-xs text-ghost mt-0.5">{sub}</p>}
+      {sub && <p className="text-2xs text-ghost mt-1">{sub}</p>}
     </div>
   )
 }
@@ -94,6 +96,7 @@ export default function StatsGrid() {
         <StatCard
           icon={Users}
           label="Clients"
+          sub="Total enregistrés"
           value={clients.length}
           isLoading={loadingClients}
           onClick={() => navigate('/clients')}
@@ -101,6 +104,7 @@ export default function StatsGrid() {
         <StatCard
           icon={ClipboardList}
           label="En cours"
+          sub="Commandes actives"
           value={stats?.en_cours ?? 0}
           color="warning"
           isLoading={loadingStats}
@@ -109,6 +113,7 @@ export default function StatsGrid() {
         <StatCard
           icon={TrendingUp}
           label="Encaissé"
+          sub="Ce mois"
           value={stats ? formatCurrency(stats.total_encaisse) : '—'}
           color="success"
           isLoading={loadingStats}
@@ -116,6 +121,7 @@ export default function StatsGrid() {
         <StatCard
           icon={Clock}
           label="En attente"
+          sub="À recouvrer"
           value={stats ? formatCurrency(stats.total_restant) : '—'}
           color="accent"
           isLoading={loadingStats}

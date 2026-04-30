@@ -8,8 +8,12 @@ import { Avatar, LanguageSwitcher } from '@/components/ui'
 import { useNotificationsCount } from '@/hooks/useNotifications'
 import { useMesAteliers } from '@/hooks/useMesAteliers'
 
-function AtelierSwitcher({ atelier, switchAtelier }) {
+function AtelierMaitreLabel() {
   const { t } = useTranslation()
+  return <p className="text-2xs text-dim">{t('parametres.ateliers_tab.maitre')}</p>
+}
+
+function AtelierSwitcher({ atelier, switchAtelier }) {
   const { data: ateliers = [] } = useMesAteliers()
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
@@ -23,7 +27,7 @@ function AtelierSwitcher({ atelier, switchAtelier }) {
   if (ateliers.length <= 1) return null
 
   return (
-    <div ref={ref} className="relative flex justify-center pb-1 -mt-1">
+    <div ref={ref} className="relative mt-0.5">
       <button
         onClick={() => setOpen(x => !x)}
         className="flex items-center gap-1 text-xs text-dim hover:text-ink px-2 py-0.5 rounded-full bg-subtle/60 transition-colors"
@@ -55,11 +59,6 @@ function AtelierSwitcher({ atelier, switchAtelier }) {
   )
 }
 
-function AtelierMaitreLabel() {
-  const { t } = useTranslation()
-  return <p className="text-2xs text-dim">{t('parametres.ateliers_tab.maitre')}</p>
-}
-
 export default function Header({ title, showBack = false, onBack, rightAction, className }) {
   const navigate = useNavigate()
   const { user, atelier, switchAtelier } = useAuth()
@@ -78,22 +77,21 @@ export default function Header({ title, showBack = false, onBack, rightAction, c
       )}
     >
       <div className="flex items-center gap-3 px-4 h-14">
-        {/* Left */}
-        {showBack ? (
+
+        {/* Back button */}
+        {showBack && (
           <button
             type="button"
             onClick={handleBack}
-            className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-subtle transition-colors shrink-0"
+            className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-subtle transition-colors shrink-0 -ml-1"
           >
             <ArrowLeft size={20} className="text-ink" />
           </button>
-        ) : (
-          <div className="w-9 shrink-0" />
         )}
 
-        {/* Title + atelier switcher */}
-        <div className="flex-1 text-center min-w-0">
-          <h1 className="text-base font-semibold font-display text-ink truncate">
+        {/* Title + atelier switcher — left-aligned */}
+        <div className="flex-1 min-w-0">
+          <h1 className="text-base font-semibold font-display text-ink truncate leading-tight">
             {title ?? 'Couture Pro'}
           </h1>
           {user?.role === 'proprietaire' && atelier && (
@@ -101,9 +99,9 @@ export default function Header({ title, showBack = false, onBack, rightAction, c
           )}
         </div>
 
-        {/* Right */}
-        <div className="flex items-center gap-1 shrink-0">
-          {rightAction}
+        {/* Right actions */}
+        <div className="flex items-center gap-0.5 shrink-0">
+          {rightAction && <div className="mr-1">{rightAction}</div>}
           <LanguageSwitcher variant="badge" />
           <button
             type="button"
@@ -113,19 +111,20 @@ export default function Header({ title, showBack = false, onBack, rightAction, c
           >
             <Bell size={20} className="text-dim" />
             {notifCount > 0 && (
-              <span className="absolute top-2 right-2 w-2 h-2 bg-danger rounded-full" />
+              <span className="absolute top-2 right-2 w-2 h-2 bg-warning rounded-full" />
             )}
           </button>
           {user && (
             <button
               type="button"
               onClick={() => navigate('/profil')}
-              className="rounded-full ml-1"
+              className="ml-1 rounded-full"
             >
               <Avatar name={user.nom} src={user.avatar} size="sm" />
             </button>
           )}
         </div>
+
       </div>
     </header>
   )
