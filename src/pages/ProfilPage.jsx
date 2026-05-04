@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts'
 import {
   useProfil, useUpdateProfil,
@@ -8,6 +9,7 @@ import { AppLayout } from '@/components/layout'
 import { Input, Button, Skeleton } from '@/components/ui'
 
 function ProfilSection() {
+  const { t } = useTranslation()
   const { data: profil, isLoading } = useProfil()
   const update = useUpdateProfil()
   const [edits, setEdits]   = useState(null)
@@ -28,21 +30,22 @@ function ProfilSection() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <Input label="Nom" value={current?.nom ?? ''} onChange={set('nom')} required />
-      <Input label="Téléphone" type="tel" value={current?.telephone ?? ''} onChange={set('telephone')} required />
-      <Input label="Email" type="email" value={current?.email ?? ''} onChange={set('email')} />
+      <Input label={t('commun.nom')} value={current?.nom ?? ''} onChange={set('nom')} required />
+      <Input label={t('commun.telephone')} type="tel" value={current?.telephone ?? ''} onChange={set('telephone')} required />
+      <Input label={t('commun.email')} type="email" value={current?.email ?? ''} onChange={set('email')} />
       {update.error && (
-        <p className="text-sm text-danger">{update.error?.message || 'Erreur lors de la mise à jour'}</p>
+        <p className="text-sm text-danger">{update.error?.message || t('profil.erreur_update')}</p>
       )}
-      {success && <p className="text-sm text-success text-center">Profil mis à jour !</p>}
+      {success && <p className="text-sm text-success text-center">{t('profil.succes_update')}</p>}
       <Button type="submit" loading={update.isPending} className="w-full">
-        Enregistrer
+        {t('commun.enregistrer')}
       </Button>
     </form>
   )
 }
 
 function MotDePasseSection() {
+  const { t } = useTranslation()
   const changer = useChangerMotDePasse()
   const [form, setForm]   = useState({ ancien: '', nouveau: '', confirmation: '' })
   const [success, setSuccess] = useState(false)
@@ -54,7 +57,7 @@ function MotDePasseSection() {
     e.preventDefault()
     setError('')
     if (form.nouveau !== form.confirmation) {
-      setError('Les mots de passe ne correspondent pas')
+      setError(t('profil.mdp_non_concordants'))
       return
     }
     try {
@@ -63,33 +66,33 @@ function MotDePasseSection() {
       setSuccess(true)
       setTimeout(() => setSuccess(false), 3000)
     } catch (err) {
-      setError(err?.message || 'Mot de passe actuel incorrect')
+      setError(err?.message || t('profil.mdp_actuel_incorrect'))
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <Input label="Mot de passe actuel" type="password" value={form.ancien} onChange={set('ancien')} required />
-      <Input label="Nouveau mot de passe" type="password" value={form.nouveau} onChange={set('nouveau')} required />
-      <Input label="Confirmer le nouveau mot de passe" type="password" value={form.confirmation} onChange={set('confirmation')} required />
+      <Input label={t('parametres.securite.ancien_mdp')} type="password" value={form.ancien} onChange={set('ancien')} required />
+      <Input label={t('parametres.securite.nouveau_mdp')} type="password" value={form.nouveau} onChange={set('nouveau')} required />
+      <Input label={t('profil.confirmer_nouveau_mdp')} type="password" value={form.confirmation} onChange={set('confirmation')} required />
       {error && <p className="text-sm text-danger">{error}</p>}
-      {success && <p className="text-sm text-success text-center">Mot de passe modifié !</p>}
+      {success && <p className="text-sm text-success text-center">{t('profil.mdp_succes')}</p>}
       <Button type="submit" loading={changer.isPending} className="w-full">
-        Changer le mot de passe
+        {t('parametres.securite.modifier')}
       </Button>
     </form>
   )
 }
 
 export default function ProfilPage() {
+  const { t } = useTranslation()
   const { user } = useAuth()
 
   return (
-    <AppLayout title="Mon profil" showBack>
+    <AppLayout title={t('profil.titre')} showBack>
       <div className="p-4 space-y-6">
-        {/* Identité */}
         <div>
-          <h2 className="text-sm font-semibold text-dim uppercase tracking-wide mb-3">Informations</h2>
+          <h2 className="text-sm font-semibold text-dim uppercase tracking-wide mb-3">{t('profil.section_informations')}</h2>
           <div className="bg-card border border-edge rounded-2xl p-4">
             {user && (
               <div className="flex items-center gap-3 mb-4 pb-4 border-b border-edge">
@@ -106,9 +109,8 @@ export default function ProfilPage() {
           </div>
         </div>
 
-        {/* Sécurité */}
         <div>
-          <h2 className="text-sm font-semibold text-dim uppercase tracking-wide mb-3">Sécurité</h2>
+          <h2 className="text-sm font-semibold text-dim uppercase tracking-wide mb-3">{t('profil.section_securite')}</h2>
           <div className="bg-card border border-edge rounded-2xl p-4">
             <MotDePasseSection />
           </div>

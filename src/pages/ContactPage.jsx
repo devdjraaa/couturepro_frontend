@@ -1,4 +1,5 @@
-import { Mail, MessageCircle, Globe, Phone } from 'lucide-react'
+import { Mail, MessageCircle, Globe } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { AppLayout } from '@/components/layout'
 
 const CONTACTS = [
@@ -26,11 +27,13 @@ const CONTACTS = [
 ]
 
 export default function ContactPage() {
+  const { t } = useTranslation()
+
   return (
-    <AppLayout title="Contact" showBack>
+    <AppLayout title={t('contact.titre')} showBack>
       <div className="p-4 space-y-4">
         <p className="text-sm text-dim text-center py-2">
-          Notre équipe est disponible pour vous aider du lundi au vendredi, de 8h à 18h.
+          {t('contact.disponibilite')}
         </p>
 
         {CONTACTS.map(c => (
@@ -53,8 +56,7 @@ export default function ContactPage() {
 
         <div className="bg-card border border-edge rounded-2xl p-4 mt-2">
           <p className="text-xs text-dim text-center leading-relaxed">
-            Pour les problèmes urgents, privilégiez le contact WhatsApp.
-            Pour les questions techniques ou les remboursements, utilisez l'email.
+            {t('contact.urgence')}
           </p>
         </div>
       </div>

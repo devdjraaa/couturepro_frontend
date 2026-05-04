@@ -1,32 +1,27 @@
 import { useState } from 'react'
 import { History, Trash2 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { AppLayout } from '@/components/layout'
 import { EmptyState, Button } from '@/components/ui'
 import { getHistorique, clearHistorique } from '@/utils/historique'
 
-const TYPE_LABELS = {
-  client_cree:      { label: 'Client ajouté',      color: 'bg-success/10 text-success' },
-  client_modifie:   { label: 'Client modifié',      color: 'bg-primary/10 text-primary' },
-  commande_creee:   { label: 'Commande créée',      color: 'bg-warning/10 text-warning' },
-  commande_livree:  { label: 'Commande livrée',     color: 'bg-success/10 text-success' },
-  paiement_ajoute:  { label: 'Paiement enregistré', color: 'bg-success/10 text-success' },
-  mesure_sauvegardee: { label: 'Mesures sauvegardées', color: 'bg-accent/10 text-accent-600' },
-}
-
-function formatDate(iso) {
-  const d = new Date(iso)
-  const now = new Date()
-  const diff = Math.floor((now - d) / 1000)
-  if (diff < 60)  return 'À l\'instant'
-  if (diff < 3600) return `Il y a ${Math.floor(diff / 60)} min`
-  if (diff < 86400) return `Il y a ${Math.floor(diff / 3600)}h`
-  return d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
+function useFormatDate() {
+  const { t } = useTranslation()
+  return (iso) => {
+    const d = new Date(iso)
+    const now = new Date()
+    const diff = Math.floor((now - d) / 1000)
+    if (diff < 60)   return t('historique.a_instant')
+    if (diff < 3600) return t('historique.il_y_a_min', { n: Math.floor(diff / 60) })
+    if (diff < 86400) return t('historique.il_y_a_h', { n: Math.floor(diff / 3600) })
+    return d.toLocaleDateString(undefined, { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
+  }
 }
 
 function groupByDay(items) {
   const groups = {}
   items.forEach(item => {
-    const day = new Date(item.at).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })
+    const day = new Date(item.at).toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' })
     if (!groups[day]) groups[day] = []
     groups[day].push(item)
   })
@@ -34,7 +29,18 @@ function groupByDay(items) {
 }
 
 export default function HistoriquePage() {
+  const { t } = useTranslation()
   const [items, setItems] = useState(() => getHistorique())
+  const formatDate = useFormatDate()
+
+  const TYPE_LABELS = {
+    client_cree:        { label: t('historique.types.client_cree'),        color: 'bg-success/10 text-success' },
+    client_modifie:     { label: t('historique.types.client_modifie'),     color: 'bg-primary/10 text-primary' },
+    commande_creee:     { label: t('historique.types.commande_creee'),     color: 'bg-warning/10 text-warning' },
+    commande_livree:    { label: t('historique.types.commande_livree'),    color: 'bg-success/10 text-success' },
+    paiement_ajoute:    { label: t('historique.types.paiement_ajoute'),    color: 'bg-success/10 text-success' },
+    mesure_sauvegardee: { label: t('historique.types.mesure_sauvegardee'), color: 'bg-accent/10 text-accent-600' },
+  }
 
   const handleClear = () => {
     clearHistorique()
@@ -45,7 +51,7 @@ export default function HistoriquePage() {
 
   return (
     <AppLayout
-      title="Historique"
+      title={t('historique.titre')}
       showBack
       rightAction={
         items.length > 0 ? (
@@ -59,8 +65,8 @@ export default function HistoriquePage() {
         {items.length === 0 ? (
           <EmptyState
             icon={History}
-            title="Aucune activité"
-            description="Vos actions récentes apparaîtront ici"
+            title={t('historique.vide_titre')}
+            description={t('historique.vide_description')}
           />
         ) : (
           <div className="space-y-5">
@@ -84,7 +90,7 @@ export default function HistoriquePage() {
               </div>
             ))}
             <p className="text-xs text-ghost text-center pt-2">
-              Historique local · 8 derniers jours
+              {t('historique.local_label')}
             </p>
           </div>
         )}

@@ -1,11 +1,13 @@
 import { useState, useRef } from 'react'
 import { useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { Image, X } from 'lucide-react'
 import { AdminLayout, AdminBadge } from '@/components/admin'
 import { useAdminTicket, useRepondreTicket, useFermerTicket, useRouvrirTicket } from '@/hooks/admin/useTickets'
 import { formatDate } from '@/utils/formatDate'
 
 export default function TicketDetailPage() {
+  const { t } = useTranslation()
   const { id } = useParams()
   const { data: ticket, isLoading } = useAdminTicket(id)
   const repondre = useRepondreTicket(id)
@@ -44,8 +46,8 @@ export default function TicketDetailPage() {
     removePhoto()
   }
 
-  if (isLoading) return <AdminLayout title="Ticket"><p className="text-sm text-gray-400">Chargement…</p></AdminLayout>
-  if (!ticket)   return <AdminLayout title="Ticket"><p className="text-sm text-red-500">Ticket introuvable.</p></AdminLayout>
+  if (isLoading) return <AdminLayout title="Ticket"><p className="text-sm text-gray-400">{t('admin.commun.chargement')}</p></AdminLayout>
+  if (!ticket)   return <AdminLayout title="Ticket"><p className="text-sm text-red-500">{t('admin.ticket_detail.introuvable')}</p></AdminLayout>
 
   return (
     <AdminLayout title={`Ticket ${ticket.reference}`}>
@@ -64,11 +66,11 @@ export default function TicketDetailPage() {
                 <AdminBadge value={ticket.statut} />
                 {ticket.statut !== 'ferme' ? (
                   <button onClick={() => fermer.mutate(id)} className="text-xs text-red-500 hover:underline">
-                    Fermer
+                    {t('admin.ticket_detail.fermer')}
                   </button>
                 ) : (
                   <button onClick={() => rouvrir.mutate(id)} className="text-xs text-green-600 hover:underline">
-                    Rouvrir
+                    {t('admin.ticket_detail.rouvrir')}
                   </button>
                 )}
               </div>
@@ -87,18 +89,16 @@ export default function TicketDetailPage() {
                 >
                   <div className="flex justify-between items-center mb-1">
                     <span className="text-xs font-semibold text-gray-600">
-                      {msg.expediteur_type === 'admin' ? 'Admin' : 'Client'}
-                      {msg.is_note_interne && ' (note interne)'}
+                      {msg.expediteur_type === 'admin'
+                        ? t('admin.ticket_detail.expediteur_admin')
+                        : t('admin.ticket_detail.expediteur_client')}
+                      {msg.is_note_interne && ` ${t('admin.ticket_detail.note_interne_badge')}`}
                     </span>
                     <span className="text-xs text-gray-400">{formatDate(msg.created_at)}</span>
                   </div>
                   <p className="text-gray-700 whitespace-pre-wrap">{msg.contenu}</p>
                   {msg.pj_url && (
-                    <img
-                      src={msg.pj_url}
-                      alt="capture"
-                      className="mt-2 rounded-lg max-h-48 object-cover w-full"
-                    />
+                    <img src={msg.pj_url} alt="capture" className="mt-2 rounded-lg max-h-48 object-cover w-full" />
                   )}
                 </div>
               ))}
@@ -110,52 +110,36 @@ export default function TicketDetailPage() {
                 <textarea
                   value={contenu}
                   onChange={e => setContenu(e.target.value)}
-                  placeholder="Votre réponse…"
+                  placeholder={t('admin.ticket_detail.votre_reponse')}
                   rows={4}
                   className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-400 resize-none"
                 />
 
-                {/* Photo */}
                 {preview ? (
                   <div className="relative rounded-lg overflow-hidden border border-gray-200">
                     <img src={preview} alt="capture" className="w-full max-h-32 object-cover" />
-                    <button
-                      type="button"
-                      onClick={removePhoto}
-                      className="absolute top-2 right-2 w-6 h-6 rounded-full bg-black/50 flex items-center justify-center"
-                    >
+                    <button type="button" onClick={removePhoto}
+                      className="absolute top-2 right-2 w-6 h-6 rounded-full bg-black/50 flex items-center justify-center">
                       <X size={12} className="text-white" />
                     </button>
                   </div>
                 ) : (
-                  <button
-                    type="button"
-                    onClick={() => fileRef.current?.click()}
-                    className="flex items-center gap-2 text-xs text-gray-400 hover:text-indigo-600 transition-colors"
-                  >
+                  <button type="button" onClick={() => fileRef.current?.click()}
+                    className="flex items-center gap-2 text-xs text-gray-400 hover:text-indigo-600 transition-colors">
                     <Image size={14} />
-                    Joindre une capture d'écran
+                    {t('admin.ticket_detail.joindre_capture')}
                   </button>
                 )}
-                <input
-                  ref={fileRef}
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handlePhoto}
-                />
+                <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handlePhoto} />
 
                 <div className="flex justify-between items-center">
                   <label className="flex items-center gap-2 text-xs text-gray-500 cursor-pointer">
                     <input type="checkbox" checked={isInterne} onChange={e => setIsInterne(e.target.checked)} />
-                    Note interne (non visible par le client)
+                    {t('admin.ticket_detail.note_interne_label')}
                   </label>
-                  <button
-                    type="submit"
-                    disabled={repondre.isPending || !contenu.trim()}
-                    className="bg-indigo-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50"
-                  >
-                    {repondre.isPending ? 'Envoi…' : 'Envoyer'}
+                  <button type="submit" disabled={repondre.isPending || !contenu.trim()}
+                    className="bg-indigo-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50">
+                    {repondre.isPending ? t('admin.ticket_detail.envoi') : t('admin.ticket_detail.envoyer')}
                   </button>
                 </div>
               </form>
@@ -166,24 +150,24 @@ export default function TicketDetailPage() {
         {/* Infos latérales */}
         <div className="space-y-4">
           <div className="bg-white border border-gray-200 rounded-xl p-5 text-sm space-y-2">
-            <h3 className="font-semibold text-gray-700 text-xs uppercase tracking-wide mb-3">Informations</h3>
+            <h3 className="font-semibold text-gray-700 text-xs uppercase tracking-wide mb-3">{t('admin.ticket_detail.informations')}</h3>
             <div className="flex justify-between">
-              <span className="text-gray-500">Priorité</span>
+              <span className="text-gray-500">{t('admin.ticket_detail.priorite')}</span>
               <span className="font-medium">{ticket.priorite}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500">Assigné à</span>
+              <span className="text-gray-500">{t('admin.ticket_detail.assigne')}</span>
               <span className="font-medium">
                 {ticket.assignedTo ? `${ticket.assignedTo.prenom} ${ticket.assignedTo.nom}` : '—'}
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500">Atelier</span>
+              <span className="text-gray-500">{t('admin.ticket_detail.atelier')}</span>
               <span className="font-medium">{ticket.atelier?.nom ?? '—'}</span>
             </div>
             {ticket.resolu_at && (
               <div className="flex justify-between">
-                <span className="text-gray-500">Résolu le</span>
+                <span className="text-gray-500">{t('admin.ticket_detail.resolu_le')}</span>
                 <span className="font-medium">{formatDate(ticket.resolu_at)}</span>
               </div>
             )}

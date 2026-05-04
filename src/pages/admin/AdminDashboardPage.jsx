@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { AdminLayout } from '@/components/admin'
 import { useAdminAuth } from '@/contexts'
 import { useAdminAteliers } from '@/hooks/admin/useAteliers'
@@ -21,37 +22,40 @@ function StatCard({ label, value, sub, color = 'indigo' }) {
 }
 
 export default function AdminDashboardPage() {
+  const { t } = useTranslation()
   const { admin } = useAdminAuth()
   const { data: ateliers } = useAdminAteliers()
   const { data: tickets } = useAdminTickets({ statut: 'ouvert' })
   const { data: paiements } = useAdminPaiements({ statut: 'pending' })
 
-  const totalAteliers = ateliers?.total ?? 0
-  const ticketsOuverts = tickets?.total ?? 0
+  const totalAteliers    = ateliers?.total ?? 0
+  const ticketsOuverts   = tickets?.total ?? 0
   const paiementsPending = paiements?.total ?? 0
+
+  const links = [
+    ['/admin/ateliers',     t('admin.dashboard.link_ateliers')],
+    ['/admin/tickets',      t('admin.dashboard.link_tickets')],
+    ['/admin/paiements',    t('admin.dashboard.link_paiements')],
+    ['/admin/transactions', t('admin.dashboard.link_transactions')],
+  ]
 
   return (
     <AdminLayout title="Dashboard">
       <p className="text-sm text-gray-500 mb-6">
-        Bonjour, <span className="font-semibold text-gray-700">{admin?.prenom} {admin?.nom}</span>
+        {t('admin.dashboard.bonjour')} <span className="font-semibold text-gray-700">{admin?.prenom} {admin?.nom}</span>
       </p>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <StatCard label="Ateliers"         value={totalAteliers}    color="indigo" />
-        <StatCard label="Tickets ouverts"  value={ticketsOuverts}   color="yellow" />
-        <StatCard label="Paiements en attente" value={paiementsPending} color="red" />
+        <StatCard label={t('admin.dashboard.ateliers')}         value={totalAteliers}    color="indigo" />
+        <StatCard label={t('admin.dashboard.tickets_ouverts')}  value={ticketsOuverts}   color="yellow" />
+        <StatCard label={t('admin.dashboard.paiements_attente')} value={paiementsPending} color="red" />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="bg-white border border-gray-200 rounded-xl p-5">
-          <p className="text-sm font-semibold text-gray-700 mb-1">Accès rapides</p>
+          <p className="text-sm font-semibold text-gray-700 mb-1">{t('admin.dashboard.acces_rapides')}</p>
           <div className="space-y-1 mt-3">
-            {[
-              ['/admin/ateliers',     'Gérer les ateliers'],
-              ['/admin/tickets',      'Voir les tickets'],
-              ['/admin/paiements',    'Valider les paiements'],
-              ['/admin/transactions', 'Créer un code d\'accès'],
-            ].map(([href, label]) => (
+            {links.map(([href, label]) => (
               <a key={href} href={href} className="block text-sm text-indigo-600 hover:underline py-0.5">
                 → {label}
               </a>
