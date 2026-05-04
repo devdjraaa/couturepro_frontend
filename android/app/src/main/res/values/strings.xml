@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">CouturePro</string>
+    <string name="title_activity_main">CouturePro</string>
+    <string name="package_name">com.couturepro.app</string>
+    <string name="custom_url_scheme">com.couturepro.app</string>
+</resources>

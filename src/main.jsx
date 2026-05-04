@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ThemeProvider, AuthProvider, AtelierProvider, AdminAuthProvider, LangProvider } from '@/contexts'
+import { ThemeProvider, AuthProvider, AtelierProvider, AdminAuthProvider, LangProvider, SyncProvider } from '@/contexts'
 import './index.css'
 import './lang/i18n.js'
 import App from './App.jsx'
@@ -26,7 +26,9 @@ createRoot(document.getElementById('root')).render(
             <AdminAuthProvider>
               <AuthProvider>
                 <AtelierProvider>
-                  <App />
+                  <SyncProvider>
+                    <App />
+                  </SyncProvider>
                 </AtelierProvider>
               </AuthProvider>
             </AdminAuthProvider>

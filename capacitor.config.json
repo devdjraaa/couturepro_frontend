@@ -1,0 +1,12 @@
+{
+  "appId": "com.couturepro.app",
+  "appName": "CouturePro",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "Network": {},
+    "Preferences": {}
+  }
+}
