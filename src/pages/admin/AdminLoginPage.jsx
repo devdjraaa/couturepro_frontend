@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAdminAuth } from '@/contexts'
 
 export default function AdminLoginPage() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { login } = useAdminAuth()
   const [form, setForm] = useState({ email: '', password: '' })
@@ -19,7 +21,7 @@ export default function AdminLoginPage() {
       await login(form)
       navigate('/admin', { replace: true })
     } catch (err) {
-      setError(err.message || 'Identifiants incorrects')
+      setError(err.message || t('admin.login.identifiants_incorrects'))
     } finally {
       setLoading(false)
     }
@@ -30,12 +32,12 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <p className="text-indigo-400 font-bold text-xl uppercase tracking-widest">CouturePro</p>
-          <p className="text-gray-400 text-sm mt-1">Espace administration</p>
+          <p className="text-gray-400 text-sm mt-1">{t('admin.login.espace_admin')}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="bg-gray-800 rounded-2xl p-6 space-y-4">
           <div>
-            <label className="block text-xs font-medium text-gray-300 mb-1">Email</label>
+            <label className="block text-xs font-medium text-gray-300 mb-1">{t('admin.parametres.profil_email')}</label>
             <input
               type="email"
               value={form.email}
@@ -46,7 +48,7 @@ export default function AdminLoginPage() {
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-300 mb-1">Mot de passe</label>
+            <label className="block text-xs font-medium text-gray-300 mb-1">{t('admin.login.mot_de_passe')}</label>
             <input
               type="password"
               value={form.password}
@@ -57,16 +59,14 @@ export default function AdminLoginPage() {
             />
           </div>
 
-          {error && (
-            <p className="text-red-400 text-sm text-center">{error}</p>
-          )}
+          {error && <p className="text-red-400 text-sm text-center">{error}</p>}
 
           <button
             type="submit"
             disabled={loading}
             className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white font-medium rounded-lg py-2.5 text-sm transition-colors"
           >
-            {loading ? 'Connexion…' : 'Se connecter'}
+            {loading ? t('admin.login.connexion') : t('admin.login.se_connecter')}
           </button>
         </form>
       </div>

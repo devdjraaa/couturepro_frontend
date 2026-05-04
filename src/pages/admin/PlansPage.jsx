@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Plus, Edit2 } from 'lucide-react'
 import { AdminLayout, AdminTable, AdminBadge } from '@/components/admin'
 import { useAdminPlans, useCreatePlan, useUpdatePlan, useTogglePlan } from '@/hooks/admin/usePlans'
@@ -78,6 +79,7 @@ function Toggle({ label, name, value, onChange }) {
 }
 
 function PlanModal({ initial, onClose, onSubmit, isLoading }) {
+  const { t } = useTranslation()
   const [form, setForm] = useState(() => {
     if (!initial) return { ...EMPTY_FORM, config: { ...DEFAULT_CONFIG } }
     const cfg = typeof initial.config === 'string' ? JSON.parse(initial.config) : (initial.config ?? {})
@@ -97,8 +99,8 @@ function PlanModal({ initial, onClose, onSubmit, isLoading }) {
     })
   }
 
-  const input = 'w-full border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 text-sm mt-1 focus:outline-none focus:border-indigo-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100'
-  const label = 'text-xs text-gray-500 dark:text-gray-400'
+  const input   = 'w-full border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 text-sm mt-1 focus:outline-none focus:border-indigo-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100'
+  const label   = 'text-xs text-gray-500 dark:text-gray-400'
   const section = 'border-t border-gray-100 dark:border-gray-700 pt-3'
   const sectionTitle = 'text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3'
 
@@ -106,76 +108,80 @@ function PlanModal({ initial, onClose, onSubmit, isLoading }) {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
       <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg my-4">
         <div className="px-6 pt-5 pb-3 border-b border-gray-100 dark:border-gray-700">
-          <h3 className="font-semibold text-gray-800 dark:text-gray-100">{isEdit ? 'Modifier le plan' : 'Nouveau plan'}</h3>
+          <h3 className="font-semibold text-gray-800 dark:text-gray-100">
+            {isEdit ? t('admin.plans.modifier') : t('admin.plans.nouveau')}
+          </h3>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="px-6 py-4 space-y-3">
             {!isEdit && (
               <div>
-                <label className={label}>Clé unique</label>
+                <label className={label}>{t('admin.plans.form_cle')}</label>
                 <input value={form.cle} onChange={setField('cle')} required placeholder="ex: premium_mensuel" className={input} />
               </div>
             )}
             <div>
-              <label className={label}>Label</label>
+              <label className={label}>{t('admin.plans.form_label')}</label>
               <input value={form.label} onChange={setField('label')} required className={input} />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className={label}>Durée (jours)</label>
+                <label className={label}>{t('admin.plans.form_duree')}</label>
                 <input type="number" min="1" value={form.duree_jours} onChange={setField('duree_jours')} required className={input} />
               </div>
               <div>
-                <label className={label}>Prix XOF</label>
+                <label className={label}>{t('admin.plans.form_prix')}</label>
                 <input type="number" min="0" value={form.prix_xof} onChange={setField('prix_xof')} required className={input} />
               </div>
             </div>
             <div>
-              <label className={label}>Description courte</label>
+              <label className={label}>{t('admin.plans.form_description')}</label>
               <input value={form.description_courte ?? ''} onChange={setField('description_courte')} className={input} />
             </div>
 
             <div className={section}>
-              <p className={sectionTitle}>Limites mensuelles</p>
+              <p className={sectionTitle}>{t('admin.plans.section_limites')}</p>
               <div className="grid grid-cols-2 gap-3">
-                <NumField label="Clients / mois"     name="max_clients_par_mois"    value={form.config.max_clients_par_mois}    onChange={setCfg} />
-                <NumField label="Photos VIP / mois"  name="max_photos_vip_par_mois" value={form.config.max_photos_vip_par_mois} onChange={setCfg} unlimited />
-                <NumField label="Factures / mois"    name="max_factures_par_mois"   value={form.config.max_factures_par_mois}   onChange={setCfg} unlimited />
-                <NumField label="Membres équipe"     name="max_membres"             value={form.config.max_membres}             onChange={setCfg} />
-                <NumField label="Assistants"         name="max_assistants"          value={form.config.max_assistants}          onChange={setCfg} />
-                <NumField label="Sous-ateliers"      name="max_sous_ateliers"       value={form.config.max_sous_ateliers ?? 0}  onChange={setCfg} />
+                <NumField label={t('admin.plans.clients_mois')}    name="max_clients_par_mois"    value={form.config.max_clients_par_mois}    onChange={setCfg} />
+                <NumField label={t('admin.plans.photos_vip_mois')} name="max_photos_vip_par_mois" value={form.config.max_photos_vip_par_mois} onChange={setCfg} unlimited />
+                <NumField label={t('admin.plans.factures_mois')}   name="max_factures_par_mois"   value={form.config.max_factures_par_mois}   onChange={setCfg} unlimited />
+                <NumField label={t('admin.plans.membres')}         name="max_membres"             value={form.config.max_membres}             onChange={setCfg} />
+                <NumField label={t('admin.plans.assistants')}      name="max_assistants"          value={form.config.max_assistants}          onChange={setCfg} />
+                <NumField label={t('admin.plans.sous_ateliers')}   name="max_sous_ateliers"       value={form.config.max_sous_ateliers ?? 0}  onChange={setCfg} />
               </div>
             </div>
 
             <div className={section}>
-              <p className={sectionTitle}>Fidélité</p>
+              <p className={sectionTitle}>{t('admin.plans.section_fidelite')}</p>
               <div className="grid grid-cols-3 gap-3">
-                <NumField label="Pts / client"   name="pts_par_client"   value={form.config.pts_par_client}   onChange={setCfg} />
-                <NumField label="Pts / commande" name="pts_par_commande" value={form.config.pts_par_commande} onChange={setCfg} />
-                <NumField label="Pts activation" name="pts_activation"   value={form.config.pts_activation}   onChange={setCfg} />
+                <NumField label={t('admin.plans.pts_client')}   name="pts_par_client"   value={form.config.pts_par_client}   onChange={setCfg} />
+                <NumField label={t('admin.plans.pts_commande')} name="pts_par_commande" value={form.config.pts_par_commande} onChange={setCfg} />
+                <NumField label={t('admin.plans.pts_activation')} name="pts_activation" value={form.config.pts_activation}   onChange={setCfg} />
               </div>
               <div className="mt-3">
-                <NumField label="Seuil conversion (pts → jours)" name="seuil_conversion_pts" value={form.config.seuil_conversion_pts} onChange={setCfg} />
+                <NumField label={t('admin.plans.seuil_conversion')} name="seuil_conversion_pts" value={form.config.seuil_conversion_pts} onChange={setCfg} />
               </div>
             </div>
 
             <div className={section}>
-              <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Fonctionnalités incluses</p>
-              <Toggle label="Photos VIP"           name="photos_vip"       value={form.config.photos_vip}       onChange={setCfg} />
-              <Toggle label="Facture WhatsApp"     name="facture_whatsapp" value={form.config.facture_whatsapp} onChange={setCfg} />
-              <Toggle label="Sauvegarde auto"      name="sauvegarde_auto"  value={form.config.sauvegarde_auto}  onChange={setCfg} />
-              <Toggle label="Module caisse"        name="module_caisse"    value={form.config.module_caisse}    onChange={setCfg} />
-              <Toggle label="Multi-ateliers"       name="multi_ateliers"   value={form.config.multi_ateliers}   onChange={setCfg} />
-              <Toggle label="Export PDF"           name="export_pdf"       value={form.config.export_pdf}       onChange={setCfg} />
+              <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">{t('admin.plans.section_fonctionnalites')}</p>
+              <Toggle label="Photos VIP"        name="photos_vip"       value={form.config.photos_vip}       onChange={setCfg} />
+              <Toggle label="Facture WhatsApp"  name="facture_whatsapp" value={form.config.facture_whatsapp} onChange={setCfg} />
+              <Toggle label="Sauvegarde auto"   name="sauvegarde_auto"  value={form.config.sauvegarde_auto}  onChange={setCfg} />
+              <Toggle label="Module caisse"     name="module_caisse"    value={form.config.module_caisse}    onChange={setCfg} />
+              <Toggle label="Multi-ateliers"    name="multi_ateliers"   value={form.config.multi_ateliers}   onChange={setCfg} />
+              <Toggle label="Export PDF"        name="export_pdf"       value={form.config.export_pdf}       onChange={setCfg} />
             </div>
           </div>
 
           <div className="flex justify-end gap-3 px-6 py-4 border-t border-gray-100 dark:border-gray-700">
-            <button type="button" onClick={onClose} className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">Annuler</button>
+            <button type="button" onClick={onClose} className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+              {t('admin.commun.annuler')}
+            </button>
             <button type="submit" disabled={isLoading}
               className="bg-indigo-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50">
-              {isLoading ? 'Enregistrement…' : 'Enregistrer'}
+              {isLoading ? t('admin.plans.enregistrement') : t('admin.plans.enregistrer')}
             </button>
           </div>
         </form>
@@ -185,6 +191,7 @@ function PlanModal({ initial, onClose, onSubmit, isLoading }) {
 }
 
 export default function PlansPage() {
+  const { t } = useTranslation()
   const { data: plans = [], isLoading } = useAdminPlans()
   const create = useCreatePlan()
   const update = useUpdatePlan()
@@ -192,12 +199,12 @@ export default function PlansPage() {
   const [modal, setModal] = useState(null)
 
   const columns = [
-    { key: 'cle',       label: 'Clé' },
-    { key: 'label',     label: 'Label' },
-    { key: 'duree_jours', label: 'Durée',  render: r => `${r.duree_jours} j` },
-    { key: 'prix_xof',  label: 'Prix',    render: r => `${Number(r.prix_xof ?? 0).toLocaleString()} XOF` },
-    { key: 'is_actif',  label: 'Statut',  render: r => <AdminBadge value={r.is_actif ? 'actif' : 'expire'} /> },
-    { key: 'abonnements_count', label: 'Abonnés' },
+    { key: 'cle',       label: t('admin.plans.col_cle') },
+    { key: 'label',     label: t('admin.plans.col_label') },
+    { key: 'duree_jours', label: t('admin.plans.col_duree'), render: r => `${r.duree_jours} j` },
+    { key: 'prix_xof',  label: t('admin.plans.col_prix'),   render: r => `${Number(r.prix_xof ?? 0).toLocaleString()} XOF` },
+    { key: 'is_actif',  label: t('admin.plans.col_statut'), render: r => <AdminBadge value={r.is_actif ? 'actif' : 'expire'} /> },
+    { key: 'abonnements_count', label: t('admin.plans.col_abonnes') },
     {
       key: 'actions', label: '',
       render: r => (
@@ -205,7 +212,7 @@ export default function PlansPage() {
           <button onClick={() => setModal(r)} className="text-indigo-500 hover:text-indigo-700"><Edit2 size={14} /></button>
           <button onClick={() => toggle.mutate(r.id)}
             className={`text-xs hover:underline ${r.is_actif ? 'text-red-500' : 'text-green-600'}`}>
-            {r.is_actif ? 'Désactiver' : 'Activer'}
+            {r.is_actif ? t('admin.plans.desactiver') : t('admin.plans.activer')}
           </button>
         </div>
       ),
@@ -216,16 +223,16 @@ export default function PlansPage() {
   const handleUpdate = async data => { await update.mutateAsync({ id: modal.id, ...data }); setModal(null) }
 
   return (
-    <AdminLayout title="Plans d'abonnement">
+    <AdminLayout title={t('admin.plans.titre')}>
       <div className="flex justify-end mb-4">
         <button onClick={() => setModal('create')}
           className="flex items-center gap-2 bg-indigo-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-indigo-700">
-          <Plus size={14} /> Nouveau plan
+          <Plus size={14} /> {t('admin.plans.nouveau')}
         </button>
       </div>
 
-      {isLoading ? <p className="text-sm text-gray-400">Chargement…</p> : (
-        <AdminTable columns={columns} rows={plans} emptyLabel="Aucun plan" />
+      {isLoading ? <p className="text-sm text-gray-400">{t('admin.commun.chargement')}</p> : (
+        <AdminTable columns={columns} rows={plans} emptyLabel={t('admin.plans.aucun')} />
       )}
 
       {modal === 'create' && (
