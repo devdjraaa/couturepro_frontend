@@ -2,9 +2,7 @@ import { cn } from '@/utils/cn'
 
 export default function TabBar({ tabs = [], activeTab, onChange, className }) {
   return (
-    <div className={cn('flex border-b border-edge overflow-x-auto', className)}
-      style={{ scrollbarWidth: 'none' }}
-    >
+    <div className={cn('flex border-b border-edge overflow-x-auto scrollbar-none', className)}>
       {tabs.map(tab => {
         const isActive = tab.key === activeTab
         return (
@@ -24,7 +22,7 @@ export default function TabBar({ tabs = [], activeTab, onChange, className }) {
             {tab.count !== undefined && (
               <span className={cn(
                 'ml-2 text-xs px-1.5 py-0.5 rounded-full font-medium',
-                isActive ? 'bg-primary-50 text-primary-700' : 'bg-subtle text-ghost',
+                isActive ? 'bg-primary/10 text-primary' : 'bg-subtle text-ghost',
               )}>
                 {tab.count}
               </span>

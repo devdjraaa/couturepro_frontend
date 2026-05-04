@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 import { Plus, ClipboardList, X, AlertTriangle, Timer } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { cn } from '@/utils/cn'
 import { useCommandes, useCreateCommande } from '@/hooks/useCommandes'
 import { useCommunications } from '@/hooks/useParametres'
 import { whatsappService } from '@/services/whatsappService'
@@ -85,7 +86,7 @@ export default function CommandesPage() {
       {!alerte && <TabBar tabs={tabsWithCounts} activeTab={activeTab} onChange={setActiveTab} />}
 
       {alerte && (
-        <div className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b border-edge ${alerte === 'retard' ? 'bg-danger/8 text-danger' : 'bg-warning/8 text-warning'}`}>
+        <div className={cn('flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b border-edge', alerte === 'retard' ? 'bg-danger/8 text-danger' : 'bg-warning/8 text-warning')}>
           {alerte === 'retard'
             ? <AlertTriangle size={15} />
             : <Timer size={15} />
