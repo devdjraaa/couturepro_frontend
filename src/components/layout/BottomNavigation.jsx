@@ -52,6 +52,7 @@ export default function BottomNavigation() {
                 </div>
 
                 <span className="text-2xs font-medium">{label}</span>
+                {isActive && <span className="w-1 h-1 rounded-full bg-primary" />}
               </>
             )}
           </NavLink>

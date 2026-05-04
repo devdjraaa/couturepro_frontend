@@ -2,17 +2,17 @@ import { cn } from '@/utils/cn'
 
 export default function EmptyState({ icon: Icon, title, description, action, className }) {
   return (
-    <div className={cn('flex flex-col items-center justify-center py-16 px-6 text-center', className)}>
+    <div className={cn('flex flex-col items-center justify-center py-10 px-6 text-center', className)}>
       {Icon && (
-        <div className="w-16 h-16 rounded-xl bg-subtle flex items-center justify-center mb-4">
-          <Icon size={28} className="text-ghost" />
+        <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-3">
+          <Icon size={26} className="text-primary" />
         </div>
       )}
       {title && (
-        <h3 className="text-base font-semibold font-display text-ink mb-1">{title}</h3>
+        <h3 className="text-sm font-semibold text-ink mb-1">{title}</h3>
       )}
       {description && (
-        <p className="text-sm text-dim max-w-xs mb-6">{description}</p>
+        <p className="text-xs text-dim max-w-xs mb-5">{description}</p>
       )}
       {action}
     </div>
