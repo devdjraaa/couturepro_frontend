@@ -1,86 +1,64 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
 import { useNetwork } from '@/hooks/useNetwork'
-import { flush, pull, getPendingCount, getLastPullAt } from '@/services/syncService'
-import { QUERY_KEYS } from '@/hooks/queryKeys'
+import { syncWithServer, getLastPulledAt } from '@/db/syncAdapter'
 import { scheduleOrderNotifications } from '@/utils/orderNotifications'
+import database from '@/db/database'
+import { Q } from '@nozbe/watermelondb'
 
 const SyncContext = createContext(null)
 
 export function SyncProvider({ children }) {
   const { isOnline, isNative } = useNetwork()
-  const queryClient = useQueryClient()
 
   const [isSyncing,    setIsSyncing]    = useState(false)
-  const [pendingCount, setPendingCount] = useState(() => getPendingCount())
-  const [lastSyncedAt, setLastSyncedAt] = useState(() => getLastPullAt())
-  const [syncError,    setSyncError]    = useState(null)
+  const [lastSyncedAt, setLastSyncedAt] = useState(() => {
+    const ts = getLastPulledAt()
+    return ts ? new Date(ts).toISOString() : null
+  })
+  const [syncError, setSyncError] = useState(null)
 
   const prevOnline = useRef(isOnline)
-
-  const refreshPendingCount = useCallback(() => {
-    setPendingCount(getPendingCount())
-  }, [])
 
   const sync = useCallback(async () => {
     if (isSyncing) return
     setIsSyncing(true)
     setSyncError(null)
     try {
-      // 1. Pousser les mutations en attente
-      const { failed } = await flush()
-      refreshPendingCount()
-
-      // 2. Tirer les données fraîches du serveur
-      const pulled = await pull()
-
-      // 3. Invalider les caches concernés pour forcer un refetch
-      if (pulled) {
-        const resources = Object.keys(pulled.data ?? {})
-        const invalidations = []
-        if (resources.includes('clients'))   invalidations.push(QUERY_KEYS.clients)
-        if (resources.includes('commandes')) invalidations.push(QUERY_KEYS.commandes)
-        if (resources.includes('mesures'))   invalidations.push(['mesures'])
-        if (resources.includes('vetements')) invalidations.push(QUERY_KEYS.vetements)
-
-        await Promise.all(
-          invalidations.map(key => queryClient.invalidateQueries({ queryKey: key }))
-        )
-      }
-
+      await syncWithServer()
       setLastSyncedAt(new Date().toISOString())
-      if (failed > 0) setSyncError(`${failed} action(s) non synchronisée(s).`)
 
       // Re-planifier les notifications après chaque sync
-      const commandes = queryClient.getQueryData(QUERY_KEYS.commandes) ?? []
-      scheduleOrderNotifications(Array.isArray(commandes) ? commandes : commandes?.data ?? [])
+      if (isNative) {
+        const commandes = await database.get('commandes')
+          .query(Q.where('statut', 'en_cours'), Q.where('is_archived', false))
+          .fetch()
+        scheduleOrderNotifications(commandes)
+      }
     } catch (err) {
       setSyncError(err?.message ?? 'Erreur de synchronisation.')
     } finally {
       setIsSyncing(false)
     }
-  }, [isSyncing, queryClient, refreshPendingCount])
+  }, [isSyncing, isNative])
 
-  // Planifier les notifications au démarrage si des commandes sont déjà en cache
-  useEffect(() => {
-    if (!isNative) return
-    const commandes = queryClient.getQueryData(QUERY_KEYS.commandes) ?? []
-    const list = Array.isArray(commandes) ? commandes : commandes?.data ?? []
-    if (list.length > 0) scheduleOrderNotifications(list)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Auto-flush dès que la connexion revient (mobile uniquement — en web l'utilisateur est toujours en ligne)
+  // Auto-sync dès que la connexion revient
   useEffect(() => {
     const wasOffline = !prevOnline.current
     prevOnline.current = isOnline
 
-    if (isOnline && wasOffline && (isNative || pendingCount > 0)) {
+    if (isOnline && wasOffline) {
       sync()
     }
-  }, [isOnline, isNative, pendingCount, sync])
+  }, [isOnline, sync])
+
+  // Sync initial au démarrage si online
+  useEffect(() => {
+    if (isOnline) sync()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
-    <SyncContext.Provider value={{ isOnline, isNative, isSyncing, pendingCount, lastSyncedAt, syncError, sync, refreshPendingCount }}>
+    <SyncContext.Provider value={{ isOnline, isNative, isSyncing, lastSyncedAt, syncError, sync }}>
       {children}
     </SyncContext.Provider>
   )

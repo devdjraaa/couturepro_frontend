@@ -1,156 +1,110 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { clientService } from '@/services/clientService'
-import { QUERY_STALE_TIME } from '@/constants/config'
-import { QUERY_KEYS } from './queryKeys'
-import { enqueue } from '@/services/syncService'
+import { Q } from '@nozbe/watermelondb'
+import { useWmQuery, useWmRecord, useMutation, database } from '@/db/useWmQuery'
 
-const LIST_KEY = () => [...QUERY_KEYS.clients, {}]
+function getAtelierId() {
+  return localStorage.getItem('cp_active_atelier') || ''
+}
 
 export function useClients(filters = {}) {
-  return useQuery({
-    queryKey: [...QUERY_KEYS.clients, filters],
-    queryFn: () => clientService.getAll(filters),
-    staleTime: QUERY_STALE_TIME,
-  })
+  return useWmQuery(() => {
+    const conditions = [Q.where('is_archived', false)]
+    if (filters.search) {
+      const s = Q.sanitizeLikeString(filters.search)
+      conditions.push(
+        Q.or(
+          Q.where('nom',       Q.like(`%${s}%`)),
+          Q.where('prenom',    Q.like(`%${s}%`)),
+          Q.where('telephone', Q.like(`%${s}%`)),
+        ),
+      )
+    }
+    if (filters.type_profil) conditions.push(Q.where('type_profil', filters.type_profil))
+    if (filters.is_vip)      conditions.push(Q.where('is_vip', true))
+    return database.get('clients').query(...conditions)
+  }, [filters.search, filters.type_profil, filters.is_vip])
 }
 
 export function useClient(id) {
-  return useQuery({
-    queryKey: QUERY_KEYS.client(id),
-    queryFn: () => clientService.getById(id),
-    enabled: !!id,
-    staleTime: QUERY_STALE_TIME,
-  })
+  return useWmRecord('clients', id)
 }
 
 export function useCreateClient() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: (payload) => {
-      const cached = queryClient.getQueryData(LIST_KEY()) ?? []
-      const nom    = payload.nom?.toLowerCase().trim() ?? ''
-      const prenom = payload.prenom?.toLowerCase().trim() ?? ''
-      const exists = cached.some(c =>
-        c.nom.toLowerCase().trim() === nom &&
-        (c.prenom?.toLowerCase().trim() ?? '') === prenom,
-      )
-      if (exists) {
-        const err = new Error(`Un client nommé "${payload.prenom ? payload.prenom + ' ' : ''}${payload.nom}" existe déjà.`)
-        err.code = 'doublon'
-        throw err
-      }
-      return clientService.create(payload)
-    },
-    onMutate: async (payload) => {
-      await queryClient.cancelQueries({ queryKey: QUERY_KEYS.clients })
-      const prev = queryClient.getQueryData(LIST_KEY())
-      const tempClient = { ...payload, id: `temp_${Date.now()}`, _optimistic: true }
-      queryClient.setQueryData(LIST_KEY(), old => [...(old ?? []), tempClient])
-      return { prev }
-    },
-    onError: (_err, _vars, ctx) => {
-      if (ctx?.prev !== undefined) queryClient.setQueryData(LIST_KEY(), ctx.prev)
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.clients })
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.quota })
-    },
-    // Si hors ligne (pas de réponse serveur), on met en queue
-    onSettled: (_data, err, payload) => {
-      if (err?.code === 'reseau') enqueue('clients', 'create', `temp_${Date.now()}`, payload)
-    },
+  return useMutation(async (payload) => {
+    // Anti-doublon local
+    const nom    = payload.nom?.toLowerCase().trim() ?? ''
+    const prenom = payload.prenom?.toLowerCase().trim() ?? ''
+    const existing = await database.get('clients').query(
+      Q.where('is_archived', false),
+    ).fetch()
+    const doublon = existing.find(c =>
+      c.nom.toLowerCase().trim() === nom &&
+      (c.prenom?.toLowerCase().trim() ?? '') === prenom,
+    )
+    if (doublon) {
+      const err = new Error(`Un client nommé "${payload.prenom ? payload.prenom + ' ' : ''}${payload.nom}" existe déjà.`)
+      err.code = 'doublon'
+      throw err
+    }
+
+    await database.write(async () => {
+      await database.get('clients').create(record => {
+        record.nom         = payload.nom ?? ''
+        record.prenom      = payload.prenom ?? ''
+        record.telephone   = payload.telephone ?? ''
+        record.type_profil = payload.type_profil ?? 'mixte'
+        record.notes       = payload.notes ?? ''
+        record.avatar_index = payload.avatar_index ?? null
+        record.is_vip      = false
+        record.is_archived = false
+        record.atelier_id  = getAtelierId()
+      })
+    })
   })
 }
 
 export function useUpdateClient() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: ({ id, ...payload }) => clientService.update(id, payload),
-    onMutate: async ({ id, ...payload }) => {
-      await queryClient.cancelQueries({ queryKey: QUERY_KEYS.client(id) })
-      const prev = queryClient.getQueryData(QUERY_KEYS.client(id))
-      queryClient.setQueryData(QUERY_KEYS.client(id), old => old ? { ...old, ...payload } : old)
-      return { prev, id }
-    },
-    onError: (_err, _vars, ctx) => {
-      if (ctx?.prev !== undefined) queryClient.setQueryData(QUERY_KEYS.client(ctx.id), ctx.prev)
-    },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.clients })
-      queryClient.setQueryData(QUERY_KEYS.client(data.id), data)
-    },
-    onSettled: (_data, err, vars) => {
-      if (err?.code === 'reseau') {
-        const { id, ...payload } = vars
-        enqueue('clients', 'update', id, payload)
-      }
-    },
+  return useMutation(async ({ id, ...payload }) => {
+    await database.write(async () => {
+      const record = await database.get('clients').find(id)
+      await record.update(r => {
+        if (payload.nom         !== undefined) r.nom         = payload.nom
+        if (payload.prenom      !== undefined) r.prenom      = payload.prenom
+        if (payload.telephone   !== undefined) r.telephone   = payload.telephone
+        if (payload.type_profil !== undefined) r.type_profil = payload.type_profil
+        if (payload.notes       !== undefined) r.notes       = payload.notes
+        if (payload.avatar_index !== undefined) r.avatar_index = payload.avatar_index
+        if (payload.is_vip      !== undefined) r.is_vip      = payload.is_vip
+      })
+    })
   })
 }
 
 export function useDeleteClient() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: (id) => clientService.delete(id),
-    onMutate: async (id) => {
-      await queryClient.cancelQueries({ queryKey: QUERY_KEYS.clients })
-      const prev = queryClient.getQueryData(LIST_KEY())
-      queryClient.setQueryData(LIST_KEY(), old => (old ?? []).filter(c => c.id !== id))
-      return { prev }
-    },
-    onError: (_err, _vars, ctx) => {
-      if (ctx?.prev !== undefined) queryClient.setQueryData(LIST_KEY(), ctx.prev)
-    },
-    onSuccess: (_, id) => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.clients })
-      queryClient.removeQueries({ queryKey: QUERY_KEYS.client(id) })
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.quota })
-    },
-    onSettled: (_data, err, id) => {
-      if (err?.code === 'reseau') enqueue('clients', 'delete', id)
-    },
+  return useMutation(async (id) => {
+    await database.write(async () => {
+      const record = await database.get('clients').find(id)
+      await record.markAsDeleted()
+    })
   })
 }
 
 export function useArchiverClient() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: (id) => clientService.archiver(id),
-    onMutate: async (id) => {
-      await queryClient.cancelQueries({ queryKey: QUERY_KEYS.clients })
-      const prev = queryClient.getQueryData(LIST_KEY())
-      queryClient.setQueryData(LIST_KEY(), old => (old ?? []).filter(c => c.id !== id))
-      return { prev }
-    },
-    onError: (_err, _vars, ctx) => {
-      if (ctx?.prev !== undefined) queryClient.setQueryData(LIST_KEY(), ctx.prev)
-    },
-    onSuccess: (_, id) => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.clients })
-      queryClient.removeQueries({ queryKey: QUERY_KEYS.client(id) })
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.quota })
-    },
+  return useMutation(async (id) => {
+    await database.write(async () => {
+      const record = await database.get('clients').find(id)
+      await record.update(r => { r.is_archived = true })
+    })
   })
 }
 
 export function useToggleVip() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: (id) => clientService.toggleVip(id),
-    onMutate: async (id) => {
-      await queryClient.cancelQueries({ queryKey: QUERY_KEYS.client(id) })
-      const prev = queryClient.getQueryData(QUERY_KEYS.client(id))
-      queryClient.setQueryData(QUERY_KEYS.client(id), old =>
-        old ? { ...old, type_profil: old.type_profil === 'vip' ? 'regulier' : 'vip' } : old,
-      )
-      return { prev, id }
-    },
-    onError: (_err, _vars, ctx) => {
-      if (ctx?.prev !== undefined) queryClient.setQueryData(QUERY_KEYS.client(ctx.id), ctx.prev)
-    },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.clients })
-      queryClient.setQueryData(QUERY_KEYS.client(data.id), data)
-    },
+  return useMutation(async (id) => {
+    await database.write(async () => {
+      const record = await database.get('clients').find(id)
+      await record.update(r => {
+        r.is_vip      = !r.is_vip
+        r.type_profil = r.is_vip ? 'vip' : 'regulier'
+      })
+    })
   })
 }
