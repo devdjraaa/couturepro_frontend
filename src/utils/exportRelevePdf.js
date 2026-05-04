@@ -1,5 +1,6 @@
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
+import { shareOrSavePdf } from './shareNative'
 
 const formatCFA = (v) =>
   new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 0 }).format(Number(v) || 0) + ' FCFA'
@@ -79,7 +80,7 @@ export async function exportRelevePdf({ commande, paiements, clientNom, atelierN
     const pageW = pdf.internal.pageSize.getWidth()
     const ratio = pageW / canvas.width
     pdf.addImage(imgData, 'PNG', 0, 0, pageW, canvas.height * ratio)
-    pdf.save(`releve-${clientNom.replace(/\s+/g, '-').toLowerCase()}-${ref}.pdf`)
+    await shareOrSavePdf(pdf, `releve-${clientNom.replace(/\s+/g, '-').toLowerCase()}-${ref}.pdf`)
   } finally {
     document.body.removeChild(container)
   }

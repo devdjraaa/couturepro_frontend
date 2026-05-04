@@ -4,16 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts'
 import { AuthLayout } from '@/components/layout'
 import { Input, Button, LanguageSwitcher } from '@/components/ui'
-
-function getOrCreateDeviceId() {
-  const key = 'cp_device_id'
-  let id = localStorage.getItem(key)
-  if (!id) {
-    id = crypto.randomUUID()
-    localStorage.setItem(key, id)
-  }
-  return id
-}
+import { getStableDeviceId } from '@/utils/deviceId'
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -53,7 +44,7 @@ export default function LoginPage() {
       await equipeLogin({
         code_acces: equipeForm.code_acces.trim().toUpperCase(),
         password:   equipeForm.password,
-        device_id:  getOrCreateDeviceId(),
+        device_id:  await getStableDeviceId(),
       })
       navigate('/', { replace: true })
     } catch (err) {

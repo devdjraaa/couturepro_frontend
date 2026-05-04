@@ -1,5 +1,6 @@
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
+import { shareOrSavePdf } from './shareNative'
 
 export async function exportMesuresPdf(clientNom, mesures, atelierNom = 'Couture Pro') {
   if (!mesures || Object.keys(mesures).length === 0) return
@@ -56,7 +57,7 @@ export async function exportMesuresPdf(clientNom, mesures, atelierNom = 'Couture
     const pageW = pdf.internal.pageSize.getWidth()
     const ratio = pageW / canvas.width
     pdf.addImage(imgData, 'PNG', 0, 0, pageW, canvas.height * ratio)
-    pdf.save(`mesures-${clientNom.replace(/\s+/g, '-').toLowerCase()}.pdf`)
+    await shareOrSavePdf(pdf, `mesures-${clientNom.replace(/\s+/g, '-').toLowerCase()}.pdf`)
   } finally {
     document.body.removeChild(container)
   }

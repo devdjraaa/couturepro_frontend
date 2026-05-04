@@ -3,6 +3,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useNetwork } from '@/hooks/useNetwork'
 import { flush, pull, getPendingCount, getLastPullAt } from '@/services/syncService'
 import { QUERY_KEYS } from '@/hooks/queryKeys'
+import { scheduleOrderNotifications } from '@/utils/orderNotifications'
 
 const SyncContext = createContext(null)
 
@@ -49,12 +50,24 @@ export function SyncProvider({ children }) {
 
       setLastSyncedAt(new Date().toISOString())
       if (failed > 0) setSyncError(`${failed} action(s) non synchronisée(s).`)
+
+      // Re-planifier les notifications après chaque sync
+      const commandes = queryClient.getQueryData(QUERY_KEYS.commandes) ?? []
+      scheduleOrderNotifications(Array.isArray(commandes) ? commandes : commandes?.data ?? [])
     } catch (err) {
       setSyncError(err?.message ?? 'Erreur de synchronisation.')
     } finally {
       setIsSyncing(false)
     }
   }, [isSyncing, queryClient, refreshPendingCount])
+
+  // Planifier les notifications au démarrage si des commandes sont déjà en cache
+  useEffect(() => {
+    if (!isNative) return
+    const commandes = queryClient.getQueryData(QUERY_KEYS.commandes) ?? []
+    const list = Array.isArray(commandes) ? commandes : commandes?.data ?? []
+    if (list.length > 0) scheduleOrderNotifications(list)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Auto-flush dès que la connexion revient (mobile uniquement — en web l'utilisateur est toujours en ligne)
   useEffect(() => {

@@ -1,5 +1,15 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
+import { Capacitor } from '@capacitor/core'
+import { StatusBar, Style } from '@capacitor/status-bar'
 import { getTheme as getStoredTheme, setTheme as storeTheme } from '@/utils/storage'
+
+async function applyStatusBar(isDark) {
+  if (!Capacitor.isNativePlatform()) return
+  try {
+    await StatusBar.setStyle({ style: isDark ? Style.Dark : Style.Light })
+    await StatusBar.setBackgroundColor({ color: isDark ? '#0f172a' : '#ffffff' })
+  } catch { /* ignore sur émulateur sans status bar */ }
+}
 
 const ThemeContext = createContext(null)
 
@@ -14,6 +24,7 @@ function resolveTheme(theme) {
 function applyTheme(theme) {
   const resolved = resolveTheme(theme)
   document.documentElement.setAttribute('data-theme', resolved)
+  applyStatusBar(resolved === 'dark')
 }
 
 export function ThemeProvider({ children }) {
