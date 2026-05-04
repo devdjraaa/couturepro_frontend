@@ -755,6 +755,104 @@
     "caisse": "Caisse",
     "support": "Support"
   },
+  "profil": {
+    "titre": "Mon profil",
+    "section_informations": "Informations",
+    "section_securite": "Sécurité",
+    "succes_update": "Profil mis à jour !",
+    "erreur_update": "Erreur lors de la mise à jour",
+    "confirmer_nouveau_mdp": "Confirmer le nouveau mot de passe",
+    "mdp_non_concordants": "Les mots de passe ne correspondent pas",
+    "mdp_actuel_incorrect": "Mot de passe actuel incorrect",
+    "mdp_succes": "Mot de passe modifié !"
+  },
+  "a_propos": {
+    "titre": "À propos",
+    "version": "Version {{version}}",
+    "description": "Couture Pro est l'application de gestion dédiée aux ateliers de couture. Elle vous permet de gérer vos clients, leurs mesures, vos commandes et votre équipe depuis votre téléphone.",
+    "fonctionnalites": "Fonctionnalités",
+    "developpe_par": "Développé par",
+    "equipe": "Équipe CouturePro",
+    "support_label": "Support",
+    "support_valeur": "support@couturepro.app",
+    "politique_label": "Politique de confidentialité",
+    "politique_valeur": "couturepro.app/privacy",
+    "features": {
+      "commandes_titre": "Gestion des commandes",
+      "commandes_desc": "Suivez toutes vos commandes de la prise de mesures à la livraison.",
+      "fidelite_titre": "Fidélité client",
+      "fidelite_desc": "Accumulez des points et offrez des bonus à vos meilleurs clients.",
+      "securite_titre": "Sécurisé",
+      "securite_desc": "Vos données sont stockées de façon sécurisée et sauvegardées.",
+      "rapide_titre": "Rapide",
+      "rapide_desc": "Interface conçue pour les artisans — simple, rapide, efficace."
+    }
+  },
+  "faq": {
+    "titre": "FAQ",
+    "sous_titre": "Questions fréquentes",
+    "q1": "Comment ajouter un nouveau client ?",
+    "a1": "Allez dans la section Clients, puis appuyez sur le bouton + en bas à droite. Renseignez le nom, le prénom et le numéro de téléphone du client.",
+    "q2": "Comment enregistrer les mesures d'un client ?",
+    "a2": "Ouvrez la fiche client, faites défiler vers la section Mesures et appuyez sur « Modifier les mesures ». Vous pouvez saisir toutes les mensurations et les enregistrer.",
+    "q3": "Comment créer une commande ?",
+    "a3": "Appuyez sur le bouton + depuis le tableau de bord ou la page Commandes. Sélectionnez le client, le type de vêtement, le prix et la date de livraison prévue.",
+    "q4": "Comment enregistrer un paiement client ?",
+    "a4": "Depuis le détail d'une commande, faites défiler vers la section Paiements et appuyez sur « Ajouter un paiement ». Indiquez le montant et le mode de paiement.",
+    "q5": "Comment ajouter un membre à mon équipe ?",
+    "a5": "Allez dans Paramètres → Équipe, puis appuyez sur l'icône + en haut à droite. Un code d'accès unique sera généré pour le nouveau membre.",
+    "q6": "Comment un membre de l'équipe se connecte-t-il ?",
+    "a6": "Sur la page de connexion, appuyez sur l'onglet « Assistant / Membre ». Saisissez le code d'accès fourni par le propriétaire. Le mot de passe initial est identique au code d'accès.",
+    "q7": "Comment renouveler mon abonnement ?",
+    "a7": "Allez dans Paramètres → Abonnement. Vous y trouverez les plans disponibles avec un bouton pour choisir ou renouveler votre abonnement via FedaPay.",
+    "q8": "Mes données sont-elles sauvegardées automatiquement ?",
+    "a8": "Oui, toutes les données sont synchronisées avec notre serveur en temps réel dès que vous avez une connexion internet.",
+    "q9": "Comment envoyer un rappel WhatsApp à un client ?",
+    "a9": "Depuis la fiche client, appuyez sur l'icône WhatsApp. L'application génère un message pré-rempli que vous n'avez plus qu'à envoyer.",
+    "q10": "Comment convertir mes points de fidélité ?",
+    "a10": "Allez dans la section Points de fidélité. Si vous avez atteint le seuil de conversion, vous verrez un bouton « Convertir en jours d'abonnement ». Chaque conversion vous offre 31 jours supplémentaires."
+  },
+  "contact": {
+    "titre": "Contact",
+    "disponibilite": "Notre équipe est disponible pour vous aider du lundi au vendredi, de 8h à 18h.",
+    "urgence": "Pour les problèmes urgents, privilégiez le contact WhatsApp. Pour les questions techniques ou les remboursements, utilisez l'email."
+  },
+  "historique": {
+    "titre": "Historique",
+    "vide_titre": "Aucune activité",
+    "vide_description": "Vos actions récentes apparaîtront ici",
+    "local_label": "Historique local · 8 derniers jours",
+    "a_instant": "À l'instant",
+    "il_y_a_min": "Il y a {{n}} min",
+    "il_y_a_h": "Il y a {{n}}h",
+    "types": {
+      "client_cree": "Client ajouté",
+      "client_modifie": "Client modifié",
+      "commande_creee": "Commande créée",
+      "commande_livree": "Commande livrée",
+      "paiement_ajoute": "Paiement enregistré",
+      "mesure_sauvegardee": "Mesures sauvegardées"
+    }
+  },
+  "ticket_detail": {
+    "introuvable": "Ticket introuvable.",
+    "aucun_message": "Aucun message pour l'instant.",
+    "message_placeholder": "Votre message…",
+    "vous": "Vous",
+    "support_label": "Support",
+    "erreur_envoi": "Erreur lors de l'envoi",
+    "ferme_message": "Ce ticket est fermé. Créez un nouveau ticket si besoin."
+  },
+  "paiement_retour": {
+    "chargement": "Vérification du paiement…",
+    "succes_titre": "Paiement confirmé !",
+    "succes_desc": "Votre abonnement a été activé avec succès.",
+    "retour_app": "Retour à l'application",
+    "echec_titre": "Paiement échoué",
+    "echec_inconnu": "Impossible de vérifier le statut de ce paiement.",
+    "echec_desc": "Le paiement n'a pas abouti. Vous pouvez réessayer.",
+    "retour_params": "Retour aux paramètres"
+  },
   "admin": {
     "commun": {
       "chargement": "Chargement…",

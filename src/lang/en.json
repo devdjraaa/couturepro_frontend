@@ -755,6 +755,104 @@
     "caisse": "Cash Register",
     "support": "Support"
   },
+  "profil": {
+    "titre": "My profile",
+    "section_informations": "Information",
+    "section_securite": "Security",
+    "succes_update": "Profile updated!",
+    "erreur_update": "Error while updating",
+    "confirmer_nouveau_mdp": "Confirm new password",
+    "mdp_non_concordants": "Passwords do not match",
+    "mdp_actuel_incorrect": "Current password is incorrect",
+    "mdp_succes": "Password changed!"
+  },
+  "a_propos": {
+    "titre": "About",
+    "version": "Version {{version}}",
+    "description": "Couture Pro is the management application dedicated to tailoring workshops. It allows you to manage your clients, measurements, orders, and team from your phone.",
+    "fonctionnalites": "Features",
+    "developpe_par": "Developed by",
+    "equipe": "CouturePro Team",
+    "support_label": "Support",
+    "support_valeur": "support@couturepro.app",
+    "politique_label": "Privacy policy",
+    "politique_valeur": "couturepro.app/privacy",
+    "features": {
+      "commandes_titre": "Order management",
+      "commandes_desc": "Track all your orders from measurements to delivery.",
+      "fidelite_titre": "Client loyalty",
+      "fidelite_desc": "Accumulate points and offer bonuses to your best clients.",
+      "securite_titre": "Secure",
+      "securite_desc": "Your data is stored securely and backed up.",
+      "rapide_titre": "Fast",
+      "rapide_desc": "Interface designed for craftsmen — simple, fast, efficient."
+    }
+  },
+  "faq": {
+    "titre": "FAQ",
+    "sous_titre": "Frequently asked questions",
+    "q1": "How do I add a new client?",
+    "a1": "Go to the Clients section, then tap the + button at the bottom right. Enter the client's name, surname, and phone number.",
+    "q2": "How do I record a client's measurements?",
+    "a2": "Open the client file, scroll to the Measurements section and tap \"Edit measurements\". You can enter all measurements and save them.",
+    "q3": "How do I create an order?",
+    "a3": "Tap the + button from the dashboard or the Orders page. Select the client, garment type, price, and expected delivery date.",
+    "q4": "How do I record a client payment?",
+    "a4": "From the order detail, scroll to the Payments section and tap \"Add a payment\". Enter the amount and payment method.",
+    "q5": "How do I add a team member?",
+    "a5": "Go to Settings → Team, then tap the + icon in the top right. A unique access code will be generated for the new member.",
+    "q6": "How does a team member sign in?",
+    "a6": "On the sign in page, tap the \"Assistant / Staff\" tab. Enter the access code provided by the owner. The initial password is the same as the access code.",
+    "q7": "How do I renew my subscription?",
+    "a7": "Go to Settings → Subscription. You will find available plans with a button to choose or renew your subscription via FedaPay.",
+    "q8": "Is my data backed up automatically?",
+    "a8": "Yes, all data is synchronized with our server in real time whenever you have an internet connection.",
+    "q9": "How do I send a WhatsApp reminder to a client?",
+    "a9": "From the client file, tap the WhatsApp icon. The app generates a pre-filled message that you simply send.",
+    "q10": "How do I redeem my loyalty points?",
+    "a10": "Go to the Loyalty Points section. If you have reached the conversion threshold, you will see a button \"Convert to subscription days\". Each conversion gives you 31 additional days."
+  },
+  "contact": {
+    "titre": "Contact",
+    "disponibilite": "Our team is available to help you Monday to Friday, from 8am to 6pm.",
+    "urgence": "For urgent issues, prefer WhatsApp. For technical questions or refunds, use email."
+  },
+  "historique": {
+    "titre": "History",
+    "vide_titre": "No activity",
+    "vide_description": "Your recent actions will appear here",
+    "local_label": "Local history · 8 last days",
+    "a_instant": "Just now",
+    "il_y_a_min": "{{n}} min ago",
+    "il_y_a_h": "{{n}}h ago",
+    "types": {
+      "client_cree": "Client added",
+      "client_modifie": "Client updated",
+      "commande_creee": "Order created",
+      "commande_livree": "Order delivered",
+      "paiement_ajoute": "Payment recorded",
+      "mesure_sauvegardee": "Measurements saved"
+    }
+  },
+  "ticket_detail": {
+    "introuvable": "Ticket not found.",
+    "aucun_message": "No messages yet.",
+    "message_placeholder": "Your message…",
+    "vous": "You",
+    "support_label": "Support",
+    "erreur_envoi": "Error while sending",
+    "ferme_message": "This ticket is closed. Create a new ticket if needed."
+  },
+  "paiement_retour": {
+    "chargement": "Checking payment…",
+    "succes_titre": "Payment confirmed!",
+    "succes_desc": "Your subscription has been activated successfully.",
+    "retour_app": "Back to the app",
+    "echec_titre": "Payment failed",
+    "echec_inconnu": "Unable to verify the status of this payment.",
+    "echec_desc": "The payment did not go through. You can try again.",
+    "retour_params": "Back to settings"
+  },
   "admin": {
     "commun": {
       "chargement": "Loading…",
