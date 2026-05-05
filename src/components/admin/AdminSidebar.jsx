@@ -1,8 +1,8 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
-  LayoutDashboard, Building2, CreditCard, TicketCheck,
-  ShieldBan, ClipboardList, Bell, Star, LogOut, Layers,
-  Settings, Sun, Moon, Monitor, Users,
+  LayoutDashboard, Home, Layers, CreditCard, MessageCircle,
+  ShieldBan, ClipboardList, Bell, Star, LogOut,
+  Sun, Moon, Monitor, Users, Wallet,
 } from 'lucide-react'
 import { useAdminAuth } from '@/contexts'
 import { useTheme } from '@/contexts'
@@ -11,11 +11,11 @@ import { cn } from '@/utils/cn'
 
 const PRINCIPAL = [
   { to: '/admin',              icon: LayoutDashboard, label: 'Dashboard',   end: true  },
-  { to: '/admin/ateliers',     icon: Building2,       label: 'Ateliers'               },
+  { to: '/admin/ateliers',     icon: Home,            label: 'Ateliers'               },
   { to: '/admin/plans',        icon: Layers,          label: 'Plans'                  },
   { to: '/admin/transactions', icon: CreditCard,      label: 'Transactions'           },
-  { to: '/admin/paiements',    icon: CreditCard,      label: 'Paiements',  badge: true },
-  { to: '/admin/tickets',      icon: TicketCheck,     label: 'Tickets'                },
+  { to: '/admin/paiements',    icon: Wallet,          label: 'Paiements',  badge: true },
+  { to: '/admin/tickets',      icon: MessageCircle,   label: 'Tickets'                },
 ]
 
 const GESTION = [
@@ -32,30 +32,36 @@ const SUPER_ADMIN = [
 function NavSection({ title, items, badgeCount = 0 }) {
   return (
     <div>
-      <p className="px-3 mb-1 text-[10px] font-semibold uppercase tracking-widest text-gray-500">
+      <p className="px-3 mb-1.5 text-2xs font-semibold uppercase tracking-widest text-admin-muted">
         {title}
       </p>
-      {items.map(({ to, icon: Icon, label, end, badge }) => (
-        <NavLink
-          key={to}
-          to={to}
-          end={end}
-          className={({ isActive }) => cn(
-            'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors',
-            isActive
-              ? 'bg-indigo-600 text-white font-medium'
-              : 'text-gray-300 hover:bg-gray-800 hover:text-white',
-          )}
-        >
-          <Icon size={15} />
-          <span className="flex-1">{label}</span>
-          {badge && badgeCount > 0 && (
-            <span className="min-w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1 leading-none">
-              {badgeCount > 99 ? '99+' : badgeCount}
-            </span>
-          )}
-        </NavLink>
-      ))}
+      <div className="space-y-0.5">
+        {items.map(({ to, icon: Icon, label, end, badge }) => (
+          <NavLink
+            key={to}
+            to={to}
+            end={end}
+            className={({ isActive }) => cn(
+              'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-150',
+              isActive
+                ? 'bg-primary text-inverse font-medium'
+                : 'text-admin-text hover:bg-admin-hover hover:text-admin-bright',
+            )}
+          >
+            {({ isActive }) => (
+              <>
+                <Icon size={16} strokeWidth={isActive ? 2.5 : 1.8} />
+                <span className="flex-1">{label}</span>
+                {badge && badgeCount > 0 && (
+                  <span className="min-w-4 h-4 bg-danger text-inverse text-2xs font-bold rounded-full flex items-center justify-center px-1 leading-none">
+                    {badgeCount > 99 ? '99+' : badgeCount}
+                  </span>
+                )}
+              </>
+            )}
+          </NavLink>
+        ))}
+      </div>
     </div>
   )
 }
@@ -69,10 +75,10 @@ function ThemeToggle() {
     <button
       onClick={toggleTheme}
       title={`Passer en mode ${next}`}
-      className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-white transition-colors"
+      className="flex items-center gap-1.5 text-xs text-admin-muted hover:text-admin-bright transition-colors"
     >
       <Icon size={13} />
-      {resolvedTheme === 'dark' ? 'Mode sombre' : 'Mode clair'}
+      <span>{resolvedTheme === 'dark' ? 'Mode sombre' : 'Mode clair'}</span>
     </button>
   )
 }
@@ -94,49 +100,52 @@ export default function AdminSidebar() {
   const gestionItems = [...GESTION, ...(isSuperAdmin ? SUPER_ADMIN : [])]
 
   return (
-    <aside className="w-56 shrink-0 bg-gray-900 text-white flex flex-col h-screen sticky top-0">
+    <aside className="w-56 shrink-0 bg-admin-surface text-admin-bright flex flex-col h-screen sticky top-0">
       {/* Logo */}
-      <div className="px-4 py-4 border-b border-gray-700/60 flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center shrink-0">
-          <span className="text-sm font-bold text-white">CP</span>
+      <div className="px-4 py-4 border-b border-inverse/5 flex items-center gap-3">
+        <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shrink-0">
+          <span className="text-sm font-bold text-inverse">CP</span>
         </div>
         <div>
-          <p className="text-sm font-bold text-white leading-tight">CouturePro</p>
-          <p className="text-[10px] text-gray-400 leading-tight">Espace admin</p>
+          <p className="text-sm font-bold text-inverse leading-tight">CouturePro</p>
+          <p className="text-xs text-admin-muted leading-tight">Espace admin</p>
         </div>
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto py-4 px-2 space-y-4">
+      <nav className="flex-1 overflow-y-auto py-4 px-2 space-y-5 scrollbar-none">
         <NavSection title="Principal" items={PRINCIPAL} badgeCount={paiementCount} />
         <NavSection title="Gestion"   items={gestionItems} />
       </nav>
 
       {/* Footer */}
-      <div className="px-4 py-3 border-t border-gray-700/60 space-y-2.5">
+      <div className="border-t border-inverse/5 px-4 py-3 space-y-3">
         <NavLink
           to="/admin/parametres"
           className={({ isActive }) => cn(
-            'flex items-center gap-2.5 transition-colors',
-            isActive ? 'text-indigo-400' : 'text-gray-300 hover:text-white',
+            'flex items-center gap-2.5 rounded-lg transition-colors',
+            isActive ? 'text-primary-300' : 'text-admin-bright hover:text-inverse',
           )}
         >
-          <div className="w-7 h-7 rounded-full bg-indigo-600 flex items-center justify-center shrink-0">
-            <span className="text-[10px] font-bold text-white">{initials}</span>
+          <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center shrink-0">
+            <span className="text-xs font-bold text-inverse">{initials}</span>
           </div>
           <div className="min-w-0">
-            <p className="text-xs font-medium truncate">{admin?.prenom} {admin?.nom}</p>
-            <p className="text-[10px] text-gray-500 truncate">{admin?.role}</p>
+            <p className="text-sm font-semibold text-inverse leading-tight truncate">
+              {admin?.prenom} {admin?.nom}
+            </p>
+            <p className="text-xs text-admin-muted leading-tight truncate">{admin?.role}</p>
           </div>
         </NavLink>
-        <div className="flex items-center justify-between pl-0.5">
+
+        <div className="flex items-center justify-between">
           <ThemeToggle />
           <button
             onClick={handleLogout}
             title="Déconnexion"
-            className="text-gray-500 hover:text-red-400 transition-colors"
+            className="text-admin-muted hover:text-danger transition-colors"
           >
-            <LogOut size={13} />
+            <LogOut size={14} />
           </button>
         </div>
       </div>

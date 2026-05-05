@@ -32,6 +32,13 @@
 
   /* Easing spring pour les animations FAB / bottom sheet */
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── Admin sidebar — toujours sombre, indépendant du thème UI ── */
+  --color-admin-surface: #111827;
+  --color-admin-hover:   #1F2937;
+  --color-admin-text:    #9CA3AF;
+  --color-admin-muted:   #6B7280;
+  --color-admin-bright:  #F9FAFB;
 }
 
 /* ════════════════════════════════════════════════════════
