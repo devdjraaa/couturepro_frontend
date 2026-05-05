@@ -1,5 +1,6 @@
 import { Users, ClipboardList, TrendingUp, Clock, AlertTriangle, Timer } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useClients } from '@/hooks/useClients'
 import { useCommandeStats } from '@/hooks/useCommandes'
 import { formatCurrency } from '@/utils/formatCurrency'
@@ -10,7 +11,7 @@ const COLOR_MAP = {
   primary: 'bg-primary/10 text-primary',
   success: 'bg-success/10 text-success',
   warning: 'bg-warning/10 text-warning',
-  accent:  'bg-accent/10  text-accent-600',
+  danger:  'bg-danger/10  text-danger',
 }
 
 function StatCard({ icon: Icon, label, value, sub, color = 'primary', isLoading, onClick }) {
@@ -62,6 +63,7 @@ function AlertRow({ icon: Icon, label, count, variant, onClick }) {
 
 export default function StatsGrid() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { data: clients = [],  isLoading: loadingClients } = useClients()
   const { data: stats,         isLoading: loadingStats   } = useCommandeStats()
 
@@ -95,16 +97,16 @@ export default function StatsGrid() {
       <div className="grid grid-cols-2 gap-3">
         <StatCard
           icon={Users}
-          label="Clients"
-          sub="Total enregistrés"
+          label={t('dashboard.stat.clients')}
+          sub={t('dashboard.stat.total_clients')}
           value={clients.length}
           isLoading={loadingClients}
           onClick={() => navigate('/clients')}
         />
         <StatCard
           icon={ClipboardList}
-          label="En cours"
-          sub="Commandes actives"
+          label={t('dashboard.commandes_en_cours')}
+          sub={t('dashboard.stat.commandes_actives')}
           value={stats?.en_cours ?? 0}
           color="warning"
           isLoading={loadingStats}
@@ -112,18 +114,18 @@ export default function StatsGrid() {
         />
         <StatCard
           icon={TrendingUp}
-          label="Encaissé"
-          sub="Ce mois"
+          label={t('dashboard.stat.encaisse')}
+          sub={t('dashboard.revenus_mois')}
           value={stats ? formatCurrency(stats.total_encaisse) : '—'}
           color="success"
           isLoading={loadingStats}
         />
         <StatCard
           icon={Clock}
-          label="En attente"
-          sub="À recouvrer"
+          label={t('dashboard.stat.en_attente')}
+          sub={t('dashboard.stat.a_recouvrer')}
           value={stats ? formatCurrency(stats.total_restant) : '—'}
-          color="accent"
+          color="danger"
           isLoading={loadingStats}
         />
       </div>

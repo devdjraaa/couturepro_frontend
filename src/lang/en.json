@@ -151,7 +151,9 @@
   },
   "dashboard": {
     "titre": "Dashboard",
-    "bonjour": "Hello",
+    "bonjour": "Good morning",
+    "bon_aprem": "Good afternoon",
+    "bonsoir": "Good evening",
     "commandes_en_cours": "In progress",
     "commandes_retard": "Late",
     "livraison_48h": "Due in 48h",
@@ -164,6 +166,18 @@
     "solde_encaisse": "Collected balance",
     "mise_a_jour": "Updated just now",
     "actions_rapides": "Quick actions",
+    "vide": {
+      "titre": "No orders yet",
+      "description": "Your orders will appear here"
+    },
+    "stat": {
+      "clients": "Clients",
+      "encaisse": "Collected",
+      "en_attente": "Pending",
+      "total_clients": "Total registered",
+      "commandes_actives": "Active orders",
+      "a_recouvrer": "To collect"
+    },
     "action": {
       "nouvelle_commande": "New",
       "nouveau_client": "Client",
