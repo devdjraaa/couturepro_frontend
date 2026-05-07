@@ -121,6 +121,7 @@
       "sous_titre": "Enter your number to receive a reset code",
       "sous_titre_mdp": "Recover your account",
       "instruction": "Enter your email address. You will receive a verification code.",
+      "instruction_tel": "Enter your phone number. A verification code will be sent to the email associated with your account.",
       "envoyer": "Send code",
       "retour_connexion": "Back to sign in"
     },
