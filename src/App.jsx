@@ -51,7 +51,38 @@ const PlaceholderPage = ({ title }) => (
 // Redirections vers ParametresPage pour l'abonnement
 const AbonnementRedirect = () => <Navigate to={`${ROUTES.PARAMETRES}?tab=abonnement`} replace />
 
+// 'user' (défaut) ou 'admin' — détermine quel sous-ensemble de routes est exposé
+const APP_TARGET = import.meta.env.VITE_APP_TARGET || 'user'
+
 export default function App() {
+  if (APP_TARGET === 'admin') {
+    return (
+      <>
+        <SyncIndicator />
+        <Routes>
+          <Route path="/admin/login" element={<AdminLoginPage />} />
+          <Route element={<AdminProtectedRoute />}>
+            <Route path="/admin"                  element={<AdminDashboardPage />} />
+            <Route path="/admin/ateliers"         element={<AteliersPage />} />
+            <Route path="/admin/ateliers/:id"     element={<AtelierDetailPage />} />
+            <Route path="/admin/plans"            element={<PlansPage />} />
+            <Route path="/admin/transactions"     element={<TransactionsPage />} />
+            <Route path="/admin/paiements"        element={<AdminPaiementsPage />} />
+            <Route path="/admin/tickets"          element={<TicketsPage />} />
+            <Route path="/admin/tickets/:id"      element={<TicketDetailPage />} />
+            <Route path="/admin/offres"           element={<OffresPage />} />
+            <Route path="/admin/liste-noire"      element={<ListeNoirePage />} />
+            <Route path="/admin/audit"            element={<AuditPage />} />
+            <Route path="/admin/notifications"    element={<AdminNotificationsPage />} />
+            <Route path="/admin/parametres"       element={<AdminParametresPage />} />
+            <Route path="/admin/admins"           element={<AdminsPage />} />
+          </Route>
+          <Route path="*" element={<Navigate to="/admin" replace />} />
+        </Routes>
+      </>
+    )
+  }
+
   return (
     <>
       <SyncIndicator />

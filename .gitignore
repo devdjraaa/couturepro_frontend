@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# APK générés par scripts/build-android.sh
+/apk/
+capacitor.config.json.bak
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -4,7 +4,7 @@ android {
     namespace = "com.couturepro.app"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.couturepro.app"
+        applicationId "com.couturepro.admin"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
