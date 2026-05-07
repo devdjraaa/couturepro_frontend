@@ -5,6 +5,7 @@ export const ROUTES = {
   OTP:              '/verification',
   FORGOT_PASSWORD:  '/mot-de-passe-oublie',
   RECOVER_ACCOUNT:  '/recuperer-compte',
+  LOGIN_SECRET_Q:   '/recuperer-compte/question-secrete',
   ONBOARDING:       '/onboarding',
 
   // App (protégées)

@@ -40,6 +40,7 @@
     "description": "Description",
     "oui": "Oui",
     "non": "Non",
+    "ou": "OU",
     "accueil": "Accueil",
     "menu": "Menu",
     "bonjour": "Bonjour",
@@ -103,6 +104,10 @@
       "deja_inscrit": "Déjà inscrit ?",
       "se_connecter": "Se connecter",
       "question_secrete": "Question secrète",
+      "question_personnalisee": "Personnalisée…",
+      "question_personnalisee_label": "Votre question",
+      "question_personnalisee_placeholder": "Ex : Comment s'appelait mon premier client ?",
+      "question_personnalisee_requise": "Veuillez saisir votre question personnalisée.",
       "reponse_secrete": "Réponse secrète",
       "reponse_secrete_placeholder": "Votre réponse",
       "mdp_non_concordants": "Les mots de passe ne correspondent pas"
@@ -125,7 +130,16 @@
       "instruction": "Entrez votre adresse email. Vous recevrez un code de vérification.",
       "instruction_tel": "Entrez votre numéro de téléphone. Un code de vérification sera envoyé à l'email associé à votre compte.",
       "envoyer": "Envoyer le code",
-      "retour_connexion": "Retour à la connexion"
+      "retour_connexion": "Retour à la connexion",
+      "essayer_question_secrete": "Essayer avec ma question secrète"
+    },
+    "question_secrete": {
+      "titre": "Question secrète",
+      "sous_titre": "Récupérer l'accès à votre compte",
+      "instruction_tel": "Entrez votre numéro pour afficher votre question secrète.",
+      "instruction_reponse": "Répondez à votre question secrète pour vous connecter.",
+      "votre_question": "Votre question",
+      "reponse_incorrecte": "Réponse incorrecte. Vérifiez et réessayez."
     },
     "recuperer_compte": {
       "titre": "Récupérer mon compte",
@@ -754,17 +768,20 @@
     "choisir": "Choisir la langue"
   },
   "nav": {
-    "dashboard": "Tableau de bord",
+    "dashboard": "Accueil",
     "clients": "Clients",
     "commandes": "Commandes",
     "catalogue": "Catalogue",
     "equipe": "Équipe",
     "points": "Fidélité",
     "notifications": "Notifications",
-    "parametres": "Paramètres",
+    "parametres": "Réglages",
     "archives": "Archives",
     "caisse": "Caisse",
-    "support": "Support"
+    "support": "Support",
+    "profil": "Profil",
+    "plus": "Plus",
+    "menu": "Menu"
   },
   "profil": {
     "titre": "Mon profil",

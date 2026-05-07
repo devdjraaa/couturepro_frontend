@@ -44,6 +44,23 @@ export default function ForgotPasswordPage() {
         <Button type="submit" className="w-full" loading={loading}>
           {t('auth.mot_de_passe_oublie.envoyer')}
         </Button>
+
+        {/* Alternative : recovery via question secrète (style Google "essayer autrement") */}
+        <div className="relative py-2">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-edge"></div>
+          </div>
+          <div className="relative flex justify-center text-xs">
+            <span className="bg-card px-2 text-ghost">{t('commun.ou')}</span>
+          </div>
+        </div>
+        <Link
+          to="/recuperer-compte/question-secrete"
+          className="block w-full text-center py-2.5 text-sm font-medium text-primary border border-primary/30 rounded-xl hover:bg-primary/5 transition-colors"
+        >
+          {t('auth.mot_de_passe_oublie.essayer_question_secrete')}
+        </Link>
+
         <p className="text-center text-sm text-content-secondary">
           <Link to="/login" className="text-primary font-medium">{t('auth.mot_de_passe_oublie.retour_connexion')}</Link>
         </p>

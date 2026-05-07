@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { Plus, Building2, Users, ClipboardList, UserPlus, Wallet, Bell, ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { AppLayout } from '@/components/layout'
+import NetworkStatusButton from '@/components/layout/NetworkStatusButton'
+import RefreshButton from '@/components/layout/RefreshButton'
 import { StatsGrid, RecentCommandes } from '@/components/dashboard'
 import { FloatingActionButton, Skeleton, LanguageSwitcher } from '@/components/ui'
 import { useAuth } from '@/contexts'
@@ -43,7 +45,9 @@ function DashboardHero({ user, stats, isLoading }) {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-0.5">
+          <NetworkStatusButton variant="hero" />
+          <RefreshButton variant="hero" />
           <LanguageSwitcher variant="hero" />
           <button
             type="button"
@@ -123,12 +127,12 @@ function QuickActions() {
             type="button"
             aria-label={t(`dashboard.action.${key}`)}
             onClick={() => navigate(to)}
-            className="bg-card border border-edge rounded-xl p-3 flex flex-col items-center gap-2 transition-colors active:opacity-70 hover:border-edge-strong"
+            className="group relative bg-card border border-edge-strong rounded-xl p-3 flex flex-col items-center gap-2 shadow-sm transition-all duration-150 hover:shadow-md hover:border-primary/40 hover:-translate-y-0.5 active:scale-95 active:shadow-sm cursor-pointer"
           >
-            <div className={cn('w-11 h-11 rounded-xl flex items-center justify-center', ACTION_COLOR_MAP[color])}>
-              <Icon size={20} />
+            <div className={cn('w-11 h-11 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110', ACTION_COLOR_MAP[color])}>
+              <Icon size={20} strokeWidth={2.2} />
             </div>
-            <span className="text-xs font-medium text-dim text-center leading-tight">
+            <span className="text-xs font-semibold text-ink text-center leading-tight">
               {t(`dashboard.action.${key}`)}
             </span>
           </button>
