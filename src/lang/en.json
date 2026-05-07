@@ -56,6 +56,7 @@
     "code_invalide": "Invalid or already used activation code.",
     "telephone_existe": "This phone number is already in use.",
     "mot_de_passe_invalide": "Incorrect number or password.",
+    "reseau_login": "No Internet connection. An initial online sign-in is required.",
     "otp_invalide": "Incorrect code. Check and try again.",
     "otp_expire": "This code has expired. Request a new one.",
     "champ_requis": "This field is required.",
