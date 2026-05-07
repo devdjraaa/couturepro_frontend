@@ -182,8 +182,6 @@ export async function syncWithServer() {
       if (body.operations.length === 0) return
       await api.post('/sync/push', body)
     },
-
-    migrationsEnabledAtVersion: 1,
   })
 }
 

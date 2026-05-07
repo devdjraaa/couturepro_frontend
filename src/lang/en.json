@@ -1,4 +1,12 @@
 {
+  "sync": {
+    "hors_ligne": "Offline",
+    "actions_attente": "Offline — {{count}} action pending",
+    "actions_attente_plural": "Offline — {{count}} actions pending",
+    "en_cours": "Syncing…",
+    "synchronise": "Synced",
+    "erreur": "Sync error"
+  },
   "commun": {
     "enregistrer": "Save",
     "annuler": "Cancel",

@@ -1,11 +1,13 @@
 import { useIsFetching } from '@tanstack/react-query'
 import { WifiOff, RefreshCw, CheckCircle } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useSync } from '@/contexts/SyncContext'
 
 export default function SyncIndicator() {
+  const { t } = useTranslation()
   const isFetching = useIsFetching()
-  const { isOnline, isSyncing, pendingCount, syncError } = useSync()
+  const { isOnline, isSyncing, syncError } = useSync()
   const [showSynced, setShowSynced] = useState(false)
   const prevSyncing = useState(false)
 
@@ -24,11 +26,7 @@ export default function SyncIndicator() {
     return (
       <div className="fixed top-0 inset-x-0 z-[70] flex items-center justify-center gap-2 px-4 py-2 bg-danger text-white text-xs font-medium shadow-lg">
         <WifiOff size={13} className="shrink-0" />
-        <span>
-          {pendingCount > 0
-            ? `Hors ligne — ${pendingCount} action${pendingCount > 1 ? 's' : ''} en attente`
-            : 'Hors ligne'}
-        </span>
+        <span>{t('sync.hors_ligne')}</span>
       </div>
     )
   }
@@ -45,7 +43,7 @@ export default function SyncIndicator() {
         </div>
         <div className="fixed top-2 right-3 z-[65] flex items-center gap-1.5 bg-card border border-edge rounded-full px-3 py-1 text-xs text-dim shadow-sm">
           <RefreshCw size={11} className="animate-spin text-primary" />
-          <span>Synchronisation…</span>
+          <span>{t('sync.en_cours')}</span>
         </div>
       </>
     )
@@ -55,7 +53,7 @@ export default function SyncIndicator() {
   if (syncError) {
     return (
       <div className="fixed top-0 inset-x-0 z-[70] flex items-center justify-center gap-2 px-4 py-2 bg-warning/90 text-white text-xs font-medium">
-        <span>{syncError}</span>
+        <span>{t('sync.erreur')}</span>
       </div>
     )
   }
@@ -65,7 +63,7 @@ export default function SyncIndicator() {
     return (
       <div className="fixed top-2 right-3 z-[65] flex items-center gap-1.5 bg-success/10 border border-success/30 rounded-full px-3 py-1 text-xs text-success shadow-sm">
         <CheckCircle size={11} />
-        <span>Synchronisé</span>
+        <span>{t('sync.synchronise')}</span>
       </div>
     )
   }
