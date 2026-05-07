@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Android (présent uniquement sur la branche `android`)
+/android/
+capacitor.config.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
