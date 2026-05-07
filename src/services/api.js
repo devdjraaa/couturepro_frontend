@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { API_BASE_URL } from '@/constants/config'
-import { getToken, clearAll, clearCachedSession } from '@/utils/storage'
+import { getToken, clearAll } from '@/utils/storage'
 
 const ACTIVE_ATELIER_KEY = 'cp_active_atelier'
 export const getActiveAtelierId = () => localStorage.getItem(ACTIVE_ATELIER_KEY)
@@ -34,15 +34,9 @@ api.interceptors.request.use(config => {
 api.interceptors.response.use(
   response => response,
   error => {
-    // 401 = token réellement invalide (pas une erreur réseau).
-    // Network errors n'ont pas error.response → on ne touche pas à la session locale.
     if (error.response?.status === 401) {
       clearAll()
-      clearCachedSession()
-      // Évite la boucle de redirect si on est déjà sur /login
-      if (!window.location.pathname.startsWith('/login')) {
-        window.location.href = '/login'
-      }
+      window.location.href = '/login'
     }
     return Promise.reject(normalizeError(error))
   }

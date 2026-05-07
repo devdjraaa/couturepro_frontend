@@ -1,5 +1,5 @@
 import api from './api'
-import { setToken, clearAll, clearCachedSession } from '@/utils/storage'
+import { setToken, clearAll } from '@/utils/storage'
 
 function normalizeMe(data) {
   const { atelier_maitre, ...proprietaire } = data
@@ -22,13 +22,8 @@ export const authService = {
   },
 
   async logout() {
-    try {
-      await api.post('/auth/logout')
-    } finally {
-      // On purge toujours le local, même si l'API n'est pas joignable
-      clearAll()
-      clearCachedSession()
-    }
+    await api.post('/auth/logout')
+    clearAll()
   },
 
   async register(payload) {

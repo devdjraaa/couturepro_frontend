@@ -1,10 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { authService } from '@/services/authService'
-import {
-  getToken, clearAll,
-  getCachedSession, setCachedSession, clearCachedSession,
-  getMaxOfflineMs,
-} from '@/utils/storage'
+import { getToken } from '@/utils/storage'
 import { setDemoMode } from '@/services/mockFlag'
 import { setActiveAtelierId } from '@/services/api'
 
@@ -46,47 +42,17 @@ export function AuthProvider({ children }) {
   const [atelier,   setAtelier]   = useState(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  // Restaurer la session au démarrage (CDC : 30 jours offline, revalidation 7j online)
+  // Restaurer la session au démarrage
   useEffect(() => {
     if (!getToken()) { setIsLoading(false); return }
-
-    // 1) Hydrate immédiatement depuis le cache local si présent et non expiré
-    const cached = getCachedSession()
-    if (cached?.user) {
-      const ageMs   = Date.now() - (cached.last_validated_at ?? cached.cached_at ?? 0)
-      const limitMs = getMaxOfflineMs(cached.user.role)
-      if (ageMs < limitMs) {
-        setUser(cached.user)
-        setAtelier(cached.atelier)
-        setDemoMode(!!cached.atelier?.is_demo)
-        setIsLoading(false)
-      } else {
-        // Cache trop vieux (CDC §1.2 : 30j gérant / 7j équipe) → forcer la reconnexion
-        clearAll()
-        clearCachedSession()
-        setIsLoading(false)
-        return
-      }
-    }
-
-    // 2) Tenter de revalider en arrière-plan (no-op si offline)
     authService.getMe()
       .then(({ user, atelier }) => {
         setUser(user)
         setAtelier(atelier)
         setDemoMode(!!atelier?.is_demo)
-        setCachedSession({ user, atelier })
       })
-      .catch((err) => {
-        // 401 → l'intercepteur a déjà clearAll() + redirect
-        // network error → on garde le cache, l'utilisateur reste connecté offline
-        if (err?.code === 'reseau') {
-          // pas d'action — la session cachée est toujours valide
-        }
-      })
-      .finally(() => {
-        if (!cached) setIsLoading(false)
-      })
+      .catch(() => { /* token invalide — clearAll déjà appelé par l'intercepteur */ })
+      .finally(() => setIsLoading(false))
   }, [])
 
   const login = useCallback(async (payload) => {
@@ -94,7 +60,6 @@ export function AuthProvider({ children }) {
     setUser(user)
     setAtelier(atelier)
     setDemoMode(!!atelier?.is_demo)
-    setCachedSession({ user, atelier })
   }, [])
 
   const equipeLogin = useCallback(async (payload) => {
@@ -102,17 +67,13 @@ export function AuthProvider({ children }) {
     setUser(user)
     setAtelier(null)
     setDemoMode(false)
-    setCachedSession({ user, atelier: null })
   }, [])
 
   const logout = useCallback(async () => {
-    // Clear local immédiatement (offline-safe)
+    await authService.logout()
     setUser(null)
     setAtelier(null)
     setDemoMode(false)
-    clearCachedSession()
-    // Tenter l'API logout en best-effort (no-op si offline)
-    try { await authService.logout() } catch { /* hors ligne ou serveur down — token sera invalidé serveur side ou à la prochaine 401 */ }
   }, [])
 
   const register = useCallback((payload) => authService.register(payload), [])
@@ -122,7 +83,6 @@ export function AuthProvider({ children }) {
     setUser(user)
     setAtelier(atelier)
     setDemoMode(!!atelier?.is_demo)
-    setCachedSession({ user, atelier })
   }, [])
 
   const resendOtp = useCallback((telephone) => authService.resendOtp(telephone), [])
