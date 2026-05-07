@@ -210,7 +210,15 @@ function AbonnementTab() {
   const handleUpgrade = async (niveau_cle) => {
     const result = await initierPaiement.mutateAsync({ niveau_cle })
     if (result?.checkout_url && result.checkout_url !== '#mock-payment') {
-      window.open(result.checkout_url, '_blank')
+      // Sur Capacitor, on navigue dans la WebView elle-même : ainsi quand FedaPay
+      // redirige vers `https://localhost/paiement/retour`, la SPA peut intercepter
+      // la route. Sur web, on ouvre dans un nouvel onglet (UX classique).
+      const isCapacitor = window.Capacitor?.isNativePlatform?.()
+      if (isCapacitor) {
+        window.location.href = result.checkout_url
+      } else {
+        window.open(result.checkout_url, '_blank')
+      }
     }
   }
 
