@@ -61,7 +61,11 @@ export const abonnementService = {
       await delay(800)
       return { checkout_url: '#mock-payment', paiement_id: 'mock-' + Date.now() }
     }
-    const { data } = await api.post('/paiements/initier', { niveau_cle, provider })
+    // Le frontend dit au backend où FedaPay doit rediriger après paiement.
+    // - Web : window.location.origin (URL réelle du SPA)
+    // - Capacitor : "https://localhost" (la WebView se chargera de naviguer)
+    const return_url = `${window.location.origin}/paiement/retour`
+    const { data } = await api.post('/paiements/initier', { niveau_cle, provider, return_url })
     return data
   },
 
