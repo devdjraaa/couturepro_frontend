@@ -30,6 +30,7 @@
     "description": "Description",
     "oui": "Yes",
     "non": "No",
+    "ou": "OR",
     "accueil": "Home",
     "menu": "Menu",
     "bonjour": "Hello",
@@ -93,6 +94,10 @@
       "deja_inscrit": "Already registered?",
       "se_connecter": "Sign in",
       "question_secrete": "Security question",
+      "question_personnalisee": "Custom…",
+      "question_personnalisee_label": "Your question",
+      "question_personnalisee_placeholder": "E.g. What was my first client's name?",
+      "question_personnalisee_requise": "Please enter your custom question.",
       "reponse_secrete": "Secret answer",
       "reponse_secrete_placeholder": "Your answer",
       "mdp_non_concordants": "Passwords do not match"
@@ -115,7 +120,16 @@
       "instruction": "Enter your email address. You will receive a verification code.",
       "instruction_tel": "Enter your phone number. A verification code will be sent to the email associated with your account.",
       "envoyer": "Send code",
-      "retour_connexion": "Back to sign in"
+      "retour_connexion": "Back to sign in",
+      "essayer_question_secrete": "Try with my security question"
+    },
+    "question_secrete": {
+      "titre": "Security question",
+      "sous_titre": "Recover access to your account",
+      "instruction_tel": "Enter your phone number to display your security question.",
+      "instruction_reponse": "Answer your security question to sign in.",
+      "votre_question": "Your question",
+      "reponse_incorrecte": "Incorrect answer. Please check and try again."
     },
     "recuperer_compte": {
       "titre": "Recover my account",
@@ -758,7 +772,7 @@
     "choisir": "Choose language"
   },
   "nav": {
-    "dashboard": "Dashboard",
+    "dashboard": "Home",
     "clients": "Clients",
     "commandes": "Orders",
     "catalogue": "Catalogue",
@@ -768,7 +782,10 @@
     "parametres": "Settings",
     "archives": "Archives",
     "caisse": "Cash Register",
-    "support": "Support"
+    "support": "Support",
+    "profil": "Profile",
+    "plus": "More",
+    "menu": "Menu"
   },
   "profil": {
     "titre": "My profile",

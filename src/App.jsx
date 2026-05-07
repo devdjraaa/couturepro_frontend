@@ -11,9 +11,10 @@ import {
   SupportPage, SupportTicketDetailPage, ThemePage,
 } from '@/pages'
 import PaiementRetourPage     from '@/pages/PaiementRetourPage'
-import OtpPage                from '@/pages/auth/OtpPage'
-import ForgotPasswordPage     from '@/pages/auth/ForgotPasswordPage'
-import RecoverAccountPage     from '@/pages/auth/RecoverAccountPage'
+import OtpPage                  from '@/pages/auth/OtpPage'
+import ForgotPasswordPage       from '@/pages/auth/ForgotPasswordPage'
+import RecoverAccountPage       from '@/pages/auth/RecoverAccountPage'
+import LoginQuestionSecretePage from '@/pages/auth/LoginQuestionSecretePage'
 import ProfilPage             from '@/pages/ProfilPage'
 import AProposPage            from '@/pages/AProposPage'
 import FAQPage                from '@/pages/FAQPage'
@@ -82,6 +83,7 @@ export default function App() {
         <Route path={ROUTES.OTP}             element={<OtpPage />}             />
         <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPasswordPage />}  />
         <Route path={ROUTES.RECOVER_ACCOUNT} element={<RecoverAccountPage />}  />
+        <Route path={ROUTES.LOGIN_SECRET_Q}  element={<LoginQuestionSecretePage />} />
         <Route path="/paiement/retour"       element={<PaiementRetourPage />} />
 
         {/* ── Routes protégées proprietaire ───────────────────────────── */}

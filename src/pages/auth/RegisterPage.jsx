@@ -10,11 +10,13 @@ export default function RegisterPage() {
   const { t } = useTranslation()
   const { register, verifyOtp, resendOtp } = useAuth()
 
+  const CUSTOM_VALUE = '__custom__'
   const QUESTIONS_SECRETE = [
     { value: 'Quel est le nom de votre premier animal de compagnie ?', label: 'Nom de votre premier animal de compagnie ?' },
     { value: 'Quel est le prénom de votre meilleure amie d\'enfance ?', label: 'Prénom de votre meilleure amie d\'enfance ?' },
     { value: 'Quelle est la ville où vous êtes né(e) ?', label: 'Ville de naissance ?' },
     { value: 'Quel est le nom de votre école primaire ?', label: 'Nom de votre école primaire ?' },
+    { value: CUSTOM_VALUE, label: t('auth.inscription.question_personnalisee') },
   ]
   const [step, setStep] = useState('form') // 'form' | 'otp'
   const [form, setForm] = useState({
@@ -26,6 +28,7 @@ export default function RegisterPage() {
     password: '',
     password_confirmation: '',
     question_secrete: QUESTIONS_SECRETE[0].value,
+    question_secrete_custom: '',
     reponse_secrete: '',
   })
   const [otp, setOtp] = useState('')
@@ -41,9 +44,18 @@ export default function RegisterPage() {
       setError(t('auth.inscription.mdp_non_concordants'))
       return
     }
+    // Si question personnalisée : utiliser le texte saisi
+    const finalQuestion = form.question_secrete === CUSTOM_VALUE
+      ? form.question_secrete_custom.trim()
+      : form.question_secrete
+    if (form.question_secrete === CUSTOM_VALUE && !finalQuestion) {
+      setError(t('auth.inscription.question_personnalisee_requise'))
+      return
+    }
     setLoading(true)
     try {
-      await register(form)
+      const { question_secrete_custom, ...rest } = form
+      await register({ ...rest, question_secrete: finalQuestion })
       setStep('otp')
     } catch (err) {
       setError(err.message || t('erreurs.inconnu'))
@@ -161,6 +173,15 @@ export default function RegisterPage() {
           options={QUESTIONS_SECRETE}
           required
         />
+        {form.question_secrete === CUSTOM_VALUE && (
+          <Input
+            label={t('auth.inscription.question_personnalisee_label')}
+            value={form.question_secrete_custom}
+            onChange={set('question_secrete_custom')}
+            placeholder={t('auth.inscription.question_personnalisee_placeholder')}
+            required
+          />
+        )}
         <Input
           label={t('auth.inscription.reponse_secrete')}
           value={form.reponse_secrete}

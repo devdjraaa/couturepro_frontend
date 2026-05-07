@@ -86,4 +86,18 @@ export const authService = {
     if (data.token) setToken(data.token)
     return data
   },
+
+  // Recovery via question secrète : récupère la question (sans la réponse)
+  async getQuestionSecrete(telephone) {
+    const { data } = await api.post('/auth/recuperation/question/lire', { telephone })
+    return data // { question_secrete }
+  },
+
+  // Recovery via question secrète : valide la réponse, login direct si OK
+  async loginParQuestionSecrete({ telephone, reponse_secrete }) {
+    const { data: loginData } = await api.post('/auth/recuperation/question/verifier', { telephone, reponse_secrete })
+    setToken(loginData.token)
+    const { data: meData } = await api.get('/auth/me')
+    return normalizeMe(meData)
+  },
 }
