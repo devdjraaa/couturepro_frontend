@@ -10,4 +10,13 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  optimizeDeps: {
+    include: ['lokijs', '@nozbe/watermelondb', '@nozbe/watermelondb/adapters/lokijs'],
+  },
+  build: {
+    commonjsOptions: {
+      transformMixedEsModules: true,
+      include: [/lokijs/, /node_modules/],
+    },
+  },
 })

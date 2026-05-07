@@ -1,11 +1,16 @@
 import { Database }      from '@nozbe/watermelondb'
-import LokiJSAdapter    from '@nozbe/watermelondb/adapters/lokijs'
+import * as LokiAdapterMod from '@nozbe/watermelondb/adapters/lokijs'
 import schema           from './schema'
 import { Client, Commande, Mesure, Vetement } from './models'
 
+// Vite/Rolldown wrap les CJS modules : `default.default` peut être nécessaire
+const LokiJSAdapter =
+  LokiAdapterMod.default?.default ||
+  LokiAdapterMod.default ||
+  LokiAdapterMod
+
 const adapter = new LokiJSAdapter({
   schema,
-  // Persiste dans IndexedDB (disponible dans le WebView Android Capacitor)
   useWebWorker: false,
   useIncrementalIndexedDB: true,
   dbName: 'couturepro',
