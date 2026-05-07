@@ -27,7 +27,7 @@ function DashboardHero({ user, stats, isLoading }) {
     ?.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() ?? '—'
 
   return (
-    <div className="lg:hidden bg-primary pt-safe px-5 pb-6 rounded-b-2xl">
+    <div className="lg:hidden sticky top-0 z-10 bg-primary pt-safe px-5 pb-6 rounded-b-2xl">
 
       {/* Ligne du haut : avatar + salutation + badges */}
       <div className="flex items-center justify-between h-14">
