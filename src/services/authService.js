@@ -1,5 +1,5 @@
 import api from './api'
-import { setToken, clearAll, clearCachedSession } from '@/utils/storage'
+import { setToken } from '@/utils/storage'
 
 function normalizeMe(data) {
   const { atelier_maitre, ...proprietaire } = data
@@ -21,14 +21,11 @@ export const authService = {
     return normalizeMe(meData)
   },
 
+  // Best-effort : tente d'invalider le token côté serveur.
+  // Le clear local est géré par AuthContext.logout (qui appelle ce service
+  // dans un try/catch pour ne jamais bloquer en cas d'offline).
   async logout() {
-    try {
-      await api.post('/auth/logout')
-    } finally {
-      // On purge toujours le local, même si l'API n'est pas joignable
-      clearAll()
-      clearCachedSession()
-    }
+    await api.post('/auth/logout')
   },
 
   async register(payload) {

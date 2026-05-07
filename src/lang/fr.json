@@ -1,11 +1,13 @@
 {
   "sync": {
+    "online": "En ligne",
     "hors_ligne": "Hors ligne",
     "actions_attente": "Hors ligne — {{count}} action en attente",
     "actions_attente_plural": "Hors ligne — {{count}} actions en attente",
     "en_cours": "Synchronisation…",
     "synchronise": "Synchronisé",
-    "erreur": "Erreur de synchronisation"
+    "erreur": "Erreur de synchronisation",
+    "refresh": "Actualiser"
   },
   "commun": {
     "enregistrer": "Enregistrer",

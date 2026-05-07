@@ -7,6 +7,8 @@ import { useAuth } from '@/contexts'
 import { Avatar, LanguageSwitcher } from '@/components/ui'
 import { useNotificationsCount } from '@/hooks/useNotifications'
 import { useMesAteliers } from '@/hooks/useMesAteliers'
+import NetworkStatusButton from './NetworkStatusButton'
+import RefreshButton from './RefreshButton'
 
 function AtelierMaitreLabel() {
   const { t } = useTranslation()
@@ -102,6 +104,8 @@ export default function Header({ title, showBack = false, onBack, rightAction, c
         {/* Right actions */}
         <div className="flex items-center gap-0.5 shrink-0">
           {rightAction && <div className="mr-1">{rightAction}</div>}
+          <NetworkStatusButton />
+          <RefreshButton />
           <LanguageSwitcher variant="badge" />
           <button
             type="button"

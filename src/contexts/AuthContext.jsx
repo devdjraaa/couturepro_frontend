@@ -106,13 +106,16 @@ export function AuthProvider({ children }) {
   }, [])
 
   const logout = useCallback(async () => {
-    // Clear local immédiatement (offline-safe)
+    // Clear local immédiatement et complètement (token + cache + atelier actif)
     setUser(null)
     setAtelier(null)
     setDemoMode(false)
+    clearAll()
     clearCachedSession()
-    // Tenter l'API logout en best-effort (no-op si offline)
-    try { await authService.logout() } catch { /* hors ligne ou serveur down — token sera invalidé serveur side ou à la prochaine 401 */ }
+    // Best-effort : tenter d'invalider le token côté serveur. Si offline ou
+    // serveur down, on ignore — le token sera invalidé serveur side au TTL
+    // Sanctum, ou à la prochaine requête qui ramènera un 401.
+    try { await authService.logout() } catch { /* offline */ }
   }, [])
 
   const register = useCallback((payload) => authService.register(payload), [])
