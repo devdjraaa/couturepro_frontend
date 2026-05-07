@@ -14,9 +14,6 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
-    // Skip l'interstitiel ngrok-free (sinon depuis Capacitor WebView, ngrok renvoie
-    // un 200 text/html sans CORS et toutes les requêtes sont bloquées)
-    'ngrok-skip-browser-warning': 'true',
   },
 })
 
