@@ -113,6 +113,7 @@
       "sous_titre": "Entrez votre numéro pour recevoir un code de réinitialisation",
       "sous_titre_mdp": "Récupérer votre compte",
       "instruction": "Entrez votre adresse email. Vous recevrez un code de vérification.",
+      "instruction_tel": "Entrez votre numéro de téléphone. Un code de vérification sera envoyé à l'email associé à votre compte.",
       "envoyer": "Envoyer le code",
       "retour_connexion": "Retour à la connexion"
     },

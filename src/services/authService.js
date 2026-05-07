@@ -58,10 +58,12 @@ export const authService = {
     return normalizeMe(data)
   },
 
-  // Récupération de compte (5 étapes)
-  async recuperationEtape1({ email }) {
-    const { data } = await api.post('/auth/recuperation/initier', { email })
-    return data // { message, demande_id }
+  // Récupération de compte
+  // - Mode simple (mot de passe oublié) : passer { telephone } → flow rapide
+  // - Mode complet (compte perdu / changement de numéro) : passer { email } → flow 5 étapes
+  async recuperationEtape1({ email, telephone }) {
+    const { data } = await api.post('/auth/recuperation/initier', { email, telephone })
+    return data // { message, demande_id, email }
   },
 
   async recuperationEtape2({ demande_id, code }) {
