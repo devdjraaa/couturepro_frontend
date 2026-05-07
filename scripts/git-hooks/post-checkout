@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Hook git : nettoie les artefacts Android quand on passe sur master.
+#
+# Args git post-checkout : <prev_head> <new_head> <flag>
+#   flag = 1 si checkout de branche, 0 si checkout de fichier
+#
+# Sur master, on supprime physiquement tout ce qui concerne Android pour
+# éviter de polluer la copie de travail (les fichiers sont déjà ignorés
+# par .gitignore mais traînent quand même sur disque).
+
+flag="$3"
+[[ "$flag" != "1" ]] && exit 0
+
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+if [[ "$current_branch" == "master" ]]; then
+  removed=()
+  for path in android apk capacitor.config.json capacitor.config.json.bak; do
+    if [[ -e "$path" ]]; then
+      rm -rf "$path"
+      removed+=("$path")
+    fi
+  done
+  if [[ ${#removed[@]} -gt 0 ]]; then
+    echo "🧹 Artefacts Android nettoyés : ${removed[*]}"
+  fi
+fi
