@@ -13,8 +13,10 @@ const COLORS = {
   disponible:  'bg-success/10 text-success',
   annule:      'bg-danger/10  text-danger',
   super_admin: 'bg-primary/10 text-primary',
+  admin:       'bg-info/10    text-info',
   moderateur:  'bg-info/10    text-info',
   support:     'bg-accent/10  text-accent',
+  inactif:     'bg-danger/10  text-danger',
 }
 
 export default function AdminBadge({ value }) {
