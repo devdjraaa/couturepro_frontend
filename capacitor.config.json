@@ -3,7 +3,14 @@
   "appName": "CouturePro",
   "webDir": "dist",
   "server": {
-    "androidScheme": "https"
+    "androidScheme": "https",
+    "allowNavigation": [
+      "*.fedapay.com",
+      "fedapay.com",
+      "*.ngrok-free.app",
+      "*.ngrok.io",
+      "*.ngrok.app"
+    ]
   },
   "plugins": {
     "Network": {},
