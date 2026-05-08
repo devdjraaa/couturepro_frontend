@@ -10,12 +10,16 @@ export default function RecoverAccountPage() {
   const location = useLocation()
   const { t } = useTranslation()
 
-  const STEPS = [
-    t('auth.recuperer_compte.etape_1'),
-    t('auth.recuperer_compte.etape_2'),
-    t('auth.recuperer_compte.etape_3'),
-    t('auth.recuperer_compte.etape_4'),
-  ]
+  // Mode simple = juste reset mot de passe (depuis téléphone). Sinon, flow complet (changement de numéro).
+  const isSimple   = location.state?.simple === true
+  const STEPS = isSimple
+    ? [t('auth.recuperer_compte.etape_1'), t('auth.recuperer_compte.etape_4')]
+    : [
+        t('auth.recuperer_compte.etape_1'),
+        t('auth.recuperer_compte.etape_2'),
+        t('auth.recuperer_compte.etape_3'),
+        t('auth.recuperer_compte.etape_4'),
+      ]
 
   const email      = location.state?.email ?? ''
   const initialId  = location.state?.demande_id ?? null
@@ -44,7 +48,9 @@ export default function RecoverAccountPage() {
     )
   }
 
-  const stepLabel = STEPS[step - 2] ?? ''
+  // En mode simple, on saute step3/4. Index visuel = 0 (etape2) ou 1 (etape5).
+  const visualIndex = isSimple ? (step === 2 ? 0 : 1) : (step - 2)
+  const stepLabel = STEPS[visualIndex] ?? ''
 
   const handleStep2 = async e => {
     e.preventDefault()
@@ -52,7 +58,9 @@ export default function RecoverAccountPage() {
     setLoading(true)
     try {
       await authService.recuperationEtape2({ demande_id: demandeId, code: otp1 })
-      setStep(3)
+      // Mode simple : on saute directement à l'écran nouveau mot de passe (step 5)
+      // Mode complet : on continue par le changement de numéro (step 3)
+      setStep(isSimple ? 5 : 3)
     } catch (err) {
       setError(err?.message || t('erreurs.otp_invalide'))
     } finally {
@@ -111,7 +119,7 @@ export default function RecoverAccountPage() {
           <div
             key={i}
             className={`h-1 flex-1 rounded-full transition-colors ${
-              i < step - 2 ? 'bg-success' : i === step - 2 ? 'bg-primary' : 'bg-border'
+              i < visualIndex ? 'bg-success' : i === visualIndex ? 'bg-primary' : 'bg-border'
             }`}
           />
         ))}

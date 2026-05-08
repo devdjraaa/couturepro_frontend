@@ -31,6 +31,14 @@ export default function LoginPage() {
   const [equipeForm, setEquipeForm] = useState({ code_acces: '', password: '' })
   const setEq = key => e => setEquipeForm(f => ({ ...f, [key]: e.target.value }))
 
+  // Distingue erreur réseau (offline) d'une vraie erreur 401 (mauvais creds)
+  // pour ne pas afficher "mot de passe incorrect" alors qu'on est juste offline.
+  const formatLoginError = err => {
+    if (err?.code === 'reseau')         return t('erreurs.reseau_login')
+    if (err?.code === 'session_expiree') return err?.message || t('erreurs.mot_de_passe_invalide')
+    return err?.message || t('erreurs.mot_de_passe_invalide')
+  }
+
   const handlePropLogin = async e => {
     e.preventDefault()
     setError('')
@@ -39,7 +47,7 @@ export default function LoginPage() {
       await login(propForm)
       navigate('/', { replace: true })
     } catch (err) {
-      setError(err?.response?.data?.message || t('erreurs.mot_de_passe_invalide'))
+      setError(formatLoginError(err))
     } finally {
       setLoading(false)
     }
@@ -57,7 +65,7 @@ export default function LoginPage() {
       })
       navigate('/', { replace: true })
     } catch (err) {
-      setError(err?.response?.data?.message || t('erreurs.mot_de_passe_invalide'))
+      setError(formatLoginError(err))
     } finally {
       setLoading(false)
     }
