@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Search, Bell, Settings, Plus } from 'lucide-react'
+import { Search, Bell, Settings, Menu } from 'lucide-react'
 import AdminSidebar from './AdminSidebar'
 
 const ROUTE_LABELS = {
@@ -20,25 +21,36 @@ const ROUTE_LABELS = {
 export default function AdminLayout({ children, title, action }) {
   const location = useLocation()
   const navigate = useNavigate()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const pageTitle = title ?? ROUTE_LABELS[location.pathname] ?? 'Admin'
 
   return (
     <div className="flex min-h-screen bg-app">
-      <AdminSidebar />
+      <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
       <main className="flex-1 overflow-y-auto flex flex-col min-w-0">
         {/* Header */}
-        <header className="bg-card border-b border-edge px-8 py-4 flex items-center gap-4 sticky top-0 z-10">
+        <header className="bg-card border-b border-edge px-4 md:px-8 py-3 md:py-4 flex items-center gap-3 sticky top-0 z-10">
+          {/* Hamburger — mobile uniquement */}
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(true)}
+            className="md:hidden w-9 h-9 flex items-center justify-center rounded-xl text-ghost hover:bg-subtle hover:text-ink transition-colors shrink-0"
+          >
+            <Menu size={20} />
+          </button>
+
           <div className="flex-1 min-w-0">
-            <p className="text-2xs text-ghost mb-0.5">
+            <p className="text-2xs text-ghost mb-0.5 hidden sm:block">
               Accueil / <span className="text-dim">{pageTitle}</span>
             </p>
-            <h1 className="text-lg font-semibold font-display text-ink leading-tight">
+            <h1 className="text-base md:text-lg font-semibold font-display text-ink leading-tight truncate">
               {pageTitle}
             </h1>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
-            {/* Search */}
+          <div className="flex items-center gap-1 md:gap-2 shrink-0">
+            {/* Search — desktop uniquement */}
             <div className="relative hidden md:block">
               <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ghost pointer-events-none" />
               <input
@@ -48,7 +60,6 @@ export default function AdminLayout({ children, title, action }) {
               />
             </div>
 
-            {/* Bell */}
             <button
               type="button"
               onClick={() => navigate('/admin/notifications')}
@@ -57,29 +68,19 @@ export default function AdminLayout({ children, title, action }) {
               <Bell size={17} />
             </button>
 
-            {/* Settings */}
             <button
               type="button"
               onClick={() => navigate('/admin/parametres')}
-              className="w-9 h-9 flex items-center justify-center rounded-xl text-ghost hover:bg-subtle hover:text-ink transition-colors"
+              className="hidden sm:flex w-9 h-9 items-center justify-center rounded-xl text-ghost hover:bg-subtle hover:text-ink transition-colors"
             >
               <Settings size={17} />
             </button>
 
-            {/* Action slot */}
-            {action !== undefined ? action : (
-              <button
-                type="button"
-                className="flex items-center gap-1.5 h-9 bg-primary hover:bg-primary-600 text-inverse text-sm font-medium px-4 rounded-xl transition-colors"
-              >
-                <Plus size={15} />
-                Nouvelle action
-              </button>
-            )}
+            {action}
           </div>
         </header>
 
-        <div className="p-8 flex-1">
+        <div className="p-4 md:p-8 flex-1">
           {children}
         </div>
       </main>
