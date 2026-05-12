@@ -111,7 +111,7 @@ function PlanModal({ initial, onClose, onSubmit, isLoading }) {
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 overflow-y-auto">
-      <div className="bg-card rounded-2xl w-full max-w-lg my-4 shadow-xl">
+      <div className="bg-card rounded-2xl w-full max-w-lg my-auto sm:my-4 shadow-xl">
         <div className="px-6 pt-5 pb-3 border-b border-edge">
           <h3 className="font-semibold text-ink">
             {isEdit ? t('admin.plans.modifier') : t('admin.plans.nouveau')}
@@ -130,7 +130,7 @@ function PlanModal({ initial, onClose, onSubmit, isLoading }) {
               <label className={LABEL}>{t('admin.plans.form_label')}</label>
               <input value={form.label} onChange={setField('label')} required className={INPUT} />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className={LABEL}>{t('admin.plans.form_duree')}</label>
                 <input type="number" min="1" value={form.duree_jours} onChange={setField('duree_jours')} required className={INPUT} />
@@ -147,7 +147,7 @@ function PlanModal({ initial, onClose, onSubmit, isLoading }) {
 
             <div className={SECTION}>
               <p className={SECT_HEAD}>{t('admin.plans.section_limites')}</p>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <NumField label={t('admin.plans.clients_mois')}    name="max_clients_par_mois"    value={form.config.max_clients_par_mois}    onChange={setCfg} />
                 <NumField label={t('admin.plans.photos_vip_mois')} name="max_photos_vip_par_mois" value={form.config.max_photos_vip_par_mois} onChange={setCfg} unlimited />
                 <NumField label={t('admin.plans.factures_mois')}   name="max_factures_par_mois"   value={form.config.max_factures_par_mois}   onChange={setCfg} unlimited />
@@ -159,7 +159,7 @@ function PlanModal({ initial, onClose, onSubmit, isLoading }) {
 
             <div className={SECTION}>
               <p className={SECT_HEAD}>{t('admin.plans.section_fidelite')}</p>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <NumField label={t('admin.plans.pts_client')}     name="pts_par_client"   value={form.config.pts_par_client}   onChange={setCfg} />
                 <NumField label={t('admin.plans.pts_commande')}   name="pts_par_commande" value={form.config.pts_par_commande} onChange={setCfg} />
                 <NumField label={t('admin.plans.pts_activation')} name="pts_activation"   value={form.config.pts_activation}   onChange={setCfg} />

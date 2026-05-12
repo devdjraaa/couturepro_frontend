@@ -53,7 +53,7 @@ export default function TicketsPage() {
 
   return (
     <AdminLayout title={t('admin.tickets.titre')}>
-      <div className="flex gap-3 mb-5">
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mb-5">
         <select value={statut} onChange={e => setStatut(e.target.value)} className={SELECT}>
           <option value="">{t('admin.tickets.statuts.tous')}</option>
           <option value="ouvert">{t('admin.tickets.statuts.ouvert')}</option>

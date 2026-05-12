@@ -118,24 +118,25 @@ export default function AdminPaiementsPage() {
   return (
     <AdminLayout title={t('admin.paiements.titre')}>
       {/* Filter bar */}
-      <div className="flex flex-wrap items-center gap-2 mb-5">
-        {STATUT_TABS.map(tab => (
-          <button
-            key={tab.key}
-            onClick={() => setStatut(tab.key)}
-            className={cn(
-              'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors',
-              statut === tab.key
-                ? 'bg-primary text-inverse'
-                : 'bg-subtle text-ghost hover:bg-inset hover:text-ink',
-            )}
-          >
-            {tab.dot && <span className={cn('w-1.5 h-1.5 rounded-full', tab.dot)} />}
-            {tab.label(t)}
-          </button>
-        ))}
-        <div className="flex-1" />
-        <select value={provider} onChange={e => setProvider(e.target.value)} className={INPUT}>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-5">
+        <div className="flex flex-wrap gap-2">
+          {STATUT_TABS.map(tab => (
+            <button
+              key={tab.key}
+              onClick={() => setStatut(tab.key)}
+              className={cn(
+                'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors',
+                statut === tab.key
+                  ? 'bg-primary text-inverse'
+                  : 'bg-subtle text-ghost hover:bg-inset hover:text-ink',
+              )}
+            >
+              {tab.dot && <span className={cn('w-1.5 h-1.5 rounded-full', tab.dot)} />}
+              {tab.label(t)}
+            </button>
+          ))}
+        </div>
+        <select value={provider} onChange={e => setProvider(e.target.value)} className={`${INPUT} sm:w-auto`}>
           {PROVIDERS.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
         </select>
       </div>

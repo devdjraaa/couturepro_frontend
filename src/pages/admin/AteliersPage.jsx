@@ -69,8 +69,8 @@ export default function AteliersPage() {
 
   return (
     <AdminLayout title={t('admin.ateliers.titre')}>
-      <div className="flex gap-3 mb-5">
-        <div className="relative flex-1 max-w-xs">
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mb-5">
+        <div className="relative flex-1">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ghost pointer-events-none" />
           <input
             value={search}

@@ -52,7 +52,7 @@ function OffreModal({ initial, onClose, onSubmit, isLoading, ateliers, plans }) 
               {(plans ?? []).map(p => <option key={p.id} value={p.cle}>{p.label}</option>)}
             </select>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className={LABEL}>{t('admin.offres.prix_special')}</label>
               <input type="number" value={form.prix_special} onChange={set('prix_special')} min="0" className={INPUT} />
@@ -79,8 +79,8 @@ function OffreModal({ initial, onClose, onSubmit, isLoading, ateliers, plans }) 
             <label className={LABEL}>{t('admin.offres.notes_internes')}</label>
             <textarea value={form.notes_internes} onChange={set('notes_internes')} rows={2} className={INPUT} />
           </div>
-          <div className="flex justify-end gap-3 pt-2">
-            <button type="button" onClick={onClose} className="text-sm text-ghost hover:text-dim transition-colors">
+          <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 pt-2">
+            <button type="button" onClick={onClose} className="text-sm text-ghost hover:text-dim transition-colors text-center sm:text-left">
               {t('admin.commun.annuler')}
             </button>
             <button

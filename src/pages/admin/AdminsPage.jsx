@@ -12,7 +12,7 @@ const EMPTY_FORM = { nom: '', prenom: '', email: '', password: '', role: 'admin'
 
 function PermissionsList({ permissions, allPermissions, onChange, readonly }) {
   return (
-    <div className="grid grid-cols-2 gap-x-6 gap-y-1 mt-3">
+    <div className="grid grid-cols-2 gap-x-3 sm:gap-x-6 gap-y-1 mt-3">
       {Object.entries(allPermissions).map(([key, label]) => (
         <label key={key} className="flex items-center gap-2 text-sm cursor-pointer">
           <input
@@ -132,7 +132,7 @@ export default function AdminsPage() {
       {showForm && (
         <form onSubmit={handleCreate} className="bg-card border border-edge rounded-xl p-5 mb-6 space-y-4">
           <p className="font-semibold text-ink text-sm">{t('admin.admins.creer_titre')}</p>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className={LABEL}>{t('admin.admins.nom')}</label>
               <input value={form.nom} onChange={set('nom')} required placeholder="Koné" className={INPUT} />

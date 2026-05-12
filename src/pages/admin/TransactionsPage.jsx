@@ -115,7 +115,7 @@ export default function TransactionsPage() {
                   {plans.map(p => <option key={p.id} value={p.cle}>{p.label}</option>)}
                 </select>
               </div>
-              <div className="flex justify-end gap-3 pt-2">
+              <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 pt-2">
                 <button type="button" onClick={() => setShowModal(false)} className="text-sm text-ghost hover:text-dim transition-colors">
                   {t('admin.commun.annuler')}
                 </button>

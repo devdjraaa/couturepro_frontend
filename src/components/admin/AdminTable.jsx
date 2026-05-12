@@ -34,6 +34,7 @@ export default function AdminTable({
 
   return (
     <div className="bg-card border border-edge rounded-xl overflow-hidden">
+      <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead className="bg-subtle border-b border-edge">
           <tr>
@@ -99,6 +100,7 @@ export default function AdminTable({
           })}
         </tbody>
       </table>
+      </div>
     </div>
   )
 }

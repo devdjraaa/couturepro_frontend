@@ -54,7 +54,7 @@ export default function ListeNoirePage() {
 
   return (
     <AdminLayout title={t('admin.liste_noire.titre')}>
-      <div className="flex gap-3 justify-between mb-5">
+      <div className="flex flex-col sm:flex-row sm:justify-between gap-2 mb-5">
         <select value={typeFilter} onChange={e => setTypeFilter(e.target.value)} className={SELECT}>
           <option value="">{t('admin.liste_noire.types.tous')}</option>
           <option value="telephone">{t('admin.liste_noire.types.telephone')}</option>
@@ -109,7 +109,7 @@ export default function ListeNoirePage() {
                   className={INPUT}
                 />
               </div>
-              <div className="flex justify-end gap-3 pt-2">
+              <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 pt-2">
                 <button type="button" onClick={() => setShowModal(false)} className="text-sm text-ghost hover:text-dim transition-colors">
                   {t('admin.commun.annuler')}
                 </button>
