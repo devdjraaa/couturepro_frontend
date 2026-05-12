@@ -941,12 +941,13 @@
       "col_cree_le": "Created on",
       "aucun": "No workshops found",
       "statuts": {
-        "tous": "All statuses",
+        "tous": "All",
         "actif": "Active",
         "expire": "Expired",
         "gele": "Frozen"
       },
-      "pagination": "Page {{current}} / {{last}} — {{total}} workshops"
+      "pagination": "Page {{current}} / {{last}} — {{total}} workshops",
+      "filtres": "Filters"
     },
     "atelier_detail": {
       "introuvable": "Workshop not found.",
