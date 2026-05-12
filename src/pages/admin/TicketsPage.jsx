@@ -18,9 +18,15 @@ export default function TicketsPage() {
   const navigate = useNavigate()
   const [statut,   setStatut]   = useState('')
   const [priorite, setPriorite] = useState('')
+  const [page,     setPage]     = useState(1)
 
-  const { data, isLoading } = useAdminTickets({ statut, priorite })
-  const tickets = data?.data ?? []
+  const { data, isLoading } = useAdminTickets({ statut, priorite, page })
+  const tickets     = data?.data         ?? []
+  const currentPage = data?.current_page ?? 1
+  const lastPage    = data?.last_page    ?? 1
+
+  const changeStatut   = v => { setStatut(v);   setPage(1) }
+  const changePriorite = v => { setPriorite(v); setPage(1) }
 
   const columns = [
     {
@@ -54,13 +60,13 @@ export default function TicketsPage() {
   return (
     <AdminLayout title={t('admin.tickets.titre')}>
       <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mb-5">
-        <select value={statut} onChange={e => setStatut(e.target.value)} className={SELECT}>
+        <select value={statut} onChange={e => changeStatut(e.target.value)} className={SELECT}>
           <option value="">{t('admin.tickets.statuts.tous')}</option>
           <option value="ouvert">{t('admin.tickets.statuts.ouvert')}</option>
           <option value="en_cours">{t('admin.tickets.statuts.en_cours')}</option>
           <option value="ferme">{t('admin.tickets.statuts.ferme')}</option>
         </select>
-        <select value={priorite} onChange={e => setPriorite(e.target.value)} className={SELECT}>
+        <select value={priorite} onChange={e => changePriorite(e.target.value)} className={SELECT}>
           <option value="">{t('admin.tickets.priorites.toutes')}</option>
           <option value="haute">{t('admin.tickets.priorites.haute')}</option>
           <option value="normale">{t('admin.tickets.priorites.normale')}</option>
@@ -71,7 +77,14 @@ export default function TicketsPage() {
       {isLoading ? (
         <p className="text-sm text-ghost">{t('admin.commun.chargement')}</p>
       ) : (
-        <AdminTable columns={columns} rows={tickets} emptyLabel={t('admin.tickets.aucun')} />
+        <AdminTable
+          columns={columns}
+          rows={tickets}
+          emptyLabel={t('admin.tickets.aucun')}
+          currentPage={currentPage}
+          lastPage={lastPage}
+          onPage={setPage}
+        />
       )}
     </AdminLayout>
   )

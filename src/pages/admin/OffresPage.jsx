@@ -99,7 +99,9 @@ function OffreModal({ initial, onClose, onSubmit, isLoading, ateliers, plans }) 
 
 export default function OffresPage() {
   const { t } = useTranslation()
-  const { data, isLoading } = useAdminOffres()
+  const [page, setPage] = useState(1)
+
+  const { data, isLoading } = useAdminOffres({ page })
   const { data: ateliers }  = useAdminAteliers()
   const { data: plans }     = useAdminPlans()
   const create = useCreateOffre()
@@ -107,7 +109,9 @@ export default function OffresPage() {
   const del    = useDeleteOffre()
   const [modal, setModal] = useState(null)
 
-  const offres = data?.data ?? []
+  const offres      = data?.data         ?? []
+  const currentPage = data?.current_page ?? 1
+  const lastPage    = data?.last_page    ?? 1
 
   const columns = [
     { key: 'label',           label: t('admin.offres.col_label') },
@@ -170,7 +174,14 @@ export default function OffresPage() {
       {isLoading ? (
         <p className="text-sm text-ghost">{t('admin.commun.chargement')}</p>
       ) : (
-        <AdminTable columns={columns} rows={offres} emptyLabel={t('admin.offres.aucune')} />
+        <AdminTable
+          columns={columns}
+          rows={offres}
+          emptyLabel={t('admin.offres.aucune')}
+          currentPage={currentPage}
+          lastPage={lastPage}
+          onPage={setPage}
+        />
       )}
 
       {modal === 'create' && (
