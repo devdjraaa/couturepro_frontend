@@ -42,7 +42,8 @@ export default function AdminLayout({ children, title, action }) {
 
           <div className="flex-1 min-w-0">
             <p className="text-2xs text-ghost mb-0.5 hidden sm:block">
-              Accueil / <span className="text-dim">{pageTitle}</span>
+              <button type="button" onClick={() => navigate('/admin')} className="hover:text-dim transition-colors">Accueil</button>
+              {' / '}<span className="text-dim">{pageTitle}</span>
             </p>
             <h1 className="text-base md:text-lg font-semibold font-display text-ink leading-tight truncate">
               {pageTitle}
