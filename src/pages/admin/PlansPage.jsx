@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Plus, Edit2 } from 'lucide-react'
 import { AdminLayout, AdminTable, AdminBadge } from '@/components/admin'
 import { useAdminPlans, useCreatePlan, useUpdatePlan, useTogglePlan } from '@/hooks/admin/usePlans'
+import { cn } from '@/utils/cn'
 
 const DEFAULT_CONFIG = {
   max_clients_par_mois:    50,
@@ -59,11 +60,12 @@ function NumField({ label, name, value, onChange, unlimited = false }) {
             type="button"
             onClick={() => onChange(name, isUnlimited ? 0 : -1)}
             title={isUnlimited ? 'Définir une limite' : 'Illimité (-1)'}
-            className={`px-2.5 rounded-xl border text-sm font-mono shrink-0 transition-colors ${
+            className={cn(
+              'px-2.5 rounded-xl border text-sm font-mono shrink-0 transition-colors',
               isUnlimited
                 ? 'bg-primary/10 border-primary/30 text-primary'
-                : 'border-edge text-ghost hover:border-edge-strong'
-            }`}
+                : 'border-edge text-ghost hover:border-edge-strong',
+            )}
           >
             ∞
           </button>
@@ -80,13 +82,15 @@ function Toggle({ label, name, value, onChange }) {
       <button
         type="button"
         onClick={() => onChange(name, !value)}
-        className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
-          value ? 'bg-primary' : 'bg-inset'
-        }`}
+        className={cn(
+          'relative inline-flex h-5 w-9 items-center rounded-full transition-colors',
+          value ? 'bg-primary' : 'bg-inset',
+        )}
       >
-        <span className={`inline-block h-4 w-4 transform rounded-full bg-card transition-transform ${
-          value ? 'translate-x-4' : 'translate-x-1'
-        }`} />
+        <span className={cn(
+          'inline-block h-4 w-4 transform rounded-full bg-card transition-transform',
+          value ? 'translate-x-4' : 'translate-x-1',
+        )} />
       </button>
     </label>
   )
@@ -200,7 +204,13 @@ function PlanModal({ initial, onClose, onSubmit, isLoading }) {
 
 export default function PlansPage() {
   const { t } = useTranslation()
-  const { data: plans = [], isLoading } = useAdminPlans()
+  const [page, setPage] = useState(1)
+
+  const { data, isLoading } = useAdminPlans({ page, per_page: 15 })
+  const plans       = data?.data         ?? data ?? []
+  const currentPage = data?.current_page ?? 1
+  const lastPage    = data?.last_page    ?? 1
+
   const create = useCreatePlan()
   const update = useUpdatePlan()
   const toggle = useTogglePlan()
@@ -234,7 +244,10 @@ export default function PlansPage() {
           </button>
           <button
             onClick={() => toggle.mutate(r.id)}
-            className={`text-xs font-medium transition-colors ${r.is_actif ? 'text-danger hover:text-danger/70' : 'text-success hover:text-success/70'}`}
+            className={cn(
+                'text-xs font-medium transition-colors',
+                r.is_actif ? 'text-danger hover:text-danger/70' : 'text-success hover:text-success/70',
+              )}
           >
             {r.is_actif ? t('admin.plans.desactiver') : t('admin.plans.activer')}
           </button>
@@ -260,7 +273,14 @@ export default function PlansPage() {
       {isLoading ? (
         <p className="text-sm text-ghost">{t('admin.commun.chargement')}</p>
       ) : (
-        <AdminTable columns={columns} rows={plans} emptyLabel={t('admin.plans.aucun')} />
+        <AdminTable
+          columns={columns}
+          rows={plans}
+          emptyLabel={t('admin.plans.aucun')}
+          currentPage={currentPage}
+          lastPage={lastPage}
+          onPage={setPage}
+        />
       )}
 
       {modal === 'create' && (

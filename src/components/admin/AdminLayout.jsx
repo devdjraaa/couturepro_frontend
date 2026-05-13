@@ -25,12 +25,12 @@ export default function AdminLayout({ children, title, action }) {
   const pageTitle = title ?? ROUTE_LABELS[location.pathname] ?? 'Admin'
 
   return (
-    <div className="flex min-h-screen bg-app">
+    <div className="flex h-screen overflow-hidden bg-app">
       <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      <main className="flex-1 overflow-y-auto flex flex-col min-w-0">
+      <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Header */}
-        <header className="bg-card border-b border-edge px-4 md:px-8 py-3 md:py-4 flex items-center gap-3 sticky top-0 z-10">
+        <header className="bg-card border-b border-edge px-4 md:px-8 py-3 md:py-4 flex items-center gap-3 shrink-0 z-10">
           {/* Hamburger — mobile uniquement */}
           <button
             type="button"
@@ -80,7 +80,7 @@ export default function AdminLayout({ children, title, action }) {
           </div>
         </header>
 
-        <div className="p-4 md:p-8 flex-1">
+        <div className="flex-1 overflow-y-auto p-4 md:p-8">
           {children}
         </div>
       </main>

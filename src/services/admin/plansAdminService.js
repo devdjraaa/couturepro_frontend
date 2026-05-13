@@ -1,8 +1,8 @@
 import adminApi from '../adminApi'
 
 export const plansAdminService = {
-  async getAll() {
-    const { data } = await adminApi.get('/plans')
+  async getAll(params = {}) {
+    const { data } = await adminApi.get('/plans', { params })
     return data
   },
 

@@ -195,8 +195,8 @@ export default function AdminDashboardPage() {
         />
       </div>
 
-      {/* Activity + Quick access */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+      {/* Activity + Right column */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Activité récente */}
         <div className="lg:col-span-2 bg-card border border-edge rounded-xl p-5">
           <div className="flex items-center justify-between mb-2">
@@ -211,30 +211,31 @@ export default function AdminDashboardPage() {
           <ActivityItem icon={TicketCheck} color="accent"  title="Ticket #1247 résolu"               subtitle="Problème de connexion"          time="il y a 5 h"   />
         </div>
 
-        {/* Accès rapides */}
-        <div className="bg-card border border-edge rounded-xl p-5">
-          <p className="text-sm font-semibold text-ink mb-2">Accès rapides</p>
-          {QUICK_LINKS.map(item => (
-            <QuickItem key={item.to + item.title} {...item} />
-          ))}
-        </div>
-      </div>
-
-      {/* État du système */}
-      <div className="bg-card border border-edge rounded-xl p-5">
-        <div className="flex items-center justify-between mb-3">
-          <p className="text-sm font-semibold text-ink">État du système</p>
-          <span className="flex items-center gap-1.5 text-xs font-medium text-success bg-success/10 px-2.5 py-1 rounded-full">
-            <span className="w-1.5 h-1.5 rounded-full bg-success" />
-            Tout fonctionne
-          </span>
-        </div>
-        {SYSTEM_ITEMS.map(({ label, status }) => (
-          <div key={label} className="flex items-center justify-between py-3 border-b border-edge last:border-0">
-            <span className="text-sm text-ghost">{label}</span>
-            <span className="text-sm text-ink font-medium">{status}</span>
+        {/* Colonne droite : Accès rapides + État du système */}
+        <div className="flex flex-col gap-4">
+          <div className="bg-card border border-edge rounded-xl p-5">
+            <p className="text-sm font-semibold text-ink mb-2">Accès rapides</p>
+            {QUICK_LINKS.map(item => (
+              <QuickItem key={item.to + item.title} {...item} />
+            ))}
           </div>
-        ))}
+
+          <div className="bg-card border border-edge rounded-xl p-5">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-sm font-semibold text-ink">État du système</p>
+              <span className="flex items-center gap-1.5 text-xs font-medium text-success bg-success/10 px-2.5 py-1 rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-success" />
+                Tout fonctionne
+              </span>
+            </div>
+            {SYSTEM_ITEMS.map(({ label, status }) => (
+              <div key={label} className="flex items-center justify-between py-2.5 border-b border-edge last:border-0">
+                <span className="text-sm text-ghost">{label}</span>
+                <span className="text-sm text-ink font-medium">{status}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </AdminLayout>
   )
