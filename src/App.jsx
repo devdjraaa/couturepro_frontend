@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { ProtectedRoute, SyncIndicator } from '@/components/layout'
+import { ProtectedRoute } from '@/components/layout'
 import { AdminProtectedRoute } from '@/components/admin'
 import {
   LoginPage, RegisterPage, OnboardingPage,
@@ -86,7 +86,6 @@ export default function App() {
 
   return (
     <>
-      <SyncIndicator />
       <Routes>
 
         {/* ── Routes admin ────────────────────────────────────────────── */}

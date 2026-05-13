@@ -21,7 +21,7 @@ function DashboardHero({ user, stats, isLoading }) {
   const { data: notifCount = 0 } = useNotificationsCount()
 
   const hour = new Date().getHours()
-  const greeting = hour < 12 ? 'Bonjour' : hour < 18 ? 'Bon après-midi' : 'Bonsoir'
+  const greeting = hour < 12 ? t('dashboard.bonjour') : hour < 18 ? t('dashboard.bon_aprem') : t('dashboard.bonsoir')
   const dateStr = new Date().toLocaleDateString('fr-FR', {
     weekday: 'long', day: 'numeric', month: 'long',
   })
@@ -29,7 +29,7 @@ function DashboardHero({ user, stats, isLoading }) {
     ?.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() ?? '—'
 
   return (
-    <div className="lg:hidden bg-primary pt-safe px-5 pb-6 rounded-b-2xl">
+    <div className="lg:hidden sticky top-0 z-10 bg-primary pt-safe px-5 pb-6 rounded-b-2xl">
 
       {/* Ligne du haut : avatar + salutation + badges */}
       <div className="flex items-center justify-between h-14">

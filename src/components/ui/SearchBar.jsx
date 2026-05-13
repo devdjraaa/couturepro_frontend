@@ -18,7 +18,7 @@ export default function SearchBar({ value, onChange, placeholder = 'Rechercherâ€
         placeholder={placeholder}
         className={cn(
           'w-full h-10 bg-subtle text-ink placeholder:text-ghost',
-          'border border-transparent rounded-lg pl-9 pr-8 text-sm font-sans',
+          'border border-transparent rounded-xl pl-9 pr-8 text-sm font-sans',
           'transition-all duration-150',
           'focus:outline-none focus:bg-card focus:border-edge focus:ring-2 focus:ring-primary/20',
           // masque le bouton natif clear des navigateurs

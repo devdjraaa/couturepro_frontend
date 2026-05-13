@@ -5,6 +5,9 @@ import { AdminLayout } from '@/components/admin'
 import { notifAdminService } from '@/services/admin/notifAdminService'
 import { useAdminAteliers } from '@/hooks/admin/useAteliers'
 
+const INPUT = 'w-full border border-edge rounded-xl px-3 py-2 text-sm text-ink bg-card mt-1 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary'
+const LABEL = 'text-xs font-medium text-ghost'
+
 export default function AdminNotificationsPage() {
   const { t } = useTranslation()
   const { data: ateliers } = useAdminAteliers()
@@ -40,45 +43,42 @@ export default function AdminNotificationsPage() {
   return (
     <AdminLayout title={t('admin.notifications.titre')}>
       <div className="max-w-lg">
-        <p className="text-sm text-gray-500 mb-6">{t('admin.notifications.broadcast_desc')}</p>
+        <p className="text-sm text-ghost mb-6">{t('admin.notifications.broadcast_desc')}</p>
 
-        <form onSubmit={handleSubmit} className="bg-white border border-gray-200 rounded-xl p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="bg-card border border-edge rounded-xl p-6 space-y-4">
           <div>
-            <label className="text-xs font-medium text-gray-500">{t('admin.notifications.atelier_cible')}</label>
-            <select value={form.atelier_id} onChange={set('atelier_id')}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm mt-1 focus:outline-none focus:border-indigo-400">
+            <label className={LABEL}>{t('admin.notifications.atelier_cible')}</label>
+            <select value={form.atelier_id} onChange={set('atelier_id')} className={INPUT}>
               <option value="">{t('admin.notifications.broadcast_tous')}</option>
               {ateliersList.map(a => <option key={a.id} value={a.id}>{a.nom}</option>)}
             </select>
           </div>
 
           <div>
-            <label className="text-xs font-medium text-gray-500">{t('admin.notifications.type')}</label>
-            <select value={form.type} onChange={set('type')}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm mt-1 focus:outline-none focus:border-indigo-400">
+            <label className={LABEL}>{t('admin.notifications.type')}</label>
+            <select value={form.type} onChange={set('type')} className={INPUT}>
               {TYPES.map(tp => <option key={tp.value} value={tp.value}>{tp.label}</option>)}
             </select>
           </div>
 
           <div>
-            <label className="text-xs font-medium text-gray-500">{t('admin.notifications.titre_label')}</label>
-            <input value={form.titre} onChange={set('titre')} required maxLength={150}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm mt-1 focus:outline-none focus:border-indigo-400" />
+            <label className={LABEL}>{t('admin.notifications.titre_label')}</label>
+            <input value={form.titre} onChange={set('titre')} required maxLength={150} className={INPUT} />
           </div>
 
           <div>
-            <label className="text-xs font-medium text-gray-500">{t('admin.notifications.contenu')}</label>
+            <label className={LABEL}>{t('admin.notifications.contenu')}</label>
             <textarea value={form.contenu} onChange={set('contenu')} required rows={4}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm mt-1 focus:outline-none focus:border-indigo-400 resize-none" />
+              className={`${INPUT} resize-none`} />
           </div>
 
           {send.isError && (
-            <p className="text-sm text-red-500">{send.error?.message ?? t('admin.notifications.erreur_envoi')}</p>
+            <p className="text-sm text-danger">{send.error?.message ?? t('admin.notifications.erreur_envoi')}</p>
           )}
-          {success && <p className="text-sm text-green-600">{success}</p>}
+          {success && <p className="text-sm text-success">{success}</p>}
 
           <button type="submit" disabled={send.isPending}
-            className="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-lg hover:bg-indigo-700 disabled:opacity-50 text-sm">
+            className="w-full bg-primary text-inverse font-medium py-2.5 rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors text-sm">
             {send.isPending
               ? t('admin.notifications.envoi')
               : form.atelier_id

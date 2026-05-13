@@ -1,26 +1,28 @@
 const COLORS = {
-  actif:      'bg-green-100 text-green-700',
-  active:     'bg-green-100 text-green-700',
-  gele:       'bg-blue-100 text-blue-700',
-  expire:     'bg-gray-100 text-gray-600',
-  pending:    'bg-yellow-100 text-yellow-700',
-  completed:  'bg-green-100 text-green-700',
-  failed:     'bg-red-100 text-red-700',
-  refunded:   'bg-purple-100 text-purple-700',
-  ouvert:     'bg-blue-100 text-blue-700',
-  en_cours:   'bg-yellow-100 text-yellow-700',
-  ferme:      'bg-gray-100 text-gray-600',
-  disponible: 'bg-green-100 text-green-700',
-  annule:     'bg-red-100 text-red-600',
-  super_admin:'bg-indigo-100 text-indigo-700',
-  moderateur: 'bg-blue-100 text-blue-700',
-  support:    'bg-teal-100 text-teal-700',
+  actif:       'bg-success/10 text-success',
+  active:      'bg-success/10 text-success',
+  gele:        'bg-primary/10 text-primary',
+  expire:      'bg-subtle text-ghost border border-edge',
+  pending:     'bg-warning/10 text-warning',
+  completed:   'bg-success/10 text-success',
+  failed:      'bg-danger/10  text-danger',
+  refunded:    'bg-accent/10  text-accent',
+  ouvert:      'bg-primary/10 text-primary',
+  en_cours:    'bg-warning/10 text-warning',
+  ferme:       'bg-subtle text-ghost border border-edge',
+  disponible:  'bg-success/10 text-success',
+  annule:      'bg-danger/10  text-danger',
+  super_admin: 'bg-primary/10 text-primary',
+  admin:       'bg-info/10    text-info',
+  moderateur:  'bg-info/10    text-info',
+  support:     'bg-accent/10  text-accent',
+  inactif:     'bg-danger/10  text-danger',
 }
 
 export default function AdminBadge({ value }) {
-  const cls = COLORS[value] ?? 'bg-gray-100 text-gray-600'
+  const cls = COLORS[value] ?? 'bg-subtle text-ghost'
   return (
-    <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${cls}`}>
+    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${cls}`}>
       {value}
     </span>
   )

@@ -1,32 +1,102 @@
-export default function AdminTable({ columns, rows, emptyLabel = 'Aucun résultat' }) {
+import { useState } from 'react'
+import { cn } from '@/utils/cn'
+
+export default function AdminTable({
+  columns,
+  rows,
+  emptyLabel = 'Aucun résultat',
+  selectable = false,
+  onSelectionChange,
+}) {
+  const [selected, setSelected] = useState(new Set())
+
+  const toggleAll = () => {
+    if (selected.size === rows.length) {
+      setSelected(new Set())
+      onSelectionChange?.([])
+    } else {
+      const all = new Set(rows.map((r, i) => r.id ?? i))
+      setSelected(all)
+      onSelectionChange?.(rows)
+    }
+  }
+
+  const toggleRow = (id, row) => {
+    const next = new Set(selected)
+    if (next.has(id)) next.delete(id)
+    else next.add(id)
+    setSelected(next)
+    onSelectionChange?.(rows.filter((r, i) => next.has(r.id ?? i)))
+  }
+
+  const allSelected  = rows.length > 0 && selected.size === rows.length
+  const someSelected = selected.size > 0 && selected.size < rows.length
+
   return (
-    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+    <div className="bg-card border border-edge rounded-xl overflow-hidden">
       <table className="w-full text-sm">
-        <thead className="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <thead className="bg-subtle border-b border-edge">
           <tr>
+            {selectable && (
+              <th className="w-10 px-4 py-3">
+                <input
+                  type="checkbox"
+                  checked={allSelected}
+                  ref={el => { if (el) el.indeterminate = someSelected }}
+                  onChange={toggleAll}
+                  className="w-4 h-4 rounded border-edge accent-primary"
+                />
+              </th>
+            )}
             {columns.map(col => (
-              <th key={col.key} className="text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide px-4 py-3">
+              <th
+                key={col.key}
+                className="text-left text-2xs font-semibold text-ghost uppercase tracking-widest px-4 py-3 whitespace-nowrap"
+              >
                 {col.label}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+        <tbody className="divide-y divide-edge">
           {rows.length === 0 ? (
             <tr>
-              <td colSpan={columns.length} className="px-4 py-8 text-center text-gray-400 dark:text-gray-500 text-sm">
+              <td
+                colSpan={columns.length + (selectable ? 1 : 0)}
+                className="px-4 py-10 text-center text-ghost text-sm"
+              >
                 {emptyLabel}
               </td>
             </tr>
-          ) : rows.map((row, i) => (
-            <tr key={row.id ?? i} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-              {columns.map(col => (
-                <td key={col.key} className="px-4 py-3 text-gray-700 dark:text-gray-200">
-                  {col.render ? col.render(row) : row[col.key] ?? '—'}
-                </td>
-              ))}
-            </tr>
-          ))}
+          ) : rows.map((row, i) => {
+            const id         = row.id ?? i
+            const isSelected = selected.has(id)
+            return (
+              <tr
+                key={id}
+                className={cn(
+                  'transition-colors',
+                  isSelected ? 'bg-primary/5' : 'hover:bg-subtle',
+                )}
+              >
+                {selectable && (
+                  <td className="w-10 px-4 py-3">
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      onChange={() => toggleRow(id, row)}
+                      className="w-4 h-4 rounded border-edge accent-primary"
+                    />
+                  </td>
+                )}
+                {columns.map(col => (
+                  <td key={col.key} className="px-4 py-3 text-ink">
+                    {col.render ? col.render(row) : (row[col.key] ?? '—')}
+                  </td>
+                ))}
+              </tr>
+            )
+          })}
         </tbody>
       </table>
     </div>

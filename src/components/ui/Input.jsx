@@ -27,7 +27,7 @@ const Input = forwardRef(function Input(
           required={required}
           className={cn(
             'w-full h-10 bg-card text-ink placeholder:text-ghost',
-            'border border-edge rounded px-3 text-sm font-sans',
+            'border border-edge rounded-xl px-3 text-sm font-sans',
             'transition-colors duration-150',
             'focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary',
             'disabled:opacity-50 disabled:cursor-not-allowed',
