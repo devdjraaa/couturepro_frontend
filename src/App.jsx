@@ -59,7 +59,6 @@ export default function App() {
   if (APP_TARGET === 'admin') {
     return (
       <>
-        <SyncIndicator />
         <Routes>
           <Route path="/admin/login" element={<AdminLoginPage />} />
           <Route element={<AdminProtectedRoute />}>
