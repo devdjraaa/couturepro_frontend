@@ -8,7 +8,7 @@ export default function AuditPage() {
   const { t } = useTranslation()
   const [page, setPage] = useState(1)
 
-  const { data, isLoading } = useAuditLogs({ page })
+  const { data, isLoading } = useAuditLogs({ page, per_page: 15 })
   const logs        = data?.data         ?? []
   const currentPage = data?.current_page ?? 1
   const lastPage    = data?.last_page    ?? 1

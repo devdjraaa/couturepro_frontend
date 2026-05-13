@@ -14,7 +14,7 @@ export default function TransactionsPage() {
   const { t } = useTranslation()
   const [page, setPage] = useState(1)
 
-  const { data, isLoading }  = useAdminTransactions({ page })
+  const { data, isLoading }  = useAdminTransactions({ page, per_page: 15 })
   const { data: ateliers = [] } = useAdminAteliers()
   const { data: plans = [] }    = useAdminPlans()
   const create = useCreateTransaction()

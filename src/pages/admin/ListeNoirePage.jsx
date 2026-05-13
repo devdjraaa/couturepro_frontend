@@ -14,7 +14,7 @@ export default function ListeNoirePage() {
   const [typeFilter, setTypeFilter] = useState('')
   const [page,       setPage]       = useState(1)
 
-  const { data, isLoading } = useListeNoire({ type: typeFilter, page })
+  const { data, isLoading } = useListeNoire({ type: typeFilter, page, per_page: 15 })
   const add    = useAddListeNoire()
   const remove = useRemoveListeNoire()
 

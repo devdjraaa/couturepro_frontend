@@ -29,7 +29,7 @@ export default function AdminPaiementsPage() {
   const [provider, setProvider] = useState('')
   const [page,     setPage]     = useState(1)
 
-  const { data, isLoading } = useAdminPaiements({ statut, provider, page })
+  const { data, isLoading } = useAdminPaiements({ statut, provider, page, per_page: 15 })
   const valider    = useValiderPaiement()
   const rembourser = useRembourserPaiement()
 

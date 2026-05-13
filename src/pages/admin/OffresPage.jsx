@@ -101,7 +101,7 @@ export default function OffresPage() {
   const { t } = useTranslation()
   const [page, setPage] = useState(1)
 
-  const { data, isLoading } = useAdminOffres({ page })
+  const { data, isLoading } = useAdminOffres({ page, per_page: 15 })
   const { data: ateliers }  = useAdminAteliers()
   const { data: plans }     = useAdminPlans()
   const create = useCreateOffre()

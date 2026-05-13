@@ -122,7 +122,7 @@ export default function AteliersPage() {
   const [statut, setStatut] = useState('')
   const [page,   setPage]   = useState(1)
 
-  const { data, isLoading } = useAdminAteliers({ search, statut, page })
+  const { data, isLoading } = useAdminAteliers({ search, statut, page, per_page: 15 })
   const geler   = useGelerAtelier()
   const degeler = useDegelerAtelier()
 

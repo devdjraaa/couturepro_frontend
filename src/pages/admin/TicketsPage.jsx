@@ -20,7 +20,7 @@ export default function TicketsPage() {
   const [priorite, setPriorite] = useState('')
   const [page,     setPage]     = useState(1)
 
-  const { data, isLoading } = useAdminTickets({ statut, priorite, page })
+  const { data, isLoading } = useAdminTickets({ statut, priorite, page, per_page: 15 })
   const tickets     = data?.data         ?? []
   const currentPage = data?.current_page ?? 1
   const lastPage    = data?.last_page    ?? 1
