@@ -32,7 +32,7 @@ function AtelierSwitcher({ atelier, switchAtelier }) {
     <div ref={ref} className="relative mt-0.5">
       <button
         onClick={() => setOpen(x => !x)}
-        className="flex items-center gap-1 text-xs text-dim hover:text-ink px-2 py-0.5 rounded-full bg-subtle/60 transition-colors"
+        className="flex items-center gap-1 text-xs text-inverse/70 hover:text-inverse px-2 py-0.5 rounded-full bg-inverse/20 transition-colors"
       >
         <Building2 size={10} className="shrink-0" />
         <span className="font-medium truncate max-w-36">{atelier?.nom ?? '—'}</span>
@@ -74,7 +74,7 @@ export default function Header({ title, showBack = false, onBack, rightAction, c
   return (
     <header
       className={cn(
-        'sticky top-0 z-20 bg-card/80 backdrop-blur-sm border-b border-edge shrink-0 pt-safe',
+        'sticky top-0 z-20 bg-primary shrink-0 pt-safe',
         className,
       )}
     >
@@ -85,15 +85,15 @@ export default function Header({ title, showBack = false, onBack, rightAction, c
           <button
             type="button"
             onClick={handleBack}
-            className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-subtle transition-colors shrink-0 -ml-1"
+            className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-inverse/10 transition-colors shrink-0 -ml-1"
           >
-            <ArrowLeft size={20} className="text-ink" />
+            <ArrowLeft size={20} className="text-inverse" />
           </button>
         )}
 
         {/* Title + atelier switcher — left-aligned */}
         <div className="flex-1 min-w-0">
-          <h1 className="text-base font-semibold font-display text-ink truncate leading-tight">
+          <h1 className="text-base font-semibold font-display text-inverse truncate leading-tight">
             {title ?? 'Couture Pro'}
           </h1>
           {user?.role === 'proprietaire' && atelier && (
@@ -110,10 +110,10 @@ export default function Header({ title, showBack = false, onBack, rightAction, c
           <button
             type="button"
             onClick={() => navigate('/notifications')}
-            className="relative w-9 h-9 flex items-center justify-center rounded-xl hover:bg-subtle transition-colors"
+            className="relative w-9 h-9 flex items-center justify-center rounded-xl hover:bg-inverse/10 transition-colors"
             aria-label="Notifications"
           >
-            <Bell size={20} className="text-dim" />
+            <Bell size={20} className="text-inverse" />
             {notifCount > 0 && (
               <span className="absolute top-2 right-2 w-2 h-2 bg-warning rounded-full" />
             )}

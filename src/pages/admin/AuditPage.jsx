@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AdminLayout, AdminTable } from '@/components/admin'
 import { useAuditLogs } from '@/hooks/admin/useAudit'
@@ -5,8 +6,12 @@ import { formatDate } from '@/utils/formatDate'
 
 export default function AuditPage() {
   const { t } = useTranslation()
-  const { data, isLoading } = useAuditLogs()
-  const logs = data?.data ?? []
+  const [page, setPage] = useState(1)
+
+  const { data, isLoading } = useAuditLogs({ page, per_page: 15 })
+  const logs        = data?.data         ?? []
+  const currentPage = data?.current_page ?? 1
+  const lastPage    = data?.last_page    ?? 1
 
   const columns = [
     { key: 'admin',       label: t('admin.audit.col_admin'),  render: r => r.admin ? `${r.admin.prenom} ${r.admin.nom}` : '—' },
@@ -32,14 +37,14 @@ export default function AuditPage() {
       {isLoading ? (
         <p className="text-sm text-ghost">{t('admin.commun.chargement')}</p>
       ) : (
-        <>
-          <AdminTable columns={columns} rows={logs} emptyLabel={t('admin.audit.aucun')} />
-          {data?.last_page > 1 && (
-            <p className="text-xs text-ghost mt-3 text-right">
-              {t('admin.audit.pagination', { total: data.total, current: data.current_page, last: data.last_page })}
-            </p>
-          )}
-        </>
+        <AdminTable
+          columns={columns}
+          rows={logs}
+          emptyLabel={t('admin.audit.aucun')}
+          currentPage={currentPage}
+          lastPage={lastPage}
+          onPage={setPage}
+        />
       )}
     </AdminLayout>
   )

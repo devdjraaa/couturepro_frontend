@@ -70,7 +70,7 @@ export default function LoginPage() {
       </div>
 
       {/* Onglets */}
-      <div className="flex rounded-xl bg-surface border border-border p-1 mb-5 gap-1">
+      <div className="flex rounded-xl bg-subtle border border-edge p-1 mb-5 gap-1">
         {[
           { key: 'proprietaire', label: t('auth.connexion.onglet_proprietaire') },
           { key: 'equipe',       label: t('auth.connexion.onglet_equipe') },
@@ -81,8 +81,8 @@ export default function LoginPage() {
             onClick={() => { setTab(tab_.key); setError('') }}
             className={`flex-1 text-sm py-2 rounded-lg font-medium transition-colors ${
               tab === tab_.key
-                ? 'bg-primary text-white'
-                : 'text-content-secondary hover:text-content'
+                ? 'bg-primary text-inverse'
+                : 'text-ghost hover:text-ink'
             }`}
           >
             {tab_.label}
@@ -112,7 +112,7 @@ export default function LoginPage() {
           <Button type="submit" className="w-full" loading={loading}>
             {t('auth.connexion.se_connecter')}
           </Button>
-          <div className="flex justify-between text-sm text-content-secondary">
+          <div className="flex justify-between text-sm text-ghost">
             <Link to="/register" className="text-primary font-medium">{t('auth.connexion.creer_compte')}</Link>
             <Link to="/mot-de-passe-oublie" className="text-dim hover:text-ink">{t('auth.connexion.mot_de_passe_oublie')}</Link>
           </div>
@@ -135,7 +135,7 @@ export default function LoginPage() {
             placeholder="••••••••"
             required
           />
-          <p className="text-xs text-content-secondary text-center -mt-2">
+          <p className="text-xs text-ghost text-center -mt-2">
             {t('auth.connexion.code_acces_hint')}
           </p>
           {error && <p className="text-sm text-danger text-center">{error}</p>}

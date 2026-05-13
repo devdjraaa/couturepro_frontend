@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Home, Layers, CreditCard, MessageCircle,
   ShieldBan, ClipboardList, Bell, Star, LogOut,
-  Sun, Moon, Monitor, Users, Wallet,
+  Sun, Moon, Monitor, Users, Wallet, X,
 } from 'lucide-react'
 import { useAdminAuth } from '@/contexts'
 import { useTheme } from '@/contexts'
@@ -29,7 +29,7 @@ const SUPER_ADMIN = [
   { to: '/admin/admins', icon: Users, label: 'Admins' },
 ]
 
-function NavSection({ title, items, badgeCount = 0 }) {
+function NavSection({ title, items, badgeCount = 0, onNav }) {
   return (
     <div>
       <p className="px-3 mb-1.5 text-2xs font-semibold uppercase tracking-widest text-admin-muted">
@@ -41,6 +41,7 @@ function NavSection({ title, items, badgeCount = 0 }) {
             key={to}
             to={to}
             end={end}
+            onClick={onNav}
             className={({ isActive }) => cn(
               'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-150',
               isActive
@@ -83,7 +84,7 @@ function ThemeToggle() {
   )
 }
 
-export default function AdminSidebar() {
+export default function AdminSidebar({ isOpen, onClose }) {
   const { admin, logout, isSuperAdmin } = useAdminAuth()
   const navigate = useNavigate()
   const { data: paiements } = useAdminPaiements({ statut: 'pending' })
@@ -100,55 +101,77 @@ export default function AdminSidebar() {
   const gestionItems = [...GESTION, ...(isSuperAdmin ? SUPER_ADMIN : [])]
 
   return (
-    <aside className="w-56 shrink-0 bg-admin-surface text-admin-bright flex flex-col h-screen sticky top-0">
-      {/* Logo */}
-      <div className="px-4 py-4 border-b border-inverse/5 flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shrink-0">
-          <span className="text-sm font-bold text-inverse">CP</span>
-        </div>
-        <div>
-          <p className="text-sm font-bold text-inverse leading-tight">CouturePro</p>
-          <p className="text-xs text-admin-muted leading-tight">Espace admin</p>
-        </div>
-      </div>
+    <>
+      {/* Overlay mobile */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={onClose}
+        />
+      )}
 
-      {/* Nav */}
-      <nav className="flex-1 overflow-y-auto py-4 px-2 space-y-5 scrollbar-none">
-        <NavSection title="Principal" items={PRINCIPAL} badgeCount={paiementCount} />
-        <NavSection title="Gestion"   items={gestionItems} />
-      </nav>
-
-      {/* Footer */}
-      <div className="border-t border-inverse/5 px-4 py-3 space-y-3">
-        <NavLink
-          to="/admin/parametres"
-          className={({ isActive }) => cn(
-            'flex items-center gap-2.5 rounded-lg transition-colors',
-            isActive ? 'text-primary-300' : 'text-admin-bright hover:text-inverse',
-          )}
-        >
-          <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center shrink-0">
-            <span className="text-xs font-bold text-inverse">{initials}</span>
+      <aside className={cn(
+        'fixed inset-y-0 left-0 z-50 w-56 bg-admin-surface text-admin-bright flex flex-col transition-transform duration-300 ease-in-out',
+        'md:static md:translate-x-0 md:h-screen md:shrink-0',
+        isOpen ? 'translate-x-0' : '-translate-x-full',
+      )}>
+        {/* Logo */}
+        <div className="px-4 py-4 border-b border-inverse/5 flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shrink-0">
+            <span className="text-sm font-bold text-inverse">CP</span>
           </div>
-          <div className="min-w-0">
-            <p className="text-sm font-semibold text-inverse leading-tight truncate">
-              {admin?.prenom} {admin?.nom}
-            </p>
-            <p className="text-xs text-admin-muted leading-tight truncate">{admin?.role}</p>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-bold text-inverse leading-tight">CouturePro</p>
+            <p className="text-xs text-admin-muted leading-tight">Espace admin</p>
           </div>
-        </NavLink>
-
-        <div className="flex items-center justify-between">
-          <ThemeToggle />
+          {/* Fermer — mobile uniquement */}
           <button
-            onClick={handleLogout}
-            title="Déconnexion"
-            className="text-admin-muted hover:text-danger transition-colors"
+            onClick={onClose}
+            className="md:hidden w-7 h-7 flex items-center justify-center rounded-lg text-admin-muted hover:text-inverse transition-colors shrink-0"
           >
-            <LogOut size={14} />
+            <X size={16} />
           </button>
         </div>
-      </div>
-    </aside>
+
+        {/* Nav */}
+        <nav className="flex-1 overflow-y-auto py-4 px-2 space-y-5 scrollbar-none">
+          <NavSection title="Principal" items={PRINCIPAL} badgeCount={paiementCount} onNav={onClose} />
+          <NavSection title="Gestion"   items={gestionItems} onNav={onClose} />
+        </nav>
+
+        {/* Footer */}
+        <div className="border-t border-inverse/5 px-4 py-3 space-y-3">
+          <NavLink
+            to="/admin/parametres"
+            onClick={onClose}
+            className={({ isActive }) => cn(
+              'flex items-center gap-2.5 rounded-lg transition-colors',
+              isActive ? 'text-primary-300' : 'text-admin-bright hover:text-inverse',
+            )}
+          >
+            <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center shrink-0">
+              <span className="text-xs font-bold text-inverse">{initials}</span>
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-inverse leading-tight truncate">
+                {admin?.prenom} {admin?.nom}
+              </p>
+              <p className="text-xs text-admin-muted leading-tight truncate">{admin?.role}</p>
+            </div>
+          </NavLink>
+
+          <div className="flex items-center justify-between">
+            <ThemeToggle />
+            <button
+              onClick={handleLogout}
+              title="Déconnexion"
+              className="text-admin-muted hover:text-danger transition-colors"
+            >
+              <LogOut size={14} />
+            </button>
+          </div>
+        </div>
+      </aside>
+    </>
   )
 }

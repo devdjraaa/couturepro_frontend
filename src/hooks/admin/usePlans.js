@@ -2,10 +2,10 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { plansAdminService } from '@/services/admin/plansAdminService'
 import { ADMIN_KEYS } from './adminQueryKeys'
 
-export function useAdminPlans() {
+export function useAdminPlans(params = {}) {
   return useQuery({
-    queryKey: ADMIN_KEYS.plans,
-    queryFn: () => plansAdminService.getAll(),
+    queryKey: [...ADMIN_KEYS.plans, params],
+    queryFn: () => plansAdminService.getAll(params),
   })
 }
 

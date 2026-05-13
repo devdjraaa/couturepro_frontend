@@ -12,14 +12,20 @@ const LABEL  = 'text-xs text-ghost'
 export default function ListeNoirePage() {
   const { t } = useTranslation()
   const [typeFilter, setTypeFilter] = useState('')
-  const { data, isLoading } = useListeNoire({ type: typeFilter })
+  const [page,       setPage]       = useState(1)
+
+  const { data, isLoading } = useListeNoire({ type: typeFilter, page, per_page: 15 })
   const add    = useAddListeNoire()
   const remove = useRemoveListeNoire()
 
   const [showModal, setShowModal] = useState(false)
   const [form, setForm] = useState({ type: 'telephone', valeur: '', raison: '' })
 
-  const entrees = data?.data ?? []
+  const entrees     = data?.data         ?? []
+  const currentPage = data?.current_page ?? 1
+  const lastPage    = data?.last_page    ?? 1
+
+  const changeType = v => { setTypeFilter(v); setPage(1) }
 
   const columns = [
     { key: 'type',       label: t('admin.liste_noire.col_type') },
@@ -54,8 +60,8 @@ export default function ListeNoirePage() {
 
   return (
     <AdminLayout title={t('admin.liste_noire.titre')}>
-      <div className="flex gap-3 justify-between mb-5">
-        <select value={typeFilter} onChange={e => setTypeFilter(e.target.value)} className={SELECT}>
+      <div className="flex flex-col sm:flex-row sm:justify-between gap-2 mb-5">
+        <select value={typeFilter} onChange={e => changeType(e.target.value)} className={SELECT}>
           <option value="">{t('admin.liste_noire.types.tous')}</option>
           <option value="telephone">{t('admin.liste_noire.types.telephone')}</option>
           <option value="email">{t('admin.liste_noire.types.email')}</option>
@@ -72,7 +78,14 @@ export default function ListeNoirePage() {
       {isLoading ? (
         <p className="text-sm text-ghost">{t('admin.commun.chargement')}</p>
       ) : (
-        <AdminTable columns={columns} rows={entrees} emptyLabel={t('admin.liste_noire.aucune')} />
+        <AdminTable
+          columns={columns}
+          rows={entrees}
+          emptyLabel={t('admin.liste_noire.aucune')}
+          currentPage={currentPage}
+          lastPage={lastPage}
+          onPage={setPage}
+        />
       )}
 
       {showModal && (
@@ -109,7 +122,7 @@ export default function ListeNoirePage() {
                   className={INPUT}
                 />
               </div>
-              <div className="flex justify-end gap-3 pt-2">
+              <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 pt-2">
                 <button type="button" onClick={() => setShowModal(false)} className="text-sm text-ghost hover:text-dim transition-colors">
                   {t('admin.commun.annuler')}
                 </button>

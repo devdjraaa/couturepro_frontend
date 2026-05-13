@@ -951,12 +951,13 @@
       "col_cree_le": "Créé le",
       "aucun": "Aucun atelier trouvé",
       "statuts": {
-        "tous": "Tous les statuts",
+        "tous": "Tous",
         "actif": "Actif",
         "expire": "Expiré",
         "gele": "Gelé"
       },
-      "pagination": "Page {{current}} / {{last}} — {{total}} ateliers"
+      "pagination": "Page {{current}} / {{last}} — {{total}} ateliers",
+      "filtres": "Filtres"
     },
     "atelier_detail": {
       "introuvable": "Atelier introuvable.",

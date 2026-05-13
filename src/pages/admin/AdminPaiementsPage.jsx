@@ -7,11 +7,11 @@ import { formatDate } from '@/utils/formatDate'
 import { cn } from '@/utils/cn'
 
 const STATUT_TABS = [
-  { key: '',           dot: null,           label: key => 'Tous' },
-  { key: 'pending',    dot: 'bg-warning',   label: t => t('admin.paiements.statuts.pending')   },
-  { key: 'completed',  dot: 'bg-success',   label: t => t('admin.paiements.statuts.completed') },
-  { key: 'failed',     dot: 'bg-danger',    label: t => t('admin.paiements.statuts.failed')    },
-  { key: 'refunded',   dot: 'bg-accent',    label: t => t('admin.paiements.statuts.refunded')  },
+  { key: '',           dot: null,         label: () => 'Tous' },
+  { key: 'pending',    dot: 'bg-warning', label: t => t('admin.paiements.statuts.pending')   },
+  { key: 'completed',  dot: 'bg-success', label: t => t('admin.paiements.statuts.completed') },
+  { key: 'failed',     dot: 'bg-danger',  label: t => t('admin.paiements.statuts.failed')    },
+  { key: 'refunded',   dot: 'bg-accent',  label: t => t('admin.paiements.statuts.refunded')  },
 ]
 
 const PROVIDERS = [
@@ -27,12 +27,18 @@ export default function AdminPaiementsPage() {
   const { t } = useTranslation()
   const [statut,   setStatut]   = useState('')
   const [provider, setProvider] = useState('')
+  const [page,     setPage]     = useState(1)
 
-  const { data, isLoading } = useAdminPaiements({ statut, provider })
+  const { data, isLoading } = useAdminPaiements({ statut, provider, page, per_page: 15 })
   const valider    = useValiderPaiement()
   const rembourser = useRembourserPaiement()
 
-  const paiements = data?.data ?? []
+  const paiements   = data?.data         ?? []
+  const currentPage = data?.current_page ?? 1
+  const lastPage    = data?.last_page    ?? 1
+
+  const changeStatut   = v => { setStatut(v);   setPage(1) }
+  const changeProvider = v => { setProvider(v); setPage(1) }
 
   const columns = [
     {
@@ -117,25 +123,25 @@ export default function AdminPaiementsPage() {
 
   return (
     <AdminLayout title={t('admin.paiements.titre')}>
-      {/* Filter bar */}
-      <div className="flex flex-wrap items-center gap-2 mb-5">
-        {STATUT_TABS.map(tab => (
-          <button
-            key={tab.key}
-            onClick={() => setStatut(tab.key)}
-            className={cn(
-              'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors',
-              statut === tab.key
-                ? 'bg-primary text-inverse'
-                : 'bg-subtle text-ghost hover:bg-inset hover:text-ink',
-            )}
-          >
-            {tab.dot && <span className={cn('w-1.5 h-1.5 rounded-full', tab.dot)} />}
-            {tab.label(t)}
-          </button>
-        ))}
-        <div className="flex-1" />
-        <select value={provider} onChange={e => setProvider(e.target.value)} className={INPUT}>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-5">
+        <div className="flex flex-wrap gap-2">
+          {STATUT_TABS.map(tab => (
+            <button
+              key={tab.key}
+              onClick={() => changeStatut(tab.key)}
+              className={cn(
+                'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors',
+                statut === tab.key
+                  ? 'bg-primary text-inverse'
+                  : 'bg-subtle text-ghost hover:bg-inset hover:text-ink',
+              )}
+            >
+              {tab.dot && <span className={cn('w-1.5 h-1.5 rounded-full', tab.dot)} />}
+              {tab.label(t)}
+            </button>
+          ))}
+        </div>
+        <select value={provider} onChange={e => changeProvider(e.target.value)} className={`${INPUT} sm:w-auto`}>
           {PROVIDERS.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
         </select>
       </div>
@@ -143,14 +149,14 @@ export default function AdminPaiementsPage() {
       {isLoading ? (
         <p className="text-sm text-ghost">{t('admin.commun.chargement')}</p>
       ) : (
-        <>
-          <AdminTable columns={columns} rows={paiements} emptyLabel={t('admin.paiements.aucun')} />
-          {data?.total != null && (
-            <p className="text-xs text-ghost mt-3 text-right">
-              {data.total} paiement{data.total !== 1 ? 's' : ''}
-            </p>
-          )}
-        </>
+        <AdminTable
+          columns={columns}
+          rows={paiements}
+          emptyLabel={t('admin.paiements.aucun')}
+          currentPage={currentPage}
+          lastPage={lastPage}
+          onPage={setPage}
+        />
       )}
     </AdminLayout>
   )

@@ -12,7 +12,9 @@ const LABEL = 'text-xs text-ghost'
 
 export default function TransactionsPage() {
   const { t } = useTranslation()
-  const { data, isLoading } = useAdminTransactions()
+  const [page, setPage] = useState(1)
+
+  const { data, isLoading }  = useAdminTransactions({ page, per_page: 15 })
   const { data: ateliers = [] } = useAdminAteliers()
   const { data: plans = [] }    = useAdminPlans()
   const create = useCreateTransaction()
@@ -20,7 +22,9 @@ export default function TransactionsPage() {
   const [showModal, setShowModal] = useState(false)
   const [form, setForm] = useState({ atelier_id: '', niveau_cle: '' })
 
-  const transactions  = data?.data ?? []
+  const transactions  = data?.data         ?? []
+  const currentPage   = data?.current_page ?? 1
+  const lastPage      = data?.last_page    ?? 1
   const ateliersList  = ateliers?.data ?? ateliers
 
   const columns = [
@@ -83,7 +87,14 @@ export default function TransactionsPage() {
       {isLoading ? (
         <p className="text-sm text-ghost">{t('admin.commun.chargement')}</p>
       ) : (
-        <AdminTable columns={columns} rows={transactions} emptyLabel={t('admin.transactions.aucune')} />
+        <AdminTable
+          columns={columns}
+          rows={transactions}
+          emptyLabel={t('admin.transactions.aucune')}
+          currentPage={currentPage}
+          lastPage={lastPage}
+          onPage={setPage}
+        />
       )}
 
       {showModal && (
@@ -115,7 +126,7 @@ export default function TransactionsPage() {
                   {plans.map(p => <option key={p.id} value={p.cle}>{p.label}</option>)}
                 </select>
               </div>
-              <div className="flex justify-end gap-3 pt-2">
+              <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 pt-2">
                 <button type="button" onClick={() => setShowModal(false)} className="text-sm text-ghost hover:text-dim transition-colors">
                   {t('admin.commun.annuler')}
                 </button>

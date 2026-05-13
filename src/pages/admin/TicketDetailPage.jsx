@@ -51,9 +51,9 @@ export default function TicketDetailPage() {
 
   return (
     <AdminLayout title={`Ticket ${ticket.reference}`}>
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
         {/* Conversation */}
-        <div className="col-span-2 space-y-4">
+        <div className="lg:col-span-2 space-y-4">
           <div className="bg-card border border-edge rounded-xl p-5">
             <div className="flex justify-between items-start mb-4">
               <div>
@@ -83,8 +83,8 @@ export default function TicketDetailPage() {
                   key={msg.id}
                   className={`rounded-xl px-4 py-3 text-sm ${
                     msg.expediteur_type === 'admin'
-                      ? 'bg-primary/5 ml-8'
-                      : 'bg-subtle mr-8'
+                      ? 'bg-primary/5 ml-3 sm:ml-8'
+                      : 'bg-subtle mr-3 sm:mr-8'
                   } ${msg.is_note_interne ? 'border border-warning/40' : ''}`}
                 >
                   <div className="flex justify-between items-center mb-1">

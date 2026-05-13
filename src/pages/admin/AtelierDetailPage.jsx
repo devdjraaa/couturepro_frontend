@@ -21,7 +21,7 @@ const INPUT = 'border border-edge rounded-xl px-3 py-2 text-sm text-ink bg-card 
 
 function InfoRow({ label, value }) {
   return (
-    <div className="flex justify-between py-2.5 border-b border-edge last:border-0">
+    <div className="flex flex-wrap justify-between gap-x-2 py-2.5 border-b border-edge last:border-0">
       <span className="text-sm text-ghost">{label}</span>
       <span className="text-sm font-medium text-ink">{value ?? '—'}</span>
     </div>
@@ -91,12 +91,12 @@ function SousAteliersSection({ atelierId }) {
                 ? t('admin.atelier_detail.appliquer_selection', { count: selected.length })
                 : t('admin.atelier_detail.appliquer_tous')}
             </p>
-            <form onSubmit={handleGlobal} className="flex gap-2 items-end">
+            <form onSubmit={handleGlobal} className="flex flex-col sm:flex-row gap-2 sm:items-end">
               <input
                 type="number" min="1"
                 value={globalForm.duree}
                 onChange={e => { setGlobalSaved(false); setGlobalForm(f => ({ ...f, duree: e.target.value })) }}
-                className={`w-20 ${INPUT}`}
+                className={`w-full sm:w-20 ${INPUT}`}
                 required
               />
               <select
@@ -107,7 +107,7 @@ function SousAteliersSection({ atelierId }) {
                 {UNITE_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
               </select>
               <button type="submit" disabled={setTrialGlobal.isPending}
-                className="flex-1 bg-primary text-inverse text-sm px-3 py-2 rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors">
+                className="w-full sm:flex-1 bg-primary text-inverse text-sm px-3 py-2 rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors">
                 {setTrialGlobal.isPending ? '…' : t('admin.commun.appliquer')}
               </button>
             </form>
@@ -155,10 +155,10 @@ export default function AtelierDetailPage() {
 
   return (
     <AdminLayout title={atelier.nom}>
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
 
         {/* Infos générales */}
-        <div className="col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-6">
           <div className="bg-card border border-edge rounded-xl p-5">
             <div className="flex justify-between items-center mb-4">
               <h2 className="font-semibold text-dim text-sm">{t('admin.atelier_detail.informations')}</h2>
