@@ -4,8 +4,8 @@ import {
   ShieldBan, ClipboardList, Bell, Star, LogOut,
   Sun, Moon, Monitor, Users, Wallet, X,
 } from 'lucide-react'
-import { useAdminAuth } from '@/contexts'
-import { useTheme } from '@/contexts'
+import { useAdminAuth, useTheme } from '@/contexts'
+import { LanguageSwitcher } from '@/components/ui'
 import { useAdminPaiements } from '@/hooks/admin/useAdminPaiements'
 import { cn } from '@/utils/cn'
 
@@ -162,6 +162,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
 
           <div className="flex items-center justify-between">
             <ThemeToggle />
+            <LanguageSwitcher variant="hero" />
             <button
               onClick={handleLogout}
               title="Déconnexion"
