@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Search, Bell, Settings, Menu } from 'lucide-react'
+import { Search, Bell, Settings, Menu, ArrowLeft } from 'lucide-react'
 import AdminSidebar from './AdminSidebar'
 
 const ROUTE_LABELS = {
@@ -23,6 +23,7 @@ export default function AdminLayout({ children, title, action }) {
   const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const pageTitle = title ?? ROUTE_LABELS[location.pathname] ?? 'Admin'
+  const isRoot = location.pathname === '/admin'
 
   return (
     <div className="flex h-screen overflow-hidden bg-app">
@@ -39,6 +40,18 @@ export default function AdminLayout({ children, title, action }) {
           >
             <Menu size={20} />
           </button>
+
+          {/* Bouton retour — toutes les pages sauf le dashboard racine */}
+          {!isRoot && (
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              aria-label="Retour"
+              className="w-9 h-9 flex items-center justify-center rounded-xl text-ghost hover:bg-subtle hover:text-ink transition-colors shrink-0"
+            >
+              <ArrowLeft size={18} />
+            </button>
+          )}
 
           <div className="flex-1 min-w-0">
             <p className="text-2xs text-ghost mb-0.5 hidden sm:block">
