@@ -910,6 +910,27 @@
       "tous_types": "All types",
       "tous_providers": "All providers"
     },
+    "nav": {
+      "dashboard":        "Dashboard",
+      "ateliers":         "Workshops",
+      "plans":            "Plans",
+      "transactions":     "Transactions",
+      "paiements":        "Payments",
+      "tickets":          "Tickets",
+      "offres":           "Special offers",
+      "liste_noire":      "Blacklist",
+      "audit":            "Audit",
+      "notifications":    "Notifications",
+      "admins":           "Admins",
+      "parametres":       "Settings",
+      "section_principal":"Main",
+      "section_gestion":  "Management",
+      "sidebar_subtitle": "Admin area",
+      "mode_clair":       "Light mode",
+      "mode_sombre":      "Dark mode",
+      "passer_mode":      "Switch to {{mode}}",
+      "rechercher":       "Search…"
+    },
     "dashboard": {
       "bonjour": "Hello,",
       "ateliers": "Workshops",
@@ -919,7 +940,26 @@
       "link_ateliers": "Manage workshops",
       "link_tickets": "View tickets",
       "link_paiements": "Validate payments",
-      "link_transactions": "Create an access code"
+      "link_transactions":     "Create an access code",
+      "greeting_matin":        "Good morning",
+      "greeting_aprem":        "Good afternoon",
+      "greeting_soir":         "Good evening",
+      "apercu":                "Here's an overview of today's activity",
+      "system_titre":          "System status",
+      "system_ok":             "All systems go",
+      "system_db":             "Database",
+      "system_api_paiements":  "Payments API",
+      "system_notif":          "Notifications service",
+      "system_operationnel":   "Operational",
+      "stat_enregistres":      "{{count}} registered",
+      "stat_aucun_attente":    "None pending",
+      "stat_en_attente":       "{{count}} pending",
+      "stat_valider":          "To validate",
+      "link_ateliers_sub":     "{{count}} active workshops",
+      "link_paiements_sub":    "{{count}} pending",
+      "link_tickets_sub_one":  "{{count}} open",
+      "link_tickets_sub_other":"{{count}} open",
+      "link_transactions_sub": "Quick generation"
     },
     "paiements": {
       "titre": "Payments",
@@ -986,7 +1026,10 @@
       "fidelite": "Loyalty points",
       "fidelite_points": "points",
       "ajuster_points": "Adjust points",
-      "annuler_ajust": "Cancel"
+      "annuler_ajust":    "Cancel",
+      "unite_minutes":    "minutes",
+      "unite_heures":     "hours",
+      "unite_jours":      "days"
     },
     "audit": {
       "titre": "Audit log",

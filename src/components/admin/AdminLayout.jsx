@@ -1,28 +1,30 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { Search, Bell, Settings, Menu, ArrowLeft } from 'lucide-react'
 import AdminSidebar from './AdminSidebar'
 
-const ROUTE_LABELS = {
-  '/admin':               'Dashboard',
-  '/admin/ateliers':      'Ateliers',
-  '/admin/plans':         'Plans',
-  '/admin/transactions':  'Transactions',
-  '/admin/paiements':     'Paiements',
-  '/admin/tickets':       'Tickets',
-  '/admin/offres':        'Offres spéciales',
-  '/admin/liste-noire':   'Liste noire',
-  '/admin/audit':         'Audit',
-  '/admin/notifications': 'Notifications',
-  '/admin/admins':        'Admins',
-  '/admin/parametres':    'Paramètres',
+const ROUTE_KEYS = {
+  '/admin':               'admin.nav.dashboard',
+  '/admin/ateliers':      'admin.nav.ateliers',
+  '/admin/plans':         'admin.nav.plans',
+  '/admin/transactions':  'admin.nav.transactions',
+  '/admin/paiements':     'admin.nav.paiements',
+  '/admin/tickets':       'admin.nav.tickets',
+  '/admin/offres':        'admin.nav.offres',
+  '/admin/liste-noire':   'admin.nav.liste_noire',
+  '/admin/audit':         'admin.nav.audit',
+  '/admin/notifications': 'admin.nav.notifications',
+  '/admin/admins':        'admin.nav.admins',
+  '/admin/parametres':    'admin.nav.parametres',
 }
 
 export default function AdminLayout({ children, title, action }) {
+  const { t } = useTranslation()
   const location = useLocation()
   const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const pageTitle = title ?? ROUTE_LABELS[location.pathname] ?? 'Admin'
+  const pageTitle = title ?? t(ROUTE_KEYS[location.pathname] ?? 'admin.nav.dashboard')
   const isRoot = location.pathname === '/admin'
 
   return (
@@ -46,7 +48,7 @@ export default function AdminLayout({ children, title, action }) {
             <button
               type="button"
               onClick={() => navigate(-1)}
-              aria-label="Retour"
+              aria-label={t('commun.retour')}
               className="w-9 h-9 flex items-center justify-center rounded-xl text-ghost hover:bg-subtle hover:text-ink transition-colors shrink-0"
             >
               <ArrowLeft size={18} />
@@ -55,7 +57,7 @@ export default function AdminLayout({ children, title, action }) {
 
           <div className="flex-1 min-w-0">
             <p className="text-2xs text-ghost mb-0.5 hidden sm:block">
-              Accueil / <span className="text-dim">{pageTitle}</span>
+              {t('commun.accueil')} / <span className="text-dim">{pageTitle}</span>
             </p>
             <h1 className="text-base md:text-lg font-semibold font-display text-ink leading-tight truncate">
               {pageTitle}
@@ -68,7 +70,7 @@ export default function AdminLayout({ children, title, action }) {
               <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ghost pointer-events-none" />
               <input
                 type="search"
-                placeholder="Rechercher…"
+                placeholder={t('admin.nav.rechercher')}
                 className="h-9 w-48 bg-subtle border border-edge rounded-xl pl-8 pr-3 text-sm text-ink placeholder:text-ghost focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary [&::-webkit-search-cancel-button]:hidden"
               />
             </div>

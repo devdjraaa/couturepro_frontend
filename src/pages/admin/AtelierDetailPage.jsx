@@ -11,12 +11,6 @@ import {
 } from '@/hooks/admin/useAteliers'
 import { formatDate } from '@/utils/formatDate'
 
-const UNITE_OPTIONS = [
-  { value: 'minutes', label: 'minutes' },
-  { value: 'heures',  label: 'heures'  },
-  { value: 'jours',   label: 'jours'   },
-]
-
 const INPUT = 'border border-edge rounded-xl px-3 py-2 text-sm text-ink bg-card focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary'
 
 function InfoRow({ label, value }) {
@@ -30,6 +24,11 @@ function InfoRow({ label, value }) {
 
 function SousAteliersSection({ atelierId }) {
   const { t } = useTranslation()
+  const UNITE_OPTIONS = [
+    { value: 'minutes', label: t('admin.atelier_detail.unite_minutes') },
+    { value: 'heures',  label: t('admin.atelier_detail.unite_heures')  },
+    { value: 'jours',   label: t('admin.atelier_detail.unite_jours')   },
+  ]
   const { data: sousAteliers = [], isLoading } = useAdminSousAteliers(atelierId)
   const setTrialGlobal = useSetTrialGlobal(atelierId)
   const [globalForm, setGlobalForm] = useState({ duree: '14', unite: 'jours' })

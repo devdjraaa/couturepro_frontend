@@ -85,13 +85,6 @@ function QuickItem({ icon: Icon, color = 'primary', title, subtitle, to }) {
   )
 }
 
-// ── System status ─────────────────────────────────────────────────────────────
-const SYSTEM_ITEMS = [
-  { label: 'Base de données',       status: 'Opérationnelle' },
-  { label: 'API Paiements',         status: 'Opérationnelle' },
-  { label: 'Service notifications', status: 'Opérationnel'   },
-]
-
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function AdminDashboardPage() {
   const { t } = useTranslation()
@@ -105,67 +98,77 @@ export default function AdminDashboardPage() {
   const paiementsPending = paiements?.total ?? 0
 
   const hour = new Date().getHours()
-  const greeting = hour < 12 ? 'Bonjour' : hour < 18 ? 'Bon après-midi' : 'Bonsoir'
+  const greeting = hour < 12
+    ? t('admin.dashboard.greeting_matin')
+    : hour < 18
+      ? t('admin.dashboard.greeting_aprem')
+      : t('admin.dashboard.greeting_soir')
+
+  const SYSTEM_ITEMS = [
+    { label: t('admin.dashboard.system_db'),           status: t('admin.dashboard.system_operationnel') },
+    { label: t('admin.dashboard.system_api_paiements'),status: t('admin.dashboard.system_operationnel') },
+    { label: t('admin.dashboard.system_notif'),        status: t('admin.dashboard.system_operationnel') },
+  ]
 
   const QUICK_LINKS = [
     {
       icon: Building2, color: 'primary',
-      title: 'Gérer les ateliers',
-      subtitle: `${totalAteliers} ateliers actifs`,
+      title:    t('admin.dashboard.link_ateliers'),
+      subtitle: t('admin.dashboard.link_ateliers_sub', { count: totalAteliers }),
       to: '/admin/ateliers',
     },
     {
       icon: CreditCard, color: 'danger',
-      title: 'Valider les paiements',
-      subtitle: `${paiementsPending} en attente`,
+      title:    t('admin.dashboard.link_paiements'),
+      subtitle: t('admin.dashboard.link_paiements_sub', { count: paiementsPending }),
       to: '/admin/paiements',
     },
     {
       icon: TicketCheck, color: 'accent',
-      title: 'Voir les tickets',
-      subtitle: `${ticketsOuverts} ouvert${ticketsOuverts !== 1 ? 's' : ''}`,
+      title:    t('admin.dashboard.link_tickets'),
+      subtitle: t('admin.dashboard.link_tickets_sub', { count: ticketsOuverts }),
       to: '/admin/tickets',
     },
     {
       icon: KeyRound, color: 'success',
-      title: "Créer un code d'accès",
-      subtitle: 'Génération rapide',
+      title:    t('admin.dashboard.link_transactions'),
+      subtitle: t('admin.dashboard.link_transactions_sub'),
       to: '/admin/ateliers',
     },
   ]
 
   return (
-    <AdminLayout title="Dashboard">
+    <AdminLayout title={t('admin.nav.dashboard')}>
       {/* Greeting */}
       <p className="text-sm text-ghost mb-6">
         {greeting},{' '}
         <span className="font-semibold text-ink">{admin?.prenom} {admin?.nom}</span>
         {' '}
-        <span className="text-ghost">— Voici un aperçu de l'activité aujourd'hui</span>
+        <span className="text-ghost">{t('admin.dashboard.apercu')}</span>
       </p>
 
       {/* 3-column stat grid */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <StatCard
-          label="Ateliers"
+          label={t('admin.dashboard.ateliers')}
           value={totalAteliers}
-          sub={`${totalAteliers} enregistrés`}
+          sub={t('admin.dashboard.stat_enregistres', { count: totalAteliers })}
           icon={Building2}
           color="primary"
           trend={null}
         />
         <StatCard
-          label="Tickets ouverts"
+          label={t('admin.dashboard.tickets_ouverts')}
           value={ticketsOuverts}
-          sub={ticketsOuverts === 0 ? 'Aucun en attente' : `${ticketsOuverts} en attente`}
+          sub={t(ticketsOuverts === 0 ? 'admin.dashboard.stat_aucun_attente' : 'admin.dashboard.stat_en_attente', { count: ticketsOuverts })}
           icon={TicketCheck}
           color="accent"
           trend={null}
         />
         <StatCard
-          label="Paiements en attente"
+          label={t('admin.dashboard.paiements_attente')}
           value={paiementsPending}
-          sub="À valider"
+          sub={t('admin.dashboard.stat_valider')}
           icon={CreditCard}
           color="danger"
           trend={null}
@@ -175,7 +178,7 @@ export default function AdminDashboardPage() {
       {/* Accès rapides + État du système */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="bg-card border border-edge rounded-xl p-5">
-          <p className="text-sm font-semibold text-ink mb-2">Accès rapides</p>
+          <p className="text-sm font-semibold text-ink mb-2">{t('admin.dashboard.acces_rapides')}</p>
           {QUICK_LINKS.map(item => (
             <QuickItem key={item.to + item.title} {...item} />
           ))}
@@ -183,10 +186,10 @@ export default function AdminDashboardPage() {
 
         <div className="bg-card border border-edge rounded-xl p-5">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm font-semibold text-ink">État du système</p>
+            <p className="text-sm font-semibold text-ink">{t('admin.dashboard.system_titre')}</p>
             <span className="flex items-center gap-1.5 text-xs font-medium text-success bg-success/10 px-2.5 py-1 rounded-full">
               <span className="w-1.5 h-1.5 rounded-full bg-success" />
-              Tout fonctionne
+              {t('admin.dashboard.system_ok')}
             </span>
           </div>
           {SYSTEM_ITEMS.map(({ label, status }) => (

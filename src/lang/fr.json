@@ -910,6 +910,27 @@
       "tous_types": "Tous types",
       "tous_providers": "Tous providers"
     },
+    "nav": {
+      "dashboard":        "Dashboard",
+      "ateliers":         "Ateliers",
+      "plans":            "Plans",
+      "transactions":     "Transactions",
+      "paiements":        "Paiements",
+      "tickets":          "Tickets",
+      "offres":           "Offres spéciales",
+      "liste_noire":      "Liste noire",
+      "audit":            "Audit",
+      "notifications":    "Notifications",
+      "admins":           "Admins",
+      "parametres":       "Paramètres",
+      "section_principal":"Principal",
+      "section_gestion":  "Gestion",
+      "sidebar_subtitle": "Espace admin",
+      "mode_clair":       "Mode clair",
+      "mode_sombre":      "Mode sombre",
+      "passer_mode":      "Passer en mode {{mode}}",
+      "rechercher":       "Rechercher…"
+    },
     "dashboard": {
       "bonjour": "Bonjour,",
       "ateliers": "Ateliers",
@@ -919,7 +940,26 @@
       "link_ateliers": "Gérer les ateliers",
       "link_tickets": "Voir les tickets",
       "link_paiements": "Valider les paiements",
-      "link_transactions": "Créer un code d'accès"
+      "link_transactions":     "Créer un code d'accès",
+      "greeting_matin":        "Bonjour",
+      "greeting_aprem":        "Bon après-midi",
+      "greeting_soir":         "Bonsoir",
+      "apercu":                "Voici un aperçu de l'activité aujourd'hui",
+      "system_titre":          "État du système",
+      "system_ok":             "Tout fonctionne",
+      "system_db":             "Base de données",
+      "system_api_paiements":  "API Paiements",
+      "system_notif":          "Service notifications",
+      "system_operationnel":   "Opérationnelle",
+      "stat_enregistres":      "{{count}} enregistrés",
+      "stat_aucun_attente":    "Aucun en attente",
+      "stat_en_attente":       "{{count}} en attente",
+      "stat_valider":          "À valider",
+      "link_ateliers_sub":     "{{count}} ateliers actifs",
+      "link_paiements_sub":    "{{count}} en attente",
+      "link_tickets_sub_one":  "{{count}} ouvert",
+      "link_tickets_sub_other":"{{count}} ouverts",
+      "link_transactions_sub": "Génération rapide"
     },
     "paiements": {
       "titre": "Paiements",
@@ -986,7 +1026,10 @@
       "fidelite": "Points fidélité",
       "fidelite_points": "points",
       "ajuster_points": "Ajuster les points",
-      "annuler_ajust": "Annuler"
+      "annuler_ajust":    "Annuler",
+      "unite_minutes":    "minutes",
+      "unite_heures":     "heures",
+      "unite_jours":      "jours"
     },
     "audit": {
       "titre": "Journal d'audit",
