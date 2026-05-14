@@ -4,39 +4,41 @@ import {
   ShieldBan, ClipboardList, Bell, Star, LogOut,
   Sun, Moon, Monitor, Users, Wallet, X,
 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useAdminAuth, useTheme } from '@/contexts'
 import { LanguageSwitcher } from '@/components/ui'
 import { useAdminPaiements } from '@/hooks/admin/useAdminPaiements'
 import { cn } from '@/utils/cn'
 
 const PRINCIPAL = [
-  { to: '/admin',              icon: LayoutDashboard, label: 'Dashboard',   end: true  },
-  { to: '/admin/ateliers',     icon: Home,            label: 'Ateliers'               },
-  { to: '/admin/plans',        icon: Layers,          label: 'Plans'                  },
-  { to: '/admin/transactions', icon: CreditCard,      label: 'Transactions'           },
-  { to: '/admin/paiements',    icon: Wallet,          label: 'Paiements',  badge: true },
-  { to: '/admin/tickets',      icon: MessageCircle,   label: 'Tickets'                },
+  { to: '/admin',              icon: LayoutDashboard, tKey: 'admin.nav.dashboard',    end: true  },
+  { to: '/admin/ateliers',     icon: Home,            tKey: 'admin.nav.ateliers'                },
+  { to: '/admin/plans',        icon: Layers,          tKey: 'admin.nav.plans'                   },
+  { to: '/admin/transactions', icon: CreditCard,      tKey: 'admin.nav.transactions'            },
+  { to: '/admin/paiements',    icon: Wallet,          tKey: 'admin.nav.paiements',  badge: true },
+  { to: '/admin/tickets',      icon: MessageCircle,   tKey: 'admin.nav.tickets'                 },
 ]
 
 const GESTION = [
-  { to: '/admin/offres',        icon: Star,          label: 'Offres spéciales' },
-  { to: '/admin/liste-noire',   icon: ShieldBan,     label: 'Liste noire'      },
-  { to: '/admin/audit',         icon: ClipboardList, label: 'Audit'            },
-  { to: '/admin/notifications', icon: Bell,          label: 'Notifications'    },
+  { to: '/admin/offres',        icon: Star,          tKey: 'admin.nav.offres'        },
+  { to: '/admin/liste-noire',   icon: ShieldBan,     tKey: 'admin.nav.liste_noire'   },
+  { to: '/admin/audit',         icon: ClipboardList, tKey: 'admin.nav.audit'         },
+  { to: '/admin/notifications', icon: Bell,          tKey: 'admin.nav.notifications' },
 ]
 
 const SUPER_ADMIN = [
-  { to: '/admin/admins', icon: Users, label: 'Admins' },
+  { to: '/admin/admins', icon: Users, tKey: 'admin.nav.admins' },
 ]
 
 function NavSection({ title, items, badgeCount = 0, onNav }) {
+  const { t } = useTranslation()
   return (
     <div>
       <p className="px-3 mb-1.5 text-2xs font-semibold uppercase tracking-widest text-admin-muted">
         {title}
       </p>
       <div className="space-y-0.5">
-        {items.map(({ to, icon: Icon, label, end, badge }) => (
+        {items.map(({ to, icon: Icon, tKey, end, badge }) => (
           <NavLink
             key={to}
             to={to}
@@ -52,7 +54,7 @@ function NavSection({ title, items, badgeCount = 0, onNav }) {
             {({ isActive }) => (
               <>
                 <Icon size={16} strokeWidth={isActive ? 2.5 : 1.8} />
-                <span className="flex-1">{label}</span>
+                <span className="flex-1">{t(tKey)}</span>
                 {badge && badgeCount > 0 && (
                   <span className="min-w-4 h-4 bg-danger text-inverse text-2xs font-bold rounded-full flex items-center justify-center px-1 leading-none">
                     {badgeCount > 99 ? '99+' : badgeCount}
@@ -69,22 +71,28 @@ function NavSection({ title, items, badgeCount = 0, onNav }) {
 
 function ThemeToggle() {
   const { theme, toggleTheme, resolvedTheme } = useTheme()
+  const { t } = useTranslation()
   const Icon = theme === 'light' ? Sun : theme === 'dark' ? Moon : Monitor
-  const next = theme === 'light' ? 'Sombre' : theme === 'dark' ? 'Système' : 'Clair'
+  const nextKey = theme === 'light'
+    ? 'admin.parametres.theme_sombre'
+    : theme === 'dark'
+      ? 'admin.parametres.theme_systeme'
+      : 'admin.parametres.theme_clair'
 
   return (
     <button
       onClick={toggleTheme}
-      title={`Passer en mode ${next}`}
+      title={t('admin.nav.passer_mode', { mode: t(nextKey) })}
       className="flex items-center gap-1.5 text-xs text-admin-muted hover:text-admin-bright transition-colors"
     >
       <Icon size={13} />
-      <span>{resolvedTheme === 'dark' ? 'Mode sombre' : 'Mode clair'}</span>
+      <span>{t(resolvedTheme === 'dark' ? 'admin.nav.mode_sombre' : 'admin.nav.mode_clair')}</span>
     </button>
   )
 }
 
 export default function AdminSidebar({ isOpen, onClose }) {
+  const { t } = useTranslation()
   const { admin, logout, isSuperAdmin } = useAdminAuth()
   const navigate = useNavigate()
   const { data: paiements } = useAdminPaiements({ statut: 'pending' })
@@ -122,7 +130,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-bold text-inverse leading-tight">CouturePro</p>
-            <p className="text-xs text-admin-muted leading-tight">Espace admin</p>
+            <p className="text-xs text-admin-muted leading-tight">{t('admin.nav.sidebar_subtitle')}</p>
           </div>
           {/* Fermer — mobile uniquement */}
           <button
@@ -135,8 +143,8 @@ export default function AdminSidebar({ isOpen, onClose }) {
 
         {/* Nav */}
         <nav className="flex-1 overflow-y-auto py-4 px-2 space-y-5 scrollbar-none">
-          <NavSection title="Principal" items={PRINCIPAL} badgeCount={paiementCount} onNav={onClose} />
-          <NavSection title="Gestion"   items={gestionItems} onNav={onClose} />
+          <NavSection title={t('admin.nav.section_principal')} items={PRINCIPAL} badgeCount={paiementCount} onNav={onClose} />
+          <NavSection title={t('admin.nav.section_gestion')}   items={gestionItems} onNav={onClose} />
         </nav>
 
         {/* Footer */}
@@ -165,7 +173,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
             <LanguageSwitcher variant="hero" />
             <button
               onClick={handleLogout}
-              title="Déconnexion"
+              title={t('auth.deconnexion')}
               className="text-admin-muted hover:text-danger transition-colors"
             >
               <LogOut size={14} />
