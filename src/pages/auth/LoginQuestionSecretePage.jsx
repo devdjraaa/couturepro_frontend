@@ -69,10 +69,11 @@ export default function LoginQuestionSecretePage() {
         <form onSubmit={handleTelephone} className="space-y-4">
           <Input
             label={t('commun.telephone')}
-            type="tel"
+            type="text"
+            inputMode="tel"
             value={telephone}
             onChange={e => setTelephone(e.target.value)}
-            placeholder="+225 07 00 00 00 00"
+            placeholder="ex : +229 97 00 00 00"
             required
           />
           {error && <p className="text-sm text-danger text-center">{error}</p>}

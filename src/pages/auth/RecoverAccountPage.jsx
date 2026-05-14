@@ -154,10 +154,11 @@ export default function RecoverAccountPage() {
           </p>
           <Input
             label={t('auth.recuperer_compte.nouveau_numero')}
-            type="tel"
+            type="text"
+            inputMode="tel"
             value={tel}
             onChange={e => setTel(e.target.value)}
-            placeholder="+225 07 00 00 00 00"
+            placeholder="ex : +229 97 00 00 00"
             required
           />
           <Button type="submit" className="w-full" loading={loading}>{t('auth.recuperer_compte.continuer')}</Button>

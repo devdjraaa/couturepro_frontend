@@ -31,7 +31,7 @@ function ProfilSection() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <Input label={t('commun.nom')} value={current?.nom ?? ''} onChange={set('nom')} required />
-      <Input label={t('commun.telephone')} type="tel" value={current?.telephone ?? ''} onChange={set('telephone')} required />
+      <Input label={t('commun.telephone')} type="text" inputMode="tel" value={current?.telephone ?? ''} onChange={set('telephone')} placeholder="ex : +229 97 00 00 00" required />
       <Input label={t('commun.email')} type="email" value={current?.email ?? ''} onChange={set('email')} />
       {update.error && (
         <p className="text-sm text-danger">{update.error?.message || t('profil.erreur_update')}</p>
