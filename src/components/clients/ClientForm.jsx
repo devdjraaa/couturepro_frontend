@@ -149,10 +149,11 @@ export default function ClientForm({ initialData, onSubmit, onCancel, isLoading 
       </div>
       <Input
         label="Téléphone"
-        type="tel"
+        type="text"
+        inputMode="tel"
         value={form.telephone}
         onChange={set('telephone')}
-        placeholder="+221 77 000 00 00"
+        placeholder="ex : +229 97 00 00 00"
         required
       />
       <Select

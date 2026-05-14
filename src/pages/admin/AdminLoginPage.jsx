@@ -8,8 +8,8 @@ export default function AdminLoginPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { login } = useAdminAuth()
-  const [form, setForm]   = useState({ email: '', password: '' })
-  const [error, setError] = useState('')
+  const [form, setForm]       = useState({ email: '', password: '' })
+  const [error, setError]     = useState('')
   const [loading, setLoading] = useState(false)
   const [showPwd, setShowPwd] = useState(false)
 
@@ -30,27 +30,27 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-app flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <p className="text-indigo-400 font-bold text-xl uppercase tracking-widest">CouturePro</p>
-          <p className="text-gray-400 text-sm mt-1">{t('admin.login.espace_admin')}</p>
+          <p className="text-primary font-bold text-xl uppercase tracking-widest">CouturePro</p>
+          <p className="text-ghost text-sm mt-1">{t('admin.login.espace_admin')}</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-gray-800 rounded-2xl p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="bg-card border border-edge rounded-2xl p-6 space-y-4">
           <div>
-            <label className="block text-xs font-medium text-gray-300 mb-1">{t('admin.parametres.profil_email')}</label>
+            <label className="block text-xs font-medium text-ink mb-1">{t('admin.parametres.profil_email')}</label>
             <input
               type="email"
               value={form.email}
               onChange={set('email')}
               placeholder="admin@couturepro.com"
               required
-              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500"
+              className="w-full bg-subtle border border-edge rounded-xl px-3 py-2.5 text-sm text-ink placeholder:text-ghost focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-300 mb-1">{t('admin.login.mot_de_passe')}</label>
+            <label className="block text-xs font-medium text-ink mb-1">{t('admin.login.mot_de_passe')}</label>
             <div className="relative">
               <input
                 type={showPwd ? 'text' : 'password'}
@@ -58,26 +58,26 @@ export default function AdminLoginPage() {
                 onChange={set('password')}
                 placeholder="••••••••"
                 required
-                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2.5 pr-10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500"
+                className="w-full bg-subtle border border-edge rounded-xl px-3 py-2.5 pr-10 text-sm text-ink placeholder:text-ghost focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors"
               />
               <button
                 type="button"
                 tabIndex={-1}
                 onClick={() => setShowPwd(v => !v)}
                 aria-label={showPwd ? 'Masquer' : 'Voir'}
-                className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-200 transition-colors"
+                className="absolute inset-y-0 right-3 flex items-center text-ghost hover:text-ink transition-colors"
               >
                 {showPwd ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
           </div>
 
-          {error && <p className="text-red-400 text-sm text-center">{error}</p>}
+          {error && <p className="text-danger text-sm text-center">{error}</p>}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white font-medium rounded-lg py-2.5 text-sm transition-colors"
+            className="w-full bg-primary hover:bg-primary/90 disabled:opacity-60 text-inverse font-medium rounded-xl py-2.5 text-sm transition-colors"
           >
             {loading ? t('admin.login.connexion') : t('admin.login.se_connecter')}
           </button>

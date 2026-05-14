@@ -129,10 +129,11 @@ export default function RegisterPage() {
         </div>
         <Input
           label={t('commun.telephone')}
-          type="tel"
+          type="text"
+          inputMode="tel"
           value={form.telephone}
           onChange={set('telephone')}
-          placeholder="+225 07 00 00 00 00"
+          placeholder="ex : +229 97 00 00 00"
           required
         />
         <Input

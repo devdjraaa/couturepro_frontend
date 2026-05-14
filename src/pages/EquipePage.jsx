@@ -169,10 +169,11 @@ export default function EquipePage() {
           </div>
           <Input
             label={t('equipe.formulaire.telephone')}
-            type="tel"
+            type="text"
+            inputMode="tel"
             value={form.telephone}
             onChange={set('telephone')}
-            placeholder="+225 07 00 00 00 00"
+            placeholder="ex : +229 97 00 00 00"
           />
           <Select label={t('equipe.formulaire.role')} value={form.role} onChange={set('role')} options={ROLE_OPTIONS} />
           {apiError && <p className="text-sm text-danger">{apiError}</p>}

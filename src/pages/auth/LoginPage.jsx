@@ -97,10 +97,11 @@ export default function LoginPage() {
         <form onSubmit={handlePropLogin} className="space-y-4">
           <Input
             label={t('commun.telephone')}
-            type="tel"
+            type="text"
+            inputMode="tel"
             value={propForm.telephone}
             onChange={setProp('telephone')}
-            placeholder="+225 07 00 00 00 00"
+            placeholder="ex : +229 97 00 00 00"
             required
           />
           <Input
