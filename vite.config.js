@@ -11,7 +11,12 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    include: ['lokijs', '@nozbe/watermelondb', '@nozbe/watermelondb/adapters/lokijs'],
+    include: [
+      'lokijs',
+      '@nozbe/watermelondb',
+      '@nozbe/watermelondb/react',
+      '@nozbe/watermelondb/adapters/lokijs',
+    ],
   },
   build: {
     commonjsOptions: {

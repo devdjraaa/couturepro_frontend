@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import {
-  Building2, TicketCheck, CreditCard, CheckCircle, KeyRound,
+  Building2, TicketCheck, CreditCard, KeyRound,
   ArrowUpRight, ArrowDownRight, Minus, ChevronRight,
 } from 'lucide-react'
 import { AdminLayout } from '@/components/admin'
@@ -60,22 +60,6 @@ function StatCard({ label, value, sub, icon: Icon, color = 'primary', trend }) {
       <p className="text-2xs text-ghost font-medium mb-0.5">{label}</p>
       <p className="text-3xl font-bold font-display text-ink">{value ?? '—'}</p>
       {sub && <p className="text-xs text-ghost mt-1">{sub}</p>}
-    </div>
-  )
-}
-
-// ── Activity item ─────────────────────────────────────────────────────────────
-function ActivityItem({ icon: Icon, color = 'primary', title, subtitle, time }) {
-  return (
-    <div className="flex items-center gap-3 py-3 border-b border-edge last:border-0">
-      <div className={cn('w-8 h-8 rounded-full flex items-center justify-center shrink-0', ICON_COLORS[color])}>
-        <Icon size={14} />
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-ink truncate">{title}</p>
-        <p className="text-xs text-ghost truncate">{subtitle}</p>
-      </div>
-      <span className="text-xs text-ghost shrink-0 whitespace-nowrap">{time}</span>
     </div>
   )
 }
@@ -160,15 +144,15 @@ export default function AdminDashboardPage() {
         <span className="text-ghost">— Voici un aperçu de l'activité aujourd'hui</span>
       </p>
 
-      {/* 4-column stat grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      {/* 3-column stat grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <StatCard
           label="Ateliers"
           value={totalAteliers}
-          sub={`${totalAteliers} actifs ce mois`}
+          sub={`${totalAteliers} enregistrés`}
           icon={Building2}
           color="primary"
-          trend={12}
+          trend={null}
         />
         <StatCard
           label="Tickets ouverts"
@@ -184,57 +168,33 @@ export default function AdminDashboardPage() {
           sub="À valider"
           icon={CreditCard}
           color="danger"
-        />
-        <StatCard
-          label="Transactions du jour"
-          value={0}
-          sub="Aucune aujourd'hui"
-          icon={CreditCard}
-          color="success"
-          trend={0}
+          trend={null}
         />
       </div>
 
-      {/* Activity + Right column */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Activité récente */}
-        <div className="lg:col-span-2 bg-card border border-edge rounded-xl p-5">
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-sm font-semibold text-ink">Activité récente</p>
-            <a href="/admin/audit" className="text-xs font-medium text-primary hover:text-primary-600 transition-colors">
-              Voir tout →
-            </a>
-          </div>
-          <ActivityItem icon={CreditCard}  color="danger"  title="Paiement en attente de validation" subtitle="Atelier Konaté · 45 000 XOF"  time="il y a 5 min" />
-          <ActivityItem icon={Building2}   color="primary" title="Nouvel atelier inscrit"             subtitle="Atelier Diabaté · Plan Premium" time="il y a 1 h"   />
-          <ActivityItem icon={CheckCircle} color="success" title="Code d'accès créé"                 subtitle="Pour Atelier Sangaré"           time="il y a 3 h"   />
-          <ActivityItem icon={TicketCheck} color="accent"  title="Ticket #1247 résolu"               subtitle="Problème de connexion"          time="il y a 5 h"   />
+      {/* Accès rapides + État du système */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="bg-card border border-edge rounded-xl p-5">
+          <p className="text-sm font-semibold text-ink mb-2">Accès rapides</p>
+          {QUICK_LINKS.map(item => (
+            <QuickItem key={item.to + item.title} {...item} />
+          ))}
         </div>
 
-        {/* Colonne droite : Accès rapides + État du système */}
-        <div className="flex flex-col gap-4">
-          <div className="bg-card border border-edge rounded-xl p-5">
-            <p className="text-sm font-semibold text-ink mb-2">Accès rapides</p>
-            {QUICK_LINKS.map(item => (
-              <QuickItem key={item.to + item.title} {...item} />
-            ))}
+        <div className="bg-card border border-edge rounded-xl p-5">
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-sm font-semibold text-ink">État du système</p>
+            <span className="flex items-center gap-1.5 text-xs font-medium text-success bg-success/10 px-2.5 py-1 rounded-full">
+              <span className="w-1.5 h-1.5 rounded-full bg-success" />
+              Tout fonctionne
+            </span>
           </div>
-
-          <div className="bg-card border border-edge rounded-xl p-5">
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-sm font-semibold text-ink">État du système</p>
-              <span className="flex items-center gap-1.5 text-xs font-medium text-success bg-success/10 px-2.5 py-1 rounded-full">
-                <span className="w-1.5 h-1.5 rounded-full bg-success" />
-                Tout fonctionne
-              </span>
+          {SYSTEM_ITEMS.map(({ label, status }) => (
+            <div key={label} className="flex items-center justify-between py-2.5 border-b border-edge last:border-0">
+              <span className="text-sm text-ghost">{label}</span>
+              <span className="text-sm text-ink font-medium">{status}</span>
             </div>
-            {SYSTEM_ITEMS.map(({ label, status }) => (
-              <div key={label} className="flex items-center justify-between py-2.5 border-b border-edge last:border-0">
-                <span className="text-sm text-ghost">{label}</span>
-                <span className="text-sm text-ink font-medium">{status}</span>
-              </div>
-            ))}
-          </div>
+          ))}
         </div>
       </div>
     </AdminLayout>
