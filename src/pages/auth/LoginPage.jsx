@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '@/contexts'
 import { AuthLayout } from '@/components/layout'
-import { Input, Button, LanguageSwitcher } from '@/components/ui'
+import { Input, Button, LanguageSwitcher, PhoneInput } from '@/components/ui'
 
 function getOrCreateDeviceId() {
   const key = 'cp_device_id'
@@ -104,13 +104,10 @@ export default function LoginPage() {
 
       {tab === 'proprietaire' ? (
         <form onSubmit={handlePropLogin} className="space-y-4">
-          <Input
+          <PhoneInput
             label={t('commun.telephone')}
-            type="text"
-            inputMode="tel"
             value={propForm.telephone}
             onChange={setProp('telephone')}
-            placeholder="ex : +229 97 00 00 00"
             required
           />
           <Input

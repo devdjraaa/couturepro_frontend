@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts'
 import { AuthLayout } from '@/components/layout'
-import { Input, Button, Select } from '@/components/ui'
+import { Input, Button, Select, PhoneInput } from '@/components/ui'
 
 export default function RegisterPage() {
   const navigate = useNavigate()
@@ -127,13 +127,10 @@ export default function RegisterPage() {
             required
           />
         </div>
-        <Input
+        <PhoneInput
           label={t('commun.telephone')}
-          type="text"
-          inputMode="tel"
           value={form.telephone}
           onChange={set('telephone')}
-          placeholder="ex : +229 97 00 00 00"
           required
         />
         <Input
