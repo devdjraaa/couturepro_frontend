@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '@/contexts'
 import { AuthLayout } from '@/components/layout'
 import { Input, Button, LanguageSwitcher } from '@/components/ui'
@@ -10,9 +11,11 @@ export default function LoginPage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { login, equipeLogin } = useAuth()
-  const [tab, setTab]     = useState('proprietaire') // 'proprietaire' | 'equipe'
-  const [error, setError] = useState('')
+  const [tab, setTab]         = useState('proprietaire') // 'proprietaire' | 'equipe'
+  const [error, setError]     = useState('')
   const [loading, setLoading] = useState(false)
+  const [showPropPwd, setShowPropPwd] = useState(false)
+  const [showEqPwd,   setShowEqPwd]   = useState(false)
 
   // Formulaire propriétaire
   const [propForm, setPropForm] = useState({ telephone: '', password: '' })
@@ -102,11 +105,22 @@ export default function LoginPage() {
           />
           <Input
             label={t('auth.connexion.mot_de_passe')}
-            type="password"
+            type={showPropPwd ? 'text' : 'password'}
             value={propForm.password}
             onChange={setProp('password')}
             placeholder="••••••••"
             required
+            suffix={
+              <button
+                type="button"
+                tabIndex={-1}
+                onClick={() => setShowPropPwd(v => !v)}
+                aria-label={showPropPwd ? 'Masquer' : 'Voir'}
+                className="hover:text-ink transition-colors"
+              >
+                {showPropPwd ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            }
           />
           {error && <p className="text-sm text-danger text-center">{error}</p>}
           <Button type="submit" className="w-full" loading={loading}>
@@ -129,11 +143,22 @@ export default function LoginPage() {
           />
           <Input
             label={t('auth.connexion.mot_de_passe')}
-            type="password"
+            type={showEqPwd ? 'text' : 'password'}
             value={equipeForm.password}
             onChange={setEq('password')}
             placeholder="••••••••"
             required
+            suffix={
+              <button
+                type="button"
+                tabIndex={-1}
+                onClick={() => setShowEqPwd(v => !v)}
+                aria-label={showEqPwd ? 'Masquer' : 'Voir'}
+                className="hover:text-ink transition-colors"
+              >
+                {showEqPwd ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            }
           />
           <p className="text-xs text-ghost text-center -mt-2">
             {t('auth.connexion.code_acces_hint')}

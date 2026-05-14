@@ -39,7 +39,10 @@ const Input = forwardRef(function Input(
           {...props}
         />
         {suffix && (
-          <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-ghost">
+          <div className={cn(
+            'absolute inset-y-0 right-3 flex items-center text-ghost',
+            typeof suffix === 'string' && 'pointer-events-none',
+          )}>
             {typeof suffix === 'string'
               ? <span className="text-sm">{suffix}</span>
               : suffix}
