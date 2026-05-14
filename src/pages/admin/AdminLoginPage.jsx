@@ -1,15 +1,17 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { Eye, EyeOff } from 'lucide-react'
 import { useAdminAuth } from '@/contexts'
 
 export default function AdminLoginPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { login } = useAdminAuth()
-  const [form, setForm] = useState({ email: '', password: '' })
+  const [form, setForm]   = useState({ email: '', password: '' })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showPwd, setShowPwd] = useState(false)
 
   const set = key => e => setForm(f => ({ ...f, [key]: e.target.value }))
 
@@ -49,14 +51,25 @@ export default function AdminLoginPage() {
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-300 mb-1">{t('admin.login.mot_de_passe')}</label>
-            <input
-              type="password"
-              value={form.password}
-              onChange={set('password')}
-              placeholder="••••••••"
-              required
-              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500"
-            />
+            <div className="relative">
+              <input
+                type={showPwd ? 'text' : 'password'}
+                value={form.password}
+                onChange={set('password')}
+                placeholder="••••••••"
+                required
+                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2.5 pr-10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500"
+              />
+              <button
+                type="button"
+                tabIndex={-1}
+                onClick={() => setShowPwd(v => !v)}
+                aria-label={showPwd ? 'Masquer' : 'Voir'}
+                className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-200 transition-colors"
+              >
+                {showPwd ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
           </div>
 
           {error && <p className="text-red-400 text-sm text-center">{error}</p>}
