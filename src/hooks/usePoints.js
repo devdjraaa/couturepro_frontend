@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { pointsService } from '@/services/pointsService'
+import { showLocalNotif } from '@/utils/localNotif'
 import { QUERY_STALE_TIME } from '@/constants/config'
 import { QUERY_KEYS } from './queryKeys'
 
@@ -20,6 +21,7 @@ export function useConvertirPoints() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.points })
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.abonnement })
+      showLocalNotif('Points convertis', '31 jours de bonus ajoutés à votre abonnement.')
     },
   })
 }

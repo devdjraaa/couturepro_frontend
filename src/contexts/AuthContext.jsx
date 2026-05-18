@@ -8,6 +8,7 @@ import {
 import { setDemoMode } from '@/services/mockFlag'
 import { setActiveAtelierId } from '@/services/api'
 import { clearSyncState } from '@/db/syncAdapter'
+import { showLocalNotif } from '@/utils/localNotif'
 
 // ── Permissions par rôle ──────────────────────────────────────────────────────
 const ROLE_PERMISSIONS = {
@@ -96,6 +97,7 @@ export function AuthProvider({ children }) {
     setAtelier(atelier)
     setDemoMode(!!atelier?.is_demo)
     setCachedSession({ user, atelier })
+    showLocalNotif('Connexion réussie', `Bienvenue, ${user.prenom || user.nom} !`)
   }, [])
 
   const equipeLogin = useCallback(async (payload) => {

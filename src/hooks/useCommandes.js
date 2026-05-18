@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Q } from '@nozbe/watermelondb'
 import { useWmQuery, useWmRecord, useMutation, database } from '@/db/useWmQuery'
+import { showLocalNotif } from '@/utils/localNotif'
 
 function getAtelierId() {
   return localStorage.getItem('cp_active_atelier') || ''
@@ -83,6 +84,9 @@ export function useCreateCommande() {
         record.atelier_id            = getAtelierId()
       })
     })
+
+    const client = payload.client_nom || 'client'
+    showLocalNotif('Commande enregistrée', `Nouvelle commande pour ${client} créée avec succès.`)
   })
 }
 
@@ -110,6 +114,14 @@ export function useUpdateStatutCommande() {
         }
       })
     })
+
+    const messages = {
+      livre:    { titre: 'Commande livrée ✓', corps: 'La commande a été marquée comme livrée.' },
+      annule:   { titre: 'Commande annulée',  corps: 'La commande a été annulée.' },
+      en_cours: { titre: 'Commande en cours', corps: 'La commande est de nouveau en cours.' },
+    }
+    const msg = messages[statut]
+    if (msg) showLocalNotif(msg.titre, msg.corps)
   })
 }
 

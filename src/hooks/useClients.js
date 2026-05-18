@@ -1,5 +1,6 @@
 import { Q } from '@nozbe/watermelondb'
 import { useWmQuery, useWmRecord, useMutation, database } from '@/db/useWmQuery'
+import { showLocalNotif } from '@/utils/localNotif'
 
 function getAtelierId() {
   return localStorage.getItem('cp_active_atelier') || ''
@@ -30,7 +31,6 @@ export function useClient(id) {
 
 export function useCreateClient() {
   return useMutation(async (payload) => {
-    // Anti-doublon local
     const nom    = payload.nom?.toLowerCase().trim() ?? ''
     const prenom = payload.prenom?.toLowerCase().trim() ?? ''
     const existing = await database.get('clients').query(
@@ -59,6 +59,9 @@ export function useCreateClient() {
         record.atelier_id  = getAtelierId()
       })
     })
+
+    const nomComplet = [payload.prenom, payload.nom].filter(Boolean).join(' ')
+    showLocalNotif('Nouveau client ajouté', `${nomComplet} a été enregistré avec succès.`)
   })
 }
 
