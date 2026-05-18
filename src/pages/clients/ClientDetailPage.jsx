@@ -199,7 +199,7 @@ export default function ClientDetailPage() {
                 title={t('clients.detail.aucune_commande_titre')}
                 description={t('clients.detail.aucune_commande_description')}
                 action={
-                  <Button onClick={() => navigate('/commandes/new')}>
+                  <Button onClick={() => navigate('/commandes/new', { state: { clientId } })}>
                     {t('clients.actions.nouvelle_commande')}
                   </Button>
                 }

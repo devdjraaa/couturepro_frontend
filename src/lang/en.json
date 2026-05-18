@@ -89,7 +89,10 @@
       "onglet_equipe": "Assistant / Staff",
       "code_acces": "Access code",
       "acceder_atelier": "Access workshop",
-      "code_acces_hint": "The initial password is the same as the access code"
+      "code_acces_hint": "The initial password is the same as the access code",
+      "se_souvenir": "Remember me",
+      "en_vous_connectant": "By signing in, you agree to our",
+      "politique_confidentialite": "terms of use"
     },
     "inscription": {
       "titre": "Create your workshop",
@@ -111,7 +114,10 @@
       "question_personnalisee_requise": "Please enter your custom question.",
       "reponse_secrete": "Secret answer",
       "reponse_secrete_placeholder": "Your answer",
-      "mdp_non_concordants": "Passwords do not match"
+      "mdp_non_concordants": "Passwords do not match",
+      "accepter_cgu_debut": "I agree to the",
+      "accepter_cgu_lien": "terms of use",
+      "cgu_requis": "You must accept the terms of use to continue"
     },
     "otp": {
       "titre": "Verification",

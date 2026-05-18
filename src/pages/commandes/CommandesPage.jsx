@@ -128,6 +128,8 @@ export default function CommandesPage() {
 
       <BottomSheet isOpen={showSheet} onClose={handleCloseSheet} title={t('commandes.formulaire.titre_ajout')}>
         <CommandeForm
+          initialData={location.state?.clientId ? { client_id: location.state.clientId } : undefined}
+          lockedClientId={!!location.state?.clientId}
           onSubmit={handleCreate}
           onCancel={handleCloseSheet}
           isLoading={createCommande.isPending}
