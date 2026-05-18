@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { useNetwork } from '@/hooks/useNetwork'
 import { useAuth } from '@/contexts/AuthContext'
 import { syncWithServer, getLastPulledAt } from '@/db/syncAdapter'
@@ -11,6 +12,7 @@ const SyncContext = createContext(null)
 export function SyncProvider({ children }) {
   const { isOnline, isNative } = useNetwork()
   const { isAuthenticated } = useAuth()
+  const queryClient = useQueryClient()
 
   const [isSyncing,    setIsSyncing]    = useState(false)
   const [lastSyncedAt, setLastSyncedAt] = useState(() => {
@@ -28,6 +30,7 @@ export function SyncProvider({ children }) {
     try {
       await syncWithServer()
       setLastSyncedAt(new Date().toISOString())
+      queryClient.invalidateQueries({ queryKey: ['notifications'] })
 
       // Re-planifier les notifications après chaque sync
       if (isNative) {
