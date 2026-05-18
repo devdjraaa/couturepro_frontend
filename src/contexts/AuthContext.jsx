@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
+import toast from 'react-hot-toast'
 import { authService } from '@/services/authService'
 import { getToken } from '@/utils/storage'
 import { setDemoMode } from '@/services/mockFlag'
@@ -60,6 +61,7 @@ export function AuthProvider({ children }) {
     setUser(user)
     setAtelier(atelier)
     setDemoMode(!!atelier?.is_demo)
+    toast.success(`Bienvenue, ${user.prenom || user.nom} !`)
   }, [])
 
   const equipeLogin = useCallback(async (payload) => {

@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 import { clientService } from '@/services/clientService'
 import { QUERY_STALE_TIME } from '@/constants/config'
 import { QUERY_KEYS } from './queryKeys'
@@ -38,9 +39,13 @@ export function useCreateClient() {
       }
       return clientService.create(payload)
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.clients })
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.quota })
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notifications })
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notificationsCount })
+      const nom = [data?.prenom, data?.nom].filter(Boolean).join(' ')
+      toast.success(`Client ${nom} ajouté avec succès.`)
     },
   })
 }

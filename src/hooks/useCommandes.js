@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 import { commandeService } from '@/services/commandeService'
 import { QUERY_STALE_TIME } from '@/constants/config'
 import { QUERY_KEYS } from './queryKeys'
@@ -32,11 +33,17 @@ export function useCreateCommande() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (payload) => commandeService.create(payload),
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.commandes })
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.commandeStats })
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.clients })
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.quota })
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notifications })
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notificationsCount })
+      const client = data?.client?.prenom
+        ? `${data.client.prenom} ${data.client.nom}`
+        : (data?.client?.nom ?? 'client')
+      toast.success(`Commande pour ${client} créée avec succès.`)
     },
   })
 }
@@ -57,11 +64,19 @@ export function useUpdateStatutCommande() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ id, statut }) => commandeService.updateStatut(id, statut),
-    onSuccess: (data) => {
+    onSuccess: (data, { statut }) => {
       queryClient.setQueryData(QUERY_KEYS.commande(data.id), data)
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.commandes })
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.commandeStats })
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.clients })
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notifications })
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notificationsCount })
+      const messages = {
+        livre:    'Commande marquée comme livrée.',
+        annule:   'Commande annulée.',
+        en_cours: 'Commande remise en cours.',
+      }
+      toast.success(messages[statut] ?? 'Statut mis à jour.')
     },
   })
 }

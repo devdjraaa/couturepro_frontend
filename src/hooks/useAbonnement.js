@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 import { abonnementService } from '@/services/abonnementService'
 import { QUERY_STALE_TIME } from '@/constants/config'
 import { QUERY_KEYS } from './queryKeys'
@@ -52,6 +53,9 @@ export function useActivateCode() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.abonnement })
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.quota })
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notifications })
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notificationsCount })
+      toast.success('Abonnement activé avec succès.')
     },
   })
 }
