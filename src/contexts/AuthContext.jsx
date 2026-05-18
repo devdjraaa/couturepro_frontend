@@ -7,6 +7,7 @@ import {
 } from '@/utils/storage'
 import { setDemoMode } from '@/services/mockFlag'
 import { setActiveAtelierId } from '@/services/api'
+import { clearSyncState } from '@/db/syncAdapter'
 
 // ── Permissions par rôle ──────────────────────────────────────────────────────
 const ROLE_PERMISSIONS = {
@@ -106,15 +107,12 @@ export function AuthProvider({ children }) {
   }, [])
 
   const logout = useCallback(async () => {
-    // Clear local immédiatement et complètement (token + cache + atelier actif)
     setUser(null)
     setAtelier(null)
     setDemoMode(false)
     clearAll()
     clearCachedSession()
-    // Best-effort : tenter d'invalider le token côté serveur. Si offline ou
-    // serveur down, on ignore — le token sera invalidé serveur side au TTL
-    // Sanctum, ou à la prochaine requête qui ramènera un 401.
+    clearSyncState()
     try { await authService.logout() } catch { /* offline */ }
   }, [])
 

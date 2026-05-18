@@ -39,6 +39,9 @@ export function useCommandeStats() {
     const in48h = new Date(now.getTime() + 48 * 3_600_000)
     const nonTerminees = commandes.filter(c => c.statut === 'en_cours')
 
+    const total_encaisse = commandes.reduce((sum, c) => sum + (Number(c.acompte) || 0), 0)
+    const total_restant  = nonTerminees.reduce((sum, c) => sum + Math.max(0, (Number(c.prix) || 0) - (Number(c.acompte) || 0)), 0)
+
     return {
       en_retard: nonTerminees.filter(c =>
         c.date_livraison_prevue && new Date(c.date_livraison_prevue) < now,
@@ -50,6 +53,8 @@ export function useCommandeStats() {
       }).length,
       en_cours: nonTerminees.length,
       total: commandes.length,
+      total_encaisse,
+      total_restant,
     }
   }, [commandes])
 

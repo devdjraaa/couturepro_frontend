@@ -1,14 +1,16 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { abonnementService } from '@/services/abonnementService'
+import { useNetwork } from '@/hooks/useNetwork'
 import { QUERY_STALE_TIME } from '@/constants/config'
 import { QUERY_KEYS } from './queryKeys'
 
 export function useAbonnement() {
+  const { isOnline } = useNetwork()
   return useQuery({
     queryKey: QUERY_KEYS.abonnement,
     queryFn: () => abonnementService.getCurrent(),
-    staleTime: 30_000,          // toujours frais après 30 s
-    refetchInterval: 60_000,    // poll toutes les 60 s pour détecter l'expiration
+    staleTime: 30_000,
+    refetchInterval: isOnline ? 60_000 : false,
   })
 }
 
