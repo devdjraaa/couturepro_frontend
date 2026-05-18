@@ -1,6 +1,6 @@
 {
-  "appId": "com.couturepro.app",
-  "appName": "CouturePro",
+  "appId": "com.couturepro.admin",
+  "appName": "CouturePro Admin",
   "webDir": "dist",
   "server": {
     "androidScheme": "https",
