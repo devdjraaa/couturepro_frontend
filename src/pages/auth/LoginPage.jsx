@@ -25,6 +25,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [showPropPwd, setShowPropPwd] = useState(false)
   const [showEqPwd,   setShowEqPwd]   = useState(false)
+  const [rememberMe,  setRememberMe]  = useState(true)
 
   // Formulaire propriétaire
   const [propForm, setPropForm] = useState({ telephone: '', password: '' })
@@ -130,6 +131,17 @@ export default function LoginPage() {
             }
           />
           {error && <p className="text-sm text-danger text-center">{error}</p>}
+
+          <label className="flex items-center gap-2 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={e => setRememberMe(e.target.checked)}
+              className="w-4 h-4 rounded border-edge accent-primary"
+            />
+            <span className="text-sm text-ghost">{t('auth.connexion.se_souvenir')}</span>
+          </label>
+
           <Button type="submit" className="w-full" loading={loading}>
             {t('auth.connexion.se_connecter')}
           </Button>
@@ -137,6 +149,10 @@ export default function LoginPage() {
             <Link to="/register" className="text-primary font-medium">{t('auth.connexion.creer_compte')}</Link>
             <Link to="/mot-de-passe-oublie" className="text-dim hover:text-ink">{t('auth.connexion.mot_de_passe_oublie')}</Link>
           </div>
+          <p className="text-center text-xs text-ghost">
+            {t('auth.connexion.en_vous_connectant')}{' '}
+            <Link to="/a-propos" className="underline hover:text-ink">{t('auth.connexion.politique_confidentialite')}</Link>
+          </p>
         </form>
       ) : (
         <form onSubmit={handleEquipeLogin} className="space-y-4">

@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { Eye, EyeOff, Check, X } from 'lucide-react'
 import { useAuth } from '@/contexts'
 import { AuthLayout } from '@/components/layout'
-import { Input, Button, Select, PhoneInput } from '@/components/ui'
+import { Input, Button, Select, PhoneInput, LanguageSwitcher } from '@/components/ui'
 
 export default function RegisterPage() {
   const navigate = useNavigate()
@@ -34,6 +35,9 @@ export default function RegisterPage() {
   const [otp, setOtp] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showPwd, setShowPwd] = useState(false)
+  const [showPwdConfirm, setShowPwdConfirm] = useState(false)
+  const [accepteCgu, setAccepteCgu] = useState(false)
 
   const set = key => e => setForm(f => ({ ...f, [key]: e.target.value }))
 
@@ -50,6 +54,10 @@ export default function RegisterPage() {
       : form.question_secrete
     if (form.question_secrete === CUSTOM_VALUE && !finalQuestion) {
       setError(t('auth.inscription.question_personnalisee_requise'))
+      return
+    }
+    if (!accepteCgu) {
+      setError(t('auth.inscription.cgu_requis'))
       return
     }
     setLoading(true)
@@ -81,6 +89,9 @@ export default function RegisterPage() {
   if (step === 'otp') {
     return (
       <AuthLayout subtitle={t('auth.otp.sous_titre_tel', { telephone: form.telephone })}>
+        <div className="flex justify-end mb-4">
+          <LanguageSwitcher variant="badge" />
+        </div>
         <form onSubmit={handleVerifyOtp} className="space-y-4">
           <Input
             label={t('auth.otp.code')}
@@ -103,13 +114,27 @@ export default function RegisterPage() {
           >
             {t('auth.otp.renvoyer')}
           </button>
+          <button
+            type="button"
+            onClick={() => { setStep('form'); setError('') }}
+            className="w-full text-sm text-ghost hover:text-ink transition-colors py-1"
+          >
+            ← {t('commun.retour')}
+          </button>
         </form>
       </AuthLayout>
     )
   }
 
+  const pwdMatch = form.password_confirmation
+    ? form.password === form.password_confirmation
+    : null
+
   return (
     <AuthLayout subtitle={t('auth.inscription.sous_titre_register')}>
+      <div className="flex justify-end mb-4">
+        <LanguageSwitcher variant="badge" />
+      </div>
       <form onSubmit={handleRegister} className="space-y-4">
         <div className="grid grid-cols-2 gap-3">
           <Input
@@ -150,19 +175,49 @@ export default function RegisterPage() {
         />
         <Input
           label={t('auth.inscription.mot_de_passe')}
-          type="password"
+          type={showPwd ? 'text' : 'password'}
           value={form.password}
           onChange={set('password')}
           placeholder="••••••••"
           required
+          suffix={
+            <button
+              type="button"
+              tabIndex={-1}
+              onClick={() => setShowPwd(v => !v)}
+              aria-label={showPwd ? 'Masquer' : 'Voir'}
+              className="hover:text-ink transition-colors"
+            >
+              {showPwd ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          }
         />
         <Input
           label={t('auth.inscription.confirmer_mot_de_passe')}
-          type="password"
+          type={showPwdConfirm ? 'text' : 'password'}
           value={form.password_confirmation}
           onChange={set('password_confirmation')}
           placeholder="••••••••"
           required
+          error={pwdMatch === false ? t('auth.inscription.mdp_non_concordants') : undefined}
+          suffix={
+            <div className="flex items-center gap-1">
+              {pwdMatch !== null && (
+                pwdMatch
+                  ? <Check size={14} className="text-success" />
+                  : <X size={14} className="text-danger" />
+              )}
+              <button
+                type="button"
+                tabIndex={-1}
+                onClick={() => setShowPwdConfirm(v => !v)}
+                aria-label={showPwdConfirm ? 'Masquer' : 'Voir'}
+                className="hover:text-ink transition-colors"
+              >
+                {showPwdConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
+          }
         />
         <Select
           label={t('auth.inscription.question_secrete')}
@@ -187,6 +242,21 @@ export default function RegisterPage() {
           placeholder={t('auth.inscription.reponse_secrete_placeholder')}
           required
         />
+        <label className="flex items-start gap-2 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={accepteCgu}
+            onChange={e => setAccepteCgu(e.target.checked)}
+            className="w-4 h-4 mt-0.5 rounded border-edge accent-primary shrink-0"
+          />
+          <span className="text-sm text-ghost leading-snug">
+            {t('auth.inscription.accepter_cgu_debut')}{' '}
+            <Link to="/a-propos" className="underline text-primary hover:text-primary/80">
+              {t('auth.inscription.accepter_cgu_lien')}
+            </Link>
+          </span>
+        </label>
+
         {error && <p className="text-sm text-danger text-center">{error}</p>}
         <Button type="submit" className="w-full" loading={loading}>
           {t('auth.inscription.creer_compte')}

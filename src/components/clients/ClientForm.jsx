@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { Camera, X } from 'lucide-react'
 import { Input, Select, Button } from '@/components/ui'
-import { AVATAR_PALETTES } from '@/components/ui/Avatar'
+import Avatar, { AVATAR_PALETTES } from '@/components/ui/Avatar'
 import { getClientPhoto, compressToBase64 } from '@/utils/clientPhotoStorage'
 import { cn } from '@/utils/cn'
 
@@ -70,6 +70,21 @@ export default function ClientForm({ initialData, onSubmit, onCancel, isLoading 
                 <X size={11} />
               </button>
             </div>
+          ) : form.avatar_index != null ? (
+            <button
+              type="button"
+              onClick={() => fileRef.current?.click()}
+              className="relative"
+            >
+              <Avatar
+                nom={form.prenom || form.nom || '?'}
+                avatar_index={form.avatar_index}
+                size="xl"
+              />
+              <span className="absolute -bottom-1 -right-1 w-5 h-5 bg-card border border-edge rounded-full flex items-center justify-center">
+                <Camera size={10} className="text-dim" />
+              </span>
+            </button>
           ) : (
             <button
               type="button"

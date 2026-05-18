@@ -11,7 +11,7 @@ const MODE_PAIEMENT_OPTIONS = [
   { value: 'virement',     label: 'Virement'     },
 ]
 
-export default function CommandeForm({ initialData, onSubmit, onCancel, isLoading }) {
+export default function CommandeForm({ initialData, lockedClientId = false, onSubmit, onCancel, isLoading }) {
   const { data: clients = [] } = useClients()
   const { data: vetements = [] } = useVetements()
   const fileRef = useRef(null)
@@ -29,6 +29,7 @@ export default function CommandeForm({ initialData, onSubmit, onCancel, isLoadin
   })
   const [photoTissu, setPhotoTissu] = useState(null)
   const [photoPreview, setPhotoPreview] = useState(initialData?.photo_tissu_url ?? null)
+  const [acompteError, setAcompteError] = useState('')
 
   const set = (key) => (e) => setForm(f => ({ ...f, [key]: e.target.value }))
 
@@ -48,6 +49,12 @@ export default function CommandeForm({ initialData, onSubmit, onCancel, isLoadin
   const handleSubmit = (e) => {
     e.preventDefault()
     const acompte = form.acompte !== '' ? Number(form.acompte) : 0
+    const prix    = Number(form.prix)
+    if (acompte > prix) {
+      setAcompteError('L\'acompte ne peut pas dépasser le prix total.')
+      return
+    }
+    setAcompteError('')
     onSubmit({
       client_id:              form.client_id,
       vetement_id:            form.vetement_id,
@@ -67,12 +74,17 @@ export default function CommandeForm({ initialData, onSubmit, onCancel, isLoadin
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 p-5">
-      <Select label="Client" value={form.client_id} onChange={set('client_id')} options={clientOptions} placeholder="Choisir un client…" required />
-      <Select label="Modèle / vêtement" value={form.vetement_id} onChange={set('vetement_id')} options={vetOptions} placeholder="Choisir un modèle…" required />
+      <Select label="Client" value={form.client_id} onChange={set('client_id')} options={clientOptions} placeholder="Choisir un client…" required disabled={lockedClientId} />
+      <Select label="Modèle / vêtement" value={form.vetement_id} onChange={set('vetement_id')} options={vetOptions} placeholder="Choisir un modèle…" required disabled={vetements.length === 0} />
+      {vetements.length === 0 && (
+        <p className="text-xs text-warning -mt-2">
+          Aucun modèle dans le catalogue. <a href="/catalogue" className="underline font-medium">Créer un modèle →</a>
+        </p>
+      )}
 
       <div className="grid grid-cols-2 gap-3">
         <Input label="Prix (XOF)" type="number" min="0" value={form.prix}    onChange={set('prix')}    placeholder="25000" required />
-        <Input label="Acompte (XOF)" type="number" min="0" value={form.acompte} onChange={set('acompte')} placeholder="0" />
+        <Input label="Acompte (XOF)" type="number" min="0" value={form.acompte} onChange={e => { set('acompte')(e); setAcompteError('') }} placeholder="0" error={acompteError} />
       </div>
       {Number(form.acompte) > 0 && !initialData && (
         <Select

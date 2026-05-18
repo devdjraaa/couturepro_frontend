@@ -79,7 +79,10 @@
       "onglet_equipe": "Assistant / Membre",
       "code_acces": "Code d'accès",
       "acceder_atelier": "Accéder à l'atelier",
-      "code_acces_hint": "Le mot de passe initial est identique au code d'accès"
+      "code_acces_hint": "Le mot de passe initial est identique au code d'accès",
+      "se_souvenir": "Se souvenir de moi",
+      "en_vous_connectant": "En vous connectant, vous acceptez nos",
+      "politique_confidentialite": "conditions d'utilisation"
     },
     "inscription": {
       "titre": "Créer votre atelier",
@@ -101,7 +104,10 @@
       "question_personnalisee_requise": "Veuillez saisir votre question personnalisée.",
       "reponse_secrete": "Réponse secrète",
       "reponse_secrete_placeholder": "Votre réponse",
-      "mdp_non_concordants": "Les mots de passe ne correspondent pas"
+      "mdp_non_concordants": "Les mots de passe ne correspondent pas",
+      "accepter_cgu_debut": "J'accepte les",
+      "accepter_cgu_lien": "conditions d'utilisation",
+      "cgu_requis": "Vous devez accepter les conditions d'utilisation pour continuer"
     },
     "otp": {
       "titre": "Vérification",
