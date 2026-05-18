@@ -33,7 +33,6 @@ export default function RegisterPage() {
     reponse_secrete: '',
   })
   const [otp, setOtp] = useState('')
-  const [otpDebug, setOtpDebug] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [showPwd, setShowPwd] = useState(false)
@@ -64,8 +63,7 @@ export default function RegisterPage() {
     setLoading(true)
     try {
       const { question_secrete_custom, ...rest } = form
-      const res = await register({ ...rest, question_secrete: finalQuestion })
-      if (res?.otp_debug) setOtpDebug(res.otp_debug)
+      await register({ ...rest, question_secrete: finalQuestion })
       setStep('otp')
     } catch (err) {
       setError(err.message || t('erreurs.inconnu'))
@@ -105,11 +103,6 @@ export default function RegisterPage() {
             maxLength={6}
             required
           />
-          {otpDebug && (
-            <p className="text-xs text-center bg-amber-100 text-amber-800 rounded px-3 py-2 font-mono">
-              [DEV] Code OTP : <strong>{otpDebug}</strong>
-            </p>
-          )}
           {error && <p className="text-sm text-danger text-center">{error}</p>}
           <Button type="submit" className="w-full" loading={loading}>
             {t('auth.otp.verifier')}
