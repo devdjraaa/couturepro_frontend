@@ -12,7 +12,7 @@ import { formatCurrency } from '@/utils/formatCurrency'
 import { cn } from '@/utils/cn'
 
 // ── Salutation ───────────────────────────────────────────────────────────────
-function Greeting({ user, subtitle }) {
+function Greeting({ user, subtitle, hero = false }) {
   const { t, i18n } = useTranslation()
   const { isDark, toggleTheme } = useTheme()
   const hour = new Date().getHours()
@@ -22,28 +22,30 @@ function Greeting({ user, subtitle }) {
   })
 
   return (
-    <div className="pt-4 pb-2">
+    <div className={hero ? 'pt-2 pb-1' : 'pt-4 pb-2'}>
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <p className="text-xs text-ghost capitalize mb-0.5">{dateStr}</p>
-          <h1 className="text-xl font-bold font-display text-ink">
+          <p className={cn('text-xs capitalize mb-0.5', hero ? 'text-inverse/60' : 'text-ghost')}>{dateStr}</p>
+          <h1 className={cn('text-xl font-bold font-display', hero ? 'text-inverse' : 'text-ink')}>
             {greeting}, {user?.prenom ?? user?.nom?.split(' ')[0] ?? ''} 👋
           </h1>
         </div>
-        <div className="flex items-center gap-1 shrink-0 mt-0.5 lg:hidden">
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-subtle transition-colors"
-            aria-label={isDark ? t('commun.passer_mode_clair') : t('commun.passer_mode_sombre')}
-          >
-            {isDark ? <Sun size={18} className="text-ink" /> : <Moon size={18} className="text-ink" />}
-          </button>
-          <LanguageSwitcher variant="badge" />
-        </div>
+        {hero && (
+          <div className="flex items-center gap-1 shrink-0 mt-0.5">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-inverse/10 transition-colors"
+              aria-label={isDark ? t('commun.passer_mode_clair') : t('commun.passer_mode_sombre')}
+            >
+              {isDark ? <Sun size={18} className="text-inverse" /> : <Moon size={18} className="text-inverse" />}
+            </button>
+            <LanguageSwitcher variant="hero" />
+          </div>
+        )}
       </div>
       {subtitle && (
-        <p className="text-sm text-ghost mt-1">{subtitle}</p>
+        <p className={cn('text-sm mt-1', hero ? 'text-inverse/70' : 'text-ghost')}>{subtitle}</p>
       )}
     </div>
   )
@@ -318,10 +320,18 @@ export default function DashboardPage() {
 
   return (
     <AppLayout title={t('dashboard.titre_auj')} noMobileHeader onRefresh={() => queryClient.invalidateQueries()}>
+
+      {/* Hero violet — mobile uniquement */}
+      <div className="bg-primary px-4 pt-safe pb-5 lg:hidden sticky top-0 z-20 rounded-b-3xl">
+        <Greeting user={user} subtitle={dynamicSub} hero />
+      </div>
+
       <div className="p-4 space-y-5 pb-safe">
 
-        {/* Salutation */}
-        <Greeting user={user} subtitle={dynamicSub} />
+        {/* Salutation desktop uniquement */}
+        <div className="hidden lg:block">
+          <Greeting user={user} subtitle={dynamicSub} />
+        </div>
 
         {/* Onboarding checklist — visible uniquement si aucune commande */}
         <WelcomeChecklist
