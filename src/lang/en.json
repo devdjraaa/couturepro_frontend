@@ -889,6 +889,16 @@
     "plus": "More",
     "menu": "Menu"
   },
+  "atelier": {
+    "titre": "Workshop",
+    "ajouter_ville": "Add a city →",
+    "section_catalogue": "My catalogue",
+    "modeles": "Garment models",
+    "fiches_mesures": "Client measurement sheets",
+    "mon_equipe": "My team",
+    "informations": "Workshop information",
+    "confirmer_deconnexion": "Log out?"
+  },
   "profil": {
     "titre": "My profile",
     "section_informations": "Information",

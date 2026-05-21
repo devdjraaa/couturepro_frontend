@@ -889,6 +889,16 @@
     "plus": "Plus",
     "menu": "Menu"
   },
+  "atelier": {
+    "titre": "Atelier",
+    "ajouter_ville": "Ajouter une ville →",
+    "section_catalogue": "Mon catalogue",
+    "modeles": "Modèles de vêtements",
+    "fiches_mesures": "Fiches de mesures clients",
+    "mon_equipe": "Mon équipe",
+    "informations": "Informations de l'atelier",
+    "confirmer_deconnexion": "Se déconnecter ?"
+  },
   "profil": {
     "titre": "Mon profil",
     "section_informations": "Informations",

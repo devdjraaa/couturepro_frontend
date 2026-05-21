@@ -4,6 +4,7 @@ import {
   Palette, MessageCircle, Globe, CreditCard,
   Lock, HelpCircle, ChevronRight,
 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts'
 import { useAtelierParametres } from '@/hooks/useParametres'
 import { useVetements } from '@/hooks/useVetements'
@@ -51,17 +52,18 @@ function SettingsRow({ icon: Icon, label, value, onClick, danger = false }) {
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function AtelierPage() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { user, atelier, logout } = useAuth()
   const { data: atelierParams }   = useAtelierParametres()
   const { data: vetements = [] }  = useVetements()
 
-  const nom      = atelierParams?.nom   ?? atelier?.nom   ?? 'Mon Atelier'
+  const nom      = atelierParams?.nom   ?? atelier?.nom   ?? t('atelier.titre')
   const ville    = atelierParams?.ville ?? atelier?.ville ?? ''
   const initial  = nom[0]?.toUpperCase() ?? 'A'
   const mesModeles = vetements.filter(v => !v.is_systeme).length
 
   return (
-    <AppLayout title="Atelier">
+    <AppLayout title={t('atelier.titre')}>
       <div className="pb-safe">
         {/* Hero atelier */}
         <div className="px-4 py-6 flex items-center gap-4">
@@ -78,77 +80,77 @@ export default function AtelierPage() {
                 onClick={() => navigate('/parametres?tab=atelier')}
                 className="text-xs text-primary underline underline-offset-2"
               >
-                Ajouter une ville →
+                {t('atelier.ajouter_ville')}
               </button>
             )}
           </div>
         </div>
 
         {/* Mon catalogue */}
-        <Section title="Mon catalogue">
+        <Section title={t('atelier.section_catalogue')}>
           <SettingsRow
             icon={Scissors}
-            label="Modèles de vêtements"
+            label={t('atelier.modeles')}
             value={mesModeles > 0 ? String(mesModeles) : undefined}
             onClick={() => navigate('/catalogue/modeles')}
           />
           <SettingsRow
             icon={Ruler}
-            label="Fiches de mesures clients"
+            label={t('atelier.fiches_mesures')}
             onClick={() => navigate('/clients')}
           />
         </Section>
 
         {/* Mon atelier */}
-        <Section title="Mon atelier">
+        <Section title={t('parametres.atelier.titre')}>
           <SettingsRow
             icon={Building2}
-            label="Informations de l'atelier"
+            label={t('atelier.informations')}
             onClick={() => navigate('/parametres?tab=atelier')}
           />
           <SettingsRow
             icon={Users}
-            label="Mon équipe"
+            label={t('atelier.mon_equipe')}
             onClick={() => navigate('/equipe')}
           />
           <SettingsRow
             icon={MapPin}
-            label="Mes ateliers"
+            label={t('parametres.onglets.ateliers')}
             onClick={() => navigate('/parametres?tab=ateliers')}
           />
         </Section>
 
         {/* Paramètres */}
-        <Section title="Paramètres">
+        <Section title={t('parametres.titre')}>
           <SettingsRow
             icon={Palette}
-            label="Apparence & thème"
+            label={t('parametres.liens.theme')}
             onClick={() => navigate('/parametres/theme')}
           />
           <SettingsRow
             icon={MessageCircle}
-            label="Communications WhatsApp"
+            label={t('parametres.liens.communications')}
             onClick={() => navigate('/parametres/communications')}
           />
           <SettingsRow
             icon={Globe}
-            label="Langue"
+            label={t('langue.titre')}
             value={user?.langue?.toUpperCase() ?? 'FR'}
             onClick={() => navigate('/parametres?tab=preferences')}
           />
           <SettingsRow
             icon={CreditCard}
-            label="Abonnement"
+            label={t('parametres.onglets.abonnement')}
             onClick={() => navigate('/parametres?tab=abonnement')}
           />
           <SettingsRow
             icon={Lock}
-            label="Sécurité"
+            label={t('parametres.onglets.securite')}
             onClick={() => navigate('/parametres?tab=securite')}
           />
           <SettingsRow
             icon={HelpCircle}
-            label="Support & aide"
+            label={t('parametres.liens.support')}
             onClick={() => navigate('/support')}
           />
         </Section>
@@ -157,10 +159,10 @@ export default function AtelierPage() {
         <div className="px-4 pt-6 pb-10 text-center">
           <button
             type="button"
-            onClick={() => { if (confirm('Se déconnecter ?')) logout() }}
+            onClick={() => { if (confirm(t('atelier.confirmer_deconnexion'))) logout() }}
             className="text-sm font-medium text-danger/70 hover:text-danger transition-colors py-2"
           >
-            Se déconnecter
+            {t('parametres.deconnexion')}
           </button>
         </div>
       </div>
