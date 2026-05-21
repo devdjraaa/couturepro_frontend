@@ -11,15 +11,16 @@ import { saveClientPhoto, deleteClientPhoto } from '@/utils/clientPhotoStorage'
 import { cn } from '@/utils/cn'
 
 const SORT_OPTIONS = [
-  { key: 'recent',    label: 'Récents',          icon: AlignLeft    },
-  { key: 'alpha',     label: 'A → Z',            icon: ArrowDownAZ  },
-  { key: 'commandes', label: 'Commandes actives', icon: ClipboardList },
+  { key: 'recent',    tKey: 'clients.tri.recent',   icon: AlignLeft    },
+  { key: 'alpha',     tKey: 'clients.tri.alpha',    icon: ArrowDownAZ  },
+  { key: 'commandes', tKey: 'clients.tri.commandes', icon: ClipboardList },
 ]
 
 function SortChips({ active, onChange }) {
+  const { t } = useTranslation()
   return (
     <div className="flex gap-2 overflow-x-auto scrollbar-none -mx-1 px-1">
-      {SORT_OPTIONS.map(({ key, label, icon: Icon }) => (
+      {SORT_OPTIONS.map(({ key, tKey, icon: Icon }) => (
         <button
           key={key}
           type="button"
@@ -32,7 +33,7 @@ function SortChips({ active, onChange }) {
           )}
         >
           <Icon size={12} />
-          {label}
+          {t(tKey)}
         </button>
       ))}
     </div>
@@ -58,8 +59,8 @@ function AlphaIndex({ letters, onJump }) {
 
 export default function ClientsPage() {
   const navigate = useNavigate()
-  const queryClient = useQueryClient()
   const { t } = useTranslation()
+  const queryClient = useQueryClient()
   const [search, setSearch]   = useState('')
   const [sort, setSort]       = useState('recent')
   const [showSheet, setShowSheet] = useState(false)
@@ -153,7 +154,7 @@ export default function ClientsPage() {
             {alphaLetters.length > 0 && <AlphaIndex letters={alphaLetters} onJump={handleJump} />}
             {favorites.length > 0 && (
               <div>
-                <p className="text-2xs font-semibold uppercase tracking-widest text-ghost px-1 mb-2">Favoris VIP</p>
+                <p className="text-2xs font-semibold uppercase tracking-widest text-ghost px-1 mb-2">{t('clients.vip_titre')}</p>
                 <div className="space-y-2">
                   {favorites.map(client => (
                     <ClientCard key={client.id} client={client} onClick={() => navigate(`/clients/${client.id}`)} />
@@ -177,14 +178,14 @@ export default function ClientsPage() {
           <>
             {favorites.length > 0 && !search && (
               <div>
-                <p className="text-2xs font-semibold uppercase tracking-widest text-ghost px-1 mb-2">Favoris VIP</p>
+                <p className="text-2xs font-semibold uppercase tracking-widest text-ghost px-1 mb-2">{t('clients.vip_titre')}</p>
                 <div className="space-y-2 mb-4">
                   {favorites.map(client => (
                     <ClientCard key={client.id} client={client} onClick={() => navigate(`/clients/${client.id}`)} />
                   ))}
                 </div>
                 {nonFavorites.length > 0 && (
-                  <p className="text-2xs font-semibold uppercase tracking-widest text-ghost px-1 mb-2">Tous les clients</p>
+                  <p className="text-2xs font-semibold uppercase tracking-widest text-ghost px-1 mb-2">{t('clients.tous_titre')}</p>
                 )}
               </div>
             )}
@@ -200,7 +201,7 @@ export default function ClientsPage() {
       {/* FAB ajouter client */}
       <button
         type="button"
-        aria-label="Ajouter un client"
+        aria-label={t('clients.ajouter_aria')}
         onClick={() => setShowSheet(true)}
         className="fixed z-40 right-4 bottom-[calc(var(--bottom-nav-height)+1rem+var(--safe-area-bottom))] w-14 h-14 rounded-full bg-primary text-inverse flex items-center justify-center shadow-lg shadow-primary/30 hover:bg-primary-600 active:scale-90 transition-all duration-200 lg:hidden"
       >

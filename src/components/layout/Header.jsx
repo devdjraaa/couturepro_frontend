@@ -61,6 +61,7 @@ function AtelierSwitcher({ atelier, switchAtelier }) {
 
 export default function Header({ title, showBack = false, onBack, rightAction, onSearch, className }) {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { user, atelier, switchAtelier } = useAuth()
   const { isDark, toggleTheme } = useTheme()
   const { data: notifCount = 0 } = useNotificationsCount()
@@ -108,7 +109,7 @@ export default function Header({ title, showBack = false, onBack, rightAction, o
               type="button"
               onClick={onSearch}
               className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-inverse/10 transition-colors"
-              aria-label="Recherche"
+              aria-label={t('commun.rechercher')}
             >
               <Search size={18} className="text-inverse" />
             </button>
@@ -117,7 +118,7 @@ export default function Header({ title, showBack = false, onBack, rightAction, o
             type="button"
             onClick={toggleTheme}
             className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-inverse/10 transition-colors"
-            aria-label={isDark ? 'Passer en mode clair' : 'Passer en mode sombre'}
+            aria-label={isDark ? t('commun.passer_mode_clair') : t('commun.passer_mode_sombre')}
           >
             {isDark
               ? <Sun  size={18} className="text-inverse" />
@@ -129,7 +130,7 @@ export default function Header({ title, showBack = false, onBack, rightAction, o
             type="button"
             onClick={() => navigate('/notifications')}
             className="relative w-9 h-9 flex items-center justify-center rounded-xl hover:bg-inverse/10 transition-colors"
-            aria-label="Notifications"
+            aria-label={t('nav.notifications')}
           >
             <Bell size={20} className="text-inverse" />
             {notifCount > 0 && (

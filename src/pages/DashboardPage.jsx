@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, AlertTriangle, Clock, CheckCircle2, Users, CircleUser } from 'lucide-react'
+import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, AlertTriangle, Clock, CheckCircle2, CircleUser } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { isToday, isPast, parseISO, differenceInCalendarDays, isThisMonth, subDays } from 'date-fns'
 import { useQueryClient } from '@tanstack/react-query'
@@ -13,9 +13,10 @@ import { cn } from '@/utils/cn'
 
 // ── Salutation ───────────────────────────────────────────────────────────────
 function Greeting({ user, subtitle }) {
+  const { t, i18n } = useTranslation()
   const hour = new Date().getHours()
-  const greeting = hour < 12 ? 'Bonjour' : hour < 18 ? 'Bon après-midi' : 'Bonsoir'
-  const dateStr  = new Date().toLocaleDateString('fr-FR', {
+  const greeting = hour < 12 ? t('dashboard.bonjour') : hour < 18 ? t('dashboard.bon_aprem') : t('dashboard.bonsoir')
+  const dateStr  = new Date().toLocaleDateString(i18n.language === 'en' ? 'en-GB' : 'fr-FR', {
     weekday: 'long', day: 'numeric', month: 'long',
   })
 
@@ -34,18 +35,19 @@ function Greeting({ user, subtitle }) {
 
 // ── Caisse du jour ────────────────────────────────────────────────────────────
 function CaisseCard({ stats, isLoading, navigate }) {
+  const { t } = useTranslation()
   const encaisse = stats?.total_encaisse ?? 0
 
   return (
     <div className="rounded-2xl bg-primary-700 p-4 text-inverse">
       <div className="flex items-center justify-between mb-1">
-        <p className="text-xs font-medium text-inverse/70">Caisse du jour</p>
+        <p className="text-xs font-medium text-inverse/70">{t('dashboard.caisse.titre')}</p>
         <button
           type="button"
           onClick={() => navigate('/caisse')}
           className="flex items-center gap-1 text-xs text-inverse/70 hover:text-inverse transition-colors"
         >
-          Voir le détail <ChevronRight size={12} />
+          {t('dashboard.caisse.voir_detail')} <ChevronRight size={12} />
         </button>
       </div>
 
@@ -53,19 +55,19 @@ function CaisseCard({ stats, isLoading, navigate }) {
         <div className="h-9 w-40 rounded-lg bg-inverse/10 animate-pulse mt-2" />
       ) : encaisse === 0 ? (
         <div className="mt-2">
-          <p className="text-sm text-inverse/60">Vos premiers acomptes s'afficheront ici.</p>
+          <p className="text-sm text-inverse/60">{t('dashboard.caisse.vide')}</p>
           <button
             type="button"
             onClick={() => navigate('/caisse')}
             className="mt-2 text-xs font-medium text-inverse/90 underline underline-offset-2"
           >
-            Enregistrer un paiement →
+            {t('dashboard.caisse.enregistrer')}
           </button>
         </div>
       ) : (
         <div className="mt-2">
           <MoneyAmount value={encaisse} size="lg" className="text-inverse" />
-          <p className="text-xs text-inverse/50 mt-1">Encaissé aujourd'hui</p>
+          <p className="text-xs text-inverse/50 mt-1">{t('dashboard.caisse.encaisse_auj')}</p>
         </div>
       )}
     </div>
@@ -102,6 +104,8 @@ function TodoItem({ label, client, dueDate, type, to, navigate }) {
 }
 
 function TodoList({ commandes, isLoading, navigate }) {
+  const { t } = useTranslation()
+
   if (isLoading) {
     return (
       <div className="space-y-3">
@@ -120,14 +124,15 @@ function TodoList({ commandes, isLoading, navigate }) {
     const dateEss = cmd.date_essayage         ? parseISO(cmd.date_essayage)         : null
     const restant = (cmd.prix ?? 0) - (cmd.acompte ?? 0)
     const to = `/commandes/${cmd.id}`
+    const vetement = cmd.vetement_nom ?? t('catalogue.titre')
 
     if (dateLiv && (isPast(dateLiv) || isToday(dateLiv))) {
       const type = isPast(dateLiv) && !isToday(dateLiv) ? 'retard' : 'livraison'
-      items.push({ type, label: `Livraison — ${cmd.vetement_nom ?? 'commande'}`, client: cmd.client_nom, dueDate: cmd.date_livraison_prevue, to, priority: type === 'retard' ? 0 : 1 })
+      items.push({ type, label: t('dashboard.todo.livraison', { vetement }), client: cmd.client_nom, dueDate: cmd.date_livraison_prevue, to, priority: type === 'retard' ? 0 : 1 })
     } else if (dateEss && isToday(dateEss)) {
-      items.push({ type: 'essai', label: `Essayage — ${cmd.vetement_nom ?? 'commande'}`, client: cmd.client_nom, dueDate: cmd.date_essayage, to, priority: 1 })
+      items.push({ type: 'essai', label: t('dashboard.todo.essayage', { vetement }), client: cmd.client_nom, dueDate: cmd.date_essayage, to, priority: 1 })
     } else if (restant > 0 && dateLiv && differenceInCalendarDays(dateLiv, today) <= 3) {
-      items.push({ type: 'solde', label: `Solde restant — ${formatCurrency(restant)}`, client: cmd.client_nom, dueDate: cmd.date_livraison_prevue, to, priority: 2 })
+      items.push({ type: 'solde', label: t('dashboard.todo.solde', { montant: formatCurrency(restant) }), client: cmd.client_nom, dueDate: cmd.date_livraison_prevue, to, priority: 2 })
     }
   })
 
@@ -137,11 +142,11 @@ function TodoList({ commandes, isLoading, navigate }) {
     return (
       <EmptyState
         icon={CheckCircle2}
-        title="Journée libre 🎉"
-        description="Pas d'urgence aujourd'hui. Prenez de l'avance sur vos commandes."
+        title={t('dashboard.todo.libre')}
+        description={t('dashboard.todo.libre_desc')}
         primaryAction={
           <Button size="sm" variant="secondary" onClick={() => navigate('/commandes')}>
-            Voir toutes les commandes
+            {t('dashboard.todo.voir_commandes')}
           </Button>
         }
         className="py-6"
@@ -160,27 +165,29 @@ function TodoList({ commandes, isLoading, navigate }) {
 
 // ── Onboarding checklist ─────────────────────────────────────────────────────
 function WelcomeChecklist({ user, clients, commandes, isLoading, navigate }) {
+  const { t } = useTranslation()
+
   if (isLoading || commandes.length > 0) return null
 
   const steps = [
     {
       icon: UserPlus,
-      label: 'Ajouter votre premier client',
-      sub: 'Créez une fiche avec ses mesures',
+      label: t('dashboard.onboarding.step_client'),
+      sub: t('dashboard.onboarding.step_client_sub'),
       done: clients.length > 0,
       to: '/clients',
     },
     {
       icon: ClipboardList,
-      label: 'Créer votre première commande',
-      sub: 'Suivi des délais et paiements',
+      label: t('dashboard.onboarding.step_commande'),
+      sub: t('dashboard.onboarding.step_commande_sub'),
       done: commandes.length > 0,
       to: '/commandes/new',
     },
     {
       icon: CircleUser,
-      label: 'Compléter votre profil',
-      sub: 'Nom, téléphone de contact',
+      label: t('dashboard.onboarding.step_profil'),
+      sub: t('dashboard.onboarding.step_profil_sub'),
       done: !!user?.telephone,
       to: '/parametres/profil',
     },
@@ -191,8 +198,8 @@ function WelcomeChecklist({ user, clients, commandes, isLoading, navigate }) {
   return (
     <div className="bg-card border border-edge rounded-2xl overflow-hidden">
       <div className="bg-gradient-to-r from-primary/8 to-accent/5 px-4 pt-4 pb-3 border-b border-edge">
-        <p className="text-sm font-bold text-ink">Bienvenue dans votre atelier 🎉</p>
-        <p className="text-xs text-ghost mt-0.5">{doneCount} / {steps.length} étapes complétées</p>
+        <p className="text-sm font-bold text-ink">{t('dashboard.onboarding.titre')}</p>
+        <p className="text-xs text-ghost mt-0.5">{t('dashboard.onboarding.etapes', { fait: doneCount, total: steps.length })}</p>
         <div className="mt-2.5 h-1 bg-edge rounded-full overflow-hidden">
           <div
             className="h-full bg-primary rounded-full transition-all duration-500"
@@ -264,6 +271,7 @@ function KpiChip({ label, value, color = 'default', trend }) {
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function DashboardPage() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const { user }  = useAuth()
   const { data: commandes = [], isLoading: loadingCmd } = useCommandes()
@@ -289,11 +297,11 @@ export default function DashboardPage() {
   }).length
 
   const dynamicSub = urgentToday > 0
-    ? `${urgentToday} action${urgentToday > 1 ? 's' : ''} urgente${urgentToday > 1 ? 's' : ''} aujourd'hui`
-    : activeCount > 0 ? `${activeCount} commande${activeCount > 1 ? 's' : ''} en cours` : null
+    ? t('dashboard.subtitle.urgentes', { count: urgentToday })
+    : activeCount > 0 ? t('dashboard.subtitle.en_cours', { count: activeCount }) : null
 
   return (
-    <AppLayout title="Aujourd'hui" noMobileHeader onRefresh={() => queryClient.invalidateQueries()}>
+    <AppLayout title={t('dashboard.titre_auj')} noMobileHeader onRefresh={() => queryClient.invalidateQueries()}>
       <div className="p-4 space-y-5 pb-safe">
 
         {/* Salutation */}
@@ -314,7 +322,7 @@ export default function DashboardPage() {
         {/* À faire aujourd'hui */}
         <div className="bg-card border border-edge rounded-2xl p-4">
           <h2 className="text-xs font-semibold text-ghost uppercase tracking-widest mb-3">
-            À faire aujourd'hui
+            {t('dashboard.a_faire')}
           </h2>
           <TodoList commandes={commandes} isLoading={loadingCmd} navigate={navigate} />
         </div>
@@ -326,11 +334,11 @@ export default function DashboardPage() {
               [...Array(4)].map((_, i) => <Skeleton key={i} className="shrink-0 w-28 h-16 rounded-xl" />)
             ) : (
               <>
-                <KpiChip label="En attente paiement" value={formatCurrency(totalRestant)} color="gold" />
-                <KpiChip label="Commandes actives"   value={activeCount}                   color="primary" />
-                <KpiChip label="Nvx clients 30j"     value={nouveauxClients}               color={nouveauxClients > 0 ? 'success' : 'default'} trend={tendanceClients !== 0 ? tendanceClients : null} />
-                <KpiChip label="Livrées ce mois"     value={livreCeMois}                   color="success" />
-                <KpiChip label="En retard"           value={lateCount}                     color={lateCount > 0 ? 'danger' : 'default'} />
+                <KpiChip label={t('dashboard.kpi.en_attente')}        value={formatCurrency(totalRestant)} color="gold" />
+                <KpiChip label={t('dashboard.kpi.commandes_actives')} value={activeCount}                  color="primary" />
+                <KpiChip label={t('dashboard.kpi.nvx_clients')}       value={nouveauxClients}              color={nouveauxClients > 0 ? 'success' : 'default'} trend={tendanceClients !== 0 ? tendanceClients : null} />
+                <KpiChip label={t('dashboard.kpi.livrees_mois')}      value={livreCeMois}                  color="success" />
+                <KpiChip label={t('dashboard.kpi.en_retard')}         value={lateCount}                    color={lateCount > 0 ? 'danger' : 'default'} />
               </>
             )}
           </div>
@@ -339,24 +347,24 @@ export default function DashboardPage() {
         {/* Actions rapides */}
         <div>
           <h2 className="text-xs font-semibold text-ghost uppercase tracking-widest mb-3">
-            Actions rapides
+            {t('dashboard.actions_rapides')}
           </h2>
           <div className="grid grid-cols-3 gap-3">
             <QuickActionTile
               icon={Plus}
-              label="Nouvelle commande"
+              label={t('dashboard.action.nouvelle_commande')}
               color="primary"
               onClick={() => navigate('/commandes/new')}
             />
             <QuickActionTile
               icon={UserPlus}
-              label="Nouveau client"
+              label={t('dashboard.action.nouveau_client')}
               color="success"
               onClick={() => navigate('/clients')}
             />
             <QuickActionTile
               icon={Wallet}
-              label="Encaisser"
+              label={t('dashboard.action.paiement')}
               color="gold"
               onClick={() => navigate('/caisse')}
             />
@@ -367,14 +375,14 @@ export default function DashboardPage() {
         <div>
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-xs font-semibold text-ghost uppercase tracking-widest">
-              Commandes récentes
+              {t('dashboard.recentes')}
             </h2>
             <button
               type="button"
               onClick={() => navigate('/commandes')}
               className="flex items-center gap-0.5 text-xs font-medium text-primary"
             >
-              Tout voir <ChevronRight size={14} />
+              {t('dashboard.tout_voir')} <ChevronRight size={14} />
             </button>
           </div>
           {loadingCmd ? (
@@ -384,11 +392,11 @@ export default function DashboardPage() {
           ) : commandes.length === 0 ? (
             <EmptyState
               icon={ClipboardList}
-              title="Pas encore de commandes"
-              description="Créez votre première commande pour commencer à suivre vos délais et paiements."
+              title={t('dashboard.recentes_vide.titre')}
+              description={t('dashboard.recentes_vide.description')}
               primaryAction={
                 <Button onClick={() => navigate('/commandes/new')}>
-                  Créer une commande
+                  {t('dashboard.recentes_vide.action')}
                 </Button>
               }
             />

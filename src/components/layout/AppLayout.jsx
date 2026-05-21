@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { AlertTriangle, RefreshCw } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
 import Sidebar from './Sidebar'
 import Header from './Header'
@@ -11,11 +12,14 @@ import { usePullToRefresh } from '@/hooks/usePullToRefresh'
 
 function ExpiryBanner() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { statut, daysLeft } = useSubscriptionGate()
 
   if (statut !== 'essai' || daysLeft === null || daysLeft > 5) return null
 
-  const label = daysLeft <= 1 ? 'expire aujourd\'hui' : `expire dans ${daysLeft} jour(s)`
+  const label = daysLeft <= 1
+    ? t('abonnement.banniere.expire_auj')
+    : t('abonnement.banniere.expire_dans', { jours: daysLeft })
 
   return (
     <div
@@ -23,7 +27,7 @@ function ExpiryBanner() {
       onClick={() => navigate('/parametres')}
     >
       <AlertTriangle size={14} className="shrink-0" />
-      <span>Votre période d'essai {label}. <span className="underline font-medium">Choisir un plan →</span></span>
+      <span>{t('abonnement.banniere.texte', { label })} <span className="underline font-medium">{t('abonnement.banniere.action')}</span></span>
     </div>
   )
 }

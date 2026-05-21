@@ -108,7 +108,7 @@ export default function SupportPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-dim mb-2">Photo (optionnel)</label>
+              <label className="block text-xs font-medium text-dim mb-2">{t('support.formulaire.photo')}</label>
               {preview ? (
                 <div className="relative w-full rounded-xl overflow-hidden border border-edge">
                   <img src={preview} alt="capture" className="w-full max-h-40 object-cover" />
@@ -127,7 +127,7 @@ export default function SupportPage() {
                   className="w-full border border-dashed border-edge rounded-xl p-4 flex flex-col items-center gap-2 text-dim hover:border-primary hover:text-primary transition-colors"
                 >
                   <Image size={20} />
-                  <span className="text-xs">Ajouter une capture d'écran</span>
+                  <span className="text-xs">{t('support.formulaire.photo_ajouter')}</span>
                 </button>
               )}
               <input
@@ -156,15 +156,15 @@ export default function SupportPage() {
           <div className="bg-card border border-edge rounded-2xl p-4 space-y-3">
             <div className="flex items-center gap-2">
               <FlaskConical size={15} className="text-primary shrink-0" />
-              <p className="text-sm font-semibold text-ink">Données de démonstration</p>
+              <p className="text-sm font-semibold text-ink">{t('support.demo.titre')}</p>
             </div>
             <p className="text-xs text-ghost leading-relaxed">
-              Injecte 15 clients et 25 commandes d'exemple pour explorer l'application sans saisir de données réelles. Remplace les données actuelles.
+              {t('support.demo.description')}
             </p>
             {demo.done ? (
               <div className="flex items-center gap-2 text-success text-sm font-medium">
                 <CheckCircle2 size={15} />
-                Données injectées — explorez l'application !
+                {t('support.demo.success')}
               </div>
             ) : (
               <Button
@@ -174,7 +174,7 @@ export default function SupportPage() {
                 onClick={demo.seed}
                 className="w-full"
               >
-                Réinitialiser les données démo
+                {t('support.demo.btn')}
               </Button>
             )}
           </div>

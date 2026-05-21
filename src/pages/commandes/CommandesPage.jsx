@@ -2,9 +2,10 @@ import { useState, useMemo } from 'react'
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 import {
   ClipboardList, LayoutList, Columns2,
-  Search, X, AlertTriangle, Timer, Zap, Banknote, Calendar,
+  X, AlertTriangle, Timer, Zap, Banknote, Calendar,
 } from 'lucide-react'
 import { isPast, parseISO, isThisWeek, isToday } from 'date-fns'
+import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
 import { useCommandes } from '@/hooks/useCommandes'
 import { AppLayout } from '@/components/layout'
@@ -15,12 +16,13 @@ import { cn } from '@/utils/cn'
 
 // ── Colonnes pipeline ─────────────────────────────────────────────────────────
 const PIPELINE_COLS = [
-  { key: 'en_cours', label: 'En cours',  color: 'text-primary'  },
-  { key: 'essai',    label: 'Essayage',  color: 'text-warning'  },
-  { key: 'livre',    label: 'Livrées',   color: 'text-success'  },
+  { key: 'en_cours', tKey: 'commandes.statut.en_cours',  color: 'text-primary'  },
+  { key: 'essai',    tKey: 'commandes.pipeline.essayage', color: 'text-warning'  },
+  { key: 'livre',    tKey: 'commandes.onglets.livrees',   color: 'text-success'  },
 ]
 
 function PipelineColumn({ col, commandes, navigate }) {
+  const { t } = useTranslation()
   const total   = commandes.reduce((s, c) => s + Math.max(0, (c.prix ?? 0) - (c.acompte ?? 0)), 0)
 
   return (
@@ -28,7 +30,7 @@ function PipelineColumn({ col, commandes, navigate }) {
       {/* En-tête colonne */}
       <div className="flex items-center justify-between mb-3 px-1">
         <div className="flex items-center gap-2">
-          <span className={cn('text-sm font-semibold', col.color)}>{col.label}</span>
+          <span className={cn('text-sm font-semibold', col.color)}>{t(col.tKey)}</span>
           <span className="text-xs font-medium text-ghost bg-subtle px-1.5 py-0.5 rounded-full">
             {commandes.length}
           </span>
@@ -42,7 +44,7 @@ function PipelineColumn({ col, commandes, navigate }) {
       <div className="flex-1 overflow-y-auto space-y-2 pb-4 pr-1">
         {commandes.length === 0 ? (
           <div className="py-8 text-center text-xs text-ghost border border-dashed border-edge rounded-2xl">
-            Aucune commande
+            {t('commandes.pipeline.vide')}
           </div>
         ) : (
           commandes.map(cmd => (
@@ -84,26 +86,27 @@ function groupByDate(commandes) {
   })
 
   return [
-    past.length     && { label: 'En retard',      items: past,     danger: true  },
-    today.length    && { label: "Aujourd'hui",     items: today               },
-    tomorrow.length && { label: 'Demain',          items: tomorrow            },
-    week.length     && { label: 'Cette semaine',   items: week                },
-    later.length    && { label: 'Plus tard',       items: later               },
-    noDate.length   && { label: 'Sans date',       items: noDate              },
+    past.length     && { labelKey: 'commandes.groupes.retard',    items: past,     danger: true },
+    today.length    && { labelKey: 'commandes.groupes.auj',       items: today              },
+    tomorrow.length && { labelKey: 'commandes.groupes.demain',    items: tomorrow           },
+    week.length     && { labelKey: 'commandes.groupes.semaine',   items: week               },
+    later.length    && { labelKey: 'commandes.groupes.plus_tard', items: later              },
+    noDate.length   && { labelKey: 'commandes.groupes.sans_date', items: noDate             },
   ].filter(Boolean)
 }
 
 function ListView({ commandes, navigate }) {
+  const { t } = useTranslation()
   const groups = useMemo(() => groupByDate(commandes), [commandes])
 
   return (
     <div className="space-y-5">
       {groups.map(group => (
-        <div key={group.label}>
+        <div key={group.labelKey}>
           <p className={cn('text-xs font-semibold uppercase tracking-widest mb-2 px-1',
             group.danger ? 'text-danger' : 'text-ghost'
           )}>
-            {group.label}
+            {t(group.labelKey)}
           </p>
           <div className="space-y-2">
             {group.items.map(cmd => (
@@ -122,15 +125,16 @@ function ListView({ commandes, navigate }) {
 
 // ── Chips de filtre ───────────────────────────────────────────────────────────
 const FILTERS = [
-  { key: 'urgentes',     label: 'Urgentes',         icon: Zap      },
-  { key: 'impayees',     label: 'Impayées',          icon: Banknote },
-  { key: 'cette_semaine',label: 'Cette semaine',     icon: Calendar },
+  { key: 'urgentes',      tKey: 'commandes.filtres.urgentes',      icon: Zap      },
+  { key: 'impayees',      tKey: 'commandes.filtres.impayees',       icon: Banknote },
+  { key: 'cette_semaine', tKey: 'commandes.filtres.cette_semaine',  icon: Calendar },
 ]
 
 function FilterChips({ active, onChange }) {
+  const { t } = useTranslation()
   return (
     <div className="flex gap-2 overflow-x-auto scrollbar-none -mx-1 px-1">
-      {FILTERS.map(({ key, label, icon: Icon }) => (
+      {FILTERS.map(({ key, tKey, icon: Icon }) => (
         <button
           key={key}
           type="button"
@@ -143,7 +147,7 @@ function FilterChips({ active, onChange }) {
           )}
         >
           <Icon size={11} />
-          {label}
+          {t(tKey)}
         </button>
       ))}
     </div>
@@ -153,6 +157,7 @@ function FilterChips({ active, onChange }) {
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function CommandesPage() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const location = useLocation()
   const [searchParams] = useSearchParams()
@@ -207,7 +212,7 @@ export default function CommandesPage() {
 
   return (
     <AppLayout
-      title="Commandes"
+      title={t('commandes.titre')}
       onRefresh={() => queryClient.invalidateQueries()}
       rightAction={
         <button
@@ -226,7 +231,7 @@ export default function CommandesPage() {
           <SearchBar
             value={search}
             onChange={setSearch}
-            placeholder="Client, modèle…"
+            placeholder={t('commandes.recherche_placeholder')}
           />
           <FilterChips active={filter} onChange={setFilter} />
 
@@ -238,7 +243,7 @@ export default function CommandesPage() {
             )}>
               {alerte === 'retard' ? <AlertTriangle size={13} /> : <Timer size={13} />}
               <span className="flex-1">
-                {alerte === 'retard' ? 'Commandes en retard' : 'Livraisons dans 48h'}
+                {alerte === 'retard' ? t('commandes.alertes.retard') : t('commandes.alertes.bientot')}
               </span>
               <button type="button" onClick={() => navigate('/commandes')} className="opacity-60 hover:opacity-100">
                 <X size={13} />
@@ -256,16 +261,16 @@ export default function CommandesPage() {
           <div className="p-4">
             <EmptyState
               icon={ClipboardList}
-              title={isSearching ? 'Aucun résultat' : 'Votre atelier est calme'}
+              title={isSearching ? t('commun.aucun_resultat') : t('commandes.vide.calme')}
               description={
                 isSearching
-                  ? 'Essayez un autre filtre ou terme de recherche.'
-                  : 'Créez une commande pour commencer à suivre vos délais, vos paiements et vos essayages.'
+                  ? t('commandes.vide.filtre_desc')
+                  : t('commandes.vide.calme_desc')
               }
               primaryAction={
                 !isSearching ? (
                   <Button onClick={() => navigate('/commandes/new')}>
-                    Créer une commande
+                    {t('commandes.vide.action')}
                   </Button>
                 ) : undefined
               }
