@@ -1,8 +1,9 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { HelpCircle, Plus, Image, X, ChevronRight } from 'lucide-react'
+import { HelpCircle, Plus, Image, X, ChevronRight, FlaskConical, CheckCircle2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useTickets, useCreerTicket } from '@/hooks/useTicket'
+import { useSeedDemo } from '@/hooks/useSeedDemo'
 import { toSupportTicket } from '@/constants/routes'
 import { AppLayout } from '@/components/layout'
 import { Button, Input, Select, Skeleton, EmptyState } from '@/components/ui'
@@ -19,6 +20,7 @@ export default function SupportPage() {
   const { t } = useTranslation()
   const { data: tickets = [], isLoading } = useTickets()
   const creer = useCreerTicket()
+  const demo = useSeedDemo()
 
   const CATEGORIES = [
     { value: 'technique',   label: t('support.categories.technique')  },
@@ -145,6 +147,35 @@ export default function SupportPage() {
               </Button>
             </div>
           </form>
+        )}
+
+        {/* Mode démo — visible uniquement en mode démo (atelier.is_demo = true) */}
+        {demo.available && (
+          <div className="bg-card border border-edge rounded-2xl p-4 space-y-3">
+            <div className="flex items-center gap-2">
+              <FlaskConical size={15} className="text-primary shrink-0" />
+              <p className="text-sm font-semibold text-ink">Données de démonstration</p>
+            </div>
+            <p className="text-xs text-ghost leading-relaxed">
+              Injecte 15 clients et 25 commandes d'exemple pour explorer l'application sans saisir de données réelles. Remplace les données actuelles.
+            </p>
+            {demo.done ? (
+              <div className="flex items-center gap-2 text-success text-sm font-medium">
+                <CheckCircle2 size={15} />
+                Données injectées — explorez l'application !
+              </div>
+            ) : (
+              <Button
+                variant="secondary"
+                icon={FlaskConical}
+                loading={demo.loading}
+                onClick={demo.seed}
+                className="w-full"
+              >
+                Réinitialiser les données démo
+              </Button>
+            )}
+          </div>
         )}
 
         <p className="text-xs font-semibold text-dim uppercase tracking-wide">{t('support.liste.titre')}</p>

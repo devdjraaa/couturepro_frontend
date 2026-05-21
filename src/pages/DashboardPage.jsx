@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, AlertTriangle, Clock, CheckCircle2, Users } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { isToday, isPast, parseISO, differenceInCalendarDays, isThisMonth } from 'date-fns'
+import { isToday, isPast, parseISO, differenceInCalendarDays, isThisMonth, subDays } from 'date-fns'
 import { AppLayout } from '@/components/layout'
 import { Skeleton, EmptyState, Button, CountdownBadge, MoneyAmount, QuickActionTile } from '@/components/ui'
 import { useAuth } from '@/contexts'
@@ -139,7 +139,7 @@ function TodoList({ commandes, isLoading, navigate }) {
         title="Journée libre 🎉"
         description="Pas d'urgence aujourd'hui. Prenez de l'avance sur vos commandes."
         primaryAction={
-          <Button size="sm" variant="outline" onClick={() => navigate('/commandes')}>
+          <Button size="sm" variant="secondary" onClick={() => navigate('/commandes')}>
             Voir toutes les commandes
           </Button>
         }
@@ -158,7 +158,7 @@ function TodoList({ commandes, isLoading, navigate }) {
 }
 
 // ── KPIs horizontaux ──────────────────────────────────────────────────────────
-function KpiChip({ label, value, color = 'default' }) {
+function KpiChip({ label, value, color = 'default', trend }) {
   const colors = {
     default: 'bg-card border-edge text-ink',
     gold:    'bg-gold-light border-gold/30 text-gold-dark',
@@ -168,7 +168,14 @@ function KpiChip({ label, value, color = 'default' }) {
   }
   return (
     <div className={cn('shrink-0 flex flex-col items-center px-4 py-2.5 rounded-xl border', colors[color])}>
-      <span className="font-mono font-bold text-lg tabular-nums leading-tight">{value ?? '—'}</span>
+      <div className="flex items-baseline gap-1">
+        <span className="font-mono font-bold text-lg tabular-nums leading-tight">{value ?? '—'}</span>
+        {trend != null && trend !== 0 && (
+          <span className={cn('text-2xs font-bold leading-tight', trend > 0 ? 'text-success' : 'text-danger')}>
+            {trend > 0 ? '+' : ''}{trend}
+          </span>
+        )}
+      </div>
       <span className="text-2xs font-medium mt-0.5 whitespace-nowrap opacity-70">{label}</span>
     </div>
   )
@@ -186,6 +193,13 @@ export default function DashboardPage() {
   const livreCeMois   = commandes.filter(c => c.statut === 'livre' && c.date_livraison_prevue && isThisMonth(parseISO(c.date_livraison_prevue))).length
   const totalRestant  = stats?.total_restant ?? 0
   const lateCount     = stats?.en_retard ?? 0
+
+  const now = new Date()
+  const date30j = subDays(now, 30)
+  const date60j = subDays(now, 60)
+  const nouveauxClients     = clients.filter(c => c.created_at && parseISO(c.created_at) >= date30j).length
+  const nouveauxClientsPrev = clients.filter(c => { if (!c.created_at) return false; const d = parseISO(c.created_at); return d >= date60j && d < date30j }).length
+  const tendanceClients     = nouveauxClients - nouveauxClientsPrev
   const urgentToday   = commandes.filter(c => {
     if (c.statut === 'livre' || c.statut === 'annule') return false
     const dateLiv = c.date_livraison_prevue ? parseISO(c.date_livraison_prevue) : null
@@ -224,6 +238,7 @@ export default function DashboardPage() {
               <>
                 <KpiChip label="En attente paiement" value={formatCurrency(totalRestant)} color="gold" />
                 <KpiChip label="Commandes actives"   value={activeCount}                   color="primary" />
+                <KpiChip label="Nvx clients 30j"     value={nouveauxClients}               color={nouveauxClients > 0 ? 'success' : 'default'} trend={tendanceClients !== 0 ? tendanceClients : null} />
                 <KpiChip label="Livrées ce mois"     value={livreCeMois}                   color="success" />
                 <KpiChip label="En retard"           value={lateCount}                     color={lateCount > 0 ? 'danger' : 'default'} />
               </>

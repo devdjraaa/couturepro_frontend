@@ -62,7 +62,7 @@ export default function PointsPage() {
             <EmptyState
               icon={Gift}
               title={t('points.historique.vide')}
-              description=""
+              description="Chaque commande livrée vous rapporte des points. Créez votre première commande pour commencer à en accumuler."
             />
           ) : (
             <div className="space-y-2">
