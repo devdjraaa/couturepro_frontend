@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom'
-import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, AlertTriangle, Clock, CheckCircle2, CircleUser } from 'lucide-react'
+import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, AlertTriangle, Clock, CheckCircle2, CircleUser, Sun, Moon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { isToday, isPast, parseISO, differenceInCalendarDays, isThisMonth, subDays } from 'date-fns'
 import { useQueryClient } from '@tanstack/react-query'
 import { AppLayout } from '@/components/layout'
-import { Skeleton, EmptyState, Button, CountdownBadge, MoneyAmount, QuickActionTile } from '@/components/ui'
-import { useAuth } from '@/contexts'
+import { Skeleton, EmptyState, Button, CountdownBadge, MoneyAmount, QuickActionTile, LanguageSwitcher } from '@/components/ui'
+import { useAuth, useTheme } from '@/contexts'
 import { useCommandes, useCommandeStats } from '@/hooks/useCommandes'
 import { useClients } from '@/hooks/useClients'
 import { formatCurrency } from '@/utils/formatCurrency'
@@ -14,6 +14,7 @@ import { cn } from '@/utils/cn'
 // ── Salutation ───────────────────────────────────────────────────────────────
 function Greeting({ user, subtitle }) {
   const { t, i18n } = useTranslation()
+  const { isDark, toggleTheme } = useTheme()
   const hour = new Date().getHours()
   const greeting = hour < 12 ? t('dashboard.bonjour') : hour < 18 ? t('dashboard.bon_aprem') : t('dashboard.bonsoir')
   const dateStr  = new Date().toLocaleDateString(i18n.language === 'en' ? 'en-GB' : 'fr-FR', {
@@ -22,10 +23,25 @@ function Greeting({ user, subtitle }) {
 
   return (
     <div className="pt-4 pb-2">
-      <p className="text-xs text-ghost capitalize mb-0.5">{dateStr}</p>
-      <h1 className="text-xl font-bold font-display text-ink">
-        {greeting}, {user?.prenom ?? user?.nom?.split(' ')[0] ?? ''} 👋
-      </h1>
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <p className="text-xs text-ghost capitalize mb-0.5">{dateStr}</p>
+          <h1 className="text-xl font-bold font-display text-ink">
+            {greeting}, {user?.prenom ?? user?.nom?.split(' ')[0] ?? ''} 👋
+          </h1>
+        </div>
+        <div className="flex items-center gap-1 shrink-0 mt-0.5 lg:hidden">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-subtle transition-colors"
+            aria-label={isDark ? t('commun.passer_mode_clair') : t('commun.passer_mode_sombre')}
+          >
+            {isDark ? <Sun size={18} className="text-ink" /> : <Moon size={18} className="text-ink" />}
+          </button>
+          <LanguageSwitcher variant="badge" />
+        </div>
+      </div>
       {subtitle && (
         <p className="text-sm text-ghost mt-1">{subtitle}</p>
       )}
