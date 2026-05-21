@@ -1,15 +1,16 @@
 import { useLocation, useNavigate, NavLink } from 'react-router-dom'
 import { Home, ClipboardList, Users, Layers, Plus } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
 import { useNotificationsCount } from '@/hooks/useNotifications'
 import { useCommandeStats } from '@/hooks/useCommandes'
 
 const NAV_ITEMS = [
-  { to: '/',           icon: Home,          label: 'Aujourd\'hui', end: true  },
-  { to: '/commandes',  icon: ClipboardList, label: 'Commandes'               },
+  { to: '/',           icon: Home,          tKey: 'nav.dashboard', end: true  },
+  { to: '/commandes',  icon: ClipboardList, tKey: 'nav.commandes'             },
   null, // slot FAB central
-  { to: '/clients',    icon: Users,         label: 'Clients'                 },
-  { to: '/catalogue',  icon: Layers,        label: 'Atelier'                 },
+  { to: '/clients',    icon: Users,         tKey: 'nav.clients'               },
+  { to: '/catalogue',  icon: Layers,        tKey: 'atelier.titre'             },
 ]
 
 const FAB_ACTIONS = {
@@ -29,6 +30,7 @@ function getFABTarget(pathname) {
 export default function BottomNavigation() {
   const location  = useLocation()
   const navigate  = useNavigate()
+  const { t } = useTranslation()
   const { data: notifCount = 0 } = useNotificationsCount()
   const { data: cmdStats }       = useCommandeStats()
   const alertCount = (cmdStats?.en_retard ?? 0) + (cmdStats?.dans_48h ?? 0)
@@ -42,7 +44,7 @@ export default function BottomNavigation() {
               <div key="fab" className="flex-1 flex items-center justify-center">
                 <button
                   type="button"
-                  aria-label="Créer"
+                  aria-label={t('commun.nouveau')}
                   onClick={() => navigate(getFABTarget(location.pathname))}
                   className="w-14 h-14 -mt-5 rounded-full bg-primary text-inverse flex items-center justify-center shadow-lg shadow-primary/40 hover:bg-primary-600 hover:shadow-xl active:scale-[0.92] active:shadow-sm transition-all duration-150"
                 >
@@ -52,7 +54,7 @@ export default function BottomNavigation() {
             )
           }
 
-          const { to, icon: Icon, label, end } = item
+          const { to, icon: Icon, tKey, end } = item
           return (
             <NavLink
               key={to}
@@ -81,7 +83,7 @@ export default function BottomNavigation() {
                       </span>
                     )}
                   </div>
-                  <span className={cn('text-2xs font-medium', isActive && 'font-semibold')}>{label}</span>
+                  <span className={cn('text-2xs font-medium', isActive && 'font-semibold')}>{t(tKey)}</span>
                 </>
               )}
             </NavLink>
