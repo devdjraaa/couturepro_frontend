@@ -5,6 +5,7 @@ import {
   Search, X, AlertTriangle, Timer, Zap, Banknote, Calendar,
 } from 'lucide-react'
 import { isPast, parseISO, isThisWeek, isToday } from 'date-fns'
+import { useQueryClient } from '@tanstack/react-query'
 import { useCommandes } from '@/hooks/useCommandes'
 import { AppLayout } from '@/components/layout'
 import { CommandeCard } from '@/components/commandes'
@@ -152,6 +153,7 @@ function FilterChips({ active, onChange }) {
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function CommandesPage() {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const location = useLocation()
   const [searchParams] = useSearchParams()
   const [view,   setView]   = useState('pipeline')   // 'pipeline' | 'liste'
@@ -206,6 +208,7 @@ export default function CommandesPage() {
   return (
     <AppLayout
       title="Commandes"
+      onRefresh={() => queryClient.invalidateQueries()}
       rightAction={
         <button
           type="button"

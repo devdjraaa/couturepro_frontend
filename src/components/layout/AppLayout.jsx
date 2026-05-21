@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { AlertTriangle } from 'lucide-react'
+import { AlertTriangle, RefreshCw } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { cn } from '@/utils/cn'
 import Sidebar from './Sidebar'
@@ -7,6 +7,7 @@ import Header from './Header'
 import BottomNavigation from './BottomNavigation'
 import { useSubscriptionGate } from '@/hooks/useSubscriptionGate'
 import { GlobalSearch } from '@/components/ui'
+import { usePullToRefresh } from '@/hooks/usePullToRefresh'
 
 function ExpiryBanner() {
   const navigate = useNavigate()
@@ -35,10 +36,12 @@ export default function AppLayout({
   noPadding = false,
   noMobileHeader = false,
   className,
+  onRefresh,
   children,
 }) {
   const [searchOpen, setSearchOpen] = useState(false)
   const location = useLocation()
+  const { containerRef, pullY, refreshing, threshold } = usePullToRefresh(onRefresh)
 
   return (
     <div className="flex h-dvh bg-app overflow-hidden">
@@ -57,12 +60,39 @@ export default function AppLayout({
         </div>
 
         <main
+          ref={containerRef}
           className={cn(
             'flex-1 overflow-y-auto overflow-x-hidden',
+            onRefresh && 'overscroll-y-none',
             !noPadding && 'pb-safe lg:pb-0',
             className,
           )}
         >
+          {onRefresh && (
+            <div
+              className="flex justify-center overflow-hidden"
+              style={{
+                height: pullY,
+                transition: pullY === 0 ? 'height 300ms cubic-bezier(0.4,0,0.2,1)' : 'none',
+              }}
+            >
+              <div className="flex items-end pb-2">
+                <div className={cn(
+                  'w-9 h-9 rounded-full border-2 bg-card shadow-sm flex items-center justify-center',
+                  pullY >= threshold || refreshing ? 'border-primary/40' : 'border-edge',
+                )}>
+                  <RefreshCw
+                    size={15}
+                    className={cn(
+                      pullY >= threshold || refreshing ? 'text-primary' : 'text-ghost',
+                      refreshing && 'animate-spin',
+                    )}
+                    style={!refreshing ? { transform: `rotate(${Math.min(pullY / threshold, 1) * 360}deg)` } : undefined}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
           <div key={location.pathname} className="animate-page-enter">
             {children}
           </div>

@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Plus, Users, AlignLeft, ArrowDownAZ, ClipboardList } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useQueryClient } from '@tanstack/react-query'
 import { useClients, useCreateClient } from '@/hooks/useClients'
 import { AppLayout } from '@/components/layout'
 import { ClientCard, ClientForm } from '@/components/clients'
@@ -57,6 +58,7 @@ function AlphaIndex({ letters, onJump }) {
 
 export default function ClientsPage() {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const { t } = useTranslation()
   const [search, setSearch]   = useState('')
   const [sort, setSort]       = useState('recent')
@@ -122,7 +124,7 @@ export default function ClientsPage() {
   const nonFavorites = groupedByLetter ? null : filtered.filter(c => !c.is_vip)
 
   return (
-    <AppLayout title={t('clients.titre')}>
+    <AppLayout title={t('clients.titre')} onRefresh={() => queryClient.invalidateQueries()}>
       <div className="p-4 space-y-3">
         <SearchBar value={search} onChange={setSearch} placeholder={t('clients.recherche_placeholder')} />
 

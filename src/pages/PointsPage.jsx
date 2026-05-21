@@ -1,5 +1,6 @@
 import { Gift, RefreshCw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useQueryClient } from '@tanstack/react-query'
 import { usePoints, useConvertirPoints } from '@/hooks/usePoints'
 import { AppLayout } from '@/components/layout'
 import { PointsSummary } from '@/components/points'
@@ -11,6 +12,7 @@ const SEUIL_DEFAUT = 10000
 
 export default function PointsPage() {
   const { t } = useTranslation()
+  const queryClient = useQueryClient()
   const { data, isLoading, isError, refetch } = usePoints()
   const convertir = useConvertirPoints()
 
@@ -33,7 +35,7 @@ export default function PointsPage() {
   }
 
   return (
-    <AppLayout title={t('points.titre')}>
+    <AppLayout title={t('points.titre')} onRefresh={() => queryClient.invalidateQueries()}>
       <div className="p-4 space-y-6">
         <PointsSummary />
 

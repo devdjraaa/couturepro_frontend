@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom'
-import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, AlertTriangle, Clock, CheckCircle2, Users } from 'lucide-react'
+import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, AlertTriangle, Clock, CheckCircle2, Users, CircleUser } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { isToday, isPast, parseISO, differenceInCalendarDays, isThisMonth, subDays } from 'date-fns'
+import { useQueryClient } from '@tanstack/react-query'
 import { AppLayout } from '@/components/layout'
 import { Skeleton, EmptyState, Button, CountdownBadge, MoneyAmount, QuickActionTile } from '@/components/ui'
 import { useAuth } from '@/contexts'
@@ -157,6 +158,85 @@ function TodoList({ commandes, isLoading, navigate }) {
   )
 }
 
+// ── Onboarding checklist ─────────────────────────────────────────────────────
+function WelcomeChecklist({ user, clients, commandes, isLoading, navigate }) {
+  if (isLoading || commandes.length > 0) return null
+
+  const steps = [
+    {
+      icon: UserPlus,
+      label: 'Ajouter votre premier client',
+      sub: 'Créez une fiche avec ses mesures',
+      done: clients.length > 0,
+      to: '/clients',
+    },
+    {
+      icon: ClipboardList,
+      label: 'Créer votre première commande',
+      sub: 'Suivi des délais et paiements',
+      done: commandes.length > 0,
+      to: '/commandes/new',
+    },
+    {
+      icon: CircleUser,
+      label: 'Compléter votre profil',
+      sub: 'Nom, téléphone de contact',
+      done: !!user?.telephone,
+      to: '/parametres/profil',
+    },
+  ]
+
+  const doneCount = steps.filter(s => s.done).length
+
+  return (
+    <div className="bg-card border border-edge rounded-2xl overflow-hidden">
+      <div className="bg-gradient-to-r from-primary/8 to-accent/5 px-4 pt-4 pb-3 border-b border-edge">
+        <p className="text-sm font-bold text-ink">Bienvenue dans votre atelier 🎉</p>
+        <p className="text-xs text-ghost mt-0.5">{doneCount} / {steps.length} étapes complétées</p>
+        <div className="mt-2.5 h-1 bg-edge rounded-full overflow-hidden">
+          <div
+            className="h-full bg-primary rounded-full transition-all duration-500"
+            style={{ width: `${(doneCount / steps.length) * 100}%` }}
+          />
+        </div>
+      </div>
+      <div className="divide-y divide-edge">
+        {steps.map((step, i) => (
+          <button
+            key={i}
+            type="button"
+            onClick={() => !step.done && navigate(step.to)}
+            className={cn(
+              'w-full flex items-center gap-3 px-4 py-3 text-left transition-colors',
+              !step.done && 'hover:bg-subtle active:bg-subtle/70',
+            )}
+          >
+            <div className={cn(
+              'w-8 h-8 rounded-xl flex items-center justify-center shrink-0',
+              step.done ? 'bg-success/10' : 'bg-primary/8',
+            )}>
+              {step.done
+                ? <CheckCircle2 size={16} className="text-success" />
+                : <step.icon size={15} className="text-primary" />
+              }
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className={cn(
+                'text-sm font-medium leading-tight',
+                step.done ? 'line-through text-ghost' : 'text-ink',
+              )}>
+                {step.label}
+              </p>
+              <p className="text-xs text-ghost mt-0.5">{step.sub}</p>
+            </div>
+            {!step.done && <ChevronRight size={14} className="text-ghost shrink-0" />}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ── KPIs horizontaux ──────────────────────────────────────────────────────────
 function KpiChip({ label, value, color = 'default', trend }) {
   const colors = {
@@ -184,6 +264,7 @@ function KpiChip({ label, value, color = 'default', trend }) {
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function DashboardPage() {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const { user }  = useAuth()
   const { data: commandes = [], isLoading: loadingCmd } = useCommandes()
   const { data: stats,          isLoading: loadingStats } = useCommandeStats()
@@ -212,11 +293,20 @@ export default function DashboardPage() {
     : activeCount > 0 ? `${activeCount} commande${activeCount > 1 ? 's' : ''} en cours` : null
 
   return (
-    <AppLayout title="Aujourd'hui" noMobileHeader>
+    <AppLayout title="Aujourd'hui" noMobileHeader onRefresh={() => queryClient.invalidateQueries()}>
       <div className="p-4 space-y-5 pb-safe">
 
         {/* Salutation */}
         <Greeting user={user} subtitle={dynamicSub} />
+
+        {/* Onboarding checklist — visible uniquement si aucune commande */}
+        <WelcomeChecklist
+          user={user}
+          clients={clients}
+          commandes={commandes}
+          isLoading={loadingCmd}
+          navigate={navigate}
+        />
 
         {/* Caisse du jour */}
         <CaisseCard stats={stats} isLoading={loadingStats} navigate={navigate} />

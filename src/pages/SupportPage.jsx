@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { HelpCircle, Plus, Image, X, ChevronRight, FlaskConical, CheckCircle2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useQueryClient } from '@tanstack/react-query'
 import { useTickets, useCreerTicket } from '@/hooks/useTicket'
 import { useSeedDemo } from '@/hooks/useSeedDemo'
 import { toSupportTicket } from '@/constants/routes'
@@ -18,6 +19,7 @@ const STATUT_COLORS = {
 export default function SupportPage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const queryClient = useQueryClient()
   const { data: tickets = [], isLoading } = useTickets()
   const creer = useCreerTicket()
   const demo = useSeedDemo()
@@ -72,7 +74,7 @@ export default function SupportPage() {
   }
 
   return (
-    <AppLayout showBack title={t('support.titre')}>
+    <AppLayout showBack title={t('support.titre')} onRefresh={() => queryClient.invalidateQueries()}>
       <div className="p-4 space-y-4">
         <Button icon={Plus} className="w-full" onClick={() => setShowForm(s => !s)}>
           {t('support.nouveau_ticket')}
