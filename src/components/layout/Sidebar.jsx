@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
-  Home, Users, ClipboardList, Scissors, Settings,
+  Home, Users, ClipboardList, Layers, Settings, Scissors,
   Bell, Star, Users2, LogOut, HelpCircle, Archive, Wallet,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -15,9 +15,9 @@ const NAV_GROUPS = [
     label: null,
     items: [
       { to: '/',          icon: Home,          key: 'dashboard',   end: true },
-      { to: '/clients',   icon: Users,         key: 'clients'               },
       { to: '/commandes', icon: ClipboardList, key: 'commandes'             },
-      { to: '/catalogue', icon: Scissors,      key: 'catalogue'             },
+      { to: '/clients',   icon: Users,         key: 'clients'               },
+      { to: '/catalogue', icon: Layers,        key: 'atelier'               },
     ],
   },
   {

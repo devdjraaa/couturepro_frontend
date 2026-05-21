@@ -5,8 +5,8 @@ import {
   LoginPage, RegisterPage, OnboardingPage,
   DashboardPage,
   ClientsPage, ClientDetailPage,
-  CommandesPage, CommandeDetailPage,
-  CataloguePage, EquipePage, PointsPage,
+  CommandesPage, CommandeDetailPage, NouvelleCommandePage,
+  AtelierPage, CataloguePage, EquipePage, PointsPage,
   NotificationsPage, ParametresPage, CommunicationsPage,
   SupportPage, SupportTicketDetailPage, ThemePage,
 } from '@/pages'
@@ -93,11 +93,12 @@ export default function App() {
           <Route path={ROUTES.CLIENTS}          element={<ClientsPage />}        />
           <Route path={ROUTES.CLIENT_DETAIL}    element={<ClientDetailPage />}   />
 
-          <Route path={ROUTES.COMMANDE_NEW}     element={<CommandesPage />}      />
+          <Route path={ROUTES.COMMANDE_NEW}     element={<NouvelleCommandePage />} />
           <Route path={ROUTES.COMMANDE_DETAIL}  element={<CommandeDetailPage />} />
           <Route path={ROUTES.COMMANDES}        element={<CommandesPage />}      />
 
-          <Route path={ROUTES.VETEMENTS}        element={<CataloguePage />}      />
+          <Route path={ROUTES.VETEMENTS}        element={<AtelierPage />}         />
+          <Route path="/catalogue/modeles"      element={<CataloguePage />}       />
           <Route path={ROUTES.ABONNEMENT}       element={<AbonnementRedirect />} />
           <Route path={ROUTES.POINTS}           element={<PointsPage />}         />
           <Route path={ROUTES.EQUIPE}           element={<EquipePage />}         />

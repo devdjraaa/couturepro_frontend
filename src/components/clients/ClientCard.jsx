@@ -1,6 +1,7 @@
 import { cn } from '@/utils/cn'
 import { Card } from '@/components/ui'
 import ClientAvatar from './ClientAvatar'
+import { formatCurrency } from '@/utils/formatCurrency'
 
 const TYPE_LABELS = {
   femme:  'Femme',
@@ -10,8 +11,9 @@ const TYPE_LABELS = {
 }
 
 export default function ClientCard({ client, onClick }) {
-  const fullName = `${client.prenom ?? ''} ${client.nom}`.trim()
+  const fullName  = `${client.prenom ?? ''} ${client.nom}`.trim()
   const typeLabel = TYPE_LABELS[client.type_profil] ?? client.type_profil ?? ''
+  const solde     = client.total_restant ?? 0
 
   return (
     <Card onClick={onClick} className="flex items-center gap-3 p-4">
@@ -20,7 +22,7 @@ export default function ClientCard({ client, onClick }) {
         <div className="flex items-center gap-2">
           <p className="text-sm font-semibold text-ink truncate">{fullName}</p>
           {client.is_vip && (
-            <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full border bg-accent/10 text-accent-600 border-accent/20 shrink-0">
+            <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full border bg-gold-light text-gold-dark border-gold/20 shrink-0">
               VIP
             </span>
           )}
@@ -30,9 +32,12 @@ export default function ClientCard({ client, onClick }) {
         </div>
         <p className="text-xs text-ghost mt-0.5">{client.telephone}</p>
       </div>
-      <div className="text-right shrink-0">
-        <p className="text-xs text-dim">{client.commandes_count ?? 0} cmd</p>
-        {client.points > 0 && (
+      <div className="text-right shrink-0 space-y-0.5">
+        <p className="text-xs text-ghost">{client.commandes_count ?? 0} cmd</p>
+        {solde > 0 && (
+          <p className="text-xs font-semibold text-gold-dark font-mono">{formatCurrency(solde)}</p>
+        )}
+        {client.points > 0 && solde === 0 && (
           <p className="text-xs text-accent-600 font-medium">{client.points} pts</p>
         )}
       </div>

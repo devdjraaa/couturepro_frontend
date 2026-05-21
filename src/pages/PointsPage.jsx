@@ -21,7 +21,7 @@ export default function PointsPage() {
 
   if (isError) {
     return (
-      <AppLayout title={t('points.titre')}>
+      <AppLayout title={t('points.titre')} showBack>
         <div className="flex flex-col items-center justify-center gap-4 p-8 text-center">
           <p className="text-sm text-dim">{t('points.erreur_chargement')}</p>
           <Button variant="secondary" icon={RefreshCw} onClick={refetch}>

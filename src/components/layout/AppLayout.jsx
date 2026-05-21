@@ -1,10 +1,12 @@
+import { useState } from 'react'
 import { AlertTriangle } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { cn } from '@/utils/cn'
 import Sidebar from './Sidebar'
 import Header from './Header'
 import BottomNavigation from './BottomNavigation'
 import { useSubscriptionGate } from '@/hooks/useSubscriptionGate'
+import { GlobalSearch } from '@/components/ui'
 
 function ExpiryBanner() {
   const navigate = useNavigate()
@@ -35,6 +37,9 @@ export default function AppLayout({
   className,
   children,
 }) {
+  const [searchOpen, setSearchOpen] = useState(false)
+  const location = useLocation()
+
   return (
     <div className="flex h-dvh bg-app overflow-hidden">
       <Sidebar />
@@ -47,6 +52,7 @@ export default function AppLayout({
             showBack={showBack}
             onBack={onBack}
             rightAction={rightAction}
+            onSearch={() => setSearchOpen(true)}
           />
         </div>
 
@@ -57,11 +63,15 @@ export default function AppLayout({
             className,
           )}
         >
-          {children}
+          <div key={location.pathname} className="animate-page-enter">
+            {children}
+          </div>
         </main>
       </div>
 
       <BottomNavigation />
+
+      {searchOpen && <GlobalSearch isOpen onClose={() => setSearchOpen(false)} />}
     </div>
   )
 }

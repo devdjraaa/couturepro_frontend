@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
-import { Edit2, Trash2, ClipboardList, MessageCircle } from 'lucide-react'
+import { Edit2, Trash2, ClipboardList, MessageCircle, ArrowLeft } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useClient, useUpdateClient, useDeleteClient, useToggleVip } from '@/hooks/useClients'
 import { useMesures, useSaveMesures } from '@/hooks/useMesures'
@@ -83,13 +83,21 @@ export default function ClientDetailPage() {
       showBack
       title={client.nom}
       rightAction={
-        <button onClick={() => setShowEdit(true)} className="p-2 text-dim">
+        <button onClick={() => setShowEdit(true)} className="p-2 text-inverse/80 hover:text-inverse transition-colors">
           <Edit2 size={18} />
         </button>
       }
     >
-      {/* Header */}
-      <div className="bg-card border-b border-edge px-4 py-4 flex items-center gap-4">
+      {/* Header client */}
+      <div className="bg-card border-b border-edge px-4 py-4 flex items-center gap-3">
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          className="w-8 h-8 flex items-center justify-center rounded-xl bg-subtle hover:bg-inset text-ghost hover:text-ink transition-colors shrink-0 lg:hidden"
+          aria-label="Retour"
+        >
+          <ArrowLeft size={18} />
+        </button>
         <ClientAvatar client={client} size="lg" />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">

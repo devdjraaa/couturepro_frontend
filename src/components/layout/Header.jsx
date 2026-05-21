@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, Bell, ChevronDown, Building2, CheckCircle2 } from 'lucide-react'
+import { ArrowLeft, Bell, ChevronDown, Building2, CheckCircle2, Search, Sun, Moon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
-import { useAuth } from '@/contexts'
+import { useAuth, useTheme } from '@/contexts'
 import { Avatar, LanguageSwitcher } from '@/components/ui'
 import { useNotificationsCount } from '@/hooks/useNotifications'
 import { useMesAteliers } from '@/hooks/useMesAteliers'
@@ -59,9 +59,10 @@ function AtelierSwitcher({ atelier, switchAtelier }) {
   )
 }
 
-export default function Header({ title, showBack = false, onBack, rightAction, className }) {
+export default function Header({ title, showBack = false, onBack, rightAction, onSearch, className }) {
   const navigate = useNavigate()
   const { user, atelier, switchAtelier } = useAuth()
+  const { isDark, toggleTheme } = useTheme()
   const { data: notifCount = 0 } = useNotificationsCount()
 
   const handleBack = () => {
@@ -102,6 +103,27 @@ export default function Header({ title, showBack = false, onBack, rightAction, c
         {/* Right actions */}
         <div className="flex items-center gap-0.5 shrink-0">
           {rightAction && <div className="mr-1">{rightAction}</div>}
+          {onSearch && (
+            <button
+              type="button"
+              onClick={onSearch}
+              className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-inverse/10 transition-colors"
+              aria-label="Recherche"
+            >
+              <Search size={18} className="text-inverse" />
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-inverse/10 transition-colors"
+            aria-label={isDark ? 'Passer en mode clair' : 'Passer en mode sombre'}
+          >
+            {isDark
+              ? <Sun  size={18} className="text-inverse" />
+              : <Moon size={18} className="text-inverse" />
+            }
+          </button>
           <LanguageSwitcher variant="hero" />
           <button
             type="button"

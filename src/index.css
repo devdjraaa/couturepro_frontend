@@ -12,6 +12,10 @@
   --font-sans:    'DM Sans', sans-serif;
   --font-mono:    'JetBrains Mono', monospace;
 
+  /* Gold — accent premium / "à recouvrer" (statiques — ne basculent pas avec le thème) */
+  --color-gold:      #C8941F;
+  --color-gold-dark: #A67515;
+
   /* Tailles de texte custom */
   --text-2xs: 0.625rem;   /* 10px — badges, labels compacts */
   --text-xxs: 0.5625rem;  /* 9px  — cas extrêmes uniquement */
@@ -90,21 +94,24 @@
   /* ── Bordures ── */
   --color-edge:        var(--color-border);        /* border-edge       */
   --color-edge-strong: var(--color-border-strong); /* border-edge-strong */
+
+  /* ── Gold-light — fond doré, dynamique ── */
+  --color-gold-light: var(--color-gold-light);
 }
 
 /* ════════════════════════════════════════════════════════
    VARIABLES CSS — Thème clair (source de vérité)
    ════════════════════════════════════════════════════════ */
 :root {
-  /* ── Primaire — Indigo ── */
-  --color-primary-50:  #EEF2FF;
-  --color-primary-100: #E0E7FF;
-  --color-primary-200: #C7D2FE;
-  --color-primary-300: #A5B4FC;
-  --color-primary-400: #818CF8;
-  --color-primary:     #6366F1;
-  --color-primary-600: #4F46E5;
-  --color-primary-700: #4338CA;
+  /* ── Primaire — Indigo profond (brand) ── */
+  --color-primary-50:  #ECEAFE;
+  --color-primary-100: #D4D0FC;
+  --color-primary-200: #B3ADF9;
+  --color-primary-300: #8E88F5;
+  --color-primary-400: #6E67F0;
+  --color-primary:     #5546E8;
+  --color-primary-600: #4535D6;
+  --color-primary-700: #2D1B6B;
 
   /* ── Accent — Ambre doré ── */
   --color-accent-50:  #FFFBEB;
@@ -114,22 +121,22 @@
   --color-accent-600: #D97706;
 
   /* ── Terracotta ── */
-  --color-terra:       #C2410C;
-  --color-terra-light: #EA580C;
-  --color-terra-50:    #FFF7ED;
+  --color-terra:       #C8541F;
+  --color-terra-light: #EA6830;
+  --color-terra-50:    #FFF2EC;
 
   /* ── Sémantiques ── */
-  --color-success: #059669;
+  --color-success: #1F7A4D;
   --color-warning: #D97706;
   --color-danger:  #DC2626;
-  --color-info:    #6366F1;
+  --color-info:    #1F6BC8;
 
-  /* ── Surfaces — fond légèrement chaud, jamais blanc pur ── */
-  --color-bg-app:      #FAFAF9;
+  /* ── Surfaces — fond crème chaud, jamais blanc pur ── */
+  --color-bg-app:      #FAF8F5;
   --color-bg-card:     #FFFFFF;
-  --color-bg-elevated: #FFFFFF;
-  --color-bg-subtle:   #F5F5F4;
-  --color-bg-inset:    #E7E5E4;
+  --color-bg-elevated: #F4F1EC;
+  --color-bg-subtle:   #F0EDE8;
+  --color-bg-inset:    #E8E4DD;
 
   /* ── Texte — jamais noir pur ── */
   --color-text-primary:   #1C1917;
@@ -140,6 +147,9 @@
   /* ── Bordures ── */
   --color-border:        #E7E5E4;
   --color-border-strong: #D6D3D1;
+
+  /* ── Gold-light — fond doré doux ── */
+  --color-gold-light: #F5E6C8;
 
   /* ── Transitions ── */
   --transition-fast:   150ms ease;
@@ -158,19 +168,39 @@
    THÈME SOMBRE — overrides via data-theme="dark"
    ════════════════════════════════════════════════════════ */
 [data-theme="dark"] {
-  --color-bg-app:      #1C1917;
-  --color-bg-card:     #292524;
-  --color-bg-elevated: #44403C;
-  --color-bg-subtle:   #292524;
-  --color-bg-inset:    #1C1917;
+  /* ── Surfaces ── */
+  --color-bg-app:      #12100F;
+  --color-bg-card:     #1E1B18;
+  --color-bg-elevated: #2A2520;
+  --color-bg-subtle:   #252118;
+  --color-bg-inset:    #0E0C0A;
 
-  --color-text-primary:   #FAFAF9;
-  --color-text-secondary: #D6D3D1;
-  --color-text-tertiary:  #78716C;
+  /* ── Texte ── */
+  --color-text-primary:   #F5F4F2;
+  --color-text-secondary: #C9C5C0;
+  --color-text-tertiary:  #6B645C;
   --color-text-inverse:   #1C1917;
 
-  --color-border:        #44403C;
-  --color-border-strong: #57534E;
+  /* ── Bordures ── */
+  --color-border:        #3A3530;
+  --color-border-strong: #504840;
+
+  /* ── Tintes primaires — fonds sombres pour badges et icônes ── */
+  --color-primary-50:  #1D1A3F;
+  --color-primary-100: #28215C;
+
+  /* ── Sémantiques — plus lumineux sur fond sombre ── */
+  --color-success: #34D399;
+  --color-warning: #FBBF24;
+  --color-danger:  #F87171;
+  --color-info:    #60A5FA;
+
+  /* ── Gold-light — fond doré sombre ── */
+  --color-gold-light: #2E2108;
+
+  /* ── Accent + terra — tintes de fond sombres ── */
+  --color-accent-50: #2A1F00;
+  --color-terra-50:  #2A1208;
 }
 
 /* ════════════════════════════════════════════════════════
@@ -282,7 +312,15 @@ body {
 }
 
 .animate-page-enter {
-  animation: page-enter var(--transition-slow) both;
+  animation: page-enter 220ms ease-out both;
+}
+
+/* Tap feedback générique — à appliquer sur tout élément cliquable custom */
+.tap-feedback {
+  transition: transform 150ms ease;
+}
+.tap-feedback:active {
+  transform: scale(0.97);
 }
 
 .animate-slide-up {
