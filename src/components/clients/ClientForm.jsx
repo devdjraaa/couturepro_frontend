@@ -1,9 +1,8 @@
 import { useState, useRef } from 'react'
-import { Camera, Image, X } from 'lucide-react'
+import { Camera, X } from 'lucide-react'
 import { Input, Select, Button } from '@/components/ui'
 import Avatar, { AVATAR_PALETTES } from '@/components/ui/Avatar'
 import { getClientPhoto, compressToBase64 } from '@/utils/clientPhotoStorage'
-import { useClientCamera } from '@/hooks/useClientCamera'
 import { cn } from '@/utils/cn'
 
 const PROFIL_OPTIONS = [
@@ -14,8 +13,6 @@ const PROFIL_OPTIONS = [
 ]
 
 export default function ClientForm({ initialData, onSubmit, onCancel, isLoading }) {
-  const { pickPhoto, isNative } = useClientCamera()
-
   const [form, setForm] = useState({
     nom:          initialData?.nom          ?? '',
     prenom:       initialData?.prenom       ?? '',
@@ -37,14 +34,6 @@ export default function ClientForm({ initialData, onSubmit, onCancel, isLoading 
     const file = e.target.files?.[0]
     if (!file) return
     const base64 = await compressToBase64(file, 200)
-    setPhotoPreview(base64)
-    setPendingPhoto(base64)
-    setForm(f => ({ ...f, avatar_index: null }))
-  }
-
-  const handleNativePick = async (source) => {
-    const base64 = await pickPhoto(source)
-    if (!base64) return
     setPhotoPreview(base64)
     setPendingPhoto(base64)
     setForm(f => ({ ...f, avatar_index: null }))
@@ -84,7 +73,7 @@ export default function ClientForm({ initialData, onSubmit, onCancel, isLoading 
           ) : form.avatar_index != null ? (
             <button
               type="button"
-              onClick={isNative ? () => handleNativePick('gallery') : () => fileRef.current?.click()}
+              onClick={() => fileRef.current?.click()}
               className="relative"
             >
               <Avatar
@@ -96,23 +85,6 @@ export default function ClientForm({ initialData, onSubmit, onCancel, isLoading 
                 <Camera size={10} className="text-dim" />
               </span>
             </button>
-          ) : isNative ? (
-            <div className="flex gap-1.5">
-              <button
-                type="button"
-                onClick={() => handleNativePick('camera')}
-                className="w-8 h-8 rounded-full border-2 border-dashed border-edge flex flex-col items-center justify-center text-ghost hover:border-primary hover:text-primary transition-colors"
-              >
-                <Camera size={14} />
-              </button>
-              <button
-                type="button"
-                onClick={() => handleNativePick('gallery')}
-                className="w-8 h-8 rounded-full border-2 border-dashed border-edge flex flex-col items-center justify-center text-ghost hover:border-primary hover:text-primary transition-colors"
-              >
-                <Image size={14} />
-              </button>
-            </div>
           ) : (
             <button
               type="button"
@@ -123,15 +95,13 @@ export default function ClientForm({ initialData, onSubmit, onCancel, isLoading 
               <span className="text-[9px] font-medium">Photo</span>
             </button>
           )}
-          {!isNative && (
-            <input
-              ref={fileRef}
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handlePhotoChange}
-            />
-          )}
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handlePhotoChange}
+          />
         </div>
 
         {/* Sélecteur avatar (désactivé si photo présente) */}

@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 import { pointsService } from '@/services/pointsService'
 import { showLocalNotif } from '@/utils/localNotif'
 import { QUERY_STALE_TIME } from '@/constants/config'
@@ -22,6 +23,10 @@ export function useConvertirPoints() {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.points })
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.abonnement })
       showLocalNotif('Points convertis', '31 jours de bonus ajoutés à votre abonnement.')
+queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notifications })
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notificationsCount })
+      toast.success('31 jours de bonus ajoutés à votre abonnement.')
+
     },
   })
 }

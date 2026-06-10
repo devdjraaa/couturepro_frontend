@@ -1,8 +1,10 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { HelpCircle, Plus, Image, X, ChevronRight } from 'lucide-react'
+import { HelpCircle, Plus, Image, X, ChevronRight, FlaskConical, CheckCircle2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useQueryClient } from '@tanstack/react-query'
 import { useTickets, useCreerTicket } from '@/hooks/useTicket'
+import { useSeedDemo } from '@/hooks/useSeedDemo'
 import { toSupportTicket } from '@/constants/routes'
 import { AppLayout } from '@/components/layout'
 import { Button, Input, Select, Skeleton, EmptyState } from '@/components/ui'
@@ -17,8 +19,10 @@ const STATUT_COLORS = {
 export default function SupportPage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const queryClient = useQueryClient()
   const { data: tickets = [], isLoading } = useTickets()
   const creer = useCreerTicket()
+  const demo = useSeedDemo()
 
   const CATEGORIES = [
     { value: 'technique',   label: t('support.categories.technique')  },
@@ -70,7 +74,7 @@ export default function SupportPage() {
   }
 
   return (
-    <AppLayout showBack title={t('support.titre')}>
+    <AppLayout showBack title={t('support.titre')} onRefresh={() => queryClient.invalidateQueries()}>
       <div className="p-4 space-y-4">
         <Button icon={Plus} className="w-full" onClick={() => setShowForm(s => !s)}>
           {t('support.nouveau_ticket')}
@@ -104,7 +108,7 @@ export default function SupportPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-dim mb-2">Photo (optionnel)</label>
+              <label className="block text-xs font-medium text-dim mb-2">{t('support.formulaire.photo')}</label>
               {preview ? (
                 <div className="relative w-full rounded-xl overflow-hidden border border-edge">
                   <img src={preview} alt="capture" className="w-full max-h-40 object-cover" />
@@ -123,7 +127,7 @@ export default function SupportPage() {
                   className="w-full border border-dashed border-edge rounded-xl p-4 flex flex-col items-center gap-2 text-dim hover:border-primary hover:text-primary transition-colors"
                 >
                   <Image size={20} />
-                  <span className="text-xs">Ajouter une capture d'écran</span>
+                  <span className="text-xs">{t('support.formulaire.photo_ajouter')}</span>
                 </button>
               )}
               <input
@@ -145,6 +149,35 @@ export default function SupportPage() {
               </Button>
             </div>
           </form>
+        )}
+
+        {/* Mode démo — visible uniquement en mode démo (atelier.is_demo = true) */}
+        {demo.available && (
+          <div className="bg-card border border-edge rounded-2xl p-4 space-y-3">
+            <div className="flex items-center gap-2">
+              <FlaskConical size={15} className="text-primary shrink-0" />
+              <p className="text-sm font-semibold text-ink">{t('support.demo.titre')}</p>
+            </div>
+            <p className="text-xs text-ghost leading-relaxed">
+              {t('support.demo.description')}
+            </p>
+            {demo.done ? (
+              <div className="flex items-center gap-2 text-success text-sm font-medium">
+                <CheckCircle2 size={15} />
+                {t('support.demo.success')}
+              </div>
+            ) : (
+              <Button
+                variant="secondary"
+                icon={FlaskConical}
+                loading={demo.loading}
+                onClick={demo.seed}
+                className="w-full"
+              >
+                {t('support.demo.btn')}
+              </Button>
+            )}
+          </div>
         )}
 
         <p className="text-xs font-semibold text-dim uppercase tracking-wide">{t('support.liste.titre')}</p>

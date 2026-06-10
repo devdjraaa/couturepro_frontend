@@ -33,7 +33,7 @@ export default function CataloguePage() {
   const modelesSysteme = vetements.filter(v => v.is_systeme)
 
   return (
-    <AppLayout title={t('catalogue.titre')}>
+    <AppLayout title={t('catalogue.titre')} showBack>
       <div className="p-4 space-y-5">
         {isLoading ? (
           <div className="space-y-2">

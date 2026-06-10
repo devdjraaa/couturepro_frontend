@@ -42,6 +42,11 @@ export const whatsappService = {
     return data
   },
 
+  async getPreuvePaiement(commandeId) {
+    const { data } = await api.get(`/whatsapp/preuve-paiement/${commandeId}`)
+    return data
+  },
+
   async getCommandePrete(commandeId) {
     if (isMock()) {
       await delay()

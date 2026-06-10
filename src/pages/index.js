@@ -1,4 +1,5 @@
 export { default as DashboardPage }     from './DashboardPage'
+export { default as AtelierPage }       from './AtelierPage'
 export { default as CataloguePage }     from './CataloguePage'
 export { default as EquipePage }        from './EquipePage'
 export { default as PointsPage }        from './PointsPage'

@@ -444,7 +444,7 @@ export default function ParametresPage() {
   const [activeTab, setActiveTab] = useState('profil')
 
   return (
-    <AppLayout title={t('parametres.titre')}>
+    <AppLayout title={t('parametres.titre')} showBack>
       <TabBar tabs={TABS} activeTab={activeTab} onChange={setActiveTab} />
       <div className="p-4 space-y-4">
         {activeTab === 'profil'      && <ProfilTab />}

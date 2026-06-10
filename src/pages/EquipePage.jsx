@@ -88,6 +88,7 @@ export default function EquipePage() {
   return (
     <AppLayout
       title={t('equipe.titre')}
+      showBack
       rightAction={
         activeTab === 'membres' && can('equipe.manage') && max !== 0 ? (
           <button onClick={() => setShowInvite(true)} className="p-2 text-dim">

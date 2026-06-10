@@ -1,18 +1,25 @@
-import { AlertTriangle } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { AlertTriangle, RefreshCw } from 'lucide-react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
 import Sidebar from './Sidebar'
 import Header from './Header'
 import BottomNavigation from './BottomNavigation'
 import { useSubscriptionGate } from '@/hooks/useSubscriptionGate'
+import { GlobalSearch } from '@/components/ui'
+import { usePullToRefresh } from '@/hooks/usePullToRefresh'
 
 function ExpiryBanner() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { statut, daysLeft } = useSubscriptionGate()
 
   if (statut !== 'essai' || daysLeft === null || daysLeft > 5) return null
 
-  const label = daysLeft <= 1 ? 'expire aujourd\'hui' : `expire dans ${daysLeft} jour(s)`
+  const label = daysLeft <= 1
+    ? t('abonnement.banniere.expire_auj')
+    : t('abonnement.banniere.expire_dans', { jours: daysLeft })
 
   return (
     <div
@@ -20,7 +27,7 @@ function ExpiryBanner() {
       onClick={() => navigate('/parametres')}
     >
       <AlertTriangle size={14} className="shrink-0" />
-      <span>Votre période d'essai {label}. <span className="underline font-medium">Choisir un plan →</span></span>
+      <span>{t('abonnement.banniere.texte', { label })} <span className="underline font-medium">{t('abonnement.banniere.action')}</span></span>
     </div>
   )
 }
@@ -33,8 +40,13 @@ export default function AppLayout({
   noPadding = false,
   noMobileHeader = false,
   className,
+  onRefresh,
   children,
 }) {
+  const [searchOpen, setSearchOpen] = useState(false)
+  const location = useLocation()
+  const { containerRef, pullY, refreshing, threshold } = usePullToRefresh(onRefresh)
+
   return (
     <div className="flex h-dvh bg-app overflow-hidden">
       <Sidebar />
@@ -47,21 +59,53 @@ export default function AppLayout({
             showBack={showBack}
             onBack={onBack}
             rightAction={rightAction}
+            onSearch={() => setSearchOpen(true)}
           />
         </div>
 
         <main
+          ref={containerRef}
           className={cn(
             'flex-1 overflow-y-auto overflow-x-hidden',
+            onRefresh && 'overscroll-y-none',
             !noPadding && 'pb-safe lg:pb-0',
             className,
           )}
         >
-          {children}
+          {onRefresh && (
+            <div
+              className="flex justify-center overflow-hidden"
+              style={{
+                height: pullY,
+                transition: pullY === 0 ? 'height 300ms cubic-bezier(0.4,0,0.2,1)' : 'none',
+              }}
+            >
+              <div className="flex items-end pb-2">
+                <div className={cn(
+                  'w-9 h-9 rounded-full border-2 bg-card shadow-sm flex items-center justify-center',
+                  pullY >= threshold || refreshing ? 'border-primary/40' : 'border-edge',
+                )}>
+                  <RefreshCw
+                    size={15}
+                    className={cn(
+                      pullY >= threshold || refreshing ? 'text-primary' : 'text-ghost',
+                      refreshing && 'animate-spin',
+                    )}
+                    style={!refreshing ? { transform: `rotate(${Math.min(pullY / threshold, 1) * 360}deg)` } : undefined}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+          <div key={location.pathname} className="animate-page-enter">
+            {children}
+          </div>
         </main>
       </div>
 
       <BottomNavigation />
+
+      {searchOpen && <GlobalSearch isOpen onClose={() => setSearchOpen(false)} />}
     </div>
   )
 }

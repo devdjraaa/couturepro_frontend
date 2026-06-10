@@ -44,6 +44,8 @@
     "accueil": "Accueil",
     "menu": "Menu",
     "bonjour": "Bonjour",
+    "passer_mode_clair": "Passer en mode clair",
+    "passer_mode_sombre": "Passer en mode sombre",
     "hors_ligne": "Mode hors ligne",
     "hors_ligne_message": "Vos données seront synchronisées à la reconnexion",
     "sync_en_cours": "Synchronisation…",
@@ -211,9 +213,55 @@
       "a_recouvrer": "À recouvrer"
     },
     "action": {
-      "nouvelle_commande": "Nouvelle",
-      "nouveau_client": "Client",
-      "paiement": "Paiement"
+      "nouvelle_commande": "Nouvelle commande",
+      "nouveau_client": "Nouveau client",
+      "paiement": "Encaisser"
+    },
+    "titre_auj": "Aujourd'hui",
+    "a_faire": "À faire aujourd'hui",
+    "tout_voir": "Tout voir",
+    "caisse": {
+      "titre": "Caisse du jour",
+      "voir_detail": "Voir le détail",
+      "vide": "Vos premiers acomptes s'afficheront ici.",
+      "enregistrer": "Enregistrer un paiement →",
+      "encaisse_auj": "Encaissé aujourd'hui"
+    },
+    "todo": {
+      "libre": "Journée libre 🎉",
+      "libre_desc": "Pas d'urgence aujourd'hui. Prenez de l'avance sur vos commandes.",
+      "voir_commandes": "Voir toutes les commandes",
+      "livraison": "Livraison — {{vetement}}",
+      "essayage": "Essayage — {{vetement}}",
+      "solde": "Solde restant — {{montant}}"
+    },
+    "onboarding": {
+      "titre": "Bienvenue dans votre atelier 🎉",
+      "etapes": "{{fait}} / {{total}} étapes complétées",
+      "step_client": "Ajouter votre premier client",
+      "step_client_sub": "Créez une fiche avec ses mesures",
+      "step_commande": "Créer votre première commande",
+      "step_commande_sub": "Suivi des délais et paiements",
+      "step_profil": "Compléter votre profil",
+      "step_profil_sub": "Nom, téléphone de contact"
+    },
+    "kpi": {
+      "en_attente": "En attente paiement",
+      "commandes_actives": "Commandes actives",
+      "nvx_clients": "Nvx clients 30j",
+      "livrees_mois": "Livrées ce mois",
+      "en_retard": "En retard"
+    },
+    "recentes_vide": {
+      "titre": "Pas encore de commandes",
+      "description": "Créez votre première commande pour commencer à suivre vos délais et paiements.",
+      "action": "Créer une commande"
+    },
+    "subtitle": {
+      "urgentes_one": "{{count}} action urgente aujourd'hui",
+      "urgentes_other": "{{count}} actions urgentes aujourd'hui",
+      "en_cours_one": "{{count}} commande en cours",
+      "en_cours_other": "{{count}} commandes en cours"
     }
   },
   "clients": {
@@ -289,7 +337,15 @@
       "confirmer": "Supprimer",
       "annuler": "Annuler"
     },
-    "archiver_confirm": "Archiver ce client ?"
+    "archiver_confirm": "Archiver ce client ?",
+    "tri": {
+      "recent": "Récents",
+      "alpha": "A → Z",
+      "commandes": "Commandes actives"
+    },
+    "vip_titre": "Favoris VIP",
+    "tous_titre": "Tous les clients",
+    "ajouter_aria": "Ajouter un client"
   },
   "commandes": {
     "titre": "Commandes",
@@ -298,7 +354,10 @@
     "vide": {
       "titre": "Aucune commande en cours",
       "description": "Créez votre première commande pour commencer",
-      "action": "Créer une commande"
+      "action": "Créer une commande",
+      "calme": "Votre atelier est calme",
+      "calme_desc": "Créez une commande pour commencer à suivre vos délais, vos paiements et vos essayages.",
+      "filtre_desc": "Essayez un autre filtre ou terme de recherche."
     },
     "onglets": {
       "en_cours": "En cours",
@@ -381,7 +440,29 @@
       "reprendre": "Remettre en cours",
       "annuler": "Annuler la commande"
     },
-    "supprimer_confirm": "Supprimer cette commande ?"
+    "supprimer_confirm": "Supprimer cette commande ?",
+    "pipeline": {
+      "vide": "Aucune commande",
+      "essayage": "Essayage",
+      "livrees": "Livrées"
+    },
+    "groupes": {
+      "retard": "En retard",
+      "auj": "Aujourd'hui",
+      "demain": "Demain",
+      "semaine": "Cette semaine",
+      "plus_tard": "Plus tard",
+      "sans_date": "Sans date"
+    },
+    "filtres": {
+      "urgentes": "Urgentes",
+      "impayees": "Impayées",
+      "cette_semaine": "Cette semaine"
+    },
+    "alertes": {
+      "retard": "Commandes en retard",
+      "bientot": "Livraisons dans 48h"
+    }
   },
   "catalogue": {
     "titre": "Catalogue",
@@ -550,6 +631,12 @@
       "payer": "Payer {{montant}} XOF",
       "securise": "Paiement sécurisé"
     },
+    "banniere": {
+      "texte": "Votre période d'essai {{label}}.",
+      "expire_auj": "expire aujourd'hui",
+      "expire_dans": "expire dans {{jours}} jour(s)",
+      "action": "Choisir un plan →"
+    },
     "code": {
       "titre": "Code d'activation",
       "sous_titre": "Entrez votre code reçu par l'administrateur",
@@ -689,12 +776,20 @@
       "sujet_placeholder": "Ex : Impossible de créer une commande",
       "message": "Message",
       "message_placeholder": "Décrivez le problème en détail…",
-      "envoyer": "Envoyer"
+      "envoyer": "Envoyer",
+      "photo": "Photo (optionnel)",
+      "photo_ajouter": "Ajouter une capture d'écran"
     },
     "liste": {
       "titre": "Mes demandes",
       "vide": "Aucun ticket",
       "vide_description": "Vos demandes de support apparaîtront ici"
+    },
+    "demo": {
+      "titre": "Données de démonstration",
+      "description": "Injecte 15 clients et 25 commandes d'exemple pour explorer l'application sans saisir de données réelles. Remplace les données actuelles.",
+      "success": "Données injectées — explorez l'application !",
+      "btn": "Réinitialiser les données démo"
     }
   },
   "communications": {
@@ -803,6 +898,16 @@
     "profil": "Profil",
     "plus": "Plus",
     "menu": "Menu"
+  },
+  "atelier": {
+    "titre": "Atelier",
+    "ajouter_ville": "Ajouter une ville →",
+    "section_catalogue": "Mon catalogue",
+    "modeles": "Modèles de vêtements",
+    "fiches_mesures": "Fiches de mesures clients",
+    "mon_equipe": "Mon équipe",
+    "informations": "Informations de l'atelier",
+    "confirmer_deconnexion": "Se déconnecter ?"
   },
   "profil": {
     "titre": "Mon profil",

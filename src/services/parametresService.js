@@ -105,4 +105,26 @@ export const parametresService = {
     })
     return data
   },
+
+  async getLangue() {
+    if (isMock()) { await delay(); return { langue: localStorage.getItem('cp_langue') ?? 'fr' } }
+    const { data } = await api.get('/parametres/langue')
+    return data
+  },
+
+  async updateLangue(langue) {
+    if (isMock()) { await delay(); localStorage.setItem('cp_langue', langue); return { langue } }
+    const { data } = await api.put('/parametres/langue', { langue })
+    return data
+  },
+
+  async registerFcmToken(fcm_token, platform = null) {
+    try {
+      await api.post('/notifications/fcm-token', { fcm_token, platform })
+    } catch {}
+  },
+
+  async removeFcmToken() {
+    try { await api.delete('/notifications/fcm-token') } catch {}
+  },
 }

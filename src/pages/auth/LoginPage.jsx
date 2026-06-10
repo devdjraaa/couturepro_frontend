@@ -7,6 +7,7 @@ import { AuthLayout } from '@/components/layout'
 import { Input, Button, LanguageSwitcher, PhoneInput } from '@/components/ui'
 import { getStableDeviceId } from '@/utils/deviceId'
 
+
 export default function LoginPage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
