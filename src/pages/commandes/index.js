@@ -1,3 +1,5 @@
 export { default as CommandesPage }         from './CommandesPage'
 export { default as CommandeDetailPage }    from './CommandeDetailPage'
 export { default as NouvelleCommandePage }  from './NouvelleCommandePage'
+export { default as NouvelleCommandeGroupeePage } from './NouvelleCommandeGroupeePage'
+export { default as CommandeGroupeDetailPage }    from './CommandeGroupeDetailPage'

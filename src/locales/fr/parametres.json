@@ -1,5 +1,8 @@
 {
   "titre": "Paramètres",
+  "onglets": {
+    "facture": "Facture"
+  },
   "sections": {
     "compte": "Mon compte",
     "atelier": "Mon atelier",

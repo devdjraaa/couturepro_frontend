@@ -2,26 +2,29 @@ import { useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import {
   Edit2, Trash2, CreditCard, MessageCircle, Ruler,
-  AlertTriangle, Download, Send, Phone, Check,
+  AlertTriangle, Download, Send, Phone, Check, Share2,
   Plus, CalendarDays, Trash, CheckCircle2, Clock,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import toast from 'react-hot-toast'
 import { useCommande, useUpdateCommande, useUpdateStatutCommande, useDeleteCommande } from '@/hooks/useCommandes'
 import { usePaiements, useEnregistrerPaiement } from '@/hooks/usePaiements'
 import { useMesures } from '@/hooks/useMesures'
 import { useCommandeItems, useDeleteCommandeItem } from '@/hooks/useCommandeItems'
 import { useCommandeEcheances, useCreateEcheance, useUpdateEcheance, useDeleteEcheance } from '@/hooks/useCommandeEcheances'
 import { useWhatsappRappel, useWhatsappCommandePrete } from '@/hooks/useWhatsapp'
-import { useCommunications } from '@/hooks/useParametres'
+import { useCommunications, useFactureSettings } from '@/hooks/useParametres'
 import { useAuth } from '@/contexts'
 import { usePlanFeature } from '@/hooks/usePlanFeature'
 import { whatsappService } from '@/services/whatsappService'
 import { AppLayout } from '@/components/layout'
 import { CommandeForm, StatutSelector } from '@/components/commandes'
+import { FeatureGate } from '@/components/abonnement'
 import { Avatar, Button, BottomSheet, Skeleton, Input, Select, StatusPill, CountdownBadge, MoneyAmount } from '@/components/ui'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { formatDate } from '@/utils/formatDate'
 import { exportRelevePdf } from '@/utils/exportRelevePdf'
+import { exportFacturePdf, shareOrDownloadPdf } from '@/utils/exportFacturePdf'
 import { cn } from '@/utils/cn'
 
 // ── Onglets internes ──────────────────────────────────────────────────────────
@@ -312,8 +315,10 @@ function TabApercu({ commande, onEdit, onStatut, onDelete, navigate }) {
 // ── Onglet Paiements ──────────────────────────────────────────────────────────
 function TabPaiements({ commande, commandeId }) {
   const { t } = useTranslation()
-  const { atelier }  = useAuth()
+  const { atelier, can, role }  = useAuth()
   const { data: paiements = [] } = usePaiements({ commande_id: commandeId })
+  const { data: items = [] }     = useCommandeItems(commandeId)
+  const { data: factureSettings } = useFactureSettings()
   const enregistrerPaiement = useEnregistrerPaiement()
   const { available: whatsappFactureAvailable } = usePlanFeature('facture_whatsapp')
 
@@ -321,6 +326,7 @@ function TabPaiements({ commande, commandeId }) {
   const [form, setForm]         = useState({ montant: '', mode_paiement: 'especes' })
   const [whatsappUrl, setWhatsappUrl] = useState(null)
   const [exportingPdf, setExportingPdf] = useState(false)
+  const [exportingFacture, setExportingFacture] = useState(null)
 
   const MODE_OPTIONS = [
     { value: 'especes',      label: t('commandes.modes_paiement.especes')      },
@@ -353,6 +359,22 @@ function TabPaiements({ commande, commandeId }) {
       await exportRelevePdf({ commande, paiements, clientNom: commande.client_nom ?? '', atelierNom: atelier?.nom ?? 'Gextimo' })
     } finally {
       setExportingPdf(false)
+    }
+  }
+
+  const handleFacture = async (mode) => {
+    setExportingFacture(mode)
+    try {
+      const { pdf, filename } = await exportFacturePdf({ commande, items, client: commande.client, atelier, factureSettings })
+      const result = await shareOrDownloadPdf(pdf, filename, {
+        title: `Facture — ${commande.client_nom}`,
+        text: `Facture pour ${commande.client_nom}`,
+      })
+      if (result === 'downloaded') toast.success('Facture téléchargée.')
+    } catch {
+      toast.error("Impossible de générer la facture.")
+    } finally {
+      setExportingFacture(null)
     }
   }
 
@@ -466,6 +488,45 @@ function TabPaiements({ commande, commandeId }) {
 
       {paiements.length === 0 && solde && (
         <p className="text-xs text-ghost text-center py-4">Aucun paiement enregistré séparément.</p>
+      )}
+
+      {/* Facture */}
+      {(can('factures.generate') || role === 'proprietaire') && (
+        <div className="bg-card border border-edge rounded-2xl p-4 space-y-3">
+          <p className="text-sm font-semibold text-ink">Facture</p>
+
+          {can('factures.generate') && (
+            <Button
+              icon={Share2}
+              variant="secondary"
+              loading={exportingFacture === 'partage'}
+              onClick={() => handleFacture('partage')}
+              className="w-full"
+            >
+              Enregistrer / Partager
+            </Button>
+          )}
+
+          {role === 'proprietaire' && (
+            whatsappFactureAvailable ? (
+              <button
+                type="button"
+                onClick={() => handleFacture('whatsapp')}
+                disabled={exportingFacture === 'whatsapp'}
+                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-[#25d366]/40 bg-[#25d366]/8 text-[#1a9e4e] text-sm font-medium hover:bg-[#25d366]/15 transition-colors disabled:opacity-50"
+              >
+                <MessageCircle size={15} />
+                {exportingFacture === 'whatsapp' ? 'Préparation…' : 'Envoyer la facture par WhatsApp'}
+              </button>
+            ) : (
+              <FeatureGate
+                featureKey="facture_whatsapp"
+                featureName="L'envoi de factures par WhatsApp"
+                variant="inline"
+              />
+            )
+          )}
+        </div>
       )}
 
       {/* #78-82 — Reçu complet WhatsApp */}

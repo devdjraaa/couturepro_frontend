@@ -57,13 +57,22 @@ const GROUPES = [
       { perm: 'notifications.view', label: 'Consulter' },
     ],
   },
+  {
+    label: 'Factures',
+    roles: ['assistant'],
+    actions: [
+      { perm: 'factures.generate', label: 'Enregistrer / Partager' },
+    ],
+  },
 ]
 
 function RoleColumn({ role, label, perms, onChange }) {
+  const groupes = GROUPES.filter(g => !g.roles || g.roles.includes(role))
+
   return (
     <div className="flex-1">
       <p className="text-xs font-semibold text-dim uppercase tracking-wide text-center mb-3">{label}</p>
-      {GROUPES.map(g => (
+      {groupes.map(g => (
         <div key={g.label} className="mb-3">
           <p className="text-[10px] text-ghost font-medium mb-1 px-1">{g.label}</p>
           {g.actions.map(({ perm, label: aLabel }) => {

@@ -76,3 +76,27 @@ export function useUpdatePreferences() {
     onSuccess: (data) => queryClient.setQueryData(['parametres', 'preferences'], data),
   })
 }
+
+export function useFactureSettings() {
+  return useQuery({
+    queryKey: ['parametres', 'facture'],
+    queryFn: () => parametresService.getFactureSettings(),
+    staleTime: QUERY_STALE_TIME,
+  })
+}
+
+export function useUpdateFactureSettings() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (payload) => parametresService.updateFactureSettings(payload),
+    onSuccess: (data) => queryClient.setQueryData(['parametres', 'facture'], (old) => ({ ...old, ...data })),
+  })
+}
+
+export function useUploadFactureLogo() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (file) => parametresService.uploadFactureLogo(file),
+    onSuccess: (data) => queryClient.setQueryData(['parametres', 'facture'], (old) => ({ ...old, ...data })),
+  })
+}
