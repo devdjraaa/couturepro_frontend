@@ -7,6 +7,16 @@ import './index.css'
 import './lang/i18n.js'
 import App from './App.jsx'
 
+// #2 — Bouton Retour Android synchronisé avec React Router
+import { App as CapApp } from '@capacitor/app'
+CapApp.addListener('backButton', ({ canGoBack }) => {
+  if (canGoBack) {
+    window.history.back()
+  } else {
+    CapApp.exitApp()
+  }
+})
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

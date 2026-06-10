@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Building2, Plus, CheckCircle2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts'
@@ -441,7 +441,8 @@ export default function ParametresPage() {
     { key: 'securite',     label: t('parametres.onglets.securite')     },
   ]
 
-  const [activeTab, setActiveTab] = useState('profil')
+  const location = useLocation()
+  const [activeTab, setActiveTab] = useState(location.state?.tab ?? 'profil')
 
   return (
     <AppLayout title={t('parametres.titre')} showBack>

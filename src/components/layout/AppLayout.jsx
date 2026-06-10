@@ -39,6 +39,7 @@ export default function AppLayout({
   rightAction,
   noPadding = false,
   noMobileHeader = false,
+  noAnimation = false,
   className,
   onRefresh,
   children,
@@ -97,7 +98,8 @@ export default function AppLayout({
               </div>
             </div>
           )}
-          <div key={location.pathname} className="animate-page-enter">
+          {/* #11 — noAnimation désactive la transition sur les pages de saisie */}
+          <div key={location.pathname} className={noAnimation ? undefined : 'animate-page-enter'}>
             {children}
           </div>
         </main>

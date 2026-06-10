@@ -1,16 +1,17 @@
 import { useLocation, useNavigate, NavLink } from 'react-router-dom'
-import { Home, ClipboardList, Users, Layers, Plus } from 'lucide-react'
+import { Home, ClipboardList, Users, Plus, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
 import { useNotificationsCount } from '@/hooks/useNotifications'
 import { useCommandeStats } from '@/hooks/useCommandes'
 
+// #45-46 — "Paramètres" remplace "Catalogue" pour rendre l'abonnement accessible
 const NAV_ITEMS = [
-  { to: '/',           icon: Home,          tKey: 'nav.dashboard', end: true  },
-  { to: '/commandes',  icon: ClipboardList, tKey: 'nav.commandes'             },
+  { to: '/',           icon: Home,          tKey: 'nav.dashboard',  end: true  },
+  { to: '/commandes',  icon: ClipboardList, tKey: 'nav.commandes'              },
   null, // slot FAB central
-  { to: '/clients',    icon: Users,         tKey: 'nav.clients'               },
-  { to: '/catalogue',  icon: Layers,        tKey: 'atelier.titre'             },
+  { to: '/clients',    icon: Users,         tKey: 'nav.clients'                },
+  { to: '/parametres', icon: Settings,      tKey: 'nav.parametres'             },
 ]
 
 const FAB_ACTIONS = {
