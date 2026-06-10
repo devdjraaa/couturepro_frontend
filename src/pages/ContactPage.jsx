@@ -13,15 +13,15 @@ const CONTACTS = [
   {
     icon: Mail,
     label: 'Email',
-    value: 'support@couturepro.app',
-    href: 'mailto:support@couturepro.app',
+    value: 'support@gextimo.app',
+    href: 'mailto:support@gextimo.app',
     color: 'bg-primary/10 text-primary',
   },
   {
     icon: Globe,
     label: 'Site web',
-    value: 'couturepro.app',
-    href: 'https://couturepro.app',
+    value: 'gextimo.app',
+    href: 'https://gextimo.app',
     color: 'bg-accent/10 text-accent-600',
   },
 ]

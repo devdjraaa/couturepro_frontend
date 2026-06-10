@@ -8,7 +8,7 @@ const fmt = (v) =>
 const modeLabel = (m) =>
   ({ especes: 'Espèces', mobile_money: 'Mobile Money', virement: 'Virement' })[m] ?? m
 
-export async function exportRapportCaissePdf({ stats, clients, atelierNom = 'Couture Pro' }) {
+export async function exportRapportCaissePdf({ stats, clients, atelierNom = 'Gextimo' }) {
   const mois = stats.mois ?? ''
   const [annee, num] = mois.split('-')
   const moisLabel = num

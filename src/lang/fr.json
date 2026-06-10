@@ -78,7 +78,7 @@
   "auth": {
     "connexion": {
       "titre": "Connexion",
-      "sous_titre": "Accédez à votre espace Couture Pro",
+      "sous_titre": "Accédez à votre espace Gextimo",
       "sous_titre_login": "Connectez-vous à votre atelier",
       "telephone": "Numéro de téléphone",
       "telephone_placeholder": "+225 07 00 00 00 00",
@@ -98,7 +98,7 @@
     },
     "inscription": {
       "titre": "Créer votre atelier",
-      "sous_titre": "Rejoignez Couture Pro gratuitement",
+      "sous_titre": "Rejoignez Gextimo gratuitement",
       "sous_titre_register": "Créez votre atelier en ligne",
       "nom_atelier": "Nom de l'atelier",
       "nom_atelier_placeholder": "Atelier Aminata",
@@ -171,7 +171,7 @@
     "onboarding": {
       "commencer": "Commencer",
       "passer": "Passer",
-      "slide_1_titre": "Bienvenue sur Couture Pro",
+      "slide_1_titre": "Bienvenue sur Gextimo",
       "slide_1_description": "Gérez votre atelier de couture facilement depuis votre téléphone.",
       "slide_2_titre": "Vos clients, organisés",
       "slide_2_description": "Enregistrez les mesures et commandes de chaque client en quelques secondes.",
@@ -923,14 +923,14 @@
   "a_propos": {
     "titre": "À propos",
     "version": "Version {{version}}",
-    "description": "Couture Pro est l'application de gestion dédiée aux ateliers de couture. Elle vous permet de gérer vos clients, leurs mesures, vos commandes et votre équipe depuis votre téléphone.",
+    "description": "Gextimo est l'application de gestion dédiée aux ateliers de couture. Elle vous permet de gérer vos clients, leurs mesures, vos commandes et votre équipe depuis votre téléphone.",
     "fonctionnalites": "Fonctionnalités",
     "developpe_par": "Développé par",
-    "equipe": "Équipe CouturePro",
+    "equipe": "Équipe Gextimo",
     "support_label": "Support",
-    "support_valeur": "support@couturepro.app",
+    "support_valeur": "support@gextimo.app",
     "politique_label": "Politique de confidentialité",
-    "politique_valeur": "couturepro.app/privacy",
+    "politique_valeur": "gextimo.app/privacy",
     "features": {
       "commandes_titre": "Gestion des commandes",
       "commandes_desc": "Suivez toutes vos commandes de la prise de mesures à la livraison.",

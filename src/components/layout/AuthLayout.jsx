@@ -10,7 +10,7 @@ export default function AuthLayout({ children, subtitle, className }) {
           <Scissors size={20} className="text-inverse" />
         </div>
         <div>
-          <p className="text-lg font-bold font-display text-ink leading-none">Couture Pro</p>
+          <p className="text-lg font-bold font-display text-ink leading-none">Gextimo</p>
           {subtitle && <p className="text-xs text-ghost mt-0.5">{subtitle}</p>}
         </div>
       </div>

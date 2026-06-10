@@ -61,7 +61,7 @@ function CaisseContent() {
       await exportRapportCaissePdf({
         stats,
         clients,
-        atelierNom: user?.atelier?.nom ?? 'Couture Pro',
+        atelierNom: user?.atelier?.nom ?? 'Gextimo',
       })
     } finally {
       setExporting(false)

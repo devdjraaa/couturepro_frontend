@@ -350,7 +350,7 @@ function TabPaiements({ commande, commandeId }) {
     if (!commande || paiements.length === 0) return
     setExportingPdf(true)
     try {
-      await exportRelevePdf({ commande, paiements, clientNom: commande.client_nom ?? '', atelierNom: atelier?.nom ?? 'Couture Pro' })
+      await exportRelevePdf({ commande, paiements, clientNom: commande.client_nom ?? '', atelierNom: atelier?.nom ?? 'Gextimo' })
     } finally {
       setExportingPdf(false)
     }

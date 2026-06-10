@@ -11,7 +11,7 @@ const formatDate = (d) =>
 const modeLabel = (mode) =>
   ({ mobile_money: 'Mobile Money', virement: 'Virement', especes: 'Espèces' })[mode] ?? mode
 
-export async function exportRelevePdf({ commande, paiements, clientNom, atelierNom = 'Couture Pro' }) {
+export async function exportRelevePdf({ commande, paiements, clientNom, atelierNom = 'Gextimo' }) {
   const reste = Math.max(0, Number(commande.prix ?? 0) - Number(commande.acompte ?? 0))
   const ref = String(commande.id).slice(0, 8).toUpperCase()
 
@@ -67,7 +67,7 @@ export async function exportRelevePdf({ commande, paiements, clientNom, atelierN
     </table>
 
     <p style="margin-top: 32px; font-size: 10px; color: #bbb; text-align: center;">
-      Document non officiel — Relevé interne généré par Couture Pro
+      Document non officiel — Relevé interne généré par Gextimo
     </p>
   `
 

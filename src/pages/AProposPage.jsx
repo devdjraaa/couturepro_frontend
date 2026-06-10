@@ -27,7 +27,7 @@ export default function AProposPage() {
           <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center shadow-md mb-3">
             <Scissors size={28} className="text-white" />
           </div>
-          <p className="text-xl font-bold font-display text-ink">Couture Pro</p>
+          <p className="text-xl font-bold font-display text-ink">Gextimo</p>
           <p className="text-sm text-dim mt-1">{t('a_propos.version', { version: VERSION })}</p>
         </div>
 

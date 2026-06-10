@@ -47,7 +47,7 @@ export const mockNotifications = [
   {
     id: 6,
     type: 'systeme',
-    titre: 'Bienvenue sur Couture Pro',
+    titre: 'Bienvenue sur Gextimo',
     message: "Votre atelier est configuré. Commencez par ajouter vos clients et vos premières commandes.",
     lu: true,
     created_at: '2025-01-15T08:30:00Z',

@@ -2,7 +2,7 @@ import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
 import { shareOrSavePdf } from './shareNative'
 
-export async function exportMesuresPdf(clientNom, mesures, atelierNom = 'Couture Pro') {
+export async function exportMesuresPdf(clientNom, mesures, atelierNom = 'Gextimo') {
   if (!mesures || Object.keys(mesures).length === 0) return
 
   const toLabel = (key) => key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
@@ -44,7 +44,7 @@ export async function exportMesuresPdf(clientNom, mesures, atelierNom = 'Couture
     </div>` : ''}
 
     <p style="margin-top: 24px; font-size: 10px; color: #bbb; text-align: center;">
-      Généré par Couture Pro
+      Généré par Gextimo
     </p>
   `
 
