@@ -34,6 +34,7 @@ const ROLE_PERMISSIONS = {
     'parametres.manage',
     'points.convert',
     'notifications.view',
+    'factures.generate',
   ],
   // CDC §4.3 — assistant : CREATE + READ + ARCHIVE (pas d'UPDATE ni DELETE)
   assistant: [

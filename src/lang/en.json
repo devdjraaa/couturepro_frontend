@@ -341,6 +341,13 @@
     "titre": "Orders",
     "nouvelle": "New order",
     "recherche_placeholder": "Search an order…",
+    "action_sheet": {
+      "titre": "New order",
+      "simple": "Single order",
+      "simple_desc": "One garment for the client",
+      "groupee": "Group order",
+      "groupee_desc": "Several garments, one invoice"
+    },
     "vide": {
       "titre": "No orders in progress",
       "description": "Create your first order to get started",

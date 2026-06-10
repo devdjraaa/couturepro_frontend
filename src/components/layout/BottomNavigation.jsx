@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { useLocation, useNavigate, NavLink } from 'react-router-dom'
-import { Home, ClipboardList, Users, Plus, Settings } from 'lucide-react'
+import { Home, ClipboardList, Users, Plus, Settings, Layers, ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
+import { BottomSheet } from '@/components/ui'
 import { useNotificationsCount } from '@/hooks/useNotifications'
 import { useCommandeStats } from '@/hooks/useCommandes'
 
@@ -35,6 +37,16 @@ export default function BottomNavigation() {
   const { data: notifCount = 0 } = useNotificationsCount()
   const { data: cmdStats }       = useCommandeStats()
   const alertCount = (cmdStats?.en_retard ?? 0) + (cmdStats?.dans_48h ?? 0)
+  const [showNewSheet, setShowNewSheet] = useState(false)
+
+  const handleFabClick = () => {
+    const target = getFABTarget(location.pathname)
+    if (target === '/commandes/new') {
+      setShowNewSheet(true)
+      return
+    }
+    navigate(target)
+  }
 
   return (
     <nav className="fixed bottom-0 inset-x-0 z-30 bg-card/95 backdrop-blur-sm border-t border-edge lg:hidden bottom-nav-container">
@@ -46,7 +58,7 @@ export default function BottomNavigation() {
                 <button
                   type="button"
                   aria-label={t('commun.nouveau')}
-                  onClick={() => navigate(getFABTarget(location.pathname))}
+                  onClick={handleFabClick}
                   className="w-14 h-14 -mt-5 rounded-full bg-primary text-inverse flex items-center justify-center shadow-lg shadow-primary/40 hover:bg-primary-600 hover:shadow-xl active:scale-[0.92] active:shadow-sm transition-all duration-150"
                 >
                   <Plus size={22} strokeWidth={2.5} />
@@ -91,6 +103,44 @@ export default function BottomNavigation() {
           )
         })}
       </div>
+
+      <BottomSheet
+        isOpen={showNewSheet}
+        onClose={() => setShowNewSheet(false)}
+        title={t('commandes.action_sheet.titre')}
+      >
+        <div className="p-2 pb-[calc(0.5rem+var(--safe-area-bottom))]">
+          <button
+            type="button"
+            onClick={() => { setShowNewSheet(false); navigate('/commandes/new') }}
+            className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-subtle transition-colors text-left"
+          >
+            <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+              <ClipboardList size={18} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-ink">{t('commandes.action_sheet.simple')}</p>
+              <p className="text-xs text-ghost">{t('commandes.action_sheet.simple_desc')}</p>
+            </div>
+            <ChevronRight size={16} className="text-ghost shrink-0" />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => { setShowNewSheet(false); navigate('/commandes/groupes/nouveau') }}
+            className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-subtle transition-colors text-left"
+          >
+            <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+              <Layers size={18} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-ink">{t('commandes.action_sheet.groupee')}</p>
+              <p className="text-xs text-ghost">{t('commandes.action_sheet.groupee_desc')}</p>
+            </div>
+            <ChevronRight size={16} className="text-ghost shrink-0" />
+          </button>
+        </div>
+      </BottomSheet>
     </nav>
   )
 }

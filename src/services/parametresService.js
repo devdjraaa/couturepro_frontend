@@ -118,6 +118,50 @@ export const parametresService = {
     return data
   },
 
+  async getFactureSettings() {
+    if (isMock()) {
+      await delay()
+      return {
+        format_facture: 'standard',
+        facture_logo_url: null,
+        facture_ifu: null,
+        facture_rccm: null,
+        facture_pied_page: null,
+        personnalisation_dispo: false,
+        atelier_nom: mockAtelier?.nom ?? 'Gextimo',
+        atelier_adresse: mockAtelier?.adresse ?? '',
+        atelier_ville: mockAtelier?.ville ?? '',
+      }
+    }
+    const { data } = await api.get('/parametres/facture')
+    return data
+  },
+
+  async updateFactureSettings(payload) {
+    if (isMock()) {
+      await delay()
+      return payload
+    }
+    const { data } = await api.put('/parametres/facture', {
+      format_facture:    payload.format_facture,
+      facture_ifu:       payload.facture_ifu,
+      facture_rccm:      payload.facture_rccm,
+      facture_pied_page: payload.facture_pied_page,
+    })
+    return data
+  },
+
+  async uploadFactureLogo(file) {
+    if (isMock()) {
+      await delay()
+      return { facture_logo_url: URL.createObjectURL(file) }
+    }
+    const fd = new FormData()
+    fd.append('logo', file)
+    const { data } = await api.post('/parametres/facture/logo', fd)
+    return data
+  },
+
   async registerFcmToken(fcm_token, platform = null) {
     try {
       await api.post('/notifications/fcm-token', { fcm_token, platform })

@@ -20,6 +20,10 @@ export const ROUTES = {
   COMMANDE_NEW:     '/commandes/new',
   COMMANDE_DETAIL:  '/commandes/:id',
 
+  // Commandes groupées
+  COMMANDE_GROUPE_NEW:    '/commandes/groupes/nouveau',
+  COMMANDE_GROUPE_DETAIL: '/commandes/groupes/:id',
+
   // Vêtements (CataloguePage)
   VETEMENTS:        '/catalogue',
 
@@ -57,5 +61,6 @@ export const ROUTES = {
 export const toSupportTicket = (id) => `/support/tickets/${id}`
 
 // Helpers pour les routes dynamiques
-export const toClientDetail    = (id) => `/clients/${id}`
-export const toCommandeDetail  = (id) => `/commandes/${id}`
+export const toClientDetail        = (id) => `/clients/${id}`
+export const toCommandeDetail      = (id) => `/commandes/${id}`
+export const toCommandeGroupeDetail = (id) => `/commandes/groupes/${id}`

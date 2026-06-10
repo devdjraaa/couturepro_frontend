@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Building2, Plus, CheckCircle2 } from 'lucide-react'
+import { Building2, Plus, CheckCircle2, ImagePlus, Lock } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts'
 import {
@@ -8,14 +8,16 @@ import {
   useAtelierParametres, useUpdateAtelier,
   useChangerMotDePasse,
   usePreferences, useUpdatePreferences,
+  useFactureSettings, useUpdateFactureSettings, useUploadFactureLogo,
 } from '@/hooks/useParametres'
 import { useAbonnement, usePlans, useInitierPaiementAbonnement, useActivateCode } from '@/hooks/useAbonnement'
 import { useMesAteliers, useCreateSousAtelier } from '@/hooks/useMesAteliers'
-import { usePlanLimit } from '@/hooks/usePlanFeature'
+import { usePlanLimit, usePlanFeature } from '@/hooks/usePlanFeature'
 import { useCountdown } from '@/hooks/useCountdown'
 import { AppLayout } from '@/components/layout'
-import { QuotaBar, PlanCard } from '@/components/abonnement'
+import { QuotaBar, PlanCard, FeatureGate } from '@/components/abonnement'
 import { TabBar, Input, Select, Button, Skeleton, LanguageSwitcher } from '@/components/ui'
+import { cn } from '@/utils/cn'
 
 const DEVISES = [
   { value: 'XOF', label: 'FCFA (XOF)'            },
@@ -133,6 +135,161 @@ function AtelierTab() {
       <Input label={t('parametres.atelier.ville')} value={current?.ville ?? ''} onChange={set('ville')} />
       <Button type="submit" loading={update.isPending} className="w-full">
         {t('commun.enregistrer')}
+      </Button>
+    </form>
+  )
+}
+
+function FactureTab() {
+  const fileRef = useRef(null)
+  const { data: settings, isLoading } = useFactureSettings()
+  const update    = useUpdateFactureSettings()
+  const uploadLogo = useUploadFactureLogo()
+  const { available: personnaliseDispo } = usePlanFeature('facture_personnalisee')
+
+  const [form, setForm] = useState({
+    format_facture:    'standard',
+    facture_ifu:       '',
+    facture_rccm:      '',
+    facture_pied_page: '',
+  })
+
+  useEffect(() => {
+    if (settings) {
+      setForm({
+        format_facture:    settings.format_facture    ?? 'standard',
+        facture_ifu:       settings.facture_ifu        ?? '',
+        facture_rccm:      settings.facture_rccm       ?? '',
+        facture_pied_page: settings.facture_pied_page  ?? '',
+      })
+    }
+  }, [settings])
+
+  const dispo = settings?.personnalisation_dispo ?? personnaliseDispo
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    await update.mutateAsync(form)
+  }
+
+  const handleLogo = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    await uploadLogo.mutateAsync(file)
+    if (fileRef.current) fileRef.current.value = ''
+  }
+
+  if (isLoading) return <Skeleton className="h-40 rounded-2xl" />
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="bg-card border border-edge rounded-2xl p-4 space-y-3">
+        <p className="text-sm font-semibold text-ink">Format de facture</p>
+
+        <label className="flex items-start gap-3 p-3 rounded-xl border border-edge cursor-pointer hover:bg-subtle transition-colors">
+          <input
+            type="radio"
+            name="format_facture"
+            value="standard"
+            checked={form.format_facture === 'standard'}
+            onChange={() => setForm(f => ({ ...f, format_facture: 'standard' }))}
+            className="mt-1 accent-primary"
+          />
+          <div>
+            <p className="text-sm font-medium text-ink">Standard</p>
+            <p className="text-xs text-ghost">Facture simple intégrée à l'application, incluse gratuitement.</p>
+          </div>
+        </label>
+
+        <label className={cn(
+          'flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition-colors',
+          dispo ? 'border-edge hover:bg-subtle' : 'border-edge opacity-60 cursor-not-allowed',
+        )}>
+          <input
+            type="radio"
+            name="format_facture"
+            value="personnalise"
+            checked={form.format_facture === 'personnalise'}
+            disabled={!dispo}
+            onChange={() => setForm(f => ({ ...f, format_facture: 'personnalise' }))}
+            className="mt-1 accent-primary"
+          />
+          <div className="flex-1">
+            <p className="text-sm font-medium text-ink flex items-center gap-1.5">
+              Personnalisée
+              {!dispo && <Lock size={12} className="text-ghost" />}
+            </p>
+            <p className="text-xs text-ghost">Logo, références IFU/RCCM et pied de page personnalisés.</p>
+          </div>
+        </label>
+
+        {!dispo && (
+          <FeatureGate
+            featureKey="facture_personnalisee"
+            featureName="La facture personnalisée"
+            variant="inline"
+          />
+        )}
+      </div>
+
+      {form.format_facture === 'personnalise' && dispo && (
+        <div className="bg-card border border-edge rounded-2xl p-4 space-y-4">
+          <div>
+            <p className="text-sm font-medium text-ink mb-2">Logo de l'atelier</p>
+            <div className="flex items-center gap-3">
+              {settings?.facture_logo_url ? (
+                <img src={settings.facture_logo_url} alt="Logo" className="w-14 h-14 rounded-xl object-contain border border-edge bg-subtle" />
+              ) : (
+                <div className="w-14 h-14 rounded-xl border border-dashed border-edge flex items-center justify-center text-ghost">
+                  <ImagePlus size={18} />
+                </div>
+              )}
+              <button
+                type="button"
+                onClick={() => fileRef.current?.click()}
+                disabled={uploadLogo.isPending}
+                className="px-3 py-2 rounded-xl border border-edge bg-subtle text-sm font-medium text-ink hover:bg-card disabled:opacity-50 transition-colors"
+              >
+                {uploadLogo.isPending ? 'Envoi…' : 'Choisir un logo'}
+              </button>
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/jpeg,image/jpg,image/png,image/webp"
+                className="hidden"
+                onChange={handleLogo}
+              />
+            </div>
+          </div>
+
+          <Input
+            label="IFU"
+            value={form.facture_ifu}
+            onChange={e => setForm(f => ({ ...f, facture_ifu: e.target.value }))}
+            placeholder="Numéro IFU"
+          />
+          <Input
+            label="RCCM"
+            value={form.facture_rccm}
+            onChange={e => setForm(f => ({ ...f, facture_rccm: e.target.value }))}
+            placeholder="Numéro RCCM"
+          />
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-ink">Pied de page</label>
+            <textarea
+              value={form.facture_pied_page}
+              onChange={e => setForm(f => ({ ...f, facture_pied_page: e.target.value }))}
+              maxLength={1000}
+              rows={3}
+              placeholder="Ex : Conditions de garantie, mentions légales…"
+              className="w-full bg-card text-ink placeholder:text-ghost border border-edge rounded-xl px-3 py-2 text-sm font-sans transition-colors focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
+            />
+          </div>
+        </div>
+      )}
+
+      <Button type="submit" loading={update.isPending} className="w-full">
+        Enregistrer
       </Button>
     </form>
   )
@@ -437,6 +594,7 @@ export default function ParametresPage() {
     { key: 'atelier',      label: t('parametres.onglets.atelier')      },
     { key: 'ateliers',     label: t('parametres.onglets.ateliers')     },
     { key: 'preferences',  label: t('parametres.onglets.preferences')  },
+    { key: 'facture',      label: t('parametres.onglets.facture')      },
     { key: 'abonnement',   label: t('parametres.onglets.abonnement')   },
     { key: 'securite',     label: t('parametres.onglets.securite')     },
   ]
@@ -452,6 +610,7 @@ export default function ParametresPage() {
         {activeTab === 'atelier'     && <AtelierTab />}
         {activeTab === 'ateliers'    && <MesAteliersTab />}
         {activeTab === 'preferences' && <PreferencesTab />}
+        {activeTab === 'facture'     && <FactureTab />}
         {activeTab === 'abonnement'  && <AbonnementTab />}
         {activeTab === 'securite'    && <SecuriteTab />}
 

@@ -7,6 +7,8 @@ export const QUERY_KEYS = {
   commandeStats:        ['commandes', 'stats'],
   commandeItems:        (id) => ['commandes', id, 'items'],
   commandeEcheances:    (id) => ['commandes', id, 'echeances'],
+  commandeGroupes:      ['commande-groupes'],
+  commandeGroupe:       (id) => ['commande-groupes', id],
   mesures:              (clientId) => ['mesures', clientId],
   vetements:            ['vetements'],
   abonnement:           ['abonnement'],

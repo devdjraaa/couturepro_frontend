@@ -341,6 +341,13 @@
     "titre": "Commandes",
     "nouvelle": "Nouvelle commande",
     "recherche_placeholder": "Rechercher une commande…",
+    "action_sheet": {
+      "titre": "Nouvelle commande",
+      "simple": "Commande simple",
+      "simple_desc": "Un seul vêtement pour le client",
+      "groupee": "Commande groupée",
+      "groupee_desc": "Plusieurs vêtements, une seule facture"
+    },
     "vide": {
       "titre": "Aucune commande en cours",
       "description": "Créez votre première commande pour commencer",

@@ -6,6 +6,7 @@ import {
   DashboardPage,
   ClientsPage, ClientDetailPage,
   CommandesPage, CommandeDetailPage, NouvelleCommandePage,
+  NouvelleCommandeGroupeePage, CommandeGroupeDetailPage,
   AtelierPage, CataloguePage, EquipePage, PointsPage,
   NotificationsPage, ParametresPage, CommunicationsPage,
   SupportPage, SupportTicketDetailPage, ThemePage,
@@ -95,6 +96,8 @@ export default function App() {
           <Route path={ROUTES.CLIENT_DETAIL}    element={<ClientDetailPage />}   />
 
           <Route path={ROUTES.COMMANDE_NEW}     element={<NouvelleCommandePage />} />
+          <Route path={ROUTES.COMMANDE_GROUPE_NEW}    element={<NouvelleCommandeGroupeePage />} />
+          <Route path={ROUTES.COMMANDE_GROUPE_DETAIL} element={<CommandeGroupeDetailPage />}    />
           <Route path={ROUTES.COMMANDE_DETAIL}  element={<CommandeDetailPage />} />
           <Route path={ROUTES.COMMANDES}        element={<CommandesPage />}      />
 
