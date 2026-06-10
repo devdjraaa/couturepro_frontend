@@ -3,15 +3,19 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import {
   Edit2, Trash2, CreditCard, MessageCircle, Ruler,
   AlertTriangle, Download, Send, Phone, Check,
+  Plus, CalendarDays, Trash, CheckCircle2, Clock,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useCommande, useUpdateCommande, useUpdateStatutCommande, useDeleteCommande } from '@/hooks/useCommandes'
 import { usePaiements, useEnregistrerPaiement } from '@/hooks/usePaiements'
 import { useMesures } from '@/hooks/useMesures'
+import { useCommandeItems, useDeleteCommandeItem } from '@/hooks/useCommandeItems'
+import { useCommandeEcheances, useCreateEcheance, useUpdateEcheance, useDeleteEcheance } from '@/hooks/useCommandeEcheances'
 import { useWhatsappRappel, useWhatsappCommandePrete } from '@/hooks/useWhatsapp'
 import { useCommunications } from '@/hooks/useParametres'
 import { useAuth } from '@/contexts'
 import { usePlanFeature } from '@/hooks/usePlanFeature'
+import { whatsappService } from '@/services/whatsappService'
 import { AppLayout } from '@/components/layout'
 import { CommandeForm, StatutSelector } from '@/components/commandes'
 import { Avatar, Button, BottomSheet, Skeleton, Input, Select, StatusPill, CountdownBadge, MoneyAmount } from '@/components/ui'
@@ -49,7 +53,17 @@ function InternalTabs({ active, onChange }) {
 function TabApercu({ commande, onEdit, onStatut, onDelete, navigate }) {
   const whatsappRappel = useWhatsappRappel()
   const whatsappPrete  = useWhatsappCommandePrete()
-  const { data: commsConfig } = useCommunications()
+  const { data: commsConfig }         = useCommunications()
+  const { data: items = [] }          = useCommandeItems(commande.id)
+  const { data: echeances = [] }      = useCommandeEcheances(commande.id)
+  const deleteItem                    = useDeleteCommandeItem(commande.id)
+  const createEcheance                = useCreateEcheance(commande.id)
+  const updateEcheance                = useUpdateEcheance(commande.id)
+  const deleteEcheance                = useDeleteEcheance(commande.id)
+  const [showEcheanceForm, setShowEcheanceForm] = useState(false)
+  const [newEcheance, setNewEcheance] = useState({ date_echeance: '', note: '' })
+
+  const TODAY = new Date().toISOString().split('T')[0]
 
   const handleStatut = async statut => {
     await onStatut(statut)
@@ -139,6 +153,130 @@ function TabApercu({ commande, onEdit, onStatut, onDelete, navigate }) {
           <p className="text-sm text-ink">{commande.note_interne}</p>
         </div>
       )}
+
+      {/* #15, #18-20 — Articles de la commande */}
+      {items.length > 0 && (
+        <div>
+          <p className="text-xs font-semibold text-ghost uppercase tracking-widest mb-2">Articles</p>
+          <div className="space-y-1.5">
+            {items.map(item => (
+              <div key={item.id} className="flex items-center justify-between bg-card border border-edge rounded-xl px-4 py-3">
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-ink truncate">
+                    {item.vetement_nom ?? item.vetement?.nom ?? 'Article'}
+                  </p>
+                  <p className="text-xs text-ghost">
+                    × {item.quantite} · {formatCurrency(item.prix_unitaire)} /unité
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="text-sm font-bold font-mono text-ink">
+                    {formatCurrency(item.quantite * item.prix_unitaire)}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => deleteItem.mutate(item.id)}
+                    className="text-ghost hover:text-error transition-colors"
+                  >
+                    <Trash size={13} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* #21 — Échéances de livraison */}
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-xs font-semibold text-ghost uppercase tracking-widest">Échéances</p>
+          <button
+            type="button"
+            onClick={() => setShowEcheanceForm(v => !v)}
+            className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+          >
+            <Plus size={13} /> Ajouter
+          </button>
+        </div>
+
+        {showEcheanceForm && (
+          <div className="bg-card border border-edge rounded-xl p-3 mb-2 space-y-2">
+            <input
+              type="date"
+              min={TODAY}
+              value={newEcheance.date_echeance}
+              onChange={e => setNewEcheance(n => ({ ...n, date_echeance: e.target.value }))}
+              className="w-full bg-subtle border border-edge rounded-lg px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30"
+            />
+            <input
+              type="text"
+              value={newEcheance.note}
+              onChange={e => setNewEcheance(n => ({ ...n, note: e.target.value }))}
+              placeholder="Note (ex : pantalons, veste…)"
+              className="w-full bg-subtle border border-edge rounded-lg px-3 py-2 text-sm text-ink placeholder:text-ghost focus:outline-none focus:ring-2 focus:ring-primary/30"
+            />
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setShowEcheanceForm(false)}
+                className="flex-1 text-xs text-ghost py-1.5 rounded-lg border border-edge"
+              >
+                Annuler
+              </button>
+              <button
+                type="button"
+                disabled={!newEcheance.date_echeance || createEcheance.isPending}
+                onClick={async () => {
+                  await createEcheance.mutateAsync(newEcheance)
+                  setNewEcheance({ date_echeance: '', note: '' })
+                  setShowEcheanceForm(false)
+                }}
+                className="flex-1 text-xs text-primary font-semibold py-1.5 rounded-lg border border-primary/30 bg-primary-50 disabled:opacity-50"
+              >
+                Enregistrer
+              </button>
+            </div>
+          </div>
+        )}
+
+        {echeances.length > 0 && (
+          <div className="space-y-1.5">
+            {echeances.map(ech => (
+              <div
+                key={ech.id}
+                className={cn(
+                  'flex items-center gap-3 px-4 py-3 rounded-xl border',
+                  ech.livree ? 'bg-success/8 border-success/20' : 'bg-card border-edge',
+                )}
+              >
+                <button
+                  type="button"
+                  onClick={() => updateEcheance.mutate({ id: ech.id, livree: !ech.livree })}
+                  className={cn('shrink-0', ech.livree ? 'text-success' : 'text-ghost')}
+                >
+                  {ech.livree ? <CheckCircle2 size={18} /> : <Clock size={18} />}
+                </button>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-ink">{formatDate(ech.date_echeance)}</p>
+                  {ech.note && <p className="text-xs text-ghost truncate">{ech.note}</p>}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => deleteEcheance.mutate(ech.id)}
+                  className="text-ghost hover:text-error transition-colors shrink-0"
+                >
+                  <Trash size={13} />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {echeances.length === 0 && (
+          <p className="text-xs text-ghost">Aucune échéance. Ajoutez-en pour mieux planifier.</p>
+        )}
+      </div>
 
       {/* Changement de statut */}
       <div>
@@ -328,6 +466,23 @@ function TabPaiements({ commande, commandeId }) {
 
       {paiements.length === 0 && solde && (
         <p className="text-xs text-ghost text-center py-4">Aucun paiement enregistré séparément.</p>
+      )}
+
+      {/* #78-82 — Reçu complet WhatsApp */}
+      {commande.client_id && (
+        <button
+          type="button"
+          onClick={async () => {
+            try {
+              const { lien } = await whatsappService.getPreuvePaiement(commandeId)
+              window.open(lien, '_blank', 'noopener,noreferrer')
+            } catch {}
+          }}
+          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-[#25d366]/40 bg-[#25d366]/8 text-[#1a9e4e] text-sm font-medium hover:bg-[#25d366]/15 transition-colors"
+        >
+          <MessageCircle size={15} />
+          Envoyer le reçu complet par WhatsApp
+        </button>
       )}
     </div>
   )

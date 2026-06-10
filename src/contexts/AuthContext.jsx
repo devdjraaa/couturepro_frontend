@@ -1,9 +1,26 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import toast from 'react-hot-toast'
 import { authService } from '@/services/authService'
+import { parametresService } from '@/services/parametresService'
 import { getToken } from '@/utils/storage'
 import { setDemoMode } from '@/services/mockFlag'
 import { setActiveAtelierId } from '@/services/api'
+
+// #41-42 — Enregistrer le token FCM Firebase si disponible
+async function tryRegisterFcm() {
+  try {
+    if (!('Notification' in window) || !('serviceWorker' in navigator)) return
+    // Firebase SDK doit être initialisé séparément avec firebaseConfig
+    // Le token est récupéré via firebase/messaging getToken()
+    // On vérifie s'il est déjà stocké en localStorage par la PWA
+    const fcmToken = localStorage.getItem('fcm_token')
+    if (fcmToken) {
+      const platform = /android/i.test(navigator.userAgent) ? 'android'
+                     : /iphone|ipad/i.test(navigator.userAgent) ? 'ios' : 'web'
+      await parametresService.registerFcmToken(fcmToken, platform)
+    }
+  } catch {}
+}
 
 // ── Permissions par rôle ──────────────────────────────────────────────────────
 const ROLE_PERMISSIONS = {
@@ -62,6 +79,7 @@ export function AuthProvider({ children }) {
     setAtelier(atelier)
     setDemoMode(!!atelier?.is_demo)
     toast.success(`Bienvenue, ${user.prenom || user.nom} !`)
+    tryRegisterFcm()
   }, [])
 
   const equipeLogin = useCallback(async (payload) => {

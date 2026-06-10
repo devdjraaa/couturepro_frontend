@@ -1,9 +1,10 @@
 import { useState, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { ChevronLeft, Search, ImagePlus, X, AlertTriangle, Check } from 'lucide-react'
+import { ChevronLeft, Search, ImagePlus, X, AlertTriangle, Check, Plus, Trash2, Info } from 'lucide-react'
 import { useClients } from '@/hooks/useClients'
 import { useVetements } from '@/hooks/useVetements'
 import { useCreateCommande } from '@/hooks/useCommandes'
+import { useCreateCommandeItems } from '@/hooks/useCommandeItems'
 import { useCommunications } from '@/hooks/useParametres'
 import { whatsappService } from '@/services/whatsappService'
 import { AppLayout } from '@/components/layout'
@@ -11,6 +12,8 @@ import { Button, Input, Skeleton } from '@/components/ui'
 import ClientAvatar from '@/components/clients/ClientAvatar'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { cn } from '@/utils/cn'
+
+const TODAY = new Date().toISOString().split('T')[0]
 
 // ── Indicateur de progression ─────────────────────────────────────────────────
 const STEP_LABELS = ['Client', 'Modèle', 'Délai', 'Prix']
@@ -119,13 +122,34 @@ function StepClient({ data, setData, onNext }) {
   )
 }
 
-// ── Étape 2 — Modèle ─────────────────────────────────────────────────────────
+// ── Étape 2 — Modèle (multi-articles) ────────────────────────────────────────
 function StepModele({ data, setData, onNext }) {
   const { data: vetements = [], isLoading } = useVetements()
   const fileRef = useRef(null)
 
-  const handleSelect = (vet) => {
-    setData(d => ({ ...d, vetement_id: vet.id }))
+  const addItem = () => {
+    setData(d => ({
+      ...d,
+      items: [...d.items, { vetement_id: '', vetement_nom: '', quantite: 1, prix_unitaire: '' }],
+    }))
+  }
+
+  const removeItem = (idx) => {
+    setData(d => ({ ...d, items: d.items.filter((_, i) => i !== idx) }))
+  }
+
+  const updateItem = (idx, field, value) => {
+    setData(d => {
+      const items = d.items.map((it, i) => {
+        if (i !== idx) return it
+        const updated = { ...it, [field]: value }
+        if (field === 'vetement_id') {
+          updated.vetement_nom = vetements.find(v => v.id === value)?.nom ?? ''
+        }
+        return updated
+      })
+      return { ...d, items }
+    })
   }
 
   const handleFile = (e) => {
@@ -139,42 +163,103 @@ function StepModele({ data, setData, onNext }) {
     if (fileRef.current) fileRef.current.value = ''
   }
 
-  const canNext = !!data.vetement_id || !!data.description
+  const canNext = data.items.some(it => it.vetement_id || it.vetement_nom) || !!data.description
 
   return (
     <div className="flex flex-col flex-1 min-h-0 overflow-y-auto px-4 pb-4 space-y-4">
-      {/* Choix du modèle */}
+
+      {/* Articles (#15, #18-20) */}
       <div>
-        <p className="text-xs font-semibold text-ghost uppercase tracking-widest mb-2">Modèle / vêtement</p>
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-xs font-semibold text-ghost uppercase tracking-widest">Articles</p>
+          <button
+            type="button"
+            onClick={addItem}
+            className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+          >
+            <Plus size={13} /> Ajouter
+          </button>
+        </div>
+
         {isLoading ? (
-          <div className="grid grid-cols-2 gap-2">
-            {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-16 rounded-xl" />)}
-          </div>
-        ) : vetements.length === 0 ? (
-          <p className="text-sm text-ghost">
-            Aucun modèle. <a href="/catalogue" className="text-primary underline">Créer un modèle →</a>
-          </p>
+          <Skeleton className="h-20 rounded-xl" />
         ) : (
-          <div className="grid grid-cols-2 gap-2">
-            {vetements.map(vet => {
-              const selected = data.vetement_id === vet.id
-              return (
-                <button
-                  key={vet.id}
-                  type="button"
-                  onClick={() => handleSelect(vet)}
-                  className={cn(
-                    'flex items-center gap-2 px-3 py-3 rounded-xl border text-left transition-colors',
-                    selected
-                      ? 'border-primary bg-primary-50 text-primary-700'
-                      : 'border-edge bg-card text-ink hover:border-primary/20',
+          <div className="space-y-3">
+            {data.items.map((item, idx) => (
+              <div key={idx} className="bg-card border border-edge rounded-xl p-3 space-y-2">
+                {/* Sélection vêtement */}
+                <div className="grid grid-cols-2 gap-1.5">
+                  {vetements.map(vet => (
+                    <button
+                      key={vet.id}
+                      type="button"
+                      onClick={() => updateItem(idx, 'vetement_id', vet.id)}
+                      className={cn(
+                        'flex items-center gap-1.5 px-2.5 py-2 rounded-lg border text-left text-xs transition-colors',
+                        item.vetement_id === vet.id
+                          ? 'border-primary bg-primary-50 text-primary-700'
+                          : 'border-edge bg-subtle text-ghost hover:border-primary/20',
+                      )}
+                    >
+                      {item.vetement_id === vet.id && <Check size={11} className="shrink-0" />}
+                      <span className="truncate font-medium">{vet.nom}</span>
+                    </button>
+                  ))}
+                </div>
+
+                {/* Quantité + prix unitaire */}
+                <div className="flex gap-2 items-end">
+                  <div className="w-20">
+                    <label className="block text-xs text-ghost mb-1">Qté</label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="999"
+                      value={item.quantite}
+                      onChange={e => updateItem(idx, 'quantite', Number(e.target.value) || 1)}
+                      className="w-full bg-subtle border border-edge rounded-lg px-2 py-1.5 text-sm text-ink text-center focus:outline-none focus:ring-2 focus:ring-primary/30"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <label className="block text-xs text-ghost mb-1">Prix unitaire (XOF)</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={item.prix_unitaire}
+                      onChange={e => updateItem(idx, 'prix_unitaire', e.target.value)}
+                      placeholder="Ex : 15000"
+                      className="w-full bg-subtle border border-edge rounded-lg px-2.5 py-1.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30"
+                    />
+                  </div>
+                  {data.items.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeItem(idx)}
+                      className="mb-0.5 w-8 h-8 flex items-center justify-center rounded-lg text-error hover:bg-error/10 transition-colors"
+                    >
+                      <Trash2 size={14} />
+                    </button>
                   )}
-                >
-                  {selected && <Check size={13} className="shrink-0" />}
-                  <span className="text-sm font-medium truncate">{vet.nom}</span>
-                </button>
-              )
-            })}
+                </div>
+
+                {/* Sous-total article */}
+                {item.prix_unitaire > 0 && (
+                  <p className="text-xs text-ghost text-right">
+                    = {formatCurrency(item.quantite * Number(item.prix_unitaire))}
+                  </p>
+                )}
+              </div>
+            ))}
+
+            {/* Total articles */}
+            {data.items.some(it => it.prix_unitaire > 0) && (
+              <div className="flex justify-between items-center px-1 pt-1">
+                <span className="text-xs text-ghost">Total articles</span>
+                <span className="text-sm font-bold text-ink font-mono">
+                  {formatCurrency(data.items.reduce((s, it) => s + (it.quantite * Number(it.prix_unitaire || 0)), 0))}
+                </span>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -237,13 +322,7 @@ function StepModele({ data, setData, onNext }) {
         </span>
       </button>
 
-      <Button
-        onClick={onNext}
-        disabled={!canNext}
-        className="w-full"
-      >
-        Suivant
-      </Button>
+      <Button onClick={onNext} disabled={!canNext} className="w-full">Suivant</Button>
     </div>
   )
 }
@@ -252,9 +331,11 @@ function StepModele({ data, setData, onNext }) {
 function StepDelai({ data, setData, onNext }) {
   return (
     <div className="flex flex-col flex-1 px-4 pb-4 space-y-4">
+      {/* #16-17 — min=TODAY bloque les dates passées */}
       <Input
         label="Date de livraison"
         type="date"
+        min={TODAY}
         value={data.date_livraison_prevue}
         onChange={e => setData(d => ({ ...d, date_livraison_prevue: e.target.value }))}
       />
@@ -285,14 +366,20 @@ const MODE_OPTIONS = [
 ]
 
 function StepPrix({ data, setData, onSubmit, isLoading }) {
-  const prix    = Number(data.prix    || 0)
-  const acompte = Number(data.acompte || 0)
-  const restant = Math.max(0, prix - acompte)
+  const itemsTotal = data.items.reduce((s, it) => s + (Number(it.quantite) * Number(it.prix_unitaire || 0)), 0)
+  const prix       = Number(data.prix || 0) || itemsTotal
+  const acompte    = Number(data.acompte || 0)
+  const restant    = Math.max(0, prix - acompte)
+  const surplus    = acompte > prix && prix > 0
   const [error, setError] = useState('')
 
   const handleSubmit = () => {
     if (!prix || prix <= 0) { setError('Le prix est requis.'); return }
-    if (acompte > prix)     { setError("L'acompte ne peut pas dépasser le prix."); return }
+    // #12-14 : acompte > prix autorisé si motif renseigné
+    if (surplus && !data.motif_surplus_acompte?.trim()) {
+      setError("L'acompte dépasse le total : précisez le motif ci-dessous.")
+      return
+    }
     setError('')
     onSubmit()
   }
@@ -344,18 +431,52 @@ function StepPrix({ data, setData, onSubmit, isLoading }) {
         </div>
       )}
 
+      {/* Total calculé depuis les articles (si renseignés) */}
+      {itemsTotal > 0 && !data.prix && (
+        <div className="flex items-center gap-2 bg-subtle rounded-xl px-4 py-2.5 text-sm text-ghost">
+          <Info size={14} />
+          Total articles calculé : <span className="font-mono font-semibold text-ink ml-1">{formatCurrency(itemsTotal)}</span>
+        </div>
+      )}
+
       {/* Reste à payer (live) */}
       {prix > 0 && (
         <div className={cn(
           'rounded-xl px-4 py-3 border',
-          restant === 0 ? 'bg-success/8 border-success/20' : 'bg-gold-light border-gold/20'
+          surplus         ? 'bg-error/8 border-error/20'   :
+          restant === 0   ? 'bg-success/8 border-success/20' :
+                            'bg-gold-light border-gold/20'
         )}>
-          <p className="text-xs text-ghost mb-0.5">Reste à payer</p>
-          <p className={cn('text-lg font-bold font-mono', restant === 0 ? 'text-success' : 'text-gold-dark')}>
-            {formatCurrency(restant)}
+          <p className="text-xs text-ghost mb-0.5">
+            {surplus ? 'Acompte en surplus' : 'Reste à payer'}
+          </p>
+          <p className={cn(
+            'text-lg font-bold font-mono',
+            surplus       ? 'text-error'   :
+            restant === 0 ? 'text-success' : 'text-gold-dark',
+          )}>
+            {surplus ? `+ ${formatCurrency(acompte - prix)}` : formatCurrency(restant)}
           </p>
         </div>
       )}
+
+      {/* #12-14 — Motif obligatoire si acompte > prix */}
+      {surplus && (
+        <div className="space-y-1.5">
+          <label className="block text-sm font-medium text-error">
+            Motif du surplus <span className="text-error">*</span>
+          </label>
+          <textarea
+            value={data.motif_surplus_acompte}
+            onChange={e => setData(d => ({ ...d, motif_surplus_acompte: e.target.value }))}
+            placeholder="Ex : Avance pour commande future, remboursement tissu…"
+            rows={2}
+            className="w-full bg-card border border-error/40 rounded-xl px-3 py-2.5 text-sm text-ink placeholder:text-ghost focus:outline-none focus:ring-2 focus:ring-error/30 resize-none"
+          />
+        </div>
+      )}
+
+      {error && <p className="text-xs text-error px-1">{error}</p>}
 
       <div className="pt-2">
         <Button onClick={handleSubmit} loading={isLoading} className="w-full">
@@ -368,24 +489,25 @@ function StepPrix({ data, setData, onSubmit, isLoading }) {
 
 // ── Page principale ───────────────────────────────────────────────────────────
 const INITIAL_DATA = {
-  client_id:             '',
-  _clientNom:            '',
-  vetement_id:           '',
-  prix:                  '',
-  acompte:               '',
-  mode_paiement_acompte: 'especes',
-  date_livraison_prevue: '',
-  note_interne:          '',
-  description:           '',
-  urgence:               false,
-  photo_tissu:           null,
-  _photoPreview:         null,
+  client_id:              '',
+  _clientNom:             '',
+  items:                  [{ vetement_id: '', vetement_nom: '', quantite: 1, prix_unitaire: '' }],
+  prix:                   '',
+  acompte:                '',
+  motif_surplus_acompte:  '',
+  mode_paiement_acompte:  'especes',
+  date_livraison_prevue:  '',
+  note_interne:           '',
+  description:            '',
+  urgence:                false,
+  photo_tissu:            null,
+  _photoPreview:          null,
 }
 
 export default function NouvelleCommandePage() {
-  const navigate  = useNavigate()
-  const location  = useLocation()
-  const createCmd = useCreateCommande()
+  const navigate      = useNavigate()
+  const location      = useLocation()
+  const createCmd     = useCreateCommande()
   const { data: commsConfig } = useCommunications()
 
   const startStep = location.state?.clientId ? 1 : 0
@@ -404,19 +526,39 @@ export default function NouvelleCommandePage() {
   const handleNext = () => setStep(s => s + 1)
 
   const handleSubmit = async () => {
+    // Calcul prix depuis items si pas saisi manuellement
+    const itemsTotal = data.items.reduce((s, it) => s + (Number(it.quantite) * Number(it.prix_unitaire || 0)), 0)
+    const prixFinal  = Number(data.prix) || itemsTotal
+
+    // Article principal (premier item avec vetement_id)
+    const premierItem = data.items.find(it => it.vetement_id)
+
     const payload = {
       client_id:             data.client_id,
-      vetement_id:           data.vetement_id || undefined,
-      prix:                  Number(data.prix),
+      vetement_id:           premierItem?.vetement_id || undefined,
+      quantite:              premierItem?.quantite    || 1,
+      prix:                  prixFinal,
       acompte:               Number(data.acompte) || 0,
+      motif_surplus_acompte: data.motif_surplus_acompte || undefined,
       mode_paiement_acompte: Number(data.acompte) > 0 ? data.mode_paiement_acompte : undefined,
       date_livraison_prevue: data.date_livraison_prevue || undefined,
-      note_interne:          data.note_interne         || undefined,
-      description:           data.description          || undefined,
+      note_interne:          data.note_interne          || undefined,
+      description:           data.description           || undefined,
       urgence:               data.urgence,
-      photo_tissu:           data.photo_tissu           || undefined,
+      photo_tissu:           data.photo_tissu            || undefined,
     }
+
     const cmd = await createCmd.mutateAsync(payload)
+
+    // Enregistrer les items multiples si > 1 article renseigné avec prix
+    const itemsValides = data.items.filter(it => (it.vetement_id || it.vetement_nom) && it.prix_unitaire > 0)
+    if (itemsValides.length > 1 && cmd?.id) {
+      try {
+        const { commandeItemService } = await import('@/services/commandeItemService')
+        await commandeItemService.bulkCreate(cmd.id, itemsValides)
+      } catch {}
+    }
+
     if (commsConfig?.whatsapp_enabled && commsConfig?.confirmation_commande && cmd?.id) {
       whatsappService.getConfirmationCommande(cmd.id)
         .then(({ lien }) => window.open(lien, '_blank', 'noopener,noreferrer'))

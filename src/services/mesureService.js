@@ -15,6 +15,15 @@ export const mesureService = {
     return data // single object or null
   },
 
+  async exportCsvUrl(clientId) {
+    return `/api/clients/${clientId}/mesures/export-csv`
+  },
+
+  async getWhatsAppLink(clientId) {
+    const { data } = await api.get(`/clients/${clientId}/mesures/whatsapp`)
+    return data // { lien, message }
+  },
+
   async save(clientId, champs) {
     if (isMock()) {
       await delay()

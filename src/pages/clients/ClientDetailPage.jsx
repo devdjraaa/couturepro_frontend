@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
-import { Edit2, Trash2, ClipboardList, MessageCircle, ArrowLeft } from 'lucide-react'
+import { Edit2, Trash2, ClipboardList, MessageCircle, ArrowLeft, Download, Share2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import toast from 'react-hot-toast'
 import { useClient, useUpdateClient, useDeleteClient, useToggleVip } from '@/hooks/useClients'
 import { useMesures, useSaveMesures } from '@/hooks/useMesures'
 import { useCommandes } from '@/hooks/useCommandes'
 import { useWhatsappRappel } from '@/hooks/useWhatsapp'
 import { useAuth } from '@/contexts'
+import { mesureService } from '@/services/mesureService'
 import { AppLayout } from '@/components/layout'
 import { ClientForm } from '@/components/clients'
 import { MesureForm, MesureDisplay } from '@/components/mesures'
@@ -185,9 +187,35 @@ export default function ClientDetailPage() {
                   clientNom={`${client.prenom ?? ''} ${client.nom}`.trim()}
                   atelierNom={atelier?.nom}
                 />
-                <Button variant="secondary" className="mt-4 w-full" onClick={() => setEditingMesures(true)}>
-                  {t('clients.detail.modifier_mesures')}
-                </Button>
+                {/* #9-10 — Export mesures */}
+                <div className="flex gap-2 mt-4">
+                  <Button variant="secondary" className="flex-1" onClick={() => setEditingMesures(true)}>
+                    {t('clients.detail.modifier_mesures')}
+                  </Button>
+                  <a
+                    href={mesureService.exportCsvUrl(clientId)}
+                    download
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-edge bg-subtle text-sm font-medium text-ghost hover:text-ink transition-colors"
+                  >
+                    <Download size={14} />
+                    CSV
+                  </a>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      try {
+                        const { lien } = await mesureService.getWhatsAppLink(clientId)
+                        window.open(lien, '_blank', 'noopener,noreferrer')
+                      } catch {
+                        toast.error('Numéro de téléphone manquant.')
+                      }
+                    }}
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-[#25d366]/40 bg-[#25d366]/8 text-sm font-medium text-[#1a9e4e] hover:bg-[#25d366]/15 transition-colors"
+                  >
+                    <Share2 size={14} />
+                    WhatsApp
+                  </button>
+                </div>
               </div>
             ) : (
               <EmptyState

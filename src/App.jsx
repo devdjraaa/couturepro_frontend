@@ -22,6 +22,7 @@ import ContactPage            from '@/pages/ContactPage'
 import HistoriquePage         from '@/pages/HistoriquePage'
 import ArchivesPage           from '@/pages/ArchivesPage'
 import CaissePage             from '@/pages/CaissePage'
+import GaleriePage            from '@/pages/GaleriePage'
 import { FeatureGate } from '@/components/abonnement'
 import { AppLayout } from '@/components/layout'
 import { ROUTES } from '@/constants/routes'
@@ -108,13 +109,8 @@ export default function App() {
           <Route path={ROUTES.COMMUNICATIONS}   element={<CommunicationsPage />} />
           <Route path={ROUTES.THEME}            element={<ThemePage />}                       />
           <Route path={ROUTES.APROPOS}          element={<AProposPage />}         />
-          <Route path={ROUTES.PHOTOS_VIP}       element={
-            <AppLayout showBack title="Photos VIP">
-              <div className="p-4">
-                <FeatureGate featureKey="photos_vip" featureName="Photos VIP" />
-              </div>
-            </AppLayout>
-          } />
+          <Route path={ROUTES.PHOTOS_VIP}       element={<GaleriePage />} />
+          <Route path="/galerie"               element={<GaleriePage />} />
           <Route path={ROUTES.HISTORIQUE}       element={<HistoriquePage />}      />
           <Route path="/archives"               element={<ArchivesPage />}        />
           <Route path="/caisse"                 element={<CaissePage />}          />
