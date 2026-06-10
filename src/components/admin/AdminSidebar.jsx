@@ -129,7 +129,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
             <span className="text-sm font-bold text-inverse">CP</span>
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-bold text-inverse leading-tight">CouturePro</p>
+            <p className="text-sm font-bold text-inverse leading-tight">Gextimo</p>
             <p className="text-xs text-admin-muted leading-tight">{t('admin.nav.sidebar_subtitle')}</p>
           </div>
           {/* Fermer — mobile uniquement */}

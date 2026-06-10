@@ -33,7 +33,7 @@ export default function AdminLoginPage() {
     <div className="min-h-screen bg-app flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <p className="text-primary font-bold text-xl uppercase tracking-widest">CouturePro</p>
+          <p className="text-primary font-bold text-xl uppercase tracking-widest">Gextimo</p>
           <p className="text-ghost text-sm mt-1">{t('admin.login.espace_admin')}</p>
         </div>
 

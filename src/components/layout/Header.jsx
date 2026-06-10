@@ -94,7 +94,7 @@ export default function Header({ title, showBack = false, onBack, rightAction, o
         {/* Title + atelier switcher — left-aligned */}
         <div className="flex-1 min-w-0">
           <h1 className="text-base font-semibold font-display text-inverse truncate leading-tight">
-            {title ?? 'Couture Pro'}
+            {title ?? 'Gextimo'}
           </h1>
           {user?.role === 'proprietaire' && atelier && (
             <AtelierSwitcher atelier={atelier} switchAtelier={switchAtelier} />

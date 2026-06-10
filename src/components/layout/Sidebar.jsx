@@ -94,7 +94,7 @@ export default function Sidebar() {
             <Scissors size={16} className="text-inverse" />
           </div>
           <div className="min-w-0">
-            <p className="font-bold font-display text-ink leading-tight">Couture Pro</p>
+            <p className="font-bold font-display text-ink leading-tight">Gextimo</p>
             <p className="text-2xs text-ghost leading-tight mt-px">Gestion d'atelier</p>
           </div>
         </div>

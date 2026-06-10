@@ -68,7 +68,7 @@
   "auth": {
     "connexion": {
       "titre": "Sign in",
-      "sous_titre": "Access your Couture Pro workspace",
+      "sous_titre": "Access your Gextimo workspace",
       "sous_titre_login": "Sign in to your workshop",
       "telephone": "Phone number",
       "telephone_placeholder": "+225 07 00 00 00 00",
@@ -88,7 +88,7 @@
     },
     "inscription": {
       "titre": "Create your workshop",
-      "sous_titre": "Join Couture Pro for free",
+      "sous_titre": "Join Gextimo for free",
       "sous_titre_register": "Create your workshop online",
       "nom_atelier": "Workshop name",
       "nom_atelier_placeholder": "Aminata's Atelier",
@@ -161,7 +161,7 @@
     "onboarding": {
       "commencer": "Get started",
       "passer": "Skip",
-      "slide_1_titre": "Welcome to Couture Pro",
+      "slide_1_titre": "Welcome to Gextimo",
       "slide_1_description": "Manage your tailoring workshop easily from your phone.",
       "slide_2_titre": "Your clients, organized",
       "slide_2_description": "Record measurements and orders for each client in seconds.",
@@ -913,14 +913,14 @@
   "a_propos": {
     "titre": "About",
     "version": "Version {{version}}",
-    "description": "Couture Pro is the management application dedicated to tailoring workshops. It allows you to manage your clients, measurements, orders, and team from your phone.",
+    "description": "Gextimo is the management application dedicated to tailoring workshops. It allows you to manage your clients, measurements, orders, and team from your phone.",
     "fonctionnalites": "Features",
     "developpe_par": "Developed by",
-    "equipe": "CouturePro Team",
+    "equipe": "Gextimo Team",
     "support_label": "Support",
-    "support_valeur": "support@couturepro.app",
+    "support_valeur": "support@gextimo.app",
     "politique_label": "Privacy policy",
-    "politique_valeur": "couturepro.app/privacy",
+    "politique_valeur": "gextimo.app/privacy",
     "features": {
       "commandes_titre": "Order management",
       "commandes_desc": "Track all your orders from measurements to delivery.",
