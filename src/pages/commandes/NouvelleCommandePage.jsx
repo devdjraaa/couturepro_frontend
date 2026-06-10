@@ -5,6 +5,7 @@ import { useClients } from '@/hooks/useClients'
 import { useVetements } from '@/hooks/useVetements'
 import { useCreateCommande } from '@/hooks/useCommandes'
 import { useCreateCommandeItems } from '@/hooks/useCommandeItems'
+import { commandeItemService } from '@/services/commandeItemService'
 import { useCommunications } from '@/hooks/useParametres'
 import { whatsappService } from '@/services/whatsappService'
 import { AppLayout } from '@/components/layout'
@@ -554,7 +555,6 @@ export default function NouvelleCommandePage() {
     const itemsValides = data.items.filter(it => (it.vetement_id || it.vetement_nom) && it.prix_unitaire > 0)
     if (itemsValides.length > 1 && cmd?.id) {
       try {
-        const { commandeItemService } = await import('@/services/commandeItemService')
         await commandeItemService.bulkCreate(cmd.id, itemsValides)
       } catch {}
     }
