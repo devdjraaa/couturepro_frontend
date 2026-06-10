@@ -100,7 +100,10 @@ export default function ClientDetailPage() {
         >
           <ArrowLeft size={18} />
         </button>
-        <ClientAvatar client={client} size="lg" />
+        {/* #8 — Clic sur l'avatar ouvre directement l'édition */}
+        <button type="button" onClick={() => setShowEdit(true)} className="shrink-0 active:scale-95 transition-transform">
+          <ClientAvatar client={client} size="lg" />
+        </button>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             <h1 className="font-bold text-ink truncate">{client.prenom} {client.nom}</h1>

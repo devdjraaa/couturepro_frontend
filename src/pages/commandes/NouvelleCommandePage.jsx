@@ -568,7 +568,7 @@ export default function NouvelleCommandePage() {
   }
 
   return (
-    <AppLayout title="" noMobileHeader>
+    <AppLayout title="" noMobileHeader noAnimation>
       <div className="flex flex-col h-full">
         {/* Progress dots */}
         <StepDots current={step} />

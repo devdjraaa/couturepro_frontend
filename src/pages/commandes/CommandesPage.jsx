@@ -164,13 +164,17 @@ export default function CommandesPage() {
   const [view,   setView]   = useState('pipeline')   // 'pipeline' | 'liste'
   const [filter, setFilter] = useState(null)
   const [search, setSearch] = useState('')
+  const [statut, setStatut] = useState('tous')       // #26 — tabs statut
 
   const alerte = searchParams.get('alerte')
 
   const { data: commandes = [], isLoading } = useCommandes()
 
   const filtered = useMemo(() => {
-    let list = commandes.filter(c => c.statut !== 'annule')
+    // #26 — filtre par tab statut
+    let list = statut === 'tous'
+      ? commandes.filter(c => c.statut !== 'annule')
+      : commandes.filter(c => c.statut === statut)
 
     // Filtre alerte URL (rétrocompatibilité)
     if (alerte === 'retard') {
@@ -197,7 +201,7 @@ export default function CommandesPage() {
     }
 
     return list
-  }, [commandes, alerte, filter, search])
+  }, [commandes, alerte, filter, search, statut])
 
   const byStatut = useMemo(() => {
     const map = {}
@@ -233,6 +237,35 @@ export default function CommandesPage() {
             onChange={setSearch}
             placeholder={t('commandes.recherche_placeholder')}
           />
+          {/* #26 — Tabs statut scrollables horizontalement */}
+          <div className="flex gap-1 overflow-x-auto scrollbar-none -mx-1 px-1">
+            {[
+              { key: 'tous',     label: t('commandes.onglets.toutes') },
+              { key: 'en_cours', label: t('commandes.statut.en_cours') },
+              { key: 'livre',    label: t('commandes.onglets.livrees') },
+              { key: 'annule',   label: t('commandes.onglets.annulees') },
+            ].map(({ key, label }) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setStatut(key)}
+                className={cn(
+                  'shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold border transition-colors',
+                  statut === key
+                    ? 'bg-primary text-inverse border-primary'
+                    : 'bg-subtle text-ghost border-transparent hover:text-ink',
+                )}
+              >
+                {label}
+                {key !== 'tous' && (
+                  <span className="ml-1.5 opacity-60">
+                    {commandes.filter(c => c.statut === key).length}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+
           <FilterChips active={filter} onChange={setFilter} />
 
           {/* Bannière alerte URL */}

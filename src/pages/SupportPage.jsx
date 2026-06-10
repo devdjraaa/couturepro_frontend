@@ -9,6 +9,7 @@ import { toSupportTicket } from '@/constants/routes'
 import { AppLayout } from '@/components/layout'
 import { Button, Input, Select, Skeleton, EmptyState } from '@/components/ui'
 import { formatDate } from '@/utils/formatDate'
+import { cn } from '@/utils/cn'
 
 const STATUT_COLORS = {
   ouvert:   'text-warning',
@@ -89,22 +90,46 @@ export default function SupportPage() {
               onChange={set('categorie')}
               options={CATEGORIES}
             />
-            <Input
-              label={t('support.formulaire.sujet')}
-              value={form.sujet}
-              onChange={set('sujet')}
-              placeholder={t('support.formulaire.sujet_placeholder')}
-              required
-            />
+            {/* #27-29 — Sujet avec compteur dynamique */}
             <div>
-              <label className="block text-xs font-medium text-dim mb-1">{t('support.formulaire.message')}</label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-xs font-medium text-dim">{t('support.formulaire.sujet')}</label>
+                <span className={cn('text-xs tabular-nums', form.sujet.length > 240 ? 'text-error font-semibold' : 'text-ghost')}>
+                  {form.sujet.length}/255
+                </span>
+              </div>
+              <input
+                type="text"
+                value={form.sujet}
+                onChange={set('sujet')}
+                placeholder={t('support.formulaire.sujet_placeholder')}
+                maxLength={255}
+                required
+                className="w-full border border-edge rounded-xl px-3 py-2.5 text-sm text-ink bg-transparent focus:outline-none focus:border-primary"
+              />
+            </div>
+
+            {/* #30-32 — Message avec compteur + blocage à 5000 */}
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-xs font-medium text-dim">{t('support.formulaire.message')}</label>
+                <span className={cn('text-xs tabular-nums', form.message.length > 4800 ? 'text-error font-semibold' : 'text-ghost')}>
+                  {form.message.length}/5000
+                </span>
+              </div>
               <textarea
                 className="w-full border border-edge rounded-xl p-3 text-sm text-ink bg-transparent resize-none focus:outline-none focus:border-primary min-h-28"
                 placeholder={t('support.formulaire.message_placeholder')}
                 value={form.message}
-                onChange={set('message')}
+                maxLength={5000}
+                onChange={e => {
+                  if (e.target.value.length <= 5000) set('message')(e)
+                }}
                 required
               />
+              {form.message.length >= 5000 && (
+                <p className="text-xs text-error mt-1">Limite de 5 000 caractères atteinte.</p>
+              )}
             </div>
 
             <div>

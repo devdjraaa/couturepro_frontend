@@ -1,14 +1,38 @@
 import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Plus, Users, AlignLeft, ArrowDownAZ, ClipboardList } from 'lucide-react'
+import { Plus, Users, AlignLeft, ArrowDownAZ, ClipboardList, BookUser, Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 import { useClients, useCreateClient } from '@/hooks/useClients'
 import { AppLayout } from '@/components/layout'
 import { ClientCard, ClientForm } from '@/components/clients'
 import { SearchBar, EmptyState, Skeleton, BottomSheet, Button } from '@/components/ui'
 import { saveClientPhoto, deleteClientPhoto } from '@/utils/clientPhotoStorage'
 import { cn } from '@/utils/cn'
+
+// #3-5 — Import contacts téléphone via Capacitor Contacts
+async function pickContacts() {
+  try {
+    const { Contacts } = await import('@capacitor-community/contacts')
+    const perm = await Contacts.requestPermissions()
+    if (perm.contacts !== 'granted') {
+      toast.error("Permission d'accès aux contacts refusée.")
+      return []
+    }
+    const { contacts } = await Contacts.getContacts({
+      projection: { name: true, phones: true },
+    })
+    return contacts.map(c => ({
+      nom:       c.name?.familyName ?? c.name?.display?.split(' ').at(-1) ?? '',
+      prenom:    c.name?.givenName  ?? '',
+      telephone: c.phones?.[0]?.number?.replace(/\s/g, '') ?? '',
+    })).filter(c => c.nom || c.prenom)
+  } catch {
+    toast.error("Import contacts non disponible sur cette plateforme.")
+    return []
+  }
+}
 
 const SORT_OPTIONS = [
   { key: 'recent',    tKey: 'clients.tri.recent',   icon: AlignLeft    },
@@ -65,6 +89,10 @@ export default function ClientsPage() {
   const [sort, setSort]       = useState('recent')
   const [showSheet, setShowSheet] = useState(false)
   const [doublonError, setDoublonError] = useState(null)
+  // #3-5 — Import contacts
+  const [contactsToImport, setContactsToImport] = useState(null)  // null | Contact[]
+  const [selectedContacts, setSelectedContacts] = useState(new Set())
+  const [importing, setImporting] = useState(false)
 
   const { data: clients = [], isLoading } = useClients()
   const createClient = useCreateClient()
@@ -95,6 +123,29 @@ export default function ClientsPage() {
   const handleJump = (letter) => {
     const el = document.getElementById(`alpha-${letter}`)
     el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  // Lancer la sélection de contacts
+  const handleOpenContacts = async () => {
+    const contacts = await pickContacts()
+    if (contacts.length === 0) return
+    setContactsToImport(contacts)
+    setSelectedContacts(new Set(contacts.map((_, i) => i)))
+  }
+
+  // Importer les contacts sélectionnés
+  const handleImportContacts = async () => {
+    if (selectedContacts.size === 0) return
+    setImporting(true)
+    let ok = 0
+    for (const idx of selectedContacts) {
+      const c = contactsToImport[idx]
+      try { await createClient.mutateAsync(c); ok++ } catch {}
+    }
+    setImporting(false)
+    setContactsToImport(null)
+    setSelectedContacts(new Set())
+    toast.success(`${ok} contact${ok > 1 ? 's' : ''} importé${ok > 1 ? 's' : ''}.`)
   }
 
   const handleCreate = async ({ _photo, ...data }) => {
@@ -223,6 +274,66 @@ export default function ClientsPage() {
           onCancel={() => { setShowSheet(false); setDoublonError(null) }}
           isLoading={createClient.isPending}
         />
+        {/* #5 — Bouton import contacts dans le form */}
+        <button
+          type="button"
+          onClick={handleOpenContacts}
+          className="w-full flex items-center justify-center gap-2 mt-3 mb-4 mx-auto text-sm text-ghost hover:text-primary transition-colors"
+        >
+          <BookUser size={15} />
+          Importer depuis les contacts
+        </button>
+      </BottomSheet>
+
+      {/* #3-4 — Popup de confirmation import contacts */}
+      <BottomSheet
+        isOpen={!!contactsToImport}
+        onClose={() => { setContactsToImport(null); setSelectedContacts(new Set()) }}
+        title={`Importer des contacts (${selectedContacts.size} sélectionné${selectedContacts.size > 1 ? 's' : ''})`}
+      >
+        <div className="px-4 pb-4 space-y-2 max-h-[60vh] overflow-y-auto">
+          {(contactsToImport ?? []).map((c, idx) => {
+            const selected = selectedContacts.has(idx)
+            return (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => setSelectedContacts(prev => {
+                  const next = new Set(prev)
+                  selected ? next.delete(idx) : next.add(idx)
+                  return next
+                })}
+                className={cn(
+                  'w-full flex items-center gap-3 px-4 py-3 rounded-xl border text-left transition-colors',
+                  selected ? 'border-primary/40 bg-primary-50' : 'border-edge bg-card',
+                )}
+              >
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-ink">{`${c.prenom} ${c.nom}`.trim()}</p>
+                  {c.telephone && <p className="text-xs text-ghost">{c.telephone}</p>}
+                </div>
+                {selected && <Check size={16} className="text-primary shrink-0" />}
+              </button>
+            )
+          })}
+        </div>
+        <div className="flex gap-3 px-4 pb-6">
+          <Button
+            variant="ghost"
+            className="flex-1"
+            onClick={() => { setContactsToImport(null); setSelectedContacts(new Set()) }}
+          >
+            Annuler
+          </Button>
+          <Button
+            className="flex-1"
+            loading={importing}
+            disabled={selectedContacts.size === 0}
+            onClick={handleImportContacts}
+          >
+            Importer ({selectedContacts.size})
+          </Button>
+        </div>
       </BottomSheet>
     </AppLayout>
   )
