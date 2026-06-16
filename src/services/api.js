@@ -36,7 +36,7 @@ api.interceptors.response.use(
   error => {
     // 401 = token réellement invalide (pas une erreur réseau).
     // Network errors n'ont pas error.response → on ne touche pas à la session locale.
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && getToken()) {
       clearAll()
       clearCachedSession()
       // Évite la boucle de redirect si on est déjà sur /login
