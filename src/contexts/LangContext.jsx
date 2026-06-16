@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { getLang, setLang as storeLang } from '@/utils/storage'
+import { getLang, setLang as storeLang, getToken } from '@/utils/storage'
 import { parametresService } from '@/services/parametresService'
 
 const LANGUES_DISPO = [
@@ -19,6 +19,7 @@ export function LangProvider({ children }) {
   // #36 — Au démarrage, charger la langue depuis l'API (si connecté)
   useEffect(() => {
     i18n.changeLanguage(langue)
+    if (!getToken()) return
     parametresService.getLangue()
       .then(({ langue: l }) => {
         if (l && l !== langue) {
