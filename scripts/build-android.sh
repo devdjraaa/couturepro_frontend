@@ -11,10 +11,10 @@ fi
 
 if [[ "$TARGET" == "admin" ]]; then
   APP_ID="com.couturepro.admin"
-  APP_NAME="CouturePro Admin"
+  APP_NAME="Gextimo Admin"
 else
   APP_ID="com.couturepro.app"
-  APP_NAME="CouturePro"
+  APP_NAME="Gextimo"
 fi
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
