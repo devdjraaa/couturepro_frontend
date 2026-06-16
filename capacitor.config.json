@@ -5,6 +5,7 @@
   "server": {
     "androidScheme": "https",
     "allowNavigation": [
+      "gextimoapi.novafriq.africa",
       "*.fedapay.com",
       "fedapay.com",
       "*.ngrok-free.app",
