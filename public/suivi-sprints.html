@@ -131,7 +131,7 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
 </header>
 
 <div class="wrap">
-  <div class="legend">Socle : Web <b>v5</b> · App <b>v5</b> &nbsp;·&nbsp; chaque sprint est livrable indépendamment (produit évolutif). La progression est sauvegardée sur cet appareil.</div>
+  <div class="legend">Socle : Web <b>v5</b> · App <b>v5</b> &nbsp;·&nbsp; chaque sprint est livrable indépendamment (produit évolutif). La progression est <b>partagée</b> (visible par tous) ; cocher/modifier est <b>protégé par un code à 6 chiffres</b> 🔒.</div>
   <div id="sprints"></div>
 
   <div class="blockers">
@@ -150,7 +150,7 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
 </div>
 
 <script>
-const STORE = 'gextimo_sprints_v1';
+const API = 'https://gextimoapi.novafriq.africa/api/suivi-sprints';
 
 const DATA = [
   { t:"Cadrage & fondations", goal:"Poser les bases techniques et les livrables bloquants.", tasks:[
@@ -238,8 +238,7 @@ const DATA = [
   ]},
 ];
 
-let state = {};
-try { state = JSON.parse(localStorage.getItem(STORE)) || {}; } catch(e){ state = {}; }
+let state = {}, locked = false, unlockCode = null;
 
 const elS = document.getElementById('sprints');
 
@@ -282,13 +281,22 @@ function render(){
   updateGlobal();
 }
 
-function task(si,ti,el){
+async function task(si,ti,el){
+  const code = await ensureCode();
+  if(!code) return;                         // pas de code → lecture seule
   const k = key(si,ti);
-  state[k] = !state[k];
-  save();
+  const prev = !!state[k];
+  state[k] = !prev;                          // mise à jour optimiste
   el.classList.toggle('ok', state[k]);
   refreshSprint(el.closest('.sprint'), si);
   updateGlobal();
+  const ok = await persist();
+  if(!ok){                                   // échec → on revient en arrière
+    state[k] = prev;
+    el.classList.toggle('ok', state[k]);
+    refreshSprint(el.closest('.sprint'), si);
+    updateGlobal();
+  }
 }
 
 function refreshSprint(card, si){
@@ -318,18 +326,56 @@ function updateGlobal(){
 function toggle(head){ head.closest('.sprint').classList.toggle('collapsed'); }
 function expandAll(open){ document.querySelectorAll('.sprint').forEach(c=> c.classList.toggle('collapsed', !open)); }
 
-function save(){
-  localStorage.setItem(STORE, JSON.stringify(state));
+function showSaved(){
   const s = document.getElementById('saved'); s.classList.add('show');
   clearTimeout(window._st); window._st = setTimeout(()=>s.classList.remove('show'), 1200);
 }
 
-function resetAll(){
-  if(!confirm('Réinitialiser toute la progression sur cet appareil ?')) return;
-  state = {}; localStorage.removeItem(STORE); render();
+async function ensureCode(){
+  if(unlockCode) return unlockCode;
+  const c = prompt(locked
+    ? 'Entrez le code à 6 chiffres pour modifier :'
+    : 'Première fois : créez votre code à 6 chiffres :');
+  if(c===null) return null;
+  if(!/^\d{6}$/.test(c)){ alert('Le code doit faire 6 chiffres.'); return null; }
+  unlockCode = c;
+  return c;
 }
 
-render();
+async function persist(){
+  try{
+    const r = await fetch(API, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ code: unlockCode, checked: state }),
+    });
+    if(r.status===403){ unlockCode=null; alert('Code incorrect.'); return false; }
+    if(!r.ok) throw 0;
+    locked = true;
+    showSaved();
+    return true;
+  }catch(e){ alert("Échec de l'enregistrement (réseau)."); return false; }
+}
+
+async function load(){
+  try{
+    const r = await fetch(API);
+    if(r.ok){ const d = await r.json(); state = d.checked || {}; locked = !!d.locked; }
+  }catch(e){ /* hors-ligne : rendu vide */ }
+  render();
+}
+
+async function resetAll(){
+  const code = await ensureCode();
+  if(!code) return;
+  if(!confirm('Réinitialiser toute la progression (visible par tout le monde) ?')) return;
+  const prev = state;
+  state = {};
+  render();
+  if(!(await persist())){ state = prev; render(); }
+}
+
+load();
 </script>
 </body>
 </html>
