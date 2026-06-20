@@ -10,7 +10,7 @@
 ## Sprint 0 — Cadrage & fondations
 **But :** poser les bases techniques et les livrables bloquants avant tout développement.
 
-- [ ] Obtenir la **charte graphique** (couleur primaire, secondaire, police principale)
+- [x] ~~Obtenir la **charte graphique**~~ → **obtenue** · tokens : [DESIGN_TOKENS_GEXTIMO.md](DESIGN_TOKENS_GEXTIMO.md) (rouge `#D00B0B` / noir / blanc cassé · Inter + Playfair Display)
 - [ ] Obtenir le **HTML du footer définitif** (avec deadline fixée)
 - [ ] Mettre en place le **design system** + composants de base (thème clair/sombre)
 - [ ] Initialiser le **repo de la vitrine web** + CI/CD
@@ -111,7 +111,7 @@
 ---
 
 ### Livrables bloquants à obtenir du client
-- Charte graphique (couleurs + police)
+- ~~Charte graphique (couleurs + police)~~ ✅ **reçue** → [DESIGN_TOKENS_GEXTIMO.md](DESIGN_TOKENS_GEXTIMO.md)
 - HTML du footer définitif
 - Confirmation URL/wordmark du pied de facture
 - Validation DGI/SFE pour l'habillage de la facture normalisée
