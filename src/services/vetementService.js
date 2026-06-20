@@ -75,4 +75,16 @@ export const vetementService = {
     }
     await api.delete(`/vetements/${id}`)
   },
+
+  // Publie / retire une création de la vitrine publique.
+  async setPublication(id, publie) {
+    if (isMock()) {
+      await delay()
+      const idx = mockVetements.findIndex(v => v.id === id || v.id === Number(id))
+      if (idx !== -1) mockVetements[idx].publie_vitrine = publie
+      return mockVetements[idx]
+    }
+    const { data } = await api.post(`/vetements/${id}/publication`, { publie })
+    return data
+  },
 }

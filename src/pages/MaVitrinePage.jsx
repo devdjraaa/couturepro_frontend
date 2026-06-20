@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  Store, ExternalLink, Copy, Check, Eye, MessageCircle,
+  Store, ExternalLink, Copy, Check, Eye, EyeOff, MessageCircle,
   Sparkles, ClipboardList, Wallet, Image as ImageIcon,
 } from 'lucide-react'
 import { AppLayout } from '@/components/layout'
@@ -10,7 +10,11 @@ import { useAuth } from '@/contexts'
 import { useDashboard } from '@/hooks/useDashboard'
 import { vetementService } from '@/services/vetementService'
 import { formatCurrency } from '@/utils/formatCurrency'
+import { cn } from '@/utils/cn'
 import { IS_NATIVE } from '@/constants/routes'
+
+// Robuste si le backend n'a pas encore le champ : champ absent = considéré publié.
+const isPublie = (v) => v.publie_vitrine !== false
 
 function Kpi({ icon: Icon, label, value, hint }) {
   return (
@@ -29,6 +33,7 @@ export default function MaVitrinePage() {
   const dash = useDashboard()
   const [creations, setCreations] = useState(null)
   const [copied, setCopied] = useState(false)
+  const [busy, setBusy] = useState(() => new Set())
 
   useEffect(() => {
     let on = true
@@ -41,6 +46,7 @@ export default function MaVitrinePage() {
   const publicPath = atelier?.id ? `/createurs/${atelier.id}` : '/createurs'
   const publicUrl = typeof window !== 'undefined' ? `${window.location.origin}${publicPath}` : publicPath
   const nbCreations = creations?.length ?? null
+  const nbPubliees = creations ? creations.filter(isPublie).length : null
 
   const copyLink = async () => {
     try {
@@ -48,6 +54,20 @@ export default function MaVitrinePage() {
       setCopied(true)
       setTimeout(() => setCopied(false), 1800)
     } catch { /* clipboard indisponible */ }
+  }
+
+  const togglePublication = async (v) => {
+    const next = !isPublie(v)
+    setBusy((s) => new Set(s).add(v.id))
+    setCreations((list) => list.map((x) => (x.id === v.id ? { ...x, publie_vitrine: next } : x)))
+    try {
+      await vetementService.setPublication(v.id, next)
+    } catch {
+      // échec → on revient à l'état précédent
+      setCreations((list) => list.map((x) => (x.id === v.id ? { ...x, publie_vitrine: !next } : x)))
+    } finally {
+      setBusy((s) => { const n = new Set(s); n.delete(v.id); return n })
+    }
   }
 
   return (
@@ -96,7 +116,7 @@ export default function MaVitrinePage() {
 
         {/* KPIs réels */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4">
-          <Kpi icon={Sparkles} label="Créations" value={nbCreations ?? '—'} hint="visibles sur votre page" />
+          <Kpi icon={Sparkles} label="Créations" value={nbCreations ?? '—'} hint={nbPubliees != null ? `${nbPubliees} publiée(s) sur la vitrine` : 'sur votre page'} />
           <Kpi icon={ClipboardList} label="Commandes en cours" value={dash.isLoading ? '—' : dash.en_cours} />
           <Kpi icon={Wallet} label="Encaissé ce mois" value={dash.isLoading ? '—' : formatCurrency(dash.total_encaisse)} />
         </div>
@@ -138,25 +158,42 @@ export default function MaVitrinePage() {
           </div>
         ) : (
           <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-            {creations.map((v) => (
-              <div key={v.id} className="bg-card border border-edge rounded-xl overflow-hidden">
-                <div className="aspect-square bg-subtle flex items-center justify-center overflow-hidden">
-                  {v.image_url
-                    ? <img src={v.image_url} alt={v.nom} className="w-full h-full object-cover" />
-                    : <ImageIcon size={22} className="text-ghost" />}
+            {creations.map((v) => {
+              const pub = isPublie(v)
+              return (
+                <div key={v.id} className="bg-card border border-edge rounded-xl overflow-hidden">
+                  <div className="relative aspect-square bg-subtle flex items-center justify-center overflow-hidden">
+                    {v.image_url
+                      ? <img src={v.image_url} alt={v.nom} className={cn('w-full h-full object-cover transition', !pub && 'opacity-40 grayscale')} />
+                      : <ImageIcon size={22} className="text-ghost" />}
+                    <button
+                      onClick={() => togglePublication(v)}
+                      disabled={busy.has(v.id)}
+                      title={pub ? 'Retirer de la vitrine' : 'Publier sur la vitrine'}
+                      className={cn(
+                        'absolute top-1.5 right-1.5 w-7 h-7 rounded-full flex items-center justify-center transition shadow-sm disabled:opacity-50',
+                        pub ? 'bg-primary text-white' : 'bg-card text-ghost border border-edge',
+                      )}
+                    >
+                      {pub ? <Eye size={14} /> : <EyeOff size={14} />}
+                    </button>
+                  </div>
+                  <div className="p-2">
+                    <p className="text-xs font-medium text-ink truncate">{v.nom}</p>
+                    <p className={cn('text-[10px] font-semibold mt-0.5', pub ? 'text-primary' : 'text-ghost')}>
+                      {pub ? 'Publié' : 'Masqué'}
+                    </p>
+                  </div>
                 </div>
-                <div className="p-2">
-                  <p className="text-xs font-medium text-ink truncate">{v.nom}</p>
-                </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
 
         <p className="text-2xs text-ghost mt-4 leading-relaxed">
-          Toutes vos créations actives apparaissent automatiquement sur votre page publique.
-          Le contrôle fin de la publication (brouillon / retirer de la vitrine) et les statistiques
-          de visites arrivent prochainement.
+          Touchez l'icône œil sur une création pour la <b className="text-dim">publier</b> ou la
+          <b className="text-dim"> retirer</b> de votre page publique. Les statistiques de visites et
+          de contacts arrivent prochainement.
         </p>
       </div>
     </AppLayout>
