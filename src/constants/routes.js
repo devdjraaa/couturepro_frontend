@@ -21,6 +21,7 @@ export const ROUTES = {
 
   // App (protégées) — '/app' sur le web, '/' sur mobile
   DASHBOARD:        IS_NATIVE ? '/' : '/app',
+  MA_VITRINE:       '/ma-vitrine',
 
   // Clients
   CLIENTS:          '/clients',

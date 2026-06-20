@@ -17,6 +17,7 @@ import ForgotPasswordPage       from '@/pages/auth/ForgotPasswordPage'
 import RecoverAccountPage       from '@/pages/auth/RecoverAccountPage'
 import LoginQuestionSecretePage from '@/pages/auth/LoginQuestionSecretePage'
 import ProfilPage             from '@/pages/ProfilPage'
+import MaVitrinePage          from '@/pages/MaVitrinePage'
 import AProposPage            from '@/pages/AProposPage'
 import FAQPage                from '@/pages/FAQPage'
 import ContactPage            from '@/pages/ContactPage'
@@ -103,6 +104,7 @@ export default function App() {
         {/* ── Routes protégées proprietaire ───────────────────────────── */}
         <Route element={<ProtectedRoute />}>
           <Route path={ROUTES.DASHBOARD}        element={<DashboardPage />}      />
+          <Route path={ROUTES.MA_VITRINE}       element={<MaVitrinePage />}      />
 
           <Route path={ROUTES.CLIENTS}          element={<ClientsPage />}        />
           <Route path={ROUTES.CLIENT_DETAIL}    element={<ClientDetailPage />}   />
