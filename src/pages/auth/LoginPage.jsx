@@ -5,6 +5,7 @@ import { Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '@/contexts'
 import { AuthLayout } from '@/components/layout'
 import { Input, Button, LanguageSwitcher, PhoneInput } from '@/components/ui'
+import { ROUTES } from '@/constants/routes'
 
 function getOrCreateDeviceId() {
   const key = 'cp_device_id'
@@ -49,7 +50,7 @@ export default function LoginPage() {
     setLoading(true)
     try {
       await login(propForm)
-      navigate('/', { replace: true })
+      navigate(ROUTES.DASHBOARD, { replace: true })
     } catch (err) {
       setError(formatLoginError(err))
     } finally {
@@ -67,7 +68,7 @@ export default function LoginPage() {
         password:   equipeForm.password,
         device_id:  getOrCreateDeviceId(),
       })
-      navigate('/', { replace: true })
+      navigate(ROUTES.DASHBOARD, { replace: true })
     } catch (err) {
       setError(formatLoginError(err))
     } finally {

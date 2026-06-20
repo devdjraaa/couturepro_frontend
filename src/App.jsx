@@ -26,7 +26,13 @@ import CaissePage             from '@/pages/CaissePage'
 import GaleriePage            from '@/pages/GaleriePage'
 import { FeatureGate } from '@/components/abonnement'
 import { AppLayout } from '@/components/layout'
-import { ROUTES } from '@/constants/routes'
+import { ROUTES, IS_NATIVE } from '@/constants/routes'
+
+// Vitrine publique (web)
+import VitrineHome        from '@/pages/vitrine/VitrineHome'
+import CreateursPage      from '@/pages/vitrine/CreateursPage'
+import CreateurProfilPage from '@/pages/vitrine/CreateurProfilPage'
+import SuiviVitrinePage   from '@/pages/vitrine/SuiviPage'
 
 // Pages admin
 import AdminLoginPage          from '@/pages/admin/AdminLoginPage'
@@ -78,6 +84,12 @@ export default function App() {
           <Route path="/admin/admins"           element={<AdminsPage />} />
         </Route>
 
+        {/* ── Vitrine publique (web uniquement) ───────────────────────── */}
+        {!IS_NATIVE && <Route path={ROUTES.VITRINE}           element={<VitrineHome />} />}
+        {!IS_NATIVE && <Route path={ROUTES.VITRINE_CREATEURS} element={<CreateursPage />} />}
+        {!IS_NATIVE && <Route path={ROUTES.VITRINE_CREATEUR}  element={<CreateurProfilPage />} />}
+        {!IS_NATIVE && <Route path={ROUTES.VITRINE_SUIVI}     element={<SuiviVitrinePage />} />}
+
         {/* ── Routes publiques proprietaire ───────────────────────────── */}
         <Route path={ROUTES.LOGIN}           element={<LoginPage />}      />
         <Route path={ROUTES.REGISTER}        element={<RegisterPage />}   />
@@ -123,7 +135,7 @@ export default function App() {
           <Route path={ROUTES.SUPPORT_TICKET}   element={<SupportTicketDetailPage />}         />
         </Route>
 
-        <Route path="*" element={<Navigate to={ROUTES.DASHBOARD} replace />} />
+        <Route path="*" element={<Navigate to={IS_NATIVE ? ROUTES.DASHBOARD : ROUTES.VITRINE} replace />} />
       </Routes>
     </>
   )

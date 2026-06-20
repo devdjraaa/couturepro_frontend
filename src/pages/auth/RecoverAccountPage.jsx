@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { authService } from '@/services/authService'
 import { AuthLayout } from '@/components/layout'
 import { Input, Button } from '@/components/ui'
+import { ROUTES } from '@/constants/routes'
 
 export default function RecoverAccountPage() {
   const navigate = useNavigate()
@@ -103,7 +104,7 @@ export default function RecoverAccountPage() {
     setLoading(true)
     try {
       await authService.recuperationEtape5({ demande_id: demandeId, password, password_confirmation: confirmPwd })
-      navigate('/', { replace: true })
+      navigate(ROUTES.DASHBOARD, { replace: true })
     } catch (err) {
       setError(err?.message || t('erreurs.inconnu'))
     } finally {
