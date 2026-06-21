@@ -992,7 +992,10 @@
       "stat_creations": "Creations",
       "stat_views": "Views this month",
       "stat_punctuality": "Punctuality",
-      "stat_experience": "Experience"
+      "stat_experience": "Experience",
+      "wa_message": "Hello {{nom}}, I'm contacting you via your Gextimo showcase.",
+      "wa_quote": "Hello {{nom}}, I'd like to request a quote via your Gextimo showcase.",
+      "wa_order": "Hello {{nom}}, I'm interested in “{{modele}}” on your Gextimo showcase."
     },
     "suivi": {
       "title": "Track your order",

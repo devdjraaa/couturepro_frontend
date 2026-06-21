@@ -48,6 +48,7 @@ export const parametresService = {
       nom:     payload.nom,
       adresse: payload.adresse,
       ville:   payload.ville,
+      contact_public: payload.contact_public,
     })
     return data
   },

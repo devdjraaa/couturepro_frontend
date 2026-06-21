@@ -9,6 +9,7 @@ import { Skeleton } from '@/components/ui'
 import { useAuth } from '@/contexts'
 import { useDashboard } from '@/hooks/useDashboard'
 import { vetementService } from '@/services/vetementService'
+import { parametresService } from '@/services/parametresService'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { cn } from '@/utils/cn'
 import { IS_NATIVE } from '@/constants/routes'
@@ -34,6 +35,8 @@ export default function MaVitrinePage() {
   const [creations, setCreations] = useState(null)
   const [copied, setCopied] = useState(false)
   const [busy, setBusy] = useState(() => new Set())
+  const [contactPublic, setContactPublic] = useState(() => !!atelier?.contact_public)
+  const [savingContact, setSavingContact] = useState(false)
 
   useEffect(() => {
     let on = true
@@ -42,6 +45,8 @@ export default function MaVitrinePage() {
       .catch(() => { if (on) setCreations([]) })
     return () => { on = false }
   }, [])
+
+  useEffect(() => { setContactPublic(!!atelier?.contact_public) }, [atelier?.contact_public])
 
   const publicPath = atelier?.id ? `/createurs/${atelier.id}` : '/createurs'
   const publicUrl = typeof window !== 'undefined' ? `${window.location.origin}${publicPath}` : publicPath
@@ -67,6 +72,20 @@ export default function MaVitrinePage() {
       setCreations((list) => list.map((x) => (x.id === v.id ? { ...x, publie_vitrine: !next } : x)))
     } finally {
       setBusy((s) => { const n = new Set(s); n.delete(v.id); return n })
+    }
+  }
+
+  const toggleContact = async () => {
+    if (savingContact || !atelier?.nom) return
+    const next = !contactPublic
+    setContactPublic(next)
+    setSavingContact(true)
+    try {
+      await parametresService.updateAtelier({ nom: atelier.nom, contact_public: next })
+    } catch {
+      setContactPublic(!next)
+    } finally {
+      setSavingContact(false)
     }
   }
 
@@ -112,6 +131,15 @@ export default function MaVitrinePage() {
               {copied ? <><Check size={16} /> Copié !</> : <><Copy size={16} /> Copier le lien</>}
             </button>
           </div>
+          {/* Opt-in : exposer le contact WhatsApp sur la vitrine publique */}
+          <button onClick={toggleContact} disabled={savingContact}
+                  className="w-full flex items-center gap-3 mt-3 pt-3 border-t border-white/10 disabled:opacity-60">
+            <MessageCircle size={16} className="text-white/60 shrink-0" />
+            <span className="text-[13px] text-white/80 text-left flex-1">Afficher mon contact WhatsApp sur ma vitrine</span>
+            <span className={cn('w-9 h-5 rounded-full relative transition shrink-0', contactPublic ? 'bg-primary' : 'bg-white/20')}>
+              <span className={cn('absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all', contactPublic ? 'left-[18px]' : 'left-0.5')} />
+            </span>
+          </button>
         </div>
 
         {/* KPIs réels */}

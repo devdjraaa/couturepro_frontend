@@ -31,6 +31,8 @@ export default function CreateurProfilPage() {
   }
 
   const creations = c.creations || []
+  const wa = c.whatsapp ? `https://wa.me/${c.whatsapp}` : null
+  const waHref = (key, params) => `${wa}?text=${encodeURIComponent(t(key, params))}`
   const stats = [
     { v: creations.length, l: t('vitrine.profil.stat_creations') },
     { v: '247', l: t('vitrine.profil.stat_views') },
@@ -55,8 +57,12 @@ export default function CreateurProfilPage() {
             {c.note && <div className="text-sm mt-2"><span className="text-primary font-bold">★ {c.note}</span> <span className="text-dim">({c.avis})</span></div>}
           </div>
           <div className="flex flex-col gap-2 w-full sm:w-auto">
-            <button className={btnPrimary}>{t('vitrine.profil.quote')}</button>
-            <button className={btnOutline}>{t('vitrine.profil.contact')}</button>
+            {wa
+              ? <a href={waHref('vitrine.profil.wa_quote', { nom: c.nom })} target="_blank" rel="noopener noreferrer" className={btnPrimary}>{t('vitrine.profil.quote')}</a>
+              : <button className={btnPrimary}>{t('vitrine.profil.quote')}</button>}
+            {wa
+              ? <a href={waHref('vitrine.profil.wa_message', { nom: c.nom })} target="_blank" rel="noopener noreferrer" className={btnOutline}>{t('vitrine.profil.contact')}</a>
+              : <button className={btnOutline}>{t('vitrine.profil.contact')}</button>}
             <button className={btnOutline}>{t('vitrine.profil.save')}</button>
           </div>
         </div>
@@ -92,7 +98,9 @@ export default function CreateurProfilPage() {
                     <h4 className="font-semibold text-[14.5px] text-ink">{m.nom}</h4>
                     <div className="font-bold text-primary text-[14px]">{format(m.prix) || t('vitrine.profil.on_quote')}</div>
                   </div>
-                  <button className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">{t('vitrine.profil.order')}</button>
+                  {wa
+                    ? <a href={waHref('vitrine.profil.wa_order', { nom: c.nom, modele: m.nom })} target="_blank" rel="noopener noreferrer" className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">{t('vitrine.profil.order')}</a>
+                    : <button className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">{t('vitrine.profil.order')}</button>}
                 </div>
               </div>
             ))}
