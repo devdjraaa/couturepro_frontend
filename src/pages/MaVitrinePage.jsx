@@ -37,6 +37,10 @@ export default function MaVitrinePage() {
   const [busy, setBusy] = useState(() => new Set())
   const [contactPublic, setContactPublic] = useState(() => !!atelier?.contact_public)
   const [savingContact, setSavingContact] = useState(false)
+  const [specialite, setSpecialite] = useState(() => atelier?.specialite || '')
+  const [bio, setBio] = useState(() => atelier?.bio || '')
+  const [savingProfile, setSavingProfile] = useState(false)
+  const [profileSaved, setProfileSaved] = useState(false)
 
   useEffect(() => {
     let on = true
@@ -47,6 +51,7 @@ export default function MaVitrinePage() {
   }, [])
 
   useEffect(() => { setContactPublic(!!atelier?.contact_public) }, [atelier?.contact_public])
+  useEffect(() => { setSpecialite(atelier?.specialite || ''); setBio(atelier?.bio || '') }, [atelier?.specialite, atelier?.bio])
 
   const publicPath = atelier?.id ? `/createurs/${atelier.id}` : '/createurs'
   const publicUrl = typeof window !== 'undefined' ? `${window.location.origin}${publicPath}` : publicPath
@@ -86,6 +91,19 @@ export default function MaVitrinePage() {
       setContactPublic(!next)
     } finally {
       setSavingContact(false)
+    }
+  }
+
+  const saveProfile = async () => {
+    if (savingProfile || !atelier?.nom) return
+    setSavingProfile(true)
+    setProfileSaved(false)
+    try {
+      await parametresService.updateAtelier({ nom: atelier.nom, specialite, bio })
+      setProfileSaved(true)
+      setTimeout(() => setProfileSaved(false), 2000)
+    } catch { /* erreur silencieuse */ } finally {
+      setSavingProfile(false)
     }
   }
 
@@ -147,6 +165,26 @@ export default function MaVitrinePage() {
           <Kpi icon={Sparkles} label="Créations" value={nbCreations ?? '—'} hint={nbPubliees != null ? `${nbPubliees} publiée(s) sur la vitrine` : 'sur votre page'} />
           <Kpi icon={ClipboardList} label="Commandes en cours" value={dash.isLoading ? '—' : dash.en_cours} />
           <Kpi icon={Wallet} label="Encaissé ce mois" value={dash.isLoading ? '—' : formatCurrency(dash.total_encaisse)} />
+        </div>
+
+        {/* Profil public éditable */}
+        <div className="mt-4 bg-card border border-edge rounded-xl p-4">
+          <p className="text-sm font-semibold text-ink mb-3">Mon profil public</p>
+          <label className="block text-xs font-medium text-dim mb-1">Spécialité</label>
+          <input value={specialite} onChange={(e) => setSpecialite(e.target.value)} maxLength={120}
+                 placeholder="Ex : Haute couture, Tailleur…"
+                 className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink mb-3 focus:outline-none focus:ring-2 focus:ring-primary/30" />
+          <label className="block text-xs font-medium text-dim mb-1">Bio</label>
+          <textarea value={bio} onChange={(e) => setBio(e.target.value)} rows={3} maxLength={1000}
+                    placeholder="Présentez votre atelier en quelques mots…"
+                    className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink resize-none focus:outline-none focus:ring-2 focus:ring-primary/30" />
+          <div className="flex items-center gap-3 mt-3">
+            <button onClick={saveProfile} disabled={savingProfile}
+                    className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-600 transition disabled:opacity-60">
+              {savingProfile ? 'Enregistrement…' : 'Enregistrer'}
+            </button>
+            {profileSaved && <span className="text-xs text-success font-medium">✓ Enregistré</span>}
+          </div>
         </div>
 
         {/* Stats publiques — à venir (tracking backend non disponible) */}

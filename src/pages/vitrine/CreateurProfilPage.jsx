@@ -55,6 +55,7 @@ export default function CreateurProfilPage() {
             <div className="text-dim text-[15px] mt-1">{c.specialite}</div>
             <div className="text-dim text-[13px] mt-1">📍 {c.ville}, Bénin</div>
             {c.note && <div className="text-sm mt-2"><span className="text-primary font-bold">★ {c.note}</span> <span className="text-dim">({c.avis})</span></div>}
+            {c.bio && <p className="text-ink text-sm mt-3 leading-relaxed">{c.bio}</p>}
           </div>
           <div className="flex flex-col gap-2 w-full sm:w-auto">
             {wa
