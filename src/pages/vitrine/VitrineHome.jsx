@@ -8,6 +8,58 @@ import { useDevise } from './vitrineCurrency'
 const btnPrimary = 'inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-white hover:bg-primary-600 transition'
 const btnOutline = 'inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary transition'
 
+function HeroSearch({ creators }) {
+  const { t } = useTranslation()
+  const [q, setQ] = useState('')
+  const query = q.trim().toLowerCase()
+  const list = creators || []
+  const cM = query ? list.filter((c) => `${c.nom} ${c.specialite} ${c.ville}`.toLowerCase().includes(query)).slice(0, 4) : []
+  const mM = query ? demoModels.filter((m) => `${m.nom} ${m.par}`.toLowerCase().includes(query)).slice(0, 4) : []
+  const idByNom = (nom) => list.find((c) => c.nom === nom)?.id
+  const has = cM.length || mM.length
+
+  return (
+    <div className="relative max-w-[540px] mx-auto mb-6 text-left">
+      <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('vitrine.search.placeholder')}
+             className="w-full rounded-xl border border-edge bg-card px-4 py-3 text-sm text-ink placeholder:text-ghost focus:outline-none focus:ring-2 focus:ring-primary/30" />
+      {query && (
+        <div className="absolute inset-x-0 top-full mt-2 bg-card border border-edge rounded-xl shadow-lg overflow-hidden z-30">
+          {!has && <div className="px-4 py-3 text-sm text-dim">{t('vitrine.search.empty')}</div>}
+          {cM.length > 0 && (
+            <div className="py-1">
+              <div className="px-4 pt-2 pb-1 text-2xs font-bold uppercase tracking-wider text-ghost">{t('vitrine.search.creators')}</div>
+              {cM.map((c) => (
+                <Link key={c.id} to={`/createurs/${c.id}`} onClick={() => setQ('')}
+                      className="flex items-center gap-2.5 px-4 py-2 hover:bg-subtle transition">
+                  <span className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold text-white shrink-0" style={{ background: c.gradient }}>{c.initiales}</span>
+                  <span className="text-sm text-ink">{c.nom}</span>
+                  <span className="text-xs text-ghost ml-auto">{c.specialite}</span>
+                </Link>
+              ))}
+            </div>
+          )}
+          {mM.length > 0 && (
+            <div className="py-1 border-t border-edge">
+              <div className="px-4 pt-2 pb-1 text-2xs font-bold uppercase tracking-wider text-ghost">{t('vitrine.search.models')}</div>
+              {mM.map((m) => {
+                const id = idByNom(m.par)
+                return (
+                  <Link key={m.id} to={id ? `/createurs/${id}` : '/#gallery'} onClick={() => setQ('')}
+                        className="flex items-center gap-2.5 px-4 py-2 hover:bg-subtle transition">
+                    <span className="text-lg">{m.emoji}</span>
+                    <span className="text-sm text-ink">{m.nom}</span>
+                    <span className="text-xs text-ghost ml-auto">{m.par}</span>
+                  </Link>
+                )
+              })}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
 function SectionHead({ eyebrow, title, subtitle }) {
   return (
     <div className="max-w-[620px] mx-auto mb-9 text-center">
@@ -51,6 +103,7 @@ export default function VitrineHome() {
           <div className="h-7 mb-6 text-dim text-[clamp(15px,2vw,19px)] font-medium">
             <b className="text-ink font-semibold">{rotMsg}</b>
           </div>
+          <HeroSearch creators={creators} />
           <div className="flex gap-3 justify-center flex-wrap mb-5">
             <a href="#creators" className={btnPrimary}>{t('vitrine.hero.cta_discover')}</a>
             <a href="#how" className={btnOutline}>{t('vitrine.hero.cta_how')}</a>

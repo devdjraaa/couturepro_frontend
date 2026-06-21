@@ -902,6 +902,7 @@
     "online": "● En ligne",
     "loading": "Chargement…",
     "indicatif": "* Prix indicatifs, convertis à titre informatif.",
+    "search": { "placeholder": "Rechercher un créateur, un modèle…", "empty": "Aucun résultat.", "creators": "Créateurs", "models": "Modèles" },
     "cookies": {
       "text": "Nous utilisons des cookies pour améliorer votre expérience et mémoriser vos préférences (langue, devise, thème).",
       "accept": "Accepter",

@@ -902,6 +902,7 @@
     "online": "● Online",
     "loading": "Loading…",
     "indicatif": "* Indicative prices, converted for information only.",
+    "search": { "placeholder": "Search a designer, a model…", "empty": "No result.", "creators": "Designers", "models": "Models" },
     "cookies": {
       "text": "We use cookies to improve your experience and remember your preferences (language, currency, theme).",
       "accept": "Accept",
