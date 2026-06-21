@@ -901,6 +901,12 @@
     "promo": "✦ New — the Gextimo showcase connects African fashion designers across West Africa.",
     "online": "● Online",
     "loading": "Loading…",
+    "indicatif": "* Indicative prices, converted for information only.",
+    "cookies": {
+      "text": "We use cookies to improve your experience and remember your preferences (language, currency, theme).",
+      "accept": "Accept",
+      "refuse": "Decline"
+    },
     "nav": {
       "how": "How it works",
       "creators": "Designers",

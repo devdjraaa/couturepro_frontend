@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { getCreators, demoModels, categories } from './vitrineApi'
+import { useDevise } from './vitrineCurrency'
 
 const btnPrimary = 'inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-white hover:bg-primary-600 transition'
 const btnOutline = 'inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary transition'
@@ -19,6 +20,7 @@ function SectionHead({ eyebrow, title, subtitle }) {
 
 export default function VitrineHome() {
   const { t } = useTranslation()
+  const { format } = useDevise()
   const [rot, setRot] = useState(0)
   const [creators, setCreators] = useState(null)
   const [cat, setCat] = useState('all')
@@ -129,11 +131,12 @@ export default function VitrineHome() {
                 <div className="p-3.5">
                   <h4 className="font-semibold text-[14.5px] text-ink">{m.nom}</h4>
                   <div className="text-[12px] text-dim mt-0.5 mb-1.5">{t('vitrine.gallery.by')} {m.par}</div>
-                  <div className="font-bold text-primary text-[14.5px]">{m.prix} <span className="text-dim font-medium text-[11px]">FCFA</span></div>
+                  <div className="font-bold text-primary text-[14.5px]">{format(m.prix)}</div>
                 </div>
               </div>
             ))}
           </div>
+          <p className="text-2xs text-ghost mt-4 text-center">{t('vitrine.indicatif')}</p>
         </div>
       </section>
 

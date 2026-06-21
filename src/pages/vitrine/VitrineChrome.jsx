@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Sun, Moon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useTheme, useLang } from '@/contexts'
 import { cn } from '@/utils/cn'
+import { useDevise, DEVISES } from './vitrineCurrency'
 
 /* Symbole orbital + wordmark (charte). */
 export function VitrineLogo({ onDark = false }) {
@@ -49,6 +51,41 @@ function ThemeToggle() {
   )
 }
 
+/* Sélecteur de devise (multidevise, taux indicatifs). */
+function DeviseSelect() {
+  const { devise, setDevise } = useDevise()
+  return (
+    <select value={devise} onChange={(e) => setDevise(e.target.value)} aria-label="Devise"
+            className="text-[11px] font-bold bg-card border border-edge rounded-[10px] px-1.5 py-[7px] text-dim focus:outline-none focus:ring-2 focus:ring-primary/30 cursor-pointer">
+      {Object.keys(DEVISES).map((k) => <option key={k} value={k}>{k}</option>)}
+    </select>
+  )
+}
+
+/* Bandeau cookies (consentement mémorisé). */
+function VitrineCookies() {
+  const { t } = useTranslation()
+  const [show, setShow] = useState(() => {
+    try { return !localStorage.getItem('gx_cookie_consent') } catch { return true }
+  })
+  if (!show) return null
+  const close = (v) => {
+    try { localStorage.setItem('gx_cookie_consent', v) } catch { /* indisponible */ }
+    setShow(false)
+  }
+  return (
+    <div className="fixed bottom-0 inset-x-0 z-50 p-3 sm:p-4">
+      <div className="max-w-[1180px] mx-auto bg-card border border-edge rounded-xl shadow-lg p-4 flex flex-col sm:flex-row items-center gap-3">
+        <p className="text-[13px] text-dim flex-1">{t('vitrine.cookies.text')}</p>
+        <div className="flex gap-2 shrink-0">
+          <button onClick={() => close('refused')} className="text-[13px] font-semibold px-3.5 py-2 rounded-[10px] border border-edge text-ink hover:border-primary hover:text-primary transition">{t('vitrine.cookies.refuse')}</button>
+          <button onClick={() => close('accepted')} className="text-[13px] font-semibold px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">{t('vitrine.cookies.accept')}</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function VitrineNavbar() {
   const { t } = useTranslation()
   return (
@@ -67,6 +104,7 @@ export function VitrineNavbar() {
           </nav>
           <div className="ml-auto flex items-center gap-2">
             <ThemeToggle />
+            <DeviseSelect />
             <LangToggle />
             <Link to="/register" className="hidden sm:inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] border border-edge text-ink hover:border-primary hover:text-primary transition">{t('vitrine.nav.signup')}</Link>
             <Link to="/login" className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">{t('vitrine.nav.login')}</Link>
@@ -116,6 +154,7 @@ export default function VitrineShell({ children }) {
       <VitrineNavbar />
       <main>{children}</main>
       <VitrineFooter />
+      <VitrineCookies />
     </div>
   )
 }

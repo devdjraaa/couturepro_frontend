@@ -901,6 +901,12 @@
     "promo": "✦ Nouveau — la vitrine Gextimo connecte les créateurs de mode africaine à toute l'Afrique de l'Ouest.",
     "online": "● En ligne",
     "loading": "Chargement…",
+    "indicatif": "* Prix indicatifs, convertis à titre informatif.",
+    "cookies": {
+      "text": "Nous utilisons des cookies pour améliorer votre expérience et mémoriser vos préférences (langue, devise, thème).",
+      "accept": "Accepter",
+      "refuse": "Refuser"
+    },
     "nav": {
       "how": "Comment ça marche",
       "creators": "Créateurs",

@@ -34,6 +34,7 @@ import VitrineHome        from '@/pages/vitrine/VitrineHome'
 import CreateursPage      from '@/pages/vitrine/CreateursPage'
 import CreateurProfilPage from '@/pages/vitrine/CreateurProfilPage'
 import SuiviVitrinePage   from '@/pages/vitrine/SuiviPage'
+import { VitrineLayout }  from '@/pages/vitrine/vitrineCurrency'
 
 // Pages admin
 import AdminLoginPage          from '@/pages/admin/AdminLoginPage'
@@ -86,10 +87,14 @@ export default function App() {
         </Route>
 
         {/* ── Vitrine publique (web uniquement) ───────────────────────── */}
-        {!IS_NATIVE && <Route path={ROUTES.VITRINE}           element={<VitrineHome />} />}
-        {!IS_NATIVE && <Route path={ROUTES.VITRINE_CREATEURS} element={<CreateursPage />} />}
-        {!IS_NATIVE && <Route path={ROUTES.VITRINE_CREATEUR}  element={<CreateurProfilPage />} />}
-        {!IS_NATIVE && <Route path={ROUTES.VITRINE_SUIVI}     element={<SuiviVitrinePage />} />}
+        {!IS_NATIVE && (
+          <Route element={<VitrineLayout />}>
+            <Route path={ROUTES.VITRINE}           element={<VitrineHome />} />
+            <Route path={ROUTES.VITRINE_CREATEURS} element={<CreateursPage />} />
+            <Route path={ROUTES.VITRINE_CREATEUR}  element={<CreateurProfilPage />} />
+            <Route path={ROUTES.VITRINE_SUIVI}     element={<SuiviVitrinePage />} />
+          </Route>
+        )}
 
         {/* ── Routes publiques proprietaire ───────────────────────────── */}
         <Route path={ROUTES.LOGIN}           element={<LoginPage />}      />

@@ -3,12 +3,14 @@ import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { getCreator, demoReviews } from './vitrineApi'
+import { useDevise } from './vitrineCurrency'
 
 const btnPrimary = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-white hover:bg-primary-600 transition'
 const btnOutline = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary transition'
 
 export default function CreateurProfilPage() {
   const { t } = useTranslation()
+  const { format } = useDevise()
   const { slug } = useParams()
   const [c, setC] = useState(undefined) // undefined = loading, null = introuvable
 
@@ -88,7 +90,7 @@ export default function CreateurProfilPage() {
                 <div className="p-3.5 flex items-center justify-between">
                   <div>
                     <h4 className="font-semibold text-[14.5px] text-ink">{m.nom}</h4>
-                    <div className="font-bold text-primary text-[14px]">{m.prix ? `${m.prix} ` : t('vitrine.profil.on_quote')}{m.prix && <span className="text-dim font-medium text-[11px]">FCFA</span>}</div>
+                    <div className="font-bold text-primary text-[14px]">{format(m.prix) || t('vitrine.profil.on_quote')}</div>
                   </div>
                   <button className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">{t('vitrine.profil.order')}</button>
                 </div>
