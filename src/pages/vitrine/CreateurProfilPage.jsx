@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { getCreator, demoReviews } from './vitrineApi'
 
@@ -7,20 +8,21 @@ const btnPrimary = 'inline-flex items-center justify-center gap-2 font-semibold 
 const btnOutline = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary transition'
 
 export default function CreateurProfilPage() {
+  const { t } = useTranslation()
   const { slug } = useParams()
   const [c, setC] = useState(undefined) // undefined = loading, null = introuvable
 
   useEffect(() => { getCreator(slug).then((d) => setC(d ?? null)) }, [slug])
 
   if (c === undefined) {
-    return <VitrineShell><div className="py-24 text-center text-dim">Chargement…</div></VitrineShell>
+    return <VitrineShell><div className="py-24 text-center text-dim">{t('vitrine.loading')}</div></VitrineShell>
   }
   if (c === null) {
     return (
       <VitrineShell>
         <div className="py-24 text-center">
-          <h1 className="font-display text-2xl text-ink">Créateur introuvable</h1>
-          <Link to="/createurs" className={btnPrimary + ' mt-5'}>Tous les créateurs</Link>
+          <h1 className="font-display text-2xl text-ink">{t('vitrine.profil.not_found')}</h1>
+          <Link to="/createurs" className={btnPrimary + ' mt-5'}>{t('vitrine.createurs_page.title')}</Link>
         </div>
       </VitrineShell>
     )
@@ -28,10 +30,10 @@ export default function CreateurProfilPage() {
 
   const creations = c.creations || []
   const stats = [
-    { v: creations.length, l: 'Créations' },
-    { v: '247', l: 'Vues ce mois' },
-    { v: '94%', l: 'Ponctualité' },
-    { v: c.experience || '—', l: 'Expérience' },
+    { v: creations.length, l: t('vitrine.profil.stat_creations') },
+    { v: '247', l: t('vitrine.profil.stat_views') },
+    { v: '94%', l: t('vitrine.profil.stat_punctuality') },
+    { v: c.experience || '—', l: t('vitrine.profil.stat_experience') },
   ]
 
   return (
@@ -44,16 +46,16 @@ export default function CreateurProfilPage() {
           <div className="flex-1 min-w-[220px]">
             <h1 className="font-display text-[26px] text-ink flex items-center gap-2.5 flex-wrap">
               {c.nom}
-              {c.verifie && <span className="text-[12px] font-bold text-primary bg-primary-50 px-2.5 py-0.5 rounded-full">✓ Vérifié</span>}
+              {c.verifie && <span className="text-[12px] font-bold text-primary bg-primary-50 px-2.5 py-0.5 rounded-full">{t('vitrine.creators.verified')}</span>}
             </h1>
             <div className="text-dim text-[15px] mt-1">{c.specialite}</div>
             <div className="text-dim text-[13px] mt-1">📍 {c.ville}, Bénin</div>
-            {c.note && <div className="text-sm mt-2"><span className="text-primary font-bold">★ {c.note}</span> <span className="text-dim">({c.avis} avis)</span></div>}
+            {c.note && <div className="text-sm mt-2"><span className="text-primary font-bold">★ {c.note}</span> <span className="text-dim">({c.avis})</span></div>}
           </div>
           <div className="flex flex-col gap-2 w-full sm:w-auto">
-            <button className={btnPrimary}>Demander un devis</button>
-            <button className={btnOutline}>📱 Contacter</button>
-            <button className={btnOutline}>♡ Enregistrer</button>
+            <button className={btnPrimary}>{t('vitrine.profil.quote')}</button>
+            <button className={btnOutline}>{t('vitrine.profil.contact')}</button>
+            <button className={btnOutline}>{t('vitrine.profil.save')}</button>
           </div>
         </div>
 
@@ -68,9 +70,9 @@ export default function CreateurProfilPage() {
         </div>
 
         {/* Créations */}
-        <h2 className="font-display text-2xl mt-10 mb-5 text-ink">Catalogue</h2>
+        <h2 className="font-display text-2xl mt-10 mb-5 text-ink">{t('vitrine.profil.catalogue')}</h2>
         {creations.length === 0 ? (
-          <p className="text-dim">Aucune création publiée pour le moment.</p>
+          <p className="text-dim">{t('vitrine.profil.no_creations')}</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {creations.map((m) => (
@@ -86,9 +88,9 @@ export default function CreateurProfilPage() {
                 <div className="p-3.5 flex items-center justify-between">
                   <div>
                     <h4 className="font-semibold text-[14.5px] text-ink">{m.nom}</h4>
-                    <div className="font-bold text-primary text-[14px]">{m.prix ? `${m.prix} ` : 'Sur devis'}{m.prix && <span className="text-dim font-medium text-[11px]">FCFA</span>}</div>
+                    <div className="font-bold text-primary text-[14px]">{m.prix ? `${m.prix} ` : t('vitrine.profil.on_quote')}{m.prix && <span className="text-dim font-medium text-[11px]">FCFA</span>}</div>
                   </div>
-                  <button className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">Commander</button>
+                  <button className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">{t('vitrine.profil.order')}</button>
                 </div>
               </div>
             ))}
@@ -96,7 +98,7 @@ export default function CreateurProfilPage() {
         )}
 
         {/* Avis */}
-        <h2 className="font-display text-2xl mt-12 mb-5 text-ink">Avis clients</h2>
+        <h2 className="font-display text-2xl mt-12 mb-5 text-ink">{t('vitrine.profil.reviews')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pb-16">
           {demoReviews.map((r) => (
             <figure key={r.nom} className="bg-card border border-edge rounded-lg p-5">
@@ -111,7 +113,7 @@ export default function CreateurProfilPage() {
         </div>
 
         <div className="pb-16">
-          <Link to="/createurs" className={btnOutline}>← Tous les créateurs</Link>
+          <Link to="/createurs" className={btnOutline}>{t('vitrine.profil.all_creators')}</Link>
         </div>
       </div>
     </VitrineShell>

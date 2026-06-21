@@ -897,6 +897,105 @@
     "plus": "More",
     "menu": "Menu"
   },
+  "vitrine": {
+    "promo": "✦ New — the Gextimo showcase connects African fashion designers across West Africa.",
+    "online": "● Online",
+    "loading": "Loading…",
+    "nav": {
+      "how": "How it works",
+      "creators": "Designers",
+      "collections": "Collections",
+      "suivi": "Tracking",
+      "signup": "Sign up",
+      "login": "Log in"
+    },
+    "hero": {
+      "eyebrow": "The fashion designers platform",
+      "title_pre": "The showcase of African ",
+      "title_hl": "fashion designers",
+      "title_post": ".",
+      "cta_discover": "Discover designers",
+      "cta_how": "How it works",
+      "stat_creators": "designers",
+      "stat_designers": "stylists",
+      "stat_cities": "cities"
+    },
+    "rotations": [
+      "Join the adventure today.",
+      "Discover the best designers.",
+      "Find your fashion inspiration.",
+      "Showcase your craft."
+    ],
+    "how": {
+      "eyebrow": "How it works",
+      "title": "Three steps, that's all",
+      "subtitle": "From account to first order, friction-free.",
+      "steps": [
+        { "n": "STEP 1", "t": "Create your account", "d": "Designer sign-up in minutes." },
+        { "n": "STEP 2", "t": "Publish your creations", "d": "Pro showcase generated automatically." },
+        { "n": "STEP 3", "t": "Receive orders", "d": "Contacts, quotes and tracking in one place." }
+      ]
+    },
+    "creators": {
+      "eyebrow": "Discover",
+      "title": "Find your designer",
+      "subtitle": "Verified talents, near you or anywhere in Africa.",
+      "visit": "Visit profile",
+      "verified": "✓ Verified",
+      "new": "New"
+    },
+    "gallery": {
+      "eyebrow": "Gallery",
+      "title": "Get inspired by the models",
+      "subtitle": "A central gallery, sorted by category.",
+      "by": "by",
+      "cats": { "all": "All", "robe": "Dresses", "costume": "Suits", "boubou": "Boubous", "enfant": "Kids" }
+    },
+    "cta": {
+      "title": "Track your order",
+      "subtitle": "With your receipt number, no account needed.",
+      "button": "Track an order"
+    },
+    "footer": {
+      "tagline": "The showcase connecting designers, artisans and clients of African fashion.",
+      "col_platform": "Platform",
+      "col_company": "Company",
+      "col_support": "Support & Legal",
+      "platform": ["Designers", "Collections", "How it works", "Become a designer"],
+      "company": ["About", "Who we are", "Blog", "Partners"],
+      "support": ["FAQ", "Contact", "Legal notice", "Cookie settings"],
+      "rights": "© 2026 Gextimo. All rights reserved."
+    },
+    "createurs_page": {
+      "eyebrow": "Designers",
+      "title": "Discover the designers",
+      "subtitle": "Verified talents across Benin and West Africa."
+    },
+    "profil": {
+      "quote": "Request a quote",
+      "contact": "📱 Contact",
+      "save": "♡ Save",
+      "catalogue": "Catalogue",
+      "no_creations": "No creation published yet.",
+      "order": "Order",
+      "on_quote": "On quote",
+      "reviews": "Client reviews",
+      "all_creators": "← All designers",
+      "not_found": "Designer not found",
+      "stat_creations": "Creations",
+      "stat_views": "Views this month",
+      "stat_punctuality": "Punctuality",
+      "stat_experience": "Experience"
+    },
+    "suivi": {
+      "title": "Track your order",
+      "subtitle": "Enter your receipt number, no account needed.",
+      "placeholder": "e.g. GEX-2026-0847",
+      "button": "Track",
+      "in_progress": "In progress",
+      "steps": ["Order", "Cutting", "Sewing", "Fitting", "Delivery"]
+    }
+  },
   "atelier": {
     "titre": "Workshop",
     "ajouter_ville": "Add a city →",

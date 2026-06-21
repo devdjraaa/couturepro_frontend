@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { getCreators } from './vitrineApi'
 
 export default function CreateursPage() {
+  const { t } = useTranslation()
   const [creators, setCreators] = useState(null)
   useEffect(() => { getCreators().then(setCreators) }, [])
 
@@ -12,12 +14,12 @@ export default function CreateursPage() {
       <section className="py-16">
         <div className="max-w-[1180px] mx-auto px-5">
           <div className="text-center mb-9">
-            <div className="text-[12px] font-bold tracking-[0.14em] uppercase text-primary">Créateurs</div>
-            <h1 className="font-display font-extrabold text-[clamp(28px,4vw,40px)] mt-2 text-ink">Découvrez les créateurs</h1>
-            <p className="text-dim mt-1">Des talents vérifiés à travers le Bénin et l’Afrique de l’Ouest.</p>
+            <div className="text-[12px] font-bold tracking-[0.14em] uppercase text-primary">{t('vitrine.createurs_page.eyebrow')}</div>
+            <h1 className="font-display font-extrabold text-[clamp(28px,4vw,40px)] mt-2 text-ink">{t('vitrine.createurs_page.title')}</h1>
+            <p className="text-dim mt-1">{t('vitrine.createurs_page.subtitle')}</p>
           </div>
 
-          {!creators && <p className="text-center text-dim">Chargement…</p>}
+          {!creators && <p className="text-center text-dim">{t('vitrine.loading')}</p>}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {(creators || []).map((c) => (
@@ -28,14 +30,13 @@ export default function CreateursPage() {
                   <div>
                     <h3 className="font-bold text-base text-ink flex items-center gap-1.5">
                       {c.nom}
-                      {c.verifie && <span className="text-[10.5px] font-bold text-primary bg-primary-50 px-1.5 py-0.5 rounded-full">✓ Vérifié</span>}
+                      {c.verifie && <span className="text-[10.5px] font-bold text-primary bg-primary-50 px-1.5 py-0.5 rounded-full">{t('vitrine.creators.verified')}</span>}
                     </h3>
                     <div className="text-[12.5px] text-dim">{c.specialite} · {c.ville}</div>
                   </div>
                 </div>
                 <div className="flex gap-3.5 text-[13px] text-dim">
-                  {c.note ? <span className="text-primary font-bold">★ {c.note}</span> : <span className="text-ghost">Nouveau</span>}
-                  {c.avis ? <span>· {c.avis} avis</span> : null}
+                  {c.note ? <span className="text-primary font-bold">★ {c.note}</span> : <span className="text-ghost">{t('vitrine.creators.new')}</span>}
                   {c.experience ? <span>· {c.experience}</span> : null}
                 </div>
               </Link>

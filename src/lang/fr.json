@@ -897,6 +897,105 @@
     "plus": "Plus",
     "menu": "Menu"
   },
+  "vitrine": {
+    "promo": "✦ Nouveau — la vitrine Gextimo connecte les créateurs de mode africaine à toute l'Afrique de l'Ouest.",
+    "online": "● En ligne",
+    "loading": "Chargement…",
+    "nav": {
+      "how": "Comment ça marche",
+      "creators": "Créateurs",
+      "collections": "Collections",
+      "suivi": "Suivi",
+      "signup": "S'inscrire",
+      "login": "Se connecter"
+    },
+    "hero": {
+      "eyebrow": "Plateforme des créateurs de mode",
+      "title_pre": "La vitrine des ",
+      "title_hl": "créateurs de mode",
+      "title_post": " africaine.",
+      "cta_discover": "Découvrir les créateurs",
+      "cta_how": "Comment ça marche",
+      "stat_creators": "créateurs",
+      "stat_designers": "designers",
+      "stat_cities": "villes"
+    },
+    "rotations": [
+      "Rejoignez l'aventure dès aujourd'hui.",
+      "Découvrez les meilleurs créateurs.",
+      "Trouvez votre inspiration mode.",
+      "Valorisez votre savoir-faire."
+    ],
+    "how": {
+      "eyebrow": "Comment ça marche",
+      "title": "Trois étapes, c'est tout",
+      "subtitle": "Du compte à la première commande, sans friction.",
+      "steps": [
+        { "n": "ÉTAPE 1", "t": "Créez votre compte", "d": "Inscription créateur en quelques minutes." },
+        { "n": "ÉTAPE 2", "t": "Publiez vos créations", "d": "Vitrine pro générée automatiquement." },
+        { "n": "ÉTAPE 3", "t": "Recevez des commandes", "d": "Contacts, devis et suivi au même endroit." }
+      ]
+    },
+    "creators": {
+      "eyebrow": "Découvrir",
+      "title": "Trouvez votre créateur",
+      "subtitle": "Des talents vérifiés, près de chez vous ou partout en Afrique.",
+      "visit": "Visiter le profil",
+      "verified": "✓ Vérifié",
+      "new": "Nouveau"
+    },
+    "gallery": {
+      "eyebrow": "Galerie",
+      "title": "Inspirez-vous des modèles",
+      "subtitle": "Une galerie centralisée, classée par catégorie.",
+      "by": "par",
+      "cats": { "all": "Tous", "robe": "Robes", "costume": "Costumes", "boubou": "Boubous", "enfant": "Enfants" }
+    },
+    "cta": {
+      "title": "Suivez votre commande",
+      "subtitle": "Avec votre numéro de reçu, sans créer de compte.",
+      "button": "Suivre une commande"
+    },
+    "footer": {
+      "tagline": "La vitrine qui connecte créateurs, artisans et clients de la mode africaine.",
+      "col_platform": "Plateforme",
+      "col_company": "Entreprise",
+      "col_support": "Support & Légal",
+      "platform": ["Créateurs", "Collections", "Comment ça marche", "Devenir créateur"],
+      "company": ["À propos", "Qui sommes-nous", "Blog", "Partenaires"],
+      "support": ["FAQ", "Contact", "Mentions légales", "Paramètres cookies"],
+      "rights": "© 2026 Gextimo. Tous droits réservés."
+    },
+    "createurs_page": {
+      "eyebrow": "Créateurs",
+      "title": "Découvrez les créateurs",
+      "subtitle": "Des talents vérifiés à travers le Bénin et l'Afrique de l'Ouest."
+    },
+    "profil": {
+      "quote": "Demander un devis",
+      "contact": "📱 Contacter",
+      "save": "♡ Enregistrer",
+      "catalogue": "Catalogue",
+      "no_creations": "Aucune création publiée pour le moment.",
+      "order": "Commander",
+      "on_quote": "Sur devis",
+      "reviews": "Avis clients",
+      "all_creators": "← Tous les créateurs",
+      "not_found": "Créateur introuvable",
+      "stat_creations": "Créations",
+      "stat_views": "Vues ce mois",
+      "stat_punctuality": "Ponctualité",
+      "stat_experience": "Expérience"
+    },
+    "suivi": {
+      "title": "Suivez votre commande",
+      "subtitle": "Entrez votre numéro de reçu, sans créer de compte.",
+      "placeholder": "Ex : GEX-2026-0847",
+      "button": "Suivre",
+      "in_progress": "En cours",
+      "steps": ["Commande", "Coupe", "Confection", "Essayage", "Livraison"]
+    }
+  },
   "atelier": {
     "titre": "Atelier",
     "ajouter_ville": "Ajouter une ville →",
