@@ -1004,6 +1004,36 @@
       "button": "Track",
       "in_progress": "In progress",
       "steps": ["Order", "Cutting", "Sewing", "Fitting", "Delivery"]
+    },
+    "menu2": { "artisans": "Artisans", "support": "Help", "about": "About us" },
+    "about": {
+      "eyebrow": "About us",
+      "title": "The African fashion ecosystem",
+      "p1": "Gextimo connects fashion creators — tailors, stylists, pattern makers — with their clients across Benin and West Africa. Our mission: showcase African craftsmanship and make it easy for talents and clients to meet.",
+      "p2": "We give creators a professional showcase, management tools (clients, orders, measurements, cash register) and, soon, ways to monetize their visibility.",
+      "values_title": "Our values",
+      "values": ["Showcase local craftsmanship", "Transparency and trust", "Simplicity and accessibility"],
+      "novafrique": "Gextimo is a NovAfrique solution."
+    },
+    "aide": {
+      "eyebrow": "Help",
+      "title": "Support & FAQ",
+      "subtitle": "Answers to the most common questions.",
+      "faq": [
+        { "q": "How do I create my creator account?", "a": "Download the Gextimo app and sign up in minutes. Your public showcase is generated automatically." },
+        { "q": "How do I publish my creations?", "a": "From your space, add your models to your catalogue then enable their publication on the showcase." },
+        { "q": "How does a client contact me?", "a": "If you enable the option, a WhatsApp button appears on your public profile to receive quotes and orders." },
+        { "q": "Is the service free?", "a": "Account creation and the basic showcase are free. Premium options will come to boost your visibility." }
+      ],
+      "contact_title": "Another question?",
+      "contact": "Write to us at support@gextimo.africa — we reply within 48 h."
+    },
+    "artisans": {
+      "eyebrow": "Artisans",
+      "title": "A central gallery of inspirations",
+      "p1": "Browse a library of models and collections to find inspiration, compare styles and choose the creator who will make your custom outfit.",
+      "p2": "Many models are freely accessible to help you express your ideas to your tailor.",
+      "cta": "View the gallery"
     }
   },
   "atelier": {

@@ -96,11 +96,14 @@ export function VitrineNavbar() {
       <header className="sticky top-0 z-40 bg-app/90 backdrop-blur border-b border-edge">
         <div className="max-w-[1180px] mx-auto px-5 h-16 flex items-center gap-4">
           <Link to="/" aria-label="Gextimo"><VitrineLogo /></Link>
-          <nav className="hidden md:flex gap-6 ml-3">
+          <nav className="hidden lg:flex gap-5 ml-3">
             <a href="/#how" className="text-sm text-dim hover:text-ink transition">{t('vitrine.nav.how')}</a>
             <Link to="/createurs" className="text-sm text-dim hover:text-ink transition">{t('vitrine.nav.creators')}</Link>
+            <Link to="/artisans" className="text-sm text-dim hover:text-ink transition">{t('vitrine.menu2.artisans')}</Link>
             <a href="/#gallery" className="text-sm text-dim hover:text-ink transition">{t('vitrine.nav.collections')}</a>
             <Link to="/suivi" className="text-sm text-dim hover:text-ink transition">{t('vitrine.nav.suivi')}</Link>
+            <Link to="/aide" className="text-sm text-dim hover:text-ink transition">{t('vitrine.menu2.support')}</Link>
+            <Link to="/qui-sommes-nous" className="text-sm text-dim hover:text-ink transition">{t('vitrine.menu2.about')}</Link>
           </nav>
           <div className="ml-auto flex items-center gap-2">
             <ThemeToggle />

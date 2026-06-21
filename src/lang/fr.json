@@ -1004,6 +1004,36 @@
       "button": "Suivre",
       "in_progress": "En cours",
       "steps": ["Commande", "Coupe", "Confection", "Essayage", "Livraison"]
+    },
+    "menu2": { "artisans": "Artisans", "support": "Aide", "about": "Qui sommes-nous" },
+    "about": {
+      "eyebrow": "Qui sommes-nous",
+      "title": "L'écosystème de la mode africaine",
+      "p1": "Gextimo connecte les créateurs de mode — couturiers, stylistes, modélistes — à leurs clients à travers le Bénin et l'Afrique de l'Ouest. Notre mission : valoriser le savoir-faire africain et faciliter la rencontre entre talents et clients.",
+      "p2": "Nous offrons aux créateurs une vitrine professionnelle, des outils de gestion (clients, commandes, mesures, caisse) et, bientôt, des moyens de monétiser leur visibilité.",
+      "values_title": "Nos valeurs",
+      "values": ["Valoriser le savoir-faire local", "Transparence et confiance", "Simplicité et accessibilité"],
+      "novafrique": "Gextimo est une solution NovAfrique."
+    },
+    "aide": {
+      "eyebrow": "Aide",
+      "title": "Support & FAQ",
+      "subtitle": "Les réponses aux questions les plus fréquentes.",
+      "faq": [
+        { "q": "Comment créer mon compte créateur ?", "a": "Téléchargez l'application Gextimo et inscrivez-vous en quelques minutes. Votre vitrine publique est générée automatiquement." },
+        { "q": "Comment publier mes créations ?", "a": "Depuis votre espace, ajoutez vos modèles à votre catalogue puis activez leur publication sur la vitrine." },
+        { "q": "Comment un client me contacte-t-il ?", "a": "Si vous activez l'option, un bouton WhatsApp apparaît sur votre profil public pour recevoir devis et commandes." },
+        { "q": "Le service est-il payant ?", "a": "La création de compte et la vitrine de base sont gratuites. Des options premium arriveront pour booster votre visibilité." }
+      ],
+      "contact_title": "Une autre question ?",
+      "contact": "Écrivez-nous à support@gextimo.africa — nous répondons sous 48 h."
+    },
+    "artisans": {
+      "eyebrow": "Artisans",
+      "title": "Une galerie centralisée d'inspirations",
+      "p1": "Parcourez une bibliothèque de modèles et de collections pour trouver l'inspiration, comparer les styles et choisir le créateur qui réalisera votre tenue sur mesure.",
+      "p2": "De nombreux modèles sont accessibles librement pour vous aider à exprimer vos envies à votre couturier.",
+      "cta": "Voir la galerie"
     }
   },
   "atelier": {

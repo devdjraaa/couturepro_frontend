@@ -18,6 +18,9 @@ export const ROUTES = {
   VITRINE_CREATEURS: '/createurs',
   VITRINE_CREATEUR:  '/createurs/:slug',
   VITRINE_SUIVI:     '/suivi',
+  VITRINE_ABOUT:     '/qui-sommes-nous',
+  VITRINE_AIDE:      '/aide',
+  VITRINE_ARTISANS:  '/artisans',
 
   // App (protégées) — '/app' sur le web, '/' sur mobile
   DASHBOARD:        IS_NATIVE ? '/' : '/app',
