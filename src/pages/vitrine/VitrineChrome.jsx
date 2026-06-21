@@ -118,17 +118,40 @@ export function VitrineNavbar() {
   )
 }
 
+function FooterLink({ to, children }) {
+  const cls = 'block text-[13.5px] mb-2.5 text-white/60 hover:text-white transition'
+  const isAnchor = to.startsWith('#') || to.includes('/#')
+  return isAnchor
+    ? <a href={to} className={cls}>{children}</a>
+    : <Link to={to} className={cls}>{children}</Link>
+}
+
 export function VitrineFooter() {
   const { t } = useTranslation()
   const cols = [
-    { h: t('vitrine.footer.col_platform'), links: t('vitrine.footer.platform', { returnObjects: true }) },
-    { h: t('vitrine.footer.col_company'),  links: t('vitrine.footer.company', { returnObjects: true }) },
-    { h: t('vitrine.footer.col_support'),  links: t('vitrine.footer.support', { returnObjects: true }) },
+    { h: t('vitrine.footer.col_platform'), links: [
+      { l: t('vitrine.nav.creators'), to: '/createurs' },
+      { l: t('vitrine.nav.collections'), to: '/#gallery' },
+      { l: t('vitrine.nav.how'), to: '/#how' },
+      { l: t('vitrine.nav.suivi'), to: '/suivi' },
+    ] },
+    { h: t('vitrine.footer.col_company'), links: [
+      { l: t('vitrine.menu2.about'), to: '/qui-sommes-nous' },
+      { l: t('vitrine.menu2.artisans'), to: '/artisans' },
+    ] },
+    { h: t('vitrine.footer.col_support'), links: [
+      { l: t('vitrine.menu2.support'), to: '/aide' },
+    ] },
+    { h: t('vitrine.footer.col_legal'), links: [
+      { l: t('vitrine.footer.legal_mentions'), to: '#' },
+      { l: t('vitrine.footer.legal_privacy'), to: '#' },
+      { l: t('vitrine.footer.legal_cookies'), to: '#' },
+    ] },
   ]
   return (
     <footer className="bg-[#0D0D0D] text-white pt-14 pb-6 mt-2">
       <div className="max-w-[1180px] mx-auto px-5">
-        <div className="grid grid-cols-1 md:grid-cols-[1.6fr_1fr_1fr_1fr] gap-8 pb-9 border-b border-white/10">
+        <div className="grid grid-cols-1 md:grid-cols-[1.6fr_1fr_1fr_1fr_1fr] gap-8 pb-9 border-b border-white/10">
           <div>
             <VitrineLogo onDark />
             <p className="text-[13px] mt-3.5 max-w-[280px] text-white/60">{t('vitrine.footer.tagline')}</p>
@@ -136,9 +159,7 @@ export function VitrineFooter() {
           {cols.map((c) => (
             <div key={c.h}>
               <h5 className="text-[12px] font-bold uppercase tracking-[0.1em] mb-3.5">{c.h}</h5>
-              {(Array.isArray(c.links) ? c.links : []).map((l) => (
-                <a key={l} href="#" className="block text-[13.5px] mb-2.5 text-white/60 hover:text-white transition">{l}</a>
-              ))}
+              {c.links.map((l) => <FooterLink key={l.l} to={l.to}>{l.l}</FooterLink>)}
             </div>
           ))}
         </div>
