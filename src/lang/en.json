@@ -904,6 +904,7 @@
     "indicatif": "* Indicative prices, converted for information only.",
     "search": { "placeholder": "Search a designer, a model…", "empty": "No result.", "creators": "Designers", "models": "Models" },
     "favoris": { "menu": "Favorites", "title": "My favorites", "empty": "You don't have any favorites yet." },
+    "inscription": { "title": "Create your designer account", "subtitle": "Sign-up happens on the Gextimo mobile app.", "body": "Download the app to create your account, manage your workshop, publish your creations and your public showcase.", "cta": "Download the app", "have_account": "Already have an account?", "login": "Log in" },
     "cookies": {
       "text": "We use cookies to improve your experience and remember your preferences (language, currency, theme).",
       "accept": "Accept",

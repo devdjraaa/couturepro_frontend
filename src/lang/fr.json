@@ -904,6 +904,7 @@
     "indicatif": "* Prix indicatifs, convertis à titre informatif.",
     "search": { "placeholder": "Rechercher un créateur, un modèle…", "empty": "Aucun résultat.", "creators": "Créateurs", "models": "Modèles" },
     "favoris": { "menu": "Favoris", "title": "Mes favoris", "empty": "Vous n'avez pas encore de favoris." },
+    "inscription": { "title": "Créez votre compte créateur", "subtitle": "L'inscription se fait sur l'application mobile Gextimo.", "body": "Téléchargez l'application pour créer votre compte, gérer votre atelier, publier vos créations et votre vitrine publique.", "cta": "Télécharger l'application", "have_account": "Déjà un compte ?", "login": "Se connecter" },
     "cookies": {
       "text": "Nous utilisons des cookies pour améliorer votre expérience et mémoriser vos préférences (langue, devise, thème).",
       "accept": "Accepter",

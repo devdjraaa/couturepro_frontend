@@ -22,6 +22,7 @@ export const ROUTES = {
   VITRINE_AIDE:      '/aide',
   VITRINE_ARTISANS:  '/artisans',
   VITRINE_FAVORIS:   '/favoris',
+  VITRINE_INSCRIPTION: '/inscription',
 
   // App (protégées) — '/app' sur le web, '/' sur mobile
   DASHBOARD:        IS_NATIVE ? '/' : '/app',

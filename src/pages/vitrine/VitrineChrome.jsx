@@ -110,7 +110,7 @@ export function VitrineNavbar() {
             <ThemeToggle />
             <DeviseSelect />
             <LangToggle />
-            <Link to="/register" className="hidden sm:inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] border border-edge text-ink hover:border-primary hover:text-primary transition">{t('vitrine.nav.signup')}</Link>
+            <Link to="/inscription" className="hidden sm:inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] border border-edge text-ink hover:border-primary hover:text-primary transition">{t('vitrine.nav.signup')}</Link>
             <Link to="/login" className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">{t('vitrine.nav.login')}</Link>
           </div>
         </div>
