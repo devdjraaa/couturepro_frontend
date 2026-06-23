@@ -43,6 +43,9 @@ export default function MaVitrinePage() {
   const [profileSaved, setProfileSaved] = useState(false)
   const [logoUrl, setLogoUrl] = useState(() => atelier?.logo_url || null)
   const [uploadingLogo, setUploadingLogo] = useState(false)
+  const [instagram, setInstagram] = useState(() => atelier?.instagram || '')
+  const [facebook, setFacebook] = useState(() => atelier?.facebook || '')
+  const [siteWeb, setSiteWeb] = useState(() => atelier?.site_web || '')
 
   useEffect(() => {
     let on = true
@@ -55,6 +58,9 @@ export default function MaVitrinePage() {
   useEffect(() => { setContactPublic(!!atelier?.contact_public) }, [atelier?.contact_public])
   useEffect(() => { setSpecialite(atelier?.specialite || ''); setBio(atelier?.bio || '') }, [atelier?.specialite, atelier?.bio])
   useEffect(() => { setLogoUrl(atelier?.logo_url || null) }, [atelier?.logo_url])
+  useEffect(() => {
+    setInstagram(atelier?.instagram || ''); setFacebook(atelier?.facebook || ''); setSiteWeb(atelier?.site_web || '')
+  }, [atelier?.instagram, atelier?.facebook, atelier?.site_web])
 
   const publicPath = atelier?.id ? `/createurs/${atelier.id}` : '/createurs'
   const publicUrl = typeof window !== 'undefined' ? `${window.location.origin}${publicPath}` : publicPath
@@ -102,7 +108,7 @@ export default function MaVitrinePage() {
     setSavingProfile(true)
     setProfileSaved(false)
     try {
-      await parametresService.updateAtelier({ nom: atelier.nom, specialite, bio })
+      await parametresService.updateAtelier({ nom: atelier.nom, specialite, bio, instagram, facebook, site_web: siteWeb })
       setProfileSaved(true)
       setTimeout(() => setProfileSaved(false), 2000)
     } catch { /* erreur silencieuse */ } finally {
@@ -202,6 +208,12 @@ export default function MaVitrinePage() {
           <textarea value={bio} onChange={(e) => setBio(e.target.value)} rows={3} maxLength={1000}
                     placeholder="Présentez votre atelier en quelques mots…"
                     className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink resize-none focus:outline-none focus:ring-2 focus:ring-primary/30" />
+          <label className="block text-xs font-medium text-dim mb-1 mt-3">Réseaux & site</label>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <input value={instagram} onChange={(e) => setInstagram(e.target.value)} maxLength={255} placeholder="Instagram (@ ou lien)" className="rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
+            <input value={facebook} onChange={(e) => setFacebook(e.target.value)} maxLength={255} placeholder="Facebook (lien)" className="rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
+            <input value={siteWeb} onChange={(e) => setSiteWeb(e.target.value)} maxLength={255} placeholder="Site web" className="rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
+          </div>
           <div className="flex items-center gap-3 mt-3">
             <button onClick={saveProfile} disabled={savingProfile}
                     className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-600 transition disabled:opacity-60">

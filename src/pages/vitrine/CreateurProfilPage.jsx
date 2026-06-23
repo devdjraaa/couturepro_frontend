@@ -33,6 +33,11 @@ export default function CreateurProfilPage() {
   const creations = c.creations || []
   const wa = c.whatsapp ? `https://wa.me/${c.whatsapp}` : null
   const waHref = (key, params) => `${wa}?text=${encodeURIComponent(t(key, params))}`
+  const r = c.reseaux || {}
+  const igUrl = r.instagram ? (r.instagram.startsWith('http') ? r.instagram : `https://instagram.com/${r.instagram.replace(/^@/, '')}`) : null
+  const fbUrl = r.facebook ? (r.facebook.startsWith('http') ? r.facebook : `https://facebook.com/${r.facebook}`) : null
+  const siteUrl = r.site_web ? (r.site_web.startsWith('http') ? r.site_web : `https://${r.site_web}`) : null
+  const socialCls = 'text-xs font-semibold px-3 py-1.5 rounded-full border border-edge text-dim hover:text-primary hover:border-primary transition'
   const stats = [
     { v: creations.length, l: t('vitrine.profil.stat_creations') },
     { v: '247', l: t('vitrine.profil.stat_views') },
@@ -58,6 +63,13 @@ export default function CreateurProfilPage() {
             <div className="text-dim text-[13px] mt-1">📍 {c.ville}, Bénin</div>
             {c.note && <div className="text-sm mt-2"><span className="text-primary font-bold">★ {c.note}</span> <span className="text-dim">({c.avis})</span></div>}
             {c.bio && <p className="text-ink text-sm mt-3 leading-relaxed">{c.bio}</p>}
+            {(igUrl || fbUrl || siteUrl) && (
+              <div className="flex gap-2 mt-3 flex-wrap">
+                {igUrl && <a href={igUrl} target="_blank" rel="noopener noreferrer" className={socialCls}>Instagram</a>}
+                {fbUrl && <a href={fbUrl} target="_blank" rel="noopener noreferrer" className={socialCls}>Facebook</a>}
+                {siteUrl && <a href={siteUrl} target="_blank" rel="noopener noreferrer" className={socialCls}>Site web</a>}
+              </div>
+            )}
           </div>
           <div className="flex flex-col gap-2 w-full sm:w-auto">
             {wa
