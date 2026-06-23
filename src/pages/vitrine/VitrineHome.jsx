@@ -141,7 +141,7 @@ export default function VitrineHome() {
               <Link key={c.id} to={`/createurs/${c.id}`}
                     className="min-w-[268px] max-w-[268px] bg-card border border-edge rounded-lg p-5 transition hover:-translate-y-0.5 hover:shadow-lg hover:border-primary">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-[50px] h-[50px] rounded-xl flex items-center justify-center font-display font-bold text-lg text-white shrink-0" style={{ background: c.gradient }}>{c.initiales}</div>
+                  <div className="w-[50px] h-[50px] rounded-xl overflow-hidden flex items-center justify-center font-display font-bold text-lg text-white shrink-0" style={c.logo_url ? undefined : { background: c.gradient }}>{c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" /> : c.initiales}</div>
                   <div>
                     <h4 className="font-bold text-[15.5px] text-ink flex items-center gap-1.5">
                       {c.nom}

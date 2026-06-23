@@ -46,7 +46,9 @@ export default function CreateurProfilPage() {
       <div className="max-w-[1180px] mx-auto px-5">
         {/* Carte profil */}
         <div className="bg-card border border-edge rounded-lg -mt-[60px] relative p-6 flex flex-wrap items-start gap-5 shadow-lg">
-          <div className="w-[88px] h-[88px] rounded-2xl flex items-center justify-center font-display font-bold text-[30px] text-white shrink-0 border-4 border-card" style={{ background: c.gradient }}>{c.initiales}</div>
+          <div className="w-[88px] h-[88px] rounded-2xl overflow-hidden flex items-center justify-center font-display font-bold text-[30px] text-white shrink-0 border-4 border-card" style={c.logo_url ? undefined : { background: c.gradient }}>
+            {c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" /> : c.initiales}
+          </div>
           <div className="flex-1 min-w-[220px]">
             <h1 className="font-display text-[26px] text-ink flex items-center gap-2.5 flex-wrap">
               {c.nom}

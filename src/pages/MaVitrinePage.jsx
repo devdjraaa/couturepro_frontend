@@ -41,6 +41,8 @@ export default function MaVitrinePage() {
   const [bio, setBio] = useState(() => atelier?.bio || '')
   const [savingProfile, setSavingProfile] = useState(false)
   const [profileSaved, setProfileSaved] = useState(false)
+  const [logoUrl, setLogoUrl] = useState(() => atelier?.logo_url || null)
+  const [uploadingLogo, setUploadingLogo] = useState(false)
 
   useEffect(() => {
     let on = true
@@ -52,6 +54,7 @@ export default function MaVitrinePage() {
 
   useEffect(() => { setContactPublic(!!atelier?.contact_public) }, [atelier?.contact_public])
   useEffect(() => { setSpecialite(atelier?.specialite || ''); setBio(atelier?.bio || '') }, [atelier?.specialite, atelier?.bio])
+  useEffect(() => { setLogoUrl(atelier?.logo_url || null) }, [atelier?.logo_url])
 
   const publicPath = atelier?.id ? `/createurs/${atelier.id}` : '/createurs'
   const publicUrl = typeof window !== 'undefined' ? `${window.location.origin}${publicPath}` : publicPath
@@ -104,6 +107,18 @@ export default function MaVitrinePage() {
       setTimeout(() => setProfileSaved(false), 2000)
     } catch { /* erreur silencieuse */ } finally {
       setSavingProfile(false)
+    }
+  }
+
+  const onLogoChange = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploadingLogo(true)
+    try {
+      const { logo_url } = await parametresService.uploadAtelierLogo(file)
+      setLogoUrl(logo_url)
+    } catch { /* erreur silencieuse */ } finally {
+      setUploadingLogo(false)
     }
   }
 
@@ -170,6 +185,15 @@ export default function MaVitrinePage() {
         {/* Profil public éditable */}
         <div className="mt-4 bg-card border border-edge rounded-xl p-4">
           <p className="text-sm font-semibold text-ink mb-3">Mon profil public</p>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-14 h-14 rounded-xl overflow-hidden bg-subtle flex items-center justify-center shrink-0">
+              {logoUrl ? <img src={logoUrl} alt="Logo" className="w-full h-full object-cover" /> : <Store size={20} className="text-ghost" />}
+            </div>
+            <label className="text-sm font-semibold text-primary cursor-pointer hover:underline">
+              {uploadingLogo ? 'Envoi…' : 'Changer le logo / la photo'}
+              <input type="file" accept="image/*" onChange={onLogoChange} disabled={uploadingLogo} className="hidden" />
+            </label>
+          </div>
           <label className="block text-xs font-medium text-dim mb-1">Spécialité</label>
           <input value={specialite} onChange={(e) => setSpecialite(e.target.value)} maxLength={120}
                  placeholder="Ex : Haute couture, Tailleur…"

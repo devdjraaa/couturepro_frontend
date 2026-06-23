@@ -163,6 +163,17 @@ export const parametresService = {
     return data
   },
 
+  async uploadAtelierLogo(file) {
+    if (isMock()) {
+      await delay()
+      return { logo_url: URL.createObjectURL(file) }
+    }
+    const fd = new FormData()
+    fd.append('logo', file)
+    const { data } = await api.post('/parametres/atelier/logo', fd)
+    return data
+  },
+
   async registerFcmToken(fcm_token, platform = null) {
     try {
       await api.post('/notifications/fcm-token', { fcm_token, platform })
