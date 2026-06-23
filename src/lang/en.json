@@ -981,7 +981,10 @@
     "createurs_page": {
       "eyebrow": "Designers",
       "title": "Discover the designers",
-      "subtitle": "Verified talents across Benin and West Africa."
+      "subtitle": "Verified talents across Benin and West Africa.",
+      "filter_search": "Search (name, specialty)…",
+      "filter_all_cities": "All cities",
+      "filter_verified": "Verified only"
     },
     "profil": {
       "quote": "Request a quote",

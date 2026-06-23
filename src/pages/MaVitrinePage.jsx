@@ -88,7 +88,8 @@ export default function MaVitrinePage() {
     setCreations((list) => list.map((x) => (x.id === v.id ? { ...x, publie_vitrine: next } : x)))
     try {
       await vetementService.setPublication(v.id, next)
-    } catch {
+    } catch (e) {
+      if (e?.response?.status === 403) alert(e.response.data?.message || 'Limite atteinte.')
       // échec → on revient à l'état précédent
       setCreations((list) => list.map((x) => (x.id === v.id ? { ...x, publie_vitrine: !next } : x)))
     } finally {
