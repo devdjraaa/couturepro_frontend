@@ -10,6 +10,7 @@ import { useAuth } from '@/contexts'
 import { useDashboard } from '@/hooks/useDashboard'
 import { vetementService } from '@/services/vetementService'
 import { parametresService } from '@/services/parametresService'
+import { collectionService } from '@/services/collectionService'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { cn } from '@/utils/cn'
 import { IS_NATIVE } from '@/constants/routes'
@@ -46,6 +47,8 @@ export default function MaVitrinePage() {
   const [instagram, setInstagram] = useState(() => atelier?.instagram || '')
   const [facebook, setFacebook] = useState(() => atelier?.facebook || '')
   const [siteWeb, setSiteWeb] = useState(() => atelier?.site_web || '')
+  const [collections, setCollections] = useState([])
+  const [newCollection, setNewCollection] = useState('')
 
   useEffect(() => {
     let on = true
@@ -61,6 +64,7 @@ export default function MaVitrinePage() {
   useEffect(() => {
     setInstagram(atelier?.instagram || ''); setFacebook(atelier?.facebook || ''); setSiteWeb(atelier?.site_web || '')
   }, [atelier?.instagram, atelier?.facebook, atelier?.site_web])
+  useEffect(() => { collectionService.getAll().then((d) => setCollections(d || [])).catch(() => {}) }, [])
 
   const publicPath = atelier?.id ? `/createurs/${atelier.id}` : '/createurs'
   const publicUrl = typeof window !== 'undefined' ? `${window.location.origin}${publicPath}` : publicPath
@@ -126,6 +130,27 @@ export default function MaVitrinePage() {
     } catch { /* erreur silencieuse */ } finally {
       setUploadingLogo(false)
     }
+  }
+
+  const addCollection = async () => {
+    const nom = newCollection.trim()
+    if (!nom) return
+    try {
+      const c = await collectionService.create(nom)
+      setCollections((l) => [...l, c])
+      setNewCollection('')
+    } catch { /* erreur silencieuse */ }
+  }
+
+  const removeCollection = async (id) => {
+    setCollections((l) => l.filter((c) => c.id !== id))
+    setCreations((list) => (list ? list.map((v) => (v.collection_id === id ? { ...v, collection_id: null } : v)) : list))
+    try { await collectionService.remove(id) } catch { /* erreur silencieuse */ }
+  }
+
+  const assignCollection = async (vetementId, collectionId) => {
+    setCreations((list) => list.map((v) => (v.id === vetementId ? { ...v, collection_id: collectionId || null } : v)))
+    try { await vetementService.setCollection(vetementId, collectionId) } catch { /* erreur silencieuse */ }
   }
 
   return (
@@ -223,6 +248,27 @@ export default function MaVitrinePage() {
           </div>
         </div>
 
+        {/* Collections */}
+        <div className="mt-4 bg-card border border-edge rounded-xl p-4">
+          <p className="text-sm font-semibold text-ink mb-3">Mes collections</p>
+          <div className="flex flex-wrap gap-2 mb-3">
+            {collections.length === 0 && <span className="text-xs text-ghost">Aucune collection pour le moment.</span>}
+            {collections.map((c) => (
+              <span key={c.id} className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-subtle text-ink">
+                {c.nom}{c.vetements_count != null && <span className="text-ghost">· {c.vetements_count}</span>}
+                <button onClick={() => removeCollection(c.id)} className="text-ghost hover:text-danger" aria-label="Supprimer">✕</button>
+              </span>
+            ))}
+          </div>
+          <div className="flex gap-2">
+            <input value={newCollection} onChange={(e) => setNewCollection(e.target.value)} maxLength={120}
+                   onKeyDown={(e) => { if (e.key === 'Enter') addCollection() }}
+                   placeholder="Nouvelle collection…"
+                   className="flex-1 rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
+            <button onClick={addCollection} className="text-sm font-semibold px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-600 transition">Ajouter</button>
+          </div>
+        </div>
+
         {/* Stats publiques — à venir (tracking backend non disponible) */}
         <div className="mt-4 bg-subtle border border-edge rounded-xl p-4">
           <p className="text-sm font-semibold text-ink mb-3">Statistiques publiques</p>
@@ -285,6 +331,13 @@ export default function MaVitrinePage() {
                     <p className={cn('text-[10px] font-semibold mt-0.5', pub ? 'text-primary' : 'text-ghost')}>
                       {pub ? 'Publié' : 'Masqué'}
                     </p>
+                    {collections.length > 0 && (
+                      <select value={v.collection_id || ''} onChange={(e) => assignCollection(v.id, e.target.value)}
+                              className="mt-1.5 w-full text-[11px] rounded border border-edge bg-app px-1.5 py-1 text-dim focus:outline-none">
+                        <option value="">— Collection</option>
+                        {collections.map((c) => <option key={c.id} value={c.id}>{c.nom}</option>)}
+                      </select>
+                    )}
                   </div>
                 </div>
               )

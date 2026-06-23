@@ -38,6 +38,33 @@ export default function CreateurProfilPage() {
   const fbUrl = r.facebook ? (r.facebook.startsWith('http') ? r.facebook : `https://facebook.com/${r.facebook}`) : null
   const siteUrl = r.site_web ? (r.site_web.startsWith('http') ? r.site_web : `https://${r.site_web}`) : null
   const socialCls = 'text-xs font-semibold px-3 py-1.5 rounded-full border border-edge text-dim hover:text-primary hover:border-primary transition'
+  const cols = c.collections || []
+
+  const renderGrid = (items) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {items.map((m) => (
+        <div key={m.id} className="bg-card border border-edge rounded-lg overflow-hidden">
+          {m.image_url ? (
+            <img src={m.image_url} alt={m.nom} className="h-[170px] w-full object-cover" />
+          ) : (
+            <div className="h-[170px] flex items-center justify-center text-[40px] relative" style={{ background: m.gradient }}>
+              <span className="absolute top-2.5 left-2.5 text-white text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-[#0D0D0D]">{m.type}</span>
+              {m.emoji}
+            </div>
+          )}
+          <div className="p-3.5 flex items-center justify-between">
+            <div>
+              <h4 className="font-semibold text-[14.5px] text-ink">{m.nom}</h4>
+              <div className="font-bold text-primary text-[14px]">{format(m.prix) || t('vitrine.profil.on_quote')}</div>
+            </div>
+            {wa
+              ? <a href={waHref('vitrine.profil.wa_order', { nom: c.nom, modele: m.nom })} target="_blank" rel="noopener noreferrer" className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">{t('vitrine.profil.order')}</a>
+              : <button className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">{t('vitrine.profil.order')}</button>}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
   const stats = [
     { v: creations.length, l: t('vitrine.profil.stat_creations') },
     { v: '247', l: t('vitrine.profil.stat_views') },
@@ -96,30 +123,29 @@ export default function CreateurProfilPage() {
         <h2 className="font-display text-2xl mt-10 mb-5 text-ink">{t('vitrine.profil.catalogue')}</h2>
         {creations.length === 0 ? (
           <p className="text-dim">{t('vitrine.profil.no_creations')}</p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {creations.map((m) => (
-              <div key={m.id} className="bg-card border border-edge rounded-lg overflow-hidden">
-                {m.image_url ? (
-                  <img src={m.image_url} alt={m.nom} className="h-[170px] w-full object-cover" />
-                ) : (
-                  <div className="h-[170px] flex items-center justify-center text-[40px] relative" style={{ background: m.gradient }}>
-                    <span className="absolute top-2.5 left-2.5 text-white text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-[#0D0D0D]">{m.type}</span>
-                    {m.emoji}
-                  </div>
-                )}
-                <div className="p-3.5 flex items-center justify-between">
-                  <div>
-                    <h4 className="font-semibold text-[14.5px] text-ink">{m.nom}</h4>
-                    <div className="font-bold text-primary text-[14px]">{format(m.prix) || t('vitrine.profil.on_quote')}</div>
-                  </div>
-                  {wa
-                    ? <a href={waHref('vitrine.profil.wa_order', { nom: c.nom, modele: m.nom })} target="_blank" rel="noopener noreferrer" className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">{t('vitrine.profil.order')}</a>
-                    : <button className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">{t('vitrine.profil.order')}</button>}
+        ) : cols.length > 0 ? (
+          <>
+            {cols.map((col) => {
+              const items = creations.filter((m) => m.collection_id === col.id)
+              return items.length ? (
+                <div key={col.id} className="mb-7">
+                  <h3 className="font-display text-lg text-ink mb-3">{col.nom}</h3>
+                  {renderGrid(items)}
                 </div>
-              </div>
-            ))}
-          </div>
+              ) : null
+            })}
+            {(() => {
+              const autres = creations.filter((m) => !m.collection_id)
+              return autres.length ? (
+                <div className="mb-7">
+                  <h3 className="font-display text-lg text-ink mb-3">{t('vitrine.profil.others')}</h3>
+                  {renderGrid(autres)}
+                </div>
+              ) : null
+            })()}
+          </>
+        ) : (
+          renderGrid(creations)
         )}
 
         {/* Avis */}

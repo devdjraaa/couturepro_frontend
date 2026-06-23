@@ -999,7 +999,8 @@
       "stat_experience": "Expérience",
       "wa_message": "Bonjour {{nom}}, je vous contacte via votre vitrine Gextimo.",
       "wa_quote": "Bonjour {{nom}}, je souhaite demander un devis via votre vitrine Gextimo.",
-      "wa_order": "Bonjour {{nom}}, je suis intéressé(e) par « {{modele}} » sur votre vitrine Gextimo."
+      "wa_order": "Bonjour {{nom}}, je suis intéressé(e) par « {{modele}} » sur votre vitrine Gextimo.",
+      "others": "Autres"
     },
     "suivi": {
       "title": "Suivez votre commande",

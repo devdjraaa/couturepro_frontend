@@ -76,6 +76,18 @@ export const vetementService = {
     await api.delete(`/vetements/${id}`)
   },
 
+  // Assigne (ou retire) une création à une collection.
+  async setCollection(id, collectionId) {
+    if (isMock()) {
+      await delay()
+      const idx = mockVetements.findIndex((v) => v.id === id || v.id === Number(id))
+      if (idx !== -1) mockVetements[idx].collection_id = collectionId || null
+      return mockVetements[idx]
+    }
+    const { data } = await api.post(`/vetements/${id}/collection`, { collection_id: collectionId || null })
+    return data
+  },
+
   // Publie / retire une création de la vitrine publique.
   async setPublication(id, publie) {
     if (isMock()) {
