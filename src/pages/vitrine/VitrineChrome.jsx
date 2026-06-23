@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Sun, Moon } from 'lucide-react'
+import { Sun, Moon, Heart } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useTheme, useLang } from '@/contexts'
 import { cn } from '@/utils/cn'
@@ -106,6 +106,7 @@ export function VitrineNavbar() {
             <Link to="/qui-sommes-nous" className="text-sm text-dim hover:text-ink transition">{t('vitrine.menu2.about')}</Link>
           </nav>
           <div className="ml-auto flex items-center gap-2">
+            <Link to="/favoris" aria-label={t('vitrine.favoris.menu')} className="w-8 h-8 flex items-center justify-center rounded-[10px] border border-edge text-dim hover:text-primary hover:border-primary transition"><Heart size={15} /></Link>
             <ThemeToggle />
             <DeviseSelect />
             <LangToggle />

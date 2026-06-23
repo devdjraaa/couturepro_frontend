@@ -903,6 +903,7 @@
     "loading": "Chargement…",
     "indicatif": "* Prix indicatifs, convertis à titre informatif.",
     "search": { "placeholder": "Rechercher un créateur, un modèle…", "empty": "Aucun résultat.", "creators": "Créateurs", "models": "Modèles" },
+    "favoris": { "menu": "Favoris", "title": "Mes favoris", "empty": "Vous n'avez pas encore de favoris." },
     "cookies": {
       "text": "Nous utilisons des cookies pour améliorer votre expérience et mémoriser vos préférences (langue, devise, thème).",
       "accept": "Accepter",

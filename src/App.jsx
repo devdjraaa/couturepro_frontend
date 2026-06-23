@@ -36,6 +36,7 @@ import CreateurProfilPage from '@/pages/vitrine/CreateurProfilPage'
 import SuiviVitrinePage   from '@/pages/vitrine/SuiviPage'
 import { VitrineLayout }  from '@/pages/vitrine/vitrineCurrency'
 import { QuiSommesNousPage, AidePage, ArtisansPage } from '@/pages/vitrine/VitrineInfoPages'
+import FavorisPage         from '@/pages/vitrine/FavorisPage'
 
 // Pages admin
 import AdminLoginPage          from '@/pages/admin/AdminLoginPage'
@@ -97,6 +98,7 @@ export default function App() {
             <Route path={ROUTES.VITRINE_ABOUT}     element={<QuiSommesNousPage />} />
             <Route path={ROUTES.VITRINE_AIDE}      element={<AidePage />} />
             <Route path={ROUTES.VITRINE_ARTISANS}  element={<ArtisansPage />} />
+            <Route path={ROUTES.VITRINE_FAVORIS}   element={<FavorisPage />} />
           </Route>
         )}
 

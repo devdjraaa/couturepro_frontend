@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Heart } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { getCreators } from './vitrineApi'
+import { useFavoris } from './useFavoris'
 
 export default function CreateursPage() {
   const { t } = useTranslation()
+  const { has, toggle } = useFavoris()
   const [creators, setCreators] = useState(null)
   useEffect(() => { getCreators().then(setCreators) }, [])
 
@@ -24,7 +27,10 @@ export default function CreateursPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {(creators || []).map((c) => (
               <Link key={c.id} to={`/createurs/${c.id}`}
-                    className="bg-card border border-edge rounded-lg p-5 transition hover:-translate-y-0.5 hover:shadow-lg hover:border-primary">
+                    className="relative bg-card border border-edge rounded-lg p-5 transition hover:-translate-y-0.5 hover:shadow-lg hover:border-primary">
+                <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(c.id) }} className="absolute top-3 right-3 z-10" aria-label="Favori">
+                  <Heart size={16} className={has(c.id) ? 'text-primary' : 'text-ghost'} fill={has(c.id) ? 'currentColor' : 'none'} />
+                </button>
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-[52px] h-[52px] rounded-xl overflow-hidden flex items-center justify-center font-display font-bold text-lg text-white shrink-0" style={c.logo_url ? undefined : { background: c.gradient }}>{c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" /> : c.initiales}</div>
                   <div>

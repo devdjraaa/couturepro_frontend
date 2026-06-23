@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { getCreator } from './vitrineApi'
 import { useDevise } from './vitrineCurrency'
+import { useFavoris } from './useFavoris'
 import { avisService } from '@/services/avisService'
 
 const btnPrimary = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-white hover:bg-primary-600 transition'
@@ -53,6 +54,7 @@ function AvisForm({ atelierId }) {
 export default function CreateurProfilPage() {
   const { t } = useTranslation()
   const { format } = useDevise()
+  const { has, toggle } = useFavoris()
   const { slug } = useParams()
   const [c, setC] = useState(undefined) // undefined = loading, null = introuvable
 
@@ -147,7 +149,7 @@ export default function CreateurProfilPage() {
             {wa
               ? <a href={waHref('vitrine.profil.wa_message', { nom: c.nom })} target="_blank" rel="noopener noreferrer" className={btnOutline}>{t('vitrine.profil.contact')}</a>
               : <button className={btnOutline}>{t('vitrine.profil.contact')}</button>}
-            <button className={btnOutline}>{t('vitrine.profil.save')}</button>
+            <button onClick={() => toggle(c.id)} className={btnOutline}>{has(c.id) ? '♥ ' : '♡ '}{t('vitrine.profil.save')}</button>
           </div>
         </div>
 

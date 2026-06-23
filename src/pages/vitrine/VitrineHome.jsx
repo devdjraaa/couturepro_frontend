@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Heart } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { getCreators, demoModels, categories } from './vitrineApi'
 import { useDevise } from './vitrineCurrency'
+import { useFavoris } from './useFavoris'
 
 const btnPrimary = 'inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-white hover:bg-primary-600 transition'
 const btnOutline = 'inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary transition'
@@ -73,6 +75,7 @@ function SectionHead({ eyebrow, title, subtitle }) {
 export default function VitrineHome() {
   const { t } = useTranslation()
   const { format } = useDevise()
+  const { has, toggle } = useFavoris()
   const [rot, setRot] = useState(0)
   const [creators, setCreators] = useState(null)
   const [cat, setCat] = useState('all')
@@ -139,7 +142,10 @@ export default function VitrineHome() {
           <div className="flex gap-4 overflow-x-auto pb-3.5">
             {(creators || []).map((c) => (
               <Link key={c.id} to={`/createurs/${c.id}`}
-                    className="min-w-[268px] max-w-[268px] bg-card border border-edge rounded-lg p-5 transition hover:-translate-y-0.5 hover:shadow-lg hover:border-primary">
+                    className="relative min-w-[268px] max-w-[268px] bg-card border border-edge rounded-lg p-5 transition hover:-translate-y-0.5 hover:shadow-lg hover:border-primary">
+                <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(c.id) }} className="absolute top-3 right-3 z-10" aria-label="Favori">
+                  <Heart size={16} className={has(c.id) ? 'text-primary' : 'text-ghost'} fill={has(c.id) ? 'currentColor' : 'none'} />
+                </button>
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-[50px] h-[50px] rounded-xl overflow-hidden flex items-center justify-center font-display font-bold text-lg text-white shrink-0" style={c.logo_url ? undefined : { background: c.gradient }}>{c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" /> : c.initiales}</div>
                   <div>
