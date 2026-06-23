@@ -1012,7 +1012,9 @@
       "avis_name": "Your name",
       "avis_text": "Your review…",
       "avis_send": "Send",
-      "avis_thanks": "Thank you! Your review will be published after validation."
+      "avis_thanks": "Thank you! Your review will be published after validation.",
+      "report": "Report",
+      "report_done": "Reported, thank you."
     },
     "suivi": {
       "title": "Track your order",

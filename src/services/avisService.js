@@ -23,4 +23,11 @@ export const avisService = {
     const { data } = await api.post(`/avis/${id}/moderation`, { statut })
     return data
   },
+
+  // Signalement public d'un avis.
+  async report(id) {
+    if (isMock()) { await delay(); return {} }
+    const { data } = await api.post(`/vitrine/avis/${id}/signaler`)
+    return data
+  },
 }

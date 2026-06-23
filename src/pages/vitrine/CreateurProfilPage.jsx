@@ -57,6 +57,7 @@ export default function CreateurProfilPage() {
   const { has, toggle } = useFavoris()
   const { slug } = useParams()
   const [c, setC] = useState(undefined) // undefined = loading, null = introuvable
+  const [reported, setReported] = useState(() => new Set())
 
   useEffect(() => { getCreator(slug).then((d) => setC(d ?? null)) }, [slug])
 
@@ -82,6 +83,11 @@ export default function CreateurProfilPage() {
   const fbUrl = r.facebook ? (r.facebook.startsWith('http') ? r.facebook : `https://facebook.com/${r.facebook}`) : null
   const siteUrl = r.site_web ? (r.site_web.startsWith('http') ? r.site_web : `https://${r.site_web}`) : null
   const socialCls = 'text-xs font-semibold px-3 py-1.5 rounded-full border border-edge text-dim hover:text-primary hover:border-primary transition'
+
+  const reportAvis = async (id) => {
+    setReported((s) => new Set(s).add(id))
+    try { await avisService.report(id) } catch { /* erreur silencieuse */ }
+  }
   const cols = c.collections || []
 
   const renderGrid = (items) => (
@@ -197,13 +203,16 @@ export default function CreateurProfilPage() {
         {(c.avis && c.avis.length > 0) ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             {c.avis.map((r, i) => (
-              <figure key={i} className="bg-card border border-edge rounded-lg p-5">
+              <figure key={r.id || i} className="bg-card border border-edge rounded-lg p-5">
                 <div className="flex items-center justify-between mb-2">
                   <b className="text-[14px] text-ink">{r.auteur_nom}</b>
                   <span className="text-[12px] text-dim">{r.created_at ? new Date(r.created_at).toLocaleDateString() : ''}</span>
                 </div>
                 <div className="text-primary text-[13px] mb-2">{'★'.repeat(r.note)}{'☆'.repeat(5 - r.note)}</div>
                 {r.texte && <p className="text-[13.5px] leading-relaxed text-ink">{r.texte}</p>}
+                {r.id && (reported.has(r.id)
+                  ? <span className="text-[11px] text-ghost mt-2 inline-block">{t('vitrine.profil.report_done')}</span>
+                  : <button onClick={() => reportAvis(r.id)} className="text-[11px] text-ghost hover:text-danger mt-2">{t('vitrine.profil.report')}</button>)}
               </figure>
             ))}
           </div>

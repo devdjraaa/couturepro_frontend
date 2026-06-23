@@ -68,7 +68,7 @@ export default function MaVitrinePage() {
     setInstagram(atelier?.instagram || ''); setFacebook(atelier?.facebook || ''); setSiteWeb(atelier?.site_web || '')
   }, [atelier?.instagram, atelier?.facebook, atelier?.site_web])
   useEffect(() => { collectionService.getAll().then((d) => setCollections(d || [])).catch(() => {}) }, [])
-  useEffect(() => { avisService.getMine().then((d) => setPendingAvis((d || []).filter((a) => a.statut === 'en_attente'))).catch(() => {}) }, [])
+  useEffect(() => { avisService.getMine().then((d) => setPendingAvis((d || []).filter((a) => a.statut === 'en_attente' || a.statut === 'signale'))).catch(() => {}) }, [])
 
   const publicPath = atelier?.id ? `/createurs/${atelier.id}` : '/createurs'
   const publicUrl = typeof window !== 'undefined' ? `${window.location.origin}${publicPath}` : publicPath
@@ -304,7 +304,7 @@ export default function MaVitrinePage() {
               {pendingAvis.map((a) => (
                 <div key={a.id} className="border border-edge rounded-lg p-3">
                   <div className="flex items-center justify-between">
-                    <b className="text-sm text-ink">{a.auteur_nom}</b>
+                    <b className="text-sm text-ink">{a.auteur_nom}{a.statut === 'signale' && <span className="text-[10px] font-bold text-danger ml-1.5">⚑ signalé</span>}</b>
                     <span className="text-primary text-xs">{'★'.repeat(a.note)}{'☆'.repeat(5 - a.note)}</span>
                   </div>
                   {a.texte && <p className="text-xs text-dim mt-1">{a.texte}</p>}

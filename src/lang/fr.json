@@ -1012,7 +1012,9 @@
       "avis_name": "Votre nom",
       "avis_text": "Votre avis…",
       "avis_send": "Envoyer",
-      "avis_thanks": "Merci ! Votre avis sera publié après validation."
+      "avis_thanks": "Merci ! Votre avis sera publié après validation.",
+      "report": "Signaler",
+      "report_done": "Signalé, merci."
     },
     "suivi": {
       "title": "Suivez votre commande",
