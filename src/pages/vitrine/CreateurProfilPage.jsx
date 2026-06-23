@@ -2,11 +2,53 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
-import { getCreator, demoReviews } from './vitrineApi'
+import { getCreator } from './vitrineApi'
 import { useDevise } from './vitrineCurrency'
+import { avisService } from '@/services/avisService'
 
 const btnPrimary = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-white hover:bg-primary-600 transition'
 const btnOutline = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary transition'
+
+function AvisForm({ atelierId }) {
+  const { t } = useTranslation()
+  const [nom, setNom] = useState('')
+  const [note, setNote] = useState(5)
+  const [texte, setTexte] = useState('')
+  const [sent, setSent] = useState(false)
+  const [sending, setSending] = useState(false)
+
+  const submit = async (e) => {
+    e.preventDefault()
+    if (!nom.trim() || sending) return
+    setSending(true)
+    try {
+      await avisService.submit(atelierId, { auteur_nom: nom.trim(), note, texte: texte.trim() || null })
+      setSent(true)
+    } catch { /* erreur silencieuse */ } finally {
+      setSending(false)
+    }
+  }
+
+  if (sent) return <p className="text-sm text-success font-medium">{t('vitrine.profil.avis_thanks')}</p>
+
+  return (
+    <form onSubmit={submit} className="bg-card border border-edge rounded-lg p-5 max-w-[520px]">
+      <h3 className="font-display text-lg text-ink mb-3">{t('vitrine.profil.avis_leave')}</h3>
+      <input value={nom} onChange={(e) => setNom(e.target.value)} maxLength={80} placeholder={t('vitrine.profil.avis_name')}
+             className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink mb-2 focus:outline-none focus:ring-2 focus:ring-primary/30" />
+      <div className="flex gap-1 mb-2">
+        {[1, 2, 3, 4, 5].map((n) => (
+          <button type="button" key={n} onClick={() => setNote(n)} className={`text-xl ${n <= note ? 'text-primary' : 'text-ghost'}`} aria-label={`${n}/5`}>★</button>
+        ))}
+      </div>
+      <textarea value={texte} onChange={(e) => setTexte(e.target.value)} rows={3} maxLength={600} placeholder={t('vitrine.profil.avis_text')}
+                className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink resize-none mb-3 focus:outline-none focus:ring-2 focus:ring-primary/30" />
+      <button type="submit" disabled={sending} className="text-sm font-semibold px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-600 transition disabled:opacity-60">
+        {t('vitrine.profil.avis_send')}
+      </button>
+    </form>
+  )
+}
 
 export default function CreateurProfilPage() {
   const { t } = useTranslation()
@@ -150,18 +192,23 @@ export default function CreateurProfilPage() {
 
         {/* Avis */}
         <h2 className="font-display text-2xl mt-12 mb-5 text-ink">{t('vitrine.profil.reviews')}</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pb-16">
-          {demoReviews.map((r) => (
-            <figure key={r.nom} className="bg-card border border-edge rounded-lg p-5">
-              <div className="flex items-center justify-between mb-2">
-                <b className="text-[14px] text-ink">{r.nom}</b>
-                <span className="text-[12px] text-dim">{r.date}</span>
-              </div>
-              <div className="text-primary text-[13px] mb-2">{'★'.repeat(r.note)}{'☆'.repeat(5 - r.note)}</div>
-              <p className="text-[13.5px] leading-relaxed text-ink">{r.texte}</p>
-            </figure>
-          ))}
-        </div>
+        {(c.avis && c.avis.length > 0) ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            {c.avis.map((r, i) => (
+              <figure key={i} className="bg-card border border-edge rounded-lg p-5">
+                <div className="flex items-center justify-between mb-2">
+                  <b className="text-[14px] text-ink">{r.auteur_nom}</b>
+                  <span className="text-[12px] text-dim">{r.created_at ? new Date(r.created_at).toLocaleDateString() : ''}</span>
+                </div>
+                <div className="text-primary text-[13px] mb-2">{'★'.repeat(r.note)}{'☆'.repeat(5 - r.note)}</div>
+                {r.texte && <p className="text-[13.5px] leading-relaxed text-ink">{r.texte}</p>}
+              </figure>
+            ))}
+          </div>
+        ) : (
+          <p className="text-dim mb-6">{t('vitrine.profil.avis_no')}</p>
+        )}
+        <div className="mb-12"><AvisForm atelierId={c.id} /></div>
 
         <div className="pb-16">
           <Link to="/createurs" className={btnOutline}>{t('vitrine.profil.all_creators')}</Link>

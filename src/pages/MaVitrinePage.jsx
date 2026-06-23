@@ -11,6 +11,7 @@ import { useDashboard } from '@/hooks/useDashboard'
 import { vetementService } from '@/services/vetementService'
 import { parametresService } from '@/services/parametresService'
 import { collectionService } from '@/services/collectionService'
+import { avisService } from '@/services/avisService'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { cn } from '@/utils/cn'
 import { IS_NATIVE } from '@/constants/routes'
@@ -49,6 +50,7 @@ export default function MaVitrinePage() {
   const [siteWeb, setSiteWeb] = useState(() => atelier?.site_web || '')
   const [collections, setCollections] = useState([])
   const [newCollection, setNewCollection] = useState('')
+  const [pendingAvis, setPendingAvis] = useState([])
 
   useEffect(() => {
     let on = true
@@ -65,6 +67,7 @@ export default function MaVitrinePage() {
     setInstagram(atelier?.instagram || ''); setFacebook(atelier?.facebook || ''); setSiteWeb(atelier?.site_web || '')
   }, [atelier?.instagram, atelier?.facebook, atelier?.site_web])
   useEffect(() => { collectionService.getAll().then((d) => setCollections(d || [])).catch(() => {}) }, [])
+  useEffect(() => { avisService.getMine().then((d) => setPendingAvis((d || []).filter((a) => a.statut === 'en_attente'))).catch(() => {}) }, [])
 
   const publicPath = atelier?.id ? `/createurs/${atelier.id}` : '/createurs'
   const publicUrl = typeof window !== 'undefined' ? `${window.location.origin}${publicPath}` : publicPath
@@ -151,6 +154,11 @@ export default function MaVitrinePage() {
   const assignCollection = async (vetementId, collectionId) => {
     setCreations((list) => list.map((v) => (v.id === vetementId ? { ...v, collection_id: collectionId || null } : v)))
     try { await vetementService.setCollection(vetementId, collectionId) } catch { /* erreur silencieuse */ }
+  }
+
+  const moderateAvis = async (id, statut) => {
+    setPendingAvis((l) => l.filter((a) => a.id !== id))
+    try { await avisService.moderate(id, statut) } catch { /* erreur silencieuse */ }
   }
 
   return (
@@ -268,6 +276,28 @@ export default function MaVitrinePage() {
             <button onClick={addCollection} className="text-sm font-semibold px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-600 transition">Ajouter</button>
           </div>
         </div>
+
+        {/* Avis à valider */}
+        {pendingAvis.length > 0 && (
+          <div className="mt-4 bg-card border border-edge rounded-xl p-4">
+            <p className="text-sm font-semibold text-ink mb-3">Avis à valider <span className="text-primary">({pendingAvis.length})</span></p>
+            <div className="space-y-3">
+              {pendingAvis.map((a) => (
+                <div key={a.id} className="border border-edge rounded-lg p-3">
+                  <div className="flex items-center justify-between">
+                    <b className="text-sm text-ink">{a.auteur_nom}</b>
+                    <span className="text-primary text-xs">{'★'.repeat(a.note)}{'☆'.repeat(5 - a.note)}</span>
+                  </div>
+                  {a.texte && <p className="text-xs text-dim mt-1">{a.texte}</p>}
+                  <div className="flex gap-2 mt-2">
+                    <button onClick={() => moderateAvis(a.id, 'valide')} className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-white hover:bg-primary-600 transition">Valider</button>
+                    <button onClick={() => moderateAvis(a.id, 'rejete')} className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-edge text-dim hover:text-danger hover:border-danger transition">Rejeter</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Stats publiques — à venir (tracking backend non disponible) */}
         <div className="mt-4 bg-subtle border border-edge rounded-xl p-4">

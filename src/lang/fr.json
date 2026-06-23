@@ -1000,7 +1000,13 @@
       "wa_message": "Bonjour {{nom}}, je vous contacte via votre vitrine Gextimo.",
       "wa_quote": "Bonjour {{nom}}, je souhaite demander un devis via votre vitrine Gextimo.",
       "wa_order": "Bonjour {{nom}}, je suis intéressé(e) par « {{modele}} » sur votre vitrine Gextimo.",
-      "others": "Autres"
+      "others": "Autres",
+      "avis_no": "Aucun avis pour le moment. Soyez le premier !",
+      "avis_leave": "Laisser un avis",
+      "avis_name": "Votre nom",
+      "avis_text": "Votre avis…",
+      "avis_send": "Envoyer",
+      "avis_thanks": "Merci ! Votre avis sera publié après validation."
     },
     "suivi": {
       "title": "Suivez votre commande",
