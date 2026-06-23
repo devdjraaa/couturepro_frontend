@@ -984,7 +984,8 @@
       "subtitle": "Verified talents across Benin and West Africa.",
       "filter_search": "Search (name, specialty)…",
       "filter_all_cities": "All cities",
-      "filter_verified": "Verified only"
+      "filter_verified": "Verified only",
+      "near_me": "Near me"
     },
     "profil": {
       "quote": "Request a quote",

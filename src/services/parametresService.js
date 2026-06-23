@@ -44,12 +44,9 @@ export const parametresService = {
       Object.assign(mockAtelier, payload)
       return mockAtelier
     }
-    const { data } = await api.put('/parametres/atelier', {
-      nom:     payload.nom,
-      adresse: payload.adresse,
-      ville:   payload.ville,
-      contact_public: payload.contact_public,
-    })
+    // Transmet tout le payload ; le backend valide/filtre (nom requis + champs
+    // optionnels : adresse, ville, contact_public, specialite, bio, réseaux, lat/lng).
+    const { data } = await api.put('/parametres/atelier', payload)
     return data
   },
 

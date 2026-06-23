@@ -984,7 +984,8 @@
       "subtitle": "Des talents vérifiés à travers le Bénin et l'Afrique de l'Ouest.",
       "filter_search": "Rechercher (nom, spécialité)…",
       "filter_all_cities": "Toutes les villes",
-      "filter_verified": "Vérifiés uniquement"
+      "filter_verified": "Vérifiés uniquement",
+      "near_me": "Près de moi"
     },
     "profil": {
       "quote": "Demander un devis",

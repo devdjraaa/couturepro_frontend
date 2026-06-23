@@ -6,6 +6,15 @@ import VitrineShell from './VitrineChrome'
 import { getCreators } from './vitrineApi'
 import { useFavoris } from './useFavoris'
 
+function distKm(a, b) {
+  const toRad = (d) => (d * Math.PI) / 180
+  const R = 6371
+  const dLat = toRad(b.lat - a.lat)
+  const dLng = toRad(b.lng - a.lng)
+  const x = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLng / 2) ** 2
+  return Math.round(2 * R * Math.asin(Math.sqrt(x)))
+}
+
 export default function CreateursPage() {
   const { t } = useTranslation()
   const { has, toggle } = useFavoris()
@@ -15,6 +24,7 @@ export default function CreateursPage() {
   const [q, setQ] = useState('')
   const [ville, setVille] = useState('')
   const [verifiedOnly, setVerifiedOnly] = useState(false)
+  const [myPos, setMyPos] = useState(null)
   const villes = [...new Set((creators || []).map((c) => c.ville).filter(Boolean))].sort()
   const filtered = (creators || []).filter((c) => {
     if (verifiedOnly && !c.verifie) return false
@@ -22,6 +32,19 @@ export default function CreateursPage() {
     if (q && !`${c.nom} ${c.specialite || ''}`.toLowerCase().includes(q.toLowerCase())) return false
     return true
   })
+  const list = myPos
+    ? filtered
+        .map((c) => ({ ...c, _dist: (c.latitude != null && c.longitude != null) ? distKm(myPos, { lat: c.latitude, lng: c.longitude }) : null }))
+        .sort((a, b) => (a._dist ?? Infinity) - (b._dist ?? Infinity))
+    : filtered
+
+  const findNearby = () => {
+    if (!navigator.geolocation) return
+    navigator.geolocation.getCurrentPosition(
+      (pos) => setMyPos({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+      () => {},
+    )
+  }
 
   return (
     <VitrineShell>
@@ -44,12 +67,13 @@ export default function CreateursPage() {
               <input type="checkbox" checked={verifiedOnly} onChange={(e) => setVerifiedOnly(e.target.checked)} />
               {t('vitrine.createurs_page.filter_verified')}
             </label>
+            <button onClick={findNearby} className={`rounded-lg border px-3 py-2 text-sm transition ${myPos ? 'border-primary text-primary' : 'border-edge text-dim hover:border-primary hover:text-primary'}`}>📍 {t('vitrine.createurs_page.near_me')}</button>
           </div>
 
           {!creators && <p className="text-center text-dim">{t('vitrine.loading')}</p>}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filtered.map((c) => (
+            {list.map((c) => (
               <Link key={c.id} to={`/createurs/${c.id}`}
                     className="relative bg-card border border-edge rounded-lg p-5 transition hover:-translate-y-0.5 hover:shadow-lg hover:border-primary">
                 <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(c.id) }} className="absolute top-3 right-3 z-10" aria-label="Favori">
@@ -68,6 +92,7 @@ export default function CreateursPage() {
                 <div className="flex gap-3.5 text-[13px] text-dim">
                   {c.note ? <span className="text-primary font-bold">★ {c.note}</span> : <span className="text-ghost">{t('vitrine.creators.new')}</span>}
                   {c.experience ? <span>· {c.experience}</span> : null}
+                  {c._dist != null ? <span>· {c._dist} km</span> : null}
                 </div>
               </Link>
             ))}

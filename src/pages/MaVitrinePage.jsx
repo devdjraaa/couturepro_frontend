@@ -48,6 +48,7 @@ export default function MaVitrinePage() {
   const [instagram, setInstagram] = useState(() => atelier?.instagram || '')
   const [facebook, setFacebook] = useState(() => atelier?.facebook || '')
   const [siteWeb, setSiteWeb] = useState(() => atelier?.site_web || '')
+  const [geoMsg, setGeoMsg] = useState('')
   const [collections, setCollections] = useState([])
   const [newCollection, setNewCollection] = useState('')
   const [pendingAvis, setPendingAvis] = useState([])
@@ -122,6 +123,20 @@ export default function MaVitrinePage() {
     } catch { /* erreur silencieuse */ } finally {
       setSavingProfile(false)
     }
+  }
+
+  const useMyPosition = () => {
+    if (!navigator.geolocation || !atelier?.nom) return
+    setGeoMsg('…')
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        try {
+          await parametresService.updateAtelier({ nom: atelier.nom, latitude: pos.coords.latitude, longitude: pos.coords.longitude })
+          setGeoMsg('✓ Position enregistrée')
+        } catch { setGeoMsg('Échec') }
+      },
+      () => setGeoMsg('Position refusée'),
+    )
   }
 
   const onLogoChange = async (e) => {
@@ -248,6 +263,9 @@ export default function MaVitrinePage() {
             <input value={facebook} onChange={(e) => setFacebook(e.target.value)} maxLength={255} placeholder="Facebook (lien)" className="rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
             <input value={siteWeb} onChange={(e) => setSiteWeb(e.target.value)} maxLength={255} placeholder="Site web" className="rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
           </div>
+          <button type="button" onClick={useMyPosition} className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline">
+            📍 Utiliser ma position {geoMsg && <span className="text-xs text-dim font-normal">{geoMsg}</span>}
+          </button>
           <div className="flex items-center gap-3 mt-3">
             <button onClick={saveProfile} disabled={savingProfile}
                     className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-600 transition disabled:opacity-60">
