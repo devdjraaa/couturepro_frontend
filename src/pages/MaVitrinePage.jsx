@@ -12,6 +12,7 @@ import { vetementService } from '@/services/vetementService'
 import { parametresService } from '@/services/parametresService'
 import { collectionService } from '@/services/collectionService'
 import { avisService } from '@/services/avisService'
+import { vitrineStatsService } from '@/services/vitrineStatsService'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { cn } from '@/utils/cn'
 import { IS_NATIVE } from '@/constants/routes'
@@ -52,6 +53,7 @@ export default function MaVitrinePage() {
   const [collections, setCollections] = useState([])
   const [newCollection, setNewCollection] = useState('')
   const [pendingAvis, setPendingAvis] = useState([])
+  const [stats, setStats] = useState(null)
 
   useEffect(() => {
     let on = true
@@ -69,6 +71,7 @@ export default function MaVitrinePage() {
   }, [atelier?.instagram, atelier?.facebook, atelier?.site_web])
   useEffect(() => { collectionService.getAll().then((d) => setCollections(d || [])).catch(() => {}) }, [])
   useEffect(() => { avisService.getMine().then((d) => setPendingAvis((d || []).filter((a) => a.statut === 'en_attente' || a.statut === 'signale'))).catch(() => {}) }, [])
+  useEffect(() => { vitrineStatsService.getStats().then(setStats).catch(() => {}) }, [])
 
   const publicPath = atelier?.id ? `/createurs/${atelier.id}` : '/createurs'
   const publicUrl = typeof window !== 'undefined' ? `${window.location.origin}${publicPath}` : publicPath
@@ -318,20 +321,19 @@ export default function MaVitrinePage() {
           </div>
         )}
 
-        {/* Stats publiques — à venir (tracking backend non disponible) */}
+        {/* Statistiques publiques (réelles) */}
         <div className="mt-4 bg-subtle border border-edge rounded-xl p-4">
           <p className="text-sm font-semibold text-ink mb-3">Statistiques publiques</p>
           <div className="grid grid-cols-3 gap-3">
             {[
-              { icon: Eye, label: 'Visites' },
-              { icon: Store, label: 'Consultations' },
-              { icon: MessageCircle, label: 'Contacts reçus' },
+              { icon: Eye, label: 'Visites', value: stats ? stats.visites.total : '—' },
+              { icon: Store, label: 'Ce mois', value: stats ? stats.visites.mois : '—' },
+              { icon: MessageCircle, label: 'Contacts', value: stats ? stats.contacts.total : '—' },
             ].map((s) => (
               <div key={s.label} className="text-center">
-                <s.icon size={18} className="mx-auto text-ghost" />
-                <div className="text-lg font-bold text-ghost mt-1">—</div>
-                <div className="text-2xs text-ghost">{s.label}</div>
-                <div className="text-[10px] font-semibold text-primary mt-0.5">Bientôt</div>
+                <s.icon size={18} className="mx-auto text-primary" />
+                <div className="text-lg font-bold text-ink mt-1">{s.value}</div>
+                <div className="text-2xs text-dim">{s.label}</div>
               </div>
             ))}
           </div>

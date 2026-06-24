@@ -6,6 +6,7 @@ import { getCreator } from './vitrineApi'
 import { useDevise } from './vitrineCurrency'
 import { useFavoris } from './useFavoris'
 import { avisService } from '@/services/avisService'
+import { vitrineStatsService } from '@/services/vitrineStatsService'
 
 const btnPrimary = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-white hover:bg-primary-600 transition'
 const btnOutline = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary transition'
@@ -60,6 +61,7 @@ export default function CreateurProfilPage() {
   const [reported, setReported] = useState(() => new Set())
 
   useEffect(() => { getCreator(slug).then((d) => setC(d ?? null)) }, [slug])
+  useEffect(() => { if (c && c.id) vitrineStatsService.track(c.id, 'visite') }, [c?.id])
 
   if (c === undefined) {
     return <VitrineShell><div className="py-24 text-center text-dim">{t('vitrine.loading')}</div></VitrineShell>
@@ -88,6 +90,8 @@ export default function CreateurProfilPage() {
     setReported((s) => new Set(s).add(id))
     try { await avisService.report(id) } catch { /* erreur silencieuse */ }
   }
+
+  const trackContact = () => vitrineStatsService.track(c?.id, 'contact')
   const cols = c.collections || []
 
   const renderGrid = (items) => (
@@ -108,7 +112,7 @@ export default function CreateurProfilPage() {
               <div className="font-bold text-primary text-[14px]">{format(m.prix) || t('vitrine.profil.on_quote')}</div>
             </div>
             {wa
-              ? <a href={waHref('vitrine.profil.wa_order', { nom: c.nom, modele: m.nom })} target="_blank" rel="noopener noreferrer" className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">{t('vitrine.profil.order')}</a>
+              ? <a href={waHref('vitrine.profil.wa_order', { nom: c.nom, modele: m.nom })} onClick={trackContact} target="_blank" rel="noopener noreferrer" className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">{t('vitrine.profil.order')}</a>
               : <button className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">{t('vitrine.profil.order')}</button>}
           </div>
         </div>
@@ -150,10 +154,10 @@ export default function CreateurProfilPage() {
           </div>
           <div className="flex flex-col gap-2 w-full sm:w-auto">
             {wa
-              ? <a href={waHref('vitrine.profil.wa_quote', { nom: c.nom })} target="_blank" rel="noopener noreferrer" className={btnPrimary}>{t('vitrine.profil.quote')}</a>
+              ? <a href={waHref('vitrine.profil.wa_quote', { nom: c.nom })} onClick={trackContact} target="_blank" rel="noopener noreferrer" className={btnPrimary}>{t('vitrine.profil.quote')}</a>
               : <button className={btnPrimary}>{t('vitrine.profil.quote')}</button>}
             {wa
-              ? <a href={waHref('vitrine.profil.wa_message', { nom: c.nom })} target="_blank" rel="noopener noreferrer" className={btnOutline}>{t('vitrine.profil.contact')}</a>
+              ? <a href={waHref('vitrine.profil.wa_message', { nom: c.nom })} onClick={trackContact} target="_blank" rel="noopener noreferrer" className={btnOutline}>{t('vitrine.profil.contact')}</a>
               : <button className={btnOutline}>{t('vitrine.profil.contact')}</button>}
             <button onClick={() => toggle(c.id)} className={btnOutline}>{has(c.id) ? '♥ ' : '♡ '}{t('vitrine.profil.save')}</button>
           </div>
