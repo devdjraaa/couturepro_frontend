@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Sun, Moon, Heart } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useTheme, useLang } from '@/contexts'
 import { cn } from '@/utils/cn'
 import { useDevise, DEVISES } from './vitrineCurrency'
+import { getBanniere } from './vitrineApi'
 
 /* Symbole orbital + wordmark (charte). */
 export function VitrineLogo({ onDark = false }) {
@@ -88,10 +89,17 @@ function VitrineCookies() {
 
 export function VitrineNavbar() {
   const { t } = useTranslation()
+  const [banniere, setBanniere] = useState(null)
+  useEffect(() => { getBanniere().then(setBanniere).catch(() => {}) }, [])
+  const promo = (banniere?.actif && banniere?.texte) ? banniere : null
   return (
     <>
       <div className="text-center text-[13px] py-2 px-10 bg-[#0D0D0D] text-[#F8F5F0]">
-        {t('vitrine.promo')}
+        {promo
+          ? (promo.lien
+              ? <a href={promo.lien} target="_blank" rel="noopener noreferrer" className="hover:underline">{promo.texte}</a>
+              : promo.texte)
+          : t('vitrine.promo')}
       </div>
       <header className="sticky top-0 z-40 bg-app/90 backdrop-blur border-b border-edge">
         <div className="max-w-[1180px] mx-auto px-5 h-16 flex items-center gap-4">
