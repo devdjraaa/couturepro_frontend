@@ -152,6 +152,7 @@ export default function VitrineHome() {
                     <h4 className="font-bold text-[15.5px] text-ink flex items-center gap-1.5">
                       {c.nom}
                       {c.verifie && <span className="text-[10.5px] font-bold text-primary bg-primary-50 px-1.5 py-0.5 rounded-full">{t('vitrine.creators.verified')}</span>}
+                      {c.sponsorise && <span title="Sponsorisé" className="text-[10.5px] font-bold text-white bg-primary px-1.5 py-0.5 rounded-full">★</span>}
                     </h4>
                     <div className="text-[12.5px] text-dim">{c.specialite}</div>
                   </div>
