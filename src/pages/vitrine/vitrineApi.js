@@ -45,6 +45,10 @@ async function safe(path) {
   }
 }
 
+export async function getSuivi(reference) {
+  return safe(`/vitrine/suivi/${encodeURIComponent(reference)}`)
+}
+
 export async function getCreators() {
   const d = await safe('/vitrine/createurs')
   return Array.isArray(d) && d.length ? d : demoCreators

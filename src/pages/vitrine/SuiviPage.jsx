@@ -1,16 +1,35 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
+import { getSuivi } from './vitrineApi'
 
-const DONE = 2
+const STEP_KEYS = ['commande', 'coupe', 'confection', 'essayage', 'livraison']
 
 export default function SuiviPage() {
   const { t } = useTranslation()
   const [val, setVal] = useState('')
-  const [show, setShow] = useState(false)
+  const [result, setResult] = useState(undefined) // undefined = idle, null = introuvable, objet = ok
+  const [loading, setLoading] = useState(false)
 
   const steps = t('vitrine.suivi.steps', { returnObjects: true })
   const list = Array.isArray(steps) ? steps : []
+
+  const search = async () => {
+    const ref = val.trim()
+    if (ref.length < 3 || loading) return
+    setLoading(true)
+    try {
+      const d = await getSuivi(ref)
+      setResult(d && d.reference ? d : null)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const annule = result && result.statut === 'annule'
+  const currentIdx = result
+    ? (result.statut === 'livre' ? STEP_KEYS.length : Math.max(0, STEP_KEYS.indexOf(result.etape)))
+    : 0
 
   return (
     <VitrineShell>
@@ -22,35 +41,43 @@ export default function SuiviPage() {
 
             <div className="flex gap-2 max-w-[480px] mx-auto">
               <input value={val} onChange={(e) => setVal(e.target.value)} placeholder={t('vitrine.suivi.placeholder')}
+                     onKeyDown={(e) => { if (e.key === 'Enter') search() }}
                      className="flex-1 rounded-xl px-4 py-3 text-[15px] outline-none text-white bg-white/10 border border-white/20 placeholder:text-white/50" />
-              <button onClick={() => setShow(val.trim().length > 2)}
-                      className="inline-flex items-center font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-white hover:bg-primary-600 transition">
+              <button onClick={search} disabled={loading}
+                      className="inline-flex items-center font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-white hover:bg-primary-600 transition disabled:opacity-60">
                 {t('vitrine.suivi.button')}
               </button>
             </div>
 
-            {show && (
+            {result === null && <p className="text-white/70 mt-5">{t('vitrine.suivi.not_found')}</p>}
+
+            {result && (
               <div className="max-w-[560px] mx-auto mt-5 bg-card text-ink rounded-lg p-5 text-left">
-                <strong>Boubou Bazin</strong> — Atelier Jaures · <span className="text-primary font-bold">{t('vitrine.suivi.in_progress')}</span>
-                <div className="flex justify-between mt-3.5">
-                  {list.map((s, i) => {
-                    const ok = i < DONE
-                    const cur = i === DONE
-                    return (
-                      <div key={s} className={`flex-1 text-center text-[10.5px] ${ok || cur ? 'text-ink' : 'text-dim'}`}>
-                        <div className="w-[26px] h-[26px] rounded-full border-2 flex items-center justify-center mx-auto mb-1.5 text-[11px]"
-                             style={{
-                               background: ok ? 'var(--color-primary)' : 'var(--color-bg-card)',
-                               borderColor: ok || cur ? 'var(--color-primary)' : 'var(--color-border)',
-                               color: ok ? '#fff' : cur ? 'var(--color-primary)' : 'var(--color-text-tertiary)',
-                             }}>
-                          {ok ? '✓' : i + 1}
+                <strong>{result.modele || '—'}</strong>{result.atelier ? ` — ${result.atelier}` : ''} ·{' '}
+                <span className={annule ? 'text-danger font-bold' : 'text-primary font-bold'}>
+                  {annule ? t('vitrine.suivi.cancelled') : t('vitrine.suivi.in_progress')}
+                </span>
+                {!annule && (
+                  <div className="flex justify-between mt-3.5">
+                    {list.map((s, i) => {
+                      const ok = i < currentIdx
+                      const cur = i === currentIdx
+                      return (
+                        <div key={s} className={`flex-1 text-center text-[10.5px] ${ok || cur ? 'text-ink' : 'text-dim'}`}>
+                          <div className="w-[26px] h-[26px] rounded-full border-2 flex items-center justify-center mx-auto mb-1.5 text-[11px]"
+                               style={{
+                                 background: ok ? 'var(--color-primary)' : 'var(--color-bg-card)',
+                                 borderColor: ok || cur ? 'var(--color-primary)' : 'var(--color-border)',
+                                 color: ok ? '#fff' : cur ? 'var(--color-primary)' : 'var(--color-text-tertiary)',
+                               }}>
+                            {ok ? '✓' : i + 1}
+                          </div>
+                          {s}
                         </div>
-                        {s}
-                      </div>
-                    )
-                  })}
-                </div>
+                      )
+                    })}
+                  </div>
+                )}
               </div>
             )}
           </div>

@@ -1022,6 +1022,8 @@
       "placeholder": "e.g. GEX-2026-0847",
       "button": "Track",
       "in_progress": "In progress",
+      "not_found": "No order found for this number.",
+      "cancelled": "Cancelled",
       "steps": ["Order", "Cutting", "Sewing", "Fitting", "Delivery"]
     },
     "menu2": { "artisans": "Artisans", "support": "Help", "about": "About us" },

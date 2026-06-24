@@ -1022,6 +1022,8 @@
       "placeholder": "Ex : GEX-2026-0847",
       "button": "Suivre",
       "in_progress": "En cours",
+      "not_found": "Aucune commande trouvée pour ce numéro.",
+      "cancelled": "Annulée",
       "steps": ["Commande", "Coupe", "Confection", "Essayage", "Livraison"]
     },
     "menu2": { "artisans": "Artisans", "support": "Aide", "about": "Qui sommes-nous" },
