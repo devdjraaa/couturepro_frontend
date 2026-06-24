@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { OnboardingSlide } from '@/components/onboarding'
 import { Button } from '@/components/ui'
 import { cn } from '@/utils/cn'
+import { ROUTES } from '@/constants/routes'
 
 export default function OnboardingPage() {
   const navigate = useNavigate()
@@ -20,7 +21,7 @@ export default function OnboardingPage() {
   const isLast = index === SLIDES.length - 1
 
   const next = () => {
-    if (isLast) navigate('/', { replace: true })
+    if (isLast) navigate(ROUTES.DASHBOARD, { replace: true })
     else setIndex(i => i + 1)
   }
 
@@ -49,7 +50,7 @@ export default function OnboardingPage() {
         </Button>
         {!isLast && (
           <button
-            onClick={() => navigate('/', { replace: true })}
+            onClick={() => navigate(ROUTES.DASHBOARD, { replace: true })}
             className="w-full text-sm text-dim py-2"
           >
             {t('auth.onboarding.passer')}

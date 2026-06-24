@@ -6,10 +6,11 @@ import { cn } from '@/utils/cn'
 import { BottomSheet } from '@/components/ui'
 import { useNotificationsCount } from '@/hooks/useNotifications'
 import { useCommandeStats } from '@/hooks/useCommandes'
+import { ROUTES } from '@/constants/routes'
 
 // #45-46 — "Paramètres" remplace "Catalogue" pour rendre l'abonnement accessible
 const NAV_ITEMS = [
-  { to: '/',           icon: Home,          tKey: 'nav.dashboard',  end: true  },
+  { to: ROUTES.DASHBOARD, icon: Home,          tKey: 'nav.dashboard',  end: true  },
   { to: '/commandes',  icon: ClipboardList, tKey: 'nav.commandes'              },
   null, // slot FAB central
   { to: '/clients',    icon: Users,         tKey: 'nav.clients'                },

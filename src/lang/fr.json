@@ -885,6 +885,7 @@
     "clients": "Clients",
     "commandes": "Commandes",
     "catalogue": "Catalogue",
+    "ma_vitrine": "Ma Vitrine",
     "equipe": "Équipe",
     "points": "Fidélité",
     "notifications": "Notifications",
@@ -895,6 +896,166 @@
     "profil": "Profil",
     "plus": "Plus",
     "menu": "Menu"
+  },
+  "vitrine": {
+    "promo": "✦ Nouveau — la vitrine Gextimo connecte les créateurs de mode africaine à toute l'Afrique de l'Ouest.",
+    "online": "● En ligne",
+    "loading": "Chargement…",
+    "indicatif": "* Prix indicatifs, convertis à titre informatif.",
+    "search": { "placeholder": "Rechercher un créateur, un modèle…", "empty": "Aucun résultat.", "creators": "Créateurs", "models": "Modèles" },
+    "favoris": { "menu": "Favoris", "title": "Mes favoris", "empty": "Vous n'avez pas encore de favoris." },
+    "inscription": { "title": "Créez votre compte créateur", "subtitle": "L'inscription se fait sur l'application mobile Gextimo.", "body": "Téléchargez l'application pour créer votre compte, gérer votre atelier, publier vos créations et votre vitrine publique.", "cta": "Télécharger l'application", "have_account": "Déjà un compte ?", "login": "Se connecter" },
+    "cookies": {
+      "text": "Nous utilisons des cookies pour améliorer votre expérience et mémoriser vos préférences (langue, devise, thème).",
+      "accept": "Accepter",
+      "refuse": "Refuser"
+    },
+    "nav": {
+      "how": "Comment ça marche",
+      "creators": "Créateurs",
+      "collections": "Collections",
+      "suivi": "Suivi",
+      "signup": "S'inscrire",
+      "login": "Se connecter"
+    },
+    "hero": {
+      "eyebrow": "Plateforme des créateurs de mode",
+      "title_pre": "La vitrine des ",
+      "title_hl": "créateurs de mode",
+      "title_post": " africaine.",
+      "cta_discover": "Découvrir les créateurs",
+      "cta_how": "Comment ça marche",
+      "stat_creators": "créateurs",
+      "stat_designers": "designers",
+      "stat_cities": "villes"
+    },
+    "rotations": [
+      "Rejoignez l'aventure dès aujourd'hui.",
+      "Découvrez les meilleurs créateurs.",
+      "Trouvez votre inspiration mode.",
+      "Valorisez votre savoir-faire."
+    ],
+    "how": {
+      "eyebrow": "Comment ça marche",
+      "title": "Trois étapes, c'est tout",
+      "subtitle": "Du compte à la première commande, sans friction.",
+      "steps": [
+        { "n": "ÉTAPE 1", "t": "Créez votre compte", "d": "Inscription créateur en quelques minutes." },
+        { "n": "ÉTAPE 2", "t": "Publiez vos créations", "d": "Vitrine pro générée automatiquement." },
+        { "n": "ÉTAPE 3", "t": "Recevez des commandes", "d": "Contacts, devis et suivi au même endroit." }
+      ]
+    },
+    "creators": {
+      "eyebrow": "Découvrir",
+      "title": "Trouvez votre créateur",
+      "subtitle": "Des talents vérifiés, près de chez vous ou partout en Afrique.",
+      "visit": "Visiter le profil",
+      "verified": "✓ Vérifié",
+      "new": "Nouveau"
+    },
+    "gallery": {
+      "eyebrow": "Galerie",
+      "title": "Inspirez-vous des modèles",
+      "subtitle": "Une galerie centralisée, classée par catégorie.",
+      "by": "par",
+      "cats": { "all": "Tous", "robe": "Robes", "costume": "Costumes", "boubou": "Boubous", "enfant": "Enfants" }
+    },
+    "cta": {
+      "title": "Suivez votre commande",
+      "subtitle": "Avec votre numéro de reçu, sans créer de compte.",
+      "button": "Suivre une commande"
+    },
+    "footer": {
+      "tagline": "La vitrine qui connecte créateurs, artisans et clients de la mode africaine.",
+      "col_platform": "Plateforme",
+      "col_company": "Entreprise",
+      "col_support": "Support",
+      "col_legal": "Légal",
+      "legal_mentions": "Mentions légales",
+      "legal_privacy": "Confidentialité",
+      "legal_cookies": "Paramètres cookies",
+      "platform": ["Créateurs", "Collections", "Comment ça marche", "Devenir créateur"],
+      "company": ["À propos", "Qui sommes-nous", "Blog", "Partenaires"],
+      "support": ["FAQ", "Contact", "Mentions légales", "Paramètres cookies"],
+      "rights": "© 2026 Gextimo. Tous droits réservés."
+    },
+    "createurs_page": {
+      "eyebrow": "Créateurs",
+      "title": "Découvrez les créateurs",
+      "subtitle": "Des talents vérifiés à travers le Bénin et l'Afrique de l'Ouest.",
+      "filter_search": "Rechercher (nom, spécialité)…",
+      "filter_all_cities": "Toutes les villes",
+      "filter_verified": "Vérifiés uniquement",
+      "near_me": "Près de moi"
+    },
+    "profil": {
+      "quote": "Demander un devis",
+      "contact": "📱 Contacter",
+      "save": "♡ Enregistrer",
+      "catalogue": "Catalogue",
+      "no_creations": "Aucune création publiée pour le moment.",
+      "order": "Commander",
+      "on_quote": "Sur devis",
+      "reviews": "Avis clients",
+      "all_creators": "← Tous les créateurs",
+      "not_found": "Créateur introuvable",
+      "stat_creations": "Créations",
+      "stat_views": "Vues ce mois",
+      "stat_punctuality": "Ponctualité",
+      "stat_experience": "Expérience",
+      "wa_message": "Bonjour {{nom}}, je vous contacte via votre vitrine Gextimo.",
+      "wa_quote": "Bonjour {{nom}}, je souhaite demander un devis via votre vitrine Gextimo.",
+      "wa_order": "Bonjour {{nom}}, je suis intéressé(e) par « {{modele}} » sur votre vitrine Gextimo.",
+      "others": "Autres",
+      "avis_no": "Aucun avis pour le moment. Soyez le premier !",
+      "avis_leave": "Laisser un avis",
+      "avis_name": "Votre nom",
+      "avis_text": "Votre avis…",
+      "avis_send": "Envoyer",
+      "avis_thanks": "Merci ! Votre avis sera publié après validation.",
+      "report": "Signaler",
+      "report_done": "Signalé, merci."
+    },
+    "suivi": {
+      "title": "Suivez votre commande",
+      "subtitle": "Entrez votre numéro de reçu, sans créer de compte.",
+      "placeholder": "Ex : GEX-2026-0847",
+      "button": "Suivre",
+      "in_progress": "En cours",
+      "not_found": "Aucune commande trouvée pour ce numéro.",
+      "cancelled": "Annulée",
+      "steps": ["Commande", "Coupe", "Confection", "Essayage", "Livraison"]
+    },
+    "menu2": { "artisans": "Artisans", "support": "Aide", "about": "Qui sommes-nous" },
+    "about": {
+      "eyebrow": "Qui sommes-nous",
+      "title": "L'écosystème de la mode africaine",
+      "p1": "Gextimo connecte les créateurs de mode — couturiers, stylistes, modélistes — à leurs clients à travers le Bénin et l'Afrique de l'Ouest. Notre mission : valoriser le savoir-faire africain et faciliter la rencontre entre talents et clients.",
+      "p2": "Nous offrons aux créateurs une vitrine professionnelle, des outils de gestion (clients, commandes, mesures, caisse) et, bientôt, des moyens de monétiser leur visibilité.",
+      "values_title": "Nos valeurs",
+      "values": ["Valoriser le savoir-faire local", "Transparence et confiance", "Simplicité et accessibilité"],
+      "novafrique": "Gextimo est une solution NovAfrique."
+    },
+    "aide": {
+      "eyebrow": "Aide",
+      "title": "Support & FAQ",
+      "subtitle": "Les réponses aux questions les plus fréquentes.",
+      "faq": [
+        { "q": "Comment créer mon compte créateur ?", "a": "Téléchargez l'application Gextimo et inscrivez-vous en quelques minutes. Votre vitrine publique est générée automatiquement." },
+        { "q": "Comment publier mes créations ?", "a": "Depuis votre espace, ajoutez vos modèles à votre catalogue puis activez leur publication sur la vitrine." },
+        { "q": "Comment un client me contacte-t-il ?", "a": "Si vous activez l'option, un bouton WhatsApp apparaît sur votre profil public pour recevoir devis et commandes." },
+        { "q": "Le service est-il payant ?", "a": "La création de compte et la vitrine de base sont gratuites. Des options premium arriveront pour booster votre visibilité." }
+      ],
+      "contact_title": "Une autre question ?",
+      "contact": "Écrivez-nous à support@gextimo.africa — nous répondons sous 48 h."
+    },
+    "artisans": {
+      "eyebrow": "Artisans",
+      "title": "Une galerie centralisée d'inspirations",
+      "p1": "Parcourez une bibliothèque de modèles et de collections pour trouver l'inspiration, comparer les styles et choisir le créateur qui réalisera votre tenue sur mesure.",
+      "p2": "De nombreux modèles sont accessibles librement pour vous aider à exprimer vos envies à votre couturier.",
+      "cta": "Voir la galerie"
+    }
   },
   "atelier": {
     "titre": "Atelier",
@@ -1026,6 +1187,8 @@
       "paiements":        "Paiements",
       "tickets":          "Tickets",
       "offres":           "Offres spéciales",
+      "signalements":     "Signalements",
+      "banniere":         "Bannière",
       "liste_noire":      "Liste noire",
       "audit":            "Audit",
       "notifications":    "Notifications",

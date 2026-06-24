@@ -17,6 +17,7 @@ import { useCommunications, useFactureSettings } from '@/hooks/useParametres'
 import { useAuth } from '@/contexts'
 import { usePlanFeature } from '@/hooks/usePlanFeature'
 import { whatsappService } from '@/services/whatsappService'
+import { commandeService } from '@/services/commandeService'
 import { AppLayout } from '@/components/layout'
 import { CommandeForm, StatutSelector } from '@/components/commandes'
 import { FeatureGate } from '@/components/abonnement'
@@ -286,6 +287,8 @@ function TabApercu({ commande, onEdit, onStatut, onDelete, navigate }) {
         <p className="text-xs font-semibold text-ghost uppercase tracking-widest mb-2">Statut</p>
         <StatutSelector value={commande.statut} onChange={handleStatut} />
       </div>
+
+      <EtapeSuivi commande={commande} />
 
       {/* Mesures (lien) */}
       {commande.client_id && (
@@ -726,5 +729,41 @@ export default function CommandeDetailPage() {
         />
       </BottomSheet>
     </AppLayout>
+  )
+}
+
+const ETAPES = [
+  { v: 'commande',   l: 'Commande' },
+  { v: 'coupe',      l: 'Coupe' },
+  { v: 'confection', l: 'Confection' },
+  { v: 'essayage',   l: 'Essayage' },
+  { v: 'livraison',  l: 'Livraison' },
+]
+
+function EtapeSuivi({ commande }) {
+  const [etape, setEtape] = useState(commande.etape || 'commande')
+  const [saved, setSaved] = useState(false)
+  const onChange = async (e) => {
+    const v = e.target.value
+    setEtape(v)
+    setSaved(false)
+    try {
+      await commandeService.setEtape(commande.id, v)
+      setSaved(true)
+      setTimeout(() => setSaved(false), 1500)
+    } catch { /* erreur silencieuse */ }
+  }
+  return (
+    <div>
+      <p className="text-xs font-semibold text-ghost uppercase tracking-widest mb-2">
+        Suivi vitrine{commande.reference ? <span className="text-primary normal-case"> · {commande.reference}</span> : null}
+      </p>
+      <div className="flex items-center gap-2">
+        <select value={etape} onChange={onChange} className="rounded-lg border border-edge bg-card px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30">
+          {ETAPES.map((s) => <option key={s.v} value={s.v}>{s.l}</option>)}
+        </select>
+        {saved && <span className="text-xs text-success font-medium">✓ Enregistré</span>}
+      </div>
+    </div>
   )
 }

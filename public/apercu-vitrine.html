@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Gextimo · Vitrine des créateurs de mode africaine</title>
+<meta name="description" content="Gextimo — la vitrine des créateurs de mode africaine. Découvrez, contactez, commandez."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Charte officielle Gextimo */
+  --rouge:#D00B0B; --rouge-hover:#B00909; --rouge-soft:#FCEAEA;
+  --noir:#0D0D0D; --blanc:#FFFFFF; --bg:#F8F5F0;
+  --vert:#1FA855; --gris:#6F635E; --gris-3:#9AA0A6; --line:#EBE4DA; --surface:#FFFFFF; --surface-2:#F1ECE4;
+  --font-ui:'Inter',system-ui,Arial,sans-serif; --font-display:'Playfair Display',Georgia,serif;
+  --radius:16px; --radius-sm:10px; --shadow:0 14px 34px -22px rgba(13,13,13,.45);
+}
+html[data-theme="dark"]{
+  --noir:#F4F1EC; --blanc:#0D0D0D; --bg:#0B0B0B; --surface:#161616; --surface-2:#1F1F1F;
+  --gris:#A8A29B; --gris-3:#6B6B6B; --line:#262626; --rouge-soft:#2a0e0e; --shadow:0 14px 34px -20px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-ui);background:var(--bg);color:var(--noir);-webkit-font-smoothing:antialiased;line-height:1.6;transition:background .25s,color .25s}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{font-family:var(--font-display);font-weight:700;line-height:1.12;letter-spacing:-.2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;padding:11px 20px;border-radius:12px;cursor:pointer;border:1.6px solid transparent;transition:.16s;white-space:nowrap}
+.btn-primary{background:var(--rouge);color:#fff;border-color:var(--rouge)}
+.btn-primary:hover{background:var(--rouge-hover);border-color:var(--rouge-hover);transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--noir);border-color:var(--line)}
+.btn-outline:hover{border-color:var(--rouge);color:var(--rouge)}
+.btn-ghost{background:transparent;color:var(--noir);border-color:transparent}
+.btn-sm{padding:8px 14px;font-size:13px;border-radius:10px}
+.chip{font-size:13px;font-weight:500;padding:7px 15px;border-radius:99px;border:1.4px solid var(--line);background:var(--surface);color:var(--gris);cursor:pointer;transition:.15s;white-space:nowrap}
+.chip:hover{border-color:var(--rouge);color:var(--rouge)}
+.chip.on{background:var(--rouge);border-color:var(--rouge);color:#fff}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--rouge)}
+.sec{padding:64px 0}
+.sec-head{max-width:620px;margin:0 auto 36px;text-align:center}
+.sec-head h2{font-size:clamp(26px,3.4vw,38px);margin:10px 0 8px}
+.sec-head p{color:var(--gris);font-size:16px}
+
+/* ===== LOGO ===== */
+.logo{display:flex;align-items:center;gap:9px}
+.logo svg{width:34px;height:34px;flex:none}
+.logo .wm{font-family:var(--font-display);font-weight:800;font-size:23px;letter-spacing:-.5px}
+.logo .wm i{color:var(--rouge);font-style:normal}
+
+/* ===== TOP BANNER ===== */
+.promo{background:var(--noir);color:#fff;font-size:13px;text-align:center;padding:9px 40px;position:relative}
+.promo b{color:#fff}
+.promo .x{position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;opacity:.7;font-size:16px}
+.promo .x:hover{opacity:1}
+
+/* ===== NAV ===== */
+.nav{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;gap:18px;height:66px}
+.nav-links{display:flex;gap:24px;margin-left:14px}
+.nav-links a{font-size:14.5px;font-weight:500;color:var(--gris);transition:.15s}
+.nav-links a:hover{color:var(--noir)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.util{display:flex;align-items:center;gap:6px}
+.util button{background:transparent;border:1.4px solid var(--line);border-radius:9px;height:34px;min-width:34px;padding:0 9px;font-size:12.5px;font-weight:600;color:var(--noir);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:.15s}
+.util button:hover{border-color:var(--rouge);color:var(--rouge)}
+.hide-sm{}
+@media(max-width:920px){.nav-links,.util .lbl{display:none}}
+@media(max-width:560px){.hide-sm{display:none}}
+
+/* ===== HERO ===== */
+.hero{padding:62px 0 50px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,var(--rouge-soft),transparent 70%);top:-180px;right:-120px;pointer-events:none}
+.hero h1{font-size:clamp(34px,6vw,62px);max-width:880px;margin:0 auto 14px}
+.hero h1 .hl{color:var(--rouge)}
+.hero .rot{height:28px;color:var(--gris);font-size:clamp(15px,2vw,19px);font-weight:500;margin-bottom:26px}
+.hero .rot b{color:var(--noir);font-weight:600}
+.hero-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:22px}
+.hero-stats{display:flex;gap:26px;justify-content:center;flex-wrap:wrap;color:var(--gris);font-size:14px}
+.hero-stats b{color:var(--noir);font-weight:700}
+.search{max-width:620px;margin:30px auto 0;display:flex;gap:8px;background:var(--surface);border:1.6px solid var(--line);border-radius:14px;padding:7px 7px 7px 16px;box-shadow:var(--shadow)}
+.search input{flex:1;border:none;outline:none;background:transparent;font-size:15px;color:var(--noir);font-family:inherit}
+.search input::placeholder{color:var(--gris-3)}
+
+/* ===== STEPS ===== */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px 22px;text-align:center}
+.step .ic{width:54px;height:54px;border-radius:15px;background:var(--rouge-soft);color:var(--rouge);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.step .ic svg{width:26px;height:26px;stroke:var(--rouge);fill:none;stroke-width:1.8}
+.step .n{font-size:12px;font-weight:700;color:var(--rouge);letter-spacing:.1em}
+.step h3{font-size:20px;margin:6px 0 6px}
+.step p{color:var(--gris);font-size:14px}
+@media(max-width:760px){.steps{grid-template-columns:1fr}}
+
+/* ===== CREATORS ===== */
+.row{display:flex;gap:18px;overflow-x:auto;padding:6px 2px 14px;scroll-snap-type:x mandatory}
+.row::-webkit-scrollbar{height:6px}.row::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+.creator{min-width:268px;max-width:268px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;scroll-snap-align:start;transition:.18s}
+.creator:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--rouge)}
+.creator-top{display:flex;align-items:center;gap:12px;margin-bottom:13px}
+.av{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:18px;color:#fff;flex:none}
+.creator h4{font-size:15.5px;font-weight:700;font-family:var(--font-ui);display:flex;align-items:center;gap:6px}
+.creator .spec{font-size:12.5px;color:var(--gris)}
+.verified{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:700;color:var(--rouge);background:var(--rouge-soft);padding:2px 7px;border-radius:99px}
+.creator-meta{display:flex;gap:14px;font-size:13px;color:var(--gris);margin-bottom:14px}
+.stars{color:var(--rouge);font-weight:700}
+.creator .loc{font-size:12.5px;color:var(--gris);margin-bottom:14px;display:flex;align-items:center;gap:5px}
+
+/* ===== GALLERY ===== */
+.filters{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-bottom:26px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.model{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:.18s}
+.model:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.model .img{height:170px;display:flex;align-items:center;justify-content:center;font-size:42px;position:relative}
+.model .tag{position:absolute;top:10px;left:10px;background:var(--noir);color:#fff;font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:99px}
+.model .bd{padding:14px}
+.model .bd h4{font-size:14.5px;font-weight:600;font-family:var(--font-ui)}
+.model .bd .by{font-size:12px;color:var(--gris);margin:2px 0 8px}
+.model .bd .price{font-weight:700;color:var(--rouge);font-size:14.5px}
+@media(max-width:980px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+
+/* ===== COLLECTIONS ===== */
+.colls{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.coll{border-radius:var(--radius);overflow:hidden;position:relative;min-height:200px;display:flex;align-items:flex-end;padding:20px;color:#fff;cursor:pointer;transition:.18s}
+.coll:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.coll::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 35%,rgba(0,0,0,.6))}
+.coll .ct{position:relative;z-index:1}
+.coll .ct h4{font-size:19px;color:#fff}
+.coll .ct p{font-size:12.5px;opacity:.85}
+@media(max-width:820px){.colls{grid-template-columns:1fr}}
+
+/* ===== TRACKING ===== */
+.track{background:var(--noir);border-radius:24px;padding:48px 30px;text-align:center;color:#fff;position:relative;overflow:hidden}
+.track h2{color:#fff;font-size:clamp(24px,3vw,34px)}
+.track p{color:rgba(255,255,255,.7);margin:8px 0 22px}
+.track-in{display:flex;gap:9px;max-width:480px;margin:0 auto}
+.track-in input{flex:1;border:1.6px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:12px 16px;font-size:15px;outline:none;font-family:inherit}
+.track-in input::placeholder{color:rgba(255,255,255,.5)}
+.track-res{max-width:560px;margin:22px auto 0;background:var(--surface);color:var(--noir);border-radius:16px;padding:20px;text-align:left;display:none}
+.track-res.on{display:block}
+.steps-prog{display:flex;justify-content:space-between;margin-top:14px}
+.sp{flex:1;text-align:center;position:relative;font-size:10.5px;color:var(--gris)}
+.sp .d{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;margin:0 auto 5px;font-size:11px;background:var(--surface)}
+.sp.ok .d{background:var(--rouge);border-color:var(--rouge);color:#fff}.sp.ok{color:var(--noir)}
+.sp.cur .d{border-color:var(--rouge);color:var(--rouge)}
+
+/* ===== FEATURES ===== */
+.feat-band{background:var(--noir);color:#fff}
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.feat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:var(--radius);padding:24px}
+.feat .ic{width:46px;height:46px;border-radius:13px;background:var(--rouge);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.feat .ic svg{width:23px;height:23px;stroke:#fff;fill:none;stroke-width:1.8}
+.feat h3{font-size:16px;font-family:var(--font-ui);font-weight:700;margin-bottom:5px}
+.feat p{font-size:13.5px;color:rgba(255,255,255,.7)}
+.feat-band .sec-head h2{color:#fff}.feat-band .sec-head p{color:rgba(255,255,255,.7)}
+@media(max-width:820px){.feats{grid-template-columns:1fr}}
+
+/* ===== TESTIMONIALS ===== */
+.tess{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.tes{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+.tes .q{font-size:14.5px;color:var(--noir);margin-bottom:16px;line-height:1.7}
+.tes .who{display:flex;align-items:center;gap:11px}
+.tes .ph{width:44px;height:44px;border-radius:50%;background:var(--surface-2);border:1px dashed var(--gris-3);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--gris-3);text-align:center;flex:none}
+.tes .who b{font-size:14px}.tes .who span{font-size:12px;color:var(--gris);display:block}
+.tes .st{color:var(--rouge);font-size:13px;margin-bottom:9px}
+@media(max-width:820px){.tess{grid-template-columns:1fr}}
+
+/* ===== FOOTER ===== */
+footer{background:var(--noir);color:#fff;padding:54px 0 22px;margin-top:10px}
+.f-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:30px;padding-bottom:36px;border-bottom:1px solid rgba(255,255,255,.12)}
+.f-brand .logo .wm{color:#fff}
+.f-brand p{font-size:13px;color:rgba(255,255,255,.6);max-width:280px;margin-top:14px}
+.f-col h5{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px}
+.f-col a{display:block;font-size:13.5px;color:rgba(255,255,255,.62);margin-bottom:9px;transition:.15s}
+.f-col a:hover{color:#fff}
+.f-bottom{text-align:center;padding-top:22px;font-size:12.5px;color:rgba(255,255,255,.55)}
+.f-bottom .nova{font-family:var(--font-display);color:#fff;font-weight:700}
+.f-bottom .dot{color:var(--rouge)}
+
+/* ===== COOKIES ===== */
+.cookie{position:fixed;left:18px;right:18px;bottom:18px;max-width:560px;margin:0 auto;background:var(--noir);color:#fff;border-radius:16px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 18px 40px -16px rgba(0,0,0,.6);z-index:60}
+.cookie p{font-size:12.5px;color:rgba(255,255,255,.8);flex:1}
+.cookie.hide{display:none}
+
+.note{position:fixed;left:12px;bottom:12px;z-index:70;background:var(--rouge);color:#fff;font-size:11px;font-weight:600;padding:5px 11px;border-radius:99px;box-shadow:var(--shadow)}
+</style>
+</head>
+<body>
+
+<!-- Bannière promo / pub permanente -->
+<div class="promo" id="promo">
+  ✦ <b>Nouveau</b> — la vitrine Gextimo connecte les créateurs de mode africaine à toute l'Afrique de l'Ouest.
+  <span class="x" onclick="document.getElementById('promo').style.display='none'">✕</span>
+</div>
+
+<!-- NAV -->
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="logo" href="#">
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="var(--noir)" stroke-width="3.4"/>
+        <circle cx="50" cy="50" r="33" fill="none" stroke="var(--noir)" stroke-width="2" opacity=".45"/>
+        <circle cx="50" cy="50" r="21" fill="none" stroke="var(--noir)" stroke-width="2" opacity=".3"/>
+        <path d="M50 4 A46 46 0 0 1 96 50" fill="none" stroke="var(--rouge)" stroke-width="6.5" stroke-linecap="round"/>
+        <circle cx="50" cy="50" r="8" fill="var(--rouge)"/>
+      </svg>
+      <span class="wm">gextimo<i>.</i></span>
+    </a>
+    <nav class="nav-links">
+      <a href="#how">Comment ça marche</a>
+      <a href="#creators">Créateurs</a>
+      <a href="#gallery">Collections</a>
+      <a href="#track">Suivi</a>
+      <a href="#support">Support</a>
+    </nav>
+    <div class="nav-right">
+      <div class="util">
+        <button onclick="toggleLang()" id="langBtn" title="Langue">FR</button>
+        <button onclick="cycleCur()" id="curBtn" title="Devise">FCFA</button>
+        <button onclick="toggleTheme()" id="themeBtn" title="Thème">🌙</button>
+      </div>
+      <a class="btn btn-outline btn-sm hide-sm" href="#">S'inscrire</a>
+      <a class="btn btn-primary btn-sm" href="#">Se connecter</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow" data-fr="Plateforme des créateurs de mode" data-en="Fashion creators platform">Plateforme des créateurs de mode</div>
+    <h1 data-fr='La vitrine des <span class="hl">créateurs de mode</span> africaine.' data-en='The showcase of African <span class="hl">fashion creators</span>.'>La vitrine des <span class="hl">créateurs de mode</span> africaine.</h1>
+    <div class="rot" id="rot"></div>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="#creators" data-fr="Découvrir les créateurs" data-en="Discover creators">Découvrir les créateurs</a>
+      <a class="btn btn-outline" href="#how" data-fr="Comment ça marche" data-en="How it works">Comment ça marche</a>
+    </div>
+    <div class="hero-stats">
+      <span><b>2 547</b> <span data-fr="créateurs" data-en="creators">créateurs</span></span>
+      <span><b>389</b> designers</span>
+      <span><b>6</b> <span data-fr="villes" data-en="cities">villes</span></span>
+    </div>
+    <div class="search">
+      <input placeholder="Rechercher un créateur, une collection, un modèle…" data-fr-ph="Rechercher un créateur, une collection, un modèle…" data-en-ph="Search a creator, a collection, a model…"/>
+      <button class="btn btn-primary btn-sm" data-fr="Rechercher" data-en="Search">Rechercher</button>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section class="sec" id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Comment ça marche</div>
+      <h2 data-fr="Trois étapes, c'est tout" data-en="Three steps, that's all">Trois étapes, c'est tout</h2>
+      <p data-fr="Du compte à la première commande, sans friction." data-en="From account to first order, frictionless.">Du compte à la première commande, sans friction.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="ic"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg></div><div class="n">ÉTAPE 1</div><h3 data-fr="Créez votre compte" data-en="Create your account">Créez votre compte</h3><p data-fr="Inscription designer en quelques minutes." data-en="Designer sign-up in minutes.">Inscription designer en quelques minutes.</p></div>
+      <div class="step"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div><div class="n">ÉTAPE 2</div><h3 data-fr="Publiez vos créations" data-en="Publish your creations">Publiez vos créations</h3><p data-fr="Vitrine pro générée automatiquement." data-en="Pro showcase generated automatically.">Vitrine pro générée automatiquement.</p></div>
+      <div class="step"><div class="ic"><svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg></div><div class="n">ÉTAPE 3</div><h3 data-fr="Recevez des commandes" data-en="Receive orders">Recevez des commandes</h3><p data-fr="Contacts, devis et suivi au même endroit." data-en="Contacts, quotes and tracking in one place.">Contacts, devis et suivi au même endroit.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CREATORS -->
+<section class="sec" id="creators" style="background:var(--surface-2)">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow" data-fr="Découvrir" data-en="Discover">Découvrir</div>
+      <h2 data-fr="Trouvez votre créateur" data-en="Find your creator">Trouvez votre créateur</h2>
+      <p data-fr="Des talents vérifiés, près de chez vous ou partout en Afrique." data-en="Verified talents, near you or anywhere in Africa.">Des talents vérifiés, près de chez vous ou partout en Afrique.</p>
+    </div>
+    <div class="row" id="creatorsRow"></div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="sec" id="gallery">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Galerie</div>
+      <h2 data-fr="Inspirez-vous des modèles" data-en="Get inspired by models">Inspirez-vous des modèles</h2>
+      <p data-fr="Parcourez une galerie centralisée, classée par catégorie." data-en="Browse a centralized gallery, sorted by category.">Parcourez une galerie centralisée, classée par catégorie.</p>
+    </div>
+    <div class="filters" id="filters">
+      <span class="chip on" data-cat="all">Tous</span>
+      <span class="chip" data-cat="robe">Robes</span>
+      <span class="chip" data-cat="costume">Costumes</span>
+      <span class="chip" data-cat="boubou">Boubous</span>
+      <span class="chip" data-cat="enfant">Enfants</span>
+    </div>
+    <div class="grid" id="modelGrid"></div>
+  </div>
+</section>
+
+<!-- COLLECTIONS -->
+<section class="sec" style="background:var(--surface-2)">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Collections</div>
+      <h2 data-fr="Collections mises en avant" data-en="Featured collections">Collections mises en avant</h2>
+    </div>
+    <div class="colls">
+      <div class="coll" style="background:linear-gradient(135deg,#D00B0B,#7a0606)"><div class="ct"><h4>Racines 2026</h4><p>14 pièces · Maison Zinsou</p></div></div>
+      <div class="coll" style="background:linear-gradient(135deg,#1a1a1a,#3a3a3a)"><div class="ct"><h4>Urban Bénin</h4><p>11 pièces · Atelier Moussa</p></div></div>
+      <div class="coll" style="background:linear-gradient(135deg,#6F635E,#2A2A2A)"><div class="ct"><h4>Héritage Wax</h4><p>9 pièces · Studio Fatou</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TRACKING -->
+<section class="sec" id="track">
+  <div class="wrap">
+    <div class="track">
+      <h2 data-fr="Suivez votre commande" data-en="Track your order">Suivez votre commande</h2>
+      <p data-fr="Entrez votre numéro de reçu, sans créer de compte." data-en="Enter your receipt number, no account needed.">Entrez votre numéro de reçu, sans créer de compte.</p>
+      <div class="track-in">
+        <input id="trackInput" placeholder="Ex : GEX-2026-0847"/>
+        <button class="btn btn-primary" onclick="track()" data-fr="Suivre" data-en="Track">Suivre</button>
+      </div>
+      <div class="track-res" id="trackRes">
+        <strong>Boubou Bazin</strong> — Atelier Jaures · <span style="color:var(--rouge);font-weight:700">En cours</span>
+        <div class="steps-prog">
+          <div class="sp ok"><div class="d">✓</div>Commande</div>
+          <div class="sp ok"><div class="d">✓</div>Coupe</div>
+          <div class="sp cur"><div class="d">3</div>Confection</div>
+          <div class="sp"><div class="d">4</div>Essayage</div>
+          <div class="sp"><div class="d">5</div>Livraison</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="feat-band">
+  <div class="wrap sec">
+    <div class="sec-head">
+      <div class="eyebrow">Pourquoi Gextimo</div>
+      <h2 data-fr="Un écosystème pensé pour vous" data-en="An ecosystem built for you">Un écosystème pensé pour vous</h2>
+    </div>
+    <div class="feats">
+      <div class="feat"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M7 18v2M17 18v2"/></svg></div><h3 data-fr="Vitrine automatique" data-en="Automatic showcase">Vitrine automatique</h3><p data-fr="Une page pro partageable, sans aucune compétence technique." data-en="A shareable pro page, no technical skill.">Une page pro partageable, sans aucune compétence technique.</p></div>
+      <div class="feat"><div class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div><h3 data-fr="Multidevise auto" data-en="Auto multi-currency">Multidevise auto</h3><p data-fr="Vos prix convertis pour chaque visiteur (FCFA, Naira, €, $)." data-en="Prices converted for each visitor (FCFA, Naira, €, $).">Vos prix convertis pour chaque visiteur (FCFA, Naira, €, $).</p></div>
+      <div class="feat"><div class="ic"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-12 7.6L3 21l1.9-6A8.5 8.5 0 1 1 21 11.5z"/></svg></div><h3 data-fr="WhatsApp intégré" data-en="WhatsApp built-in">WhatsApp intégré</h3><p data-fr="Devis, factures et contacts directement par WhatsApp." data-en="Quotes, invoices and contacts via WhatsApp.">Devis, factures et contacts directement par WhatsApp.</p></div>
+      <div class="feat"><div class="ic"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div><h3 data-fr="Profils vérifiés" data-en="Verified profiles">Profils vérifiés</h3><p data-fr="Badge vérifié et avis clients pour inspirer confiance." data-en="Verified badge and client reviews to build trust.">Badge vérifié et avis clients pour inspirer confiance.</p></div>
+      <div class="feat"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 0-8 8c0 5 8 12 8 12s8-7 8-12a8 8 0 0 0-8-8z"/></svg></div><h3 data-fr="Recherche géolocalisée" data-en="Geolocated search">Recherche géolocalisée</h3><p data-fr="Trouvez un créateur proche de chez vous." data-en="Find a creator near you.">Trouvez un créateur proche de chez vous.</p></div>
+      <div class="feat"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg></div><h3 data-fr="Sans engagement" data-en="No commitment">Sans engagement</h3><p data-fr="Démarrez gratuitement, évoluez à votre rythme." data-en="Start free, grow at your pace.">Démarrez gratuitement, évoluez à votre rythme.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="sec" id="support">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow" data-fr="Ils nous font confiance" data-en="They trust us">Ils nous font confiance</div>
+      <h2 data-fr="La parole aux créateurs" data-en="Creators speak">La parole aux créateurs</h2>
+    </div>
+    <div class="tess">
+      <div class="tes"><div class="st">★★★★★</div><p class="q" data-fr="« Ma vitrine Gextimo m'a apporté des clients que je n'aurais jamais touchés. Simple et pro. »" data-en="“My Gextimo showcase brought me clients I'd never have reached. Simple and pro.”">« Ma vitrine Gextimo m'a apporté des clients que je n'aurais jamais touchés. Simple et pro. »</p><div class="who"><div class="ph">photo<br>réelle</div><div><b>Fatoumata S.</b><span data-fr="Styliste · Cotonou" data-en="Stylist · Cotonou">Styliste · Cotonou</span></div></div></div>
+      <div class="tes"><div class="st">★★★★★</div><p class="q" data-fr="« Les devis et factures par WhatsApp, c'est un gain de temps énorme au quotidien. »" data-en="“Quotes and invoices via WhatsApp save me huge time daily.”">« Les devis et factures par WhatsApp, c'est un gain de temps énorme au quotidien. »</p><div class="who"><div class="ph">photo<br>réelle</div><div><b>Karim D.</b><span data-fr="Tailleur · Abomey-Calavi" data-en="Tailor · Abomey-Calavi">Tailleur · Abomey-Calavi</span></div></div></div>
+      <div class="tes"><div class="st">★★★★★</div><p class="q" data-fr="« Enfin une plateforme qui valorise vraiment la mode africaine. »" data-en="“Finally a platform that truly values African fashion.”">« Enfin une plateforme qui valorise vraiment la mode africaine. »</p><div class="who"><div class="ph">photo<br>réelle</div><div><b>Adama K.</b><span data-fr="Modéliste · Parakou" data-en="Pattern maker · Parakou">Modéliste · Parakou</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="f-grid">
+      <div class="f-brand">
+        <a class="logo" href="#">
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            <circle cx="50" cy="50" r="46" fill="none" stroke="#fff" stroke-width="3.4"/>
+            <circle cx="50" cy="50" r="33" fill="none" stroke="#fff" stroke-width="2" opacity=".45"/>
+            <path d="M50 4 A46 46 0 0 1 96 50" fill="none" stroke="var(--rouge)" stroke-width="6.5" stroke-linecap="round"/>
+            <circle cx="50" cy="50" r="8" fill="var(--rouge)"/>
+          </svg>
+          <span class="wm">gextimo<i style="color:var(--rouge)">.</i></span>
+        </a>
+        <p>La vitrine qui connecte créateurs, artisans et clients de la mode africaine.</p>
+      </div>
+      <div class="f-col"><h5>Plateforme</h5><a href="#">Créateurs</a><a href="#">Collections</a><a href="#">Comment ça marche</a><a href="#">Devenir créateur</a></div>
+      <div class="f-col"><h5>Entreprise</h5><a href="#">À propos</a><a href="#">Qui sommes-nous</a><a href="#">Blog</a><a href="#">Partenaires</a></div>
+      <div class="f-col"><h5>Support &amp; Légal</h5><a href="#">FAQ</a><a href="#">Contact</a><a href="#">Mentions légales</a><a href="#" onclick="document.getElementById('cookie').classList.remove('hide')">Paramètres cookies</a></div>
+    </div>
+    <div class="f-bottom">
+      <span class="nova">Une solution NovAfrique<span class="dot"> ·</span></span> © 2026 Gextimo. Tous droits réservés.
+    </div>
+  </div>
+</footer>
+
+<!-- COOKIE BANNER -->
+<div class="cookie" id="cookie">
+  <p>Nous utilisons des cookies pour mémoriser vos préférences (langue, devise, thème) et améliorer votre expérience.</p>
+  <button class="btn btn-primary btn-sm" onclick="document.getElementById('cookie').classList.add('hide')">Accepter</button>
+</div>
+
+<div class="note">Aperçu vitrine · charte officielle</div>
+
+<script>
+/* THEME */
+function toggleTheme(){
+  const h=document.documentElement, dark=h.getAttribute('data-theme')==='dark';
+  h.setAttribute('data-theme',dark?'light':'dark');
+  document.getElementById('themeBtn').textContent=dark?'🌙':'☀️';
+}
+/* LANGUE (cosmétique) */
+let lang='fr';
+function toggleLang(){
+  lang=lang==='fr'?'en':'fr';
+  document.getElementById('langBtn').textContent=lang.toUpperCase();
+  document.querySelectorAll('[data-'+lang+']').forEach(el=>el.innerHTML=el.getAttribute('data-'+lang));
+  document.querySelectorAll('[data-'+lang+'-ph]').forEach(el=>el.placeholder=el.getAttribute('data-'+lang+'-ph'));
+  buildRot();
+}
+/* DEVISE (cosmétique) */
+const curs=['FCFA','Naira','€','$']; let ci=0;
+function cycleCur(){ ci=(ci+1)%curs.length; document.getElementById('curBtn').textContent=curs[ci]; }
+
+/* MESSAGE ROTATIF */
+const rotsFR=['Rejoignez l\'aventure dès aujourd\'hui.','Découvrez les meilleurs créateurs.','Trouvez votre inspiration mode.','Valorisez votre savoir-faire.'];
+const rotsEN=['Join the adventure today.','Discover the best creators.','Find your fashion inspiration.','Showcase your craft.'];
+let ri=0,rotTimer;
+function buildRot(){ clearInterval(rotTimer); const arr=lang==='fr'?rotsFR:rotsEN; ri=0;
+  const set=()=>{document.getElementById('rot').innerHTML='<b>'+arr[ri]+'</b>'; ri=(ri+1)%arr.length;};
+  set(); rotTimer=setInterval(set,2600);
+}
+buildRot();
+
+/* CRÉATEURS */
+const creators=[
+  {n:'Maison Zinsou',i:'MZ',s:'Haute couture',v:'Cotonou',r:'4.9',g:'linear-gradient(135deg,#D00B0B,#7a0606)',vf:1},
+  {n:'Atelier Jaures',i:'AJ',s:'Tailleur',v:'Cotonou',r:'4.8',g:'linear-gradient(135deg,#1a1a1a,#444)',vf:1},
+  {n:'Studio Fatou',i:'SF',s:'Styliste',v:'Porto-Novo',r:'4.9',g:'linear-gradient(135deg,#6F635E,#2A2A2A)',vf:1},
+  {n:'Atelier Moussa',i:'AM',s:'Modéliste',v:'Parakou',r:'4.7',g:'linear-gradient(135deg,#D00B0B,#1a1a1a)',vf:0},
+  {n:'Maison Adama',i:'MA',s:'Couturière',v:'Abomey-Calavi',r:'4.6',g:'linear-gradient(135deg,#333,#D00B0B)',vf:1},
+];
+document.getElementById('creatorsRow').innerHTML=creators.map(c=>`
+  <div class="creator">
+    <div class="creator-top">
+      <div class="av" style="background:${c.g}">${c.i}</div>
+      <div><h4>${c.n} ${c.vf?'<span class="verified">✓ Vérifié</span>':''}</h4><div class="spec">${c.s}</div></div>
+    </div>
+    <div class="creator-meta"><span class="stars">★ ${c.r}</span><span>· 23 avis</span></div>
+    <div class="loc">📍 ${c.v}, Bénin</div>
+    <a class="btn btn-outline btn-sm" style="width:100%;justify-content:center" href="#">Visiter le profil</a>
+  </div>`).join('');
+
+/* MODÈLES */
+const models=[
+  {n:'Boubou Bazin',by:'Atelier Jaures',p:'25 000',c:'boubou',e:'👘',t:'Sur mesure',g:'linear-gradient(135deg,#D00B0B,#7a0606)'},
+  {n:'Robe Racines',by:'Maison Zinsou',p:'75 000',c:'robe',e:'👗',t:'Sur mesure',g:'linear-gradient(135deg,#1a1a1a,#444)'},
+  {n:'Costume Slim',by:'Atelier Moussa',p:'55 000',c:'costume',e:'🤵',t:'Sur mesure',g:'linear-gradient(135deg,#333,#111)'},
+  {n:'Ensemble Enfant',by:'Maison Adama',p:'18 000',c:'enfant',e:'🧒',t:'Prêt-à-porter',g:'linear-gradient(135deg,#6F635E,#2A2A2A)'},
+  {n:'Boubou Royal',by:'Studio Fatou',p:'45 000',c:'boubou',e:'👑',t:'Sur mesure',g:'linear-gradient(135deg,#D00B0B,#1a1a1a)'},
+  {n:'Robe Cocktail',by:'Maison Zinsou',p:'40 000',c:'robe',e:'💃',t:'Sur mesure',g:'linear-gradient(135deg,#444,#D00B0B)'},
+  {n:'Complet Wax',by:'Atelier Jaures',p:'32 000',c:'costume',e:'🧥',t:'Sur mesure',g:'linear-gradient(135deg,#222,#555)'},
+  {n:'Robe Écolière',by:'Maison Adama',p:'10 000',c:'enfant',e:'🎒',t:'Prêt-à-porter',g:'linear-gradient(135deg,#7a0606,#D00B0B)'},
+];
+function renderModels(cat){
+  document.getElementById('modelGrid').innerHTML=models.filter(m=>cat==='all'||m.c===cat).map(m=>`
+    <div class="model">
+      <div class="img" style="background:${m.g}"><span class="tag">${m.t}</span>${m.e}</div>
+      <div class="bd"><h4>${m.n}</h4><div class="by">par ${m.by}</div><div class="price">${m.p} <span style="color:var(--gris);font-weight:500;font-size:11px">${curs[ci]==='FCFA'?'FCFA':curs[ci]}</span></div></div>
+    </div>`).join('');
+}
+renderModels('all');
+document.getElementById('filters').addEventListener('click',e=>{
+  if(!e.target.classList.contains('chip'))return;
+  document.querySelectorAll('#filters .chip').forEach(c=>c.classList.remove('on'));
+  e.target.classList.add('on'); renderModels(e.target.dataset.cat);
+});
+
+/* SUIVI */
+function track(){
+  const v=document.getElementById('trackInput').value.trim();
+  document.getElementById('trackRes').classList.toggle('on', v.length>2);
+}
+</script>
+</body>
+</html>

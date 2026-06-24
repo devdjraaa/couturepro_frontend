@@ -11,6 +11,8 @@ export const ADMIN_KEYS = {
   ticket:       (id) => ['admin', 'tickets', id],
   offres:       ['admin', 'offres'],
   listeNoire:       ['admin', 'liste-noire'],
+  signalements:     ['admin', 'signalements'],
+  banniere:         ['admin', 'banniere'],
   audit:            ['admin', 'audit'],
   admins:           ['admin', 'admins'],
   sousAteliers:     (id) => ['admin', 'ateliers', id, 'sous-ateliers'],

@@ -44,11 +44,9 @@ export const parametresService = {
       Object.assign(mockAtelier, payload)
       return mockAtelier
     }
-    const { data } = await api.put('/parametres/atelier', {
-      nom:     payload.nom,
-      adresse: payload.adresse,
-      ville:   payload.ville,
-    })
+    // Transmet tout le payload ; le backend valide/filtre (nom requis + champs
+    // optionnels : adresse, ville, contact_public, specialite, bio, réseaux, lat/lng).
+    const { data } = await api.put('/parametres/atelier', payload)
     return data
   },
 
@@ -159,6 +157,17 @@ export const parametresService = {
     const fd = new FormData()
     fd.append('logo', file)
     const { data } = await api.post('/parametres/facture/logo', fd)
+    return data
+  },
+
+  async uploadAtelierLogo(file) {
+    if (isMock()) {
+      await delay()
+      return { logo_url: URL.createObjectURL(file) }
+    }
+    const fd = new FormData()
+    fd.append('logo', file)
+    const { data } = await api.post('/parametres/atelier/logo', fd)
     return data
   },
 

@@ -1,3 +1,8 @@
+// Plateforme : sur le web, « / » est la vitrine publique et l'app vit sous /app.
+// Sur mobile (Capacitor), l'app garde « / » (la vitrine n'est pas montée).
+export const IS_NATIVE =
+  typeof window !== 'undefined' && !!window.Capacitor?.isNativePlatform?.()
+
 export const ROUTES = {
   // Auth (public)
   LOGIN:            '/login',
@@ -8,8 +13,20 @@ export const ROUTES = {
   LOGIN_SECRET_Q:   '/recuperer-compte/question-secrete',
   ONBOARDING:       '/onboarding',
 
-  // App (protégées)
-  DASHBOARD:        '/',
+  // Vitrine publique (web uniquement)
+  VITRINE:           '/',
+  VITRINE_CREATEURS: '/createurs',
+  VITRINE_CREATEUR:  '/createurs/:slug',
+  VITRINE_SUIVI:     '/suivi',
+  VITRINE_ABOUT:     '/qui-sommes-nous',
+  VITRINE_AIDE:      '/aide',
+  VITRINE_ARTISANS:  '/artisans',
+  VITRINE_FAVORIS:   '/favoris',
+  VITRINE_INSCRIPTION: '/inscription',
+
+  // App (protégées) — '/app' sur le web, '/' sur mobile
+  DASHBOARD:        IS_NATIVE ? '/' : '/app',
+  MA_VITRINE:       '/ma-vitrine',
 
   // Clients
   CLIENTS:          '/clients',

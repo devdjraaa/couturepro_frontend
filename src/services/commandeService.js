@@ -94,6 +94,17 @@ export const commandeService = {
     return data
   },
 
+  async setEtape(id, etape) {
+    if (isMock()) {
+      await delay()
+      const idx = mockCommandes.findIndex(c => c.id === id || c.id === Number(id))
+      if (idx !== -1) mockCommandes[idx].etape = etape
+      return mockCommandes[idx]
+    }
+    const { data } = await api.post(`/commandes/${id}/etape`, { etape })
+    return data
+  },
+
   async delete(id) {
     if (isMock()) {
       await delay()

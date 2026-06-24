@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { authService } from '@/services/authService'
 import { AuthLayout } from '@/components/layout'
 import { Input, Button } from '@/components/ui'
+import { ROUTES } from '@/constants/routes'
 
 /**
  * Récupération via question secrète (style Google "essayer autrement").
@@ -49,7 +50,7 @@ export default function LoginQuestionSecretePage() {
         reponse_secrete: reponse,
       })
       // Reload pour que AuthContext recharge la session via /auth/me avec le token
-      window.location.href = '/'
+      window.location.href = ROUTES.DASHBOARD
     } catch (err) {
       setError(err?.message || t('auth.question_secrete.reponse_incorrecte'))
     } finally {
