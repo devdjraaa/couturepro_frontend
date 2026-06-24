@@ -55,6 +55,8 @@ import AuditPage               from '@/pages/admin/AuditPage'
 import AdminNotificationsPage  from '@/pages/admin/AdminNotificationsPage'
 import AdminParametresPage    from '@/pages/admin/AdminParametresPage'
 import AdminsPage             from '@/pages/admin/AdminsPage'
+import SignalementsPage       from '@/pages/admin/SignalementsPage'
+import BannierePage           from '@/pages/admin/BannierePage'
 
 const PlaceholderPage = ({ title }) => (
   <div className="flex items-center justify-center h-full p-8 text-content-secondary">
@@ -87,6 +89,8 @@ export default function App() {
           <Route path="/admin/notifications"    element={<AdminNotificationsPage />} />
           <Route path="/admin/parametres"       element={<AdminParametresPage />} />
           <Route path="/admin/admins"           element={<AdminsPage />} />
+          <Route path="/admin/signalements"     element={<SignalementsPage />} />
+          <Route path="/admin/banniere"         element={<BannierePage />} />
         </Route>
 
         {/* ── Vitrine publique (web uniquement) ───────────────────────── */}

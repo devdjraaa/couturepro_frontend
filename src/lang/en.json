@@ -1187,6 +1187,8 @@
       "paiements":        "Payments",
       "tickets":          "Tickets",
       "offres":           "Special offers",
+      "signalements":     "Reports",
+      "banniere":         "Banner",
       "liste_noire":      "Blacklist",
       "audit":            "Audit",
       "notifications":    "Notifications",
