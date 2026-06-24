@@ -7,6 +7,7 @@ import { useDevise } from './vitrineCurrency'
 import { useFavoris } from './useFavoris'
 import { avisService } from '@/services/avisService'
 import { vitrineStatsService } from '@/services/vitrineStatsService'
+import { signalementService } from '@/services/signalementService'
 
 const btnPrimary = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-white hover:bg-primary-600 transition'
 const btnOutline = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary transition'
@@ -59,6 +60,7 @@ export default function CreateurProfilPage() {
   const { slug } = useParams()
   const [c, setC] = useState(undefined) // undefined = loading, null = introuvable
   const [reported, setReported] = useState(() => new Set())
+  const [signaled, setSignaled] = useState(() => new Set())
 
   useEffect(() => { getCreator(slug).then((d) => setC(d ?? null)) }, [slug])
   useEffect(() => { if (c && c.id) vitrineStatsService.track(c.id, 'visite') }, [c?.id])
@@ -92,6 +94,7 @@ export default function CreateurProfilPage() {
   }
 
   const trackContact = () => vitrineStatsService.track(c?.id, 'contact')
+  const signaler = (type, id) => { setSignaled((s) => new Set(s).add(id)); signalementService.report(type, id) }
   const cols = c.collections || []
 
   const renderGrid = (items) => (
@@ -114,6 +117,11 @@ export default function CreateurProfilPage() {
             {wa
               ? <a href={waHref('vitrine.profil.wa_order', { nom: c.nom, modele: m.nom })} onClick={trackContact} target="_blank" rel="noopener noreferrer" className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">{t('vitrine.profil.order')}</a>
               : <button className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">{t('vitrine.profil.order')}</button>}
+          </div>
+          <div className="px-3.5 pb-2">
+            {signaled.has(m.id)
+              ? <span className="text-[10px] text-ghost">⚑ {t('vitrine.profil.report_done')}</span>
+              : <button onClick={() => signaler('creation', m.id)} className="text-[10px] text-ghost hover:text-danger">⚑ {t('vitrine.profil.report')}</button>}
           </div>
         </div>
       ))}
@@ -225,8 +233,11 @@ export default function CreateurProfilPage() {
         )}
         <div className="mb-12"><AvisForm atelierId={c.id} /></div>
 
-        <div className="pb-16">
+        <div className="pb-16 flex items-center gap-4 flex-wrap">
           <Link to="/createurs" className={btnOutline}>{t('vitrine.profil.all_creators')}</Link>
+          {signaled.has(c.id)
+            ? <span className="text-xs text-ghost">⚑ {t('vitrine.profil.report_done')}</span>
+            : <button onClick={() => signaler('profil', c.id)} className="text-xs text-ghost hover:text-danger">⚑ {t('vitrine.profil.report')} ce profil</button>}
         </div>
       </div>
     </VitrineShell>
