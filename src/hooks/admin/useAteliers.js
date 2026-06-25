@@ -39,6 +39,28 @@ export function useDegelerAtelier() {
   })
 }
 
+export function useVerifierAtelier() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id) => ateliersAdminService.verifier(id),
+    onSuccess: (_, id) => {
+      qc.invalidateQueries({ queryKey: ADMIN_KEYS.ateliers })
+      qc.invalidateQueries({ queryKey: ADMIN_KEYS.atelier(id) })
+    },
+  })
+}
+
+export function useSponsoriserAtelier() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, jours }) => ateliersAdminService.sponsoriser(id, jours),
+    onSuccess: (_, { id }) => {
+      qc.invalidateQueries({ queryKey: ADMIN_KEYS.ateliers })
+      qc.invalidateQueries({ queryKey: ADMIN_KEYS.atelier(id) })
+    },
+  })
+}
+
 export function useAdminAtelierFidelite(id) {
   return useQuery({
     queryKey: ADMIN_KEYS.atelierFid(id),

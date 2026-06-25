@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Building2, ExternalLink } from 'lucide-react'
 import { AdminLayout, AdminBadge } from '@/components/admin'
 import {
-  useAdminAtelier, useGelerAtelier, useDegelerAtelier,
+  useAdminAtelier, useGelerAtelier, useDegelerAtelier, useVerifierAtelier, useSponsoriserAtelier,
   useAdminAtelierFidelite, useAjusterFidelite,
   useSetDemoMode, useSetTrialDuration,
   useAdminSousAteliers, useSetTrialGlobal,
@@ -125,6 +125,8 @@ export default function AtelierDetailPage() {
   const { data: fidelite }           = useAdminAtelierFidelite(id)
   const geler   = useGelerAtelier()
   const degeler = useDegelerAtelier()
+  const verifier    = useVerifierAtelier()
+  const sponsoriser = useSponsoriserAtelier()
   const ajuster = useAjusterFidelite(id)
 
   const setDemo  = useSetDemoMode(id)
@@ -172,6 +174,12 @@ export default function AtelierDetailPage() {
                     {t('admin.commun.geler')}
                   </button>
                 )}
+                <button onClick={() => verifier.mutate(id)} className={atelier.verifie ? 'text-xs text-primary hover:text-primary-600 transition-colors' : 'text-xs text-ghost hover:text-primary transition-colors'}>
+                  {atelier.verifie ? '✓ Vérifié' : 'Vérifier'}
+                </button>
+                {atelier.sponsorise
+                  ? <button onClick={() => sponsoriser.mutate({ id, jours: 0 })} className="text-xs text-primary hover:text-primary-600 transition-colors">★ Sponsorisé</button>
+                  : <button onClick={() => sponsoriser.mutate({ id, jours: 7 })} className="text-xs text-ghost hover:text-primary transition-colors">Sponsoriser 7j</button>}
               </div>
             </div>
             <InfoRow label={t('admin.atelier_detail.proprietaire')} value={atelier.proprietaire ? `${atelier.proprietaire.prenom} ${atelier.proprietaire.nom}` : null} />
