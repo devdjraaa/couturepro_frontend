@@ -81,6 +81,7 @@ export function AuthProvider({ children }) {
     setDemoMode(!!atelier?.is_demo)
     toast.success(`Bienvenue, ${user.prenom || user.nom} !`)
     tryRegisterFcm()
+    return { user, atelier }
   }, [])
 
   const equipeLogin = useCallback(async (payload) => {

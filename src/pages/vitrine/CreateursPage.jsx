@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Heart } from 'lucide-react'
+import { Heart, Search, AlertCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { getCreators } from './vitrineApi'
 import { useFavoris } from './useFavoris'
+import { Spinner } from '@/components/ui'
 
 function distKm(a, b) {
   const toRad = (d) => (d * Math.PI) / 180
@@ -19,7 +20,13 @@ export default function CreateursPage() {
   const { t } = useTranslation()
   const { has, toggle } = useFavoris()
   const [creators, setCreators] = useState(null)
-  useEffect(() => { getCreators().then(setCreators) }, [])
+  const [error, setError] = useState(false)
+  useEffect(() => {
+    setError(false)
+    getCreators()
+      .then(setCreators)
+      .catch(() => setError(true))
+  }, [])
 
   const [q, setQ] = useState('')
   const [ville, setVille] = useState('')
@@ -70,7 +77,42 @@ export default function CreateursPage() {
             <button onClick={findNearby} className={`rounded-lg border px-3 py-2 text-sm transition ${myPos ? 'border-primary text-primary' : 'border-edge text-dim hover:border-primary hover:text-primary'}`}>📍 {t('vitrine.createurs_page.near_me')}</button>
           </div>
 
-          {!creators && <p className="text-center text-dim">{t('vitrine.loading')}</p>}
+          {/* État chargement */}
+          {!creators && !error && (
+            <div className="flex justify-center py-16">
+              <Spinner size="lg" />
+            </div>
+          )}
+
+          {/* État erreur */}
+          {error && (
+            <div className="flex flex-col items-center gap-3 py-16 text-center">
+              <AlertCircle size={28} className="text-danger" />
+              <p className="text-sm text-dim">{t('erreurs.chargement')}</p>
+              <button
+                onClick={() => { setError(false); setCreators(null); getCreators().then(setCreators).catch(() => setError(true)) }}
+                className="text-sm font-semibold text-primary hover:underline"
+              >
+                Réessayer
+              </button>
+            </div>
+          )}
+
+          {/* État vide */}
+          {creators && list.length === 0 && !error && (
+            <div className="flex flex-col items-center gap-3 py-16 text-center">
+              <Search size={28} className="text-ghost" />
+              <p className="text-sm text-dim">{t('vitrine.createurs_page.empty')}</p>
+              {(q || ville || verifiedOnly) && (
+                <button
+                  onClick={() => { setQ(''); setVille(''); setVerifiedOnly(false) }}
+                  className="text-sm font-semibold text-primary hover:underline"
+                >
+                  Réinitialiser les filtres
+                </button>
+              )}
+            </div>
+          )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {list.map((c) => (

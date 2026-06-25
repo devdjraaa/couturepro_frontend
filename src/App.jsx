@@ -16,6 +16,7 @@ import OtpPage                  from '@/pages/auth/OtpPage'
 import ForgotPasswordPage       from '@/pages/auth/ForgotPasswordPage'
 import RecoverAccountPage       from '@/pages/auth/RecoverAccountPage'
 import LoginQuestionSecretePage from '@/pages/auth/LoginQuestionSecretePage'
+import ArtisanAppPage           from '@/pages/auth/ArtisanAppPage'
 import ProfilPage             from '@/pages/ProfilPage'
 import MaVitrinePage          from '@/pages/MaVitrinePage'
 import AProposPage            from '@/pages/AProposPage'
@@ -110,6 +111,7 @@ export default function App() {
 
         {/* ── Routes publiques proprietaire ───────────────────────────── */}
         <Route path={ROUTES.LOGIN}           element={<LoginPage />}      />
+        <Route path="/artisan-app"           element={<ArtisanAppPage />} />
         <Route path={ROUTES.REGISTER}        element={<RegisterPage />}   />
         <Route path={ROUTES.ONBOARDING}      element={<OnboardingPage />} />
         <Route path={ROUTES.OTP}             element={<OtpPage />}             />
