@@ -4,6 +4,7 @@ import {
   Store, ExternalLink, Copy, Check, Eye, EyeOff, MessageCircle,
   Sparkles, ClipboardList, Wallet, Image as ImageIcon,
   ShieldCheck, ShieldAlert, Upload, Link as LinkIcon,
+  Star,
 } from 'lucide-react'
 import { AppLayout } from '@/components/layout'
 import { Skeleton } from '@/components/ui'
@@ -14,6 +15,7 @@ import { parametresService } from '@/services/parametresService'
 import { collectionService } from '@/services/collectionService'
 import { avisService } from '@/services/avisService'
 import { vitrineStatsService } from '@/services/vitrineStatsService'
+import { abonnementService } from '@/services/abonnementService'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { cn } from '@/utils/cn'
 import { IS_NATIVE } from '@/constants/routes'

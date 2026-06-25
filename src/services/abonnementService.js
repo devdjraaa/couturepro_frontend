@@ -79,6 +79,12 @@ export const abonnementService = {
     return data
   },
 
+  async acheterSponso({ jours, provider = 'fedapay' }) {
+    const return_url = `${window.location.origin}/paiement/retour`
+    const { data } = await api.post('/abonnement/sponsoriser', { jours, provider, return_url })
+    return data // { checkout_url }
+  },
+
   async activateCode(code) {
     if (isMock()) {
       await delay()

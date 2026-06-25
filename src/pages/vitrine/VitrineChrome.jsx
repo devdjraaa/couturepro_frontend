@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Sun, Moon, Heart } from 'lucide-react'
+import { Sun, Moon, Heart, Globe, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useTheme, useLang } from '@/contexts'
 import { cn } from '@/utils/cn'
 import { useDevise, DEVISES } from './vitrineCurrency'
 import { getBanniere } from './vitrineApi'
+
+const FIRST_VISIT_KEY = 'gx_welcome_done'
 
 /* Symbole orbital + wordmark (charte). */
 export function VitrineLogo({ onDark = false }) {
@@ -147,6 +149,7 @@ export function VitrineFooter() {
     { h: t('vitrine.footer.col_company'), links: [
       { l: t('vitrine.menu2.about'), to: '/qui-sommes-nous' },
       { l: t('vitrine.menu2.artisans'), to: '/artisans' },
+      { l: 'Tarifs', to: '/premium' },
     ] },
     { h: t('vitrine.footer.col_support'), links: [
       { l: t('vitrine.menu2.support'), to: '/aide' },
@@ -181,6 +184,90 @@ export function VitrineFooter() {
   )
 }
 
+/* Popup de 1ère visite : choix langue + devise. */
+function WelcomePopup() {
+  const { t } = useTranslation()
+  const { langue, setLangue } = useLang()
+  const { devise, setDevise } = useDevise()
+  const [open, setOpen] = useState(() => {
+    try { return !localStorage.getItem(FIRST_VISIT_KEY) } catch { return false }
+  })
+
+  const close = () => {
+    try { localStorage.setItem(FIRST_VISIT_KEY, '1') } catch { /* indisponible */ }
+    setOpen(false)
+  }
+
+  if (!open) return null
+
+  const langues = [
+    { code: 'fr', label: 'Français', flag: '🇫🇷' },
+    { code: 'en', label: 'English',  flag: '🇬🇧' },
+  ]
+  const devises = Object.keys(DEVISES)
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-[#0D0D0D]/60 backdrop-blur-sm">
+      <div className="bg-card border border-edge rounded-2xl shadow-xl w-full max-w-sm p-6 relative">
+        <button onClick={close} aria-label="Fermer" className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full text-ghost hover:text-ink transition">
+          <X size={16} />
+        </button>
+
+        <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 mx-auto mb-4">
+          <Globe size={22} className="text-primary" />
+        </div>
+
+        <h2 className="font-display font-bold text-xl text-ink text-center mb-1">{t('vitrine.welcome_popup.title')}</h2>
+        <p className="text-sm text-dim text-center mb-5">{t('vitrine.welcome_popup.subtitle')}</p>
+
+        <div className="mb-4">
+          <p className="text-xs font-semibold text-ghost uppercase tracking-wider mb-2">{t('vitrine.welcome_popup.langue')}</p>
+          <div className="flex gap-2">
+            {langues.map((l) => (
+              <button
+                key={l.code}
+                onClick={() => setLangue(l.code)}
+                className={cn(
+                  'flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border text-sm font-semibold transition',
+                  langue === l.code ? 'border-primary bg-primary/5 text-primary' : 'border-edge text-dim hover:border-primary hover:text-primary',
+                )}
+              >
+                <span>{l.flag}</span> {l.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="mb-6">
+          <p className="text-xs font-semibold text-ghost uppercase tracking-wider mb-2">{t('vitrine.welcome_popup.devise')}</p>
+          <div className="grid grid-cols-4 gap-1.5">
+            {devises.map((d) => (
+              <button
+                key={d}
+                onClick={() => setDevise(d)}
+                className={cn(
+                  'py-2 rounded-xl border text-xs font-bold transition',
+                  devise === d ? 'border-primary bg-primary/5 text-primary' : 'border-edge text-dim hover:border-primary hover:text-primary',
+                )}
+              >
+                {d}
+              </button>
+            ))}
+          </div>
+          <p className="text-[10.5px] text-ghost mt-1.5">{t('vitrine.welcome_popup.devise_hint')}</p>
+        </div>
+
+        <button
+          onClick={close}
+          className="w-full py-3 rounded-xl bg-primary text-white font-semibold text-sm hover:bg-primary-600 transition"
+        >
+          {t('vitrine.welcome_popup.cta')}
+        </button>
+      </div>
+    </div>
+  )
+}
+
 export default function VitrineShell({ children }) {
   return (
     <div className="min-h-dvh bg-app text-ink font-sans">
@@ -188,6 +275,7 @@ export default function VitrineShell({ children }) {
       <main>{children}</main>
       <VitrineFooter />
       <VitrineCookies />
+      <WelcomePopup />
     </div>
   )
 }

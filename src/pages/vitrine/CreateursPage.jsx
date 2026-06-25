@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Heart, Search, AlertCircle } from 'lucide-react'
+import { Heart, Search, AlertCircle, SlidersHorizontal, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { getCreators } from './vitrineApi'
 import { useFavoris } from './useFavoris'
 import { Spinner } from '@/components/ui'
+import { cn } from '@/utils/cn'
 
 function distKm(a, b) {
   const toRad = (d) => (d * Math.PI) / 180
@@ -16,42 +17,77 @@ function distKm(a, b) {
   return Math.round(2 * R * Math.asin(Math.sqrt(x)))
 }
 
+const RAYONS = [5, 10, 25, 50, 100]
+const TRIS = [
+  { value: 'pertinence', label: 'Pertinence' },
+  { value: 'note',       label: 'Meilleure note' },
+  { value: 'distance',   label: 'Plus proche' },
+]
+
 export default function CreateursPage() {
   const { t } = useTranslation()
   const { has, toggle } = useFavoris()
   const [creators, setCreators] = useState(null)
   const [error, setError] = useState(false)
-  useEffect(() => {
-    setError(false)
-    getCreators()
-      .then(setCreators)
-      .catch(() => setError(true))
-  }, [])
 
   const [q, setQ] = useState('')
   const [ville, setVille] = useState('')
   const [verifiedOnly, setVerifiedOnly] = useState(false)
+  const [noteMin, setNoteMin] = useState(0)
   const [myPos, setMyPos] = useState(null)
+  const [rayon, setRayon] = useState(25)
+  const [tri, setTri] = useState('pertinence')
+  const [showFilters, setShowFilters] = useState(false)
+
+  const reload = () => {
+    setError(false)
+    setCreators(null)
+    getCreators().then(setCreators).catch(() => setError(true))
+  }
+
+  useEffect(() => { reload() }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
   const villes = [...new Set((creators || []).map((c) => c.ville).filter(Boolean))].sort()
+
   const filtered = (creators || []).filter((c) => {
     if (verifiedOnly && !c.verifie) return false
     if (ville && c.ville !== ville) return false
+    if (noteMin > 0 && (c.note == null || Number(c.note) < noteMin)) return false
     if (q && !`${c.nom} ${c.specialite || ''}`.toLowerCase().includes(q.toLowerCase())) return false
     return true
   })
-  const list = myPos
-    ? filtered
-        .map((c) => ({ ...c, _dist: (c.latitude != null && c.longitude != null) ? distKm(myPos, { lat: c.latitude, lng: c.longitude }) : null }))
-        .sort((a, b) => (a._dist ?? Infinity) - (b._dist ?? Infinity))
-    : filtered
+
+  const withDist = filtered.map((c) => ({
+    ...c,
+    _dist: (myPos && c.latitude != null && c.longitude != null)
+      ? distKm(myPos, { lat: c.latitude, lng: c.longitude })
+      : null,
+  }))
+
+  // Filtre par rayon si position connue
+  const inRadius = myPos
+    ? withDist.filter((c) => c._dist == null || c._dist <= rayon)
+    : withDist
+
+  const sorted = [...inRadius].sort((a, b) => {
+    if (tri === 'note')     return (b.note ?? 0) - (a.note ?? 0)
+    if (tri === 'distance') return (a._dist ?? Infinity) - (b._dist ?? Infinity)
+    // pertinence : sponsorisés en premier, puis vérifiés
+    return (b.sponsorise ? 1 : 0) - (a.sponsorise ? 1 : 0)
+      || (b.verifie ? 1 : 0) - (a.verifie ? 1 : 0)
+  })
 
   const findNearby = () => {
     if (!navigator.geolocation) return
     navigator.geolocation.getCurrentPosition(
-      (pos) => setMyPos({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+      (pos) => { setMyPos({ lat: pos.coords.latitude, lng: pos.coords.longitude }); setTri('distance') },
       () => {},
     )
   }
+
+  const clearPos = () => { setMyPos(null); if (tri === 'distance') setTri('pertinence') }
+
+  const hasActiveFilters = q || ville || verifiedOnly || noteMin > 0 || myPos
 
   return (
     <VitrineShell>
@@ -63,19 +99,116 @@ export default function CreateursPage() {
             <p className="text-dim mt-1">{t('vitrine.createurs_page.subtitle')}</p>
           </div>
 
-          <div className="flex flex-wrap gap-2 justify-center mb-6">
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('vitrine.createurs_page.filter_search')}
-                   className="rounded-lg border border-edge bg-card px-3 py-2 text-sm text-ink w-full sm:w-72 focus:outline-none focus:ring-2 focus:ring-primary/30" />
-            <select value={ville} onChange={(e) => setVille(e.target.value)} className="rounded-lg border border-edge bg-card px-3 py-2 text-sm text-dim focus:outline-none">
-              <option value="">{t('vitrine.createurs_page.filter_all_cities')}</option>
-              {villes.map((v) => <option key={v} value={v}>{v}</option>)}
+          {/* Barre de recherche principale */}
+          <div className="flex flex-wrap gap-2 justify-center mb-3">
+            <div className="relative w-full sm:w-80">
+              <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-ghost pointer-events-none" />
+              <input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder={t('vitrine.createurs_page.filter_search')}
+                className="w-full rounded-lg border border-edge bg-card pl-9 pr-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30"
+              />
+            </div>
+
+            <select value={tri} onChange={(e) => setTri(e.target.value)}
+                    className="rounded-lg border border-edge bg-card px-3 py-2 text-sm text-dim focus:outline-none">
+              {TRIS.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
             </select>
-            <label className="inline-flex items-center gap-2 text-sm text-dim px-2">
-              <input type="checkbox" checked={verifiedOnly} onChange={(e) => setVerifiedOnly(e.target.checked)} />
-              {t('vitrine.createurs_page.filter_verified')}
-            </label>
-            <button onClick={findNearby} className={`rounded-lg border px-3 py-2 text-sm transition ${myPos ? 'border-primary text-primary' : 'border-edge text-dim hover:border-primary hover:text-primary'}`}>📍 {t('vitrine.createurs_page.near_me')}</button>
+
+            <button
+              onClick={() => setShowFilters((v) => !v)}
+              className={cn(
+                'inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm transition',
+                showFilters ? 'border-primary bg-primary/5 text-primary' : 'border-edge text-dim hover:border-primary hover:text-primary',
+              )}
+            >
+              <SlidersHorizontal size={14} />
+              Filtres
+              {hasActiveFilters && <span className="w-1.5 h-1.5 rounded-full bg-primary" />}
+            </button>
           </div>
+
+          {/* Panneau filtres avancés */}
+          {showFilters && (
+            <div className="bg-card border border-edge rounded-xl p-4 mb-5 flex flex-wrap gap-4">
+              {/* Ville */}
+              <div className="flex flex-col gap-1 min-w-[160px]">
+                <label className="text-xs font-semibold text-ghost uppercase tracking-wide">Ville</label>
+                <select value={ville} onChange={(e) => setVille(e.target.value)}
+                        className="rounded-lg border border-edge bg-app px-3 py-2 text-sm text-dim focus:outline-none">
+                  <option value="">{t('vitrine.createurs_page.filter_all_cities')}</option>
+                  {villes.map((v) => <option key={v} value={v}>{v}</option>)}
+                </select>
+              </div>
+
+              {/* Note minimale */}
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-ghost uppercase tracking-wide">Note minimum</label>
+                <div className="flex gap-1">
+                  {[0, 3, 4, 4.5].map((n) => (
+                    <button key={n} onClick={() => setNoteMin(n)}
+                            className={cn(
+                              'px-3 py-1.5 rounded-lg border text-xs font-bold transition',
+                              noteMin === n ? 'border-primary bg-primary/5 text-primary' : 'border-edge text-dim hover:border-primary',
+                            )}>
+                      {n === 0 ? 'Toutes' : `★ ${n}+`}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Vérifiés uniquement */}
+              <div className="flex flex-col gap-1 justify-end">
+                <label className="flex items-center gap-2 text-sm text-dim cursor-pointer">
+                  <input type="checkbox" checked={verifiedOnly} onChange={(e) => setVerifiedOnly(e.target.checked)}
+                         className="w-4 h-4 accent-primary rounded" />
+                  {t('vitrine.createurs_page.filter_verified')}
+                </label>
+              </div>
+
+              {/* Géolocalisation + rayon */}
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-ghost uppercase tracking-wide">Proximité</label>
+                {myPos ? (
+                  <div className="flex items-center gap-2">
+                    <select value={rayon} onChange={(e) => setRayon(Number(e.target.value))}
+                            className="rounded-lg border border-edge bg-app px-3 py-2 text-sm text-dim focus:outline-none">
+                      {RAYONS.map((r) => <option key={r} value={r}>≤ {r} km</option>)}
+                    </select>
+                    <button onClick={clearPos} className="w-7 h-7 flex items-center justify-center rounded-lg border border-edge text-ghost hover:text-danger transition">
+                      <X size={13} />
+                    </button>
+                  </div>
+                ) : (
+                  <button onClick={findNearby}
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-edge px-3 py-2 text-sm text-dim hover:border-primary hover:text-primary transition">
+                    📍 {t('vitrine.createurs_page.near_me')}
+                  </button>
+                )}
+              </div>
+
+              {/* Reset */}
+              {hasActiveFilters && (
+                <div className="flex flex-col justify-end ml-auto">
+                  <button
+                    onClick={() => { setQ(''); setVille(''); setVerifiedOnly(false); setNoteMin(0); clearPos() }}
+                    className="text-xs font-semibold text-ghost hover:text-danger transition"
+                  >
+                    Tout effacer
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Résumé actif */}
+          {creators && (
+            <p className="text-xs text-ghost mb-4 text-center">
+              {sorted.length} créateur{sorted.length !== 1 ? 's' : ''}
+              {myPos && ` dans un rayon de ${rayon} km`}
+            </p>
+          )}
 
           {/* État chargement */}
           {!creators && !error && (
@@ -89,23 +222,20 @@ export default function CreateursPage() {
             <div className="flex flex-col items-center gap-3 py-16 text-center">
               <AlertCircle size={28} className="text-danger" />
               <p className="text-sm text-dim">{t('erreurs.chargement')}</p>
-              <button
-                onClick={() => { setError(false); setCreators(null); getCreators().then(setCreators).catch(() => setError(true)) }}
-                className="text-sm font-semibold text-primary hover:underline"
-              >
+              <button onClick={reload} className="text-sm font-semibold text-primary hover:underline">
                 Réessayer
               </button>
             </div>
           )}
 
           {/* État vide */}
-          {creators && list.length === 0 && !error && (
+          {creators && sorted.length === 0 && !error && (
             <div className="flex flex-col items-center gap-3 py-16 text-center">
               <Search size={28} className="text-ghost" />
               <p className="text-sm text-dim">{t('vitrine.createurs_page.empty')}</p>
-              {(q || ville || verifiedOnly) && (
+              {hasActiveFilters && (
                 <button
-                  onClick={() => { setQ(''); setVille(''); setVerifiedOnly(false) }}
+                  onClick={() => { setQ(''); setVille(''); setVerifiedOnly(false); setNoteMin(0); clearPos() }}
                   className="text-sm font-semibold text-primary hover:underline"
                 >
                   Réinitialiser les filtres
@@ -115,16 +245,18 @@ export default function CreateursPage() {
           )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {list.map((c) => (
+            {sorted.map((c) => (
               <Link key={c.id} to={`/createurs/${c.id}`}
                     className="relative bg-card border border-edge rounded-lg p-5 transition hover:-translate-y-0.5 hover:shadow-lg hover:border-primary">
                 <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(c.id) }} className="absolute top-3 right-3 z-10" aria-label="Favori">
                   <Heart size={16} className={has(c.id) ? 'text-primary' : 'text-ghost'} fill={has(c.id) ? 'currentColor' : 'none'} />
                 </button>
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-[52px] h-[52px] rounded-xl overflow-hidden flex items-center justify-center font-display font-bold text-lg text-white shrink-0" style={c.logo_url ? undefined : { background: c.gradient }}>{c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" /> : c.initiales}</div>
+                  <div className="w-[52px] h-[52px] rounded-xl overflow-hidden flex items-center justify-center font-display font-bold text-lg text-white shrink-0" style={c.logo_url ? undefined : { background: c.gradient }}>
+                    {c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" /> : c.initiales}
+                  </div>
                   <div>
-                    <h3 className="font-bold text-base text-ink flex items-center gap-1.5">
+                    <h3 className="font-bold text-base text-ink flex items-center gap-1.5 flex-wrap">
                       {c.nom}
                       {c.verifie && <span className="text-[10.5px] font-bold text-primary bg-primary-50 px-1.5 py-0.5 rounded-full">{t('vitrine.creators.verified')}</span>}
                       {c.sponsorise && <span title="Sponsorisé" className="text-[10.5px] font-bold text-white bg-primary px-1.5 py-0.5 rounded-full">★</span>}
@@ -132,7 +264,7 @@ export default function CreateursPage() {
                     <div className="text-[12.5px] text-dim">{c.specialite} · {c.ville}</div>
                   </div>
                 </div>
-                <div className="flex gap-3.5 text-[13px] text-dim">
+                <div className="flex gap-3.5 text-[13px] text-dim flex-wrap">
                   {c.note ? <span className="text-primary font-bold">★ {c.note}</span> : <span className="text-ghost">{t('vitrine.creators.new')}</span>}
                   {c.experience ? <span>· {c.experience}</span> : null}
                   {c._dist != null ? <span>· {c._dist} km</span> : null}

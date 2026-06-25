@@ -63,7 +63,8 @@
     "otp_expire": "Ce code a expiré. Demandez-en un nouveau.",
     "champ_requis": "Ce champ est requis.",
     "format_invalide": "Format invalide.",
-    "inconnu": "Une erreur inattendue s'est produite."
+    "inconnu": "Une erreur inattendue s'est produite.",
+    "chargement": "Impossible de charger les données. Vérifiez votre connexion."
   },
   "auth": {
     "connexion": {
@@ -815,28 +816,28 @@
   },
   "plans": {
     "standard_mensuel": "Standard Mensuel",
-    "standard_annuel":  "Standard Annuel",
-    "premium_mensuel":  "Premium Mensuel",
-    "premium_annuel":   "Premium Annuel",
-    "magnat_mensuel":   "Magnat Mensuel",
-    "magnat_annuel":    "Magnat Annuel",
-    "actif":            "Actif",
-    "essai":            "Essai",
-    "renouveler":       "Renouveler",
-    "choisir":          "Choisir ce plan",
-    "par_an":           "/ an",
-    "par_mois":         "/ mois",
-    "illimite":         "Illimité",
-    "non_inclus":       "Non inclus",
-    "clients_mois":     "clients / mois",
-    "membres_equipe":   "membres d'équipe",
-    "photos_vip":       "Photos VIP",
-    "photos_vip_mois":  "photos VIP / mois",
-    "factures_wa":      "Factures WhatsApp",
+    "standard_annuel": "Standard Annuel",
+    "premium_mensuel": "Premium Mensuel",
+    "premium_annuel": "Premium Annuel",
+    "magnat_mensuel": "Magnat Mensuel",
+    "magnat_annuel": "Magnat Annuel",
+    "actif": "Actif",
+    "essai": "Essai",
+    "renouveler": "Renouveler",
+    "choisir": "Choisir ce plan",
+    "par_an": "/ an",
+    "par_mois": "/ mois",
+    "illimite": "Illimité",
+    "non_inclus": "Non inclus",
+    "clients_mois": "clients / mois",
+    "membres_equipe": "membres d'équipe",
+    "photos_vip": "Photos VIP",
+    "photos_vip_mois": "photos VIP / mois",
+    "factures_wa": "Factures WhatsApp",
     "factures_wa_mois": "factures WhatsApp / mois",
-    "sauvegarde_auto":  "Sauvegarde auto",
-    "module_caisse":    "Module caisse",
-    "sous_ateliers":    "sous-ateliers"
+    "sauvegarde_auto": "Sauvegarde auto",
+    "module_caisse": "Module caisse",
+    "sous_ateliers": "sous-ateliers"
   },
   "caisse": {
     "titre": "Caisse",
@@ -902,9 +903,25 @@
     "online": "● En ligne",
     "loading": "Chargement…",
     "indicatif": "* Prix indicatifs, convertis à titre informatif.",
-    "search": { "placeholder": "Rechercher un créateur, un modèle…", "empty": "Aucun résultat.", "creators": "Créateurs", "models": "Modèles" },
-    "favoris": { "menu": "Favoris", "title": "Mes favoris", "empty": "Vous n'avez pas encore de favoris." },
-    "inscription": { "title": "Créez votre compte créateur", "subtitle": "L'inscription se fait sur l'application mobile Gextimo.", "body": "Téléchargez l'application pour créer votre compte, gérer votre atelier, publier vos créations et votre vitrine publique.", "cta": "Télécharger l'application", "have_account": "Déjà un compte ?", "login": "Se connecter" },
+    "search": {
+      "placeholder": "Rechercher un créateur, un modèle…",
+      "empty": "Aucun résultat.",
+      "creators": "Créateurs",
+      "models": "Modèles"
+    },
+    "favoris": {
+      "menu": "Favoris",
+      "title": "Mes favoris",
+      "empty": "Vous n'avez pas encore de favoris."
+    },
+    "inscription": {
+      "title": "Créez votre compte créateur",
+      "subtitle": "L'inscription se fait sur l'application mobile Gextimo.",
+      "body": "Téléchargez l'application pour créer votre compte, gérer votre atelier, publier vos créations et votre vitrine publique.",
+      "cta": "Télécharger l'application",
+      "have_account": "Déjà un compte ?",
+      "login": "Se connecter"
+    },
     "cookies": {
       "text": "Nous utilisons des cookies pour améliorer votre expérience et mémoriser vos préférences (langue, devise, thème).",
       "accept": "Accepter",
@@ -940,9 +957,21 @@
       "title": "Trois étapes, c'est tout",
       "subtitle": "Du compte à la première commande, sans friction.",
       "steps": [
-        { "n": "ÉTAPE 1", "t": "Créez votre compte", "d": "Inscription créateur en quelques minutes." },
-        { "n": "ÉTAPE 2", "t": "Publiez vos créations", "d": "Vitrine pro générée automatiquement." },
-        { "n": "ÉTAPE 3", "t": "Recevez des commandes", "d": "Contacts, devis et suivi au même endroit." }
+        {
+          "n": "ÉTAPE 1",
+          "t": "Créez votre compte",
+          "d": "Inscription créateur en quelques minutes."
+        },
+        {
+          "n": "ÉTAPE 2",
+          "t": "Publiez vos créations",
+          "d": "Vitrine pro générée automatiquement."
+        },
+        {
+          "n": "ÉTAPE 3",
+          "t": "Recevez des commandes",
+          "d": "Contacts, devis et suivi au même endroit."
+        }
       ]
     },
     "creators": {
@@ -958,7 +987,13 @@
       "title": "Inspirez-vous des modèles",
       "subtitle": "Une galerie centralisée, classée par catégorie.",
       "by": "par",
-      "cats": { "all": "Tous", "robe": "Robes", "costume": "Costumes", "boubou": "Boubous", "enfant": "Enfants" }
+      "cats": {
+        "all": "Tous",
+        "robe": "Robes",
+        "costume": "Costumes",
+        "boubou": "Boubous",
+        "enfant": "Enfants"
+      }
     },
     "cta": {
       "title": "Suivez votre commande",
@@ -974,9 +1009,24 @@
       "legal_mentions": "Mentions légales",
       "legal_privacy": "Confidentialité",
       "legal_cookies": "Paramètres cookies",
-      "platform": ["Créateurs", "Collections", "Comment ça marche", "Devenir créateur"],
-      "company": ["À propos", "Qui sommes-nous", "Blog", "Partenaires"],
-      "support": ["FAQ", "Contact", "Mentions légales", "Paramètres cookies"],
+      "platform": [
+        "Créateurs",
+        "Collections",
+        "Comment ça marche",
+        "Devenir créateur"
+      ],
+      "company": [
+        "À propos",
+        "Qui sommes-nous",
+        "Blog",
+        "Partenaires"
+      ],
+      "support": [
+        "FAQ",
+        "Contact",
+        "Mentions légales",
+        "Paramètres cookies"
+      ],
       "rights": "© 2026 Gextimo. Tous droits réservés."
     },
     "createurs_page": {
@@ -986,7 +1036,8 @@
       "filter_search": "Rechercher (nom, spécialité)…",
       "filter_all_cities": "Toutes les villes",
       "filter_verified": "Vérifiés uniquement",
-      "near_me": "Près de moi"
+      "near_me": "Près de moi",
+      "empty": "Aucun créateur ne correspond à votre recherche."
     },
     "profil": {
       "quote": "Demander un devis",
@@ -1024,16 +1075,30 @@
       "in_progress": "En cours",
       "not_found": "Aucune commande trouvée pour ce numéro.",
       "cancelled": "Annulée",
-      "steps": ["Commande", "Coupe", "Confection", "Essayage", "Livraison"]
+      "steps": [
+        "Commande",
+        "Coupe",
+        "Confection",
+        "Essayage",
+        "Livraison"
+      ]
     },
-    "menu2": { "artisans": "Artisans", "support": "Aide", "about": "Qui sommes-nous" },
+    "menu2": {
+      "artisans": "Artisans",
+      "support": "Aide",
+      "about": "Qui sommes-nous"
+    },
     "about": {
       "eyebrow": "Qui sommes-nous",
       "title": "L'écosystème de la mode africaine",
       "p1": "Gextimo connecte les créateurs de mode — couturiers, stylistes, modélistes — à leurs clients à travers le Bénin et l'Afrique de l'Ouest. Notre mission : valoriser le savoir-faire africain et faciliter la rencontre entre talents et clients.",
       "p2": "Nous offrons aux créateurs une vitrine professionnelle, des outils de gestion (clients, commandes, mesures, caisse) et, bientôt, des moyens de monétiser leur visibilité.",
       "values_title": "Nos valeurs",
-      "values": ["Valoriser le savoir-faire local", "Transparence et confiance", "Simplicité et accessibilité"],
+      "values": [
+        "Valoriser le savoir-faire local",
+        "Transparence et confiance",
+        "Simplicité et accessibilité"
+      ],
       "novafrique": "Gextimo est une solution NovAfrique."
     },
     "aide": {
@@ -1041,10 +1106,22 @@
       "title": "Support & FAQ",
       "subtitle": "Les réponses aux questions les plus fréquentes.",
       "faq": [
-        { "q": "Comment créer mon compte créateur ?", "a": "Téléchargez l'application Gextimo et inscrivez-vous en quelques minutes. Votre vitrine publique est générée automatiquement." },
-        { "q": "Comment publier mes créations ?", "a": "Depuis votre espace, ajoutez vos modèles à votre catalogue puis activez leur publication sur la vitrine." },
-        { "q": "Comment un client me contacte-t-il ?", "a": "Si vous activez l'option, un bouton WhatsApp apparaît sur votre profil public pour recevoir devis et commandes." },
-        { "q": "Le service est-il payant ?", "a": "La création de compte et la vitrine de base sont gratuites. Des options premium arriveront pour booster votre visibilité." }
+        {
+          "q": "Comment créer mon compte créateur ?",
+          "a": "Téléchargez l'application Gextimo et inscrivez-vous en quelques minutes. Votre vitrine publique est générée automatiquement."
+        },
+        {
+          "q": "Comment publier mes créations ?",
+          "a": "Depuis votre espace, ajoutez vos modèles à votre catalogue puis activez leur publication sur la vitrine."
+        },
+        {
+          "q": "Comment un client me contacte-t-il ?",
+          "a": "Si vous activez l'option, un bouton WhatsApp apparaît sur votre profil public pour recevoir devis et commandes."
+        },
+        {
+          "q": "Le service est-il payant ?",
+          "a": "La création de compte et la vitrine de base sont gratuites. Des options premium arriveront pour booster votre visibilité."
+        }
       ],
       "contact_title": "Une autre question ?",
       "contact": "Écrivez-nous à support@gextimo.africa — nous répondons sous 48 h."
@@ -1055,6 +1132,14 @@
       "p1": "Parcourez une bibliothèque de modèles et de collections pour trouver l'inspiration, comparer les styles et choisir le créateur qui réalisera votre tenue sur mesure.",
       "p2": "De nombreux modèles sont accessibles librement pour vous aider à exprimer vos envies à votre couturier.",
       "cta": "Voir la galerie"
+    },
+    "welcome_popup": {
+      "title": "Bienvenue sur Gextimo",
+      "subtitle": "Choisissez votre langue et votre devise pour continuer.",
+      "langue": "Langue",
+      "devise": "Devise",
+      "devise_hint": "Prix indicatifs — convertis au taux du jour.",
+      "cta": "Commencer"
     }
   },
   "atelier": {
@@ -1180,27 +1265,27 @@
       "tous_providers": "Tous providers"
     },
     "nav": {
-      "dashboard":        "Dashboard",
-      "ateliers":         "Ateliers",
-      "plans":            "Plans",
-      "transactions":     "Transactions",
-      "paiements":        "Paiements",
-      "tickets":          "Tickets",
-      "offres":           "Offres spéciales",
-      "signalements":     "Signalements",
-      "banniere":         "Bannière",
-      "liste_noire":      "Liste noire",
-      "audit":            "Audit",
-      "notifications":    "Notifications",
-      "admins":           "Admins",
-      "parametres":       "Paramètres",
-      "section_principal":"Principal",
-      "section_gestion":  "Gestion",
+      "dashboard": "Dashboard",
+      "ateliers": "Ateliers",
+      "plans": "Plans",
+      "transactions": "Transactions",
+      "paiements": "Paiements",
+      "tickets": "Tickets",
+      "offres": "Offres spéciales",
+      "signalements": "Signalements",
+      "banniere": "Bannière",
+      "liste_noire": "Liste noire",
+      "audit": "Audit",
+      "notifications": "Notifications",
+      "admins": "Admins",
+      "parametres": "Paramètres",
+      "section_principal": "Principal",
+      "section_gestion": "Gestion",
       "sidebar_subtitle": "Espace admin",
-      "mode_clair":       "Mode clair",
-      "mode_sombre":      "Mode sombre",
-      "passer_mode":      "Passer en mode {{mode}}",
-      "rechercher":       "Rechercher…"
+      "mode_clair": "Mode clair",
+      "mode_sombre": "Mode sombre",
+      "passer_mode": "Passer en mode {{mode}}",
+      "rechercher": "Rechercher…"
     },
     "dashboard": {
       "bonjour": "Bonjour,",
@@ -1211,25 +1296,25 @@
       "link_ateliers": "Gérer les ateliers",
       "link_tickets": "Voir les tickets",
       "link_paiements": "Valider les paiements",
-      "link_transactions":     "Créer un code d'accès",
-      "greeting_matin":        "Bonjour",
-      "greeting_aprem":        "Bon après-midi",
-      "greeting_soir":         "Bonsoir",
-      "apercu":                "Voici un aperçu de l'activité aujourd'hui",
-      "system_titre":          "État du système",
-      "system_ok":             "Tout fonctionne",
-      "system_db":             "Base de données",
-      "system_api_paiements":  "API Paiements",
-      "system_notif":          "Service notifications",
-      "system_operationnel":   "Opérationnelle",
-      "stat_enregistres":      "{{count}} enregistrés",
-      "stat_aucun_attente":    "Aucun en attente",
-      "stat_en_attente":       "{{count}} en attente",
-      "stat_valider":          "À valider",
-      "link_ateliers_sub":     "{{count}} ateliers actifs",
-      "link_paiements_sub":    "{{count}} en attente",
-      "link_tickets_sub_one":  "{{count}} ouvert",
-      "link_tickets_sub_other":"{{count}} ouverts",
+      "link_transactions": "Créer un code d'accès",
+      "greeting_matin": "Bonjour",
+      "greeting_aprem": "Bon après-midi",
+      "greeting_soir": "Bonsoir",
+      "apercu": "Voici un aperçu de l'activité aujourd'hui",
+      "system_titre": "État du système",
+      "system_ok": "Tout fonctionne",
+      "system_db": "Base de données",
+      "system_api_paiements": "API Paiements",
+      "system_notif": "Service notifications",
+      "system_operationnel": "Opérationnelle",
+      "stat_enregistres": "{{count}} enregistrés",
+      "stat_aucun_attente": "Aucun en attente",
+      "stat_en_attente": "{{count}} en attente",
+      "stat_valider": "À valider",
+      "link_ateliers_sub": "{{count}} ateliers actifs",
+      "link_paiements_sub": "{{count}} en attente",
+      "link_tickets_sub_one": "{{count}} ouvert",
+      "link_tickets_sub_other": "{{count}} ouverts",
       "link_transactions_sub": "Génération rapide"
     },
     "paiements": {
@@ -1297,10 +1382,10 @@
       "fidelite": "Points fidélité",
       "fidelite_points": "points",
       "ajuster_points": "Ajuster les points",
-      "annuler_ajust":    "Annuler",
-      "unite_minutes":    "minutes",
-      "unite_heures":     "heures",
-      "unite_jours":      "jours"
+      "annuler_ajust": "Annuler",
+      "unite_minutes": "minutes",
+      "unite_heures": "heures",
+      "unite_jours": "jours"
     },
     "audit": {
       "titre": "Journal d'audit",

@@ -63,7 +63,8 @@
     "otp_expire": "This code has expired. Request a new one.",
     "champ_requis": "This field is required.",
     "format_invalide": "Invalid format.",
-    "inconnu": "An unexpected error occurred."
+    "inconnu": "An unexpected error occurred.",
+    "chargement": "Unable to load data. Check your connection."
   },
   "auth": {
     "connexion": {
@@ -815,28 +816,28 @@
   },
   "plans": {
     "standard_mensuel": "Standard Monthly",
-    "standard_annuel":  "Standard Annual",
-    "premium_mensuel":  "Premium Monthly",
-    "premium_annuel":   "Premium Annual",
-    "magnat_mensuel":   "Magnat Monthly",
-    "magnat_annuel":    "Magnat Annual",
-    "actif":            "Active",
-    "essai":            "Trial",
-    "renouveler":       "Renew",
-    "choisir":          "Choose plan",
-    "par_an":           "/ yr",
-    "par_mois":         "/ mo",
-    "illimite":         "Unlimited",
-    "non_inclus":       "Not included",
-    "clients_mois":     "clients / month",
-    "membres_equipe":   "team members",
-    "photos_vip":       "VIP photos",
-    "photos_vip_mois":  "VIP photos / month",
-    "factures_wa":      "WhatsApp invoices",
+    "standard_annuel": "Standard Annual",
+    "premium_mensuel": "Premium Monthly",
+    "premium_annuel": "Premium Annual",
+    "magnat_mensuel": "Magnat Monthly",
+    "magnat_annuel": "Magnat Annual",
+    "actif": "Active",
+    "essai": "Trial",
+    "renouveler": "Renew",
+    "choisir": "Choose plan",
+    "par_an": "/ yr",
+    "par_mois": "/ mo",
+    "illimite": "Unlimited",
+    "non_inclus": "Not included",
+    "clients_mois": "clients / month",
+    "membres_equipe": "team members",
+    "photos_vip": "VIP photos",
+    "photos_vip_mois": "VIP photos / month",
+    "factures_wa": "WhatsApp invoices",
     "factures_wa_mois": "WhatsApp invoices / month",
-    "sauvegarde_auto":  "Auto backup",
-    "module_caisse":    "Cash register module",
-    "sous_ateliers":    "sub-workshops"
+    "sauvegarde_auto": "Auto backup",
+    "module_caisse": "Cash register module",
+    "sous_ateliers": "sub-workshops"
   },
   "caisse": {
     "titre": "Cash Register",
@@ -902,9 +903,25 @@
     "online": "● Online",
     "loading": "Loading…",
     "indicatif": "* Indicative prices, converted for information only.",
-    "search": { "placeholder": "Search a designer, a model…", "empty": "No result.", "creators": "Designers", "models": "Models" },
-    "favoris": { "menu": "Favorites", "title": "My favorites", "empty": "You don't have any favorites yet." },
-    "inscription": { "title": "Create your designer account", "subtitle": "Sign-up happens on the Gextimo mobile app.", "body": "Download the app to create your account, manage your workshop, publish your creations and your public showcase.", "cta": "Download the app", "have_account": "Already have an account?", "login": "Log in" },
+    "search": {
+      "placeholder": "Search a designer, a model…",
+      "empty": "No result.",
+      "creators": "Designers",
+      "models": "Models"
+    },
+    "favoris": {
+      "menu": "Favorites",
+      "title": "My favorites",
+      "empty": "You don't have any favorites yet."
+    },
+    "inscription": {
+      "title": "Create your designer account",
+      "subtitle": "Sign-up happens on the Gextimo mobile app.",
+      "body": "Download the app to create your account, manage your workshop, publish your creations and your public showcase.",
+      "cta": "Download the app",
+      "have_account": "Already have an account?",
+      "login": "Log in"
+    },
     "cookies": {
       "text": "We use cookies to improve your experience and remember your preferences (language, currency, theme).",
       "accept": "Accept",
@@ -940,9 +957,21 @@
       "title": "Three steps, that's all",
       "subtitle": "From account to first order, friction-free.",
       "steps": [
-        { "n": "STEP 1", "t": "Create your account", "d": "Designer sign-up in minutes." },
-        { "n": "STEP 2", "t": "Publish your creations", "d": "Pro showcase generated automatically." },
-        { "n": "STEP 3", "t": "Receive orders", "d": "Contacts, quotes and tracking in one place." }
+        {
+          "n": "STEP 1",
+          "t": "Create your account",
+          "d": "Designer sign-up in minutes."
+        },
+        {
+          "n": "STEP 2",
+          "t": "Publish your creations",
+          "d": "Pro showcase generated automatically."
+        },
+        {
+          "n": "STEP 3",
+          "t": "Receive orders",
+          "d": "Contacts, quotes and tracking in one place."
+        }
       ]
     },
     "creators": {
@@ -958,7 +987,13 @@
       "title": "Get inspired by the models",
       "subtitle": "A central gallery, sorted by category.",
       "by": "by",
-      "cats": { "all": "All", "robe": "Dresses", "costume": "Suits", "boubou": "Boubous", "enfant": "Kids" }
+      "cats": {
+        "all": "All",
+        "robe": "Dresses",
+        "costume": "Suits",
+        "boubou": "Boubous",
+        "enfant": "Kids"
+      }
     },
     "cta": {
       "title": "Track your order",
@@ -974,9 +1009,24 @@
       "legal_mentions": "Legal notice",
       "legal_privacy": "Privacy",
       "legal_cookies": "Cookie settings",
-      "platform": ["Designers", "Collections", "How it works", "Become a designer"],
-      "company": ["About", "Who we are", "Blog", "Partners"],
-      "support": ["FAQ", "Contact", "Legal notice", "Cookie settings"],
+      "platform": [
+        "Designers",
+        "Collections",
+        "How it works",
+        "Become a designer"
+      ],
+      "company": [
+        "About",
+        "Who we are",
+        "Blog",
+        "Partners"
+      ],
+      "support": [
+        "FAQ",
+        "Contact",
+        "Legal notice",
+        "Cookie settings"
+      ],
       "rights": "© 2026 Gextimo. All rights reserved."
     },
     "createurs_page": {
@@ -986,7 +1036,8 @@
       "filter_search": "Search (name, specialty)…",
       "filter_all_cities": "All cities",
       "filter_verified": "Verified only",
-      "near_me": "Near me"
+      "near_me": "Near me",
+      "empty": "No creator matches your search."
     },
     "profil": {
       "quote": "Request a quote",
@@ -1024,16 +1075,30 @@
       "in_progress": "In progress",
       "not_found": "No order found for this number.",
       "cancelled": "Cancelled",
-      "steps": ["Order", "Cutting", "Sewing", "Fitting", "Delivery"]
+      "steps": [
+        "Order",
+        "Cutting",
+        "Sewing",
+        "Fitting",
+        "Delivery"
+      ]
     },
-    "menu2": { "artisans": "Artisans", "support": "Help", "about": "About us" },
+    "menu2": {
+      "artisans": "Artisans",
+      "support": "Help",
+      "about": "About us"
+    },
     "about": {
       "eyebrow": "About us",
       "title": "The African fashion ecosystem",
       "p1": "Gextimo connects fashion creators — tailors, stylists, pattern makers — with their clients across Benin and West Africa. Our mission: showcase African craftsmanship and make it easy for talents and clients to meet.",
       "p2": "We give creators a professional showcase, management tools (clients, orders, measurements, cash register) and, soon, ways to monetize their visibility.",
       "values_title": "Our values",
-      "values": ["Showcase local craftsmanship", "Transparency and trust", "Simplicity and accessibility"],
+      "values": [
+        "Showcase local craftsmanship",
+        "Transparency and trust",
+        "Simplicity and accessibility"
+      ],
       "novafrique": "Gextimo is a NovAfrique solution."
     },
     "aide": {
@@ -1041,10 +1106,22 @@
       "title": "Support & FAQ",
       "subtitle": "Answers to the most common questions.",
       "faq": [
-        { "q": "How do I create my creator account?", "a": "Download the Gextimo app and sign up in minutes. Your public showcase is generated automatically." },
-        { "q": "How do I publish my creations?", "a": "From your space, add your models to your catalogue then enable their publication on the showcase." },
-        { "q": "How does a client contact me?", "a": "If you enable the option, a WhatsApp button appears on your public profile to receive quotes and orders." },
-        { "q": "Is the service free?", "a": "Account creation and the basic showcase are free. Premium options will come to boost your visibility." }
+        {
+          "q": "How do I create my creator account?",
+          "a": "Download the Gextimo app and sign up in minutes. Your public showcase is generated automatically."
+        },
+        {
+          "q": "How do I publish my creations?",
+          "a": "From your space, add your models to your catalogue then enable their publication on the showcase."
+        },
+        {
+          "q": "How does a client contact me?",
+          "a": "If you enable the option, a WhatsApp button appears on your public profile to receive quotes and orders."
+        },
+        {
+          "q": "Is the service free?",
+          "a": "Account creation and the basic showcase are free. Premium options will come to boost your visibility."
+        }
       ],
       "contact_title": "Another question?",
       "contact": "Write to us at support@gextimo.africa — we reply within 48 h."
@@ -1055,6 +1132,14 @@
       "p1": "Browse a library of models and collections to find inspiration, compare styles and choose the creator who will make your custom outfit.",
       "p2": "Many models are freely accessible to help you express your ideas to your tailor.",
       "cta": "View the gallery"
+    },
+    "welcome_popup": {
+      "title": "Welcome to Gextimo",
+      "subtitle": "Choose your language and currency to continue.",
+      "langue": "Language",
+      "devise": "Currency",
+      "devise_hint": "Indicative prices — converted at today's rate.",
+      "cta": "Get started"
     }
   },
   "atelier": {
@@ -1180,27 +1265,27 @@
       "tous_providers": "All providers"
     },
     "nav": {
-      "dashboard":        "Dashboard",
-      "ateliers":         "Workshops",
-      "plans":            "Plans",
-      "transactions":     "Transactions",
-      "paiements":        "Payments",
-      "tickets":          "Tickets",
-      "offres":           "Special offers",
-      "signalements":     "Reports",
-      "banniere":         "Banner",
-      "liste_noire":      "Blacklist",
-      "audit":            "Audit",
-      "notifications":    "Notifications",
-      "admins":           "Admins",
-      "parametres":       "Settings",
-      "section_principal":"Main",
-      "section_gestion":  "Management",
+      "dashboard": "Dashboard",
+      "ateliers": "Workshops",
+      "plans": "Plans",
+      "transactions": "Transactions",
+      "paiements": "Payments",
+      "tickets": "Tickets",
+      "offres": "Special offers",
+      "signalements": "Reports",
+      "banniere": "Banner",
+      "liste_noire": "Blacklist",
+      "audit": "Audit",
+      "notifications": "Notifications",
+      "admins": "Admins",
+      "parametres": "Settings",
+      "section_principal": "Main",
+      "section_gestion": "Management",
       "sidebar_subtitle": "Admin area",
-      "mode_clair":       "Light mode",
-      "mode_sombre":      "Dark mode",
-      "passer_mode":      "Switch to {{mode}}",
-      "rechercher":       "Search…"
+      "mode_clair": "Light mode",
+      "mode_sombre": "Dark mode",
+      "passer_mode": "Switch to {{mode}}",
+      "rechercher": "Search…"
     },
     "dashboard": {
       "bonjour": "Hello,",
@@ -1211,25 +1296,25 @@
       "link_ateliers": "Manage workshops",
       "link_tickets": "View tickets",
       "link_paiements": "Validate payments",
-      "link_transactions":     "Create an access code",
-      "greeting_matin":        "Good morning",
-      "greeting_aprem":        "Good afternoon",
-      "greeting_soir":         "Good evening",
-      "apercu":                "Here's an overview of today's activity",
-      "system_titre":          "System status",
-      "system_ok":             "All systems go",
-      "system_db":             "Database",
-      "system_api_paiements":  "Payments API",
-      "system_notif":          "Notifications service",
-      "system_operationnel":   "Operational",
-      "stat_enregistres":      "{{count}} registered",
-      "stat_aucun_attente":    "None pending",
-      "stat_en_attente":       "{{count}} pending",
-      "stat_valider":          "To validate",
-      "link_ateliers_sub":     "{{count}} active workshops",
-      "link_paiements_sub":    "{{count}} pending",
-      "link_tickets_sub_one":  "{{count}} open",
-      "link_tickets_sub_other":"{{count}} open",
+      "link_transactions": "Create an access code",
+      "greeting_matin": "Good morning",
+      "greeting_aprem": "Good afternoon",
+      "greeting_soir": "Good evening",
+      "apercu": "Here's an overview of today's activity",
+      "system_titre": "System status",
+      "system_ok": "All systems go",
+      "system_db": "Database",
+      "system_api_paiements": "Payments API",
+      "system_notif": "Notifications service",
+      "system_operationnel": "Operational",
+      "stat_enregistres": "{{count}} registered",
+      "stat_aucun_attente": "None pending",
+      "stat_en_attente": "{{count}} pending",
+      "stat_valider": "To validate",
+      "link_ateliers_sub": "{{count}} active workshops",
+      "link_paiements_sub": "{{count}} pending",
+      "link_tickets_sub_one": "{{count}} open",
+      "link_tickets_sub_other": "{{count}} open",
       "link_transactions_sub": "Quick generation"
     },
     "paiements": {
@@ -1297,10 +1382,10 @@
       "fidelite": "Loyalty points",
       "fidelite_points": "points",
       "ajuster_points": "Adjust points",
-      "annuler_ajust":    "Cancel",
-      "unite_minutes":    "minutes",
-      "unite_heures":     "hours",
-      "unite_jours":      "days"
+      "annuler_ajust": "Cancel",
+      "unite_minutes": "minutes",
+      "unite_heures": "hours",
+      "unite_jours": "days"
     },
     "audit": {
       "titre": "Audit log",

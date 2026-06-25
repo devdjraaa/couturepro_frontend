@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { X } from 'lucide-react'
 import VitrineShell from './VitrineChrome'
 import { getCreator } from './vitrineApi'
 import { useDevise } from './vitrineCurrency'
@@ -11,6 +12,106 @@ import { signalementService } from '@/services/signalementService'
 
 const btnPrimary = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-white hover:bg-primary-600 transition'
 const btnOutline = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary transition'
+
+function DevisModal({ createur, wa, onClose, onTrack }) {
+  const [form, setForm] = useState({ nom: '', telephone: '', type_vetement: '', description: '', budget: '', delai: '' })
+  const [sent, setSent] = useState(false)
+  const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }))
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    onTrack()
+    if (wa) {
+      const msg =
+        `Bonjour ${createur}, je souhaite un devis.\n` +
+        `Nom : ${form.nom}\n` +
+        `Tél : ${form.telephone}\n` +
+        `Vêtement : ${form.type_vetement}\n` +
+        (form.description ? `Détails : ${form.description}\n` : '') +
+        (form.budget ? `Budget : ${form.budget} FCFA\n` : '') +
+        (form.delai ? `Délai souhaité : ${form.delai}\n` : '')
+      window.open(`${wa}?text=${encodeURIComponent(msg)}`, '_blank')
+    }
+    setSent(true)
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0D0D0D]/60 backdrop-blur-sm">
+      <div className="bg-card border border-edge rounded-2xl shadow-xl w-full max-w-md p-6 relative max-h-[90dvh] overflow-y-auto">
+        <button onClick={onClose} aria-label="Fermer" className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full text-ghost hover:text-ink transition">
+          <X size={16} />
+        </button>
+
+        <h2 className="font-display font-bold text-xl text-ink mb-1">Demande de devis</h2>
+        <p className="text-sm text-dim mb-4">Auprès de <strong className="text-ink">{createur}</strong></p>
+
+        {sent ? (
+          <div className="py-6 text-center">
+            <p className="text-2xl mb-2">✓</p>
+            <p className="text-sm text-success font-medium mb-1">Demande envoyée via WhatsApp !</p>
+            <p className="text-xs text-dim">Le créateur vous répondra directement.</p>
+            <button onClick={onClose} className="mt-4 text-sm font-semibold text-primary hover:underline">Fermer</button>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-3">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-dim mb-1">Votre nom *</label>
+                <input required value={form.nom} onChange={set('nom')} placeholder="Aminata Diallo"
+                       className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-dim mb-1">Téléphone *</label>
+                <input required value={form.telephone} onChange={set('telephone')} placeholder="+229 …"
+                       className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-dim mb-1">Type de vêtement *</label>
+              <input required value={form.type_vetement} onChange={set('type_vetement')} placeholder="Robe de soirée, costume, boubou…"
+                     className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-dim mb-1">Description</label>
+              <textarea value={form.description} onChange={set('description')} rows={3} maxLength={500}
+                        placeholder="Couleurs, style, occasion, inspirations…"
+                        className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink resize-none focus:outline-none focus:ring-2 focus:ring-primary/30" />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-dim mb-1">Budget (FCFA)</label>
+                <input type="number" min="0" value={form.budget} onChange={set('budget')} placeholder="ex : 50000"
+                       className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-dim mb-1">Délai souhaité</label>
+                <select value={form.delai} onChange={set('delai')}
+                        className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-dim focus:outline-none">
+                  <option value="">—</option>
+                  <option value="Moins de 2 semaines">Moins de 2 sem.</option>
+                  <option value="2 à 4 semaines">2 à 4 semaines</option>
+                  <option value="1 à 2 mois">1 à 2 mois</option>
+                  <option value="Plus de 2 mois">Plus de 2 mois</option>
+                </select>
+              </div>
+            </div>
+
+            {!wa && (
+              <p className="text-xs text-ghost">Ce créateur n'a pas activé le contact WhatsApp. Votre demande sera transmise lors du prochain contact.</p>
+            )}
+
+            <button type="submit" className="w-full py-3 rounded-xl bg-primary text-white font-semibold text-sm hover:bg-primary-600 transition">
+              {wa ? 'Envoyer via WhatsApp' : 'Envoyer la demande'}
+            </button>
+          </form>
+        )}
+      </div>
+    </div>
+  )
+}
 
 function AvisForm({ atelierId }) {
   const { t } = useTranslation()
@@ -61,6 +162,7 @@ export default function CreateurProfilPage() {
   const [c, setC] = useState(undefined) // undefined = loading, null = introuvable
   const [reported, setReported] = useState(() => new Set())
   const [signaled, setSignaled] = useState(() => new Set())
+  const [devisOpen, setDevisOpen] = useState(false)
 
   useEffect(() => { getCreator(slug).then((d) => setC(d ?? null)) }, [slug])
   useEffect(() => { if (c && c.id) vitrineStatsService.track(c.id, 'visite') }, [c?.id])
@@ -161,9 +263,7 @@ export default function CreateurProfilPage() {
             )}
           </div>
           <div className="flex flex-col gap-2 w-full sm:w-auto">
-            {wa
-              ? <a href={waHref('vitrine.profil.wa_quote', { nom: c.nom })} onClick={trackContact} target="_blank" rel="noopener noreferrer" className={btnPrimary}>{t('vitrine.profil.quote')}</a>
-              : <button className={btnPrimary}>{t('vitrine.profil.quote')}</button>}
+            <button onClick={() => setDevisOpen(true)} className={btnPrimary}>{t('vitrine.profil.quote')}</button>
             {wa
               ? <a href={waHref('vitrine.profil.wa_message', { nom: c.nom })} onClick={trackContact} target="_blank" rel="noopener noreferrer" className={btnOutline}>{t('vitrine.profil.contact')}</a>
               : <button className={btnOutline}>{t('vitrine.profil.contact')}</button>}
@@ -240,6 +340,15 @@ export default function CreateurProfilPage() {
             : <button onClick={() => signaler('profil', c.id)} className="text-xs text-ghost hover:text-danger">⚑ {t('vitrine.profil.report')} ce profil</button>}
         </div>
       </div>
+
+      {devisOpen && (
+        <DevisModal
+          createur={c.nom}
+          wa={wa}
+          onClose={() => setDevisOpen(false)}
+          onTrack={trackContact}
+        />
+      )}
     </VitrineShell>
   )
 }
