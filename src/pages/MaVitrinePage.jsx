@@ -14,6 +14,7 @@ import { vetementService } from '@/services/vetementService'
 import { parametresService } from '@/services/parametresService'
 import { collectionService } from '@/services/collectionService'
 import { avisService } from '@/services/avisService'
+import { devisService } from '@/services/devisService'
 import { vitrineStatsService } from '@/services/vitrineStatsService'
 import { abonnementService } from '@/services/abonnementService'
 import { formatCurrency } from '@/utils/formatCurrency'
@@ -56,6 +57,7 @@ export default function MaVitrinePage() {
   const [collections, setCollections] = useState([])
   const [newCollection, setNewCollection] = useState('')
   const [pendingAvis, setPendingAvis] = useState([])
+  const [devis, setDevis] = useState([])
   const [stats, setStats] = useState(null)
   const [verifDoc, setVerifDoc] = useState(null)
   const [verifLien, setVerifLien] = useState('')
@@ -80,6 +82,7 @@ export default function MaVitrinePage() {
   }, [atelier?.instagram, atelier?.facebook, atelier?.site_web])
   useEffect(() => { collectionService.getAll().then((d) => setCollections(d || [])).catch(() => {}) }, [])
   useEffect(() => { avisService.getMine().then((d) => setPendingAvis((d || []).filter((a) => a.statut === 'en_attente' || a.statut === 'signale'))).catch(() => {}) }, [])
+  useEffect(() => { devisService.getMine().then((d) => setDevis(d || [])).catch(() => {}) }, [])
   useEffect(() => { vitrineStatsService.getStats().then(setStats).catch(() => {}) }, [])
 
   const publicPath = atelier?.id ? `/createurs/${atelier.id}` : '/createurs'
@@ -187,6 +190,11 @@ export default function MaVitrinePage() {
   const moderateAvis = async (id, statut) => {
     setPendingAvis((l) => l.filter((a) => a.id !== id))
     try { await avisService.moderate(id, statut) } catch { /* erreur silencieuse */ }
+  }
+
+  const traiterDevis = async (id) => {
+    setDevis((l) => l.map((d) => (d.id === id ? { ...d, statut: 'traite' } : d)))
+    try { await devisService.traiter(id) } catch { /* erreur silencieuse */ }
   }
 
   const acheterSponso = async () => {
@@ -451,6 +459,37 @@ export default function MaVitrinePage() {
                   <div className="flex gap-2 mt-2">
                     <button onClick={() => moderateAvis(a.id, 'valide')} className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-white hover:bg-primary-600 transition">Valider</button>
                     <button onClick={() => moderateAvis(a.id, 'rejete')} className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-edge text-dim hover:text-danger hover:border-danger transition">Rejeter</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Demandes de devis reçues */}
+        {devis.some((d) => d.statut === 'nouveau') && (
+          <div className="mt-4 bg-card border border-edge rounded-xl p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <ClipboardList size={16} className="text-primary" />
+              <p className="text-sm font-semibold text-ink">Demandes de devis <span className="text-primary">({devis.filter((d) => d.statut === 'nouveau').length})</span></p>
+            </div>
+            <div className="space-y-3">
+              {devis.filter((d) => d.statut === 'nouveau').map((d) => (
+                <div key={d.id} className="border border-edge rounded-lg p-3">
+                  <div className="flex items-center justify-between">
+                    <b className="text-sm text-ink">{d.nom}</b>
+                    <span className="text-xs text-dim">{d.contact}</span>
+                  </div>
+                  {d.description && <p className="text-xs text-dim mt-1 whitespace-pre-line">{d.description}</p>}
+                  {(d.budget || d.delai) && (
+                    <div className="flex gap-3 mt-1.5 text-[11px] text-ghost">
+                      {d.budget && <span>Budget : {d.budget} FCFA</span>}
+                      {d.delai && <span>Délai : {d.delai}</span>}
+                    </div>
+                  )}
+                  <div className="flex gap-2 mt-2">
+                    <button onClick={() => traiterDevis(d.id)} className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-white hover:bg-primary-600 transition">Marquer traité</button>
+                    {d.contact && <a href={`https://wa.me/${d.contact.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-edge text-dim hover:text-primary hover:border-primary transition">Répondre</a>}
                   </div>
                 </div>
               ))}

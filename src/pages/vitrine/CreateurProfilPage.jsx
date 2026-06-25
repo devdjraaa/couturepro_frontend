@@ -7,6 +7,7 @@ import { getCreator } from './vitrineApi'
 import { useDevise } from './vitrineCurrency'
 import { useFavoris } from './useFavoris'
 import { avisService } from '@/services/avisService'
+import { devisService } from '@/services/devisService'
 import { vitrineStatsService } from '@/services/vitrineStatsService'
 import { signalementService } from '@/services/signalementService'
 import { usePageMeta } from '@/hooks/usePageMeta'
@@ -14,14 +15,30 @@ import { usePageMeta } from '@/hooks/usePageMeta'
 const btnPrimary = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-white hover:bg-primary-600 transition'
 const btnOutline = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary transition'
 
-function DevisModal({ createur, wa, onClose, onTrack }) {
+function DevisModal({ atelierId, createur, wa, onClose, onTrack }) {
   const [form, setForm] = useState({ nom: '', telephone: '', type_vetement: '', description: '', budget: '', delai: '' })
   const [sent, setSent] = useState(false)
+  const [sending, setSending] = useState(false)
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }))
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    if (sending) return
+    setSending(true)
     onTrack()
+
+    // 1. On enregistre la demande côté créateur (visible dans « Ma vitrine »).
+    try {
+      await devisService.submit(atelierId, {
+        nom:         form.nom.trim(),
+        contact:     form.telephone.trim(),
+        description: form.type_vetement.trim() + (form.description.trim() ? `\n${form.description.trim()}` : ''),
+        budget:      form.budget ? String(form.budget) : null,
+        delai:       form.delai || null,
+      })
+    } catch { /* la demande WhatsApp reste possible même si l'enregistrement échoue */ }
+
+    // 2. Si le créateur a activé WhatsApp, on pré-remplit aussi le message.
     if (wa) {
       const msg =
         `Bonjour ${createur}, je souhaite un devis.\n` +
@@ -33,6 +50,7 @@ function DevisModal({ createur, wa, onClose, onTrack }) {
         (form.delai ? `Délai souhaité : ${form.delai}\n` : '')
       window.open(`${wa}?text=${encodeURIComponent(msg)}`, '_blank')
     }
+    setSending(false)
     setSent(true)
   }
 
@@ -49,8 +67,8 @@ function DevisModal({ createur, wa, onClose, onTrack }) {
         {sent ? (
           <div className="py-6 text-center">
             <p className="text-2xl mb-2">✓</p>
-            <p className="text-sm text-success font-medium mb-1">Demande envoyée via WhatsApp !</p>
-            <p className="text-xs text-dim">Le créateur vous répondra directement.</p>
+            <p className="text-sm text-success font-medium mb-1">Demande envoyée !</p>
+            <p className="text-xs text-dim">{wa ? 'Le créateur la voit dans son espace et vous répondra sur WhatsApp.' : 'Le créateur la voit dans son espace et vous recontactera.'}</p>
             <button onClick={onClose} className="mt-4 text-sm font-semibold text-primary hover:underline">Fermer</button>
           </div>
         ) : (
@@ -104,8 +122,8 @@ function DevisModal({ createur, wa, onClose, onTrack }) {
               <p className="text-xs text-ghost">Ce créateur n'a pas activé le contact WhatsApp. Votre demande sera transmise lors du prochain contact.</p>
             )}
 
-            <button type="submit" className="w-full py-3 rounded-xl bg-primary text-white font-semibold text-sm hover:bg-primary-600 transition">
-              {wa ? 'Envoyer via WhatsApp' : 'Envoyer la demande'}
+            <button type="submit" disabled={sending} className="w-full py-3 rounded-xl bg-primary text-white font-semibold text-sm hover:bg-primary-600 transition disabled:opacity-60">
+              {sending ? 'Envoi…' : (wa ? 'Envoyer (+ WhatsApp)' : 'Envoyer la demande')}
             </button>
           </form>
         )}
@@ -351,6 +369,7 @@ export default function CreateurProfilPage() {
 
       {devisOpen && (
         <DevisModal
+          atelierId={c.id}
           createur={c.nom}
           wa={wa}
           onClose={() => setDevisOpen(false)}
