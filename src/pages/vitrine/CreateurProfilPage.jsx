@@ -9,6 +9,7 @@ import { useFavoris } from './useFavoris'
 import { avisService } from '@/services/avisService'
 import { vitrineStatsService } from '@/services/vitrineStatsService'
 import { signalementService } from '@/services/signalementService'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 const btnPrimary = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-white hover:bg-primary-600 transition'
 const btnOutline = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary transition'
@@ -166,6 +167,13 @@ export default function CreateurProfilPage() {
 
   useEffect(() => { getCreator(slug).then((d) => setC(d ?? null)) }, [slug])
   useEffect(() => { if (c && c.id) vitrineStatsService.track(c.id, 'visite') }, [c?.id])
+
+  usePageMeta({
+    title:       c?.nom ?? undefined,
+    description: c?.bio ?? (c ? `Découvrez les créations de ${c.nom} sur Gextimo.` : undefined),
+    image:       c?.logo_url ?? undefined,
+    path:        c ? `/createurs/${slug}` : undefined,
+  })
 
   if (c === undefined) {
     return <VitrineShell><div className="py-24 text-center text-dim">{t('vitrine.loading')}</div></VitrineShell>

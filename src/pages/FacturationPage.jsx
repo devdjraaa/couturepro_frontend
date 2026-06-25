@@ -1,0 +1,633 @@
+import { useState, useEffect, useCallback } from 'react'
+import {
+  FileText, Plus, X, ChevronDown, ChevronUp, Upload, Send,
+  QrCode, Trash2, Check, AlertCircle, Clock, Ban,
+  MessageCircle, Download,
+} from 'lucide-react'
+import { AppLayout } from '@/components/layout'
+import { useAuth } from '@/contexts'
+import { factureService } from '@/services/factureService'
+import { cn } from '@/utils/cn'
+
+const MODES_PAIEMENT = [
+  { value: 'wave',      label: 'Wave' },
+  { value: 'om',        label: 'Orange Money' },
+  { value: 'especes',   label: 'Espèces' },
+  { value: 'virement',  label: 'Virement bancaire' },
+  { value: 'autre',     label: 'Autre' },
+]
+
+const TYPES_DOC = [
+  { value: 'devis',    label: 'Devis' },
+  { value: 'facture',  label: 'Facture' },
+  { value: 'recu',     label: 'Reçu' },
+]
+
+const STATUTS = {
+  non_payee: { label: 'Non payée',  color: 'text-warning',  bg: 'bg-warning/10',   icon: Clock     },
+  acompte:   { label: 'Acompte',    color: 'text-primary',  bg: 'bg-primary/10',   icon: AlertCircle },
+  soldee:    { label: 'Soldée',     color: 'text-success',  bg: 'bg-success/10',   icon: Check     },
+  annulee:   { label: 'ANNULÉE',    color: 'text-danger',   bg: 'bg-danger/10',    icon: Ban       },
+}
+
+const GABARITS = [
+  { value: 'standard',     label: 'Standard',     desc: 'Mise en page sobre et professionnelle' },
+  { value: 'personnalise', label: 'Personnalisé',  desc: 'Avec couleurs et logo de votre atelier' },
+]
+
+const calcTotal = (lignes) => lignes.reduce((sum, l) => sum + (Number(l.quantite) || 0) * (Number(l.prix_unitaire) || 0), 0)
+const fmt = (v) => new Intl.NumberFormat('fr-FR').format(Number(v) || 0)
+
+function StatutBadge({ statut }) {
+  const s = STATUTS[statut] ?? STATUTS.non_payee
+  const Icon = s.icon
+  return (
+    <span className={cn('inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full', s.bg, s.color)}>
+      <Icon size={11} /> {s.label}
+    </span>
+  )
+}
+
+function LigneRow({ ligne, onChange, onRemove, index }) {
+  return (
+    <div className="flex gap-2 items-start">
+      <input
+        value={ligne.description}
+        onChange={(e) => onChange(index, 'description', e.target.value)}
+        placeholder="Description"
+        className="flex-1 rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30"
+      />
+      <input
+        type="number" min="1"
+        value={ligne.quantite}
+        onChange={(e) => onChange(index, 'quantite', e.target.value)}
+        placeholder="Qté"
+        className="w-16 rounded-lg border border-edge bg-app px-2 py-2 text-sm text-ink text-center focus:outline-none focus:ring-2 focus:ring-primary/30"
+      />
+      <input
+        type="number" min="0"
+        value={ligne.prix_unitaire}
+        onChange={(e) => onChange(index, 'prix_unitaire', e.target.value)}
+        placeholder="Prix"
+        className="w-28 rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30"
+      />
+      <button onClick={() => onRemove(index)} className="mt-2 text-ghost hover:text-danger transition">
+        <X size={15} />
+      </button>
+    </div>
+  )
+}
+
+const EMPTY_FORM = {
+  type: 'facture',
+  client_nom: '',
+  client_telephone: '',
+  date_echeance: '',
+  lignes: [{ description: '', quantite: 1, prix_unitaire: '' }],
+  mode_paiement: 'wave',
+  gabarit: 'standard',
+  acompte: '',
+  notes: '',
+}
+
+function FormulaireModal({ onClose, onCreated }) {
+  const [form, setForm] = useState(EMPTY_FORM)
+  const [saving, setSaving] = useState(false)
+  const [err, setErr] = useState('')
+
+  const set = (k, v) => setForm((f) => ({ ...f, [k]: v }))
+
+  const updateLigne = (i, k, v) => {
+    const lignes = [...form.lignes]
+    lignes[i] = { ...lignes[i], [k]: v }
+    setForm((f) => ({ ...f, lignes }))
+  }
+
+  const addLigne = () => setForm((f) => ({
+    ...f,
+    lignes: [...f.lignes, { description: '', quantite: 1, prix_unitaire: '' }],
+  }))
+
+  const removeLigne = (i) => setForm((f) => ({
+    ...f,
+    lignes: f.lignes.filter((_, idx) => idx !== i),
+  }))
+
+  const total = calcTotal(form.lignes)
+  const restant = total - (Number(form.acompte) || 0)
+
+  const submit = async () => {
+    if (!form.client_nom.trim()) { setErr('Le nom du client est requis.'); return }
+    if (form.lignes.length === 0) { setErr('Ajoutez au moins une ligne.'); return }
+    if (form.lignes.some((l) => !l.description.trim())) { setErr('Chaque ligne doit avoir une description.'); return }
+    setSaving(true); setErr('')
+    try {
+      const created = await factureService.create({
+        ...form,
+        lignes: form.lignes.map((l) => ({
+          description: l.description,
+          quantite: Number(l.quantite) || 1,
+          prix_unitaire: Number(l.prix_unitaire) || 0,
+        })),
+        acompte: Number(form.acompte) || 0,
+      })
+      onCreated(created)
+      onClose()
+    } catch {
+      setErr('Erreur lors de la création. Réessayez.')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-12 bg-[#0D0D0D]/60 backdrop-blur-sm overflow-y-auto">
+      <div className="bg-card border border-edge rounded-2xl shadow-xl w-full max-w-xl relative">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-edge">
+          <h2 className="font-display font-bold text-lg text-ink">Nouveau document</h2>
+          <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full text-ghost hover:text-ink transition">
+            <X size={17} />
+          </button>
+        </div>
+
+        <div className="p-5 space-y-4">
+          {/* Type de document */}
+          <div>
+            <label className="block text-xs font-medium text-dim mb-1.5">Type</label>
+            <div className="flex gap-2">
+              {TYPES_DOC.map((t) => (
+                <button
+                  key={t.value}
+                  onClick={() => set('type', t.value)}
+                  className={cn(
+                    'flex-1 py-2 rounded-xl border text-sm font-semibold transition',
+                    form.type === t.value ? 'border-primary bg-primary/5 text-primary' : 'border-edge text-dim hover:border-primary hover:text-ink',
+                  )}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Client */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-medium text-dim mb-1">Nom du client *</label>
+              <input value={form.client_nom} onChange={(e) => set('client_nom', e.target.value)}
+                     placeholder="Aminata Diallo"
+                     className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-dim mb-1">Téléphone *</label>
+              <input value={form.client_telephone} onChange={(e) => set('client_telephone', e.target.value)}
+                     placeholder="+221 77 000 0000"
+                     className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-medium text-dim mb-1">Date d'échéance</label>
+              <input type="date" value={form.date_echeance} onChange={(e) => set('date_echeance', e.target.value)}
+                     className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-dim mb-1">Mode de paiement</label>
+              <select value={form.mode_paiement} onChange={(e) => set('mode_paiement', e.target.value)}
+                      className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30">
+                {MODES_PAIEMENT.map((m) => <option key={m.value} value={m.value}>{m.label}</option>)}
+              </select>
+            </div>
+          </div>
+
+          {/* Lignes */}
+          <div>
+            <label className="block text-xs font-medium text-dim mb-2">Lignes</label>
+            <div className="space-y-2">
+              {form.lignes.map((l, i) => (
+                <LigneRow key={i} ligne={l} index={i} onChange={updateLigne} onRemove={removeLigne} />
+              ))}
+            </div>
+            <button onClick={addLigne} className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline">
+              <Plus size={13} /> Ajouter une ligne
+            </button>
+          </div>
+
+          {/* Totaux */}
+          <div className="bg-subtle border border-edge rounded-xl p-3 space-y-1.5">
+            <div className="flex justify-between text-sm">
+              <span className="text-dim">Sous-total</span>
+              <span className="font-semibold text-ink">{fmt(total)} FCFA</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <label className="text-sm text-dim">Acompte</label>
+              <input
+                type="number" min="0"
+                value={form.acompte}
+                onChange={(e) => set('acompte', e.target.value)}
+                placeholder="0"
+                className="w-32 rounded-lg border border-edge bg-app px-3 py-1.5 text-sm text-ink text-right focus:outline-none focus:ring-2 focus:ring-primary/30"
+              />
+            </div>
+            <div className="flex justify-between text-sm border-t border-edge pt-1.5 mt-1">
+              <span className="font-semibold text-ink">Restant dû</span>
+              <span className="font-bold font-display text-ink">{fmt(restant < 0 ? 0 : restant)} FCFA</span>
+            </div>
+          </div>
+
+          {/* Gabarit */}
+          <div>
+            <label className="block text-xs font-medium text-dim mb-1.5">Gabarit</label>
+            <div className="grid grid-cols-2 gap-2">
+              {GABARITS.map((g) => (
+                <button
+                  key={g.value}
+                  onClick={() => set('gabarit', g.value)}
+                  className={cn(
+                    'text-left px-3 py-2.5 rounded-xl border transition',
+                    form.gabarit === g.value ? 'border-primary bg-primary/5' : 'border-edge hover:border-primary',
+                  )}
+                >
+                  <p className={cn('text-sm font-semibold', form.gabarit === g.value ? 'text-primary' : 'text-ink')}>{g.label}</p>
+                  <p className="text-[11px] text-ghost">{g.desc}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Notes */}
+          <div>
+            <label className="block text-xs font-medium text-dim mb-1">Notes</label>
+            <textarea value={form.notes} onChange={(e) => set('notes', e.target.value)} rows={2}
+                      placeholder="Conditions, délais, instructions particulières…"
+                      className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink resize-none focus:outline-none focus:ring-2 focus:ring-primary/30" />
+          </div>
+
+          {err && <p className="text-xs text-danger font-medium">{err}</p>}
+        </div>
+
+        <div className="px-5 pb-5 flex justify-end gap-2">
+          <button onClick={onClose} className="px-4 py-2 rounded-xl border border-edge text-sm font-semibold text-dim hover:text-ink transition">
+            Annuler
+          </button>
+          <button onClick={submit} disabled={saving}
+                  className="px-5 py-2 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-600 transition disabled:opacity-60">
+            {saving ? 'Création…' : 'Créer'}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
+  const [open, setOpen] = useState(false)
+  const [updatingStatut, setUpdatingStatut] = useState(false)
+  const [uploadingDgi, setUploadingDgi] = useState(false)
+  const [acompteInput, setAcompteInput] = useState(String(doc.acompte || 0))
+
+  const total = calcTotal(doc.lignes || [])
+  const restant = total - (Number(doc.acompte) || 0)
+
+  const changeStatut = async (statut) => {
+    setUpdatingStatut(true)
+    try {
+      const updated = await factureService.updateStatut(doc.id, statut, statut === 'acompte' ? Number(acompteInput) || 0 : null)
+      onStatutChange(updated)
+    } catch { /* silencieux */ } finally { setUpdatingStatut(false) }
+  }
+
+  const uploadDgi = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploadingDgi(true)
+    try {
+      const updated = await factureService.uploadDgi(doc.id, file)
+      onDgiUploaded(updated)
+    } catch { /* silencieux */ } finally { setUploadingDgi(false) }
+  }
+
+  const sendWhatsApp = () => {
+    const tel = (doc.client_telephone || '').replace(/\D/g, '')
+    const msg = encodeURIComponent(
+      `Bonjour ${doc.client_nom},\n\nVoici votre ${doc.type === 'devis' ? 'devis' : doc.type === 'recu' ? 'reçu' : 'facture'} n° ${doc.numero}.\nMontant total : ${fmt(total)} FCFA\nRestant dû : ${fmt(restant < 0 ? 0 : restant)} FCFA\n\nCode de suivi : ${doc.code_tracage}\n\nMerci pour votre confiance.`
+    )
+    window.open(`https://wa.me/${tel}?text=${msg}`, '_blank', 'noopener,noreferrer')
+  }
+
+  return (
+    <div className="bg-card border border-edge rounded-xl overflow-hidden">
+      {/* En-tête de la carte */}
+      <div
+        className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-subtle transition"
+        onClick={() => setOpen((v) => !v)}
+      >
+        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+          <FileText size={15} className="text-primary" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-sm text-ink">{doc.numero}</span>
+            <span className="text-[11px] text-ghost">· {TYPES_DOC.find((t) => t.value === doc.type)?.label ?? doc.type}</span>
+          </div>
+          <p className="text-xs text-dim truncate">{doc.client_nom}</p>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <StatutBadge statut={doc.statut} />
+          <span className="text-sm font-semibold text-ink">{fmt(total)} FCFA</span>
+          {open ? <ChevronUp size={15} className="text-ghost" /> : <ChevronDown size={15} className="text-ghost" />}
+        </div>
+      </div>
+
+      {/* Détails dépliables */}
+      {open && (
+        <div className="border-t border-edge px-4 py-4 space-y-4">
+          {/* Lignes */}
+          <div>
+            <p className="text-xs font-semibold text-ghost uppercase tracking-wider mb-2">Lignes</p>
+            <div className="space-y-1.5">
+              {(doc.lignes || []).map((l, i) => (
+                <div key={i} className="flex justify-between text-sm">
+                  <span className="text-dim">{l.description} <span className="text-ghost">× {l.quantite}</span></span>
+                  <span className="font-medium text-ink">{fmt(l.quantite * l.prix_unitaire)} FCFA</span>
+                </div>
+              ))}
+            </div>
+            <div className="border-t border-edge mt-2 pt-2 flex justify-between font-bold text-sm">
+              <span className="text-ink">Total</span>
+              <span className="text-ink">{fmt(total)} FCFA</span>
+            </div>
+            {Number(doc.acompte) > 0 && (
+              <div className="flex justify-between text-xs text-dim mt-1">
+                <span>Acompte versé</span>
+                <span>− {fmt(doc.acompte)} FCFA</span>
+              </div>
+            )}
+            {restant > 0 && (
+              <div className="flex justify-between text-sm font-semibold text-primary mt-1">
+                <span>Restant dû</span>
+                <span>{fmt(restant)} FCFA</span>
+              </div>
+            )}
+          </div>
+
+          {/* Mode paiement */}
+          <div className="text-sm text-dim">
+            Mode de paiement : <span className="text-ink font-medium">{MODES_PAIEMENT.find((m) => m.value === doc.mode_paiement)?.label ?? doc.mode_paiement}</span>
+            {doc.date_echeance && (
+              <span className="ml-3">Échéance : <span className="text-ink font-medium">{doc.date_echeance}</span></span>
+            )}
+          </div>
+
+          {/* Code de traçage / QR */}
+          {doc.code_tracage && (
+            <div className="flex items-center gap-2 bg-subtle border border-edge rounded-lg px-3 py-2">
+              <QrCode size={15} className="text-primary shrink-0" />
+              <span className="text-xs font-mono text-ink">{doc.code_tracage}</span>
+            </div>
+          )}
+
+          {/* Notes */}
+          {doc.notes && (
+            <p className="text-xs text-dim italic">{doc.notes}</p>
+          )}
+
+          {/* Changer statut */}
+          <div>
+            <p className="text-xs font-semibold text-ghost uppercase tracking-wider mb-2">Statut</p>
+            <div className="flex flex-wrap gap-2 items-center">
+              {Object.entries(STATUTS).map(([k, s]) => (
+                <button
+                  key={k}
+                  disabled={updatingStatut || doc.statut === k}
+                  onClick={() => changeStatut(k)}
+                  className={cn(
+                    'text-xs font-semibold px-3 py-1.5 rounded-lg border transition disabled:opacity-50',
+                    doc.statut === k
+                      ? `${s.bg} ${s.color} border-transparent`
+                      : 'border-edge text-dim hover:border-primary hover:text-primary',
+                  )}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </div>
+            {doc.statut === 'acompte' && (
+              <div className="flex items-center gap-2 mt-2">
+                <span className="text-xs text-dim">Montant acompte :</span>
+                <input
+                  type="number" min="0"
+                  value={acompteInput}
+                  onChange={(e) => setAcompteInput(e.target.value)}
+                  className="w-28 rounded-lg border border-edge bg-app px-2 py-1 text-xs text-ink focus:outline-none focus:ring-2 focus:ring-primary/30"
+                />
+                <button
+                  disabled={updatingStatut}
+                  onClick={() => changeStatut('acompte')}
+                  className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-white hover:bg-primary-600 transition disabled:opacity-60"
+                >
+                  Mettre à jour
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Upload DGI */}
+          <div>
+            <p className="text-xs font-semibold text-ghost uppercase tracking-wider mb-2">Facture normalisée DGI</p>
+            {doc.dgi_pdf_url ? (
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-success font-medium">✓ PDF DGI joint</span>
+                <a href={doc.dgi_pdf_url} target="_blank" rel="noopener noreferrer"
+                   className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline">
+                  <Download size={12} /> Télécharger
+                </a>
+              </div>
+            ) : (
+              <label className="inline-flex items-center gap-2 cursor-pointer text-sm font-semibold text-primary hover:underline">
+                <Upload size={14} />
+                {uploadingDgi ? 'Envoi…' : 'Joindre la facture DGI (PDF)'}
+                <input type="file" accept="application/pdf" onChange={uploadDgi} disabled={uploadingDgi} className="hidden" />
+              </label>
+            )}
+          </div>
+
+          {/* Actions */}
+          <div className="flex gap-2 pt-1 border-t border-edge">
+            <button
+              onClick={sendWhatsApp}
+              className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-xl bg-[#25D366] text-white hover:opacity-90 transition"
+            >
+              <MessageCircle size={15} /> Envoyer WhatsApp
+            </button>
+            <button
+              onClick={() => onDelete(doc.id)}
+              className="ml-auto inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-xl border border-edge text-ghost hover:text-danger hover:border-danger transition"
+            >
+              <Trash2 size={13} /> Supprimer
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default function FacturationPage() {
+  const { atelier } = useAuth()
+  const [docs, setDocs] = useState(null)
+  const [showForm, setShowForm] = useState(false)
+  const [filterType, setFilterType] = useState('tous')
+  const [filterStatut, setFilterStatut] = useState('tous')
+
+  const loadDocs = useCallback(async () => {
+    try {
+      const data = await factureService.getAll()
+      setDocs(data || [])
+    } catch { setDocs([]) }
+  }, [])
+
+  useEffect(() => { loadDocs() }, [loadDocs])
+
+  const handleCreated = (doc) => setDocs((l) => [doc, ...(l || [])])
+
+  const handleStatutChange = (updated) => {
+    setDocs((l) => l.map((d) => (d.id === updated.id ? { ...d, ...updated } : d)))
+  }
+
+  const handleDgiUploaded = (updated) => {
+    setDocs((l) => l.map((d) => (d.id === updated.id ? { ...d, ...updated } : d)))
+  }
+
+  const handleDelete = async (id) => {
+    setDocs((l) => l.filter((d) => d.id !== id))
+    try { await factureService.delete(id) } catch { /* silencieux */ }
+  }
+
+  const filtered = (docs || []).filter((d) => {
+    if (filterType !== 'tous' && d.type !== filterType) return false
+    if (filterStatut !== 'tous' && d.statut !== filterStatut) return false
+    return true
+  })
+
+  const totaux = (docs || []).reduce(
+    (acc, d) => {
+      const t = calcTotal(d.lignes || [])
+      acc.total += t
+      if (d.statut === 'soldee') acc.encaisse += t
+      if (d.statut === 'non_payee' || d.statut === 'acompte') acc.restant += t - (Number(d.acompte) || 0)
+      return acc
+    },
+    { total: 0, encaisse: 0, restant: 0 },
+  )
+
+  return (
+    <AppLayout>
+      <div className="max-w-3xl mx-auto px-4 pb-24 lg:pb-8">
+        {/* En-tête */}
+        <div className="pt-4 pb-3 flex items-start justify-between gap-3">
+          <div>
+            <div className="flex items-center gap-2 text-primary text-xs font-bold uppercase tracking-wider">
+              <FileText size={15} /> Facturation
+            </div>
+            <h1 className="text-2xl font-bold font-display text-ink mt-1">Devis & Factures</h1>
+            <p className="text-sm text-dim mt-0.5">Gérez vos documents commerciaux.</p>
+          </div>
+          <button
+            onClick={() => setShowForm(true)}
+            className="shrink-0 inline-flex items-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl bg-primary text-white hover:bg-primary-600 transition"
+          >
+            <Plus size={16} /> Nouveau
+          </button>
+        </div>
+
+        {/* KPIs */}
+        <div className="grid grid-cols-3 gap-3 mb-4">
+          {[
+            { label: 'Total facturé',  value: fmt(totaux.total)    },
+            { label: 'Encaissé',       value: fmt(totaux.encaisse) },
+            { label: 'Restant dû',     value: fmt(totaux.restant)  },
+          ].map((k) => (
+            <div key={k.label} className="bg-card border border-edge rounded-xl p-3 text-center">
+              <div className="text-lg font-bold font-display text-ink">{k.value}</div>
+              <div className="text-[11px] text-ghost mt-0.5">{k.label} FCFA</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Filtres */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          <div className="flex items-center gap-1 bg-subtle border border-edge rounded-xl p-0.5">
+            {[{ value: 'tous', label: 'Tous' }, ...TYPES_DOC].map((t) => (
+              <button
+                key={t.value}
+                onClick={() => setFilterType(t.value)}
+                className={cn(
+                  'px-3 py-1.5 rounded-[10px] text-xs font-semibold transition',
+                  filterType === t.value ? 'bg-primary text-white' : 'text-ghost hover:text-ink',
+                )}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+          <div className="flex items-center gap-1 bg-subtle border border-edge rounded-xl p-0.5">
+            {[{ value: 'tous', label: 'Tous statuts' }, ...Object.entries(STATUTS).map(([k, s]) => ({ value: k, label: s.label }))].map((s) => (
+              <button
+                key={s.value}
+                onClick={() => setFilterStatut(s.value)}
+                className={cn(
+                  'px-3 py-1.5 rounded-[10px] text-xs font-semibold transition',
+                  filterStatut === s.value ? 'bg-primary text-white' : 'text-ghost hover:text-ink',
+                )}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Liste */}
+        {docs === null ? (
+          <div className="space-y-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-16 bg-card border border-edge rounded-xl animate-pulse" />
+            ))}
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="bg-card border border-edge rounded-xl p-10 text-center">
+            <FileText size={28} className="mx-auto text-ghost mb-2" />
+            <p className="text-sm text-dim">
+              {docs.length === 0 ? 'Aucun document pour le moment.' : 'Aucun document ne correspond aux filtres.'}
+            </p>
+            {docs.length === 0 && (
+              <button onClick={() => setShowForm(true)} className="mt-3 text-sm font-semibold text-primary hover:underline">
+                Créer votre premier document →
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {filtered.map((doc) => (
+              <DocCard
+                key={doc.id}
+                doc={doc}
+                onStatutChange={handleStatutChange}
+                onDgiUploaded={handleDgiUploaded}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {showForm && (
+        <FormulaireModal
+          onClose={() => setShowForm(false)}
+          onCreated={handleCreated}
+        />
+      )}
+    </AppLayout>
+  )
+}

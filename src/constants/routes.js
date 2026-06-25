@@ -66,6 +66,9 @@ export const ROUTES = {
   THEME:            '/parametres/theme',
   APROPOS:          '/parametres/a-propos',
 
+  // Facturation
+  FACTURATION: '/facturation',
+
   // Autres
   PHOTOS_VIP:  '/photos-vip',
   HISTORIQUE:  '/historique',

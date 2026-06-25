@@ -61,6 +61,8 @@ export default function MaVitrinePage() {
   const [verifLien, setVerifLien] = useState('')
   const [verifSending, setVerifSending] = useState(false)
   const [verifSent, setVerifSent] = useState(false)
+  const [sponsoJours, setSponsoJours] = useState(7)
+  const [sponsoBusy, setSponsoBusy] = useState(false)
 
   useEffect(() => {
     let on = true
@@ -185,6 +187,17 @@ export default function MaVitrinePage() {
   const moderateAvis = async (id, statut) => {
     setPendingAvis((l) => l.filter((a) => a.id !== id))
     try { await avisService.moderate(id, statut) } catch { /* erreur silencieuse */ }
+  }
+
+  const acheterSponso = async () => {
+    if (sponsoBusy) return
+    setSponsoBusy(true)
+    try {
+      const { checkout_url } = await abonnementService.acheterSponso({ jours: sponsoJours })
+      if (checkout_url) window.location.href = checkout_url
+    } catch { /* erreur silencieuse */ } finally {
+      setSponsoBusy(false)
+    }
   }
 
   const submitVerification = async () => {
@@ -351,6 +364,56 @@ export default function MaVitrinePage() {
             )}
           </div>
         )}
+
+        {/* Mise en avant sponsorisée */}
+        <div className="mt-4 bg-card border border-edge rounded-xl p-4">
+          <div className="flex items-center gap-2 mb-1">
+            <Star size={17} className={atelier?.sponsorise ? 'text-warning' : 'text-ghost'} />
+            <p className="text-sm font-semibold text-ink">Mise en avant sponsorisée</p>
+            {atelier?.sponsorise && (
+              <span className="ml-auto text-[11px] font-bold px-2 py-0.5 rounded-full bg-warning/15 text-warning border border-warning/25">
+                Actif
+              </span>
+            )}
+          </div>
+
+          {atelier?.sponsorise ? (
+            <p className="text-xs text-dim">Votre atelier est actuellement mis en avant en tête des résultats de recherche sur la vitrine.</p>
+          ) : (
+            <>
+              <p className="text-xs text-dim mb-3">Apparaissez en premier sur la vitrine publique et augmentez votre visibilité auprès des clients.</p>
+              <div className="grid grid-cols-3 gap-2 mb-3">
+                {[
+                  { jours: 7,  prix: 1500  },
+                  { jours: 15, prix: 2500  },
+                  { jours: 30, prix: 4500  },
+                ].map(({ jours, prix }) => (
+                  <button
+                    key={jours}
+                    onClick={() => setSponsoJours(jours)}
+                    className={cn(
+                      'flex flex-col items-center py-3 rounded-xl border text-sm font-semibold transition',
+                      sponsoJours === jours
+                        ? 'border-primary bg-primary/5 text-primary'
+                        : 'border-edge text-dim hover:border-primary hover:text-ink',
+                    )}
+                  >
+                    <span className="font-bold">{jours} j</span>
+                    <span className="text-[11px] font-normal mt-0.5">{prix.toLocaleString('fr-FR')} FCFA</span>
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={acheterSponso}
+                disabled={sponsoBusy}
+                className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl bg-primary text-white hover:bg-primary-600 transition disabled:opacity-60"
+              >
+                <Star size={15} />
+                {sponsoBusy ? 'Redirection…' : `Sponsoriser ${sponsoJours} jours`}
+              </button>
+            </>
+          )}
+        </div>
 
         {/* Collections */}
         <div className="mt-4 bg-card border border-edge rounded-xl p-4">

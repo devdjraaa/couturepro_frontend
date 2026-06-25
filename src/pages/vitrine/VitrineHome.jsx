@@ -4,6 +4,7 @@ import { Heart } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { getCreators, demoModels, categories } from './vitrineApi'
+import { usePageMeta } from '@/hooks/usePageMeta'
 import { useDevise } from './vitrineCurrency'
 import { useFavoris } from './useFavoris'
 
@@ -77,6 +78,7 @@ export default function VitrineHome() {
   const { format } = useDevise()
   const { has, toggle } = useFavoris()
   const [rot, setRot] = useState(0)
+  usePageMeta({ path: '/' })
   const [creators, setCreators] = useState(null)
   const [cat, setCat] = useState('all')
 

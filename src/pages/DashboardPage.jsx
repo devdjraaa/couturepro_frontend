@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, AlertTriangle, Clock, CheckCircle2, CircleUser, Sun, Moon } from 'lucide-react'
+import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, AlertTriangle, Clock, CheckCircle2, CircleUser, Sun, Moon, Store, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { isToday, isPast, parseISO, differenceInCalendarDays, isThisMonth, subDays } from 'date-fns'
 import { useQueryClient } from '@tanstack/react-query'
@@ -182,12 +182,36 @@ function TodoList({ commandes, isLoading, navigate }) {
 }
 
 // ── Onboarding checklist ─────────────────────────────────────────────────────
-function WelcomeChecklist({ user, clients, commandes, isLoading, navigate }) {
-  const { t } = useTranslation()
+const ONBOARDING_DISMISS_KEY = 'gx_onboarding_done'
 
-  if (isLoading || commandes.length > 0) return null
+function WelcomeChecklist({ user, atelier, clients, commandes, isLoading, navigate }) {
+  const { t } = useTranslation()
+  const [dismissed, setDismissed] = useState(() => {
+    try { return !!localStorage.getItem(ONBOARDING_DISMISS_KEY) } catch { return false }
+  })
+
+  const dismiss = () => {
+    try { localStorage.setItem(ONBOARDING_DISMISS_KEY, '1') } catch { /* indisponible */ }
+    setDismissed(true)
+  }
+
+  if (isLoading || dismissed) return null
 
   const steps = [
+    {
+      icon: CircleUser,
+      label: t('dashboard.onboarding.step_profil'),
+      sub: t('dashboard.onboarding.step_profil_sub'),
+      done: !!user?.telephone,
+      to: '/parametres/profil',
+    },
+    {
+      icon: Store,
+      label: 'Configurer ma vitrine',
+      sub: 'Ajoutez votre bio et spécialité pour attirer des clients',
+      done: !!(atelier?.bio),
+      to: '/ma-vitrine',
+    },
     {
       icon: UserPlus,
       label: t('dashboard.onboarding.step_client'),
@@ -202,22 +226,23 @@ function WelcomeChecklist({ user, clients, commandes, isLoading, navigate }) {
       done: commandes.length > 0,
       to: '/commandes/new',
     },
-    {
-      icon: CircleUser,
-      label: t('dashboard.onboarding.step_profil'),
-      sub: t('dashboard.onboarding.step_profil_sub'),
-      done: !!user?.telephone,
-      to: '/parametres/profil',
-    },
   ]
 
   const doneCount = steps.filter(s => s.done).length
+  if (doneCount === steps.length) return null
 
   return (
     <div className="bg-card border border-edge rounded-2xl overflow-hidden">
       <div className="bg-gradient-to-r from-primary/8 to-accent/5 px-4 pt-4 pb-3 border-b border-edge">
-        <p className="text-sm font-bold text-ink">{t('dashboard.onboarding.titre')}</p>
-        <p className="text-xs text-ghost mt-0.5">{t('dashboard.onboarding.etapes', { fait: doneCount, total: steps.length })}</p>
+        <div className="flex items-start justify-between gap-2">
+          <div>
+            <p className="text-sm font-bold text-ink">{t('dashboard.onboarding.titre')}</p>
+            <p className="text-xs text-ghost mt-0.5">{t('dashboard.onboarding.etapes', { fait: doneCount, total: steps.length })}</p>
+          </div>
+          <button onClick={dismiss} aria-label="Masquer" className="w-7 h-7 flex items-center justify-center rounded-full text-ghost hover:text-ink transition shrink-0">
+            <X size={14} />
+          </button>
+        </div>
         <div className="mt-2.5 h-1 bg-edge rounded-full overflow-hidden">
           <div
             className="h-full bg-primary rounded-full transition-all duration-500"
