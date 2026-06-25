@@ -33,7 +33,7 @@ const PLANS = [
       'Vitrine publique + badge Vérifié',
       'CRM avancé & historique complet',
       'Facturation & devis PDF',
-      'Gestion d'équipe',
+      "Gestion d'équipe",
       'Support prioritaire',
     ],
   },

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, AlertTriangle, Clock, CheckCircle2, CircleUser, Sun, Moon, Store, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -316,7 +317,7 @@ export default function DashboardPage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const queryClient = useQueryClient()
-  const { user }  = useAuth()
+  const { user, atelier }  = useAuth()
   const { data: commandes = [], isLoading: loadingCmd } = useCommandes()
   const { data: stats,          isLoading: loadingStats } = useCommandeStats()
   const { data: clients = [] }  = useClients()
@@ -361,6 +362,7 @@ export default function DashboardPage() {
         {/* Onboarding checklist — visible uniquement si aucune commande */}
         <WelcomeChecklist
           user={user}
+          atelier={atelier}
           clients={clients}
           commandes={commandes}
           isLoading={loadingCmd}
