@@ -333,7 +333,7 @@ export default function MaVitrinePage() {
             </div>
             <p className="text-xs text-dim mb-3">Joignez un document officiel (CNI, diplôme, certificat de créateur…) ou un lien vers votre portfolio / profil professionnel pour obtenir le badge « Vérifié ».</p>
 
-            {verifSent ? (
+            {(verifSent || atelier?.verification_demandee_a) ? (
               <p className="text-sm text-success font-medium">✓ Demande envoyée — nous vous répondons sous 48 h.</p>
             ) : (
               <div className="space-y-3">

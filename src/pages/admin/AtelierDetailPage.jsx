@@ -187,6 +187,22 @@ export default function AtelierDetailPage() {
             <InfoRow label={t('admin.atelier_detail.cree_le')}      value={formatDate(atelier.created_at)} />
             <InfoRow label={t('admin.ateliers.col_clients')}        value={atelier.clients_count} />
             <InfoRow label={t('admin.ateliers.col_commandes')}      value={atelier.commandes_count} />
+
+            {atelier.verification_demandee_a && !atelier.verifie && (
+              <div className="mt-4 bg-warning/10 border border-warning/30 rounded-lg p-4">
+                <p className="text-sm font-semibold text-warning mb-1">Demande de vérification en attente</p>
+                <p className="text-xs text-dim mb-3">Reçue le {formatDate(atelier.verification_demandee_a)}.</p>
+                <div className="flex flex-wrap gap-2">
+                  {atelier.verification_doc_url && (
+                    <a href={atelier.verification_doc_url} target="_blank" rel="noopener noreferrer" className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-edge text-ink hover:border-primary hover:text-primary transition-colors">Voir le document</a>
+                  )}
+                  {atelier.verification_lien && (
+                    <a href={atelier.verification_lien} target="_blank" rel="noopener noreferrer" className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-edge text-ink hover:border-primary hover:text-primary transition-colors">Lien fourni</a>
+                  )}
+                  <button onClick={() => verifier.mutate(id)} className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-white hover:bg-primary-600 transition-colors">Valider la vérification</button>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Abonnement */}
