@@ -65,6 +65,7 @@ export default function MaVitrinePage() {
   const [verifSent, setVerifSent] = useState(false)
   const [sponsoJours, setSponsoJours] = useState(7)
   const [sponsoBusy, setSponsoBusy] = useState(false)
+  const [sponsoOffres, setSponsoOffres] = useState(null)
 
   useEffect(() => {
     let on = true
@@ -83,6 +84,12 @@ export default function MaVitrinePage() {
   useEffect(() => { collectionService.getAll().then((d) => setCollections(d || [])).catch(() => {}) }, [])
   useEffect(() => { avisService.getMine().then((d) => setPendingAvis((d || []).filter((a) => a.statut === 'en_attente' || a.statut === 'signale'))).catch(() => {}) }, [])
   useEffect(() => { devisService.getMine().then((d) => setDevis(d || [])).catch(() => {}) }, [])
+  useEffect(() => {
+    abonnementService.getSponsoOffres().then((d) => {
+      setSponsoOffres(d)
+      if (d?.offres?.length) setSponsoJours(d.offres[0].jours)
+    }).catch(() => {})
+  }, [])
   useEffect(() => { vitrineStatsService.getStats().then(setStats).catch(() => {}) }, [])
 
   const publicPath = atelier?.id ? `/createurs/${atelier.id}` : '/createurs'
@@ -387,15 +394,13 @@ export default function MaVitrinePage() {
 
           {atelier?.sponsorise ? (
             <p className="text-xs text-dim">Votre atelier est actuellement mis en avant en tête des résultats de recherche sur la vitrine.</p>
+          ) : sponsoOffres && !sponsoOffres.actif ? (
+            <p className="text-xs text-dim">La mise en avant n'est pas disponible pour le moment.</p>
           ) : (
             <>
               <p className="text-xs text-dim mb-3">Apparaissez en premier sur la vitrine publique et augmentez votre visibilité auprès des clients.</p>
               <div className="grid grid-cols-3 gap-2 mb-3">
-                {[
-                  { jours: 7,  prix: 1500  },
-                  { jours: 15, prix: 2500  },
-                  { jours: 30, prix: 4500  },
-                ].map(({ jours, prix }) => (
+                {(sponsoOffres?.offres ?? []).map(({ jours, prix }) => (
                   <button
                     key={jours}
                     onClick={() => setSponsoJours(jours)}
@@ -407,13 +412,13 @@ export default function MaVitrinePage() {
                     )}
                   >
                     <span className="font-bold">{jours} j</span>
-                    <span className="text-[11px] font-normal mt-0.5">{prix.toLocaleString('fr-FR')} FCFA</span>
+                    <span className="text-[11px] font-normal mt-0.5">{Number(prix).toLocaleString('fr-FR')} FCFA</span>
                   </button>
                 ))}
               </div>
               <button
                 onClick={acheterSponso}
-                disabled={sponsoBusy}
+                disabled={sponsoBusy || !sponsoOffres?.offres?.length}
                 className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl bg-primary text-white hover:bg-primary-600 transition disabled:opacity-60"
               >
                 <Star size={15} />
