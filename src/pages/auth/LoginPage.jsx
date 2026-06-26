@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts'
 import { AuthLayout } from '@/components/layout'
 import { Input, Button, LanguageSwitcher, PhoneInput } from '@/components/ui'
 import { getStableDeviceId } from '@/utils/deviceId'
+import { ROUTES, IS_NATIVE } from '@/constants/routes'
 
 
 export default function LoginPage() {
@@ -40,8 +41,12 @@ export default function LoginPage() {
     setError('')
     setLoading(true)
     try {
-      await login(propForm)
-      navigate('/', { replace: true })
+      const { atelier } = await login(propForm)
+      if (!IS_NATIVE && atelier?.type === 'artisan') {
+        navigate('/artisan-app', { replace: true })
+      } else {
+        navigate(ROUTES.DASHBOARD, { replace: true })
+      }
     } catch (err) {
       setError(formatLoginError(err))
     } finally {
@@ -59,7 +64,7 @@ export default function LoginPage() {
         password:   equipeForm.password,
         device_id:  await getStableDeviceId(),
       })
-      navigate('/', { replace: true })
+      navigate(ROUTES.DASHBOARD, { replace: true })
     } catch (err) {
       setError(formatLoginError(err))
     } finally {

@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { ImagePlus, Trash2, X, Images } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { AppLayout } from '@/components/layout'
 import { Button, Skeleton, EmptyState } from '@/components/ui'
 import FeatureGate from '@/components/abonnement/FeatureGate'
@@ -8,9 +9,10 @@ import { cn } from '@/utils/cn'
 import { formatDate } from '@/utils/formatDate'
 
 function QuotaBadge({ quota }) {
+  const { t } = useTranslation()
   if (!quota) return null
   if (quota.illimite) {
-    return <span className="text-xs text-ghost bg-subtle px-2 py-0.5 rounded-full">Photos illimitées</span>
+    return <span className="text-xs text-ghost bg-subtle px-2 py-0.5 rounded-full">{t('galerie.illimitees')}</span>
   }
   const pct = quota.max > 0 ? Math.min(100, (quota.utilise / quota.max) * 100) : 0
   const restant = quota.max - quota.utilise
@@ -22,12 +24,13 @@ function QuotaBadge({ quota }) {
           style={{ width: `${pct}%` }}
         />
       </div>
-      <span className="text-xs text-ghost">{restant < 0 ? 0 : restant} restante{restant > 1 ? 's' : ''} ce mois</span>
+      <span className="text-xs text-ghost">{t('galerie.restantes', { n: restant < 0 ? 0 : restant })}</span>
     </div>
   )
 }
 
 export default function GaleriePage() {
+  const { t } = useTranslation()
   const fileRef  = useRef(null)
   const [preview, setPreview] = useState(null)
 
@@ -44,8 +47,8 @@ export default function GaleriePage() {
   }
 
   return (
-    <AppLayout title="Galerie photos">
-      <FeatureGate featureKey="photos_vip" featureName="Galerie photos">
+    <AppLayout title={t('galerie.titre')}>
+      <FeatureGate featureKey="photos_vip" featureName={t('galerie.feature_name')}>
         <div className="p-4 space-y-4">
 
           {/* En-tête quota + bouton upload */}
@@ -58,7 +61,7 @@ export default function GaleriePage() {
               className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-inverse text-sm font-medium hover:bg-primary-700 disabled:opacity-50 transition-colors"
             >
               <ImagePlus size={15} />
-              {upload.isPending ? 'Upload…' : 'Ajouter'}
+              {upload.isPending ? t('galerie.upload') : t('commun.ajouter')}
             </button>
             <input
               ref={fileRef}
@@ -72,7 +75,7 @@ export default function GaleriePage() {
           {/* Quota épuisé */}
           {quota && !quota.illimite && quota.restant <= 0 && (
             <div className="bg-warning/10 border border-warning/30 rounded-xl px-4 py-3 text-sm text-warning font-medium">
-              Quota mensuel atteint. Revenez le mois prochain ou passez à un plan supérieur.
+              {t('galerie.quota_atteint')}
             </div>
           )}
 
@@ -84,11 +87,11 @@ export default function GaleriePage() {
           ) : photos.length === 0 ? (
             <EmptyState
               icon={Images}
-              title="Aucune photo"
-              description="Ajoutez des photos de tissus, créations ou inspirations."
+              title={t('galerie.vide_titre')}
+              description={t('galerie.vide_desc')}
               action={
                 <Button onClick={() => fileRef.current?.click()} disabled={upload.isPending}>
-                  <ImagePlus size={15} className="mr-1" /> Ajouter une photo
+                  <ImagePlus size={15} className="mr-1" /> {t('galerie.ajouter_photo')}
                 </Button>
               }
             />

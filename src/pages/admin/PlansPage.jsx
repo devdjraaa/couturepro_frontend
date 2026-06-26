@@ -21,6 +21,27 @@ const DEFAULT_CONFIG = {
   sauvegarde_auto:         false,
   module_caisse:           false,
   multi_ateliers:          false,
+  export_pdf:              false,
+  max_creations_vitrine:   5,
+  max_commandes_par_mois:  -1,
+  visible_galerie:         true,
+}
+
+// Clés qui ont un champ dédié dans le formulaire (le reste tombe dans « Autres clés »).
+const KNOWN_KEYS = [
+  'max_clients_par_mois', 'max_assistants', 'max_membres', 'max_sous_ateliers',
+  'max_photos_vip_par_mois', 'max_factures_par_mois', 'pts_par_client', 'pts_par_commande',
+  'pts_activation', 'seuil_conversion_pts', 'photos_vip', 'facture_whatsapp', 'sauvegarde_auto',
+  'module_caisse', 'multi_ateliers', 'export_pdf',
+  'max_creations_vitrine', 'max_commandes_par_mois', 'visible_galerie',
+]
+
+// Devine le type d'une valeur saisie (booléen / nombre / chaîne).
+function parseConfigVal(v) {
+  if (v === 'true') return true
+  if (v === 'false') return false
+  if (v !== '' && !Number.isNaN(Number(v))) return Number(v)
+  return v
 }
 
 const EMPTY_FORM = {
@@ -107,6 +128,9 @@ function PlanModal({ initial, onClose, onSubmit, isLoading }) {
   const isEdit   = !!initial?.id
   const setField = key => e => setForm(f => ({ ...f, [key]: e.target.value }))
   const setCfg   = (key, val) => setForm(f => ({ ...f, config: { ...f.config, [key]: val } }))
+  const removeCfg = key => setForm(f => { const c = { ...f.config }; delete c[key]; return { ...f, config: c } })
+  const [newKey, setNewKey] = useState('')
+  const addKey = () => { const k = newKey.trim(); if (k && !(k in form.config)) { setCfg(k, ''); setNewKey('') } }
 
   const handleSubmit = e => {
     e.preventDefault()
@@ -162,6 +186,17 @@ function PlanModal({ initial, onClose, onSubmit, isLoading }) {
             </div>
 
             <div className={SECTION}>
+              <p className={SECT_HEAD}>Vitrine</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <NumField label="Créations publiables (galerie)" name="max_creations_vitrine"  value={form.config.max_creations_vitrine ?? 0}  onChange={setCfg} unlimited />
+                <NumField label="Commandes / mois"               name="max_commandes_par_mois" value={form.config.max_commandes_par_mois ?? -1} onChange={setCfg} unlimited />
+              </div>
+              <div className="mt-1">
+                <Toggle label="Visible dans la galerie" name="visible_galerie" value={form.config.visible_galerie} onChange={setCfg} />
+              </div>
+            </div>
+
+            <div className={SECTION}>
               <p className={SECT_HEAD}>{t('admin.plans.section_fidelite')}</p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <NumField label={t('admin.plans.pts_client')}     name="pts_par_client"   value={form.config.pts_par_client}   onChange={setCfg} />
@@ -181,6 +216,21 @@ function PlanModal({ initial, onClose, onSubmit, isLoading }) {
               <Toggle label="Module caisse"    name="module_caisse"    value={form.config.module_caisse}    onChange={setCfg} />
               <Toggle label="Multi-ateliers"   name="multi_ateliers"   value={form.config.multi_ateliers}   onChange={setCfg} />
               <Toggle label="Export PDF"       name="export_pdf"       value={form.config.export_pdf}       onChange={setCfg} />
+            </div>
+
+            <div className={SECTION}>
+              <p className={SECT_HEAD}>Autres clés (avancé)</p>
+              {Object.keys(form.config).filter(k => !KNOWN_KEYS.includes(k)).map(k => (
+                <div key={k} className="flex items-center gap-2 mb-2">
+                  <span className="text-xs text-dim flex-1 truncate" title={k}>{k}</span>
+                  <input value={String(form.config[k] ?? '')} onChange={e => setCfg(k, parseConfigVal(e.target.value))} className={INPUT + ' max-w-[160px]'} />
+                  <button type="button" onClick={() => removeCfg(k)} className="text-ghost hover:text-danger text-sm px-1" title="Retirer">✕</button>
+                </div>
+              ))}
+              <div className="flex gap-2 mt-2">
+                <input value={newKey} onChange={e => setNewKey(e.target.value)} placeholder="nouvelle_cle" className={INPUT + ' max-w-[200px]'} />
+                <button type="button" onClick={addKey} className="text-sm font-medium text-primary whitespace-nowrap">+ Ajouter</button>
+              </div>
             </div>
           </div>
 

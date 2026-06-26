@@ -1,11 +1,12 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
   Home, Users, ClipboardList, Layers, Settings, Scissors,
-  Bell, Star, Users2, LogOut, HelpCircle, Archive, Wallet,
+  Bell, Star, Users2, LogOut, HelpCircle, Archive, Wallet, Store, FileText,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
 import { useAuth } from '@/contexts'
+import { ROUTES } from '@/constants/routes'
 import { Avatar } from '@/components/ui'
 import { useNotificationsCount } from '@/hooks/useNotifications'
 
@@ -14,19 +15,21 @@ const NAV_GROUPS = [
     key: 'principal',
     label: null,
     items: [
-      { to: '/',          icon: Home,          key: 'dashboard',   end: true },
-      { to: '/commandes', icon: ClipboardList, key: 'commandes'             },
-      { to: '/clients',   icon: Users,         key: 'clients'               },
-      { to: '/catalogue', icon: Layers,        key: 'atelier'               },
+      { to: ROUTES.DASHBOARD,  icon: Home,          key: 'dashboard',   end: true },
+      { to: '/commandes',      icon: ClipboardList, key: 'commandes'             },
+      { to: '/clients',        icon: Users,         key: 'clients'               },
+      { to: '/catalogue',      icon: Layers,        key: 'atelier'               },
+      { to: ROUTES.MA_VITRINE, icon: Store,         key: 'ma_vitrine'           },
     ],
   },
   {
     key: 'gestion',
     label: 'Gestion',
     items: [
-      { to: '/equipe',  icon: Users2, key: 'equipe'                        },
-      { to: '/points',  icon: Star,   key: 'points'                        },
-      { to: '/caisse',  icon: Wallet, key: 'caisse', proprietaire: true    },
+      { to: '/equipe',          icon: Users2,   key: 'equipe'                     },
+      { to: '/points',          icon: Star,     key: 'points'                     },
+      { to: ROUTES.FACTURATION, icon: FileText, key: 'facturation'                },
+      { to: '/caisse',          icon: Wallet,   key: 'caisse', proprietaire: true },
     ],
   },
   {

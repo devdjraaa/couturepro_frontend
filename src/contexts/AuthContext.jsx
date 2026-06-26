@@ -118,6 +118,7 @@ export function AuthProvider({ children }) {
     setCachedSession({ user, atelier })
     showLocalNotif('Connexion réussie', `Bienvenue, ${user.prenom || user.nom} !`)
     tryRegisterFcm()
+    return { user, atelier }
   }, [])
 
   const equipeLogin = useCallback(async (payload) => {

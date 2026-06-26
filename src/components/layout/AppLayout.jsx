@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { AlertTriangle, RefreshCw } from 'lucide-react'
+import { AlertTriangle, RefreshCw, Ban } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
@@ -9,6 +9,7 @@ import BottomNavigation from './BottomNavigation'
 import { useSubscriptionGate } from '@/hooks/useSubscriptionGate'
 import { GlobalSearch } from '@/components/ui'
 import { usePullToRefresh } from '@/hooks/usePullToRefresh'
+import { useAuth } from '@/contexts'
 
 function ExpiryBanner() {
   const navigate = useNavigate()
@@ -32,6 +33,26 @@ function ExpiryBanner() {
   )
 }
 
+function AccountStatusBanner() {
+  const { atelier } = useAuth()
+  const navigate = useNavigate()
+
+  if (!atelier) return null
+
+  // statut réel de l'atelier : 'actif' | 'essai' | 'expire' | 'gele'.
+  // 'gele' = compte suspendu (action admin, ou blocage auto sur récidive de signalements).
+  if (atelier.statut === 'gele') {
+    return (
+      <div className="flex items-center gap-2 px-4 py-2 bg-danger/10 border-b border-danger/30 text-sm text-danger cursor-pointer" onClick={() => navigate('/support')}>
+        <Ban size={14} className="shrink-0" />
+        <span>Votre compte est temporairement suspendu. <span className="underline font-medium">Contacter le support</span></span>
+      </div>
+    )
+  }
+
+  return null
+}
+
 export default function AppLayout({
   title,
   showBack = false,
@@ -53,6 +74,7 @@ export default function AppLayout({
       <Sidebar />
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <AccountStatusBanner />
         <ExpiryBanner />
         <div className={noMobileHeader ? 'hidden lg:block' : ''}>
           <Header

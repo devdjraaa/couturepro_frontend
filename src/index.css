@@ -103,15 +103,15 @@
    VARIABLES CSS — Thème clair (source de vérité)
    ════════════════════════════════════════════════════════ */
 :root {
-  /* ── Primaire — Indigo profond (brand) ── */
-  --color-primary-50:  #ECEAFE;
-  --color-primary-100: #D4D0FC;
-  --color-primary-200: #B3ADF9;
-  --color-primary-300: #8E88F5;
-  --color-primary-400: #6E67F0;
-  --color-primary:     #5546E8;
-  --color-primary-600: #4535D6;
-  --color-primary-700: #2D1B6B;
+  /* ── Primaire — Rouge Gextimo (charte officielle #D00B0B) ── */
+  --color-primary-50:  #FDEAEA;
+  --color-primary-100: #FAC9C9;
+  --color-primary-200: #F39B9B;
+  --color-primary-300: #E85F5F;
+  --color-primary-400: #DE2E2E;
+  --color-primary:     #D00B0B;
+  --color-primary-600: #B00909;
+  --color-primary-700: #7A0606;
 
   /* ── Accent — Ambre doré ── */
   --color-accent-50:  #FFFBEB;
@@ -185,9 +185,9 @@
   --color-border:        #3A3530;
   --color-border-strong: #504840;
 
-  /* ── Tintes primaires — fonds sombres pour badges et icônes ── */
-  --color-primary-50:  #1D1A3F;
-  --color-primary-100: #28215C;
+  /* ── Tintes primaires — fonds sombres pour badges et icônes (rouge charte) ── */
+  --color-primary-50:  #2A0E0E;
+  --color-primary-100: #3D1414;
 
   /* ── Sémantiques — plus lumineux sur fond sombre ── */
   --color-success: #34D399;

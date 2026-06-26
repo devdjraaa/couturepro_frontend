@@ -21,6 +21,16 @@ export const ateliersAdminService = {
     return data
   },
 
+  async verifier(id) {
+    const { data } = await adminApi.post(`/ateliers/${id}/verifier`)
+    return data
+  },
+
+  async sponsoriser(id, jours) {
+    const { data } = await adminApi.post(`/ateliers/${id}/sponsoriser`, { jours })
+    return data
+  },
+
   async getFidelite(id) {
     const { data } = await adminApi.get(`/ateliers/${id}/fidelite`)
     return data

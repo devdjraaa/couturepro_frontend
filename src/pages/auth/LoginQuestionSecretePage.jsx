@@ -7,6 +7,7 @@ import { setCachedSession } from '@/utils/storage'
 import { setDemoMode } from '@/services/mockFlag'
 import { AuthLayout } from '@/components/layout'
 import { Input, Button } from '@/components/ui'
+import { ROUTES } from '@/constants/routes'
 
 /**
  * Récupération via question secrète (style Google "essayer autrement").
