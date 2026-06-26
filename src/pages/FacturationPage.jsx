@@ -2,10 +2,11 @@ import { useState, useEffect, useCallback } from 'react'
 import {
   FileText, Plus, X, ChevronDown, ChevronUp, Upload, Send,
   QrCode, Trash2, Check, AlertCircle, Clock, Ban,
-  MessageCircle, Download, ShieldCheck,
+  MessageCircle, Download, ShieldCheck, Printer,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import QRCode from 'qrcode'
+import { imprimerFactureHabillee } from '@/utils/imprimerFactureHabillee'
 import { AppLayout } from '@/components/layout'
 import { useAuth } from '@/contexts'
 import { factureService } from '@/services/factureService'
@@ -276,6 +277,7 @@ function FormulaireModal({ onClose, onCreated }) {
 
 function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
   const { t } = useTranslation()
+  const { atelier } = useAuth()
   const [open, setOpen] = useState(false)
   const [updatingStatut, setUpdatingStatut] = useState(false)
   const [uploadingDgi, setUploadingDgi] = useState(false)
@@ -471,12 +473,18 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
                 <p className="text-[11px] font-mono text-dim break-all">{t('facturation.doc.dgi_code')} {doc.emecef_code}</p>
               </div>
             ) : doc.dgi_pdf_url ? (
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-success font-medium">{t('facturation.doc.dgi_pdf_joint')}</span>
-                <a href={doc.dgi_pdf_url} target="_blank" rel="noopener noreferrer"
-                   className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline">
-                  <Download size={12} /> {t('facturation.doc.telecharger')}
-                </a>
+              <div className="space-y-2">
+                <div className="flex items-center gap-3">
+                  <span className="text-xs text-success font-medium">{t('facturation.doc.dgi_pdf_joint')}</span>
+                  <a href={doc.dgi_pdf_url} target="_blank" rel="noopener noreferrer"
+                     className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline">
+                    <Download size={12} /> {t('facturation.doc.telecharger')}
+                  </a>
+                </div>
+                <button onClick={() => imprimerFactureHabillee(doc, atelier)}
+                  className="inline-flex items-center gap-2 text-sm font-semibold px-3 py-1.5 rounded-lg border border-edge text-ink hover:border-primary hover:text-primary transition">
+                  <Printer size={14} /> {t('facturation.doc.imprimer_habillage')}
+                </button>
               </div>
             ) : (
               <div className="space-y-2">
