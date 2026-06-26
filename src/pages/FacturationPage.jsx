@@ -6,7 +6,7 @@ import {
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import QRCode from 'qrcode'
-import { imprimerFactureHabillee } from '@/utils/imprimerFactureHabillee'
+import { partagerFactureHabillee } from '@/utils/imprimerFactureHabillee'
 import { AppLayout } from '@/components/layout'
 import { useAuth } from '@/contexts'
 import { factureService } from '@/services/factureService'
@@ -285,7 +285,16 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
   const [normErr, setNormErr] = useState('')
   const [acompteInput, setAcompteInput] = useState(String(doc.acompte || 0))
   const [qrDataUrl, setQrDataUrl] = useState(null)
+  const [habilling, setHabilling] = useState(false)
   const { available: peutNormaliser } = usePlanFeature('facturation_normalisee')
+
+  const habiller = async () => {
+    if (habilling) return
+    setHabilling(true)
+    try { await partagerFactureHabillee(doc, atelier) }
+    catch { alert(t('facturation.doc.habillage_erreur')) }
+    finally { setHabilling(false) }
+  }
 
   // Le qrCode renvoyé par e-MECeF est un CONTENU (pas une URL) → on génère l'image QR.
   useEffect(() => {
@@ -481,9 +490,9 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
                     <Download size={12} /> {t('facturation.doc.telecharger')}
                   </a>
                 </div>
-                <button onClick={() => imprimerFactureHabillee(doc, atelier)}
-                  className="inline-flex items-center gap-2 text-sm font-semibold px-3 py-1.5 rounded-lg border border-edge text-ink hover:border-primary hover:text-primary transition">
-                  <Printer size={14} /> {t('facturation.doc.imprimer_habillage')}
+                <button onClick={habiller} disabled={habilling}
+                  className="inline-flex items-center gap-2 text-sm font-semibold px-3 py-1.5 rounded-lg border border-edge text-ink hover:border-primary hover:text-primary transition disabled:opacity-60">
+                  <Printer size={14} /> {habilling ? t('facturation.doc.habillage_generation') : t('facturation.doc.imprimer_habillage')}
                 </button>
               </div>
             ) : (
