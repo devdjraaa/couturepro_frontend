@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { AlertTriangle, RefreshCw, Ban, ShieldOff } from 'lucide-react'
+import { AlertTriangle, RefreshCw, Ban } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
@@ -39,20 +39,13 @@ function AccountStatusBanner() {
 
   if (!atelier) return null
 
-  if (atelier.suspendu || atelier.statut_compte === 'suspendu') {
+  // statut réel de l'atelier : 'actif' | 'essai' | 'expire' | 'gele'.
+  // 'gele' = compte suspendu (action admin, ou blocage auto sur récidive de signalements).
+  if (atelier.statut === 'gele') {
     return (
       <div className="flex items-center gap-2 px-4 py-2 bg-danger/10 border-b border-danger/30 text-sm text-danger cursor-pointer" onClick={() => navigate('/support')}>
         <Ban size={14} className="shrink-0" />
         <span>Votre compte est temporairement suspendu. <span className="underline font-medium">Contacter le support</span></span>
-      </div>
-    )
-  }
-
-  if (atelier.actif === false || atelier.statut_compte === 'desactive') {
-    return (
-      <div className="flex items-center gap-2 px-4 py-2 bg-danger/10 border-b border-danger/30 text-sm text-danger cursor-pointer" onClick={() => navigate('/support')}>
-        <ShieldOff size={14} className="shrink-0" />
-        <span>Votre compte a été désactivé. <span className="underline font-medium">Contacter le support</span></span>
       </div>
     )
   }

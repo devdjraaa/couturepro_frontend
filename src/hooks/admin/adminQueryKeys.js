@@ -13,6 +13,7 @@ export const ADMIN_KEYS = {
   listeNoire:       ['admin', 'liste-noire'],
   signalements:     ['admin', 'signalements'],
   banniere:         ['admin', 'banniere'],
+  sponsorisation:   ['admin', 'sponsorisation'],
   audit:            ['admin', 'audit'],
   admins:           ['admin', 'admins'],
   sousAteliers:     (id) => ['admin', 'ateliers', id, 'sous-ateliers'],

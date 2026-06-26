@@ -12,6 +12,7 @@ import { vetementService } from '@/services/vetementService'
 import { parametresService } from '@/services/parametresService'
 import { collectionService } from '@/services/collectionService'
 import { avisService } from '@/services/avisService'
+import { devisService } from '@/services/devisService'
 import { vitrineStatsService } from '@/services/vitrineStatsService'
 
 import { formatCurrency } from '@/utils/formatCurrency'
@@ -54,7 +55,14 @@ export default function MaVitrinePage() {
   const [collections, setCollections] = useState([])
   const [newCollection, setNewCollection] = useState('')
   const [pendingAvis, setPendingAvis] = useState([])
+  const [devis, setDevis] = useState([])
   const [stats, setStats] = useState(null)
+  const [verifDoc, setVerifDoc] = useState(null)
+  const [verifLien, setVerifLien] = useState('')
+  const [verifSending, setVerifSending] = useState(false)
+  const [verifSent, setVerifSent] = useState(false)
+  const [sponsoJours, setSponsoJours] = useState(7)
+  const [sponsoBusy, setSponsoBusy] = useState(false)
 
   useEffect(() => {
     let on = true
@@ -72,6 +80,13 @@ export default function MaVitrinePage() {
   }, [atelier?.instagram, atelier?.facebook, atelier?.site_web])
   useEffect(() => { collectionService.getAll().then((d) => setCollections(d || [])).catch(() => {}) }, [])
   useEffect(() => { avisService.getMine().then((d) => setPendingAvis((d || []).filter((a) => a.statut === 'en_attente' || a.statut === 'signale'))).catch(() => {}) }, [])
+  useEffect(() => { devisService.getMine().then((d) => setDevis(d || [])).catch(() => {}) }, [])
+  useEffect(() => {
+    abonnementService.getSponsoOffres().then((d) => {
+      setSponsoOffres(d)
+      if (d?.offres?.length) setSponsoJours(d.offres[0].jours)
+    }).catch(() => {})
+  }, [])
   useEffect(() => { vitrineStatsService.getStats().then(setStats).catch(() => {}) }, [])
 
   const publicPath = atelier?.id ? `/createurs/${atelier.id}` : '/createurs'
@@ -181,6 +196,11 @@ export default function MaVitrinePage() {
     try { await avisService.moderate(id, statut) } catch { /* erreur silencieuse */ }
   }
 
+  const traiterDevis = async (id) => {
+    setDevis((l) => l.map((d) => (d.id === id ? { ...d, statut: 'traite' } : d)))
+    try { await devisService.traiter(id) } catch { /* erreur silencieuse */ }
+  }
+
 
   return (
     <AppLayout>
@@ -280,6 +300,112 @@ export default function MaVitrinePage() {
           </div>
         </div>
 
+        {/* Badge vérifié ou demande de vérification */}
+        {atelier?.verifie ? (
+          <div className="mt-4 bg-card border border-edge rounded-xl p-4 flex items-center gap-3">
+            <ShieldCheck size={20} className="text-success shrink-0" />
+            <div>
+              <p className="text-sm font-semibold text-ink">Compte vérifié</p>
+              <p className="text-xs text-dim">Le badge « Vérifié » est affiché sur votre vitrine publique.</p>
+            </div>
+          </div>
+        ) : (
+          <div className="mt-4 bg-card border border-edge rounded-xl p-4">
+            <div className="flex items-center gap-2 mb-1">
+              <ShieldAlert size={17} className="text-warning shrink-0" />
+              <p className="text-sm font-semibold text-ink">Demander la vérification</p>
+            </div>
+            <p className="text-xs text-dim mb-3">Joignez un document officiel (CNI, diplôme, certificat de créateur…) ou un lien vers votre portfolio / profil professionnel pour obtenir le badge « Vérifié ».</p>
+
+            {verifSent ? (
+              <p className="text-sm text-success font-medium">✓ Demande envoyée — nous vous répondons sous 48 h.</p>
+            ) : (
+              <div className="space-y-3">
+                <label className="flex items-center gap-2 cursor-pointer group">
+                  <div className="w-8 h-8 rounded-lg border border-edge bg-subtle flex items-center justify-center shrink-0 group-hover:border-primary transition">
+                    {verifDoc ? <Check size={14} className="text-success" /> : <Upload size={14} className="text-ghost" />}
+                  </div>
+                  <span className="text-xs text-dim group-hover:text-ink transition truncate">
+                    {verifDoc ? verifDoc.name : 'Joindre un document (PDF, JPG, PNG)'}
+                  </span>
+                  <input
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    onChange={(e) => setVerifDoc(e.target.files?.[0] ?? null)}
+                    className="hidden"
+                  />
+                </label>
+                <div className="flex items-center gap-2">
+                  <LinkIcon size={14} className="text-ghost shrink-0" />
+                  <input
+                    type="url"
+                    value={verifLien}
+                    onChange={(e) => setVerifLien(e.target.value)}
+                    placeholder="Lien vers votre portfolio (https://…)"
+                    className="flex-1 rounded-lg border border-edge bg-app px-3 py-2 text-xs text-ink focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  />
+                </div>
+                <button
+                  onClick={submitVerification}
+                  disabled={verifSending || (!verifDoc && !verifLien.trim())}
+                  className="text-sm font-semibold px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-600 transition disabled:opacity-50"
+                >
+                  {verifSending ? 'Envoi…' : 'Envoyer la demande'}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Mise en avant sponsorisée */}
+        <div className="mt-4 bg-card border border-edge rounded-xl p-4">
+          <div className="flex items-center gap-2 mb-1">
+            <Star size={17} className={atelier?.sponsorise ? 'text-warning' : 'text-ghost'} />
+            <p className="text-sm font-semibold text-ink">Mise en avant sponsorisée</p>
+            {atelier?.sponsorise && (
+              <span className="ml-auto text-[11px] font-bold px-2 py-0.5 rounded-full bg-warning/15 text-warning border border-warning/25">
+                Actif
+              </span>
+            )}
+          </div>
+
+          {atelier?.sponsorise ? (
+            <p className="text-xs text-dim">Votre atelier est actuellement mis en avant en tête des résultats de recherche sur la vitrine.</p>
+          ) : (
+            <>
+              <p className="text-xs text-dim mb-3">Apparaissez en premier sur la vitrine publique et augmentez votre visibilité auprès des clients.</p>
+              <div className="grid grid-cols-3 gap-2 mb-3">
+                {[
+                  { jours: 7,  prix: 1500  },
+                  { jours: 15, prix: 2500  },
+                  { jours: 30, prix: 4500  },
+                ].map(({ jours, prix }) => (
+                  <button
+                    key={jours}
+                    onClick={() => setSponsoJours(jours)}
+                    className={cn(
+                      'flex flex-col items-center py-3 rounded-xl border text-sm font-semibold transition',
+                      sponsoJours === jours
+                        ? 'border-primary bg-primary/5 text-primary'
+                        : 'border-edge text-dim hover:border-primary hover:text-ink',
+                    )}
+                  >
+                    <span className="font-bold">{jours} j</span>
+                    <span className="text-[11px] font-normal mt-0.5">{prix.toLocaleString('fr-FR')} FCFA</span>
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={acheterSponso}
+                disabled={sponsoBusy}
+                className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl bg-primary text-white hover:bg-primary-600 transition disabled:opacity-60"
+              >
+                <Star size={15} />
+                {sponsoBusy ? 'Redirection…' : `Sponsoriser ${sponsoJours} jours`}
+              </button>
+            </>
+          )}
+        </div>
 
         {/* Collections */}
         <div className="mt-4 bg-card border border-edge rounded-xl p-4">
@@ -317,6 +443,37 @@ export default function MaVitrinePage() {
                   <div className="flex gap-2 mt-2">
                     <button onClick={() => moderateAvis(a.id, 'valide')} className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-white hover:bg-primary-600 transition">Valider</button>
                     <button onClick={() => moderateAvis(a.id, 'rejete')} className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-edge text-dim hover:text-danger hover:border-danger transition">Rejeter</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Demandes de devis reçues */}
+        {devis.some((d) => d.statut === 'nouveau') && (
+          <div className="mt-4 bg-card border border-edge rounded-xl p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <ClipboardList size={16} className="text-primary" />
+              <p className="text-sm font-semibold text-ink">Demandes de devis <span className="text-primary">({devis.filter((d) => d.statut === 'nouveau').length})</span></p>
+            </div>
+            <div className="space-y-3">
+              {devis.filter((d) => d.statut === 'nouveau').map((d) => (
+                <div key={d.id} className="border border-edge rounded-lg p-3">
+                  <div className="flex items-center justify-between">
+                    <b className="text-sm text-ink">{d.nom}</b>
+                    <span className="text-xs text-dim">{d.contact}</span>
+                  </div>
+                  {d.description && <p className="text-xs text-dim mt-1 whitespace-pre-line">{d.description}</p>}
+                  {(d.budget || d.delai) && (
+                    <div className="flex gap-3 mt-1.5 text-[11px] text-ghost">
+                      {d.budget && <span>Budget : {d.budget} FCFA</span>}
+                      {d.delai && <span>Délai : {d.delai}</span>}
+                    </div>
+                  )}
+                  <div className="flex gap-2 mt-2">
+                    <button onClick={() => traiterDevis(d.id)} className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-white hover:bg-primary-600 transition">Marquer traité</button>
+                    {d.contact && <a href={`https://wa.me/${d.contact.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-edge text-dim hover:text-primary hover:border-primary transition">Répondre</a>}
                   </div>
                 </div>
               ))}

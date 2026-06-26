@@ -53,6 +53,10 @@ export async function getBanniere() {
   return safe('/vitrine/banniere')
 }
 
+export async function getPlans() {
+  return safe('/vitrine/plans')
+}
+
 export async function getCreators() {
   const d = await safe('/vitrine/createurs')
   return Array.isArray(d) && d.length ? d : demoCreators
