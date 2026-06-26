@@ -289,7 +289,7 @@ export default function CreateurProfilPage() {
             )}
           </div>
           <div className="flex flex-col gap-2 w-full sm:w-auto">
-            <button onClick={() => setDevisOpen(true)} className={btnPrimary}>{t('vitrine.profil.quote')}</button>
+            {c.devis !== false && <button onClick={() => setDevisOpen(true)} className={btnPrimary}>{t('vitrine.profil.quote')}</button>}
             {wa
               ? <a href={waHref('vitrine.profil.wa_message', { nom: c.nom })} onClick={trackContact} target="_blank" rel="noopener noreferrer" className={btnOutline}>{t('vitrine.profil.contact')}</a>
               : <button className={btnOutline}>{t('vitrine.profil.contact')}</button>}

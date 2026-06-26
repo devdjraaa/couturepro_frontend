@@ -10,6 +10,7 @@ import { AppLayout } from '@/components/layout'
 import { Skeleton } from '@/components/ui'
 import { useAuth } from '@/contexts'
 import { useDashboard } from '@/hooks/useDashboard'
+import { usePlanFeature } from '@/hooks/usePlanFeature'
 import { vetementService } from '@/services/vetementService'
 import { parametresService } from '@/services/parametresService'
 import { collectionService } from '@/services/collectionService'
@@ -38,6 +39,7 @@ function Kpi({ icon: Icon, label, value, hint }) {
 
 export default function MaVitrinePage() {
   const { atelier } = useAuth()
+  const { available: peutSponsoriser } = usePlanFeature('sponsorisation')
   const dash = useDashboard()
   const [creations, setCreations] = useState(null)
   const [copied, setCopied] = useState(false)
@@ -381,6 +383,7 @@ export default function MaVitrinePage() {
         )}
 
         {/* Mise en avant sponsorisée */}
+        {peutSponsoriser && (
         <div className="mt-4 bg-card border border-edge rounded-xl p-4">
           <div className="flex items-center gap-2 mb-1">
             <Star size={17} className={atelier?.sponsorise ? 'text-warning' : 'text-ghost'} />
@@ -427,6 +430,7 @@ export default function MaVitrinePage() {
             </>
           )}
         </div>
+        )}
 
         {/* Collections */}
         <div className="mt-4 bg-card border border-edge rounded-xl p-4">

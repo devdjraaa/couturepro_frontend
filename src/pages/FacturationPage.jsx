@@ -7,6 +7,8 @@ import {
 import { AppLayout } from '@/components/layout'
 import { useAuth } from '@/contexts'
 import { factureService } from '@/services/factureService'
+import { FeatureGate } from '@/components/abonnement'
+import { usePlanFeature } from '@/hooks/usePlanFeature'
 import { cn } from '@/utils/cn'
 
 const MODES_PAIEMENT = [
@@ -288,6 +290,7 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
   const [normalisant, setNormalisant] = useState(false)
   const [normErr, setNormErr] = useState('')
   const [acompteInput, setAcompteInput] = useState(String(doc.acompte || 0))
+  const { available: peutNormaliser } = usePlanFeature('facturation_normalisee')
 
   const total = calcTotal(doc.lignes || [])
   const restant = total - (Number(doc.acompte) || 0)
@@ -471,7 +474,7 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
               </div>
             ) : (
               <div className="space-y-2">
-                {doc.type === 'facture' && (
+                {doc.type === 'facture' && peutNormaliser && (
                   <div>
                     <button onClick={normaliser} disabled={normalisant}
                       className="inline-flex items-center gap-2 text-sm font-semibold px-3 py-1.5 rounded-lg bg-primary text-white hover:bg-primary-600 transition disabled:opacity-60">
@@ -560,6 +563,7 @@ export default function FacturationPage() {
 
   return (
     <AppLayout>
+      <FeatureGate featureKey="facturation" featureName="La facturation">
       <div className="max-w-3xl mx-auto px-4 pb-24 lg:pb-8">
         {/* En-tête */}
         <div className="pt-4 pb-3 flex items-start justify-between gap-3">
@@ -664,6 +668,7 @@ export default function FacturationPage() {
           onCreated={handleCreated}
         />
       )}
+      </FeatureGate>
     </AppLayout>
   )
 }
