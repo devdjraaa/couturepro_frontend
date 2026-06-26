@@ -1,4 +1,22 @@
 {
+  "artisan_app": {
+    "titre": "Votre espace est sur l'application mobile",
+    "intro": "L'espace Artisan Gextimo — gestion des clients, commandes, mesures et bien plus — est optimisé pour l'application mobile.",
+    "sous_texte": "Téléchargez l'application ou continuez sur le navigateur.",
+    "telecharger": "Télécharger sur Android",
+    "continuer": "Continuer sur le navigateur"
+  },
+  "galerie": {
+    "titre": "Galerie photos",
+    "feature_name": "Galerie photos",
+    "illimitees": "Photos illimitées",
+    "restantes": "{{n}} restante(s) ce mois",
+    "upload": "Upload…",
+    "quota_atteint": "Quota mensuel atteint. Revenez le mois prochain ou passez à un plan supérieur.",
+    "vide_titre": "Aucune photo",
+    "vide_desc": "Ajoutez des photos de tissus, créations ou inspirations.",
+    "ajouter_photo": "Ajouter une photo"
+  },
   "premium": {
     "tag": "Tarifs",
     "titre": "Choisissez votre plan",
@@ -788,7 +806,11 @@
       "systeme": "Système",
       "paiement": "Paiement",
       "alerte_archive": "Archive"
-    }
+    },
+    "tout_lire": "Tout lire",
+    "vide_categorie": "Aucune notification dans cette catégorie.",
+    "cat": { "toutes": "Toutes", "commande": "Commandes", "paiement": "Paiements", "systeme": "Rappels" },
+    "jour": { "aujourdhui": "Aujourd'hui", "hier": "Hier", "semaine": "Cette semaine", "ancien": "Plus ancien" }
   },
   "abonnement": {
     "titre": "Abonnement",

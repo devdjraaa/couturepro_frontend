@@ -1,4 +1,22 @@
 {
+  "artisan_app": {
+    "titre": "Your workspace is on the mobile app",
+    "intro": "The Gextimo Artisan workspace — clients, orders, measurements and more — is optimized for the mobile app.",
+    "sous_texte": "Download the app or continue in your browser.",
+    "telecharger": "Download on Android",
+    "continuer": "Continue in browser"
+  },
+  "galerie": {
+    "titre": "Photo gallery",
+    "feature_name": "Photo gallery",
+    "illimitees": "Unlimited photos",
+    "restantes": "{{n}} left this month",
+    "upload": "Uploading…",
+    "quota_atteint": "Monthly quota reached. Come back next month or upgrade your plan.",
+    "vide_titre": "No photos",
+    "vide_desc": "Add photos of fabrics, creations or inspirations.",
+    "ajouter_photo": "Add a photo"
+  },
   "premium": {
     "tag": "Pricing",
     "titre": "Choose your plan",
@@ -788,7 +806,11 @@
       "systeme": "System",
       "paiement": "Payment",
       "alerte_archive": "Archive"
-    }
+    },
+    "tout_lire": "Mark all read",
+    "vide_categorie": "No notifications in this category.",
+    "cat": { "toutes": "All", "commande": "Orders", "paiement": "Payments", "systeme": "Reminders" },
+    "jour": { "aujourdhui": "Today", "hier": "Yesterday", "semaine": "This week", "ancien": "Older" }
   },
   "abonnement": {
     "titre": "Subscription",
