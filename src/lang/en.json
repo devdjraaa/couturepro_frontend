@@ -1322,6 +1322,7 @@
       "rights": "© 2026 Gextimo. All rights reserved."
     },
     "createurs_page": {
+      "tri": { "pertinence": "Relevance", "note": "Top rated", "distance": "Nearest" },
       "eyebrow": "Designers",
       "title": "Discover the designers",
       "subtitle": "Verified talents across Benin and West Africa.",

@@ -1322,6 +1322,7 @@
       "rights": "© 2026 Gextimo. Tous droits réservés."
     },
     "createurs_page": {
+      "tri": { "pertinence": "Pertinence", "note": "Meilleure note", "distance": "Plus proche" },
       "eyebrow": "Créateurs",
       "title": "Découvrez les créateurs",
       "subtitle": "Des talents vérifiés à travers le Bénin et l'Afrique de l'Ouest.",

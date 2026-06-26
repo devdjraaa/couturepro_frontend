@@ -19,11 +19,7 @@ function distKm(a, b) {
 }
 
 const RAYONS = [5, 10, 25, 50, 100]
-const TRIS = [
-  { value: 'pertinence', label: 'Pertinence' },
-  { value: 'note',       label: 'Meilleure note' },
-  { value: 'distance',   label: 'Plus proche' },
-]
+const TRIS = ['pertinence', 'note', 'distance']
 
 export default function CreateursPage() {
   const { t } = useTranslation()
@@ -115,7 +111,7 @@ export default function CreateursPage() {
 
             <select value={tri} onChange={(e) => setTri(e.target.value)}
                     className="rounded-lg border border-edge bg-card px-3 py-2 text-sm text-dim focus:outline-none">
-              {TRIS.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
+              {TRIS.map((s) => <option key={s} value={s}>{t(`vitrine.createurs_page.tri.${s}`)}</option>)}
             </select>
 
             <button
