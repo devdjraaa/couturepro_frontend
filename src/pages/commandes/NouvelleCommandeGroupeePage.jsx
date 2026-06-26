@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ChevronLeft, Search, Check, Plus, Trash2, AlertTriangle } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useClients } from '@/hooks/useClients'
 import { useVetements } from '@/hooks/useVetements'
 import { useCreateCommandeGroupe } from '@/hooks/useCommandeGroupes'
@@ -12,13 +13,8 @@ import { cn } from '@/utils/cn'
 
 const TODAY = new Date().toISOString().split('T')[0]
 
-const STEP_LABELS = ['Client', 'Articles']
-
-const MODE_OPTIONS = [
-  { value: 'especes',      label: 'Espèces'      },
-  { value: 'mobile_money', label: 'Mobile Money' },
-  { value: 'virement',     label: 'Virement'     },
-]
+const STEP_KEYS = ['client', 'articles']
+const MODE_VALUES = ['especes', 'mobile_money', 'virement']
 
 const emptySousCommande = () => ({
   vetement_id: '',
@@ -36,7 +32,7 @@ const emptySousCommande = () => ({
 function StepDots({ current }) {
   return (
     <div className="flex items-center justify-center gap-2 py-2">
-      {STEP_LABELS.map((label, i) => (
+      {STEP_KEYS.map((label, i) => (
         <div key={i} className="flex flex-col items-center gap-1">
           <div className={cn(
             'w-2 h-2 rounded-full transition-all duration-200',
@@ -51,6 +47,7 @@ function StepDots({ current }) {
 }
 
 function StepHeader({ step, onBack }) {
+  const { t } = useTranslation()
   return (
     <div className="flex items-center gap-3 px-4 pt-4 pb-2">
       <button
@@ -61,8 +58,8 @@ function StepHeader({ step, onBack }) {
         <ChevronLeft size={18} />
       </button>
       <div className="flex-1">
-        <p className="text-xs text-ghost">{`Étape ${step + 1} sur ${STEP_LABELS.length}`}</p>
-        <p className="text-base font-semibold text-ink">{STEP_LABELS[step]}</p>
+        <p className="text-xs text-ghost">{t('commandes.groupe_form.etape', { n: step + 1, total: STEP_KEYS.length })}</p>
+        <p className="text-base font-semibold text-ink">{t(`commandes.groupe_form.step_${STEP_KEYS[step]}`)}</p>
       </div>
     </div>
   )
@@ -70,6 +67,7 @@ function StepHeader({ step, onBack }) {
 
 // ── Étape 1 — Client ──────────────────────────────────────────────────────────
 function StepClient({ data, setData, onNext }) {
+  const { t } = useTranslation()
   const [search, setSearch] = useState('')
   const { data: clients = [], isLoading } = useClients()
 
@@ -92,7 +90,7 @@ function StepClient({ data, setData, onNext }) {
             type="search"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Rechercher un client…"
+            placeholder={t('commandes.groupe_form.recherche_client')}
             className="w-full pl-9 pr-4 py-2.5 bg-subtle rounded-xl text-sm text-ink placeholder:text-ghost focus:outline-none focus:ring-2 focus:ring-primary/30"
             autoFocus
           />
@@ -104,7 +102,7 @@ function StepClient({ data, setData, onNext }) {
           [...Array(5)].map((_, i) => <Skeleton key={i} className="h-14 rounded-xl" />)
         ) : filtered.length === 0 ? (
           <p className="text-sm text-ghost text-center py-8">
-            {search ? 'Aucun client trouvé.' : 'Aucun client dans le carnet.'}
+            {search ? t('commandes.groupe_form.aucun_client') : t('commandes.groupe_form.carnet_vide')}
           </p>
         ) : (
           filtered.map(client => {
@@ -139,6 +137,7 @@ function StepClient({ data, setData, onNext }) {
 
 // ── Une sous-commande ─────────────────────────────────────────────────────────
 function SousCommandeCard({ index, sc, vetements, onChange, onRemove, canRemove }) {
+  const { t } = useTranslation()
   const set = (field, value) => onChange(index, field, value)
 
   const total = (Number(sc.quantite) || 1) * Number(sc.prix || 0)
@@ -149,7 +148,7 @@ function SousCommandeCard({ index, sc, vetements, onChange, onRemove, canRemove 
     <div className="bg-card border border-edge rounded-xl p-3 space-y-3">
       <div className="flex items-center justify-between">
         <p className="text-xs font-semibold text-ghost uppercase tracking-widest">
-          Article {index + 1}
+          {t('commandes.groupe_form.article', { n: index + 1 })}
         </p>
         {canRemove && (
           <button
@@ -188,7 +187,7 @@ function SousCommandeCard({ index, sc, vetements, onChange, onRemove, canRemove 
       {/* Quantité + prix */}
       <div className="flex gap-2">
         <div className="w-20">
-          <label className="block text-xs text-ghost mb-1">Qté</label>
+          <label className="block text-xs text-ghost mb-1">{t('commandes.groupe_form.qte')}</label>
           <input
             type="number"
             min="1"
@@ -199,13 +198,13 @@ function SousCommandeCard({ index, sc, vetements, onChange, onRemove, canRemove 
           />
         </div>
         <div className="flex-1">
-          <label className="block text-xs text-ghost mb-1">Prix total (XOF)</label>
+          <label className="block text-xs text-ghost mb-1">{t('commandes.groupe_form.prix_total')}</label>
           <input
             type="number"
             min="0"
             value={sc.prix}
             onChange={e => set('prix', e.target.value)}
-            placeholder="Ex : 25000"
+            placeholder={t('commandes.groupe_form.prix_ph')}
             className="w-full bg-subtle border border-edge rounded-lg px-2.5 py-1.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30"
           />
         </div>
@@ -213,7 +212,7 @@ function SousCommandeCard({ index, sc, vetements, onChange, onRemove, canRemove 
 
       {/* Date de livraison */}
       <div>
-        <label className="block text-xs text-ghost mb-1">Livraison prévue</label>
+        <label className="block text-xs text-ghost mb-1">{t('commandes.groupe_form.livraison')}</label>
         <input
           type="date"
           min={TODAY}
@@ -225,7 +224,7 @@ function SousCommandeCard({ index, sc, vetements, onChange, onRemove, canRemove 
 
       {/* Acompte */}
       <div>
-        <label className="block text-xs text-ghost mb-1">Acompte reçu (XOF)</label>
+        <label className="block text-xs text-ghost mb-1">{t('commandes.groupe_form.acompte')}</label>
         <input
           type="number"
           min="0"
@@ -238,19 +237,19 @@ function SousCommandeCard({ index, sc, vetements, onChange, onRemove, canRemove 
 
       {acompte > 0 && (
         <div className="flex gap-2">
-          {MODE_OPTIONS.map(opt => (
+          {MODE_VALUES.map(opt => (
             <button
-              key={opt.value}
+              key={opt}
               type="button"
-              onClick={() => set('mode_paiement_acompte', opt.value)}
+              onClick={() => set('mode_paiement_acompte', opt)}
               className={cn(
                 'flex-1 py-1.5 px-2 rounded-lg text-xs font-medium border transition-colors',
-                sc.mode_paiement_acompte === opt.value
+                sc.mode_paiement_acompte === opt
                   ? 'border-primary bg-primary-50 text-primary-700'
                   : 'border-edge bg-card text-ghost',
               )}
             >
-              {opt.label}
+              {t(`commandes.groupe_form.mode.${opt}`)}
             </button>
           ))}
         </div>
@@ -260,7 +259,7 @@ function SousCommandeCard({ index, sc, vetements, onChange, onRemove, canRemove 
       <textarea
         value={sc.description}
         onChange={e => set('description', e.target.value)}
-        placeholder="Description / instructions (optionnel)"
+        placeholder={t('commandes.groupe_form.description_ph')}
         rows={2}
         className="w-full bg-subtle border border-edge rounded-lg px-2.5 py-1.5 text-sm text-ink placeholder:text-ghost focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
       />
@@ -277,18 +276,18 @@ function SousCommandeCard({ index, sc, vetements, onChange, onRemove, canRemove 
         )}
       >
         <AlertTriangle size={13} />
-        {sc.urgence ? 'Article urgent' : 'Marquer comme urgent'}
+        {sc.urgence ? t('commandes.groupe_form.urgent') : t('commandes.groupe_form.marquer_urgent')}
       </button>
 
       {/* Sous-total */}
       {total > 0 && (
         <p className="text-xs text-ghost text-right">
-          Sous-total : <span className="font-mono font-semibold text-ink">{formatCurrency(total)}</span>
+          {t('commandes.groupe_form.sous_total')} <span className="font-mono font-semibold text-ink">{formatCurrency(total)}</span>
         </p>
       )}
 
       {surplus && (
-        <p className="text-xs text-error">L'acompte dépasse le prix de cet article.</p>
+        <p className="text-xs text-error">{t('commandes.groupe_form.acompte_surplus')}</p>
       )}
     </div>
   )
@@ -296,6 +295,7 @@ function SousCommandeCard({ index, sc, vetements, onChange, onRemove, canRemove 
 
 // ── Étape 2 — Sous-commandes ──────────────────────────────────────────────────
 function StepSousCommandes({ data, setData, onSubmit, isLoading }) {
+  const { t } = useTranslation()
   const { data: vetements = [], isLoading: loadingVetements } = useVetements()
   const [error, setError] = useState('')
 
@@ -320,7 +320,7 @@ function StepSousCommandes({ data, setData, onSubmit, isLoading }) {
   const handleSubmit = () => {
     const valides = data.sous_commandes.filter(sc => sc.vetement_id && Number(sc.prix) > 0)
     if (valides.length < 2) {
-      setError('Sélectionnez au moins 2 articles avec un vêtement et un prix renseignés.')
+      setError(t('commandes.groupe_form.err_min'))
       return
     }
     setError('')
@@ -333,7 +333,7 @@ function StepSousCommandes({ data, setData, onSubmit, isLoading }) {
       <div className="flex items-center gap-2 bg-primary-50 border border-primary/20 rounded-xl px-3 py-2">
         <Check size={14} className="text-primary shrink-0" />
         <p className="text-sm text-ink truncate">
-          Client : <span className="font-semibold">{data._clientNom}</span>
+          {t('commandes.groupe_form.client_label')} <span className="font-semibold">{data._clientNom}</span>
         </p>
       </div>
 
@@ -360,18 +360,18 @@ function StepSousCommandes({ data, setData, onSubmit, isLoading }) {
         onClick={addSousCommande}
         className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl border border-dashed border-edge text-sm font-medium text-primary hover:border-primary/40 transition-colors"
       >
-        <Plus size={14} /> Ajouter un article
+        <Plus size={14} /> {t('commandes.groupe_form.ajouter_article')}
       </button>
 
       {/* Note groupe */}
       <div>
         <label className="block text-xs font-semibold text-ghost uppercase tracking-widest mb-2">
-          Note (optionnelle)
+          {t('commandes.groupe_form.note')}
         </label>
         <textarea
           value={data.note}
           onChange={e => setData(d => ({ ...d, note: e.target.value }))}
-          placeholder="Ex : à livrer ensemble pour un événement le…"
+          placeholder={t('commandes.groupe_form.note_ph')}
           rows={2}
           className="w-full bg-card border border-edge rounded-xl px-3 py-2.5 text-sm text-ink placeholder:text-ghost focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
         />
@@ -381,12 +381,12 @@ function StepSousCommandes({ data, setData, onSubmit, isLoading }) {
       {totalGeneral > 0 && (
         <div className="bg-card border border-edge rounded-2xl px-4 py-3 space-y-1.5">
           <div className="flex justify-between text-sm">
-            <span className="text-ghost">Total commande groupée</span>
+            <span className="text-ghost">{t('commandes.groupe_form.total')}</span>
             <span className="font-bold font-mono text-ink">{formatCurrency(totalGeneral)}</span>
           </div>
           {acompteTotal > 0 && (
             <div className="flex justify-between text-sm">
-              <span className="text-ghost">Acomptes reçus</span>
+              <span className="text-ghost">{t('commandes.groupe_form.acomptes')}</span>
               <span className="font-semibold font-mono text-success">{formatCurrency(acompteTotal)}</span>
             </div>
           )}
@@ -396,7 +396,7 @@ function StepSousCommandes({ data, setData, onSubmit, isLoading }) {
       {error && <p className="text-xs text-error px-1">{error}</p>}
 
       <Button onClick={handleSubmit} loading={isLoading} className="w-full">
-        Créer la commande groupée
+        {t('commandes.groupe_form.creer')}
       </Button>
     </div>
   )
