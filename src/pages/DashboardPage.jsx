@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, AlertTriangle, Clock, CheckCircle2, CircleUser, Sun, Moon, Store, X } from 'lucide-react'
+import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, AlertTriangle, Clock, CheckCircle2, CircleUser, Sun, Moon, Store, X, Layers, Users2, Star } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { isToday, isPast, parseISO, differenceInCalendarDays, isThisMonth, subDays } from 'date-fns'
 import { useQueryClient } from '@tanstack/react-query'
@@ -402,7 +402,7 @@ export default function DashboardPage() {
           <h2 className="text-xs font-semibold text-ghost uppercase tracking-widest mb-3">
             {t('dashboard.actions_rapides')}
           </h2>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
             <QuickActionTile
               icon={Plus}
               label={t('dashboard.action.nouvelle_commande')}
@@ -420,6 +420,30 @@ export default function DashboardPage() {
               label={t('dashboard.action.paiement')}
               color="gold"
               onClick={() => navigate('/caisse')}
+            />
+            <QuickActionTile
+              icon={Layers}
+              label="Mon Atelier"
+              color="ghost"
+              onClick={() => navigate('/catalogue')}
+            />
+            <QuickActionTile
+              icon={Store}
+              label="Ma Vitrine"
+              color="warning"
+              onClick={() => navigate('/ma-vitrine')}
+            />
+            <QuickActionTile
+              icon={Users2}
+              label="Équipe"
+              color="success"
+              onClick={() => navigate('/equipe')}
+            />
+            <QuickActionTile
+              icon={Star}
+              label="Fidélité"
+              color="gold"
+              onClick={() => navigate('/points')}
             />
           </div>
         </div>

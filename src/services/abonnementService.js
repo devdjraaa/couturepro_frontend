@@ -14,6 +14,22 @@ export const abonnementService = {
     return data
   },
 
+  // Offres de sponsorisation (prix config-driven, éditables depuis l'admin).
+  async getSponsoOffres() {
+    if (isMock()) {
+      await delay()
+      return { actif: true, offres: [{ jours: 7, prix: 1500 }, { jours: 15, prix: 2500 }, { jours: 30, prix: 4500 }] }
+    }
+    const { data } = await api.get('/vitrine/sponsorisation')
+    return data // { actif, offres: [{ jours, prix }] }
+  },
+
+  async acheterSponso({ jours, provider = 'fedapay' }) {
+    const return_url = `${window.location.origin}/paiement/retour`
+    const { data } = await api.post('/abonnement/sponsoriser', { jours, provider, return_url })
+    return data // { checkout_url }
+  },
+
   async getPlans() {
     if (isMock()) {
       await delay()
@@ -77,22 +93,6 @@ export const abonnementService = {
     }
     const { data } = await api.get(`/paiements/${paiementId}/status`)
     return data
-  },
-
-  // Offres de sponsorisation (prix config-driven, éditables depuis l'admin).
-  async getSponsoOffres() {
-    if (isMock()) {
-      await delay()
-      return { actif: true, offres: [{ jours: 7, prix: 1500 }, { jours: 15, prix: 2500 }, { jours: 30, prix: 4500 }] }
-    }
-    const { data } = await api.get('/vitrine/sponsorisation')
-    return data // { actif, offres: [{ jours, prix }] }
-  },
-
-  async acheterSponso({ jours, provider = 'fedapay' }) {
-    const return_url = `${window.location.origin}/paiement/retour`
-    const { data } = await api.post('/abonnement/sponsoriser', { jours, provider, return_url })
-    return data // { checkout_url }
   },
 
   async activateCode(code) {
