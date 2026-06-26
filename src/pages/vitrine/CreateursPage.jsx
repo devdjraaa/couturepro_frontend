@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { getCreators } from './vitrineApi'
 import { useFavoris } from './useFavoris'
+import { usePageMeta } from '@/hooks/usePageMeta'
 import { Spinner } from '@/components/ui'
 import { cn } from '@/utils/cn'
 
@@ -26,6 +27,7 @@ const TRIS = [
 
 export default function CreateursPage() {
   const { t } = useTranslation()
+  usePageMeta({ title: t('vitrine.createurs_page.title'), description: t('vitrine.createurs_page.subtitle'), path: '/createurs' })
   const { has, toggle } = useFavoris()
   const [creators, setCreators] = useState(null)
   const [error, setError] = useState(false)

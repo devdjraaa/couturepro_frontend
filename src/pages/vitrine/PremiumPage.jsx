@@ -4,6 +4,7 @@ import { Check, Zap, Crown, Star } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { getPlans } from './vitrineApi'
+import { usePageMeta } from '@/hooks/usePageMeta'
 import { cn } from '@/utils/cn'
 
 const TIER_ICONS = [Star, Zap, Crown]
@@ -51,6 +52,7 @@ function groupTiers(plans) {
 
 export default function PremiumPage() {
   const { t } = useTranslation()
+  usePageMeta({ title: t('premium.titre'), description: t('premium.sous_titre'), path: '/premium' })
   const [periode, setPeriode] = useState('mensuel')
   const [plans, setPlans] = useState(null) // null = chargement
 

@@ -2,11 +2,13 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { getSuivi } from './vitrineApi'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 const STEP_KEYS = ['commande', 'coupe', 'confection', 'essayage', 'livraison']
 
 export default function SuiviPage() {
   const { t } = useTranslation()
+  usePageMeta({ title: t('vitrine.suivi.title'), description: t('vitrine.suivi.subtitle'), path: '/suivi' })
   const [val, setVal] = useState('')
   const [result, setResult] = useState(undefined) // undefined = idle, null = introuvable, objet = ok
   const [loading, setLoading] = useState(false)

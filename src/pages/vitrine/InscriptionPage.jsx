@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 export default function InscriptionPage() {
   const { t } = useTranslation()
+  usePageMeta({ title: t('vitrine.inscription.title'), description: t('vitrine.inscription.subtitle'), path: '/inscription' })
   return (
     <VitrineShell>
       <section className="py-20">
