@@ -542,6 +542,26 @@
   },
   "commandes": {
     "titre": "Commandes",
+    "groupe": {
+      "titre": "Commande groupée",
+      "articles": "{{n}} article(s)",
+      "total_general": "Total général",
+      "acomptes_recus": "Acomptes reçus",
+      "reste": "Reste à payer",
+      "note": "Note",
+      "articles_titre": "Articles de la commande",
+      "article_defaut": "Article",
+      "facture": "Facture",
+      "enregistrer_partager": "Enregistrer / Partager",
+      "pas_permission": "Vous n'avez pas la permission de générer des factures pour cet atelier.",
+      "preparation": "Préparation…",
+      "envoyer_whatsapp": "Envoyer par WhatsApp",
+      "feature_whatsapp": "L'envoi de factures par WhatsApp",
+      "toast_telechargee": "Facture téléchargée.",
+      "toast_erreur": "Impossible de générer la facture.",
+      "partage_titre": "Facture — {{client}}",
+      "partage_texte": "Facture commande groupée pour {{client}}"
+    },
     "nouvelle": "Nouvelle commande",
     "recherche_placeholder": "Rechercher une commande…",
     "action_sheet": {

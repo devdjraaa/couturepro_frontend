@@ -542,6 +542,26 @@
   },
   "commandes": {
     "titre": "Orders",
+    "groupe": {
+      "titre": "Grouped order",
+      "articles": "{{n}} item(s)",
+      "total_general": "Grand total",
+      "acomptes_recus": "Deposits received",
+      "reste": "Balance due",
+      "note": "Note",
+      "articles_titre": "Order items",
+      "article_defaut": "Item",
+      "facture": "Invoice",
+      "enregistrer_partager": "Save / Share",
+      "pas_permission": "You don't have permission to generate invoices for this workshop.",
+      "preparation": "Preparing…",
+      "envoyer_whatsapp": "Send via WhatsApp",
+      "feature_whatsapp": "Sending invoices via WhatsApp",
+      "toast_telechargee": "Invoice downloaded.",
+      "toast_erreur": "Could not generate the invoice.",
+      "partage_titre": "Invoice — {{client}}",
+      "partage_texte": "Grouped order invoice for {{client}}"
+    },
     "nouvelle": "New order",
     "recherche_placeholder": "Search an order…",
     "action_sheet": {

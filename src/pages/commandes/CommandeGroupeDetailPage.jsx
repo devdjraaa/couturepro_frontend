@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { ChevronRight, MessageCircle, Share2 } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { useTranslation } from 'react-i18next'
 import { useCommandeGroupe } from '@/hooks/useCommandeGroupes'
 import { useFactureSettings } from '@/hooks/useParametres'
 import { usePlanFeature } from '@/hooks/usePlanFeature'
@@ -16,6 +17,7 @@ import { toCommandeDetail } from '@/constants/routes'
 import { cn } from '@/utils/cn'
 
 export default function CommandeGroupeDetailPage() {
+  const { t } = useTranslation()
   const { id } = useParams()
   const { data: groupe, isLoading } = useCommandeGroupe(id)
   const { data: factureSettings }   = useFactureSettings()
@@ -30,12 +32,12 @@ export default function CommandeGroupeDetailPage() {
     try {
       const { pdf, filename } = await exportFactureGroupePdf({ groupe, atelier, factureSettings })
       const result = await shareOrDownloadPdf(pdf, filename, {
-        title: `Facture — ${groupe.client_nom}`,
-        text: `Facture commande groupée pour ${groupe.client_nom}`,
+        title: t('commandes.groupe.partage_titre', { client: groupe.client_nom }),
+        text: t('commandes.groupe.partage_texte', { client: groupe.client_nom }),
       })
-      if (result === 'downloaded') toast.success('Facture téléchargée.')
+      if (result === 'downloaded') toast.success(t('commandes.groupe.toast_telechargee'))
     } catch {
-      toast.error("Impossible de générer la facture.")
+      toast.error(t('commandes.groupe.toast_erreur'))
     } finally {
       setExporting(null)
     }
@@ -43,7 +45,7 @@ export default function CommandeGroupeDetailPage() {
 
   if (isLoading) {
     return (
-      <AppLayout showBack title="Commande groupée">
+      <AppLayout showBack title={t('commandes.groupe.titre')}>
         <div className="p-4 space-y-3">
           <Skeleton className="h-24 rounded-2xl" />
           <Skeleton className="h-32 rounded-2xl" />
@@ -66,21 +68,21 @@ export default function CommandeGroupeDetailPage() {
             <Avatar name={groupe.client_nom} size="md" />
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-ink truncate">{groupe.client_nom}</p>
-              <p className="text-xs text-ghost">{groupe.commandes?.length ?? 0} article(s) · {formatDate(groupe.created_at)}</p>
+              <p className="text-xs text-ghost">{t('commandes.groupe.articles', { n: groupe.commandes?.length ?? 0 })} · {formatDate(groupe.created_at)}</p>
             </div>
           </div>
 
           <div className="divide-y divide-edge border-t border-edge">
             <div className="flex justify-between py-2">
-              <span className="text-sm text-ghost">Total général</span>
+              <span className="text-sm text-ghost">{t('commandes.groupe.total_general')}</span>
               <span className="text-sm font-semibold text-ink font-mono">{formatCurrency(groupe.total_general)}</span>
             </div>
             <div className="flex justify-between py-2">
-              <span className="text-sm text-ghost">Acomptes reçus</span>
+              <span className="text-sm text-ghost">{t('commandes.groupe.acomptes_recus')}</span>
               <span className="text-sm font-semibold text-success font-mono">{formatCurrency(groupe.acompte_total)}</span>
             </div>
             <div className="flex justify-between py-2">
-              <span className="text-sm font-medium text-ink">Reste à payer</span>
+              <span className="text-sm font-medium text-ink">{t('commandes.groupe.reste')}</span>
               <span className={cn('text-lg font-bold font-mono', groupe.reste_total === 0 ? 'text-success' : 'text-gold-dark')}>
                 {formatCurrency(groupe.reste_total)}
               </span>
@@ -91,7 +93,7 @@ export default function CommandeGroupeDetailPage() {
         {/* Note */}
         {groupe.note && (
           <div className="bg-subtle rounded-xl px-4 py-3">
-            <p className="text-xs text-ghost mb-1">Note</p>
+            <p className="text-xs text-ghost mb-1">{t('commandes.groupe.note')}</p>
             <p className="text-sm text-ink whitespace-pre-wrap">{groupe.note}</p>
           </div>
         )}
@@ -99,7 +101,7 @@ export default function CommandeGroupeDetailPage() {
         {/* Sous-commandes */}
         <div>
           <p className="text-xs font-semibold text-ghost uppercase tracking-widest mb-2">
-            Articles de la commande
+            {t('commandes.groupe.articles_titre')}
           </p>
           <div className="space-y-1.5">
             {(groupe.commandes ?? []).map(c => (
@@ -109,7 +111,7 @@ export default function CommandeGroupeDetailPage() {
                 className="flex items-center gap-3 bg-card border border-edge rounded-xl px-4 py-3 hover:border-primary/30 transition-colors"
               >
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-ink truncate">{c.vetement_nom ?? c.vetement?.nom ?? 'Article'}</p>
+                  <p className="text-sm font-semibold text-ink truncate">{c.vetement_nom ?? c.vetement?.nom ?? t('commandes.groupe.article_defaut')}</p>
                   <p className="text-xs text-ghost">
                     × {c.quantite} · {formatCurrency(c.prix)}
                     {c.date_livraison_prevue && ` · ${formatDate(c.date_livraison_prevue)}`}
@@ -124,7 +126,7 @@ export default function CommandeGroupeDetailPage() {
 
         {/* Facture */}
         <div className="bg-card border border-edge rounded-2xl p-4 space-y-3">
-          <p className="text-sm font-semibold text-ink">Facture</p>
+          <p className="text-sm font-semibold text-ink">{t('commandes.groupe.facture')}</p>
 
           {canGenerateFacture ? (
             <Button
@@ -134,11 +136,11 @@ export default function CommandeGroupeDetailPage() {
               onClick={() => handleShare('partage')}
               className="w-full"
             >
-              Enregistrer / Partager
+              {t('commandes.groupe.enregistrer_partager')}
             </Button>
           ) : (
             <p className="text-xs text-ghost">
-              Vous n'avez pas la permission de générer des factures pour cet atelier.
+              {t('commandes.groupe.pas_permission')}
             </p>
           )}
 
@@ -151,12 +153,12 @@ export default function CommandeGroupeDetailPage() {
                 className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-[#25d366]/40 bg-[#25d366]/8 text-[#1a9e4e] text-sm font-medium hover:bg-[#25d366]/15 transition-colors disabled:opacity-50"
               >
                 <MessageCircle size={15} />
-                {exporting === 'whatsapp' ? 'Préparation…' : 'Envoyer par WhatsApp'}
+                {exporting === 'whatsapp' ? t('commandes.groupe.preparation') : t('commandes.groupe.envoyer_whatsapp')}
               </button>
             ) : (
               <FeatureGate
                 featureKey="facture_whatsapp"
-                featureName="L'envoi de factures par WhatsApp"
+                featureName={t('commandes.groupe.feature_whatsapp')}
                 variant="inline"
               />
             )
