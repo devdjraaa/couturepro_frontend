@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Sun, Moon, Heart, Globe, X } from 'lucide-react'
+import { Sun, Moon, Heart, Globe, X, Menu, ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useTheme, useLang } from '@/contexts'
 import { cn } from '@/utils/cn'
@@ -91,9 +91,38 @@ function VitrineCookies() {
 
 export function VitrineNavbar() {
   const { t } = useTranslation()
+  const { isDark, toggleTheme } = useTheme()
+  const { langue, setLangue } = useLang()
+  const { devise, setDevise } = useDevise()
   const [banniere, setBanniere] = useState(null)
+  const [drawerOpen, setDrawerOpen] = useState(false)
+
   useEffect(() => { getBanniere().then(setBanniere).catch(() => {}) }, [])
+
+  useEffect(() => {
+    document.body.style.overflow = drawerOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [drawerOpen])
+
+  useEffect(() => {
+    const handler = (e) => { if (e.key === 'Escape') setDrawerOpen(false) }
+    document.addEventListener('keydown', handler)
+    return () => document.removeEventListener('keydown', handler)
+  }, [])
+
+  const close = () => setDrawerOpen(false)
   const promo = (banniere?.actif && banniere?.texte) ? banniere : null
+
+  const navLinks = [
+    { label: t('vitrine.nav.how'),        href: '/#how',            anchor: true },
+    { label: t('vitrine.nav.creators'),   to:   '/createurs' },
+    { label: t('vitrine.menu2.artisans'), to:   '/artisans' },
+    { label: t('vitrine.nav.collections'),href: '/#gallery',         anchor: true },
+    { label: t('vitrine.nav.suivi'),      to:   '/suivi' },
+    { label: t('vitrine.menu2.support'),  to:   '/aide' },
+    { label: t('vitrine.menu2.about'),    to:   '/qui-sommes-nous' },
+  ]
+
   return (
     <>
       <div className="text-center text-[13px] py-2 px-10 bg-[#0D0D0D] text-[#F8F5F0]">
@@ -103,28 +132,176 @@ export function VitrineNavbar() {
               : promo.texte)
           : t('vitrine.promo')}
       </div>
+
       <header className="sticky top-0 z-40 bg-app/90 backdrop-blur border-b border-edge">
-        <div className="max-w-[1180px] mx-auto px-5 h-16 flex items-center gap-4">
-          <Link to="/" aria-label="Gextimo"><VitrineLogo /></Link>
-          <nav className="hidden lg:flex gap-5 ml-3">
-            <a href="/#how" className="text-sm text-dim hover:text-ink transition">{t('vitrine.nav.how')}</a>
-            <Link to="/createurs" className="text-sm text-dim hover:text-ink transition">{t('vitrine.nav.creators')}</Link>
-            <Link to="/artisans" className="text-sm text-dim hover:text-ink transition">{t('vitrine.menu2.artisans')}</Link>
-            <a href="/#gallery" className="text-sm text-dim hover:text-ink transition">{t('vitrine.nav.collections')}</a>
-            <Link to="/suivi" className="text-sm text-dim hover:text-ink transition">{t('vitrine.nav.suivi')}</Link>
-            <Link to="/aide" className="text-sm text-dim hover:text-ink transition">{t('vitrine.menu2.support')}</Link>
-            <Link to="/qui-sommes-nous" className="text-sm text-dim hover:text-ink transition">{t('vitrine.menu2.about')}</Link>
-          </nav>
-          <div className="ml-auto flex items-center gap-2">
-            <Link to="/favoris" aria-label={t('vitrine.favoris.menu')} className="w-8 h-8 flex items-center justify-center rounded-[10px] border border-edge text-dim hover:text-primary hover:border-primary transition"><Heart size={15} /></Link>
-            <ThemeToggle />
-            <DeviseSelect />
-            <LangToggle />
-            <Link to="/inscription" className="hidden sm:inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] border border-edge text-ink hover:border-primary hover:text-primary transition">{t('vitrine.nav.signup')}</Link>
-            <Link to="/login" className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">{t('vitrine.nav.login')}</Link>
+        <div className="max-w-[1180px] mx-auto px-4 sm:px-5">
+
+          {/* ── Barre mobile (< sm) ── */}
+          <div className="flex sm:hidden items-center h-16 gap-2">
+            <Link to="/" aria-label="Gextimo"><VitrineLogo /></Link>
+            <div className="ml-auto flex items-center gap-2">
+              <Link to="/favoris" aria-label={t('vitrine.favoris.menu')}
+                className="w-11 h-11 flex items-center justify-center rounded-[10px] border border-edge text-dim hover:text-primary hover:border-primary transition">
+                <Heart size={18} />
+              </Link>
+              <Link to="/inscription"
+                className="h-11 px-4 flex items-center font-semibold text-[13px] rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">
+                {t('vitrine.nav.signup')}
+              </Link>
+              <button type="button" aria-label="Ouvrir le menu" aria-expanded={drawerOpen}
+                onClick={() => setDrawerOpen(true)}
+                className="w-11 h-11 flex items-center justify-center rounded-[10px] border border-edge text-dim hover:text-ink transition">
+                <Menu size={20} />
+              </button>
+            </div>
+          </div>
+
+          {/* ── Barre desktop (≥ sm) ── */}
+          <div className="hidden sm:flex items-center h-16 gap-4">
+            <Link to="/" aria-label="Gextimo"><VitrineLogo /></Link>
+            <nav className="hidden lg:flex gap-5 ml-3">
+              <a href="/#how" className="text-sm text-dim hover:text-ink transition">{t('vitrine.nav.how')}</a>
+              <Link to="/createurs" className="text-sm text-dim hover:text-ink transition">{t('vitrine.nav.creators')}</Link>
+              <Link to="/artisans" className="text-sm text-dim hover:text-ink transition">{t('vitrine.menu2.artisans')}</Link>
+              <a href="/#gallery" className="text-sm text-dim hover:text-ink transition">{t('vitrine.nav.collections')}</a>
+              <Link to="/suivi" className="text-sm text-dim hover:text-ink transition">{t('vitrine.nav.suivi')}</Link>
+              <Link to="/aide" className="text-sm text-dim hover:text-ink transition">{t('vitrine.menu2.support')}</Link>
+              <Link to="/qui-sommes-nous" className="text-sm text-dim hover:text-ink transition">{t('vitrine.menu2.about')}</Link>
+            </nav>
+            <div className="ml-auto flex items-center gap-2">
+              <Link to="/favoris" aria-label={t('vitrine.favoris.menu')}
+                className="w-8 h-8 flex items-center justify-center rounded-[10px] border border-edge text-dim hover:text-primary hover:border-primary transition">
+                <Heart size={15} />
+              </Link>
+              <ThemeToggle />
+              <DeviseSelect />
+              <LangToggle />
+              <Link to="/inscription"
+                className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] border border-edge text-ink hover:border-primary hover:text-primary transition">
+                {t('vitrine.nav.signup')}
+              </Link>
+              <Link to="/login"
+                className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">
+                {t('vitrine.nav.login')}
+              </Link>
+            </div>
           </div>
         </div>
       </header>
+
+      {/* ── Scrim (mobile only) ── */}
+      <div
+        aria-hidden="true"
+        onClick={close}
+        className={cn(
+          'fixed inset-0 z-50 sm:hidden bg-[#0D0D0D]/60 backdrop-blur-sm transition-opacity duration-300',
+          drawerOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none',
+        )}
+      />
+
+      {/* ── Tiroir (mobile only) ── */}
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menu de navigation"
+        className={cn(
+          'fixed top-0 right-0 bottom-0 z-[51] sm:hidden w-[85vw] max-w-sm bg-card flex flex-col shadow-2xl transition-transform duration-300 ease-out',
+          drawerOpen ? 'translate-x-0' : 'translate-x-full',
+        )}
+      >
+        {/* En-tête tiroir */}
+        <div className="flex items-center justify-between px-5 h-16 border-b border-edge shrink-0">
+          <VitrineLogo />
+          <button onClick={close} aria-label="Fermer le menu"
+            className="w-10 h-10 flex items-center justify-center rounded-full text-ghost hover:text-ink transition">
+            <X size={20} />
+          </button>
+        </div>
+
+        {/* Corps scrollable */}
+        <div className="flex-1 overflow-y-auto px-5 py-5 flex flex-col gap-5">
+
+          {/* Bloc compte */}
+          <div className="flex flex-col gap-2.5">
+            <Link to="/inscription" onClick={close}
+              className="flex items-center justify-center h-11 rounded-[10px] bg-primary text-white font-semibold text-[14px] hover:bg-primary-600 transition">
+              {t('vitrine.nav.signup')}
+            </Link>
+            <Link to="/login" onClick={close}
+              className="flex items-center justify-center h-11 rounded-[10px] border border-edge text-ink font-semibold text-[14px] hover:border-primary hover:text-primary transition">
+              {t('vitrine.nav.login')}
+            </Link>
+          </div>
+
+          <div className="border-t border-edge" />
+
+          {/* Navigation */}
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-ghost mb-1">Navigation</p>
+            <nav>
+              {navLinks.map((l) =>
+                l.anchor
+                  ? <a key={l.label} href={l.href} onClick={close}
+                      className="flex items-center justify-between py-3 text-[14px] text-dim hover:text-ink transition border-b border-edge last:border-b-0">
+                      <span>{l.label}</span>
+                      <ChevronRight size={15} className="text-ghost shrink-0" />
+                    </a>
+                  : <Link key={l.label} to={l.to} onClick={close}
+                      className="flex items-center justify-between py-3 text-[14px] text-dim hover:text-ink transition border-b border-edge last:border-b-0">
+                      <span>{l.label}</span>
+                      <ChevronRight size={15} className="text-ghost shrink-0" />
+                    </Link>
+              )}
+            </nav>
+          </div>
+
+          <div className="border-t border-edge" />
+
+          {/* Préférences */}
+          <div className="flex flex-col gap-4 pb-2">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-ghost">Préférences</p>
+
+            {/* Langue */}
+            <div className="flex items-center justify-between">
+              <span className="text-[13px] text-dim">Langue</span>
+              <div className="flex rounded-[10px] border border-edge overflow-hidden text-[11px] font-bold">
+                {['fr', 'en'].map((l) => (
+                  <button key={l} type="button" onClick={() => setLangue(l)}
+                    className={cn('px-3 py-2 transition', langue === l ? 'bg-primary text-white' : 'text-dim hover:text-ink')}>
+                    {l.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Devise */}
+            <div className="flex items-center justify-between">
+              <span className="text-[13px] text-dim">Devise</span>
+              <select value={devise} onChange={(e) => setDevise(e.target.value)} aria-label="Devise"
+                className="text-[11px] font-bold bg-card border border-edge rounded-[10px] px-2 py-2 text-dim focus:outline-none focus:ring-2 focus:ring-primary/30 cursor-pointer">
+                {Object.keys(DEVISES).map((k) => <option key={k} value={k}>{k}</option>)}
+              </select>
+            </div>
+
+            {/* Thème */}
+            <div className="flex items-center justify-between">
+              <span className="text-[13px] text-dim">Thème</span>
+              <div className="flex rounded-[10px] border border-edge overflow-hidden text-[11px] font-bold">
+                <button type="button" onClick={() => isDark && toggleTheme()}
+                  className={cn('flex items-center gap-1.5 px-3 py-2 transition',
+                    !isDark ? 'bg-subtle text-ink' : 'text-dim hover:text-ink')}>
+                  <Sun size={12} /> Clair
+                </button>
+                <button type="button" onClick={() => !isDark && toggleTheme()}
+                  className={cn('flex items-center gap-1.5 px-3 py-2 transition',
+                    isDark ? 'bg-primary text-white' : 'text-dim hover:text-ink')}>
+                  <Moon size={12} /> Sombre
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   )
 }

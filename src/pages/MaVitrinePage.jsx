@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom'
 import {
   Store, ExternalLink, Copy, Check, Eye, EyeOff, MessageCircle,
   Sparkles, ClipboardList, Wallet, Image as ImageIcon,
-  ShieldCheck, ShieldAlert, Upload, Link as LinkIcon,
-  Star,
 } from 'lucide-react'
 import { AppLayout } from '@/components/layout'
 import { Skeleton } from '@/components/ui'
@@ -15,7 +13,7 @@ import { parametresService } from '@/services/parametresService'
 import { collectionService } from '@/services/collectionService'
 import { avisService } from '@/services/avisService'
 import { vitrineStatsService } from '@/services/vitrineStatsService'
-import { abonnementService } from '@/services/abonnementService'
+
 import { formatCurrency } from '@/utils/formatCurrency'
 import { cn } from '@/utils/cn'
 import { IS_NATIVE } from '@/constants/routes'
@@ -57,12 +55,6 @@ export default function MaVitrinePage() {
   const [newCollection, setNewCollection] = useState('')
   const [pendingAvis, setPendingAvis] = useState([])
   const [stats, setStats] = useState(null)
-  const [verifDoc, setVerifDoc] = useState(null)
-  const [verifLien, setVerifLien] = useState('')
-  const [verifSending, setVerifSending] = useState(false)
-  const [verifSent, setVerifSent] = useState(false)
-  const [sponsoJours, setSponsoJours] = useState(7)
-  const [sponsoBusy, setSponsoBusy] = useState(false)
 
   useEffect(() => {
     let on = true
@@ -189,26 +181,6 @@ export default function MaVitrinePage() {
     try { await avisService.moderate(id, statut) } catch { /* erreur silencieuse */ }
   }
 
-  const acheterSponso = async () => {
-    if (sponsoBusy) return
-    setSponsoBusy(true)
-    try {
-      const { checkout_url } = await abonnementService.acheterSponso({ jours: sponsoJours })
-      if (checkout_url) window.location.href = checkout_url
-    } catch { /* erreur silencieuse */ } finally {
-      setSponsoBusy(false)
-    }
-  }
-
-  const submitVerification = async () => {
-    if (verifSending || (!verifDoc && !verifLien.trim())) return
-    setVerifSending(true)
-    try {
-      await parametresService.demanderVerification({ fichier: verifDoc, lien: verifLien.trim() || null })
-      setVerifSent(true)
-    } catch { /* erreur silencieuse — le backend répondra quand l'endpoint sera disponible */ }
-    finally { setVerifSending(false) }
-  }
 
   return (
     <AppLayout>
@@ -308,112 +280,6 @@ export default function MaVitrinePage() {
           </div>
         </div>
 
-        {/* Badge vérifié ou demande de vérification */}
-        {atelier?.verifie ? (
-          <div className="mt-4 bg-card border border-edge rounded-xl p-4 flex items-center gap-3">
-            <ShieldCheck size={20} className="text-success shrink-0" />
-            <div>
-              <p className="text-sm font-semibold text-ink">Compte vérifié</p>
-              <p className="text-xs text-dim">Le badge « Vérifié » est affiché sur votre vitrine publique.</p>
-            </div>
-          </div>
-        ) : (
-          <div className="mt-4 bg-card border border-edge rounded-xl p-4">
-            <div className="flex items-center gap-2 mb-1">
-              <ShieldAlert size={17} className="text-warning shrink-0" />
-              <p className="text-sm font-semibold text-ink">Demander la vérification</p>
-            </div>
-            <p className="text-xs text-dim mb-3">Joignez un document officiel (CNI, diplôme, certificat de créateur…) ou un lien vers votre portfolio / profil professionnel pour obtenir le badge « Vérifié ».</p>
-
-            {verifSent ? (
-              <p className="text-sm text-success font-medium">✓ Demande envoyée — nous vous répondons sous 48 h.</p>
-            ) : (
-              <div className="space-y-3">
-                <label className="flex items-center gap-2 cursor-pointer group">
-                  <div className="w-8 h-8 rounded-lg border border-edge bg-subtle flex items-center justify-center shrink-0 group-hover:border-primary transition">
-                    {verifDoc ? <Check size={14} className="text-success" /> : <Upload size={14} className="text-ghost" />}
-                  </div>
-                  <span className="text-xs text-dim group-hover:text-ink transition truncate">
-                    {verifDoc ? verifDoc.name : 'Joindre un document (PDF, JPG, PNG)'}
-                  </span>
-                  <input
-                    type="file"
-                    accept=".pdf,.jpg,.jpeg,.png"
-                    onChange={(e) => setVerifDoc(e.target.files?.[0] ?? null)}
-                    className="hidden"
-                  />
-                </label>
-                <div className="flex items-center gap-2">
-                  <LinkIcon size={14} className="text-ghost shrink-0" />
-                  <input
-                    type="url"
-                    value={verifLien}
-                    onChange={(e) => setVerifLien(e.target.value)}
-                    placeholder="Lien vers votre portfolio (https://…)"
-                    className="flex-1 rounded-lg border border-edge bg-app px-3 py-2 text-xs text-ink focus:outline-none focus:ring-2 focus:ring-primary/30"
-                  />
-                </div>
-                <button
-                  onClick={submitVerification}
-                  disabled={verifSending || (!verifDoc && !verifLien.trim())}
-                  className="text-sm font-semibold px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-600 transition disabled:opacity-50"
-                >
-                  {verifSending ? 'Envoi…' : 'Envoyer la demande'}
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Mise en avant sponsorisée */}
-        <div className="mt-4 bg-card border border-edge rounded-xl p-4">
-          <div className="flex items-center gap-2 mb-1">
-            <Star size={17} className={atelier?.sponsorise ? 'text-warning' : 'text-ghost'} />
-            <p className="text-sm font-semibold text-ink">Mise en avant sponsorisée</p>
-            {atelier?.sponsorise && (
-              <span className="ml-auto text-[11px] font-bold px-2 py-0.5 rounded-full bg-warning/15 text-warning border border-warning/25">
-                Actif
-              </span>
-            )}
-          </div>
-
-          {atelier?.sponsorise ? (
-            <p className="text-xs text-dim">Votre atelier est actuellement mis en avant en tête des résultats de recherche sur la vitrine.</p>
-          ) : (
-            <>
-              <p className="text-xs text-dim mb-3">Apparaissez en premier sur la vitrine publique et augmentez votre visibilité auprès des clients.</p>
-              <div className="grid grid-cols-3 gap-2 mb-3">
-                {[
-                  { jours: 7,  prix: 1500  },
-                  { jours: 15, prix: 2500  },
-                  { jours: 30, prix: 4500  },
-                ].map(({ jours, prix }) => (
-                  <button
-                    key={jours}
-                    onClick={() => setSponsoJours(jours)}
-                    className={cn(
-                      'flex flex-col items-center py-3 rounded-xl border text-sm font-semibold transition',
-                      sponsoJours === jours
-                        ? 'border-primary bg-primary/5 text-primary'
-                        : 'border-edge text-dim hover:border-primary hover:text-ink',
-                    )}
-                  >
-                    <span className="font-bold">{jours} j</span>
-                    <span className="text-[11px] font-normal mt-0.5">{prix.toLocaleString('fr-FR')} FCFA</span>
-                  </button>
-                ))}
-              </div>
-              <button
-                onClick={acheterSponso}
-                disabled={sponsoBusy}
-                className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl bg-primary text-white hover:bg-primary-600 transition disabled:opacity-60"
-              >
-                <Star size={15} />
-                {sponsoBusy ? 'Redirection…' : `Sponsoriser ${sponsoJours} jours`}
-              </button>
-            </>
-          )}
-        </div>
 
         {/* Collections */}
         <div className="mt-4 bg-card border border-edge rounded-xl p-4">

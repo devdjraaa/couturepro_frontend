@@ -181,11 +181,4 @@ export const parametresService = {
     try { await api.delete('/notifications/fcm-token') } catch {}
   },
 
-  async demanderVerification({ fichier, lien }) {
-    const fd = new FormData()
-    if (fichier) fd.append('document', fichier)
-    if (lien)    fd.append('lien', lien)
-    const { data } = await api.post('/parametres/demande-verification', fd)
-    return data
-  },
 }
