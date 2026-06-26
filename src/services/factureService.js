@@ -136,4 +136,16 @@ export const factureService = {
     }
     await api.delete(`/factures/${id}`)
   },
+
+  // Normalisation DGI via e-MECeF (renvoie la facture avec emecef_code + qr_code_url).
+  async normaliser(id) {
+    if (isMock()) {
+      await delay(800)
+      const f = MOCK_FACTURES.find((x) => x.id === id)
+      if (f) { f.emecef_code = 'TEST-MECEF-0000000000000'; f.normalisee_at = new Date().toISOString() }
+      return f
+    }
+    const { data } = await api.post(`/factures/${id}/normaliser`)
+    return data
+  },
 }

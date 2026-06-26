@@ -2,11 +2,13 @@ import { useState, useEffect, useCallback } from 'react'
 import {
   FileText, Plus, X, ChevronDown, ChevronUp, Upload, Send,
   QrCode, Trash2, Check, AlertCircle, Clock, Ban,
-  MessageCircle, Download,
+  MessageCircle, Download, ShieldCheck,
 } from 'lucide-react'
 import { AppLayout } from '@/components/layout'
 import { useAuth } from '@/contexts'
 import { factureService } from '@/services/factureService'
+import { FeatureGate } from '@/components/abonnement'
+import { usePlanFeature } from '@/hooks/usePlanFeature'
 import { cn } from '@/utils/cn'
 
 const MODES_PAIEMENT = [
@@ -285,7 +287,10 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
   const [open, setOpen] = useState(false)
   const [updatingStatut, setUpdatingStatut] = useState(false)
   const [uploadingDgi, setUploadingDgi] = useState(false)
+  const [normalisant, setNormalisant] = useState(false)
+  const [normErr, setNormErr] = useState('')
   const [acompteInput, setAcompteInput] = useState(String(doc.acompte || 0))
+  const { available: peutNormaliser } = usePlanFeature('facturation_normalisee')
 
   const total = calcTotal(doc.lignes || [])
   const restant = total - (Number(doc.acompte) || 0)
@@ -306,6 +311,16 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
       const updated = await factureService.uploadDgi(doc.id, file)
       onDgiUploaded(updated)
     } catch { /* silencieux */ } finally { setUploadingDgi(false) }
+  }
+
+  const normaliser = async () => {
+    setNormalisant(true); setNormErr('')
+    try {
+      const updated = await factureService.normaliser(doc.id)
+      onDgiUploaded(updated)
+    } catch (e) {
+      setNormErr(e?.response?.data?.message || 'Échec de la normalisation e-MECeF.')
+    } finally { setNormalisant(false) }
   }
 
   const sendWhatsApp = () => {
@@ -433,10 +448,23 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
             )}
           </div>
 
-          {/* Upload DGI */}
+          {/* Normalisation DGI (e-MECeF) */}
           <div>
             <p className="text-xs font-semibold text-ghost uppercase tracking-wider mb-2">Facture normalisée DGI</p>
-            {doc.dgi_pdf_url ? (
+            {doc.emecef_code ? (
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-success font-medium">✓ Normalisée e-MECeF</span>
+                  {doc.qr_code_url && (
+                    <a href={doc.qr_code_url} target="_blank" rel="noopener noreferrer"
+                       className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline">
+                      <QrCode size={12} /> QR DGI
+                    </a>
+                  )}
+                </div>
+                <p className="text-[11px] font-mono text-dim break-all">Code MECeF/DGI : {doc.emecef_code}</p>
+              </div>
+            ) : doc.dgi_pdf_url ? (
               <div className="flex items-center gap-2">
                 <span className="text-xs text-success font-medium">✓ PDF DGI joint</span>
                 <a href={doc.dgi_pdf_url} target="_blank" rel="noopener noreferrer"
@@ -445,11 +473,22 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
                 </a>
               </div>
             ) : (
-              <label className="inline-flex items-center gap-2 cursor-pointer text-sm font-semibold text-primary hover:underline">
-                <Upload size={14} />
-                {uploadingDgi ? 'Envoi…' : 'Joindre la facture DGI (PDF)'}
-                <input type="file" accept="application/pdf" onChange={uploadDgi} disabled={uploadingDgi} className="hidden" />
-              </label>
+              <div className="space-y-2">
+                {doc.type === 'facture' && peutNormaliser && (
+                  <div>
+                    <button onClick={normaliser} disabled={normalisant}
+                      className="inline-flex items-center gap-2 text-sm font-semibold px-3 py-1.5 rounded-lg bg-primary text-white hover:bg-primary-600 transition disabled:opacity-60">
+                      <ShieldCheck size={14} /> {normalisant ? 'Normalisation…' : 'Normaliser via e-MECeF'}
+                    </button>
+                    {normErr && <p className="text-xs text-danger mt-1">{normErr}</p>}
+                  </div>
+                )}
+                <label className="inline-flex items-center gap-2 cursor-pointer text-sm font-semibold text-primary hover:underline">
+                  <Upload size={14} />
+                  {uploadingDgi ? 'Envoi…' : 'Ou joindre un PDF normalisé'}
+                  <input type="file" accept="application/pdf" onChange={uploadDgi} disabled={uploadingDgi} className="hidden" />
+                </label>
+              </div>
             )}
           </div>
 
@@ -524,6 +563,7 @@ export default function FacturationPage() {
 
   return (
     <AppLayout>
+      <FeatureGate featureKey="facturation" featureName="La facturation">
       <div className="max-w-3xl mx-auto px-4 pb-24 lg:pb-8">
         {/* En-tête */}
         <div className="pt-4 pb-3 flex items-start justify-between gap-3">
@@ -628,6 +668,7 @@ export default function FacturationPage() {
           onCreated={handleCreated}
         />
       )}
+      </FeatureGate>
     </AppLayout>
   )
 }

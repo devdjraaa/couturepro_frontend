@@ -126,6 +126,8 @@ export const parametresService = {
         facture_rccm: null,
         facture_pied_page: null,
         personnalisation_dispo: false,
+        assujetti_tva: false,
+        emecef_configure: false,
         atelier_nom: mockAtelier?.nom ?? 'Gextimo',
         atelier_adresse: mockAtelier?.adresse ?? '',
         atelier_ville: mockAtelier?.ville ?? '',
@@ -140,12 +142,16 @@ export const parametresService = {
       await delay()
       return payload
     }
-    const { data } = await api.put('/parametres/facture', {
+    const body = {
       format_facture:    payload.format_facture,
       facture_ifu:       payload.facture_ifu,
       facture_rccm:      payload.facture_rccm,
       facture_pied_page: payload.facture_pied_page,
-    })
+      assujetti_tva:     payload.assujetti_tva,
+    }
+    // N'envoyer le jeton que s'il est saisi (vide = conserver l'existant).
+    if (payload.emecef_token) body.emecef_token = payload.emecef_token
+    const { data } = await api.put('/parametres/facture', body)
     return data
   },
 
