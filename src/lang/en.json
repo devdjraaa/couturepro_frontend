@@ -408,7 +408,8 @@
     "action": {
       "nouvelle_commande": "New order",
       "nouveau_client": "New client",
-      "paiement": "Collect payment"
+      "paiement": "Collect payment",
+      "atelier": "My Workshop"
     },
     "titre_auj": "Today",
     "a_faire": "Today's tasks",
