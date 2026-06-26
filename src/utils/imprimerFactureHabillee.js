@@ -1,107 +1,72 @@
 // Façon A — « habillage » GEXTIMO d'une facture normalisée e-SFE.
-// On NE reconstruit RIEN : le PDF officiel (déjà certifié par la DGI) est
-// embarqué tel quel dans une iframe, avec un en-tête GEXTIMO au-dessus et le
-// pied de vérification en dessous. GEXTIMO habille, il ne certifie pas.
-//
-// Le pied (URL officielle de vérification + disclaimer) reproduit le composant
-// fourni : il complète le QR officiel, il ne le remplace pas.
+// On NE reconstruit RIEN : on EMBARQUE le PDF officiel (déjà certifié par la DGI)
+// INTACT dans un nouveau PDF, avec un en-tête GEXTIMO au-dessus et un pied de
+// vérification en dessous. On produit un VRAI PDF (pas une iframe imprimée, qui
+// n'embarque pas le document) → impression/partage fiables, y compris en WebView.
+// GEXTIMO habille, il ne certifie pas : les éléments de sécurité restent ceux du
+// PDF e-SFE reproduit tel quel.
+import { PDFDocument, rgb, StandardFonts } from 'pdf-lib'
 
-const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
-  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-))
+const A4 = [595.28, 841.89]
+const ACCENT = rgb(0.816, 0.043, 0.043) // charte GEXTIMO (#D00B0B)
+const GREY   = rgb(0.42, 0.45, 0.5)
+const WHITE  = rgb(1, 1, 1)
+const INK    = rgb(0.12, 0.16, 0.22)
 
-export function imprimerFactureHabillee(doc, atelier) {
-  const pdfUrl = doc?.dgi_pdf_url
-  if (!pdfUrl) return false
+// WinAnsi (police standard) n'encode pas certains caractères (—, …) → on nettoie.
+const safe = (s) => String(s ?? '').replace(/[—–]/g, '-').replace(/…/g, '...')
 
-  const nom     = esc(atelier?.nom || 'Mon atelier')
-  const logo    = atelier?.logo_url ? esc(atelier.logo_url) : null
-  const ville   = esc(atelier?.ville || '')
-  const contact = esc(atelier?.telephone || atelier?.contact_public || '')
-  const numero  = esc(doc?.numero || '')
+// Compose le PDF habillé et renvoie ses octets (Uint8Array).
+export async function genererFactureHabillee(doc, atelier) {
+  const res = await fetch(doc.dgi_pdf_url)
+  if (!res.ok) throw new Error('PDF officiel inaccessible')
+  const srcBytes = await res.arrayBuffer()
 
-  const html = `<!doctype html>
-<html lang="fr"><head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Facture ${numero} — ${nom}</title>
-<style>
-  :root{
-    --gx-ink:#1f2937; --gx-muted:#6b7280;
-    --gx-accent:#D00B0B;       /* charte GEXTIMO (rouge) */
-    --gx-line:#e5e7eb; --gx-bg:#fafafa;
+  const out  = await PDFDocument.create()
+  const bold = await out.embedFont(StandardFonts.HelveticaBold)
+  const reg  = await out.embedFont(StandardFonts.Helvetica)
+  const pages = await out.embedPdf(srcBytes)
+
+  const nom = safe(atelier?.nom || 'Mon atelier')
+  const sub = safe([atelier?.ville, atelier?.telephone || atelier?.contact_public].filter(Boolean).join(' · '))
+
+  pages.forEach((ep) => {
+    const page = out.addPage(A4)
+    // En-tête GEXTIMO
+    page.drawRectangle({ x: 0, y: A4[1] - 58, width: A4[0], height: 58, color: ACCENT })
+    page.drawText(nom, { x: 24, y: A4[1] - 32, font: bold, size: 15, color: WHITE })
+    if (sub) page.drawText(sub, { x: 24, y: A4[1] - 47, font: reg, size: 9, color: WHITE })
+    page.drawText('GEXTIMO · By Novafriq', { x: A4[0] - 168, y: A4[1] - 32, font: bold, size: 11, color: WHITE })
+
+    // PDF officiel e-SFE embarqué INTACT, mis à l'échelle entre en-tête et pied
+    const maxW = A4[0] - 48, maxH = A4[1] - 58 - 80
+    const s = Math.min(maxW / ep.width, maxH / ep.height)
+    page.drawPage(ep, { x: (A4[0] - ep.width * s) / 2, y: 72, width: ep.width * s, height: ep.height * s })
+
+    // Pied de vérification (complète le QR officiel, ne le remplace pas)
+    page.drawLine({ start: { x: 24, y: 62 }, end: { x: A4[0] - 24, y: 62 }, thickness: 1.5, color: ACCENT })
+    page.drawText('Facture normalisee certifiee e-MECeF - DGI Benin', { x: 24, y: 47, font: bold, size: 9, color: INK })
+    page.drawText('Verification : sygmef.impots.bj/verification  (saisir le CODE MECeF/DGI et le NIM ci-dessus)', { x: 24, y: 35, font: reg, size: 8, color: GREY })
+    page.drawText('Mise en page GEXTIMO. Les elements de securite sont ceux de la facture e-MECeF reproduite ci-dessus.', { x: 24, y: 24, font: reg, size: 7, color: GREY })
+  })
+
+  return out.save()
+}
+
+// Génère puis partage (mobile) ou télécharge (web) le PDF habillé.
+export async function partagerFactureHabillee(doc, atelier) {
+  const bytes = await genererFactureHabillee(doc, atelier)
+  const blob = new Blob([bytes], { type: 'application/pdf' })
+  const filename = `facture-${(doc?.numero || 'gextimo')}.pdf`
+  const file = new File([blob], filename, { type: 'application/pdf' })
+
+  if (typeof navigator !== 'undefined' && navigator.canShare && navigator.canShare({ files: [file] })) {
+    try { await navigator.share({ files: [file], title: filename }); return 'shared' }
+    catch (e) { if (e?.name === 'AbortError') return 'cancelled' }
   }
-  *{ box-sizing:border-box; }
-  html,body{ margin:0; padding:0; background:#fff; color:var(--gx-ink);
-    font-family:"DM Sans", Arial, sans-serif; }
-  .gx-page{ max-width:800px; margin:0 auto; padding:16px; }
-
-  /* En-tête GEXTIMO (habillage) */
-  .gx-head{ display:flex; align-items:center; gap:14px;
-    border-bottom:2px solid var(--gx-accent); padding-bottom:10px; margin-bottom:12px; }
-  .gx-head img{ width:54px; height:54px; object-fit:contain; border-radius:8px; }
-  .gx-head .gx-atelier b{ font-family:"Outfit",Arial,sans-serif; font-size:18px; color:var(--gx-ink); }
-  .gx-head .gx-atelier span{ display:block; color:var(--gx-muted); font-size:11px; }
-  .gx-head .gx-brand{ margin-left:auto; text-align:right; }
-  .gx-head .gx-brand b{ font-family:"Outfit",Arial,sans-serif; font-weight:700; letter-spacing:.5px; color:var(--gx-accent); font-size:15px; }
-  .gx-head .gx-brand span{ display:block; color:var(--gx-muted); font-size:10px; }
-
-  /* PDF officiel e-SFE — embarqué INTACT, jamais modifié */
-  .gx-doc{ width:100%; height:1000px; border:1px solid var(--gx-line); border-radius:6px; }
-
-  /* Pied de vérification (complète le QR officiel) */
-  .gx-footer{ border-top:2px solid var(--gx-accent); background:var(--gx-bg);
-    padding:10px 16px; margin-top:12px; display:flex; align-items:center;
-    justify-content:space-between; gap:16px; font-size:11px; line-height:1.45; }
-  .gx-wordmark b{ font-family:"Outfit",Arial,sans-serif; font-weight:700; letter-spacing:.5px; font-size:15px; color:var(--gx-accent); }
-  .gx-wordmark span{ color:var(--gx-muted); font-size:10px; }
-  .gx-verify{ text-align:right; max-width:62%; }
-  .gx-verify .gx-title{ font-weight:600; color:var(--gx-ink); }
-  .gx-verify .gx-url{ color:var(--gx-accent); font-weight:600; text-decoration:none; }
-  .gx-verify .gx-note{ color:var(--gx-muted); font-size:10px; margin-top:2px; }
-  .gx-disclaimer{ font-size:9px; color:var(--gx-muted); text-align:center; padding:4px 16px 0; }
-
-  .gx-print{ position:fixed; top:12px; right:12px; background:var(--gx-accent); color:#fff;
-    border:0; padding:10px 16px; border-radius:10px; font-weight:600; cursor:pointer; }
-
-  @media print{
-    .gx-print{ display:none; }
-    .gx-footer,.gx-disclaimer{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-    .gx-footer{ break-inside:avoid; }
-    .gx-doc{ height:auto; min-height:900px; border:0; }
-  }
-</style></head>
-<body>
-  <button class="gx-print" onclick="window.print()">Imprimer</button>
-  <div class="gx-page">
-    <div class="gx-head">
-      ${logo ? `<img src="${logo}" alt="${nom}" />` : ''}
-      <div class="gx-atelier"><b>${nom}</b><span>${[ville, contact].filter(Boolean).join(' · ')}</span></div>
-      <div class="gx-brand"><b>GEXTIMO</b><span>By Novafriq</span></div>
-    </div>
-
-    <!-- Facture normalisée e-SFE (DGI) — embarquée telle quelle -->
-    <iframe class="gx-doc" src="${pdfUrl}" title="Facture normalisée"></iframe>
-
-    <div class="gx-footer">
-      <div class="gx-wordmark"><b>GEXTIMO</b><span>By Novafriq</span></div>
-      <div class="gx-verify">
-        <div class="gx-title">Facture normalisée certifiée e-MECeF — DGI Bénin</div>
-        <div>Vérification : <a class="gx-url" href="https://sygmef.impots.bj/verification">sygmef.impots.bj/verification</a></div>
-        <div class="gx-note">Saisir le <b>CODE MECeF/DGI</b> et le <b>NIM</b> figurant sur la facture ci-dessus.</div>
-      </div>
-    </div>
-    <div class="gx-disclaimer">
-      Mise en page GEXTIMO. Les éléments de sécurité (NIM, code MECeF/DGI, signature et QR code) sont
-      exclusivement ceux de la facture normalisée e-MECeF reproduite ci-dessus, sans aucune modification.
-    </div>
-  </div>
-</body></html>`
-
-  const w = window.open('', '_blank')
-  if (!w) return false // popup bloqué
-  w.document.open()
-  w.document.write(html)
-  w.document.close()
-  return true
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url; a.download = filename; a.click()
+  setTimeout(() => URL.revokeObjectURL(url), 4000)
+  return 'downloaded'
 }
