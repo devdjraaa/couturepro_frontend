@@ -1,4 +1,42 @@
 {
+  "premium": {
+    "tag": "Tarifs",
+    "titre": "Choisissez votre plan",
+    "sous_titre": "Commencez gratuitement, passez à un plan payant quand vous êtes prêt. Pas d'engagement, résiliez à tout moment.",
+    "mensuel": "Mensuel",
+    "annuel": "Annuel",
+    "deux_mois": "2 mois offerts",
+    "chargement": "Chargement des offres…",
+    "bientot": "Les offres seront bientôt disponibles.",
+    "gratuit": "Gratuit",
+    "fcfa": "FCFA",
+    "par_an": "/ an",
+    "par_mois": "/ mois",
+    "soit_mois": "soit {{x}} FCFA / mois",
+    "commencer_gratuit": "Commencer gratuitement",
+    "choisir": "Choisir {{plan}}",
+    "essai": "Pas encore convaincu ? Le plan Free est gratuit, sans carte bancaire.",
+    "essai_cta": "Démarrer →",
+    "faq_titre": "Questions fréquentes",
+    "feat": {
+      "illimite": "illimité",
+      "creations": "{{n}} créations en vitrine",
+      "galerie_oui": "Visible dans la galerie publique",
+      "galerie_non": "Profil accessible par lien direct",
+      "clients": "{{n}} clients / mois",
+      "equipe": "Équipe jusqu'à {{n}} membre(s)",
+      "pdf": "Factures & devis PDF",
+      "photos_vip": "Photos VIP",
+      "caisse": "Module Caisse",
+      "multi": "Multi-ateliers"
+    },
+    "faq": [
+      { "q": "Puis-je changer de plan à tout moment ?", "r": "Oui, vous pouvez passer à un plan supérieur ou inférieur à tout moment. La différence est calculée au prorata." },
+      { "q": "Le plan Free est-il vraiment gratuit ?", "r": "Oui, le plan Free est gratuit et sans engagement, sans carte bancaire. Vous passez à un plan payant uniquement quand vous le souhaitez." },
+      { "q": "Comment fonctionne la facturation annuelle ?", "r": "La facturation annuelle est réglée en une seule fois et représente environ 2 mois offerts par rapport à la facturation mensuelle." },
+      { "q": "Mes données sont-elles sécurisées ?", "r": "Oui, vos données sont chiffrées et sauvegardées quotidiennement." }
+    ]
+  },
   "ma_vitrine": {
     "espace_public": "Espace public",
     "titre": "Ma Vitrine",
