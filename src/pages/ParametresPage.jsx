@@ -152,6 +152,8 @@ function FactureTab() {
     facture_ifu:       '',
     facture_rccm:      '',
     facture_pied_page: '',
+    assujetti_tva:     false,
+    emecef_token:      '', // jamais prérempli ; vide = on conserve l'existant
   })
 
   useEffect(() => {
@@ -161,6 +163,8 @@ function FactureTab() {
         facture_ifu:       settings.facture_ifu        ?? '',
         facture_rccm:      settings.facture_rccm       ?? '',
         facture_pied_page: settings.facture_pied_page  ?? '',
+        assujetti_tva:     settings.assujetti_tva      ?? false,
+        emecef_token:      '',
       })
     }
   }, [settings])
@@ -287,6 +291,26 @@ function FactureTab() {
           </div>
         </div>
       )}
+
+      {/* Fiscalité / facture normalisée DGI (e-MECeF) */}
+      <div className="bg-card border border-edge rounded-2xl p-4 space-y-3">
+        <div>
+          <p className="text-sm font-semibold text-ink">Facturation normalisée (DGI)</p>
+          <p className="text-xs text-ghost">Pour les ateliers assujettis à la TVA : connectez votre compte e-MECeF pour émettre des factures normalisées (Code DGI + QR). Pensez à renseigner votre IFU.</p>
+        </div>
+        <label className="flex items-center justify-between cursor-pointer">
+          <span className="text-sm text-ink">Assujetti à la TVA</span>
+          <input type="checkbox" checked={form.assujetti_tva} onChange={e => setForm(f => ({ ...f, assujetti_tva: e.target.checked }))} />
+        </label>
+        {form.assujetti_tva && (
+          <Input
+            label="Jeton e-MECeF"
+            value={form.emecef_token}
+            onChange={e => setForm(f => ({ ...f, emecef_token: e.target.value }))}
+            placeholder={settings?.emecef_configure ? '•••••• déjà configuré (laisser vide pour conserver)' : 'Collez votre jeton e-MECeF'}
+          />
+        )}
+      </div>
 
       <Button type="submit" loading={update.isPending} className="w-full">
         Enregistrer
