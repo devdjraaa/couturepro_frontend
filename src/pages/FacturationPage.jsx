@@ -5,6 +5,7 @@ import {
   MessageCircle, Download, ShieldCheck,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import QRCode from 'qrcode'
 import { AppLayout } from '@/components/layout'
 import { useAuth } from '@/contexts'
 import { factureService } from '@/services/factureService'
@@ -281,7 +282,19 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
   const [normalisant, setNormalisant] = useState(false)
   const [normErr, setNormErr] = useState('')
   const [acompteInput, setAcompteInput] = useState(String(doc.acompte || 0))
+  const [qrDataUrl, setQrDataUrl] = useState(null)
   const { available: peutNormaliser } = usePlanFeature('facturation_normalisee')
+
+  // Le qrCode renvoyé par e-MECeF est un CONTENU (pas une URL) → on génère l'image QR.
+  useEffect(() => {
+    let on = true
+    if (doc.qr_code_url) {
+      QRCode.toDataURL(doc.qr_code_url, { width: 220, margin: 1 })
+        .then(url => { if (on) setQrDataUrl(url) })
+        .catch(() => { if (on) setQrDataUrl(null) })
+    } else { setQrDataUrl(null) }
+    return () => { on = false }
+  }, [doc.qr_code_url])
 
   const total = calcTotal(doc.lignes || [])
   const restant = total - (Number(doc.acompte) || 0)
@@ -450,16 +463,11 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
           <div>
             <p className="text-xs font-semibold text-ghost uppercase tracking-wider mb-2">{t('facturation.doc.dgi_titre')}</p>
             {doc.emecef_code ? (
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-success font-medium">{t('facturation.doc.dgi_normalisee')}</span>
-                  {doc.qr_code_url && (
-                    <a href={doc.qr_code_url} target="_blank" rel="noopener noreferrer"
-                       className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline">
-                      <QrCode size={12} /> {t('facturation.doc.dgi_qr')}
-                    </a>
-                  )}
-                </div>
+              <div className="space-y-2">
+                <span className="text-xs text-success font-medium">{t('facturation.doc.dgi_normalisee')}</span>
+                {qrDataUrl && (
+                  <img src={qrDataUrl} alt={t('facturation.doc.dgi_qr')} className="w-28 h-28 border border-edge rounded-lg bg-white p-1" />
+                )}
                 <p className="text-[11px] font-mono text-dim break-all">{t('facturation.doc.dgi_code')} {doc.emecef_code}</p>
               </div>
             ) : doc.dgi_pdf_url ? (
