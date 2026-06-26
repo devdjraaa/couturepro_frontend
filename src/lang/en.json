@@ -202,6 +202,7 @@
       "dgi_code": "MECeF/DGI code:",
       "dgi_pdf_joint": "✓ DGI PDF attached",
       "telecharger": "Download",
+      "imprimer_habillage": "Print (GEXTIMO layout)",
       "normaliser": "Normalize via e-MECeF",
       "normalisation": "Normalizing…",
       "normaliser_err": "e-MECeF normalization failed.",
