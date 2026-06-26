@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, AlertTriangle, Clock, CheckCircle2, CircleUser, Sun, Moon, Store, X, Layers, Users2, Star } from 'lucide-react'
+import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, AlertTriangle, Clock, CheckCircle2, CircleUser, Sun, Moon, Store, X, Layers, Users2, Star, FileText } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { isToday, isPast, parseISO, differenceInCalendarDays, isThisMonth, subDays } from 'date-fns'
 import { useQueryClient } from '@tanstack/react-query'
@@ -423,25 +423,31 @@ export default function DashboardPage() {
             />
             <QuickActionTile
               icon={Layers}
-              label="Mon Atelier"
+              label={t('dashboard.action.atelier')}
               color="ghost"
               onClick={() => navigate('/catalogue')}
             />
             <QuickActionTile
               icon={Store}
-              label="Ma Vitrine"
+              label={t('nav.ma_vitrine')}
               color="warning"
               onClick={() => navigate('/ma-vitrine')}
             />
             <QuickActionTile
+              icon={FileText}
+              label={t('nav.facturation')}
+              color="primary"
+              onClick={() => navigate('/facturation')}
+            />
+            <QuickActionTile
               icon={Users2}
-              label="Équipe"
+              label={t('nav.equipe')}
               color="success"
               onClick={() => navigate('/equipe')}
             />
             <QuickActionTile
               icon={Star}
-              label="Fidélité"
+              label={t('nav.points')}
               color="gold"
               onClick={() => navigate('/points')}
             />

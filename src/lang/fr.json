@@ -418,7 +418,8 @@
     "action": {
       "nouvelle_commande": "Nouvelle commande",
       "nouveau_client": "Nouveau client",
-      "paiement": "Encaisser"
+      "paiement": "Encaisser",
+      "atelier": "Mon Atelier"
     },
     "titre_auj": "Aujourd'hui",
     "a_faire": "À faire aujourd'hui",
