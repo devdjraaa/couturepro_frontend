@@ -6,6 +6,7 @@
 // GEXTIMO habille, il ne certifie pas : les éléments de sécurité restent ceux du
 // PDF e-SFE reproduit tel quel.
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib'
+import api from '@/services/api'
 
 const A4 = [595.28, 841.89]
 const ACCENT = rgb(0.816, 0.043, 0.043) // charte GEXTIMO (#D00B0B)
@@ -16,11 +17,23 @@ const INK    = rgb(0.12, 0.16, 0.22)
 // WinAnsi (police standard) n'encode pas certains caractères (—, …) → on nettoie.
 const safe = (s) => String(s ?? '').replace(/[—–]/g, '-').replace(/…/g, '...')
 
-// Compose le PDF habillé et renvoie ses octets (Uint8Array).
-export async function genererFactureHabillee(doc, atelier) {
+// Récupère les octets du PDF officiel : via l'API (même origine, CORS api/* ok),
+// avec repli sur l'URL directe du stockage si besoin.
+async function chargerPdfOfficiel(doc) {
+  if (doc?.id) {
+    try {
+      const { data } = await api.get(`/factures/${doc.id}/dgi`, { responseType: 'arraybuffer' })
+      return data
+    } catch { /* repli ci-dessous */ }
+  }
   const res = await fetch(doc.dgi_pdf_url)
   if (!res.ok) throw new Error('PDF officiel inaccessible')
-  const srcBytes = await res.arrayBuffer()
+  return res.arrayBuffer()
+}
+
+// Compose le PDF habillé et renvoie ses octets (Uint8Array).
+export async function genererFactureHabillee(doc, atelier) {
+  const srcBytes = await chargerPdfOfficiel(doc)
 
   const out  = await PDFDocument.create()
   const bold = await out.embedFont(StandardFonts.HelveticaBold)
