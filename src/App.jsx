@@ -24,6 +24,7 @@ import AProposPage            from '@/pages/AProposPage'
 import FAQPage                from '@/pages/FAQPage'
 import ContactPage            from '@/pages/ContactPage'
 import FacturationPage        from '@/pages/FacturationPage'
+import OutilsCreatifsPage     from '@/pages/OutilsCreatifsPage'
 import HistoriquePage         from '@/pages/HistoriquePage'
 import ArchivesPage           from '@/pages/ArchivesPage'
 import CaissePage             from '@/pages/CaissePage'
@@ -153,6 +154,7 @@ export default function App() {
           <Route path={ROUTES.PHOTOS_VIP}       element={<GaleriePage />} />
           <Route path="/galerie"               element={<GaleriePage />} />
           <Route path={ROUTES.FACTURATION}      element={<FacturationPage />}     />
+          <Route path={ROUTES.OUTILS_CREATIFS} element={<OutilsCreatifsPage />}  />
           <Route path={ROUTES.HISTORIQUE}       element={<HistoriquePage />}      />
           <Route path="/archives"               element={<ArchivesPage />}        />
           <Route path="/caisse"                 element={<CaissePage />}          />

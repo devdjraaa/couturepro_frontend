@@ -1260,7 +1260,8 @@
     "support": "Support",
     "profil": "Profile",
     "plus": "More",
-    "menu": "Menu"
+    "menu": "Menu",
+    "outils_creatifs": "Creative tools"
   },
   "vitrine": {
     "promo": "✦ New — the Gextimo showcase connects African fashion designers across West Africa.",
@@ -1983,5 +1984,31 @@
     "etape3_desc": "Clients will contact you directly through your showcase.",
     "commencer": "Get started",
     "passer": "Skip this step"
+  },
+  "outils_creatifs": {
+    "titre": "Creative tools",
+    "croquis": "Sketches",
+    "fiche_technique": "Tech sheets",
+    "patron": "Patterns",
+    "moodboard": "Moodboards",
+    "tous": "All",
+    "ajouter": "Add",
+    "titre_label": "Title",
+    "description_label": "Description",
+    "categorie_label": "Category",
+    "images_label": "Images",
+    "public_label": "Visible on my showcase",
+    "enregistrer": "Save",
+    "modifier": "Edit",
+    "supprimer": "Delete",
+    "confirmer_suppression": "Delete this creation?",
+    "aucun": "No creations in this category.",
+    "succes_ajout": "Creation added.",
+    "succes_modif": "Creation updated.",
+    "succes_suppr": "Creation deleted.",
+    "erreur": "An error occurred."
+  },
+  "sidebar": {
+    "outils_creatifs": "Creative tools"
   }
 }

@@ -70,6 +70,9 @@ export const ROUTES = {
   // Facturation
   FACTURATION: '/facturation',
 
+  // Outils créatifs
+  OUTILS_CREATIFS: '/outils-creatifs',
+
   // Autres
   PHOTOS_VIP:  '/photos-vip',
   HISTORIQUE:  '/historique',

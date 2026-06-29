@@ -1260,7 +1260,8 @@
     "support": "Support",
     "profil": "Profil",
     "plus": "Plus",
-    "menu": "Menu"
+    "menu": "Menu",
+    "outils_creatifs": "Outils créatifs"
   },
   "vitrine": {
     "promo": "✦ Nouveau — la vitrine Gextimo connecte les créateurs de mode africaine à toute l'Afrique de l'Ouest.",
@@ -1983,5 +1984,31 @@
     "etape3_desc": "Les clients vous contacteront directement via votre vitrine.",
     "commencer": "Commencer",
     "passer": "Passer cette étape"
+  },
+  "outils_creatifs": {
+    "titre": "Outils créatifs",
+    "croquis": "Croquis",
+    "fiche_technique": "Fiches techniques",
+    "patron": "Patrons",
+    "moodboard": "Moodboards",
+    "tous": "Tous",
+    "ajouter": "Ajouter",
+    "titre_label": "Titre",
+    "description_label": "Description",
+    "categorie_label": "Catégorie",
+    "images_label": "Images",
+    "public_label": "Visible sur ma vitrine",
+    "enregistrer": "Enregistrer",
+    "modifier": "Modifier",
+    "supprimer": "Supprimer",
+    "confirmer_suppression": "Supprimer cette création ?",
+    "aucun": "Aucune création dans cette catégorie.",
+    "succes_ajout": "Création ajoutée.",
+    "succes_modif": "Création mise à jour.",
+    "succes_suppr": "Création supprimée.",
+    "erreur": "Une erreur est survenue."
+  },
+  "sidebar": {
+    "outils_creatifs": "Outils créatifs"
   }
 }
