@@ -2006,7 +2006,8 @@
     "succes_ajout": "Creation added.",
     "succes_modif": "Creation updated.",
     "succes_suppr": "Creation deleted.",
-    "erreur": "An error occurred."
+    "erreur": "An error occurred.",
+    "partager": "Share"
   },
   "sidebar": {
     "outils_creatifs": "Creative tools"

@@ -1,16 +1,18 @@
 import { useState, useEffect, useRef } from 'react'
-import { Pencil, Trash2, Plus, X, Eye, EyeOff, ImagePlus } from 'lucide-react'
+import { Pencil, Trash2, Plus, X, Eye, EyeOff, ImagePlus, Share2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { AppLayout } from '@/components/layout'
 import { TabBar, Button, EmptyState, Skeleton } from '@/components/ui'
 import { creationDesignerService } from '@/services/creationDesignerService'
+import { shareToInstagram } from '@/utils/shareInstagram'
+import { useAuth } from '@/contexts'
 import { cn } from '@/utils/cn'
 
 const CATEGORIES = ['croquis', 'fiche_technique', 'patron', 'moodboard']
 
 const EMPTY_FORM = { titre: '', description: '', categorie: 'croquis', public: false, images: [] }
 
-function CreationCard({ item, onEdit, onDelete, t }) {
+function CreationCard({ item, onEdit, onDelete, onShare, t }) {
   const imgUrl = item.images?.[0]
     ? `${import.meta.env.VITE_API_URL?.replace('/api', '')}/storage/${item.images[0]}`
     : null
@@ -33,6 +35,11 @@ function CreationCard({ item, onEdit, onDelete, t }) {
           <button onClick={() => onEdit(item)} className="text-xs text-primary flex items-center gap-1">
             <Pencil size={12} /> {t('outils_creatifs.modifier')}
           </button>
+          {imgUrl && (
+            <button onClick={() => onShare(item, imgUrl)} className="text-xs text-accent flex items-center gap-1">
+              <Share2 size={12} /> {t('outils_creatifs.partager')}
+            </button>
+          )}
           <button onClick={() => onDelete(item)} className="text-xs text-danger flex items-center gap-1 ml-auto">
             <Trash2 size={12} /> {t('outils_creatifs.supprimer')}
           </button>
@@ -132,6 +139,7 @@ function CreationForm({ initial, onSave, onCancel, t }) {
 
 export default function OutilsCreatifsPage() {
   const { t } = useTranslation()
+  const { atelier } = useAuth()
   const [items, setItems] = useState(null)
   const [filter, setFilter] = useState(null)
   const [editing, setEditing] = useState(null)
@@ -157,6 +165,14 @@ export default function OutilsCreatifsPage() {
       await creationDesignerService.remove(item.id)
       load()
     } catch { /* silencieux */ }
+  }
+
+  const handleShare = (item, imgUrl) => {
+    shareToInstagram({
+      imageUrl: imgUrl,
+      text: `${item.titre} — ${atelier?.nom || 'GEXTIMO'}`,
+      instagramHandle: atelier?.instagram,
+    })
   }
 
   return (
@@ -197,6 +213,7 @@ export default function OutilsCreatifsPage() {
                 key={item.id} item={item} t={t}
                 onEdit={(it) => { setEditing(it); setShowForm(false) }}
                 onDelete={handleDelete}
+                onShare={handleShare}
               />
             ))}
           </div>

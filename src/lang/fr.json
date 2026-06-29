@@ -2006,7 +2006,8 @@
     "succes_ajout": "Création ajoutée.",
     "succes_modif": "Création mise à jour.",
     "succes_suppr": "Création supprimée.",
-    "erreur": "Une erreur est survenue."
+    "erreur": "Une erreur est survenue.",
+    "partager": "Partager"
   },
   "sidebar": {
     "outils_creatifs": "Outils créatifs"
