@@ -59,10 +59,22 @@
       "multi": "Multi-ateliers"
     },
     "faq": [
-      { "q": "Puis-je changer de plan à tout moment ?", "r": "Oui, vous pouvez passer à un plan supérieur ou inférieur à tout moment. La différence est calculée au prorata." },
-      { "q": "Le plan Free est-il vraiment gratuit ?", "r": "Oui, le plan Free est gratuit et sans engagement, sans carte bancaire. Vous passez à un plan payant uniquement quand vous le souhaitez." },
-      { "q": "Comment fonctionne la facturation annuelle ?", "r": "La facturation annuelle est réglée en une seule fois et représente environ 2 mois offerts par rapport à la facturation mensuelle." },
-      { "q": "Mes données sont-elles sécurisées ?", "r": "Oui, vos données sont chiffrées et sauvegardées quotidiennement." }
+      {
+        "q": "Puis-je changer de plan à tout moment ?",
+        "r": "Oui, vous pouvez passer à un plan supérieur ou inférieur à tout moment. La différence est calculée au prorata."
+      },
+      {
+        "q": "Le plan Free est-il vraiment gratuit ?",
+        "r": "Oui, le plan Free est gratuit et sans engagement, sans carte bancaire. Vous passez à un plan payant uniquement quand vous le souhaitez."
+      },
+      {
+        "q": "Comment fonctionne la facturation annuelle ?",
+        "r": "La facturation annuelle est réglée en une seule fois et représente environ 2 mois offerts par rapport à la facturation mensuelle."
+      },
+      {
+        "q": "Mes données sont-elles sécurisées ?",
+        "r": "Oui, vos données sont chiffrées et sauvegardées quotidiennement."
+      }
     ]
   },
   "ma_vitrine": {
@@ -158,11 +170,35 @@
     "vide": "Aucun document pour le moment.",
     "vide_filtres": "Aucun document ne correspond aux filtres.",
     "creer_premier": "Créer votre premier document →",
-    "types": { "devis": "Devis", "facture": "Facture", "recu": "Reçu" },
-    "modes": { "wave": "Wave", "om": "Orange Money", "especes": "Espèces", "virement": "Virement bancaire", "autre": "Autre" },
-    "statuts": { "non_payee": "Non payée", "acompte": "Acompte", "soldee": "Soldée", "annulee": "ANNULÉE" },
-    "gabarits": { "standard_label": "Standard", "standard_desc": "Mise en page sobre et professionnelle", "personnalise_label": "Personnalisé", "personnalise_desc": "Avec couleurs et logo de votre atelier" },
-    "ligne": { "description": "Description", "qte": "Qté", "prix": "Prix" },
+    "types": {
+      "devis": "Devis",
+      "facture": "Facture",
+      "recu": "Reçu"
+    },
+    "modes": {
+      "wave": "Wave",
+      "om": "Orange Money",
+      "especes": "Espèces",
+      "virement": "Virement bancaire",
+      "autre": "Autre"
+    },
+    "statuts": {
+      "non_payee": "Non payée",
+      "acompte": "Acompte",
+      "soldee": "Soldée",
+      "annulee": "ANNULÉE"
+    },
+    "gabarits": {
+      "standard_label": "Standard",
+      "standard_desc": "Mise en page sobre et professionnelle",
+      "personnalise_label": "Personnalisé",
+      "personnalise_desc": "Avec couleurs et logo de votre atelier"
+    },
+    "ligne": {
+      "description": "Description",
+      "qte": "Qté",
+      "prix": "Prix"
+    },
     "modal": {
       "titre": "Nouveau document",
       "type": "Type",
@@ -205,6 +241,9 @@
       "imprimer_habillage": "Imprimer / Partager (habillage GEXTIMO)",
       "habillage_generation": "Génération…",
       "habillage_erreur": "Impossible de générer la facture habillée. Téléchargez le PDF officiel.",
+      "pdf": "PDF",
+      "pdf_generation": "PDF…",
+      "pdf_erreur": "Impossible de générer le PDF.",
       "normaliser": "Normaliser via e-MECeF",
       "normalisation": "Normalisation…",
       "normaliser_err": "Échec de la normalisation e-MECeF.",
@@ -552,7 +591,9 @@
     },
     "vip_titre": "Favoris VIP",
     "tous_titre": "Tous les clients",
-    "ajouter_aria": "Ajouter un client"
+    "ajouter_aria": "Ajouter un client",
+    "import_resultat": "{{imported}} contact(s) importé(s), {{skipped}} doublon(s) ignoré(s).",
+    "import_erreur": "Erreur lors de l'import."
   },
   "commandes": {
     "titre": "Commandes",
@@ -589,7 +630,11 @@
       "prix_ph": "Ex : 25000",
       "livraison": "Livraison prévue",
       "acompte": "Acompte reçu (XOF)",
-      "mode": { "especes": "Espèces", "mobile_money": "Mobile Money", "virement": "Virement" },
+      "mode": {
+        "especes": "Espèces",
+        "mobile_money": "Mobile Money",
+        "virement": "Virement"
+      },
       "description_ph": "Description / instructions (optionnel)",
       "urgent": "Article urgent",
       "marquer_urgent": "Marquer comme urgent",
@@ -628,7 +673,11 @@
       "note_interne": "Note interne",
       "note_interne_ph": "Instructions pour l'équipe, références client…",
       "mode_titre": "Mode de paiement",
-      "mode": { "especes": "Espèces", "mobile_money": "Mobile Money", "virement": "Virement" },
+      "mode": {
+        "especes": "Espèces",
+        "mobile_money": "Mobile Money",
+        "virement": "Virement"
+      },
       "prix_total": "Prix total (XOF)",
       "prix_total_ph": "Ex : 35000",
       "acompte": "Acompte reçu (XOF)",
@@ -908,8 +957,18 @@
     },
     "tout_lire": "Tout lire",
     "vide_categorie": "Aucune notification dans cette catégorie.",
-    "cat": { "toutes": "Toutes", "commande": "Commandes", "paiement": "Paiements", "systeme": "Rappels" },
-    "jour": { "aujourdhui": "Aujourd'hui", "hier": "Hier", "semaine": "Cette semaine", "ancien": "Plus ancien" }
+    "cat": {
+      "toutes": "Toutes",
+      "commande": "Commandes",
+      "paiement": "Paiements",
+      "systeme": "Rappels"
+    },
+    "jour": {
+      "aujourdhui": "Aujourd'hui",
+      "hier": "Hier",
+      "semaine": "Cette semaine",
+      "ancien": "Plus ancien"
+    }
   },
   "abonnement": {
     "titre": "Abonnement",
@@ -1045,7 +1104,18 @@
       "theme": "Apparence & thème",
       "a_propos": "À propos"
     },
-    "deconnexion": "Se déconnecter"
+    "deconnexion": "Se déconnecter",
+    "type_compte": {
+      "titre": "Type de compte",
+      "description": "Changez votre profil entre artisan et designer.",
+      "artisan": "Artisan",
+      "designer": "Designer",
+      "artisan_desc": "Gestion d'atelier, commandes, clients, mesures.",
+      "designer_desc": "Vitrine publique, créations, galerie, devis.",
+      "confirmer": "Confirmer le changement",
+      "succes": "Type de compte mis à jour.",
+      "erreur": "Erreur lors du changement de type."
+    }
   },
   "theme": {
     "titre": "Apparence",
@@ -1202,7 +1272,8 @@
     "support": "Support",
     "profil": "Profil",
     "plus": "Plus",
-    "menu": "Menu"
+    "menu": "Menu",
+    "outils_creatifs": "Outils créatifs"
   },
   "vitrine": {
     "promo": "✦ Nouveau — la vitrine Gextimo connecte les créateurs de mode africaine à toute l'Afrique de l'Ouest.",
@@ -1336,7 +1407,11 @@
       "rights": "© 2026 Gextimo. Tous droits réservés."
     },
     "createurs_page": {
-      "tri": { "pertinence": "Pertinence", "note": "Meilleure note", "distance": "Plus proche" },
+      "tri": {
+        "pertinence": "Pertinence",
+        "note": "Meilleure note",
+        "distance": "Plus proche"
+      },
       "eyebrow": "Créateurs",
       "title": "Découvrez les créateurs",
       "subtitle": "Des talents vérifiés à travers le Bénin et l'Afrique de l'Ouest.",
@@ -1909,5 +1984,44 @@
       "pts_activation": "Pts activation",
       "seuil_conversion": "Seuil conversion (pts → jours)"
     }
+  },
+  "bienvenue": {
+    "titre": "Bienvenue sur Gextimo !",
+    "sous_titre": "Votre espace professionnel est prêt.",
+    "etape1_titre": "Complétez votre profil",
+    "etape1_desc": "Ajoutez votre logo, spécialité et coordonnées pour être visible.",
+    "etape2_titre": "Ajoutez vos créations",
+    "etape2_desc": "Publiez vos réalisations pour attirer des clients.",
+    "etape3_titre": "Recevez des commandes",
+    "etape3_desc": "Les clients vous contacteront directement via votre vitrine.",
+    "commencer": "Commencer",
+    "passer": "Passer cette étape"
+  },
+  "outils_creatifs": {
+    "titre": "Outils créatifs",
+    "croquis": "Croquis",
+    "fiche_technique": "Fiches techniques",
+    "patron": "Patrons",
+    "moodboard": "Moodboards",
+    "tous": "Tous",
+    "ajouter": "Ajouter",
+    "titre_label": "Titre",
+    "description_label": "Description",
+    "categorie_label": "Catégorie",
+    "images_label": "Images",
+    "public_label": "Visible sur ma vitrine",
+    "enregistrer": "Enregistrer",
+    "modifier": "Modifier",
+    "supprimer": "Supprimer",
+    "confirmer_suppression": "Supprimer cette création ?",
+    "aucun": "Aucune création dans cette catégorie.",
+    "succes_ajout": "Création ajoutée.",
+    "succes_modif": "Création mise à jour.",
+    "succes_suppr": "Création supprimée.",
+    "erreur": "Une erreur est survenue.",
+    "partager": "Partager"
+  },
+  "sidebar": {
+    "outils_creatifs": "Outils créatifs"
   }
 }

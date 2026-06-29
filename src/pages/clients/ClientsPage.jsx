@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { useClients, useCreateClient } from '@/hooks/useClients'
+import { clientService } from '@/services/clientService'
 import { AppLayout } from '@/components/layout'
 import { ClientCard, ClientForm } from '@/components/clients'
 import { SearchBar, EmptyState, Skeleton, BottomSheet, Button } from '@/components/ui'
@@ -137,15 +138,16 @@ export default function ClientsPage() {
   const handleImportContacts = async () => {
     if (selectedContacts.size === 0) return
     setImporting(true)
-    let ok = 0
-    for (const idx of selectedContacts) {
-      const c = contactsToImport[idx]
-      try { await createClient.mutateAsync(c); ok++ } catch {}
+    try {
+      const contacts = [...selectedContacts].map(idx => contactsToImport[idx])
+      const { imported, skipped } = await clientService.importBatch(contacts)
+      toast.success(t('clients.import_resultat', { imported, skipped }))
+    } catch {
+      toast.error(t('clients.import_erreur'))
     }
     setImporting(false)
     setContactsToImport(null)
     setSelectedContacts(new Set())
-    toast.success(`${ok} contact${ok > 1 ? 's' : ''} importé${ok > 1 ? 's' : ''}.`)
   }
 
   const handleCreate = async ({ _photo, ...data }) => {

@@ -59,10 +59,22 @@
       "multi": "Multi-workshops"
     },
     "faq": [
-      { "q": "Can I change plan at any time?", "r": "Yes, you can upgrade or downgrade at any time. The difference is prorated." },
-      { "q": "Is the Free plan really free?", "r": "Yes, the Free plan is free with no commitment and no credit card. You only move to a paid plan when you want to." },
-      { "q": "How does yearly billing work?", "r": "Yearly billing is paid in one go and represents about 2 months free compared to monthly billing." },
-      { "q": "Is my data secure?", "r": "Yes, your data is encrypted and backed up daily." }
+      {
+        "q": "Can I change plan at any time?",
+        "r": "Yes, you can upgrade or downgrade at any time. The difference is prorated."
+      },
+      {
+        "q": "Is the Free plan really free?",
+        "r": "Yes, the Free plan is free with no commitment and no credit card. You only move to a paid plan when you want to."
+      },
+      {
+        "q": "How does yearly billing work?",
+        "r": "Yearly billing is paid in one go and represents about 2 months free compared to monthly billing."
+      },
+      {
+        "q": "Is my data secure?",
+        "r": "Yes, your data is encrypted and backed up daily."
+      }
     ]
   },
   "ma_vitrine": {
@@ -158,11 +170,35 @@
     "vide": "No documents yet.",
     "vide_filtres": "No documents match the filters.",
     "creer_premier": "Create your first document →",
-    "types": { "devis": "Quote", "facture": "Invoice", "recu": "Receipt" },
-    "modes": { "wave": "Wave", "om": "Orange Money", "especes": "Cash", "virement": "Bank transfer", "autre": "Other" },
-    "statuts": { "non_payee": "Unpaid", "acompte": "Deposit", "soldee": "Paid", "annulee": "CANCELLED" },
-    "gabarits": { "standard_label": "Standard", "standard_desc": "Clean, professional layout", "personnalise_label": "Custom", "personnalise_desc": "With your workshop's colors and logo" },
-    "ligne": { "description": "Description", "qte": "Qty", "prix": "Price" },
+    "types": {
+      "devis": "Quote",
+      "facture": "Invoice",
+      "recu": "Receipt"
+    },
+    "modes": {
+      "wave": "Wave",
+      "om": "Orange Money",
+      "especes": "Cash",
+      "virement": "Bank transfer",
+      "autre": "Other"
+    },
+    "statuts": {
+      "non_payee": "Unpaid",
+      "acompte": "Deposit",
+      "soldee": "Paid",
+      "annulee": "CANCELLED"
+    },
+    "gabarits": {
+      "standard_label": "Standard",
+      "standard_desc": "Clean, professional layout",
+      "personnalise_label": "Custom",
+      "personnalise_desc": "With your workshop's colors and logo"
+    },
+    "ligne": {
+      "description": "Description",
+      "qte": "Qty",
+      "prix": "Price"
+    },
     "modal": {
       "titre": "New document",
       "type": "Type",
@@ -205,6 +241,9 @@
       "imprimer_habillage": "Print / Share (GEXTIMO layout)",
       "habillage_generation": "Generating…",
       "habillage_erreur": "Could not generate the branded invoice. Download the official PDF instead.",
+      "pdf": "PDF",
+      "pdf_generation": "PDF…",
+      "pdf_erreur": "Could not generate the PDF.",
       "normaliser": "Normalize via e-MECeF",
       "normalisation": "Normalizing…",
       "normaliser_err": "e-MECeF normalization failed.",
@@ -552,7 +591,9 @@
     },
     "vip_titre": "VIP Favourites",
     "tous_titre": "All clients",
-    "ajouter_aria": "Add a client"
+    "ajouter_aria": "Add a client",
+    "import_resultat": "{{imported}} contact(s) imported, {{skipped}} duplicate(s) skipped.",
+    "import_erreur": "Import failed."
   },
   "commandes": {
     "titre": "Orders",
@@ -589,7 +630,11 @@
       "prix_ph": "E.g. 25000",
       "livraison": "Expected delivery",
       "acompte": "Deposit received (XOF)",
-      "mode": { "especes": "Cash", "mobile_money": "Mobile Money", "virement": "Transfer" },
+      "mode": {
+        "especes": "Cash",
+        "mobile_money": "Mobile Money",
+        "virement": "Transfer"
+      },
       "description_ph": "Description / instructions (optional)",
       "urgent": "Urgent item",
       "marquer_urgent": "Mark as urgent",
@@ -628,7 +673,11 @@
       "note_interne": "Internal note",
       "note_interne_ph": "Instructions for the team, client references…",
       "mode_titre": "Payment method",
-      "mode": { "especes": "Cash", "mobile_money": "Mobile Money", "virement": "Transfer" },
+      "mode": {
+        "especes": "Cash",
+        "mobile_money": "Mobile Money",
+        "virement": "Transfer"
+      },
       "prix_total": "Total price (XOF)",
       "prix_total_ph": "E.g. 35000",
       "acompte": "Deposit received (XOF)",
@@ -908,8 +957,18 @@
     },
     "tout_lire": "Mark all read",
     "vide_categorie": "No notifications in this category.",
-    "cat": { "toutes": "All", "commande": "Orders", "paiement": "Payments", "systeme": "Reminders" },
-    "jour": { "aujourdhui": "Today", "hier": "Yesterday", "semaine": "This week", "ancien": "Older" }
+    "cat": {
+      "toutes": "All",
+      "commande": "Orders",
+      "paiement": "Payments",
+      "systeme": "Reminders"
+    },
+    "jour": {
+      "aujourdhui": "Today",
+      "hier": "Yesterday",
+      "semaine": "This week",
+      "ancien": "Older"
+    }
   },
   "abonnement": {
     "titre": "Subscription",
@@ -1045,7 +1104,18 @@
       "theme": "Appearance & theme",
       "a_propos": "About"
     },
-    "deconnexion": "Sign out"
+    "deconnexion": "Sign out",
+    "type_compte": {
+      "titre": "Account type",
+      "description": "Switch your profile between artisan and designer.",
+      "artisan": "Artisan",
+      "designer": "Designer",
+      "artisan_desc": "Workshop management, orders, clients, measurements.",
+      "designer_desc": "Public showcase, creations, gallery, quotes.",
+      "confirmer": "Confirm change",
+      "succes": "Account type updated.",
+      "erreur": "Error changing account type."
+    }
   },
   "theme": {
     "titre": "Appearance",
@@ -1202,7 +1272,8 @@
     "support": "Support",
     "profil": "Profile",
     "plus": "More",
-    "menu": "Menu"
+    "menu": "Menu",
+    "outils_creatifs": "Creative tools"
   },
   "vitrine": {
     "promo": "✦ New — the Gextimo showcase connects African fashion designers across West Africa.",
@@ -1336,7 +1407,11 @@
       "rights": "© 2026 Gextimo. All rights reserved."
     },
     "createurs_page": {
-      "tri": { "pertinence": "Relevance", "note": "Top rated", "distance": "Nearest" },
+      "tri": {
+        "pertinence": "Relevance",
+        "note": "Top rated",
+        "distance": "Nearest"
+      },
       "eyebrow": "Designers",
       "title": "Discover the designers",
       "subtitle": "Verified talents across Benin and West Africa.",
@@ -1909,5 +1984,44 @@
       "pts_activation": "Pts activation",
       "seuil_conversion": "Conversion threshold (pts → days)"
     }
+  },
+  "bienvenue": {
+    "titre": "Welcome to Gextimo!",
+    "sous_titre": "Your professional space is ready.",
+    "etape1_titre": "Complete your profile",
+    "etape1_desc": "Add your logo, specialty and contact info to be visible.",
+    "etape2_titre": "Add your creations",
+    "etape2_desc": "Publish your work to attract clients.",
+    "etape3_titre": "Receive orders",
+    "etape3_desc": "Clients will contact you directly through your showcase.",
+    "commencer": "Get started",
+    "passer": "Skip this step"
+  },
+  "outils_creatifs": {
+    "titre": "Creative tools",
+    "croquis": "Sketches",
+    "fiche_technique": "Tech sheets",
+    "patron": "Patterns",
+    "moodboard": "Moodboards",
+    "tous": "All",
+    "ajouter": "Add",
+    "titre_label": "Title",
+    "description_label": "Description",
+    "categorie_label": "Category",
+    "images_label": "Images",
+    "public_label": "Visible on my showcase",
+    "enregistrer": "Save",
+    "modifier": "Edit",
+    "supprimer": "Delete",
+    "confirmer_suppression": "Delete this creation?",
+    "aucun": "No creations in this category.",
+    "succes_ajout": "Creation added.",
+    "succes_modif": "Creation updated.",
+    "succes_suppr": "Creation deleted.",
+    "erreur": "An error occurred.",
+    "partager": "Share"
+  },
+  "sidebar": {
+    "outils_creatifs": "Creative tools"
   }
 }
