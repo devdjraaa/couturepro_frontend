@@ -581,7 +581,9 @@
     },
     "vip_titre": "VIP Favourites",
     "tous_titre": "All clients",
-    "ajouter_aria": "Add a client"
+    "ajouter_aria": "Add a client",
+    "import_resultat": "{{imported}} contact(s) imported, {{skipped}} duplicate(s) skipped.",
+    "import_erreur": "Import failed."
   },
   "commandes": {
     "titre": "Orders",
