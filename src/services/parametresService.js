@@ -194,4 +194,9 @@ export const parametresService = {
     const { data } = await api.post('/parametres/demande-verification', fd)
     return data
   },
+
+  async changerTypeCompte(type) {
+    const { data } = await api.put('/parametres/type-compte', { type })
+    return data
+  },
 }

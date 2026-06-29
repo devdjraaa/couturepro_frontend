@@ -12,6 +12,7 @@ export const ROUTES = {
   RECOVER_ACCOUNT:  '/recuperer-compte',
   LOGIN_SECRET_Q:   '/recuperer-compte/question-secrete',
   ONBOARDING:       '/onboarding',
+  BIENVENUE:        '/bienvenue',
 
   // Vitrine publique (web uniquement)
   VITRINE:           '/',

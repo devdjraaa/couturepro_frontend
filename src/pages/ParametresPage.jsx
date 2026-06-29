@@ -17,6 +17,7 @@ import { useCountdown } from '@/hooks/useCountdown'
 import { AppLayout } from '@/components/layout'
 import { QuotaBar, PlanCard, FeatureGate } from '@/components/abonnement'
 import { TabBar, Input, Select, Button, Skeleton, LanguageSwitcher } from '@/components/ui'
+import { parametresService } from '@/services/parametresService'
 import { cn } from '@/utils/cn'
 
 const DEVISES = [
@@ -609,6 +610,64 @@ function SecuriteTab() {
   )
 }
 
+function TypeCompteTab() {
+  const { t } = useTranslation()
+  const { atelier, refreshAtelier } = useAuth()
+  const [loading, setLoading] = useState(false)
+  const [selected, setSelected] = useState(atelier?.type || 'artisan')
+  const [msg, setMsg] = useState('')
+
+  const types = [
+    { value: 'artisan',  label: t('parametres.type_compte.artisan'),  desc: t('parametres.type_compte.artisan_desc') },
+    { value: 'designer', label: t('parametres.type_compte.designer'), desc: t('parametres.type_compte.designer_desc') },
+  ]
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (selected === atelier?.type) return
+    setLoading(true); setMsg('')
+    try {
+      await parametresService.changerTypeCompte(selected)
+      if (refreshAtelier) await refreshAtelier()
+      setMsg(t('parametres.type_compte.succes'))
+    } catch {
+      setMsg(t('parametres.type_compte.erreur'))
+    } finally { setLoading(false) }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <p className="text-sm text-dim">{t('parametres.type_compte.description')}</p>
+      <div className="space-y-2">
+        {types.map(tp => (
+          <label
+            key={tp.value}
+            className={cn(
+              'flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition',
+              selected === tp.value ? 'border-primary bg-primary/5' : 'border-edge bg-card',
+            )}
+          >
+            <input
+              type="radio" name="type_compte" value={tp.value}
+              checked={selected === tp.value}
+              onChange={() => setSelected(tp.value)}
+              className="mt-1"
+            />
+            <div>
+              <p className="font-semibold text-sm text-ink">{tp.label}</p>
+              <p className="text-xs text-dim">{tp.desc}</p>
+            </div>
+          </label>
+        ))}
+      </div>
+      {msg && <p className={cn('text-sm', msg.includes('mis à jour') || msg.includes('updated') ? 'text-success' : 'text-danger')}>{msg}</p>}
+      <Button type="submit" loading={loading} disabled={selected === atelier?.type} className="w-full">
+        {t('parametres.type_compte.confirmer')}
+      </Button>
+    </form>
+  )
+}
+
 export default function ParametresPage() {
   const { logout } = useAuth()
   const { t } = useTranslation()
@@ -620,6 +679,7 @@ export default function ParametresPage() {
     { key: 'preferences',  label: t('parametres.onglets.preferences')  },
     { key: 'facture',      label: t('parametres.onglets.facture')      },
     { key: 'abonnement',   label: t('parametres.onglets.abonnement')   },
+    { key: 'type_compte', label: t('parametres.type_compte.titre')    },
     { key: 'securite',     label: t('parametres.onglets.securite')     },
   ]
 
@@ -636,6 +696,7 @@ export default function ParametresPage() {
         {activeTab === 'preferences' && <PreferencesTab />}
         {activeTab === 'facture'     && <FactureTab />}
         {activeTab === 'abonnement'  && <AbonnementTab />}
+        {activeTab === 'type_compte' && <TypeCompteTab />}
         {activeTab === 'securite'    && <SecuriteTab />}
 
         <div className="pt-2 border-t border-edge space-y-2">

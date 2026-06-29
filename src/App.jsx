@@ -17,6 +17,7 @@ import ForgotPasswordPage       from '@/pages/auth/ForgotPasswordPage'
 import RecoverAccountPage       from '@/pages/auth/RecoverAccountPage'
 import LoginQuestionSecretePage from '@/pages/auth/LoginQuestionSecretePage'
 import ArtisanAppPage           from '@/pages/auth/ArtisanAppPage'
+import BienvenuePage            from '@/pages/auth/BienvenuePage'
 import ProfilPage             from '@/pages/ProfilPage'
 import MaVitrinePage          from '@/pages/MaVitrinePage'
 import AProposPage            from '@/pages/AProposPage'
@@ -117,6 +118,7 @@ export default function App() {
         <Route path="/artisan-app"           element={<ArtisanAppPage />} />
         <Route path={ROUTES.REGISTER}        element={<RegisterPage />}   />
         <Route path={ROUTES.ONBOARDING}      element={<OnboardingPage />} />
+        <Route path={ROUTES.BIENVENUE}       element={<BienvenuePage />} />
         <Route path={ROUTES.OTP}             element={<OtpPage />}             />
         <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPasswordPage />}  />
         <Route path={ROUTES.RECOVER_ACCOUNT} element={<RecoverAccountPage />}  />

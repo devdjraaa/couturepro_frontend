@@ -49,10 +49,22 @@
       "multi": "Multi-workshops"
     },
     "faq": [
-      { "q": "Can I change plan at any time?", "r": "Yes, you can upgrade or downgrade at any time. The difference is prorated." },
-      { "q": "Is the Free plan really free?", "r": "Yes, the Free plan is free with no commitment and no credit card. You only move to a paid plan when you want to." },
-      { "q": "How does yearly billing work?", "r": "Yearly billing is paid in one go and represents about 2 months free compared to monthly billing." },
-      { "q": "Is my data secure?", "r": "Yes, your data is encrypted and backed up daily." }
+      {
+        "q": "Can I change plan at any time?",
+        "r": "Yes, you can upgrade or downgrade at any time. The difference is prorated."
+      },
+      {
+        "q": "Is the Free plan really free?",
+        "r": "Yes, the Free plan is free with no commitment and no credit card. You only move to a paid plan when you want to."
+      },
+      {
+        "q": "How does yearly billing work?",
+        "r": "Yearly billing is paid in one go and represents about 2 months free compared to monthly billing."
+      },
+      {
+        "q": "Is my data secure?",
+        "r": "Yes, your data is encrypted and backed up daily."
+      }
     ]
   },
   "ma_vitrine": {
@@ -148,11 +160,35 @@
     "vide": "No documents yet.",
     "vide_filtres": "No documents match the filters.",
     "creer_premier": "Create your first document →",
-    "types": { "devis": "Quote", "facture": "Invoice", "recu": "Receipt" },
-    "modes": { "wave": "Wave", "om": "Orange Money", "especes": "Cash", "virement": "Bank transfer", "autre": "Other" },
-    "statuts": { "non_payee": "Unpaid", "acompte": "Deposit", "soldee": "Paid", "annulee": "CANCELLED" },
-    "gabarits": { "standard_label": "Standard", "standard_desc": "Clean, professional layout", "personnalise_label": "Custom", "personnalise_desc": "With your workshop's colors and logo" },
-    "ligne": { "description": "Description", "qte": "Qty", "prix": "Price" },
+    "types": {
+      "devis": "Quote",
+      "facture": "Invoice",
+      "recu": "Receipt"
+    },
+    "modes": {
+      "wave": "Wave",
+      "om": "Orange Money",
+      "especes": "Cash",
+      "virement": "Bank transfer",
+      "autre": "Other"
+    },
+    "statuts": {
+      "non_payee": "Unpaid",
+      "acompte": "Deposit",
+      "soldee": "Paid",
+      "annulee": "CANCELLED"
+    },
+    "gabarits": {
+      "standard_label": "Standard",
+      "standard_desc": "Clean, professional layout",
+      "personnalise_label": "Custom",
+      "personnalise_desc": "With your workshop's colors and logo"
+    },
+    "ligne": {
+      "description": "Description",
+      "qte": "Qty",
+      "prix": "Price"
+    },
     "modal": {
       "titre": "New document",
       "type": "Type",
@@ -582,7 +618,11 @@
       "prix_ph": "E.g. 25000",
       "livraison": "Expected delivery",
       "acompte": "Deposit received (XOF)",
-      "mode": { "especes": "Cash", "mobile_money": "Mobile Money", "virement": "Transfer" },
+      "mode": {
+        "especes": "Cash",
+        "mobile_money": "Mobile Money",
+        "virement": "Transfer"
+      },
       "description_ph": "Description / instructions (optional)",
       "urgent": "Urgent item",
       "marquer_urgent": "Mark as urgent",
@@ -621,7 +661,11 @@
       "note_interne": "Internal note",
       "note_interne_ph": "Instructions for the team, client references…",
       "mode_titre": "Payment method",
-      "mode": { "especes": "Cash", "mobile_money": "Mobile Money", "virement": "Transfer" },
+      "mode": {
+        "especes": "Cash",
+        "mobile_money": "Mobile Money",
+        "virement": "Transfer"
+      },
       "prix_total": "Total price (XOF)",
       "prix_total_ph": "E.g. 35000",
       "acompte": "Deposit received (XOF)",
@@ -901,8 +945,18 @@
     },
     "tout_lire": "Mark all read",
     "vide_categorie": "No notifications in this category.",
-    "cat": { "toutes": "All", "commande": "Orders", "paiement": "Payments", "systeme": "Reminders" },
-    "jour": { "aujourdhui": "Today", "hier": "Yesterday", "semaine": "This week", "ancien": "Older" }
+    "cat": {
+      "toutes": "All",
+      "commande": "Orders",
+      "paiement": "Payments",
+      "systeme": "Reminders"
+    },
+    "jour": {
+      "aujourdhui": "Today",
+      "hier": "Yesterday",
+      "semaine": "This week",
+      "ancien": "Older"
+    }
   },
   "abonnement": {
     "titre": "Subscription",
@@ -1038,7 +1092,18 @@
       "theme": "Appearance & theme",
       "a_propos": "About"
     },
-    "deconnexion": "Sign out"
+    "deconnexion": "Sign out",
+    "type_compte": {
+      "titre": "Account type",
+      "description": "Switch your profile between artisan and designer.",
+      "artisan": "Artisan",
+      "designer": "Designer",
+      "artisan_desc": "Workshop management, orders, clients, measurements.",
+      "designer_desc": "Public showcase, creations, gallery, quotes.",
+      "confirmer": "Confirm change",
+      "succes": "Account type updated.",
+      "erreur": "Error changing account type."
+    }
   },
   "theme": {
     "titre": "Appearance",
@@ -1329,7 +1394,11 @@
       "rights": "© 2026 Gextimo. All rights reserved."
     },
     "createurs_page": {
-      "tri": { "pertinence": "Relevance", "note": "Top rated", "distance": "Nearest" },
+      "tri": {
+        "pertinence": "Relevance",
+        "note": "Top rated",
+        "distance": "Nearest"
+      },
       "eyebrow": "Designers",
       "title": "Discover the designers",
       "subtitle": "Verified talents across Benin and West Africa.",
@@ -1902,5 +1971,17 @@
       "pts_activation": "Pts activation",
       "seuil_conversion": "Conversion threshold (pts → days)"
     }
+  },
+  "bienvenue": {
+    "titre": "Welcome to Gextimo!",
+    "sous_titre": "Your professional space is ready.",
+    "etape1_titre": "Complete your profile",
+    "etape1_desc": "Add your logo, specialty and contact info to be visible.",
+    "etape2_titre": "Add your creations",
+    "etape2_desc": "Publish your work to attract clients.",
+    "etape3_titre": "Receive orders",
+    "etape3_desc": "Clients will contact you directly through your showcase.",
+    "commencer": "Get started",
+    "passer": "Skip this step"
   }
 }
