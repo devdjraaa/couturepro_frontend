@@ -7,7 +7,7 @@ const formatCFA = (v) =>
 const formatDate = (d) =>
   new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })
 
-function buildHeaderHtml({ atelier, factureSettings, ref, date }) {
+function buildHeaderHtml({ atelier, factureSettings, ref, date, titre = 'FACTURE' }) {
   const personnalise = factureSettings?.format_facture === 'personnalise'
   const atelierNom    = atelier?.nom    || factureSettings?.atelier_nom    || 'Gextimo'
   const atelierAdresse = atelier?.adresse || factureSettings?.atelier_adresse || ''
@@ -31,7 +31,7 @@ function buildHeaderHtml({ atelier, factureSettings, ref, date }) {
           </div>
         </div>
         <div style="text-align:right;">
-          <h1 style="font-size:22px;font-weight:bold;margin:0;color:#111827;">FACTURE</h1>
+          <h1 style="font-size:22px;font-weight:bold;margin:0;color:#111827;">${titre}</h1>
           <p style="font-size:11px;color:#6b7280;margin:4px 0 0;">N° ${ref}</p>
           <p style="font-size:11px;color:#6b7280;margin:2px 0 0;">${date}</p>
         </div>
@@ -42,7 +42,7 @@ function buildHeaderHtml({ atelier, factureSettings, ref, date }) {
   return `
     <div style="border-bottom: 2px solid #6d28d9; padding-bottom: 12px; margin-bottom: 24px;">
       <p style="font-size: 11px; color: #7c3aed; font-weight: 600; margin: 0 0 4px;">${atelierNom}</p>
-      <h1 style="font-size: 20px; font-weight: bold; margin: 0;">FACTURE</h1>
+      <h1 style="font-size: 20px; font-weight: bold; margin: 0;">${titre}</h1>
       <p style="font-size: 13px; color: #555; margin: 4px 0 0;">N° ${ref}</p>
       <p style="font-size: 11px; color: #888; margin: 4px 0 0;">${date}${adresseLigne ? ' · ' + adresseLigne : ''}</p>
     </div>
@@ -119,9 +119,9 @@ function buildFooterHtml(factureSettings) {
   `
 }
 
-function buildFactureHtml({ atelier, factureSettings, ref, date, client, lignes, total, acompte, reste, note }) {
+function buildFactureHtml({ atelier, factureSettings, ref, date, client, lignes, total, acompte, reste, note, titre }) {
   return `
-    ${buildHeaderHtml({ atelier, factureSettings, ref, date })}
+    ${buildHeaderHtml({ atelier, factureSettings, ref, date, titre })}
     ${buildClientHtml(client)}
     ${buildLignesHtml(lignes)}
     ${buildTotauxHtml({ total, acompte, reste })}
@@ -215,6 +215,35 @@ export async function exportFactureGroupePdf({ groupe, atelier, factureSettings 
 
   const pdf = await renderPdf(html)
   return { pdf, filename: `facture-groupee-${slug(client?.nom ?? client?.prenom)}-${ref}.pdf` }
+}
+
+// Devis / facture / reçu « simple » du module Facturation (modèle Facture).
+const TITRES_DOC = { devis: 'DEVIS', facture: 'FACTURE', recu: 'REÇU' }
+
+export async function exportFactureDocPdf({ facture, atelier, factureSettings }) {
+  const titre = TITRES_DOC[facture?.type] ?? 'FACTURE'
+  const lignes = (facture?.lignes ?? []).map(l => ({
+    designation: l.description ?? 'Article',
+    qte: Number(l.quantite) || 1,
+    pu: Number(l.prix_unitaire) || 0,
+    total: (Number(l.quantite) || 1) * (Number(l.prix_unitaire) || 0),
+  }))
+  const total   = lignes.reduce((s, l) => s + l.total, 0)
+  const acompte = Number(facture?.acompte) || 0
+  const reste   = Math.max(0, total - acompte)
+
+  const html = buildFactureHtml({
+    atelier, factureSettings,
+    ref: facture?.numero ?? '',
+    date: formatDate(facture?.date_emission ?? new Date()),
+    client: { nom: facture?.client_nom, telephone: facture?.client_telephone },
+    lignes, total, acompte, reste,
+    note: facture?.notes,
+    titre,
+  })
+
+  const pdf = await renderPdf(html)
+  return { pdf, filename: `${facture?.type || 'facture'}-${slug(facture?.client_nom)}-${facture?.numero || ''}.pdf` }
 }
 
 // Télécharge le PDF, ou ouvre le partage natif (WhatsApp, Bluetooth, etc.) si disponible

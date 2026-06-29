@@ -7,9 +7,11 @@ import {
 import { useTranslation } from 'react-i18next'
 import QRCode from 'qrcode'
 import { partagerFactureHabillee } from '@/utils/imprimerFactureHabillee'
+import { exportFactureDocPdf, shareOrDownloadPdf } from '@/utils/exportFacturePdf'
 import { AppLayout } from '@/components/layout'
 import { useAuth } from '@/contexts'
 import { factureService } from '@/services/factureService'
+import { useFactureSettings } from '@/hooks/useParametres'
 import { FeatureGate } from '@/components/abonnement'
 import { usePlanFeature } from '@/hooks/usePlanFeature'
 import { cn } from '@/utils/cn'
@@ -286,7 +288,9 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
   const [acompteInput, setAcompteInput] = useState(String(doc.acompte || 0))
   const [qrDataUrl, setQrDataUrl] = useState(null)
   const [habilling, setHabilling] = useState(false)
+  const [pdfBusy, setPdfBusy] = useState(false)
   const { available: peutNormaliser } = usePlanFeature('facturation_normalisee')
+  const { data: factureSettings } = useFactureSettings()
 
   const habiller = async () => {
     if (habilling) return
@@ -294,6 +298,17 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
     try { await partagerFactureHabillee(doc, atelier) }
     catch { alert(t('facturation.doc.habillage_erreur')) }
     finally { setHabilling(false) }
+  }
+
+  // PDF « simple » (devis/facture/reçu non normalisé) : génération + partage/téléchargement.
+  const telechargerPdf = async () => {
+    if (pdfBusy) return
+    setPdfBusy(true)
+    try {
+      const { pdf, filename } = await exportFactureDocPdf({ facture: doc, atelier, factureSettings })
+      await shareOrDownloadPdf(pdf, filename, { title: filename })
+    } catch { alert(t('facturation.doc.pdf_erreur')) }
+    finally { setPdfBusy(false) }
   }
 
   // Le qrCode renvoyé par e-MECeF est un CONTENU (pas une URL) → on génère l'image QR.
@@ -522,6 +537,13 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
               className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-xl bg-[#25D366] text-white hover:opacity-90 transition"
             >
               <MessageCircle size={15} /> {t('facturation.doc.whatsapp')}
+            </button>
+            <button
+              onClick={telechargerPdf}
+              disabled={pdfBusy}
+              className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary transition disabled:opacity-60"
+            >
+              <Download size={15} /> {pdfBusy ? t('facturation.doc.pdf_generation') : t('facturation.doc.pdf')}
             </button>
             <button
               onClick={() => onDelete(doc.id)}
