@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 function PageHead({ eyebrow, title, subtitle }) {
   return (
@@ -14,6 +15,7 @@ function PageHead({ eyebrow, title, subtitle }) {
 
 export function QuiSommesNousPage() {
   const { t } = useTranslation()
+  usePageMeta({ title: t('vitrine.about.title'), path: '/qui-sommes-nous' })
   const values = t('vitrine.about.values', { returnObjects: true })
   return (
     <VitrineShell>
@@ -41,6 +43,7 @@ export function QuiSommesNousPage() {
 
 export function AidePage() {
   const { t } = useTranslation()
+  usePageMeta({ title: t('vitrine.aide.title'), description: t('vitrine.aide.subtitle'), path: '/aide' })
   const faq = t('vitrine.aide.faq', { returnObjects: true })
   return (
     <VitrineShell>
@@ -71,6 +74,7 @@ export function AidePage() {
 
 export function ArtisansPage() {
   const { t } = useTranslation()
+  usePageMeta({ title: t('vitrine.artisans.title'), path: '/artisans' })
   return (
     <VitrineShell>
       <section className="py-16">

@@ -3,7 +3,10 @@ import { Link } from 'react-router-dom'
 import {
   Store, ExternalLink, Copy, Check, Eye, EyeOff, MessageCircle,
   Sparkles, ClipboardList, Wallet, Image as ImageIcon,
+  ShieldCheck, ShieldAlert, Upload, Link as LinkIcon,
+  Star,
 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { AppLayout } from '@/components/layout'
 import { Skeleton } from '@/components/ui'
 import { useAuth } from '@/contexts'
@@ -15,7 +18,7 @@ import { collectionService } from '@/services/collectionService'
 import { avisService } from '@/services/avisService'
 import { devisService } from '@/services/devisService'
 import { vitrineStatsService } from '@/services/vitrineStatsService'
-
+import { abonnementService } from '@/services/abonnementService'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { cn } from '@/utils/cn'
 import { IS_NATIVE } from '@/constants/routes'
@@ -36,6 +39,7 @@ function Kpi({ icon: Icon, label, value, hint }) {
 }
 
 export default function MaVitrinePage() {
+  const { t } = useTranslation()
   const { atelier } = useAuth()
   const { available: peutSponsoriser } = usePlanFeature('sponsorisation')
   const dash = useDashboard()
@@ -65,6 +69,7 @@ export default function MaVitrinePage() {
   const [verifSent, setVerifSent] = useState(false)
   const [sponsoJours, setSponsoJours] = useState(7)
   const [sponsoBusy, setSponsoBusy] = useState(false)
+  const [sponsoOffres, setSponsoOffres] = useState(null)
 
   useEffect(() => {
     let on = true
@@ -111,7 +116,7 @@ export default function MaVitrinePage() {
     try {
       await vetementService.setPublication(v.id, next)
     } catch (e) {
-      if (e?.response?.status === 403) alert(e.response.data?.message || 'Limite atteinte.')
+      if (e?.response?.status === 403) alert(e.response.data?.message || t('ma_vitrine.limite_atteinte'))
       // échec → on revient à l'état précédent
       setCreations((list) => list.map((x) => (x.id === v.id ? { ...x, publie_vitrine: !next } : x)))
     } finally {
@@ -153,10 +158,10 @@ export default function MaVitrinePage() {
       async (pos) => {
         try {
           await parametresService.updateAtelier({ nom: atelier.nom, latitude: pos.coords.latitude, longitude: pos.coords.longitude })
-          setGeoMsg('✓ Position enregistrée')
-        } catch { setGeoMsg('Échec') }
+          setGeoMsg(t('ma_vitrine.geo_enregistre'))
+        } catch { setGeoMsg(t('ma_vitrine.geo_echec')) }
       },
-      () => setGeoMsg('Position refusée'),
+      () => setGeoMsg(t('ma_vitrine.geo_refuse')),
     )
   }
 
@@ -203,6 +208,26 @@ export default function MaVitrinePage() {
     try { await devisService.traiter(id) } catch { /* erreur silencieuse */ }
   }
 
+  const acheterSponso = async () => {
+    if (sponsoBusy) return
+    setSponsoBusy(true)
+    try {
+      const { checkout_url } = await abonnementService.acheterSponso({ jours: sponsoJours })
+      if (checkout_url) window.location.href = checkout_url
+    } catch { /* erreur silencieuse */ } finally {
+      setSponsoBusy(false)
+    }
+  }
+
+  const submitVerification = async () => {
+    if (verifSending || (!verifDoc && !verifLien.trim())) return
+    setVerifSending(true)
+    try {
+      await parametresService.demanderVerification({ fichier: verifDoc, lien: verifLien.trim() || null })
+      setVerifSent(true)
+    } catch { /* erreur silencieuse — le backend répondra quand l'endpoint sera disponible */ }
+    finally { setVerifSending(false) }
+  }
 
   return (
     <AppLayout>
@@ -211,46 +236,46 @@ export default function MaVitrinePage() {
         {/* En-tête */}
         <div className="pt-4 pb-3">
           <div className="flex items-center gap-2 text-primary text-xs font-bold uppercase tracking-wider">
-            <Store size={15} /> Espace public
+            <Store size={15} /> {t('ma_vitrine.espace_public')}
           </div>
-          <h1 className="text-2xl font-bold font-display text-ink mt-1">Ma Vitrine</h1>
-          <p className="text-sm text-dim mt-0.5">Votre présence sur la marketplace Gextimo.</p>
+          <h1 className="text-2xl font-bold font-display text-ink mt-1">{t('ma_vitrine.titre')}</h1>
+          <p className="text-sm text-dim mt-0.5">{t('ma_vitrine.sous_titre')}</p>
         </div>
 
         {/* Carte page publique */}
         <div className="rounded-2xl p-5 text-white bg-[#0D0D0D]">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <p className="text-white/60 text-xs">Votre page publique</p>
-              <p className="font-bold font-display text-lg truncate">{atelier?.nom ?? 'Mon atelier'}</p>
+              <p className="text-white/60 text-xs">{t('ma_vitrine.page_publique')}</p>
+              <p className="font-bold font-display text-lg truncate">{atelier?.nom ?? t('ma_vitrine.mon_atelier')}</p>
               <p className="text-white/50 text-xs mt-0.5 truncate">{publicUrl}</p>
             </div>
             <span className="shrink-0 text-[11px] font-semibold px-2 py-1 rounded-full bg-primary/20 text-primary border border-primary/30">
-              ● En ligne
+              {t('ma_vitrine.en_ligne')}
             </span>
           </div>
           <div className="flex gap-2 mt-4">
             {IS_NATIVE ? (
               <a href={publicUrl} target="_blank" rel="noopener noreferrer"
                  className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl bg-primary text-white hover:bg-primary-600 transition">
-                <ExternalLink size={16} /> Voir ma page
+                <ExternalLink size={16} /> {t('ma_vitrine.voir_page')}
               </a>
             ) : (
               <Link to={publicPath}
                     className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl bg-primary text-white hover:bg-primary-600 transition">
-                <ExternalLink size={16} /> Voir ma page
+                <ExternalLink size={16} /> {t('ma_vitrine.voir_page')}
               </Link>
             )}
             <button onClick={copyLink}
                     className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl border border-white/20 text-white hover:bg-white/10 transition">
-              {copied ? <><Check size={16} /> Copié !</> : <><Copy size={16} /> Copier le lien</>}
+              {copied ? <><Check size={16} /> {t('ma_vitrine.copie')}</> : <><Copy size={16} /> {t('ma_vitrine.copier_lien')}</>}
             </button>
           </div>
           {/* Opt-in : exposer le contact WhatsApp sur la vitrine publique */}
           <button onClick={toggleContact} disabled={savingContact}
                   className="w-full flex items-center gap-3 mt-3 pt-3 border-t border-white/10 disabled:opacity-60">
             <MessageCircle size={16} className="text-white/60 shrink-0" />
-            <span className="text-[13px] text-white/80 text-left flex-1">Afficher mon contact WhatsApp sur ma vitrine</span>
+            <span className="text-[13px] text-white/80 text-left flex-1">{t('ma_vitrine.afficher_whatsapp')}</span>
             <span className={cn('w-9 h-5 rounded-full relative transition shrink-0', contactPublic ? 'bg-primary' : 'bg-white/20')}>
               <span className={cn('absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all', contactPublic ? 'left-[18px]' : 'left-0.5')} />
             </span>
@@ -259,46 +284,46 @@ export default function MaVitrinePage() {
 
         {/* KPIs réels */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4">
-          <Kpi icon={Sparkles} label="Créations" value={nbCreations ?? '—'} hint={nbPubliees != null ? `${nbPubliees} publiée(s) sur la vitrine` : 'sur votre page'} />
-          <Kpi icon={ClipboardList} label="Commandes en cours" value={dash.isLoading ? '—' : dash.en_cours} />
-          <Kpi icon={Wallet} label="Encaissé ce mois" value={dash.isLoading ? '—' : formatCurrency(dash.total_encaisse)} />
+          <Kpi icon={Sparkles} label={t('ma_vitrine.kpi_creations')} value={nbCreations ?? '—'} hint={nbPubliees != null ? t('ma_vitrine.kpi_publiees', { n: nbPubliees }) : t('ma_vitrine.kpi_sur_page')} />
+          <Kpi icon={ClipboardList} label={t('ma_vitrine.kpi_commandes')} value={dash.isLoading ? '—' : dash.en_cours} />
+          <Kpi icon={Wallet} label={t('ma_vitrine.kpi_encaisse')} value={dash.isLoading ? '—' : formatCurrency(dash.total_encaisse)} />
         </div>
 
         {/* Profil public éditable */}
         <div className="mt-4 bg-card border border-edge rounded-xl p-4">
-          <p className="text-sm font-semibold text-ink mb-3">Mon profil public</p>
+          <p className="text-sm font-semibold text-ink mb-3">{t('ma_vitrine.mon_profil')}</p>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-14 h-14 rounded-xl overflow-hidden bg-subtle flex items-center justify-center shrink-0">
               {logoUrl ? <img src={logoUrl} alt="Logo" className="w-full h-full object-cover" /> : <Store size={20} className="text-ghost" />}
             </div>
             <label className="text-sm font-semibold text-primary cursor-pointer hover:underline">
-              {uploadingLogo ? 'Envoi…' : 'Changer le logo / la photo'}
+              {uploadingLogo ? t('ma_vitrine.envoi') : t('ma_vitrine.changer_logo')}
               <input type="file" accept="image/*" onChange={onLogoChange} disabled={uploadingLogo} className="hidden" />
             </label>
           </div>
-          <label className="block text-xs font-medium text-dim mb-1">Spécialité</label>
+          <label className="block text-xs font-medium text-dim mb-1">{t('ma_vitrine.specialite')}</label>
           <input value={specialite} onChange={(e) => setSpecialite(e.target.value)} maxLength={120}
-                 placeholder="Ex : Haute couture, Tailleur…"
+                 placeholder={t('ma_vitrine.specialite_ph')}
                  className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink mb-3 focus:outline-none focus:ring-2 focus:ring-primary/30" />
-          <label className="block text-xs font-medium text-dim mb-1">Bio</label>
+          <label className="block text-xs font-medium text-dim mb-1">{t('ma_vitrine.bio')}</label>
           <textarea value={bio} onChange={(e) => setBio(e.target.value)} rows={3} maxLength={1000}
-                    placeholder="Présentez votre atelier en quelques mots…"
+                    placeholder={t('ma_vitrine.bio_ph')}
                     className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink resize-none focus:outline-none focus:ring-2 focus:ring-primary/30" />
-          <label className="block text-xs font-medium text-dim mb-1 mt-3">Réseaux & site</label>
+          <label className="block text-xs font-medium text-dim mb-1 mt-3">{t('ma_vitrine.reseaux')}</label>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-            <input value={instagram} onChange={(e) => setInstagram(e.target.value)} maxLength={255} placeholder="Instagram (@ ou lien)" className="rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
-            <input value={facebook} onChange={(e) => setFacebook(e.target.value)} maxLength={255} placeholder="Facebook (lien)" className="rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
-            <input value={siteWeb} onChange={(e) => setSiteWeb(e.target.value)} maxLength={255} placeholder="Site web" className="rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
+            <input value={instagram} onChange={(e) => setInstagram(e.target.value)} maxLength={255} placeholder={t('ma_vitrine.instagram_ph')} className="rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
+            <input value={facebook} onChange={(e) => setFacebook(e.target.value)} maxLength={255} placeholder={t('ma_vitrine.facebook_ph')} className="rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
+            <input value={siteWeb} onChange={(e) => setSiteWeb(e.target.value)} maxLength={255} placeholder={t('ma_vitrine.site_ph')} className="rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
           </div>
           <button type="button" onClick={useMyPosition} className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline">
-            📍 Utiliser ma position {geoMsg && <span className="text-xs text-dim font-normal">{geoMsg}</span>}
+            📍 {t('ma_vitrine.utiliser_position')} {geoMsg && <span className="text-xs text-dim font-normal">{geoMsg}</span>}
           </button>
           <div className="flex items-center gap-3 mt-3">
             <button onClick={saveProfile} disabled={savingProfile}
                     className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-600 transition disabled:opacity-60">
-              {savingProfile ? 'Enregistrement…' : 'Enregistrer'}
+              {savingProfile ? t('ma_vitrine.enregistrement') : t('commun.enregistrer')}
             </button>
-            {profileSaved && <span className="text-xs text-success font-medium">✓ Enregistré</span>}
+            {profileSaved && <span className="text-xs text-success font-medium">{t('ma_vitrine.enregistre')}</span>}
           </div>
         </div>
 
@@ -307,20 +332,20 @@ export default function MaVitrinePage() {
           <div className="mt-4 bg-card border border-edge rounded-xl p-4 flex items-center gap-3">
             <ShieldCheck size={20} className="text-success shrink-0" />
             <div>
-              <p className="text-sm font-semibold text-ink">Compte vérifié</p>
-              <p className="text-xs text-dim">Le badge « Vérifié » est affiché sur votre vitrine publique.</p>
+              <p className="text-sm font-semibold text-ink">{t('ma_vitrine.compte_verifie')}</p>
+              <p className="text-xs text-dim">{t('ma_vitrine.verifie_desc')}</p>
             </div>
           </div>
         ) : (
           <div className="mt-4 bg-card border border-edge rounded-xl p-4">
             <div className="flex items-center gap-2 mb-1">
               <ShieldAlert size={17} className="text-warning shrink-0" />
-              <p className="text-sm font-semibold text-ink">Demander la vérification</p>
+              <p className="text-sm font-semibold text-ink">{t('ma_vitrine.demander_verif')}</p>
             </div>
-            <p className="text-xs text-dim mb-3">Joignez un document officiel (CNI, diplôme, certificat de créateur…) ou un lien vers votre portfolio / profil professionnel pour obtenir le badge « Vérifié ».</p>
+            <p className="text-xs text-dim mb-3">{t('ma_vitrine.verif_desc')}</p>
 
-            {verifSent ? (
-              <p className="text-sm text-success font-medium">✓ Demande envoyée — nous vous répondons sous 48 h.</p>
+            {(verifSent || atelier?.verification_demandee_a) ? (
+              <p className="text-sm text-success font-medium">{t('ma_vitrine.verif_envoyee')}</p>
             ) : (
               <div className="space-y-3">
                 <label className="flex items-center gap-2 cursor-pointer group">
@@ -328,7 +353,7 @@ export default function MaVitrinePage() {
                     {verifDoc ? <Check size={14} className="text-success" /> : <Upload size={14} className="text-ghost" />}
                   </div>
                   <span className="text-xs text-dim group-hover:text-ink transition truncate">
-                    {verifDoc ? verifDoc.name : 'Joindre un document (PDF, JPG, PNG)'}
+                    {verifDoc ? verifDoc.name : t('ma_vitrine.joindre_doc')}
                   </span>
                   <input
                     type="file"
@@ -343,7 +368,7 @@ export default function MaVitrinePage() {
                     type="url"
                     value={verifLien}
                     onChange={(e) => setVerifLien(e.target.value)}
-                    placeholder="Lien vers votre portfolio (https://…)"
+                    placeholder={t('ma_vitrine.portfolio_ph')}
                     className="flex-1 rounded-lg border border-edge bg-app px-3 py-2 text-xs text-ink focus:outline-none focus:ring-2 focus:ring-primary/30"
                   />
                 </div>
@@ -352,7 +377,7 @@ export default function MaVitrinePage() {
                   disabled={verifSending || (!verifDoc && !verifLien.trim())}
                   className="text-sm font-semibold px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-600 transition disabled:opacity-50"
                 >
-                  {verifSending ? 'Envoi…' : 'Envoyer la demande'}
+                  {verifSending ? t('ma_vitrine.envoi') : t('ma_vitrine.envoyer_demande')}
                 </button>
               </div>
             )}
@@ -364,25 +389,23 @@ export default function MaVitrinePage() {
         <div className="mt-4 bg-card border border-edge rounded-xl p-4">
           <div className="flex items-center gap-2 mb-1">
             <Star size={17} className={atelier?.sponsorise ? 'text-warning' : 'text-ghost'} />
-            <p className="text-sm font-semibold text-ink">Mise en avant sponsorisée</p>
+            <p className="text-sm font-semibold text-ink">{t('ma_vitrine.sponso_titre')}</p>
             {atelier?.sponsorise && (
               <span className="ml-auto text-[11px] font-bold px-2 py-0.5 rounded-full bg-warning/15 text-warning border border-warning/25">
-                Actif
+                {t('ma_vitrine.actif')}
               </span>
             )}
           </div>
 
           {atelier?.sponsorise ? (
-            <p className="text-xs text-dim">Votre atelier est actuellement mis en avant en tête des résultats de recherche sur la vitrine.</p>
+            <p className="text-xs text-dim">{t('ma_vitrine.sponso_actif_desc')}</p>
+          ) : sponsoOffres && !sponsoOffres.actif ? (
+            <p className="text-xs text-dim">{t('ma_vitrine.sponso_indispo')}</p>
           ) : (
             <>
-              <p className="text-xs text-dim mb-3">Apparaissez en premier sur la vitrine publique et augmentez votre visibilité auprès des clients.</p>
+              <p className="text-xs text-dim mb-3">{t('ma_vitrine.sponso_desc')}</p>
               <div className="grid grid-cols-3 gap-2 mb-3">
-                {[
-                  { jours: 7,  prix: 1500  },
-                  { jours: 15, prix: 2500  },
-                  { jours: 30, prix: 4500  },
-                ].map(({ jours, prix }) => (
+                {(sponsoOffres?.offres ?? []).map(({ jours, prix }) => (
                   <button
                     key={jours}
                     onClick={() => setSponsoJours(jours)}
@@ -393,18 +416,18 @@ export default function MaVitrinePage() {
                         : 'border-edge text-dim hover:border-primary hover:text-ink',
                     )}
                   >
-                    <span className="font-bold">{jours} j</span>
-                    <span className="text-[11px] font-normal mt-0.5">{prix.toLocaleString('fr-FR')} FCFA</span>
+                    <span className="font-bold">{t('ma_vitrine.jours', { n: jours })}</span>
+                    <span className="text-[11px] font-normal mt-0.5">{Number(prix).toLocaleString('fr-FR')} {t('ma_vitrine.fcfa')}</span>
                   </button>
                 ))}
               </div>
               <button
                 onClick={acheterSponso}
-                disabled={sponsoBusy}
+                disabled={sponsoBusy || !sponsoOffres?.offres?.length}
                 className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl bg-primary text-white hover:bg-primary-600 transition disabled:opacity-60"
               >
                 <Star size={15} />
-                {sponsoBusy ? 'Redirection…' : `Sponsoriser ${sponsoJours} jours`}
+                {sponsoBusy ? t('ma_vitrine.redirection') : t('ma_vitrine.sponsoriser_n', { n: sponsoJours })}
               </button>
             </>
           )}
@@ -413,40 +436,40 @@ export default function MaVitrinePage() {
 
         {/* Collections */}
         <div className="mt-4 bg-card border border-edge rounded-xl p-4">
-          <p className="text-sm font-semibold text-ink mb-3">Mes collections</p>
+          <p className="text-sm font-semibold text-ink mb-3">{t('ma_vitrine.mes_collections')}</p>
           <div className="flex flex-wrap gap-2 mb-3">
-            {collections.length === 0 && <span className="text-xs text-ghost">Aucune collection pour le moment.</span>}
+            {collections.length === 0 && <span className="text-xs text-ghost">{t('ma_vitrine.aucune_collection')}</span>}
             {collections.map((c) => (
               <span key={c.id} className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-subtle text-ink">
                 {c.nom}{c.vetements_count != null && <span className="text-ghost">· {c.vetements_count}</span>}
-                <button onClick={() => removeCollection(c.id)} className="text-ghost hover:text-danger" aria-label="Supprimer">✕</button>
+                <button onClick={() => removeCollection(c.id)} className="text-ghost hover:text-danger" aria-label={t('commun.supprimer')}>✕</button>
               </span>
             ))}
           </div>
           <div className="flex gap-2">
             <input value={newCollection} onChange={(e) => setNewCollection(e.target.value)} maxLength={120}
                    onKeyDown={(e) => { if (e.key === 'Enter') addCollection() }}
-                   placeholder="Nouvelle collection…"
+                   placeholder={t('ma_vitrine.nouvelle_collection_ph')}
                    className="flex-1 rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
-            <button onClick={addCollection} className="text-sm font-semibold px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-600 transition">Ajouter</button>
+            <button onClick={addCollection} className="text-sm font-semibold px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-600 transition">{t('commun.ajouter')}</button>
           </div>
         </div>
 
         {/* Avis à valider */}
         {pendingAvis.length > 0 && (
           <div className="mt-4 bg-card border border-edge rounded-xl p-4">
-            <p className="text-sm font-semibold text-ink mb-3">Avis à valider <span className="text-primary">({pendingAvis.length})</span></p>
+            <p className="text-sm font-semibold text-ink mb-3">{t('ma_vitrine.avis_titre')} <span className="text-primary">({pendingAvis.length})</span></p>
             <div className="space-y-3">
               {pendingAvis.map((a) => (
                 <div key={a.id} className="border border-edge rounded-lg p-3">
                   <div className="flex items-center justify-between">
-                    <b className="text-sm text-ink">{a.auteur_nom}{a.statut === 'signale' && <span className="text-[10px] font-bold text-danger ml-1.5">⚑ signalé</span>}</b>
+                    <b className="text-sm text-ink">{a.auteur_nom}{a.statut === 'signale' && <span className="text-[10px] font-bold text-danger ml-1.5">{t('ma_vitrine.signale')}</span>}</b>
                     <span className="text-primary text-xs">{'★'.repeat(a.note)}{'☆'.repeat(5 - a.note)}</span>
                   </div>
                   {a.texte && <p className="text-xs text-dim mt-1">{a.texte}</p>}
                   <div className="flex gap-2 mt-2">
-                    <button onClick={() => moderateAvis(a.id, 'valide')} className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-white hover:bg-primary-600 transition">Valider</button>
-                    <button onClick={() => moderateAvis(a.id, 'rejete')} className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-edge text-dim hover:text-danger hover:border-danger transition">Rejeter</button>
+                    <button onClick={() => moderateAvis(a.id, 'valide')} className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-white hover:bg-primary-600 transition">{t('ma_vitrine.valider')}</button>
+                    <button onClick={() => moderateAvis(a.id, 'rejete')} className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-edge text-dim hover:text-danger hover:border-danger transition">{t('ma_vitrine.rejeter')}</button>
                   </div>
                 </div>
               ))}
@@ -459,7 +482,7 @@ export default function MaVitrinePage() {
           <div className="mt-4 bg-card border border-edge rounded-xl p-4">
             <div className="flex items-center gap-2 mb-3">
               <ClipboardList size={16} className="text-primary" />
-              <p className="text-sm font-semibold text-ink">Demandes de devis <span className="text-primary">({devis.filter((d) => d.statut === 'nouveau').length})</span></p>
+              <p className="text-sm font-semibold text-ink">{t('ma_vitrine.devis_titre')} <span className="text-primary">({devis.filter((d) => d.statut === 'nouveau').length})</span></p>
             </div>
             <div className="space-y-3">
               {devis.filter((d) => d.statut === 'nouveau').map((d) => (
@@ -471,13 +494,13 @@ export default function MaVitrinePage() {
                   {d.description && <p className="text-xs text-dim mt-1 whitespace-pre-line">{d.description}</p>}
                   {(d.budget || d.delai) && (
                     <div className="flex gap-3 mt-1.5 text-[11px] text-ghost">
-                      {d.budget && <span>Budget : {d.budget} FCFA</span>}
-                      {d.delai && <span>Délai : {d.delai}</span>}
+                      {d.budget && <span>{t('ma_vitrine.budget')} {d.budget} {t('ma_vitrine.fcfa')}</span>}
+                      {d.delai && <span>{t('ma_vitrine.delai')} {d.delai}</span>}
                     </div>
                   )}
                   <div className="flex gap-2 mt-2">
-                    <button onClick={() => traiterDevis(d.id)} className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-white hover:bg-primary-600 transition">Marquer traité</button>
-                    {d.contact && <a href={`https://wa.me/${d.contact.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-edge text-dim hover:text-primary hover:border-primary transition">Répondre</a>}
+                    <button onClick={() => traiterDevis(d.id)} className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-white hover:bg-primary-600 transition">{t('ma_vitrine.marquer_traite')}</button>
+                    {d.contact && <a href={`https://wa.me/${d.contact.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-edge text-dim hover:text-primary hover:border-primary transition">{t('ma_vitrine.repondre')}</a>}
                   </div>
                 </div>
               ))}
@@ -487,12 +510,12 @@ export default function MaVitrinePage() {
 
         {/* Statistiques publiques (réelles) */}
         <div className="mt-4 bg-subtle border border-edge rounded-xl p-4">
-          <p className="text-sm font-semibold text-ink mb-3">Statistiques publiques</p>
+          <p className="text-sm font-semibold text-ink mb-3">{t('ma_vitrine.stats_titre')}</p>
           <div className="grid grid-cols-3 gap-3">
             {[
-              { icon: Eye, label: 'Visites', value: stats ? stats.visites.total : '—' },
-              { icon: Store, label: 'Ce mois', value: stats ? stats.visites.mois : '—' },
-              { icon: MessageCircle, label: 'Contacts', value: stats ? stats.contacts.total : '—' },
+              { icon: Eye, label: t('ma_vitrine.visites'), value: stats ? stats.visites.total : '—' },
+              { icon: Store, label: t('ma_vitrine.ce_mois'), value: stats ? stats.visites.mois : '—' },
+              { icon: MessageCircle, label: t('ma_vitrine.contacts'), value: stats ? stats.contacts.total : '—' },
             ].map((s) => (
               <div key={s.label} className="text-center">
                 <s.icon size={18} className="mx-auto text-primary" />
@@ -505,8 +528,8 @@ export default function MaVitrinePage() {
 
         {/* Créations */}
         <div className="flex items-center justify-between mt-6 mb-3">
-          <h2 className="text-lg font-bold font-display text-ink">Vos créations</h2>
-          <Link to="/catalogue" className="text-sm font-semibold text-primary hover:underline">Gérer →</Link>
+          <h2 className="text-lg font-bold font-display text-ink">{t('ma_vitrine.vos_creations')}</h2>
+          <Link to="/catalogue" className="text-sm font-semibold text-primary hover:underline">{t('ma_vitrine.gerer')}</Link>
         </div>
 
         {creations === null ? (
@@ -516,8 +539,8 @@ export default function MaVitrinePage() {
         ) : creations.length === 0 ? (
           <div className="bg-card border border-edge rounded-xl p-8 text-center">
             <ImageIcon size={28} className="mx-auto text-ghost" />
-            <p className="text-sm text-dim mt-2">Aucune création pour le moment.</p>
-            <Link to="/catalogue" className="inline-flex mt-3 text-sm font-semibold text-primary hover:underline">Ajouter une création</Link>
+            <p className="text-sm text-dim mt-2">{t('ma_vitrine.aucune_creation')}</p>
+            <Link to="/catalogue" className="inline-flex mt-3 text-sm font-semibold text-primary hover:underline">{t('ma_vitrine.ajouter_creation')}</Link>
           </div>
         ) : (
           <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
@@ -532,7 +555,7 @@ export default function MaVitrinePage() {
                     <button
                       onClick={() => togglePublication(v)}
                       disabled={busy.has(v.id)}
-                      title={pub ? 'Retirer de la vitrine' : 'Publier sur la vitrine'}
+                      title={pub ? t('ma_vitrine.retirer_vitrine') : t('ma_vitrine.publier_vitrine')}
                       className={cn(
                         'absolute top-1.5 right-1.5 w-7 h-7 rounded-full flex items-center justify-center transition shadow-sm disabled:opacity-50',
                         pub ? 'bg-primary text-white' : 'bg-card text-ghost border border-edge',
@@ -544,12 +567,12 @@ export default function MaVitrinePage() {
                   <div className="p-2">
                     <p className="text-xs font-medium text-ink truncate">{v.nom}</p>
                     <p className={cn('text-[10px] font-semibold mt-0.5', pub ? 'text-primary' : 'text-ghost')}>
-                      {pub ? 'Publié' : 'Masqué'}
+                      {pub ? t('ma_vitrine.publie') : t('ma_vitrine.masque')}
                     </p>
                     {collections.length > 0 && (
                       <select value={v.collection_id || ''} onChange={(e) => assignCollection(v.id, e.target.value)}
                               className="mt-1.5 w-full text-[11px] rounded border border-edge bg-app px-1.5 py-1 text-dim focus:outline-none">
-                        <option value="">— Collection</option>
+                        <option value="">{t('ma_vitrine.collection_opt')}</option>
                         {collections.map((c) => <option key={c.id} value={c.id}>{c.nom}</option>)}
                       </select>
                     )}
@@ -561,9 +584,7 @@ export default function MaVitrinePage() {
         )}
 
         <p className="text-2xs text-ghost mt-4 leading-relaxed">
-          Touchez l'icône œil sur une création pour la <b className="text-dim">publier</b> ou la
-          <b className="text-dim"> retirer</b> de votre page publique. Les statistiques de visites et
-          de contacts arrivent prochainement.
+          {t('ma_vitrine.aide')}
         </p>
       </div>
     </AppLayout>

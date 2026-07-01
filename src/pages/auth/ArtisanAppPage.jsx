@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom'
 import { Smartphone, ArrowRight, LogOut } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts'
 import { ROUTES } from '@/constants/routes'
 import { VitrineLogo } from '@/pages/vitrine/VitrineChrome'
 
 export default function ArtisanAppPage() {
+  const { t } = useTranslation()
   const { logout, atelier } = useAuth()
 
   return (
@@ -18,13 +20,13 @@ export default function ArtisanAppPage() {
       </div>
 
       <h1 className="font-display font-bold text-2xl text-ink mb-2">
-        Votre espace est sur l'application mobile
+        {t('artisan_app.titre')}
       </h1>
       <p className="text-dim max-w-sm mb-2">
-        Bonjour {atelier?.nom && <strong className="text-ink">{atelier.nom}</strong>}. L'espace Artisan Gextimo — gestion des clients, commandes, mesures et bien plus — est optimisé pour l'application mobile.
+        {atelier?.nom && <>{t('commun.bonjour')} <strong className="text-ink">{atelier.nom}</strong>. </>}{t('artisan_app.intro')}
       </p>
       <p className="text-sm text-ghost max-w-sm mb-8">
-        Téléchargez l'application ou continuez sur le navigateur.
+        {t('artisan_app.sous_texte')}
       </p>
 
       <div className="flex flex-col gap-3 w-full max-w-xs">
@@ -35,14 +37,14 @@ export default function ArtisanAppPage() {
           className="inline-flex items-center justify-center gap-2 font-semibold px-5 py-3 rounded-xl bg-primary text-white hover:bg-primary-600 transition"
         >
           <Smartphone size={17} />
-          Télécharger sur Android
+          {t('artisan_app.telecharger')}
         </a>
 
         <Link
           to={ROUTES.DASHBOARD}
           className="inline-flex items-center justify-center gap-2 font-semibold px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary transition"
         >
-          Continuer sur le navigateur
+          {t('artisan_app.continuer')}
           <ArrowRight size={16} />
         </Link>
 
@@ -51,7 +53,7 @@ export default function ArtisanAppPage() {
           className="inline-flex items-center justify-center gap-2 text-sm text-ghost hover:text-danger transition mt-1"
         >
           <LogOut size={14} />
-          Se déconnecter
+          {t('auth.deconnexion')}
         </button>
       </div>
     </div>

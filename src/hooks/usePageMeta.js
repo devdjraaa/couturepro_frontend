@@ -2,8 +2,10 @@ import { useEffect } from 'react'
 
 const DEFAULT_TITLE = 'Gextimo — La marketplace des créateurs de mode africains'
 const DEFAULT_DESC  = 'Trouvez les meilleurs designers et tailleurs africains. Commandez des tenues sur mesure, suivez vos commandes en temps réel.'
-const DEFAULT_IMAGE = 'https://gextimo.com/og-cover.png'
-const BASE_URL      = 'https://gextimo.com'
+// Domaine courant (zéro hardcode) : fonctionne quel que soit le sous-domaine de déploiement.
+const ORIGIN        = typeof window !== 'undefined' ? window.location.origin : ''
+const DEFAULT_IMAGE = `${ORIGIN}/og-cover.png`
+const BASE_URL      = ORIGIN
 
 function setMeta(property, content) {
   if (!content) return

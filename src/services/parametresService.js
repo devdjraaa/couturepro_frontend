@@ -105,13 +105,13 @@ export const parametresService = {
   },
 
   async getLangue() {
-    if (isMock()) { await delay(); return { langue: localStorage.getItem('cp_langue') ?? 'fr' } }
+    if (isMock()) { await delay(); return { langue: localStorage.getItem('cp_lang') ?? 'fr' } }
     const { data } = await api.get('/parametres/langue')
     return data
   },
 
   async updateLangue(langue) {
-    if (isMock()) { await delay(); localStorage.setItem('cp_langue', langue); return { langue } }
+    if (isMock()) { await delay(); localStorage.setItem('cp_lang', langue); return { langue } }
     const { data } = await api.put('/parametres/langue', { langue })
     return data
   },
@@ -187,4 +187,16 @@ export const parametresService = {
     try { await api.delete('/notifications/fcm-token') } catch {}
   },
 
+  async demanderVerification({ fichier, lien }) {
+    const fd = new FormData()
+    if (fichier) fd.append('document', fichier)
+    if (lien)    fd.append('lien', lien)
+    const { data } = await api.post('/parametres/demande-verification', fd)
+    return data
+  },
+
+  async changerTypeCompte(type) {
+    const { data } = await api.put('/parametres/type-compte', { type })
+    return data
+  },
 }

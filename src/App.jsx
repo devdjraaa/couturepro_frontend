@@ -17,12 +17,14 @@ import ForgotPasswordPage       from '@/pages/auth/ForgotPasswordPage'
 import RecoverAccountPage       from '@/pages/auth/RecoverAccountPage'
 import LoginQuestionSecretePage from '@/pages/auth/LoginQuestionSecretePage'
 import ArtisanAppPage           from '@/pages/auth/ArtisanAppPage'
+import BienvenuePage            from '@/pages/auth/BienvenuePage'
 import ProfilPage             from '@/pages/ProfilPage'
 import MaVitrinePage          from '@/pages/MaVitrinePage'
 import AProposPage            from '@/pages/AProposPage'
 import FAQPage                from '@/pages/FAQPage'
 import ContactPage            from '@/pages/ContactPage'
 import FacturationPage        from '@/pages/FacturationPage'
+import OutilsCreatifsPage     from '@/pages/OutilsCreatifsPage'
 import HistoriquePage         from '@/pages/HistoriquePage'
 import ArchivesPage           from '@/pages/ArchivesPage'
 import CaissePage             from '@/pages/CaissePage'
@@ -117,6 +119,7 @@ export default function App() {
         <Route path="/artisan-app"           element={<ArtisanAppPage />} />
         <Route path={ROUTES.REGISTER}        element={<RegisterPage />}   />
         <Route path={ROUTES.ONBOARDING}      element={<OnboardingPage />} />
+        <Route path={ROUTES.BIENVENUE}       element={<BienvenuePage />} />
         <Route path={ROUTES.OTP}             element={<OtpPage />}             />
         <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPasswordPage />}  />
         <Route path={ROUTES.RECOVER_ACCOUNT} element={<RecoverAccountPage />}  />
@@ -151,6 +154,7 @@ export default function App() {
           <Route path={ROUTES.PHOTOS_VIP}       element={<GaleriePage />} />
           <Route path="/galerie"               element={<GaleriePage />} />
           <Route path={ROUTES.FACTURATION}      element={<FacturationPage />}     />
+          <Route path={ROUTES.OUTILS_CREATIFS} element={<OutilsCreatifsPage />}  />
           <Route path={ROUTES.HISTORIQUE}       element={<HistoriquePage />}      />
           <Route path="/archives"               element={<ArchivesPage />}        />
           <Route path="/caisse"                 element={<CaissePage />}          />

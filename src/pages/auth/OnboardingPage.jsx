@@ -21,7 +21,7 @@ export default function OnboardingPage() {
   const isLast = index === SLIDES.length - 1
 
   const next = () => {
-    if (isLast) navigate(ROUTES.DASHBOARD, { replace: true })
+    if (isLast) navigate(ROUTES.BIENVENUE, { replace: true })
     else setIndex(i => i + 1)
   }
 

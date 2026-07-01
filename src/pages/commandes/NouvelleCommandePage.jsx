@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { ChevronLeft, Search, ImagePlus, X, AlertTriangle, Check, Plus, Trash2, Info } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useClients } from '@/hooks/useClients'
 import { useVetements } from '@/hooks/useVetements'
 import { useCreateCommande } from '@/hooks/useCommandes'
@@ -16,12 +17,13 @@ import { cn } from '@/utils/cn'
 const TODAY = new Date().toISOString().split('T')[0]
 
 // ── Indicateur de progression ─────────────────────────────────────────────────
-const STEP_LABELS = ['Client', 'Modèle', 'Délai', 'Prix']
+const STEP_KEYS = ['client', 'modele', 'delai', 'prix']
+const MODE_VALUES = ['especes', 'mobile_money', 'virement']
 
 function StepDots({ current }) {
   return (
     <div className="flex items-center justify-center gap-2 py-2">
-      {STEP_LABELS.map((label, i) => (
+      {STEP_KEYS.map((label, i) => (
         <div key={i} className="flex flex-col items-center gap-1">
           <div className={cn(
             'w-2 h-2 rounded-full transition-all duration-200',
@@ -36,6 +38,7 @@ function StepDots({ current }) {
 }
 
 function StepHeader({ step, onBack }) {
+  const { t } = useTranslation()
   return (
     <div className="flex items-center gap-3 px-4 pt-4 pb-2">
       <button
@@ -46,8 +49,8 @@ function StepHeader({ step, onBack }) {
         <ChevronLeft size={18} />
       </button>
       <div className="flex-1">
-        <p className="text-xs text-ghost">{`Étape ${step + 1} sur ${STEP_LABELS.length}`}</p>
-        <p className="text-base font-semibold text-ink">{STEP_LABELS[step]}</p>
+        <p className="text-xs text-ghost">{t('commandes.creation.etape', { n: step + 1, total: STEP_KEYS.length })}</p>
+        <p className="text-base font-semibold text-ink">{t(`commandes.creation.step_${STEP_KEYS[step]}`)}</p>
       </div>
     </div>
   )
@@ -55,6 +58,7 @@ function StepHeader({ step, onBack }) {
 
 // ── Étape 1 — Client ──────────────────────────────────────────────────────────
 function StepClient({ data, setData, onNext }) {
+  const { t } = useTranslation()
   const [search, setSearch] = useState('')
   const { data: clients = [], isLoading } = useClients()
 
@@ -77,7 +81,7 @@ function StepClient({ data, setData, onNext }) {
             type="search"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Rechercher un client…"
+            placeholder={t('commandes.creation.recherche_client')}
             className="w-full pl-9 pr-4 py-2.5 bg-subtle rounded-xl text-sm text-ink placeholder:text-ghost focus:outline-none focus:ring-2 focus:ring-primary/30"
             autoFocus
           />
@@ -89,7 +93,7 @@ function StepClient({ data, setData, onNext }) {
           [...Array(5)].map((_, i) => <Skeleton key={i} className="h-14 rounded-xl" />)
         ) : filtered.length === 0 ? (
           <p className="text-sm text-ghost text-center py-8">
-            {search ? 'Aucun client trouvé.' : 'Aucun client dans le carnet.'}
+            {search ? t('commandes.creation.aucun_client') : t('commandes.creation.carnet_vide')}
           </p>
         ) : (
           filtered.map(client => {
@@ -124,6 +128,7 @@ function StepClient({ data, setData, onNext }) {
 
 // ── Étape 2 — Modèle (multi-articles) ────────────────────────────────────────
 function StepModele({ data, setData, onNext }) {
+  const { t } = useTranslation()
   const { data: vetements = [], isLoading } = useVetements()
   const fileRef = useRef(null)
 
@@ -171,13 +176,13 @@ function StepModele({ data, setData, onNext }) {
       {/* Articles (#15, #18-20) */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <p className="text-xs font-semibold text-ghost uppercase tracking-widest">Articles</p>
+          <p className="text-xs font-semibold text-ghost uppercase tracking-widest">{t('commandes.creation.articles')}</p>
           <button
             type="button"
             onClick={addItem}
             className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
           >
-            <Plus size={13} /> Ajouter
+            <Plus size={13} /> {t('commun.ajouter')}
           </button>
         </div>
 
@@ -210,7 +215,7 @@ function StepModele({ data, setData, onNext }) {
                 {/* Quantité + prix unitaire */}
                 <div className="flex gap-2 items-end">
                   <div className="w-20">
-                    <label className="block text-xs text-ghost mb-1">Qté</label>
+                    <label className="block text-xs text-ghost mb-1">{t('commandes.creation.qte')}</label>
                     <input
                       type="number"
                       min="1"
@@ -221,13 +226,13 @@ function StepModele({ data, setData, onNext }) {
                     />
                   </div>
                   <div className="flex-1">
-                    <label className="block text-xs text-ghost mb-1">Prix unitaire (XOF)</label>
+                    <label className="block text-xs text-ghost mb-1">{t('commandes.creation.prix_unitaire')}</label>
                     <input
                       type="number"
                       min="0"
                       value={item.prix_unitaire}
                       onChange={e => updateItem(idx, 'prix_unitaire', e.target.value)}
-                      placeholder="Ex : 15000"
+                      placeholder={t('commandes.creation.prix_unitaire_ph')}
                       className="w-full bg-subtle border border-edge rounded-lg px-2.5 py-1.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30"
                     />
                   </div>
@@ -254,7 +259,7 @@ function StepModele({ data, setData, onNext }) {
             {/* Total articles */}
             {data.items.some(it => it.prix_unitaire > 0) && (
               <div className="flex justify-between items-center px-1 pt-1">
-                <span className="text-xs text-ghost">Total articles</span>
+                <span className="text-xs text-ghost">{t('commandes.creation.total_articles')}</span>
                 <span className="text-sm font-bold text-ink font-mono">
                   {formatCurrency(data.items.reduce((s, it) => s + (it.quantite * Number(it.prix_unitaire || 0)), 0))}
                 </span>
@@ -267,12 +272,12 @@ function StepModele({ data, setData, onNext }) {
       {/* Description */}
       <div>
         <label className="block text-xs font-semibold text-ghost uppercase tracking-widest mb-2">
-          Description / instructions
+          {t('commandes.creation.description')}
         </label>
         <textarea
           value={data.description}
           onChange={e => setData(d => ({ ...d, description: e.target.value }))}
-          placeholder="Ex : Col en V, boutons dorés, longueur genou…"
+          placeholder={t('commandes.creation.description_ph')}
           rows={3}
           className="w-full bg-card border border-edge rounded-xl px-3 py-2.5 text-sm text-ink placeholder:text-ghost focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
         />
@@ -280,7 +285,7 @@ function StepModele({ data, setData, onNext }) {
 
       {/* Photo tissu */}
       <div>
-        <p className="text-xs font-semibold text-ghost uppercase tracking-widest mb-2">Photo du tissu</p>
+        <p className="text-xs font-semibold text-ghost uppercase tracking-widest mb-2">{t('commandes.creation.photo_titre')}</p>
         {data._photoPreview ? (
           <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-edge">
             <img src={data._photoPreview} alt="tissu" className="w-full h-full object-cover" />
@@ -299,7 +304,7 @@ function StepModele({ data, setData, onNext }) {
             className="w-full py-5 rounded-xl border-2 border-dashed border-edge flex flex-col items-center gap-1.5 text-ghost hover:border-primary hover:text-primary transition-colors"
           >
             <ImagePlus size={20} />
-            <span className="text-xs">Ajouter une photo</span>
+            <span className="text-xs">{t('commandes.creation.ajouter_photo')}</span>
           </button>
         )}
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
@@ -318,22 +323,23 @@ function StepModele({ data, setData, onNext }) {
       >
         <AlertTriangle size={15} />
         <span className="text-sm font-medium">
-          {data.urgence ? 'Commande urgente' : 'Marquer comme urgente'}
+          {data.urgence ? t('commandes.creation.urgente') : t('commandes.creation.marquer_urgente')}
         </span>
       </button>
 
-      <Button onClick={onNext} disabled={!canNext} className="w-full">Suivant</Button>
+      <Button onClick={onNext} disabled={!canNext} className="w-full">{t('commun.suivant')}</Button>
     </div>
   )
 }
 
 // ── Étape 3 — Délai ───────────────────────────────────────────────────────────
 function StepDelai({ data, setData, onNext }) {
+  const { t } = useTranslation()
   return (
     <div className="flex flex-col flex-1 px-4 pb-4 space-y-4">
       {/* #16-17 — min=TODAY bloque les dates passées */}
       <Input
-        label="Date de livraison"
+        label={t('commandes.creation.date_livraison')}
         type="date"
         min={TODAY}
         value={data.date_livraison_prevue}
@@ -341,31 +347,26 @@ function StepDelai({ data, setData, onNext }) {
       />
 
       <div>
-        <label className="block text-sm font-medium text-ink mb-1.5">Note interne</label>
+        <label className="block text-sm font-medium text-ink mb-1.5">{t('commandes.creation.note_interne')}</label>
         <textarea
           value={data.note_interne}
           onChange={e => setData(d => ({ ...d, note_interne: e.target.value }))}
-          placeholder="Instructions pour l'équipe, références client…"
+          placeholder={t('commandes.creation.note_interne_ph')}
           rows={4}
           className="w-full bg-card border border-edge rounded-xl px-3 py-2.5 text-sm text-ink placeholder:text-ghost focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
         />
       </div>
 
       <div className="pt-2">
-        <Button onClick={onNext} className="w-full">Suivant</Button>
+        <Button onClick={onNext} className="w-full">{t('commun.suivant')}</Button>
       </div>
     </div>
   )
 }
 
 // ── Étape 4 — Prix & Acompte ──────────────────────────────────────────────────
-const MODE_OPTIONS = [
-  { value: 'especes',      label: 'Espèces'      },
-  { value: 'mobile_money', label: 'Mobile Money' },
-  { value: 'virement',     label: 'Virement'     },
-]
-
 function StepPrix({ data, setData, onSubmit, isLoading }) {
+  const { t } = useTranslation()
   const itemsTotal = data.items.reduce((s, it) => s + (Number(it.quantite) * Number(it.prix_unitaire || 0)), 0)
   const prix       = Number(data.prix || 0) || itemsTotal
   const acompte    = Number(data.acompte || 0)
@@ -374,10 +375,10 @@ function StepPrix({ data, setData, onSubmit, isLoading }) {
   const [error, setError] = useState('')
 
   const handleSubmit = () => {
-    if (!prix || prix <= 0) { setError('Le prix est requis.'); return }
+    if (!prix || prix <= 0) { setError(t('commandes.creation.err_prix')); return }
     // #12-14 : acompte > prix autorisé si motif renseigné
     if (surplus && !data.motif_surplus_acompte?.trim()) {
-      setError("L'acompte dépasse le total : précisez le motif ci-dessous.")
+      setError(t('commandes.creation.err_surplus'))
       return
     }
     setError('')
@@ -387,18 +388,18 @@ function StepPrix({ data, setData, onSubmit, isLoading }) {
   return (
     <div className="flex flex-col flex-1 px-4 pb-4 space-y-4">
       <Input
-        label="Prix total (XOF)"
+        label={t('commandes.creation.prix_total')}
         type="number"
         min="0"
         value={data.prix}
         onChange={e => setData(d => ({ ...d, prix: e.target.value }))}
-        placeholder="Ex : 35000"
+        placeholder={t('commandes.creation.prix_total_ph')}
         required
         error={error}
       />
 
       <Input
-        label="Acompte reçu (XOF)"
+        label={t('commandes.creation.acompte')}
         type="number"
         min="0"
         max={prix || undefined}
@@ -410,21 +411,21 @@ function StepPrix({ data, setData, onSubmit, isLoading }) {
       {/* Mode de paiement — visible seulement si acompte > 0 */}
       {acompte > 0 && (
         <div>
-          <p className="text-sm font-medium text-ink mb-2">Mode de paiement</p>
+          <p className="text-sm font-medium text-ink mb-2">{t('commandes.creation.mode_titre')}</p>
           <div className="flex gap-2">
-            {MODE_OPTIONS.map(opt => (
+            {MODE_VALUES.map(opt => (
               <button
-                key={opt.value}
+                key={opt}
                 type="button"
-                onClick={() => setData(d => ({ ...d, mode_paiement_acompte: opt.value }))}
+                onClick={() => setData(d => ({ ...d, mode_paiement_acompte: opt }))}
                 className={cn(
                   'flex-1 py-2 px-3 rounded-xl text-xs font-medium border transition-colors',
-                  data.mode_paiement_acompte === opt.value
+                  data.mode_paiement_acompte === opt
                     ? 'border-primary bg-primary-50 text-primary-700'
                     : 'border-edge bg-card text-ghost',
                 )}
               >
-                {opt.label}
+                {t(`commandes.creation.mode.${opt}`)}
               </button>
             ))}
           </div>
@@ -435,7 +436,7 @@ function StepPrix({ data, setData, onSubmit, isLoading }) {
       {itemsTotal > 0 && !data.prix && (
         <div className="flex items-center gap-2 bg-subtle rounded-xl px-4 py-2.5 text-sm text-ghost">
           <Info size={14} />
-          Total articles calculé : <span className="font-mono font-semibold text-ink ml-1">{formatCurrency(itemsTotal)}</span>
+          {t('commandes.creation.total_calcule')} <span className="font-mono font-semibold text-ink ml-1">{formatCurrency(itemsTotal)}</span>
         </div>
       )}
 
@@ -448,7 +449,7 @@ function StepPrix({ data, setData, onSubmit, isLoading }) {
                             'bg-gold-light border-gold/20'
         )}>
           <p className="text-xs text-ghost mb-0.5">
-            {surplus ? 'Acompte en surplus' : 'Reste à payer'}
+            {surplus ? t('commandes.creation.acompte_surplus_label') : t('commandes.creation.reste')}
           </p>
           <p className={cn(
             'text-lg font-bold font-mono',
@@ -464,12 +465,12 @@ function StepPrix({ data, setData, onSubmit, isLoading }) {
       {surplus && (
         <div className="space-y-1.5">
           <label className="block text-sm font-medium text-error">
-            Motif du surplus <span className="text-error">*</span>
+            {t('commandes.creation.motif_surplus')} <span className="text-error">*</span>
           </label>
           <textarea
             value={data.motif_surplus_acompte}
             onChange={e => setData(d => ({ ...d, motif_surplus_acompte: e.target.value }))}
-            placeholder="Ex : Avance pour commande future, remboursement tissu…"
+            placeholder={t('commandes.creation.motif_surplus_ph')}
             rows={2}
             className="w-full bg-card border border-error/40 rounded-xl px-3 py-2.5 text-sm text-ink placeholder:text-ghost focus:outline-none focus:ring-2 focus:ring-error/30 resize-none"
           />
@@ -480,7 +481,7 @@ function StepPrix({ data, setData, onSubmit, isLoading }) {
 
       <div className="pt-2">
         <Button onClick={handleSubmit} loading={isLoading} className="w-full">
-          Créer la commande
+          {t('commandes.creation.creer')}
         </Button>
       </div>
     </div>

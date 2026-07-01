@@ -4,9 +4,11 @@ import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { getCreators } from './vitrineApi'
 import { useFavoris } from './useFavoris'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 export default function FavorisPage() {
   const { t } = useTranslation()
+  usePageMeta({ title: t('vitrine.favoris.title'), path: '/favoris' })
   const { ids } = useFavoris()
   const [creators, setCreators] = useState(null)
 

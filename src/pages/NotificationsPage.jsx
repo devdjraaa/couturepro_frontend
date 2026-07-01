@@ -1,23 +1,25 @@
 import { useState, useMemo } from 'react'
 import { Bell, Package, CreditCard, AlertCircle } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useNotifications, useMarquerLue, useMarquerToutesLues } from '@/hooks/useNotifications'
 import { AppLayout } from '@/components/layout'
 import { NotificationItem } from '@/components/notifications'
 import { Skeleton, EmptyState } from '@/components/ui'
 import { cn } from '@/utils/cn'
 
-// ── Catégories ────────────────────────────────────────────────────────────────
+// ── Catégories (libellés résolus via i18n : notifications.cat.<key>) ────────────
 const CATEGORIES = [
-  { key: 'toutes',   label: 'Toutes'    },
-  { key: 'commande', label: 'Commandes', icon: Package     },
-  { key: 'paiement', label: 'Paiements', icon: CreditCard  },
-  { key: 'systeme',  label: 'Rappels',   icon: AlertCircle },
+  { key: 'toutes'                          },
+  { key: 'commande', icon: Package         },
+  { key: 'paiement', icon: CreditCard      },
+  { key: 'systeme',  icon: AlertCircle     },
 ]
 
 function CategoryChips({ active, onChange }) {
+  const { t } = useTranslation()
   return (
     <div className="flex gap-2 overflow-x-auto scrollbar-none px-4 py-2.5 border-b border-edge">
-      {CATEGORIES.map(({ key, label }) => (
+      {CATEGORIES.map(({ key }) => (
         <button
           key={key}
           type="button"
@@ -29,14 +31,14 @@ function CategoryChips({ active, onChange }) {
               : 'bg-subtle text-ghost hover:text-ink',
           )}
         >
-          {label}
+          {t(`notifications.cat.${key}`)}
         </button>
       ))}
     </div>
   )
 }
 
-// ── Groupement par jour ────────────────────────────────────────────────────────
+// ── Groupement par jour (clés stables ; libellés via i18n) ──────────────────────
 function groupByDay(notifications) {
   const now       = new Date()
   const todayStr  = now.toDateString()
@@ -47,26 +49,27 @@ function groupByDay(notifications) {
     const d  = new Date(n.created_at)
     const ds = d.toDateString()
 
-    let label
-    if (ds === todayStr)    label = "Aujourd'hui"
-    else if (ds === hierStr) label = 'Hier'
+    let key
+    if (ds === todayStr)     key = 'aujourdhui'
+    else if (ds === hierStr) key = 'hier'
     else {
       const diff = Math.floor((now - d) / 86400000)
-      label = diff <= 7 ? 'Cette semaine' : 'Plus ancien'
+      key = diff <= 7 ? 'semaine' : 'ancien'
     }
 
-    if (!groups[label]) groups[label] = []
-    groups[label].push(n)
+    if (!groups[key]) groups[key] = []
+    groups[key].push(n)
   })
 
-  const ORDER = ["Aujourd'hui", 'Hier', 'Cette semaine', 'Plus ancien']
+  const ORDER = ['aujourdhui', 'hier', 'semaine', 'ancien']
   return ORDER
-    .filter(l => groups[l])
-    .map(l => [l, groups[l]])
+    .filter(k => groups[k])
+    .map(k => [k, groups[k]])
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function NotificationsPage() {
+  const { t } = useTranslation()
   const [category, setCategory] = useState('toutes')
 
   const { data: notifications = [], isLoading } = useNotifications()
@@ -83,7 +86,7 @@ export default function NotificationsPage() {
 
   return (
     <AppLayout
-      title="Notifications"
+      title={t('notifications.titre')}
       showBack
       rightAction={
         nonLues > 0 ? (
@@ -92,7 +95,7 @@ export default function NotificationsPage() {
             onClick={() => marquerToutesLues.mutate()}
             className="text-xs font-medium text-inverse/80 hover:text-inverse px-2 py-1"
           >
-            Tout lire
+            {t('notifications.tout_lire')}
           </button>
         ) : null
       }
@@ -106,20 +109,20 @@ export default function NotificationsPage() {
       ) : filtered.length === 0 ? (
         <EmptyState
           icon={Bell}
-          title="Aucune notification"
+          title={t('notifications.vide.titre')}
           description={
             category === 'toutes'
-              ? 'Vous êtes à jour !'
-              : 'Aucune notification dans cette catégorie.'
+              ? t('notifications.vide.description')
+              : t('notifications.vide_categorie')
           }
           className="py-16"
         />
       ) : (
         <div className="pb-safe">
-          {groups.map(([label, items]) => (
-            <div key={label}>
+          {groups.map(([key, items]) => (
+            <div key={key}>
               <p className="text-xs font-semibold text-ghost uppercase tracking-widest px-4 pt-4 pb-1">
-                {label}
+                {t(`notifications.jour.${key}`)}
               </p>
               <div className="divide-y divide-edge">
                 {items.map(n => (

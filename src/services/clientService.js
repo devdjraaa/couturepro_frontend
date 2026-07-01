@@ -100,4 +100,9 @@ export const clientService = {
     const { data } = await api.post(`/clients/${id}/toggle-vip`)
     return data
   },
+
+  async importBatch(contacts) {
+    const { data } = await api.post('/clients/import', { contacts })
+    return data
+  },
 }
