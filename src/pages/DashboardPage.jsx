@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, AlertTriangle, Clock, CheckCircle2, CircleUser, Sun, Moon, Store, X, Layers, Users2, Star, FileText } from 'lucide-react'
+import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, CheckCircle2, CircleUser, Sun, Moon, Store, X, Layers, Users2, Star, FileText } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { isToday, isPast, parseISO, differenceInCalendarDays, isThisMonth, subDays } from 'date-fns'
 import { useQueryClient } from '@tanstack/react-query'
@@ -26,27 +26,27 @@ function Greeting({ user, subtitle, hero = false }) {
     <div className={hero ? 'pt-2 pb-1' : 'pt-4 pb-2'}>
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <p className={cn('text-xs capitalize mb-0.5', hero ? 'text-inverse/60' : 'text-ghost')}>{dateStr}</p>
-          <h1 className={cn('text-xl font-bold font-display', hero ? 'text-inverse' : 'text-ink')}>
+          <p className={cn('mb-0.5', hero ? 'text-[11px] font-bold uppercase tracking-[.18em] text-ghost' : 'text-xs capitalize text-ghost')}>{dateStr}</p>
+          <h1 className={cn('font-bold font-display leading-tight', hero ? 'text-[26px] text-ink' : 'text-xl text-ink')}>
             {greeting}, {user?.prenom ?? user?.nom?.split(' ')[0] ?? ''} 👋
           </h1>
         </div>
         {hero && (
-          <div className="flex items-center gap-1 shrink-0 mt-0.5">
+          <div className="flex items-center gap-1 shrink-0 mt-1">
             <button
               type="button"
               onClick={toggleTheme}
-              className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-inverse/10 transition-colors"
+              className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-subtle transition-colors"
               aria-label={isDark ? t('commun.passer_mode_clair') : t('commun.passer_mode_sombre')}
             >
-              {isDark ? <Sun size={18} className="text-inverse" /> : <Moon size={18} className="text-inverse" />}
+              {isDark ? <Sun size={18} className="text-dim" /> : <Moon size={18} className="text-dim" />}
             </button>
             <LanguageSwitcher variant="hero" />
           </div>
         )}
       </div>
       {subtitle && (
-        <p className={cn('text-sm mt-1', hero ? 'text-inverse/70' : 'text-ghost')}>{subtitle}</p>
+        <p className={cn('text-sm mt-1', hero ? 'text-dim' : 'text-ghost')}>{subtitle}</p>
       )}
     </div>
   )
@@ -58,9 +58,12 @@ function CaisseCard({ stats, isLoading, navigate }) {
   const encaisse = stats?.total_encaisse ?? 0
 
   return (
-    <div className="rounded-2xl bg-primary-700 p-4 text-inverse">
+    <div
+      className="rounded-2xl p-4 text-inverse"
+      style={{ background: 'linear-gradient(135deg, #5C0808 0%, #B50E0E 55%, #E82A1E 100%)' }}
+    >
       <div className="flex items-center justify-between mb-1">
-        <p className="text-xs font-medium text-inverse/70">{t('dashboard.caisse.titre')}</p>
+        <p className="text-[11px] font-bold uppercase tracking-widest text-inverse/60">{t('dashboard.caisse.titre')}</p>
         <button
           type="button"
           onClick={() => navigate('/caisse')}
@@ -84,9 +87,12 @@ function CaisseCard({ stats, isLoading, navigate }) {
           </button>
         </div>
       ) : (
-        <div className="mt-2">
+        <div className="mt-2 relative">
           <MoneyAmount value={encaisse} size="lg" className="text-inverse" />
           <p className="text-xs text-inverse/50 mt-1">{t('dashboard.caisse.encaisse_auj')}</p>
+          <svg viewBox="0 0 80 28" className="absolute right-0 top-0 w-20 h-7 opacity-25 pointer-events-none" fill="none" aria-hidden="true">
+            <polyline points="0,24 12,18 24,20 36,10 48,14 60,5 72,8 80,4" stroke="white" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+          </svg>
         </div>
       )}
     </div>
@@ -94,30 +100,33 @@ function CaisseCard({ stats, isLoading, navigate }) {
 }
 
 // ── Élément "À faire" ─────────────────────────────────────────────────────────
-function TodoItem({ label, client, dueDate, type, to, navigate }) {
+const TYPE_CFG = {
+  retard:    { bg: 'bg-danger/10',   text: 'text-danger',     abbr: 'RETARD' },
+  livraison: { bg: 'bg-primary/10',  text: 'text-primary',    abbr: 'LIVR.' },
+  essai:     { bg: 'bg-accent-50',   text: 'text-accent-600', abbr: 'ESSAI' },
+  solde:     { bg: 'bg-gold-light',  text: 'text-gold-dark',  abbr: 'SOLDE' },
+}
+
+function TodoItem({ label, client, dueDate, type, to, navigate, timeStr }) {
+  const cfg = TYPE_CFG[type] ?? TYPE_CFG.livraison
   return (
     <button
       type="button"
       onClick={() => navigate(to)}
-      className="flex items-center gap-3 w-full py-3 border-b border-edge last:border-0 hover:bg-subtle -mx-1 px-1 rounded-lg transition-colors text-left"
+      className="flex items-center gap-3 w-full py-2.5 border-b border-edge last:border-0 hover:bg-subtle -mx-1 px-1 rounded-lg transition-colors text-left"
     >
-      <div className={cn(
-        'w-8 h-8 rounded-lg flex items-center justify-center shrink-0',
-        type === 'retard'  ? 'bg-danger/10' :
-        type === 'essai'   ? 'bg-accent-50' :
-        type === 'solde'   ? 'bg-gold-light' :
-        'bg-primary-50',
-      )}>
-        {type === 'retard'  ? <AlertTriangle size={14} className="text-danger" /> :
-         type === 'essai'   ? <Clock size={14} className="text-accent-600" /> :
-         type === 'solde'   ? <Wallet size={14} className="text-gold-dark" /> :
-         <ClipboardList size={14} className="text-primary" />}
+      <div className={cn('w-14 shrink-0 flex flex-col items-center justify-center py-2 rounded-xl', cfg.bg)}>
+        <span className={cn('text-[13px] font-mono font-bold leading-tight', cfg.text)}>{timeStr}</span>
+        <span className={cn('text-[9px] font-bold uppercase tracking-wide mt-0.5 opacity-70', cfg.text)}>{cfg.abbr}</span>
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-ink truncate">{label}</p>
-        <p className="text-xs text-ghost">{client}</p>
+        <p className="text-[13px] font-semibold text-ink truncate">{label}</p>
+        <p className="text-xs text-ghost truncate">{client}</p>
       </div>
-      {dueDate && <CountdownBadge dueDate={dueDate} />}
+      <div className="flex items-center gap-1.5 shrink-0">
+        {dueDate && <CountdownBadge dueDate={dueDate} />}
+        <ChevronRight size={13} className="text-ghost" />
+      </div>
     </button>
   )
 }
@@ -146,12 +155,15 @@ function TodoList({ commandes, isLoading, navigate }) {
     const vetement = cmd.vetement_nom ?? t('catalogue.titre')
 
     if (dateLiv && (isPast(dateLiv) || isToday(dateLiv))) {
-      const type = isPast(dateLiv) && !isToday(dateLiv) ? 'retard' : 'livraison'
-      items.push({ type, label: t('dashboard.todo.livraison', { vetement }), client: cmd.client_nom, dueDate: cmd.date_livraison_prevue, to, priority: type === 'retard' ? 0 : 1 })
+      const isRetard = isPast(dateLiv) && !isToday(dateLiv)
+      const type = isRetard ? 'retard' : 'livraison'
+      const timeStr = isRetard ? `-${Math.abs(differenceInCalendarDays(dateLiv, today))}j` : 'Auj.'
+      items.push({ type, timeStr, label: t('dashboard.todo.livraison', { vetement }), client: cmd.client_nom, dueDate: cmd.date_livraison_prevue, to, priority: isRetard ? 0 : 1 })
     } else if (dateEss && isToday(dateEss)) {
-      items.push({ type: 'essai', label: t('dashboard.todo.essayage', { vetement }), client: cmd.client_nom, dueDate: cmd.date_essayage, to, priority: 1 })
+      items.push({ type: 'essai', timeStr: 'Auj.', label: t('dashboard.todo.essayage', { vetement }), client: cmd.client_nom, dueDate: cmd.date_essayage, to, priority: 1 })
     } else if (restant > 0 && dateLiv && differenceInCalendarDays(dateLiv, today) <= 3) {
-      items.push({ type: 'solde', label: t('dashboard.todo.solde', { montant: formatCurrency(restant) }), client: cmd.client_nom, dueDate: cmd.date_livraison_prevue, to, priority: 2 })
+      const dLeft = differenceInCalendarDays(dateLiv, today)
+      items.push({ type: 'solde', timeStr: dLeft === 0 ? 'Auj.' : `J-${dLeft}`, label: t('dashboard.todo.solde', { montant: formatCurrency(restant) }), client: cmd.client_nom, dueDate: cmd.date_livraison_prevue, to, priority: 2 })
     }
   })
 
@@ -290,24 +302,26 @@ function WelcomeChecklist({ user, atelier, clients, commandes, isLoading, naviga
 
 // ── KPIs horizontaux ──────────────────────────────────────────────────────────
 function KpiChip({ label, value, color = 'default', trend }) {
-  const colors = {
-    default: 'bg-card border-edge text-ink',
-    gold:    'bg-gold-light border-gold/30 text-gold-dark',
-    success: 'bg-success/8 border-success/20 text-success',
-    primary: 'bg-primary-50 border-primary/20 text-primary-700',
-    danger:  'bg-danger/8 border-danger/20 text-danger',
+  const textColors = {
+    default: 'text-ink',
+    gold:    'text-gold-dark',
+    success: 'text-success',
+    primary: 'text-primary',
+    danger:  'text-danger',
   }
   return (
-    <div className={cn('shrink-0 flex flex-col items-center px-4 py-2.5 rounded-xl border', colors[color])}>
-      <div className="flex items-baseline gap-1">
-        <span className="font-mono font-bold text-lg tabular-nums leading-tight">{value ?? '—'}</span>
+    <div className="shrink-0 flex flex-col items-center px-5 py-3.5">
+      <div className="flex items-baseline gap-0.5">
+        <span className={cn('font-mono font-bold text-[22px] tabular-nums leading-none', textColors[color])}>
+          {value ?? '—'}
+        </span>
         {trend != null && trend !== 0 && (
-          <span className={cn('text-2xs font-bold leading-tight', trend > 0 ? 'text-success' : 'text-danger')}>
+          <span className={cn('text-xs font-bold leading-tight', trend > 0 ? 'text-success' : 'text-danger')}>
             {trend > 0 ? '+' : ''}{trend}
           </span>
         )}
       </div>
-      <span className="text-2xs font-medium mt-0.5 whitespace-nowrap opacity-70">{label}</span>
+      <span className="text-[10px] font-bold uppercase tracking-[.14em] mt-1 whitespace-nowrap text-ghost text-center leading-tight">{label}</span>
     </div>
   )
 }
@@ -347,8 +361,8 @@ export default function DashboardPage() {
   return (
     <AppLayout title={t('dashboard.titre_auj')} noMobileHeader onRefresh={() => queryClient.invalidateQueries()}>
 
-      {/* Hero violet — mobile uniquement */}
-      <div className="bg-primary px-4 pt-safe pb-5 lg:hidden sticky top-0 z-20 rounded-b-3xl">
+      {/* Hero sombre — mobile uniquement */}
+      <div className="bg-app px-4 pt-safe pb-5 lg:hidden sticky top-0 z-20 border-b border-edge/30">
         <Greeting user={user} subtitle={dynamicSub} hero />
       </div>
 
@@ -374,17 +388,27 @@ export default function DashboardPage() {
 
         {/* À faire aujourd'hui */}
         <div className="bg-card border border-edge rounded-2xl p-4">
-          <h2 className="text-xs font-semibold text-ghost uppercase tracking-widest mb-3">
-            {t('dashboard.a_faire')}
-          </h2>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[.18em] text-ghost">
+              <span className="text-primary font-light">—</span>
+              {t('dashboard.a_faire')}
+            </h2>
+            <button
+              type="button"
+              onClick={() => navigate('/commandes')}
+              className="flex items-center gap-0.5 text-xs font-semibold text-primary"
+            >
+              {t('dashboard.tout_voir')} <ChevronRight size={12} />
+            </button>
+          </div>
           <TodoList commandes={commandes} isLoading={loadingCmd} navigate={navigate} />
         </div>
 
         {/* KPIs secondaires */}
-        <div className="overflow-x-auto -mx-4 px-4 scrollbar-none">
-          <div className="flex gap-3 pb-1">
+        <div className="bg-card border border-edge rounded-2xl overflow-x-auto scrollbar-none">
+          <div className="flex divide-x divide-edge">
             {loadingStats ? (
-              [...Array(4)].map((_, i) => <Skeleton key={i} className="shrink-0 w-28 h-16 rounded-xl" />)
+              [...Array(4)].map((_, i) => <Skeleton key={i} className="shrink-0 w-24 h-[72px] rounded-xl m-3" />)
             ) : (
               <>
                 <KpiChip label={t('dashboard.kpi.en_attente')}        value={formatCurrency(totalRestant)} color="gold" />
@@ -399,7 +423,8 @@ export default function DashboardPage() {
 
         {/* Actions rapides */}
         <div>
-          <h2 className="text-xs font-semibold text-ghost uppercase tracking-widest mb-3">
+          <h2 className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[.18em] text-ghost mb-3">
+            <span className="text-primary font-light">—</span>
             {t('dashboard.actions_rapides')}
           </h2>
           <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
@@ -457,7 +482,8 @@ export default function DashboardPage() {
         {/* Commandes récentes */}
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-xs font-semibold text-ghost uppercase tracking-widest">
+            <h2 className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[.18em] text-ghost">
+              <span className="text-primary font-light">—</span>
               {t('dashboard.recentes')}
             </h2>
             <button

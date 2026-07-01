@@ -10,7 +10,7 @@ export default function LanguageSwitcher({ variant = 'pills' }) {
       <button
         type="button"
         onClick={() => setLangue(other.code)}
-        className="text-2xs font-bold text-inverse bg-inverse/20 hover:bg-inverse/30 px-2 py-1 rounded-lg transition-all duration-150 active:scale-90"
+        className="text-2xs font-bold text-dim bg-subtle hover:bg-edge px-2 py-1 rounded-lg transition-all duration-150 active:scale-90"
         title={other.label}
       >
         {langue.toUpperCase()}
