@@ -60,7 +60,7 @@ function CaisseCard({ stats, isLoading, navigate }) {
   return (
     <div
       className="rounded-2xl p-4 text-inverse"
-      style={{ background: 'linear-gradient(135deg, #5C0808 0%, #B50E0E 55%, #E82A1E 100%)' }}
+      style={{ background: 'linear-gradient(135deg, var(--color-primary-700) 0%, var(--color-primary-600) 55%, var(--color-primary) 100%)' }}
     >
       <div className="flex items-center justify-between mb-1">
         <p className="text-[11px] font-bold uppercase tracking-widest text-inverse/60">{t('dashboard.caisse.titre')}</p>
