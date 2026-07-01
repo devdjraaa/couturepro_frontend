@@ -16,37 +16,54 @@ import { cn } from '@/utils/cn'
 function Greeting({ user, subtitle, hero = false }) {
   const { t, i18n } = useTranslation()
   const { isDark, toggleTheme } = useTheme()
+  const navigate = useNavigate()
   const hour = new Date().getHours()
   const greeting = hour < 12 ? t('dashboard.bonjour') : hour < 18 ? t('dashboard.bon_aprem') : t('dashboard.bonsoir')
   const dateStr  = new Date().toLocaleDateString(i18n.language === 'en' ? 'en-GB' : 'fr-FR', {
     weekday: 'long', day: 'numeric', month: 'long',
   })
+  const initials = [user?.prenom?.[0], user?.nom?.split(' ')[0]?.[0]]
+    .filter(Boolean).join('').toUpperCase() || '?'
 
   return (
     <div className={hero ? 'pt-2 pb-1' : 'pt-4 pb-2'}>
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <p className={cn('mb-0.5', hero ? 'text-[11px] font-bold uppercase tracking-[.18em] text-ghost' : 'text-xs capitalize text-ghost')}>{dateStr}</p>
-          <h1 className={cn('font-bold font-display leading-tight', hero ? 'text-[26px] text-ink' : 'text-xl text-ink')}>
+          <p
+            className={cn('mb-1', hero ? 'text-[11px] font-bold uppercase tracking-[.18em]' : 'text-xs capitalize text-ghost')}
+            style={hero ? { color: 'var(--color-gold)' } : undefined}
+          >
+            {dateStr}
+          </p>
+          <h1 className={cn('font-bold font-display', hero ? 'text-[34px] leading-[1.08] text-ink' : 'text-xl leading-tight text-ink')}>
             {greeting}, {user?.prenom ?? user?.nom?.split(' ')[0] ?? ''} 👋
           </h1>
         </div>
         {hero && (
-          <div className="flex items-center gap-1 shrink-0 mt-1">
+          <div className="flex items-center gap-2 shrink-0 mt-1">
             <button
               type="button"
               onClick={toggleTheme}
-              className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-subtle transition-colors"
+              className="w-11 h-11 flex items-center justify-center rounded-2xl bg-subtle hover:bg-edge transition-colors shrink-0"
               aria-label={isDark ? t('commun.passer_mode_clair') : t('commun.passer_mode_sombre')}
             >
-              {isDark ? <Sun size={18} className="text-dim" /> : <Moon size={18} className="text-dim" />}
+              {isDark ? <Sun size={17} className="text-ink" /> : <Moon size={17} className="text-ink" />}
             </button>
             <LanguageSwitcher variant="hero" />
+            <button
+              type="button"
+              onClick={() => navigate('/parametres/profil')}
+              className="w-11 h-11 flex items-center justify-center rounded-2xl text-[13px] font-bold shrink-0"
+              style={{ background: 'linear-gradient(135deg, var(--color-gold-hi) 0%, var(--color-gold) 100%)', color: 'var(--color-bg-app, #100B0A)' }}
+              aria-label={t('nav.profil')}
+            >
+              {initials}
+            </button>
           </div>
         )}
       </div>
       {subtitle && (
-        <p className={cn('text-sm mt-1', hero ? 'text-dim' : 'text-ghost')}>{subtitle}</p>
+        <p className={cn('text-sm mt-1.5', hero ? 'text-dim' : 'text-ghost')}>{subtitle}</p>
       )}
     </div>
   )
