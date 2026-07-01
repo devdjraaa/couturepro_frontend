@@ -22,12 +22,12 @@ const Select = forwardRef(function Select(
           id={selectId}
           required={required}
           className={cn(
-            'w-full h-10 bg-card text-ink',
+            'w-full h-12 bg-elevated text-ink font-medium',
             'border border-edge rounded-xl px-3 pr-9 text-sm font-sans appearance-none',
             'transition-colors duration-150',
-            'focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary',
+            'input-couture-focus',
             'disabled:opacity-50 disabled:cursor-not-allowed',
-            error && 'border-danger focus:ring-danger/30 focus:border-danger',
+            error && 'border-danger',
             className,
           )}
           {...props}

@@ -32,11 +32,30 @@ export function LangProvider({ children }) {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const setLangue = useCallback((code) => {
-    storeLang(code)
-    setLangueState(code)
-    i18n.changeLanguage(code)
-    // #36 — Persister en base
-    parametresService.updateLangue(code).catch(() => {})
+    const FADE_OUT = 160
+    const FADE_IN  = 220
+    const body = document.body
+    body.style.transition = `opacity ${FADE_OUT}ms ease, filter ${FADE_OUT}ms ease`
+    body.style.opacity    = '0'
+    body.style.filter     = 'blur(3px)'
+
+    setTimeout(() => {
+      storeLang(code)
+      setLangueState(code)
+      i18n.changeLanguage(code)
+      // #36 — Persister en base
+      parametresService.updateLangue(code).catch(() => {})
+
+      requestAnimationFrame(() => {
+        body.style.transition = `opacity ${FADE_IN}ms ease, filter ${FADE_IN}ms ease`
+        body.style.opacity    = '1'
+        body.style.filter     = 'blur(0px)'
+        setTimeout(() => {
+          body.style.transition = ''
+          body.style.filter     = ''
+        }, FADE_IN)
+      })
+    }, FADE_OUT)
   }, [i18n])
 
   return (

@@ -10,7 +10,7 @@ export default function LanguageSwitcher({ variant = 'pills' }) {
       <button
         type="button"
         onClick={() => setLangue(other.code)}
-        className="text-2xs font-bold text-inverse bg-inverse/20 hover:bg-inverse/30 px-2 py-1 rounded-lg transition-colors"
+        className="text-2xs font-bold text-inverse bg-inverse/20 hover:bg-inverse/30 px-2 py-1 rounded-lg transition-all duration-150 active:scale-90"
         title={other.label}
       >
         {langue.toUpperCase()}
@@ -25,7 +25,7 @@ export default function LanguageSwitcher({ variant = 'pills' }) {
       <button
         type="button"
         onClick={() => setLangue(other.code)}
-        className="flex items-center gap-1 text-xs font-semibold text-dim hover:text-ink bg-subtle hover:bg-edge px-2 py-1 rounded-lg transition-colors"
+        className="flex items-center gap-1 text-xs font-semibold text-dim hover:text-ink bg-subtle hover:bg-edge px-2 py-1 rounded-lg transition-all duration-150 active:scale-90"
         title={other.label}
       >
         <span>{other.flag}</span>
@@ -56,7 +56,7 @@ export default function LanguageSwitcher({ variant = 'pills' }) {
           key={l.code}
           type="button"
           onClick={() => setLangue(l.code)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-150 active:scale-95 ${
             langue === l.code
               ? 'bg-card text-ink shadow-sm'
               : 'text-dim hover:text-ink'
