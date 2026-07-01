@@ -44,16 +44,30 @@ export default function PhoneInput({
           {required && <span className="text-danger ml-0.5">*</span>}
         </label>
       )}
-      <div className={cn(
-        'flex h-10 bg-card border rounded-xl overflow-hidden transition-colors duration-150',
-        'focus-within:ring-2 focus-within:border-primary focus-within:ring-primary/30',
-        error ? 'border-danger focus-within:ring-danger/30 focus-within:border-danger' : 'border-edge',
-      )}>
+      <div
+        className={cn(
+          'flex h-12 bg-elevated border rounded-xl overflow-hidden transition-colors duration-150',
+          error ? 'border-danger' : 'border-edge',
+        )}
+        style={{ '--tw-ring-color': 'var(--color-gold-soft)' }}
+        onFocus={e => {
+          if (!error) {
+            e.currentTarget.style.borderColor = 'var(--color-hair-gold)'
+            e.currentTarget.style.boxShadow   = '0 0 0 4px var(--color-gold-soft)'
+          }
+        }}
+        onBlur={e => {
+          if (!e.currentTarget.contains(e.relatedTarget)) {
+            e.currentTarget.style.borderColor = ''
+            e.currentTarget.style.boxShadow   = ''
+          }
+        }}
+      >
         <select
           value={prefix}
           onChange={handlePrefixChange}
           aria-label="Indicatif pays"
-          className="bg-subtle border-r border-edge text-ink text-sm pl-2 pr-1 focus:outline-none cursor-pointer shrink-0"
+          className="bg-subtle border-r border-edge text-ink text-sm pl-2 pr-1 focus:outline-none cursor-pointer shrink-0 font-medium"
         >
           {PHONE_PREFIXES.map(p => (
             <option key={p.code} value={p.code}>

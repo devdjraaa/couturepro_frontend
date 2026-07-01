@@ -409,6 +409,15 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes tab-enter {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-tab-enter {
+  animation: tab-enter 200ms ease-out both;
+}
+
 @keyframes slide-in-right {
   from { opacity: 0; transform: translateX(100%); }
   to   { opacity: 1; transform: translateX(0); }
