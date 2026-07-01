@@ -2,17 +2,17 @@ import { cn } from '@/utils/cn'
 import Spinner from './Spinner'
 
 const variants = {
-  primary:   'bg-primary text-inverse hover:bg-primary-600 active:bg-primary-700 shadow-sm',
-  secondary: 'bg-card text-ink border border-edge hover:bg-subtle active:bg-inset shadow-sm',
+  primary:   'btn-primary-couture text-white font-bold',
+  secondary: 'bg-elevated text-ink border border-edge hover:bg-subtle active:bg-inset shadow-sm',
   ghost:     'text-dim hover:bg-subtle hover:text-ink active:bg-inset',
-  danger:    'bg-danger text-inverse hover:bg-red-700 active:bg-red-800 shadow-sm',
-  accent:    'bg-accent text-inverse hover:bg-amber-600 active:bg-amber-700 shadow-sm',
+  danger:    'bg-danger text-white font-semibold shadow-sm hover:brightness-110 active:brightness-90',
+  accent:    'bg-accent text-white font-semibold shadow-sm hover:brightness-110 active:brightness-90',
 }
 
 const sizes = {
   sm: 'h-8 px-3 text-xs gap-1.5',
-  md: 'h-10 px-4 text-sm gap-2',
-  lg: 'h-12 px-6 text-base gap-2.5',
+  md: 'h-11 px-4 text-sm gap-2',
+  lg: 'h-14 px-6 text-base gap-2.5 rounded-2xl',
 }
 
 export default function Button({
