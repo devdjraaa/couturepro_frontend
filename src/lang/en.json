@@ -1022,7 +1022,8 @@
       "abonnement": "Subscription",
       "securite": "Security",
       "preferences": "Preferences",
-      "ateliers": "My workshops"
+      "ateliers": "My workshops",
+      "facture": "Invoicing"
     },
     "profil": {
       "titre": "My profile",
