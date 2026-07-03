@@ -10,7 +10,8 @@ async function applyStatusBar(isDark) {
     // passe sous « le rideau » du téléphone. NB : sur Android 15 (edge-to-edge forcé), la
     // vraie solution est le plugin @capacitor-community/safe-area (cf. journal — décision safe-area).
     await StatusBar.setOverlaysWebView({ overlay: false })
-    await StatusBar.setStyle({ style: isDark ? Style.Dark : Style.Light })
+    // Fond de status bar toujours foncé (rouge en clair, navy en sombre) → icônes claires.
+    await StatusBar.setStyle({ style: Style.Dark })
     await StatusBar.setBackgroundColor({ color: isDark ? '#0f172a' : '#e11d2a' })
   } catch { /* ignore sur émulateur/web sans status bar native */ }
 }

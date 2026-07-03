@@ -40,6 +40,8 @@ export async function showLocalNotif(title, body, extra = {}) {
         channelId: CHANNEL_ID,
         title,
         body,
+        smallIcon: 'ic_stat_notify',   // logo Gextimo (silhouette) — sinon icône Android par défaut
+        iconColor: '#e11d2a',          // teinte de l'icône dans la barre de notif
         schedule:  { at: new Date(Date.now() + 500), allowWhileIdle: true },
         extra,
       }],
