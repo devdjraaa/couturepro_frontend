@@ -314,7 +314,7 @@
     "connexion": {
       "titre": "Sign in",
       "sous_titre": "Access your Gextimo workspace",
-      "sous_titre_login": "Sign in to your workshop",
+      "sous_titre_login": "Sign in to your workspace",
       "telephone": "Phone number",
       "telephone_placeholder": "+225 07 00 00 00 00",
       "mot_de_passe": "Password",
@@ -325,7 +325,7 @@
       "onglet_proprietaire": "Owner",
       "onglet_equipe": "Assistant / Staff",
       "code_acces": "Access code",
-      "acceder_atelier": "Access workshop",
+      "acceder_atelier": "Access workspace",
       "code_acces_hint": "The initial password is the same as the access code",
       "se_souvenir": "Remember me",
       "en_vous_connectant": "By signing in, you agree to our",
@@ -334,8 +334,8 @@
     "inscription": {
       "titre": "Create your workshop",
       "sous_titre": "Join Gextimo for free",
-      "sous_titre_register": "Create your workshop online",
-      "nom_atelier": "Workshop name",
+      "sous_titre_register": "Create your space online",
+      "nom_atelier": "Business name (workshop / brand)",
       "nom_atelier_placeholder": "Aminata's Atelier",
       "mot_de_passe": "Password",
       "confirmer_mot_de_passe": "Confirm password",

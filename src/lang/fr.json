@@ -314,7 +314,7 @@
     "connexion": {
       "titre": "Connexion",
       "sous_titre": "Accédez à votre espace Gextimo",
-      "sous_titre_login": "Connectez-vous à votre atelier",
+      "sous_titre_login": "Connectez-vous à votre espace",
       "telephone": "Numéro de téléphone",
       "telephone_placeholder": "+225 07 00 00 00 00",
       "mot_de_passe": "Mot de passe",
@@ -325,7 +325,7 @@
       "onglet_proprietaire": "Propriétaire",
       "onglet_equipe": "Assistant / Membre",
       "code_acces": "Code d'accès",
-      "acceder_atelier": "Accéder à l'atelier",
+      "acceder_atelier": "Accéder à l'espace",
       "code_acces_hint": "Le mot de passe initial est identique au code d'accès",
       "se_souvenir": "Se souvenir de moi",
       "en_vous_connectant": "En vous connectant, vous acceptez nos",
@@ -334,8 +334,8 @@
     "inscription": {
       "titre": "Créer votre atelier",
       "sous_titre": "Rejoignez Gextimo gratuitement",
-      "sous_titre_register": "Créez votre atelier en ligne",
-      "nom_atelier": "Nom de l'atelier",
+      "sous_titre_register": "Créez votre espace en ligne",
+      "nom_atelier": "Nom de la structure (atelier / marque)",
       "nom_atelier_placeholder": "Atelier Aminata",
       "mot_de_passe": "Mot de passe",
       "confirmer_mot_de_passe": "Confirmer le mot de passe",
