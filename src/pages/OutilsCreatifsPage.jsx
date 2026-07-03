@@ -205,7 +205,7 @@ export default function OutilsCreatifsPage() {
             <Skeleton className="h-40 rounded-xl" />
           </div>
         ) : items.length === 0 ? (
-          <EmptyState message={t('outils_creatifs.aucun')} />
+          <EmptyState icon={ImagePlus} title={t('outils_creatifs.aucun')} description={t('outils_creatifs.aucun_sous')} />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {items.map(item => (
