@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, AlertTriangle, Clock, CheckCircle2, CircleUser, Sun, Moon, Store, X, Layers, Users2, Star, FileText } from 'lucide-react'
+import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, AlertTriangle, Clock, CheckCircle2, CircleUser, Sun, Moon, Store, X, Layers, Users2, Star, FileText, Crown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { isToday, isPast, parseISO, differenceInCalendarDays, isThisMonth, subDays } from 'date-fns'
 import { useQueryClient } from '@tanstack/react-query'
@@ -9,6 +9,8 @@ import { Skeleton, EmptyState, Button, CountdownBadge, MoneyAmount, QuickActionT
 import { useAuth, useTheme } from '@/contexts'
 import { useCommandes, useCommandeStats } from '@/hooks/useCommandes'
 import { useClients } from '@/hooks/useClients'
+import { useAbonnement } from '@/hooks/useAbonnement'
+import { ROUTES } from '@/constants/routes'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { cn } from '@/utils/cn'
 
@@ -312,6 +314,55 @@ function KpiChip({ label, value, color = 'default', trend }) {
   )
 }
 
+// ── Abonnement (accès rapide au plan depuis l'accueil) ─────────────────────────
+function AbonnementCard({ navigate }) {
+  const { t } = useTranslation()
+  const { data: abo, isLoading } = useAbonnement()
+  if (isLoading || !abo) return null
+
+  const jours  = typeof abo.jours_restants === 'number' ? abo.jours_restants : null
+  const essai  = abo.statut === 'essai'
+  const urgent = jours !== null && jours <= 3
+  const statutLabel = t(`abonnement.statut.${abo.statut}`, { defaultValue: abo.statut })
+
+  return (
+    <button
+      onClick={() => navigate(ROUTES.ABONNEMENT)}
+      className={cn(
+        'w-full flex items-center gap-3 rounded-2xl border px-4 py-3 text-left transition-colors',
+        urgent ? 'border-danger/30 bg-danger/[0.06] hover:bg-danger/10'
+               : essai ? 'border-accent/25 bg-accent/[0.06] hover:bg-accent/10'
+                       : 'border-edge bg-card hover:bg-subtle',
+      )}
+    >
+      <div className={cn(
+        'w-9 h-9 rounded-xl flex items-center justify-center shrink-0',
+        urgent ? 'bg-danger/12 text-danger' : essai ? 'bg-accent/12 text-accent-600' : 'bg-primary/10 text-primary',
+      )}>
+        <Crown size={17} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-1.5">
+          <span className="text-sm font-semibold text-ink truncate">{abo.niveau_label}</span>
+          <span className={cn(
+            'text-2xs font-medium px-1.5 py-0.5 rounded-full shrink-0',
+            urgent ? 'bg-danger/15 text-danger' : essai ? 'bg-accent/15 text-accent-700' : 'bg-success/15 text-success',
+          )}>
+            {statutLabel}
+          </span>
+        </div>
+        {jours !== null && (
+          <p className={cn('text-xs mt-0.5', urgent ? 'text-danger font-medium' : 'text-ghost')}>
+            {t('dashboard.abonnement.jours_restants', { count: jours })}
+          </p>
+        )}
+      </div>
+      <span className="text-xs font-medium text-primary shrink-0">{t('dashboard.abonnement.gerer')}</span>
+      <ChevronRight size={15} className="text-ghost shrink-0 -ml-1" />
+    </button>
+  )
+}
+
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function DashboardPage() {
   const navigate = useNavigate()
@@ -368,6 +419,9 @@ export default function DashboardPage() {
           isLoading={loadingCmd}
           navigate={navigate}
         />
+
+        {/* Abonnement — accès rapide au plan (plan + temps restant) */}
+        <AbonnementCard navigate={navigate} />
 
         {/* Caisse du jour */}
         <CaisseCard stats={stats} isLoading={loadingStats} navigate={navigate} />

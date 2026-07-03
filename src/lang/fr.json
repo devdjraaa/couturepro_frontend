@@ -430,6 +430,11 @@
   },
   "dashboard": {
     "titre": "Tableau de bord",
+    "abonnement": {
+      "jours_restants_one": "{{count}} jour restant",
+      "jours_restants_other": "{{count}} jours restants",
+      "gerer": "Gérer"
+    },
     "bonjour": "Bonjour",
     "bon_aprem": "Bon après-midi",
     "bonsoir": "Bonsoir",

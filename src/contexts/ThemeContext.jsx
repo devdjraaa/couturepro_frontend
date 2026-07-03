@@ -6,9 +6,13 @@ import { getTheme as getStoredTheme, setTheme as storeTheme } from '@/utils/stor
 async function applyStatusBar(isDark) {
   if (!Capacitor.isNativePlatform()) return
   try {
+    // Le WebView reste sous la status bar (pas d'edge-to-edge overlay) : évite que le header
+    // passe sous « le rideau » du téléphone. NB : sur Android 15 (edge-to-edge forcé), la
+    // vraie solution est le plugin @capacitor-community/safe-area (cf. journal — décision safe-area).
+    await StatusBar.setOverlaysWebView({ overlay: false })
     await StatusBar.setStyle({ style: isDark ? Style.Dark : Style.Light })
-    await StatusBar.setBackgroundColor({ color: isDark ? '#0f172a' : '#ffffff' })
-  } catch { /* ignore sur émulateur sans status bar */ }
+    await StatusBar.setBackgroundColor({ color: isDark ? '#0f172a' : '#e11d2a' })
+  } catch { /* ignore sur émulateur/web sans status bar native */ }
 }
 
 const ThemeContext = createContext(null)
@@ -24,7 +28,7 @@ function resolveTheme(theme) {
 function applyTheme(theme) {
   const resolved = resolveTheme(theme)
   document.documentElement.setAttribute('data-theme', resolved)
-  applyStatusBar(resolved === 'dark')
+  applyStatusBar()
 }
 
 export function ThemeProvider({ children }) {

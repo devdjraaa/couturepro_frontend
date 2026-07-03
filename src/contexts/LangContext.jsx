@@ -6,8 +6,9 @@ import { parametresService } from '@/services/parametresService'
 const LANGUES_DISPO = [
   { code: 'fr', label: 'Français', flag: '🇫🇷' },
   { code: 'en', label: 'English',  flag: '🇬🇧' },
-  { code: 'ar', label: 'العربية',  flag: '🇲🇦' },
-  { code: 'wo', label: 'Wolof',    flag: '🇸🇳' },
+  // Langues à réactiver une fois les fichiers de traduction ajoutés (src/lang/ + i18n.js) :
+  // { code: 'ar', label: 'العربية',  flag: '🇲🇦' },
+  // { code: 'wo', label: 'Wolof',    flag: '🇸🇳' },
 ]
 
 const LangContext = createContext(null)
