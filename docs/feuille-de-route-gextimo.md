@@ -1,218 +1,110 @@
-# Feuille de route — Gextimo (anciennement CouturePro)
+# Feuille de route — Gextimo
 
 **La plateforme des professionnels de la mode — Artisans & Designers (Afrique francophone)**
 
-> Période couverte : 18 avril 2026 → 12 juin 2026 (~8 semaines de développement)
-> Document mis à jour le 12 juin 2026
+> Document mis à jour le 3 juillet 2026
+> Cette feuille de route décrit **ce sur quoi nous travaillons actuellement** et **ce qui reste à
+> faire**. Les grands chantiers déjà livrés (espace Artisan web + admin, espace Designer, vitrine
+> publique) sont résumés en tête pour mémoire, puis le document se concentre sur la suite.
 
 ---
 
-## 1. Vue d'ensemble
+## 1. Où en est le produit (résumé)
 
-Gextimo est pensée comme la plateforme de référence pour deux profils de professionnels de la mode :
-
-- les **Artisans** (couturiers, ateliers de couture) : Gextimo remplace le carnet papier et couvre l'ensemble de leur activité — clients, mesures, commandes, paiements, équipe, abonnement, panel d'administration ;
-- les **Designers** (créateurs de collections) : Gextimo doit devenir leur vitrine professionnelle et le pont qui les relie aux ateliers capables de réaliser leurs créations.
-
-Aujourd'hui, **l'espace Artisan est quasi complet** : une version web opérationnelle a été livrée, et la version mobile (Android/iOS) est en cours de mise à niveau. **L'espace Designer reste entièrement à construire** — c'est la prochaine grande étape du produit, avec comme première brique visible du grand public une **vitrine publique réservée aux Designers**, que les Artisans pourront consulter depuis leur espace pour découvrir leur travail.
-
-> Note de cadrage : cette feuille de route se concentre volontairement sur les espaces **Artisan** et **Designer** (les deux comptes professionnels de la plateforme). L'ouverture d'un espace pour le client final (recherche publique, suivi de commande sans connexion, avis, etc.) fera l'objet d'une réflexion et d'une feuille de route dédiées, dans un second temps.
-
----
-
-## 2. État d'avancement global
-
-| Espace / Volet | État |
+| Volet | État |
 |---|---|
-| **Espace Artisan** — Application Web | ✅ Quasi complète — utilisable en production |
-| **Espace Artisan** — Panel d'administration | ✅ Complet |
-| **Espace Artisan** — Application mobile Android/iOS (hors-ligne) | 🟡 Base technique posée — à resynchroniser avec les dernières fonctionnalités web |
-| **Espace Designer** | 🔴 Non démarré — prochaine grande étape du produit |
-| **Vitrine publique** (Designer, consultable par les Artisans) | 🔴 Non démarré — espace de publication réservé aux Designers |
-| Traductions Français / Anglais | ✅ Structure en place — français complet, anglais à finaliser |
+| **Espace Artisan — Web** (clients, mesures, commandes, paiements, facturation, caisse, équipe, multi-ateliers, fidélité, abonnement) | ✅ Livré, opérationnel |
+| **Panel d'administration** (ateliers, plans, transactions, support, modération, audit) | ✅ Livré |
+| **Espace Designer** (« Ma Vitrine », créations, collections, profil public, outils créatifs) | ✅ Construit et **branché à l'API réelle** |
+| **Vitrine publique** (createurs, recherche, géoloc, avis, suivi de commande, multilingue/multidevise) | ✅ Construite et branchée |
+| **Application mobile (Android)** | 🟡 **En test sur téléphone réel + finitions UX** ← *sprint en cours* |
+| **Application iOS** | ⬜ Non démarrée (nécessite un Mac/Xcode — plus tard) |
+| Traductions FR / EN | ✅ FR complet · 🟡 EN à finaliser |
+
+> En clair : la **plateforme web** (Artisan + Admin) et l'**espace Designer + vitrine** sont faits.
+> Le chantier du moment est de **fiabiliser et polir l'application mobile Android** sur de vrais
+> appareils, avant élargissement.
 
 ---
 
-## 3. Espace Artisan — ce qui a été réalisé
+## 2. Sprint en cours — Finition & fiabilisation de l'app mobile Android
 
-Le projet a démarré par une phase de cadrage (cahier des charges, identité visuelle, spécifications des écrans), suivie d'un développement continu qui a permis de livrer une **version web complète et opérationnelle** de l'espace Artisan, ainsi que d'entamer sa **version mobile (Android/iOS)**.
+Objectif : une application mobile **propre, cohérente et testée sur un vrai téléphone**, prête à être
+distribuée aux premiers utilisateurs.
 
-### Étape 1 — Cadrage du projet
-- Cahier des charges fonctionnel et technique, affiné en plusieurs versions
-- Identité visuelle et guide de style (couleurs, typographies, composants)
-- Spécifications détaillées de chaque écran de l'application
-- Choix d'une architecture centralisée (React + Laravel sur serveur dédié), plus simple et plus économique à maintenir que la solution initialement envisagée
+### 2.1 Fait dans ce sprint ✅
+- [x] **Tests sur appareil réel** (téléphone Android physique en USB) avec rechargement instantané
+      du code (live reload) — remplace l'émulateur.
+- [x] **Affichage plein écran corrigé** : la barre d'état (heure/batterie) ne masque plus l'en-tête,
+      plus d'espace vide en haut (gestion « edge-to-edge » + zones de sécurité).
+- [x] **Import des contacts du téléphone réparé** : autorisations manquantes ajoutées, import par
+      lots (gros carnets de plusieurs centaines de contacts), gestion des contacts sans nom.
+- [x] **Bouton d'action flottant** (menu « + » en bas à droite) : accès direct à *Nouveau client* et
+      *Importer des contacts*, désormais bien visibles.
+- [x] **Abonnement visible sur l'accueil** : rappel discret du forfait et des jours d'essai restants,
+      d'un simple coup d'œil.
+- [x] **Bouton de synchronisation** (en ligne / hors-ligne) de retour sur le tableau de bord.
+- [x] **Notifications à l'image de Gextimo** : logo et couleur de la marque dans la barre de notifs.
+- [x] **Langues limitées au Français et à l'Anglais** (les langues non finalisées sont masquées).
+- [x] **Correctifs serveur bloquants** : plusieurs erreurs empêchaient la connexion et la création de
+      commandes/clients — corrigées et déployées.
 
-### Étape 2 — Authentification et accès
-- Connexion et inscription du gérant d'atelier
-- Procédure de récupération de mot de passe simplifiée (téléphone → code reçu par e-mail → nouveau mot de passe)
-- Connexion de l'équipe (assistants / membres) via un code d'accès individuel
-- Espace de connexion séparé pour l'équipe d'administration
-- Messages d'erreur clairs (distinction entre problème de connexion internet et identifiants incorrects)
+### 2.2 En cours 🔧
+- [ ] **Deux applications distinctes** :
+  - **Gextimo** (app des Artisans / Stylistes / Designers) → destinée au grand public / Play Store ;
+  - **Gextimo Admin** (console interne réservée à l'équipe, quelques comptes) → non publiée.
+  *Aujourd'hui une seule app mélange les deux identités : on les sépare proprement.*
+- [ ] **Numéro de téléphone unifié** : enregistrer et rechercher le numéro sous une seule forme
+      normalisée, pour éviter tout échec de connexion dû à un espace ou un format différent.
+- [ ] **Zones de sécurité (dernières versions Android)** : intégrer le composant dédié pour un
+      affichage parfait sur les téléphones les plus récents (Android 15+).
 
-### Étape 3 — Carnet de clients
-- Ajout, modification, recherche et archivage des clients
-- Import direct des contacts du téléphone (sélection multiple, contrôle anti-doublons)
-- Photo de profil (depuis la galerie) ou avatar généré automatiquement
-- Catégorisation des clients (VIP, régulier, occasionnel)
-
-### Étape 4 — Mesures et catalogue de vêtements
-- Fiches de mesures personnalisées par client
-- Export des mesures en PDF et envoi direct par WhatsApp
-- Export des mesures au format tableau (CSV)
-- Catalogue de 20 modèles de vêtements types (mode ouest-africaine), plus possibilité de créer des modèles personnalisés avec photos
-
-### Étape 5 — Gestion des commandes
-- Création de commandes avec statut (en cours, essai, livrée, annulée), date de livraison, niveau d'urgence et photo du tissu
-- Commandes à plusieurs articles : plusieurs vêtements dans une même commande, quantités et total calculés automatiquement
-- Commandes groupées : plusieurs sous-commandes pour un même client avec récapitulatif consolidé (total, acompte, reste à payer)
-- Échéances de livraison : ajout, suivi et marquage comme livré
-- Filtres et compteurs par statut sur la liste des commandes
-
-### Étape 6 — Paiements et facturation
-- Enregistrement des acomptes et des soldes, plusieurs modes de paiement
-- Reçus et relevés de paiement générés en PDF, envoyables par WhatsApp
-- Module de facturation complet : factures standards et personnalisées (logo de l'atelier, IFU, RCCM, pied de page), pour les commandes simples comme groupées
-- Paramétrage des informations de facturation de l'atelier
-
-### Étape 7 — Abonnements et paiement en ligne
-- Période d'essai gratuite de 14 jours
-- Plusieurs formules d'abonnement (Starter, Pro, Magnat) déverrouillant progressivement les fonctionnalités
-- Paiement en ligne intégré (FedaPay) et activation par code
-- Mise en avant des avantages de l'offre supérieure lorsqu'une fonctionnalité est verrouillée
-
-### Étape 8 — Programme de fidélité
-- Accumulation automatique de points sur les commandes
-- Conversion des points en abonnement bonus
-- Niveaux de fidélité (Bronze → Argent → Or → Platine → Diamant) avec barre de progression visuelle
-
-### Étape 9 — Équipe et permissions
-- Ajout de membres d'équipe (assistants / membres) avec code d'accès individuel
-- Révocation des accès en un clic
-- Gestion fine des droits par rôle : ce que chaque membre peut voir, créer, modifier ou supprimer (clients, commandes, mesures, factures...)
-
-### Étape 10 — Multi-ateliers
-- Gestion de plusieurs ateliers depuis un même compte
-- Sélecteur d'atelier et création de nouveaux ateliers (sous-ateliers)
-
-### Étape 11 — Module Caisse
-- Tableau de bord financier : total encaissé, montants en attente, commandes soldées
-- Suivi des clients débiteurs (montants restant dus)
-- Export du rapport mensuel en PDF
-
-### Étape 12 — Communications automatiques et notifications
-- Messages WhatsApp configurables et envoyés automatiquement : confirmation de commande, rappel avant livraison, commande prête
-- Centre de notifications interne avec compteur de non-lus
-- Réception des notifications push sur mobile
-
-### Étape 13 — Panel d'administration
-- Gestion des ateliers, des plans d'abonnement, des transactions et des paiements
-- Gestion des tickets de support (pièces jointes, notes internes)
-- Liste noire, journal d'audit et notifications globales
-- Comptes administrateurs avec rôles différenciés (super admin / admin / support)
-
-### Étape 14 — Traduction et confort d'utilisation
-- Système de traduction mis en place (français complet, anglais en préparation)
-- Sélecteur de langue disponible partout, y compris dans le panel admin
-- Mode sombre / clair
-- Listes rafraîchissables par glissement, états de chargement et messages d'écran vide avec actions claires
-
-### Étape 15 — Corrections et finitions (mai - juin 2026)
-- Plus de 60 retours d'utilisation analysés et corrigés (formulaires, navigation, affichages, alertes)
-- Bouton retour physique Android synchronisé avec la navigation de l'application
-- Renforcement des validations de formulaires (limites de caractères, champs obligatoires, etc.)
-
-### Étape 16 — Changement de marque
-- Renommage complet de l'application **CouturePro → Gextimo** sur l'ensemble des écrans, traductions et supports
+### 2.3 Reste à finir dans ce sprint ⏳
+- [ ] Généraliser le nouveau bouton flottant et les états d'écran vide sur les autres listes.
+- [ ] Passe de finition visuelle des barres d'onglets (Paramètres, Outils créatifs) sur petits écrans.
+- [ ] Finaliser la traduction anglaise.
 
 ---
 
-## 4. Version mobile de l'espace Artisan (Android / iOS) — chantier en parallèle
+## 3. Notifications — stratégie retenue
 
-Un chantier dédié à l'application mobile native a été engagé en parallèle de la version web :
-- Mise en place du projet Android
-- Intégration des fonctions natives : appareil photo, notifications, partage, identifiant d'appareil
-- Mise en place du fonctionnement **hors connexion internet** (base de données locale + synchronisation différée), avec des sessions longue durée (30 jours pour le gérant, 7 jours pour l'équipe)
-- Premiers scripts de génération de l'application Android (APK)
-
-⚠️ **Point d'attention** : ce chantier mobile doit maintenant être **mis à jour** avec toutes les fonctionnalités livrées récemment côté web (Module Caisse, multi-ateliers, facturation PDF, changement de marque Gextimo, traductions) avant d'aller plus loin.
+- **Notifications locales** (rappels, confirmations d'action) : ✅ en place et à l'image de Gextimo.
+- **Notifications push** (recevoir une alerte **application fermée**) : **reportées**. Elles
+  nécessiteraient un service tiers (Firebase). Pour l'instant on s'appuie sur les notifications
+  locales + une actualisation à l'ouverture de l'app. Le push « app fermée » sera étudié plus tard,
+  si le besoin se confirme.
 
 ---
 
-## 5. Espace Designer — le prochain grand chantier
+## 4. Prochaines grandes étapes (après ce sprint)
 
-L'espace Designer est un **nouveau profil professionnel** sur Gextimo, complémentaire de l'espace Artisan : il permet à un créateur de présenter ses collections et de s'appuyer sur un réseau d'ateliers pour les réaliser.
+### 4.1 Espace Designer & vitrine — finitions
+Le socle est construit et branché. Restent des finitions ciblées : page publique d'abonnement
+Premium, achat de mise en avant en self-service, filtres avancés de la galerie, formulaire de devis
+dédié, et une passe générale de **refonte visuelle** (le design actuel est fonctionnel mais brut).
 
-### Étape 17 — Rôle et inscription Designer
-- Introduction d'un nouveau profil **Designer** dans le système, en complément des rôles existants (Propriétaire / Assistant / Membre d'atelier)
-- Parcours d'inscription adapté : choix du profil (Artisan ou Designer) dès la création de compte
-- Tableau de bord dédié, distinct de celui d'un atelier, avec ses propres menus et statistiques
+### 4.2 Mode hors-ligne mobile
+Fiabiliser la synchronisation données ↔ serveur avec indicateur d'état, sessions longue durée
+(30 j gérant / 7 j équipe).
 
-### Étape 18 — Gestion des collections
-- Création et gestion de collections (nom, thème ou saison, description, visuel de couverture)
-- Ajout de pièces à une collection, avec fiche technique par pièce (tissus, tailles disponibles, prix indicatif, photos)
-- Mise en avant des collections (collection vedette, archivage des collections passées)
+### 4.3 Distribution
+Générer les versions installables des **deux** apps, puis préparer la publication de **Gextimo** sur
+le Play Store. **iOS** : à ouvrir plus tard (nécessite un environnement Mac/Xcode).
 
-### Étape 19 — Mise en relation Designer ↔ Atelier
-- Un designer peut associer ses créations à un ou plusieurs ateliers partenaires capables de les réaliser
-- Réception et suivi par le designer des demandes de réalisation transmises aux ateliers
-- Visibilité croisée : un atelier Gextimo peut afficher les collections de designers qu'il réalise pour lui
+### 4.4 Compléments produit
+Facturation Designer (devis/facture/reçu + DGI), gestion du stock tissu/fil, rappels SMS (clients
+sans WhatsApp), catalogue d'inspiration (« mood board »).
 
-### Étape 20 — Statistiques et visibilité du Designer
-- Tableau de bord : nombre de vues par collection, pièces les plus demandées, taux de conversion des demandes
-- Historique des demandes reçues et de leur statut
-
----
-
-## 6. Vitrine publique — l'espace de publication des Designers
-
-La vitrine publique est un espace de **publication réservé aux Designers** : une page de présentation professionnelle, accessible sans connexion, où ils mettent en avant leurs collections. Les Artisans n'ont pas leur propre vitrine et ne peuvent rien y publier, mais ils peuvent **consulter** celles des Designers depuis leur espace Gextimo — pour s'inspirer ou repérer un partenaire potentiel.
-
-### Étape 21 — Page vitrine publique automatique (Designers)
-- Génération automatique d'une page publique pour chaque Designer (consultable sans compte Gextimo)
-- Contenu : présentation, ville, spécialités, photo de couverture, années d'expérience
-- Catalogue public des collections, avec photos
-- Côté Artisan : un espace "Découvrir les Designers" permet de consulter ces vitrines en lecture uniquement, directement depuis l'application
-
-### Étape 22 — Réputation et avis
-- Indicateurs de réputation affichés sur la vitrine d'un Designer : note moyenne, nombre d'avis, ponctualité, nombre de créations en ligne
-- Collecte simplifiée d'avis : lien envoyé au client après livraison pour laisser une note, sans création de compte côté client
-
-### Étape 23 — Partage et mise en contact
-- URL personnalisée et partageable (réseaux sociaux, carte de visite numérique, code QR)
-- Bouton de contact direct par WhatsApp depuis la vitrine, vers le Designer
+### 4.5 Préparation au lancement public
+CGU + politique de confidentialité validées, vérifications de sécurité, traduction EN complète.
 
 ---
 
-## 7. Autres prochaines étapes — espace Artisan
+## 5. En résumé
 
-### Étape 24 — Mise à niveau de la version mobile
-Reporter sur l'application mobile l'ensemble des fonctionnalités livrées récemment côté web (Caisse, multi-ateliers, facturation, rebranding, traductions).
-
-### Étape 25 — Finalisation du mode hors-ligne
-Fiabiliser la synchronisation des données entre l'application mobile et le serveur, avec un indicateur visuel de l'état de synchronisation pour l'utilisateur.
-
-### Étape 26 — Tests et première application installable
-Tests sur appareils Android réels, puis génération des premières versions installables (APK) ; préparation du chantier iOS.
-
-### Étape 27 — Finitions abonnement
-Finaliser l'affichage du quota de factures envoyées par WhatsApp selon la formule d'abonnement souscrite.
-
-### Étape 28 — Fonctionnalités complémentaires
-- Gestion du stock de tissu / fil (suivi des chutes de matière)
-- Rappels par SMS pour les clients ne disposant pas de WhatsApp
-- Étude de l'élargissement de la facturation à toutes les formules d'abonnement
-- Catalogue d'inspiration visuelle pour les modèles (type « mood board »)
-
-### Étape 29 — Préparation au lancement public
-- Finalisation et validation juridique des Conditions Générales d'Utilisation et de la Politique de Confidentialité
-- Vérifications de sécurité avant ouverture au public
-- Traduction complète de l'application en anglais
-
----
-
-## 8. En résumé
-
-En l'espace de huit semaines, Gextimo est passé d'un cahier des charges à une plateforme web quasi complète pour l'**espace Artisan**, couvrant l'ensemble du parcours d'un atelier de couture — du client à la facture, en passant par les mesures, les commandes, les paiements, l'abonnement, l'équipe et la gestion multi-ateliers — avec un panel d'administration pleinement opérationnel.
-
-La prochaine grande étape consiste à ouvrir Gextimo aux **Designers**, avec un espace dédié (profil, collections, mise en relation avec les ateliers) et une **vitrine publique réservée aux Designers** — consultable en lecture par les Artisans depuis leur espace —, qui constituera la première brique visible par le grand public. En parallèle, la mise à niveau et la finalisation de la **version mobile hors-ligne** de l'espace Artisan reste une priorité pour une utilisation sur le terrain sans dépendance à une connexion internet permanente.
+La plateforme **web** (Artisan + Admin) et l'**espace Designer + vitrine publique** sont construits et
+fonctionnels. Le travail du moment porte sur la **fiabilisation et la finition de l'application mobile
+Android**, testée directement sur un vrai téléphone : affichage plein écran, import de contacts,
+visibilité de l'abonnement, notifications à la marque, et la **séparation en deux applications**
+(Gextimo pour les professionnels, Gextimo Admin en interne). Viennent ensuite la finalisation du
+hors-ligne, la distribution (Play Store), puis l'ouverture iOS.
