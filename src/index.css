@@ -286,6 +286,14 @@ body {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
+.animate-fade-in { animation: fade-in 150ms ease-out both; }
+
+/* Apparition des items du FAB speed-dial */
+@keyframes fab-item {
+  from { opacity: 0; transform: translateY(10px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-fab-item { animation: fab-item 160ms cubic-bezier(0.34,1.56,0.64,1) both; }
 
 /* Entrée de page : fade + slide-up */
 @keyframes page-enter {

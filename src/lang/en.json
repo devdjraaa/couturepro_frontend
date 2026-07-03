@@ -518,6 +518,7 @@
   "clients": {
     "titre": "Clients",
     "nouveau": "New client",
+    "importer_contacts": "Import contacts",
     "recherche_placeholder": "Search a client…",
     "vide": {
       "titre": "Your list is empty",

@@ -518,6 +518,7 @@
   "clients": {
     "titre": "Clients",
     "nouveau": "Nouveau client",
+    "importer_contacts": "Importer des contacts",
     "recherche_placeholder": "Rechercher un client…",
     "vide": {
       "titre": "Votre carnet est vierge",
