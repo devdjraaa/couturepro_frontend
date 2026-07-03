@@ -322,25 +322,6 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
     return () => { on = false }
   }, [doc.qr_code_url])
 
-  const habiller = async () => {
-    if (habilling) return
-    setHabilling(true)
-    try { await partagerFactureHabillee(doc, atelier) }
-    catch { alert(t('facturation.doc.habillage_erreur')) }
-    finally { setHabilling(false) }
-  }
-
-  // Le qrCode renvoyé par e-MECeF est un CONTENU (pas une URL) → on génère l'image QR.
-  useEffect(() => {
-    let on = true
-    if (doc.qr_code_url) {
-      QRCode.toDataURL(doc.qr_code_url, { width: 220, margin: 1 })
-        .then(url => { if (on) setQrDataUrl(url) })
-        .catch(() => { if (on) setQrDataUrl(null) })
-    } else { setQrDataUrl(null) }
-    return () => { on = false }
-  }, [doc.qr_code_url])
-
   const total = calcTotal(doc.lignes || [])
   const restant = total - (Number(doc.acompte) || 0)
 
