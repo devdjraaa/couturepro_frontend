@@ -18,7 +18,7 @@ const NAV_GROUPS = [
       { to: ROUTES.DASHBOARD,  icon: Home,          key: 'dashboard',   end: true },
       { to: '/commandes',      icon: ClipboardList, key: 'commandes'             },
       { to: '/clients',        icon: Users,         key: 'clients'               },
-      { to: '/catalogue',      icon: Layers,        key: 'atelier'               },
+      { to: '/catalogue',      icon: Layers,        key: 'catalogue'             },
       { to: ROUTES.MA_VITRINE, icon: Store,         key: 'ma_vitrine'           },
     ],
   },

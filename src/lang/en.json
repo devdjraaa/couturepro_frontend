@@ -2017,6 +2017,7 @@
     "supprimer": "Delete",
     "confirmer_suppression": "Delete this creation?",
     "aucun": "No creations in this category.",
+    "aucun_sous": "Add sketches, tech packs, patterns or moodboards to enrich your storefront.",
     "succes_ajout": "Creation added.",
     "succes_modif": "Creation updated.",
     "succes_suppr": "Creation deleted.",
