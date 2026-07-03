@@ -700,7 +700,8 @@
     "onglets": {
       "en_cours": "In progress",
       "livrees": "Delivered",
-      "toutes": "All"
+      "toutes": "All",
+      "annulees": "Cancelled"
     },
     "statut": {
       "en_cours": "In progress",

@@ -700,7 +700,8 @@
     "onglets": {
       "en_cours": "En cours",
       "livrees": "Livrées",
-      "toutes": "Toutes"
+      "toutes": "Toutes",
+      "annulees": "Annulées"
     },
     "statut": {
       "en_cours": "En cours",
