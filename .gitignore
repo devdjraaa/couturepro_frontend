@@ -26,4 +26,3 @@ capacitor.config.json.bak
 *.njsproj
 *.sln
 *.sw?
-public/screentest/

@@ -51,6 +51,9 @@
 
     <!-- Contacts (import depuis le carnet du téléphone) -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!-- Le plugin @capacitor-community/contacts exige aussi WRITE_CONTACTS déclaré
+         (son requestPermissions() plante sinon), même si l'app ne fait que LIRE les contacts. -->
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 
     <!-- Caméra / galerie -->
     <uses-permission android:name="android.permission.CAMERA" />
