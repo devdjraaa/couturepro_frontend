@@ -1,4 +1,14 @@
 {
+  "sync": {
+    "online": "Online",
+    "hors_ligne": "Offline",
+    "actions_attente": "Offline — {{count}} action pending",
+    "actions_attente_plural": "Offline — {{count}} actions pending",
+    "en_cours": "Syncing…",
+    "synchronise": "Synced",
+    "erreur": "Sync error",
+    "refresh": "Refresh"
+  },
   "artisan_app": {
     "titre": "Your workspace is on the mobile app",
     "intro": "The Gextimo Artisan workspace — clients, orders, measurements and more — is optimized for the mobile app.",
@@ -420,6 +430,11 @@
   },
   "dashboard": {
     "titre": "Dashboard",
+    "abonnement": {
+      "jours_restants_one": "{{count}} day left",
+      "jours_restants_other": "{{count}} days left",
+      "gerer": "Manage"
+    },
     "bonjour": "Good morning",
     "bon_aprem": "Good afternoon",
     "bonsoir": "Good evening",

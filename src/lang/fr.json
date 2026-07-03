@@ -1,4 +1,14 @@
 {
+  "sync": {
+    "online": "En ligne",
+    "hors_ligne": "Hors ligne",
+    "actions_attente": "Hors ligne — {{count}} action en attente",
+    "actions_attente_plural": "Hors ligne — {{count}} actions en attente",
+    "en_cours": "Synchronisation…",
+    "synchronise": "Synchronisé",
+    "erreur": "Erreur de synchronisation",
+    "refresh": "Actualiser"
+  },
   "artisan_app": {
     "titre": "Votre espace est sur l'application mobile",
     "intro": "L'espace Artisan Gextimo — gestion des clients, commandes, mesures et bien plus — est optimisé pour l'application mobile.",
@@ -420,6 +430,11 @@
   },
   "dashboard": {
     "titre": "Tableau de bord",
+    "abonnement": {
+      "jours_restants_one": "{{count}} jour restant",
+      "jours_restants_other": "{{count}} jours restants",
+      "gerer": "Gérer"
+    },
     "bonjour": "Bonjour",
     "bon_aprem": "Bon après-midi",
     "bonsoir": "Bonsoir",
