@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
+import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
-import { Plus, Users, AlignLeft, ArrowDownAZ, ClipboardList, BookUser, Check } from 'lucide-react'
+import { Plus, X, UserPlus, Users, AlignLeft, ArrowDownAZ, ClipboardList, BookUser, Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
@@ -24,11 +25,19 @@ async function pickContacts() {
     const { contacts } = await Contacts.getContacts({
       projection: { name: true, phones: true },
     })
-    return contacts.map(c => ({
-      nom:       c.name?.familyName ?? c.name?.display?.split(' ').at(-1) ?? '',
-      prenom:    c.name?.givenName  ?? '',
-      telephone: c.phones?.[0]?.number?.replace(/\s/g, '') ?? '',
-    })).filter(c => c.nom || c.prenom)
+    return contacts.map(c => {
+      // ⚠️ `||` (pas `??`) : beaucoup de contacts ont familyName/givenName = '' (vide, pas null),
+      // ce que `??` ne rattrape pas → nom vide → le backend rejette tout le lot.
+      const family  = (c.name?.familyName || '').trim()
+      const given   = (c.name?.givenName  || '').trim()
+      const display = (c.name?.display    || '').trim()
+      const tel     = (c.phones?.[0]?.number || '').replace(/\s/g, '')
+      // nom toujours non-vide : famille → nom affiché → prénom → téléphone
+      const nom     = family || display || given || tel
+      // prénom seulement s'il ne fait pas doublon avec le nom
+      const prenom  = family ? given : ''
+      return { nom, prenom, telephone: tel }
+    }).filter(c => c.nom && c.telephone)
   } catch {
     toast.error("Import contacts non disponible sur cette plateforme.")
     return []
@@ -89,6 +98,7 @@ export default function ClientsPage() {
   const [search, setSearch]   = useState('')
   const [sort, setSort]       = useState('recent')
   const [showSheet, setShowSheet] = useState(false)
+  const [fabOpen, setFabOpen] = useState(false)
   const [doublonError, setDoublonError] = useState(null)
   // #3-5 — Import contacts
   const [contactsToImport, setContactsToImport] = useState(null)  // null | Contact[]
@@ -140,7 +150,15 @@ export default function ClientsPage() {
     setImporting(true)
     try {
       const contacts = [...selectedContacts].map(idx => contactsToImport[idx])
-      const { imported, skipped } = await clientService.importBatch(contacts)
+      // Le backend limite à 200 contacts par requête → on découpe en lots et on agrège.
+      const CHUNK = 200
+      let imported = 0, skipped = 0
+      for (let i = 0; i < contacts.length; i += CHUNK) {
+        const res = await clientService.importBatch(contacts.slice(i, i + CHUNK))
+        imported += res?.imported ?? 0
+        skipped  += res?.skipped ?? 0
+      }
+      queryClient.invalidateQueries()
       toast.success(t('clients.import_resultat', { imported, skipped }))
     } catch {
       toast.error(t('clients.import_erreur'))
@@ -251,15 +269,57 @@ export default function ClientsPage() {
         )}
       </div>
 
-      {/* FAB ajouter client */}
-      <button
-        type="button"
-        aria-label={t('clients.ajouter_aria')}
-        onClick={() => setShowSheet(true)}
-        className="fixed z-40 right-4 bottom-[calc(var(--bottom-nav-height)+1rem+var(--safe-area-bottom))] w-14 h-14 rounded-full bg-primary text-inverse flex items-center justify-center shadow-lg shadow-primary/30 hover:bg-primary-600 active:scale-90 transition-all duration-200 lg:hidden"
-      >
-        <Plus size={24} />
-      </button>
+      {/* FAB speed-dial (Nouveau client + Importer contacts).
+          Rendu via portal dans <body> pour rester FIXÉ au viewport : sinon l'ancêtre
+          .animate-page-enter (transform persistant) casserait le position:fixed. */}
+      {createPortal(
+        <div className="lg:hidden">
+          {/* Backdrop quand ouvert */}
+          {fabOpen && (
+            <button
+              type="button"
+              aria-label={t('commun.fermer')}
+              onClick={() => setFabOpen(false)}
+              className="fixed inset-0 z-40 bg-ink/40 backdrop-blur-[1px] animate-fade-in"
+            />
+          )}
+
+          <div className="fixed z-50 right-4 bottom-[calc(var(--bottom-nav-height)+1rem+var(--safe-area-bottom))] flex flex-col items-end gap-3">
+            {/* Actions (visibles quand ouvert) */}
+            {fabOpen && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => { setFabOpen(false); handleOpenContacts() }}
+                  className="flex items-center gap-2 pl-4 pr-3 h-11 rounded-full bg-card border border-edge text-ink shadow-lg active:scale-95 transition-transform animate-fab-item"
+                >
+                  <span className="text-sm font-medium">{t('clients.importer_contacts')}</span>
+                  <span className="w-8 h-8 rounded-full bg-accent/15 text-accent-600 flex items-center justify-center"><BookUser size={16} /></span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setFabOpen(false); setShowSheet(true) }}
+                  className="flex items-center gap-2 pl-4 pr-3 h-11 rounded-full bg-card border border-edge text-ink shadow-lg active:scale-95 transition-transform animate-fab-item"
+                >
+                  <span className="text-sm font-medium">{t('clients.nouveau')}</span>
+                  <span className="w-8 h-8 rounded-full bg-primary/12 text-primary flex items-center justify-center"><UserPlus size={16} /></span>
+                </button>
+              </>
+            )}
+
+            {/* Bouton principal (opaque) */}
+            <button
+              type="button"
+              aria-label={t('clients.ajouter_aria')}
+              onClick={() => setFabOpen(o => !o)}
+              className="w-14 h-14 rounded-full bg-primary text-inverse flex items-center justify-center shadow-xl shadow-primary/40 hover:bg-primary-600 active:scale-90 transition-all duration-200"
+            >
+              <Plus size={24} className={cn('transition-transform duration-200', fabOpen && 'rotate-45')} />
+            </button>
+          </div>
+        </div>,
+        document.body,
+      )}
 
       <BottomSheet
         isOpen={showSheet}
