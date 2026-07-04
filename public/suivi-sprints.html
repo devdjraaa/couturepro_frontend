@@ -215,9 +215,9 @@ function render(){
     card.className = 'sprint' + (allDone ? '' : (done>0 ? '' : ' collapsed')); // closed if not started
     card.innerHTML = `
       <div class="sp-head" onclick="toggle(this)">
-        <div class="sp-num ${allDone?'done':''}">${allDone?'✓':si}</div>
+        <div class="sp-num ${allDone?'done':''}">${allDone?'✓':si+1}</div>
         <div class="sp-meta">
-          <div class="sp-title">Sprint ${si} — ${sp.t}</div>
+          <div class="sp-title">Sprint ${si+1} — ${sp.t}</div>
           <div class="sp-goal">${sp.goal}</div>
         </div>
         <div class="sp-right">
@@ -265,7 +265,7 @@ function refreshSprint(card, si){
   card.querySelector('.sp-bar > i').style.width = pct+'%';
   card.querySelector('.sp-bar > i').classList.toggle('done', allDone);
   const pctEl = card.querySelector('.sp-pct'); pctEl.textContent = pct+'%'; pctEl.classList.toggle('done', allDone);
-  const num = card.querySelector('.sp-num'); num.classList.toggle('done', allDone); num.textContent = allDone?'✓':si;
+  const num = card.querySelector('.sp-num'); num.classList.toggle('done', allDone); num.textContent = allDone?'✓':si+1;
 }
 
 function updateGlobal(){
