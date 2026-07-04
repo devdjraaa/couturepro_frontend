@@ -3,14 +3,14 @@ import { Capacitor } from '@capacitor/core'
 import { StatusBar, Style } from '@capacitor/status-bar'
 import { getTheme as getStoredTheme, setTheme as storeTheme } from '@/utils/storage'
 
-async function applyStatusBar() {
+async function applyStatusBar(isDark) {
   if (!Capacitor.isNativePlatform()) return
   try {
-    // Edge-to-edge : la status bar se superpose au header (rouge). Le décalage du contenu est géré
-    // par la safe-area (viewport-fit=cover + .pt-safe sur le header → env(safe-area-inset-top)).
-    // Icônes claires (Style.Dark) pour le contraste sur le header rouge.
+    // Edge-to-edge : la status bar se superpose au contenu ; le décalage est géré par la safe-area
+    // (viewport-fit=cover + .pt-safe + plugin @capacitor-community/safe-area).
+    // Icônes adaptées au thème : foncées sur fond clair (pages d'auth), claires en mode sombre.
     await StatusBar.setOverlaysWebView({ overlay: true })
-    await StatusBar.setStyle({ style: Style.Dark })
+    await StatusBar.setStyle({ style: isDark ? Style.Dark : Style.Light })
   } catch { /* ignore sur émulateur/web sans status bar native */ }
 }
 
@@ -27,7 +27,7 @@ function resolveTheme(theme) {
 function applyTheme(theme) {
   const resolved = resolveTheme(theme)
   document.documentElement.setAttribute('data-theme', resolved)
-  applyStatusBar()
+  applyStatusBar(resolved === 'dark')
 }
 
 export function ThemeProvider({ children }) {

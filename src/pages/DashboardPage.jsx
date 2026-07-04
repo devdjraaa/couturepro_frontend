@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next'
 import { isToday, isPast, parseISO, differenceInCalendarDays, isThisMonth, subDays } from 'date-fns'
 import { useQueryClient } from '@tanstack/react-query'
 import { AppLayout } from '@/components/layout'
-import NetworkStatusButton from '@/components/layout/NetworkStatusButton'
 import { Skeleton, EmptyState, Button, CountdownBadge, MoneyAmount, QuickActionTile, LanguageSwitcher } from '@/components/ui'
 import { useAuth, useTheme } from '@/contexts'
 import { useCommandes, useCommandeStats } from '@/hooks/useCommandes'
@@ -44,8 +43,6 @@ function Greeting({ user, subtitle, hero = false }) {
         </div>
         {hero && (
           <div className="flex items-center gap-2 shrink-0 mt-1">
-            {/* Sync offline/online (natif uniquement) — le dashboard masque le header mobile */}
-            <NetworkStatusButton variant="hero" />
             <button
               type="button"
               onClick={toggleTheme}
