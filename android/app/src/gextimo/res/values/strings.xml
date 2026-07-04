@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <!-- Flavor « gextimo » : application des professionnels (Play Store) -->
+    <string name="app_name">Gextimo</string>
+    <string name="title_activity_main">Gextimo</string>
+</resources>

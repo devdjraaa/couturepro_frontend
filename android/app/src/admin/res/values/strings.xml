@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <!-- Flavor « admin » : console interne réservée à l'équipe -->
+    <string name="app_name">Gextimo Admin</string>
+    <string name="title_activity_main">Gextimo Admin</string>
+</resources>

@@ -22,6 +22,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    // Deux applications distinctes depuis le même code :
+    //  - gextimo : app des professionnels (Play Store)     → nom/icône dans src/gextimo/res
+    //  - admin   : console interne réservée à l'équipe      → nom/icône dans src/admin/res
+    flavorDimensions "cible"
+    productFlavors {
+        gextimo {
+            dimension "cible"
+            applicationId "com.gextimo.app"
+        }
+        admin {
+            dimension "cible"
+            applicationId "com.couturepro.admin"
+        }
+    }
 }
 
 repositories {
