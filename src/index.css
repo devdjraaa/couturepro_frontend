@@ -7,37 +7,41 @@
    TOKENS STATIQUES — ne changent pas avec le thème
    ════════════════════════════════════════════════════════ */
 @theme {
-  /* Typographie */
-  --font-display: 'Outfit', sans-serif;
-  --font-sans:    'DM Sans', sans-serif;
+  /* Typographie — Gextimo Couture */
+  --font-display: 'Bodoni Moda', serif;
+  --font-sans:    'Plus Jakarta Sans', sans-serif;
   --font-mono:    'JetBrains Mono', monospace;
 
-  /* Gold — accent premium / "à recouvrer" (statiques — ne basculent pas avec le thème) */
-  --color-gold:      #C8941F;
-  --color-gold-dark: #A67515;
+  /* Gold — accent premium (statiques, référence charte Couture) */
+  --color-gold:       #CDA662;
+  --color-gold-dark:  #A87F3E;
+  --color-gold-hi:    #E4C486;
+
+  /* Avatar — brun foncé pour texte sur fond or */
+  --color-avatar-on-gold: #2a1c0a;
 
   /* Tailles de texte custom */
   --text-2xs: 0.625rem;   /* 10px — badges, labels compacts */
   --text-xxs: 0.5625rem;  /* 9px  — cas extrêmes uniquement */
 
-  /* Coins arrondis — généreux mais pas bulle */
-  --radius-sm:   0.5rem;    /* 8px  — inputs, badges */
-  --radius:      0.75rem;   /* 12px — cartes, boutons */
-  --radius-lg:   1rem;      /* 16px — modals, bottom sheets */
-  --radius-xl:   1.5rem;    /* 24px — FAB, avatars */
+  /* Coins arrondis */
+  --radius-sm:   0.5rem;
+  --radius:      0.75rem;
+  --radius-lg:   1rem;
+  --radius-xl:   1.5rem;
   --radius-full: 9999px;
 
-  /* Ombres chaudes (teinte stone — jamais grises froides) */
-  --shadow-xs: 0 1px 2px rgba(28, 25, 23, 0.04);
-  --shadow-sm: 0 1px 3px rgba(28, 25, 23, 0.06), 0 1px 2px rgba(28, 25, 23, 0.04);
-  --shadow-md: 0 4px 8px rgba(28, 25, 23, 0.08), 0 2px 4px rgba(28, 25, 23, 0.04);
-  --shadow-lg: 0 12px 24px rgba(28, 25, 23, 0.10), 0 4px 8px rgba(28, 25, 23, 0.05);
-  --shadow-xl: 0 20px 40px rgba(28, 25, 23, 0.12);
+  /* Ombres chaudes */
+  --shadow-xs: 0 1px 2px rgba(16, 11, 10, 0.06);
+  --shadow-sm: 0 1px 3px rgba(16, 11, 10, 0.10), 0 1px 2px rgba(16, 11, 10, 0.06);
+  --shadow-md: 0 4px 8px rgba(16, 11, 10, 0.14), 0 2px 4px rgba(16, 11, 10, 0.08);
+  --shadow-lg: 0 12px 24px rgba(16, 11, 10, 0.18), 0 4px 8px rgba(16, 11, 10, 0.10);
+  --shadow-xl: 0 24px 60px -24px rgba(0, 0, 0, 0.70);
 
-  /* Easing spring pour les animations FAB / bottom sheet */
+  /* Easing spring */
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* ── Admin sidebar — toujours sombre, indépendant du thème UI ── */
+  /* ── Admin sidebar — toujours sombre ── */
   --color-admin-surface: #111827;
   --color-admin-hover:   #1F2937;
   --color-admin-text:    #9CA3AF;
@@ -47,10 +51,9 @@
 
 /* ════════════════════════════════════════════════════════
    TOKENS DYNAMIQUES — référencent les variables CSS
-   qui changent avec [data-theme="dark"]
    ════════════════════════════════════════════════════════ */
 @theme inline {
-  /* ── Primaire — Indigo vibrant ── */
+  /* ── Primaire — Rouge Gextimo ── */
   --color-primary-50:  var(--color-primary-50);
   --color-primary-100: var(--color-primary-100);
   --color-primary-200: var(--color-primary-200);
@@ -67,7 +70,7 @@
   --color-accent:     var(--color-accent);
   --color-accent-600: var(--color-accent-600);
 
-  /* ── Terracotta — touch africaine ── */
+  /* ── Terracotta ── */
   --color-terra:       var(--color-terra);
   --color-terra-light: var(--color-terra-light);
   --color-terra-50:    var(--color-terra-50);
@@ -79,31 +82,36 @@
   --color-info:    var(--color-info);
 
   /* ── Surfaces ── */
-  --color-app:      var(--color-bg-app);      /* bg-app      */
-  --color-card:     var(--color-bg-card);     /* bg-card      */
-  --color-elevated: var(--color-bg-elevated); /* bg-elevated  */
-  --color-subtle:   var(--color-bg-subtle);   /* bg-subtle    */
-  --color-inset:    var(--color-bg-inset);    /* bg-inset     */
+  --color-app:      var(--color-bg-app);
+  --color-card:     var(--color-bg-card);
+  --color-elevated: var(--color-bg-elevated);
+  --color-subtle:   var(--color-bg-subtle);
+  --color-inset:    var(--color-bg-inset);
 
   /* ── Texte ── */
-  --color-ink:     var(--color-text-primary);   /* text-ink     */
-  --color-dim:     var(--color-text-secondary); /* text-dim     */
-  --color-ghost:   var(--color-text-tertiary);  /* text-ghost   */
-  --color-inverse: var(--color-text-inverse);   /* text-inverse */
+  --color-ink:     var(--color-text-primary);
+  --color-dim:     var(--color-text-secondary);
+  --color-ghost:   var(--color-text-tertiary);
+  --color-inverse: var(--color-text-inverse);
 
   /* ── Bordures ── */
-  --color-edge:        var(--color-border);        /* border-edge       */
-  --color-edge-strong: var(--color-border-strong); /* border-edge-strong */
+  --color-edge:        var(--color-border);
+  --color-edge-strong: var(--color-border-strong);
 
-  /* ── Gold-light — fond doré, dynamique ── */
+  /* ── Gold-light (fond doré, dynamique) ── */
   --color-gold-light: var(--color-gold-light);
+
+  /* ── Tokens Couture dynamiques ── */
+  --color-hair-gold: var(--color-hair-gold);
+  --color-gold-soft: var(--color-gold-soft);
+  --color-red-hi:    var(--color-red-hi);
 }
 
 /* ════════════════════════════════════════════════════════
-   VARIABLES CSS — Thème clair (source de vérité)
+   VARIABLES CSS — Thème clair
    ════════════════════════════════════════════════════════ */
 :root {
-  /* ── Primaire — Rouge Gextimo (charte officielle #D00B0B) ── */
+  /* ── Primaire — Rouge Gextimo (charte officielle) ── */
   --color-primary-50:  #FDEAEA;
   --color-primary-100: #FAC9C9;
   --color-primary-200: #F39B9B;
@@ -131,14 +139,14 @@
   --color-danger:  #DC2626;
   --color-info:    #1F6BC8;
 
-  /* ── Surfaces — fond crème chaud, jamais blanc pur ── */
+  /* ── Surfaces — fond crème chaud ── */
   --color-bg-app:      #FAF8F5;
   --color-bg-card:     #FFFFFF;
   --color-bg-elevated: #F4F1EC;
   --color-bg-subtle:   #F0EDE8;
   --color-bg-inset:    #E8E4DD;
 
-  /* ── Texte — jamais noir pur ── */
+  /* ── Texte ── */
   --color-text-primary:   #1C1917;
   --color-text-secondary: #57534E;
   --color-text-tertiary:  #A8A29E;
@@ -148,8 +156,13 @@
   --color-border:        #E7E5E4;
   --color-border-strong: #D6D3D1;
 
-  /* ── Gold-light — fond doré doux ── */
+  /* ── Gold-light ── */
   --color-gold-light: #F5E6C8;
+
+  /* ── Tokens Couture (mode clair) ── */
+  --color-hair-gold: rgba(200,148,31,.30);
+  --color-gold-soft: rgba(200,148,31,.12);
+  --color-red-hi:    #E85F5F;
 
   /* ── Transitions ── */
   --transition-fast:   150ms ease;
@@ -165,42 +178,53 @@
 }
 
 /* ════════════════════════════════════════════════════════
-   THÈME SOMBRE — overrides via data-theme="dark"
+   THÈME SOMBRE — Gextimo Couture
    ════════════════════════════════════════════════════════ */
 [data-theme="dark"] {
-  /* ── Surfaces ── */
-  --color-bg-app:      #12100F;
-  --color-bg-card:     #1E1B18;
-  --color-bg-elevated: #2A2520;
-  --color-bg-subtle:   #252118;
-  --color-bg-inset:    #0E0C0A;
+  /* ── Surfaces — noir chaud textile ── */
+  --color-bg-app:      #100B0A;
+  --color-bg-card:     #1B1412;
+  --color-bg-elevated: #241A17;
+  --color-bg-subtle:   #2E211D;
+  --color-bg-inset:    #150F0D;
 
-  /* ── Texte ── */
-  --color-text-primary:   #F5F4F2;
-  --color-text-secondary: #C9C5C0;
-  --color-text-tertiary:  #6B645C;
-  --color-text-inverse:   #1C1917;
+  /* ── Texte — crème soyeuse ── */
+  --color-text-primary:   #F4ECE1;
+  --color-text-secondary: #A99A8B;
+  --color-text-tertiary:  #5A5049;
+  --color-text-inverse:   #F4ECE1;
 
-  /* ── Bordures ── */
-  --color-border:        #3A3530;
-  --color-border-strong: #504840;
+  /* ── Bordures — fil d'or discret ── */
+  --color-border:        rgba(233,206,180,.10);
+  --color-border-strong: rgba(233,206,180,.18);
 
-  /* ── Tintes primaires — fonds sombres pour badges et icônes (rouge charte) ── */
-  --color-primary-50:  #2A0E0E;
-  --color-primary-100: #3D1414;
+  /* ── Primaire — Rouge Gextimo Couture ── */
+  --color-primary-50:  rgba(232,42,30,.14);
+  --color-primary-100: rgba(232,42,30,.22);
+  --color-primary-200: rgba(232,42,30,.32);
+  --color-primary-300: #F5443A;
+  --color-primary-400: #E82A1E;
+  --color-primary:     #E82A1E;
+  --color-primary-600: #A50D04;
+  --color-primary-700: #8E0B03;
+
+  /* ── Accent ── */
+  --color-accent-50: rgba(245,158,11,.12);
+  --color-terra-50:  rgba(200,84,31,.12);
 
   /* ── Sémantiques — plus lumineux sur fond sombre ── */
-  --color-success: #34D399;
+  --color-success: #4FB07C;
   --color-warning: #FBBF24;
   --color-danger:  #F87171;
   --color-info:    #60A5FA;
 
-  /* ── Gold-light — fond doré sombre ── */
-  --color-gold-light: #2E2108;
+  /* ── Gold-light ── */
+  --color-gold-light: rgba(205,166,98,.14);
 
-  /* ── Accent + terra — tintes de fond sombres ── */
-  --color-accent-50: #2A1F00;
-  --color-terra-50:  #2A1208;
+  /* ── Tokens Couture (mode sombre) ── */
+  --color-hair-gold: rgba(201,162,90,.35);
+  --color-gold-soft: rgba(205,166,98,.14);
+  --color-red-hi:    #F5443A;
 }
 
 /* ════════════════════════════════════════════════════════
@@ -214,7 +238,7 @@
 
 body {
   margin: 0;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   background-color: var(--color-bg-app);
   color: var(--color-text-primary);
   -webkit-tap-highlight-color: transparent;
@@ -231,45 +255,46 @@ body {
    CLASSES UTILITAIRES GLOBALES
    ════════════════════════════════════════════════════════ */
 
-/* Fond tissé — texture subtile rappelant le tissage */
+/* Texture textile — diagonale croisée (matière couture) */
 .app-background {
   background-color: var(--color-bg-app);
-  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h20v20H0z' fill='none'/%3E%3Cpath d='M0 10h20M10 0v20' stroke='%23e7e5e4' stroke-width='0.3'/%3E%3C/svg%3E");
-  background-size: 20px 20px;
+  background-image:
+    repeating-linear-gradient(135deg, rgba(255,255,255,.010) 0 1px, transparent 1px 8px),
+    repeating-linear-gradient(45deg,  rgba(0,0,0,.06)        0 1px, transparent 1px 9px);
 }
 
 [data-theme="dark"] .app-background {
-  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h20v20H0z' fill='none'/%3E%3Cpath d='M0 10h20M10 0v20' stroke='%2344403C' stroke-width='0.3'/%3E%3C/svg%3E");
+  background-image:
+    repeating-linear-gradient(135deg, rgba(255,255,255,.014) 0 1px, transparent 1px 8px),
+    repeating-linear-gradient(45deg,  rgba(0,0,0,.10)        0 1px, transparent 1px 9px);
 }
 
-/* Padding bas qui compense la bottom nav + safe area iOS */
+/* Padding bas — bottom nav + safe area iOS */
 .pb-safe {
   padding-bottom: calc(var(--bottom-nav-height) + var(--safe-area-bottom));
 }
 
-/* Safe area top — header mobile */
+/* Safe area top */
 .pt-safe {
   padding-top: var(--safe-area-top);
 }
 
-/* Conteneur complet de la barre de navigation basse */
+/* Bottom nav */
 .bottom-nav-container {
   padding-bottom: var(--safe-area-bottom);
   height: calc(var(--bottom-nav-height) + var(--safe-area-bottom));
 }
 
-/* Zone interne de la nav (hors safe area) */
 .h-bottom-nav {
   height: var(--bottom-nav-height);
 }
 
-/* Scrollbar iOS-style fine */
+/* Scrollbars */
 .scrollbar-thin {
   scrollbar-width: thin;
   scrollbar-color: var(--color-border) transparent;
 }
 
-/* Scrollbar masquée (carousels mobiles) */
 .scrollbar-none {
   scrollbar-width: none;
 }
@@ -278,10 +303,102 @@ body {
 }
 
 /* ════════════════════════════════════════════════════════
+   COMPOSANTS CSS — Gextimo Couture
+   ════════════════════════════════════════════════════════ */
+
+/* Bouton primaire — dégradé rouge, lueur, reflet intérieur, trame */
+.btn-primary-couture {
+  background: linear-gradient(160deg,
+    var(--color-primary-300, #F5443A)  0%,
+    var(--color-primary,     #E82A1E) 42%,
+    var(--color-primary-700, #8E0B03) 100%
+  );
+  box-shadow:
+    0 18px 40px -14px rgba(180,20,10,.55),
+    inset 0 1px 0 rgba(255,255,255,.22);
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 200ms ease, filter 150ms ease;
+}
+.btn-primary-couture::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    135deg,
+    rgba(255,255,255,.045) 0 1px,
+    transparent 1px 8px
+  );
+  pointer-events: none;
+  border-radius: inherit;
+}
+.btn-primary-couture:hover:not(:disabled) {
+  box-shadow:
+    0 22px 48px -12px rgba(180,20,10,.70),
+    inset 0 1px 0 rgba(255,255,255,.26);
+  filter: brightness(1.06);
+}
+.btn-primary-couture:active:not(:disabled) {
+  filter: brightness(0.93);
+  box-shadow:
+    0 8px 20px -8px rgba(180,20,10,.50),
+    inset 0 1px 0 rgba(255,255,255,.18);
+}
+
+/* Input — focus gold (remplace le focus primaire) */
+.input-couture-focus:focus {
+  outline: none;
+  border-color: var(--color-hair-gold) !important;
+  box-shadow: 0 0 0 4px var(--color-gold-soft) !important;
+}
+
+/* Section label — 11px / 800 / or / avant-filet */
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+.section-label::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 1px;
+  background: var(--color-hair-gold);
+  flex-shrink: 0;
+}
+
+/* Carte premium — filet d'or en tête */
+.card-couture {
+  position: relative;
+}
+.card-couture::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-hair-gold), transparent);
+  pointer-events: none;
+}
+
+/* Avatar — carré arrondi, dégradé or */
+.avatar-couture {
+  background: linear-gradient(135deg, var(--color-gold-hi, #E4C486) 0%, var(--color-gold, #CDA662) 100%);
+  color: var(--color-avatar-on-gold, #2a1c0a);
+  border-radius: 13px;
+  flex-shrink: 0;
+}
+
+/* ════════════════════════════════════════════════════════
    ANIMATIONS
    ════════════════════════════════════════════════════════ */
 
-/* Backdrop / overlay */
 @keyframes fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
@@ -295,35 +412,48 @@ body {
 }
 .animate-fab-item { animation: fab-item 160ms cubic-bezier(0.34,1.56,0.64,1) both; }
 
-/* Entrée de page : fade + slide-up */
 @keyframes page-enter {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Slide depuis la droite (page détail) */
+@keyframes tab-enter {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-tab-enter {
+  animation: tab-enter 200ms ease-out both;
+}
+
+@keyframes auth-card-enter {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+.animate-auth-card-enter {
+  animation: auth-card-enter 340ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
 @keyframes slide-in-right {
   from { opacity: 0; transform: translateX(100%); }
   to   { opacity: 1; transform: translateX(0); }
 }
 
-/* Bottom sheet */
 @keyframes slide-up {
   from { opacity: 0; transform: translateY(100%); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Shimmer skeleton */
 @keyframes shimmer {
   0%   { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
 
 .animate-page-enter {
-  animation: page-enter 220ms ease-out both;
+  animation: page-enter 240ms ease-out both;
 }
 
-/* Tap feedback générique — à appliquer sur tout élément cliquable custom */
 .tap-feedback {
   transition: transform 150ms ease;
 }

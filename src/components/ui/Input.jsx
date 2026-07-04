@@ -26,10 +26,10 @@ const Input = forwardRef(function Input(
           id={inputId}
           required={required}
           className={cn(
-            'w-full h-10 bg-card text-ink placeholder:text-ghost',
-            'border border-edge rounded-xl px-3 text-sm font-sans',
+            'w-full h-12 bg-elevated text-ink placeholder:text-ghost',
+            'border border-edge rounded-xl px-3 text-sm font-sans font-medium',
             'transition-colors duration-150',
-            'focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary',
+            'input-couture-focus',
             'disabled:opacity-50 disabled:cursor-not-allowed',
             Icon    && 'pl-9',
             suffix  && 'pr-10',

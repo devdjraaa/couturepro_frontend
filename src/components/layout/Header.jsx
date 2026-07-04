@@ -74,9 +74,13 @@ export default function Header({ title, showBack = false, onBack, rightAction, o
   return (
     <header
       className={cn(
-        'sticky top-0 z-20 bg-primary shrink-0 pt-safe',
+        'sticky top-0 z-20 shrink-0 pt-safe',
         className,
       )}
+      style={{
+        background: 'linear-gradient(160deg, var(--color-primary-300, #F5443A) 0%, var(--color-primary, #E82A1E) 45%, var(--color-primary-700, #8E0B03) 100%)',
+        boxShadow: '0 4px 24px -8px rgba(180,20,10,.40)',
+      }}
     >
       <div className="flex items-center gap-3 px-4 h-14">
 
@@ -93,7 +97,7 @@ export default function Header({ title, showBack = false, onBack, rightAction, o
 
         {/* Title + atelier switcher — left-aligned */}
         <div className="flex-1 min-w-0">
-          <h1 className="text-base font-semibold font-display text-inverse truncate leading-tight">
+          <h1 className="text-base font-bold font-display text-white truncate leading-tight tracking-tight">
             {title ?? 'Gextimo'}
           </h1>
           {user?.role === 'proprietaire' && atelier && (

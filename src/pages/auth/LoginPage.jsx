@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, ArrowRight, Check } from 'lucide-react'
 import { useAuth } from '@/contexts'
 import { AuthLayout } from '@/components/layout'
 import { Input, Button, LanguageSwitcher, PhoneInput } from '@/components/ui'
 import { ROUTES, IS_NATIVE } from '@/constants/routes'
+import { cn } from '@/utils/cn'
 
 function getOrCreateDeviceId() {
   const key = 'cp_device_id'
@@ -17,36 +18,41 @@ function getOrCreateDeviceId() {
   return id
 }
 
+const EASING = 'cubic-bezier(0.65, 0, 0.35, 1)' // ease-in-out cinématique
+
 export default function LoginPage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { login, equipeLogin } = useAuth()
-  const [tab, setTab]         = useState('proprietaire') // 'proprietaire' | 'equipe'
-  const [error, setError]     = useState('')
+  const [tab, setTab]         = useState('proprietaire')
+  const [propError, setPropError] = useState('')
+  const [equipeError, setEquipeError] = useState('')
   const [loading, setLoading] = useState(false)
   const [showPropPwd, setShowPropPwd] = useState(false)
   const [showEqPwd,   setShowEqPwd]   = useState(false)
   const [rememberMe,  setRememberMe]  = useState(true)
 
-  // Formulaire propriétaire
-  const [propForm, setPropForm] = useState({ telephone: '', password: '' })
+  const [propForm, setPropForm]   = useState({ telephone: '', password: '' })
   const setProp = key => e => setPropForm(f => ({ ...f, [key]: e.target.value }))
 
-  // Formulaire membre
   const [equipeForm, setEquipeForm] = useState({ code_acces: '', password: '' })
   const setEq = key => e => setEquipeForm(f => ({ ...f, [key]: e.target.value }))
 
-  // Distingue erreur réseau (offline) d'une vraie erreur 401 (mauvais creds)
-  // pour ne pas afficher "mot de passe incorrect" alors qu'on est juste offline.
   const formatLoginError = err => {
-    if (err?.code === 'reseau')         return t('erreurs.reseau_login')
+    if (err?.code === 'reseau')          return t('erreurs.reseau_login')
     if (err?.code === 'session_expiree') return err?.message || t('erreurs.mot_de_passe_invalide')
     return err?.message || t('erreurs.mot_de_passe_invalide')
   }
 
+  const switchTab = next => {
+    setTab(next)
+    setPropError('')
+    setEquipeError('')
+  }
+
   const handlePropLogin = async e => {
     e.preventDefault()
-    setError('')
+    setPropError('')
     setLoading(true)
     try {
       const { atelier } = await login(propForm)
@@ -56,7 +62,7 @@ export default function LoginPage() {
         navigate(ROUTES.DASHBOARD, { replace: true })
       }
     } catch (err) {
-      setError(formatLoginError(err))
+      setPropError(formatLoginError(err))
     } finally {
       setLoading(false)
     }
@@ -64,7 +70,7 @@ export default function LoginPage() {
 
   const handleEquipeLogin = async e => {
     e.preventDefault()
-    setError('')
+    setEquipeError('')
     setLoading(true)
     try {
       await equipeLogin({
@@ -74,129 +80,185 @@ export default function LoginPage() {
       })
       navigate(ROUTES.DASHBOARD, { replace: true })
     } catch (err) {
-      setError(formatLoginError(err))
+      setEquipeError(formatLoginError(err))
     } finally {
       setLoading(false)
     }
   }
 
+  const isProp = tab === 'proprietaire'
+
   return (
     <AuthLayout subtitle={t('auth.connexion.sous_titre_login')}>
+
       {/* Langue */}
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-end mb-5">
         <LanguageSwitcher variant="badge" />
       </div>
 
-      {/* Onglets */}
-      <div className="flex rounded-xl bg-subtle border border-edge p-1 mb-5 gap-1">
+      {/* Segmented control */}
+      <div
+        className="flex rounded-xl p-1 mb-6 gap-1"
+        style={{ background: 'var(--color-bg-elevated)', border: '1px solid var(--color-border)' }}
+      >
         {[
           { key: 'proprietaire', label: t('auth.connexion.onglet_proprietaire') },
           { key: 'equipe',       label: t('auth.connexion.onglet_equipe') },
-        ].map(tab_ => (
+        ].map(t_ => (
           <button
-            key={tab_.key}
+            key={t_.key}
             type="button"
-            onClick={() => { setTab(tab_.key); setError('') }}
-            className={`flex-1 text-sm py-2 rounded-lg font-medium transition-colors ${
-              tab === tab_.key
-                ? 'bg-primary text-inverse'
-                : 'text-ghost hover:text-ink'
-            }`}
+            onClick={() => switchTab(t_.key)}
+            className={cn(
+              'flex-1 text-sm py-2.5 rounded-[10px] font-semibold relative overflow-hidden',
+              'transition-colors duration-200',
+              tab === t_.key ? 'btn-primary-couture text-white' : 'text-ghost hover:text-dim',
+            )}
           >
-            {tab_.label}
+            {t_.label}
           </button>
         ))}
       </div>
 
-      {tab === 'proprietaire' ? (
-        <form onSubmit={handlePropLogin} className="space-y-4">
-          <PhoneInput
-            label={t('commun.telephone')}
-            value={propForm.telephone}
-            onChange={setProp('telephone')}
-            required
-          />
-          <Input
-            label={t('auth.connexion.mot_de_passe')}
-            type={showPropPwd ? 'text' : 'password'}
-            value={propForm.password}
-            onChange={setProp('password')}
-            placeholder="••••••••"
-            required
-            suffix={
-              <button
-                type="button"
-                tabIndex={-1}
-                onClick={() => setShowPropPwd(v => !v)}
-                aria-label={showPropPwd ? 'Masquer' : 'Voir'}
-                className="hover:text-ink transition-colors"
-              >
-                {showPropPwd ? <EyeOff size={16} /> : <Eye size={16} />}
-              </button>
-            }
-          />
-          {error && <p className="text-sm text-danger text-center">{error}</p>}
+      {/* ── Slider horizontal — les deux formulaires coexistent ── */}
+      <div style={{ overflow: 'hidden' }}>
+        <div
+          style={{
+            display: 'flex',
+            width: '200%',
+            transform: isProp ? 'translateX(0%)' : 'translateX(-50%)',
+            transition: `transform 360ms ${EASING}`,
+            willChange: 'transform',
+          }}
+        >
 
-          <label className="flex items-center gap-2 cursor-pointer select-none">
-            <input
-              type="checkbox"
-              checked={rememberMe}
-              onChange={e => setRememberMe(e.target.checked)}
-              className="w-4 h-4 rounded border-edge accent-primary"
-            />
-            <span className="text-sm text-ghost">{t('auth.connexion.se_souvenir')}</span>
-          </label>
+          {/* ── Panneau Propriétaire ── */}
+          <div
+            style={{ width: '50%' }}
+            aria-hidden={!isProp}
+            inert={!isProp ? '' : undefined}
+          >
+            <form onSubmit={handlePropLogin} className="space-y-4 pr-0.5">
+              <PhoneInput
+                label={t('commun.telephone')}
+                value={propForm.telephone}
+                onChange={setProp('telephone')}
+                required
+              />
+              <Input
+                label={t('auth.connexion.mot_de_passe')}
+                type={showPropPwd ? 'text' : 'password'}
+                value={propForm.password}
+                onChange={setProp('password')}
+                placeholder="••••••••"
+                required
+                suffix={
+                  <button
+                    type="button"
+                    tabIndex={-1}
+                    onClick={() => setShowPropPwd(v => !v)}
+                    aria-label={showPropPwd ? 'Masquer' : 'Voir'}
+                    className="hover:text-ink transition-colors"
+                  >
+                    {showPropPwd ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                }
+              />
 
-          <Button type="submit" className="w-full" loading={loading}>
-            {t('auth.connexion.se_connecter')}
-          </Button>
-          <div className="flex justify-between text-sm text-ghost">
-            <Link to="/register" className="text-primary font-medium">{t('auth.connexion.creer_compte')}</Link>
-            <Link to="/mot-de-passe-oublie" className="text-dim hover:text-ink">{t('auth.connexion.mot_de_passe_oublie')}</Link>
+              {propError && (
+                <p className="text-sm text-danger text-center py-1.5 px-3 rounded-xl bg-danger/10 border border-danger/20">
+                  {propError}
+                </p>
+              )}
+
+              <label className="flex items-center gap-2.5 cursor-pointer select-none">
+                <div
+                  onClick={() => setRememberMe(v => !v)}
+                  className={cn(
+                    'w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-all duration-150',
+                    rememberMe ? 'bg-primary border-transparent' : 'border-edge bg-elevated',
+                  )}
+                >
+                  {rememberMe && <Check size={11} className="text-white" strokeWidth={3} />}
+                </div>
+                <span className="text-sm text-dim">{t('auth.connexion.se_souvenir')}</span>
+              </label>
+
+              <Button type="submit" size="lg" className="w-full" loading={loading} iconRight={ArrowRight}>
+                {t('auth.connexion.se_connecter')}
+              </Button>
+
+              <div className="flex justify-between text-sm">
+                <Link to="/register" className="font-semibold" style={{ color: 'var(--color-gold)' }}>
+                  {t('auth.connexion.creer_compte')}
+                </Link>
+                <Link to="/mot-de-passe-oublie" className="text-ghost hover:text-dim transition-colors">
+                  {t('auth.connexion.mot_de_passe_oublie')}
+                </Link>
+              </div>
+
+              <p className="text-center text-xs text-ghost">
+                {t('auth.connexion.en_vous_connectant')}{' '}
+                <Link to="/a-propos" className="underline underline-offset-2 hover:text-dim">
+                  {t('auth.connexion.politique_confidentialite')}
+                </Link>
+              </p>
+            </form>
           </div>
-          <p className="text-center text-xs text-ghost">
-            {t('auth.connexion.en_vous_connectant')}{' '}
-            <Link to="/a-propos" className="underline hover:text-ink">{t('auth.connexion.politique_confidentialite')}</Link>
-          </p>
-        </form>
-      ) : (
-        <form onSubmit={handleEquipeLogin} className="space-y-4">
-          <Input
-            label={t('auth.connexion.code_acces')}
-            value={equipeForm.code_acces}
-            onChange={setEq('code_acces')}
-            placeholder="ex : ABCD1234"
-            required
-            className="uppercase tracking-widest font-mono"
-          />
-          <Input
-            label={t('auth.connexion.mot_de_passe')}
-            type={showEqPwd ? 'text' : 'password'}
-            value={equipeForm.password}
-            onChange={setEq('password')}
-            placeholder="••••••••"
-            required
-            suffix={
-              <button
-                type="button"
-                tabIndex={-1}
-                onClick={() => setShowEqPwd(v => !v)}
-                aria-label={showEqPwd ? 'Masquer' : 'Voir'}
-                className="hover:text-ink transition-colors"
-              >
-                {showEqPwd ? <EyeOff size={16} /> : <Eye size={16} />}
-              </button>
-            }
-          />
-          <p className="text-xs text-ghost text-center -mt-2">
-            {t('auth.connexion.code_acces_hint')}
-          </p>
-          {error && <p className="text-sm text-danger text-center">{error}</p>}
-          <Button type="submit" className="w-full" loading={loading}>
-            {t('auth.connexion.acceder_atelier')}
-          </Button>
-        </form>
-      )}
+
+          {/* ── Panneau Équipe ── */}
+          <div
+            style={{ width: '50%' }}
+            aria-hidden={isProp}
+            inert={isProp ? '' : undefined}
+          >
+            <form onSubmit={handleEquipeLogin} className="space-y-4 pl-0.5">
+              <Input
+                label={t('auth.connexion.code_acces')}
+                value={equipeForm.code_acces}
+                onChange={setEq('code_acces')}
+                placeholder="ex : ABCD1234"
+                required
+                className="uppercase tracking-widest font-mono"
+              />
+              <Input
+                label={t('auth.connexion.mot_de_passe')}
+                type={showEqPwd ? 'text' : 'password'}
+                value={equipeForm.password}
+                onChange={setEq('password')}
+                placeholder="••••••••"
+                required
+                suffix={
+                  <button
+                    type="button"
+                    tabIndex={-1}
+                    onClick={() => setShowEqPwd(v => !v)}
+                    aria-label={showEqPwd ? 'Masquer' : 'Voir'}
+                    className="hover:text-ink transition-colors"
+                  >
+                    {showEqPwd ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                }
+              />
+              <p className="text-xs text-ghost text-center -mt-2">
+                {t('auth.connexion.code_acces_hint')}
+              </p>
+
+              {equipeError && (
+                <p className="text-sm text-danger text-center py-1.5 px-3 rounded-xl bg-danger/10 border border-danger/20">
+                  {equipeError}
+                </p>
+              )}
+
+              <Button type="submit" size="lg" className="w-full" loading={loading} iconRight={ArrowRight}>
+                {t('auth.connexion.acceder_atelier')}
+              </Button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+
     </AuthLayout>
   )
 }
