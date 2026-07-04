@@ -110,7 +110,8 @@
 /* ════════════════════════════════════════════════════════
    VARIABLES CSS — Thème clair
    ════════════════════════════════════════════════════════ */
-:root {
+:root,
+[data-theme="light"] {
   /* ── Primaire — Rouge Gextimo (charte officielle) ── */
   --color-primary-50:  #FDEAEA;
   --color-primary-100: #FAC9C9;
@@ -305,6 +306,15 @@ body {
 /* ════════════════════════════════════════════════════════
    COMPOSANTS CSS — Gextimo Couture
    ════════════════════════════════════════════════════════ */
+
+/* Dégradé rouge des en-têtes (Header mobile, hero du login et de l'accueil) */
+.header-gradient {
+  background: linear-gradient(160deg,
+    var(--color-primary-300, #F5443A)  0%,
+    var(--color-primary,     #E82A1E) 45%,
+    var(--color-primary-700, #8E0B03) 100%
+  );
+}
 
 /* Bouton primaire — dégradé rouge, lueur, reflet intérieur, trame */
 .btn-primary-couture {
