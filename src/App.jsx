@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { ProtectedRoute } from '@/components/layout'
 import { AdminProtectedRoute } from '@/components/admin'
@@ -76,6 +77,24 @@ const AbonnementRedirect = () => <Navigate to={`${ROUTES.PARAMETRES}?tab=abonnem
 const APP_TARGET = import.meta.env.VITE_APP_TARGET || 'user'
 
 export default function App() {
+  // App « Gextimo Admin » (com.couturepro.admin) : ouvre directement l'espace admin au lancement.
+  // L'app « Gextimo » (com.gextimo.app) garde l'entrée pros par défaut. Détection à l'exécution
+  // via l'appId (un seul bundle partagé par les deux applications Android).
+  useEffect(() => {
+    if (!IS_NATIVE) return
+    let cancelled = false
+    import('@capacitor/app')
+      .then(({ App: CapApp }) => CapApp.getInfo())
+      .then((info) => {
+        if (!cancelled && info?.id === 'com.couturepro.admin' && window.location.pathname === '/') {
+          window.location.replace('/admin/login')
+        }
+      })
+      .catch(() => { /* plugin indisponible : on reste sur l'entrée par défaut */ })
+    return () => { cancelled = true }
+  }, [])
+
+  // Build ciblé admin (VITE_APP_TARGET=admin) : n'expose que les routes admin.
   if (APP_TARGET === 'admin') {
     return (
       <>
