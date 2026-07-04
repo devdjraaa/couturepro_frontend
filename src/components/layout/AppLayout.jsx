@@ -10,6 +10,7 @@ import { useSubscriptionGate } from '@/hooks/useSubscriptionGate'
 import { GlobalSearch } from '@/components/ui'
 import { usePullToRefresh } from '@/hooks/usePullToRefresh'
 import { useAuth } from '@/contexts'
+import { ROUTES } from '@/constants/routes'
 
 function ExpiryBanner() {
   const navigate = useNavigate()
@@ -55,7 +56,7 @@ function AccountStatusBanner() {
 
 export default function AppLayout({
   title,
-  showBack = false,
+  showBack,         // undefined = auto (toutes pages sauf dashboard) ; true/false = explicite
   onBack,
   rightAction,
   noPadding = false,
@@ -67,6 +68,7 @@ export default function AppLayout({
 }) {
   const [searchOpen, setSearchOpen] = useState(false)
   const location = useLocation()
+  const autoShowBack = showBack !== undefined ? showBack : location.pathname !== ROUTES.DASHBOARD
   const { containerRef, pullY, refreshing, threshold } = usePullToRefresh(onRefresh)
 
   return (
@@ -79,7 +81,7 @@ export default function AppLayout({
         <div className={noMobileHeader ? 'hidden lg:block' : ''}>
           <Header
             title={title}
-            showBack={showBack}
+            showBack={autoShowBack}
             onBack={onBack}
             rightAction={rightAction}
             onSearch={() => setSearchOpen(true)}

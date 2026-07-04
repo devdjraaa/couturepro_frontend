@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, CheckCircle2, CircleUser, Sun, Moon, Store, X, Layers, Users2, Star, FileText, Crown } from 'lucide-react'
+import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, ChevronDown, CheckCircle2, CircleUser, Sun, Moon, Store, X, Layers, Users2, Star, FileText, Crown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { isToday, isPast, parseISO, differenceInCalendarDays, isThisMonth, subDays } from 'date-fns'
 import { useQueryClient } from '@tanstack/react-query'
@@ -426,6 +426,8 @@ export default function DashboardPage() {
     ? t('dashboard.subtitle.urgentes', { count: urgentToday })
     : activeCount > 0 ? t('dashboard.subtitle.en_cours', { count: activeCount }) : null
 
+  const [actionsExpanded, setActionsExpanded] = useState(false)
+
   return (
     <AppLayout title={t('dashboard.titre_auj')} noMobileHeader onRefresh={() => queryClient.invalidateQueries()}>
 
@@ -498,56 +500,43 @@ export default function DashboardPage() {
             <span className="text-primary font-light">—</span>
             {t('dashboard.actions_rapides')}
           </h2>
-          <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-            <QuickActionTile
-              icon={Plus}
-              label={t('dashboard.action.nouvelle_commande')}
-              color="primary"
-              onClick={() => navigate('/commandes/new')}
-            />
-            <QuickActionTile
-              icon={UserPlus}
-              label={t('dashboard.action.nouveau_client')}
-              color="success"
-              onClick={() => navigate('/clients')}
-            />
-            <QuickActionTile
-              icon={Wallet}
-              label={t('dashboard.action.paiement')}
-              color="gold"
-              onClick={() => navigate('/caisse')}
-            />
-            <QuickActionTile
-              icon={Layers}
-              label={t('dashboard.action.atelier')}
-              color="ghost"
-              onClick={() => navigate('/catalogue')}
-            />
-            <QuickActionTile
-              icon={Store}
-              label={t('nav.ma_vitrine')}
-              color="warning"
-              onClick={() => navigate('/ma-vitrine')}
-            />
-            <QuickActionTile
-              icon={FileText}
-              label={t('nav.facturation')}
-              color="primary"
-              onClick={() => navigate('/facturation')}
-            />
-            <QuickActionTile
-              icon={Users2}
-              label={t('nav.equipe')}
-              color="success"
-              onClick={() => navigate('/equipe')}
-            />
-            <QuickActionTile
-              icon={Star}
-              label={t('nav.points')}
-              color="gold"
-              onClick={() => navigate('/points')}
-            />
+
+          {/* 3 premières — toujours visibles */}
+          <div className="grid grid-cols-3 gap-3">
+            <QuickActionTile icon={Plus}     label={t('dashboard.action.nouvelle_commande')} color="primary"  onClick={() => navigate('/commandes/new')} />
+            <QuickActionTile icon={UserPlus} label={t('dashboard.action.nouveau_client')}    color="success"  onClick={() => navigate('/clients')} />
+            <QuickActionTile icon={Wallet}   label={t('dashboard.action.paiement')}          color="gold"     onClick={() => navigate('/caisse')} />
           </div>
+
+          {/* Options supplémentaires — déroulables */}
+          <div
+            className="overflow-hidden transition-all duration-300 ease-in-out"
+            style={{ maxHeight: actionsExpanded ? '400px' : '0px' }}
+          >
+            <div className="grid grid-cols-3 gap-3 pt-3">
+              <QuickActionTile icon={Layers}   label={t('dashboard.action.atelier')}  color="ghost"   onClick={() => navigate('/catalogue')} />
+              <QuickActionTile icon={Store}    label={t('nav.ma_vitrine')}            color="warning" onClick={() => navigate('/ma-vitrine')} />
+              <QuickActionTile icon={FileText} label={t('nav.facturation')}           color="primary" onClick={() => navigate('/facturation')} />
+              <QuickActionTile icon={Users2}   label={t('nav.equipe')}               color="success" onClick={() => navigate('/equipe')} />
+              <QuickActionTile icon={Star}     label={t('nav.points')}               color="gold"    onClick={() => navigate('/points')} />
+            </div>
+          </div>
+
+          {/* Bouton dérouler / réduire */}
+          <button
+            type="button"
+            onClick={() => setActionsExpanded(x => !x)}
+            className="mt-3 w-full flex items-center justify-center py-2 rounded-xl border border-edge hover:border-primary/40 hover:bg-subtle transition-all duration-200 group"
+            aria-label={actionsExpanded ? 'Réduire' : 'Voir plus'}
+          >
+            <ChevronDown
+              size={16}
+              className={cn(
+                'text-ghost group-hover:text-primary transition-all duration-300',
+                actionsExpanded && 'rotate-180',
+              )}
+            />
+          </button>
         </div>
 
         {/* Commandes récentes */}
