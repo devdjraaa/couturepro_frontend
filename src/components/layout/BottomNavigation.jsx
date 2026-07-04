@@ -50,7 +50,7 @@ export default function BottomNavigation() {
   }
 
   return (
-    <nav className="fixed bottom-0 inset-x-0 z-30 bg-card/95 backdrop-blur-sm border-t border-edge lg:hidden bottom-nav-container">
+    <nav className="fixed bottom-0 inset-x-0 z-30 bg-card/80 backdrop-blur-[18px] border-t border-edge lg:hidden bottom-nav-container">
       <div className="flex items-center h-bottom-nav">
         {NAV_ITEMS.map((item, i) => {
           if (!item) {
@@ -60,7 +60,8 @@ export default function BottomNavigation() {
                   type="button"
                   aria-label={t('commun.nouveau')}
                   onClick={handleFabClick}
-                  className="w-14 h-14 -mt-5 rounded-full bg-primary text-inverse flex items-center justify-center shadow-lg shadow-primary/40 hover:bg-primary-600 hover:shadow-xl active:scale-[0.92] active:shadow-sm transition-all duration-150"
+                  className="w-14 h-14 -mt-5 rounded-[21px] btn-primary-couture text-white flex items-center justify-center active:scale-[0.92] transition-all duration-150"
+                  style={{ boxShadow: '0 0 0 6px var(--color-bg-app), 0 18px 36px -12px rgba(180,20,10,.60)' }}
                 >
                   <Plus size={22} strokeWidth={2.5} />
                 </button>
@@ -76,14 +77,14 @@ export default function BottomNavigation() {
               end={end}
               className={({ isActive }) => cn(
                 'flex-1 flex flex-col items-center justify-center gap-0.5 transition-all duration-150 active:scale-[0.88]',
-                isActive ? 'text-primary' : 'text-ghost',
+                isActive ? 'text-[var(--color-red-hi)]' : 'text-ghost',
               )}
             >
               {({ isActive }) => (
                 <>
                   <div className={cn(
                     'relative flex items-center justify-center w-12 h-7 rounded-2xl transition-all duration-300 ease-spring',
-                    isActive ? 'bg-primary/10 scale-105' : 'scale-100',
+                    isActive ? 'bg-[var(--color-primary-50)] scale-105' : 'scale-100',
                   )}>
                     <Icon size={20} strokeWidth={isActive ? 2.5 : 1.8} />
                     {to === '/' && notifCount > 0 && (

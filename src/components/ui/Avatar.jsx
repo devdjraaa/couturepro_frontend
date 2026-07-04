@@ -1,22 +1,23 @@
 import { cn } from '@/utils/cn'
 
 const sizes = {
-  xs: 'w-6 h-6 text-xs',
+  xs: 'w-6 h-6 text-[10px]',
   sm: 'w-8 h-8 text-xs',
   md: 'w-10 h-10 text-sm',
   lg: 'w-12 h-12 text-base',
   xl: 'w-16 h-16 text-xl',
 }
 
-// 7 palettes correspondant aux avatar_index 0–6
+// Palettes couleurs — utilisées dans ClientForm pour la sélection d'avatar
+// Utilise les tokens sémantiques, pas de couleurs Tailwind brutes
 export const AVATAR_PALETTES = [
-  { bg: 'bg-indigo-100', text: 'text-indigo-700', emoji: '👗' },
-  { bg: 'bg-amber-100',  text: 'text-amber-700',  emoji: '✂️' },
-  { bg: 'bg-emerald-100',text: 'text-emerald-700',emoji: '🧵' },
-  { bg: 'bg-rose-100',   text: 'text-rose-700',   emoji: '👒' },
-  { bg: 'bg-sky-100',    text: 'text-sky-700',     emoji: '🪡' },
-  { bg: 'bg-violet-100', text: 'text-violet-700',  emoji: '🧶' },
-  { bg: 'bg-orange-100', text: 'text-orange-700',  emoji: '👔' },
+  { bg: 'bg-primary/10',  text: 'text-primary',    emoji: '✂️' },
+  { bg: 'bg-gold-light',  text: 'text-gold-dark',  emoji: '🧵' },
+  { bg: 'bg-success/10',  text: 'text-success',    emoji: '👗' },
+  { bg: 'bg-danger/10',   text: 'text-danger',     emoji: '👒' },
+  { bg: 'bg-accent/10',   text: 'text-accent-600', emoji: '🪡' },
+  { bg: 'bg-terra-50',    text: 'text-terra',      emoji: '🧶' },
+  { bg: 'bg-info/10',     text: 'text-info',       emoji: '👔' },
 ]
 
 function hashName(name = '') {
@@ -29,34 +30,47 @@ function initials(nom = '') {
   return (nom.slice(0, 2) || '?').toUpperCase()
 }
 
-// Accepte nom ou name (compat)
-export default function Avatar({ nom, name, photo_url, avatar_index, size = 'md', className }) {
+export default function Avatar({ nom, name, photo_url, src, avatar_index, size = 'md', className }) {
   const label = nom ?? name ?? ''
-  const paletteIndex = avatar_index != null ? Number(avatar_index) % AVATAR_PALETTES.length : hashName(label)
-  const palette = AVATAR_PALETTES[paletteIndex]
+  const photo  = photo_url ?? src
 
-  if (photo_url) {
+  if (photo) {
     return (
       <img
-        src={photo_url}
+        src={photo}
         alt={label}
-        className={cn('rounded-full object-cover shrink-0', sizes[size], className)}
+        className={cn('rounded-[13px] object-cover shrink-0', sizes[size], className)}
       />
     )
   }
 
+  // avatar_index choisi → palette couleurs (ex. dans ClientForm)
+  if (avatar_index != null) {
+    const paletteIndex = Number(avatar_index) % AVATAR_PALETTES.length
+    const palette = AVATAR_PALETTES[paletteIndex]
+    return (
+      <div
+        aria-label={label}
+        className={cn(
+          'rounded-[13px] flex items-center justify-center font-display font-bold shrink-0',
+          sizes[size],
+          palette.bg,
+          palette.text,
+          className,
+        )}
+      >
+        {palette.emoji}
+      </div>
+    )
+  }
+
+  // Défaut — dégradé or Gextimo Couture
   return (
     <div
       aria-label={label}
-      className={cn(
-        'rounded-full flex items-center justify-center font-display font-semibold shrink-0',
-        sizes[size],
-        palette.bg,
-        palette.text,
-        className,
-      )}
+      className={cn('avatar-couture flex items-center justify-center font-display font-bold shrink-0', sizes[size], className)}
     >
-      {avatar_index != null ? palette.emoji : initials(label)}
+      {initials(label)}
     </div>
   )
 }

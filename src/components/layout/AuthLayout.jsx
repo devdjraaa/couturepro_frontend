@@ -1,25 +1,37 @@
-import { Scissors } from 'lucide-react'
+import { useLocation } from 'react-router-dom'
 import { cn } from '@/utils/cn'
+import { VitrineLogo } from '@/pages/vitrine/VitrineChrome'
 
 export default function AuthLayout({ children, subtitle, className }) {
+  const location = useLocation()
+
   return (
-    <div className="min-h-dvh bg-app flex flex-col items-center justify-center p-4">
+    <div className="min-h-dvh bg-app app-background flex flex-col items-center justify-center p-5">
+
       {/* Logo */}
-      <div className="flex items-center gap-2.5 mb-8">
-        <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-md">
-          <Scissors size={20} className="text-inverse" />
-        </div>
-        <div>
-          <p className="text-lg font-bold font-display text-ink leading-none">Gextimo</p>
-          {subtitle && <p className="text-xs text-ghost mt-0.5">{subtitle}</p>}
-        </div>
+      <div className="flex flex-col items-center gap-2 mb-8">
+        <VitrineLogo />
+        <p
+          className="text-[10px] font-bold tracking-[.22em] uppercase"
+          style={{ color: 'var(--color-gold)' }}
+        >
+          Maison · Atelier
+        </p>
+        {subtitle && (
+          <p className="text-sm text-ghost mt-1">{subtitle}</p>
+        )}
       </div>
 
-      {/* Card */}
-      <div className={cn(
-        'w-full max-w-sm bg-card rounded-2xl border border-edge shadow-sm p-6',
-        className,
-      )}>
+      {/* Carte — re-monte à chaque changement de route → animation d'entrée */}
+      <div
+        key={location.pathname}
+        className={cn(
+          'w-full max-w-sm bg-card rounded-[24px] border border-edge p-6 card-couture',
+          'shadow-[0_24px_60px_-24px_rgba(0,0,0,.70)]',
+          'animate-auth-card-enter',
+          className,
+        )}
+      >
         {children}
       </div>
     </div>
