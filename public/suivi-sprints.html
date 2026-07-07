@@ -103,7 +103,7 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
     <div class="kpi">
       <div class="row">
         <span class="lbl">Routes validées à travers l'app</span>
-        <span class="big">20<small>&nbsp;/&nbsp;≈140</small></span>
+        <span class="big">21<small>&nbsp;/&nbsp;≈140</small></span>
       </div>
       <div class="bar"><i style="width:14%"></i></div>
     </div>
@@ -201,7 +201,7 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
         <tr>
           <td class="mod">Paramètres</td><td class="rt">16</td>
           <td><span class="badge b-wip"><i></i> En cours</span></td>
-          <td class="nt">Type de compte (artisan ↔ designer) OK. Reste profil, atelier, facture, préférences, sécurité.</td>
+          <td class="nt">Type de compte (artisan ↔ designer) + <b>profil</b> (nom / téléphone / email → serveur) validés. Reste atelier, facture, préférences, sécurité.</td>
         </tr>
         <tr>
           <td class="mod">Archives</td><td class="rt">1</td>
@@ -313,6 +313,12 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
         <h4>Bouton « + » d'ajout mal positionné (catalogue) <span class="fx">corrigé</span></h4>
         <p>Sur l'écran des modèles, le bouton rond d'ajout <b>s'affichait en haut</b> au lieu d'être fixé
           en bas à droite, à cause d'une animation d'entrée de page. Corrigé pour tous les écrans.</p>
+      </div>
+      <div class="bug">
+        <h4>Erreur peu claire sur un téléphone invalide (profil) <span class="fx">corrigé</span></h4>
+        <p>Dans « Modifier le profil », un numéro de téléphone non valide provoquait une erreur serveur
+          générique au lieu d'un message clair « numéro invalide ». Corrigé : le champ renvoie désormais
+          un message compréhensible.</p>
       </div>
     </div>
   </section>
