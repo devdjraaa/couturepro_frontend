@@ -103,7 +103,7 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
     <div class="kpi">
       <div class="row">
         <span class="lbl">Routes validées à travers l'app</span>
-        <span class="big">21<small>&nbsp;/&nbsp;≈140</small></span>
+        <span class="big">22<small>&nbsp;/&nbsp;≈140</small></span>
       </div>
       <div class="bar"><i style="width:14%"></i></div>
     </div>
@@ -145,8 +145,8 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
       <span class="badge b-todo"><i></i> À tester</span>
     </div>
     <div class="stats">
-      <div class="stat d"><div class="v">3</div><div class="k">modules validés de bout en bout</div></div>
-      <div class="stat w"><div class="v">7</div><div class="k">modules en cours</div></div>
+      <div class="stat d"><div class="v">4</div><div class="k">modules validés de bout en bout</div></div>
+      <div class="stat w"><div class="v">6</div><div class="k">modules en cours</div></div>
       <div class="stat t"><div class="v">13</div><div class="k">modules à tester</div></div>
     </div>
     <p class="sub" style="margin-top:12px;margin-bottom:0">
@@ -201,7 +201,7 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
         <tr>
           <td class="mod">Paramètres</td><td class="rt">16</td>
           <td><span class="badge b-wip"><i></i> En cours</span></td>
-          <td class="nt">Type de compte (artisan ↔ designer) + <b>profil</b> (nom / téléphone / email → serveur) validés. Reste atelier, facture, préférences, sécurité.</td>
+          <td class="nt">Type de compte (artisan ↔ designer), <b>profil</b> (nom / tél / email → serveur) et <b>atelier</b> (nom / ville) validés. Reste facture, préférences, sécurité.</td>
         </tr>
         <tr>
           <td class="mod">Archives</td><td class="rt">1</td>
@@ -210,8 +210,8 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
         </tr>
         <tr>
           <td class="mod">Catalogue (vêtements &amp; modèles)</td><td class="rt">6</td>
-          <td><span class="badge b-wip"><i></i> En cours</span></td>
-          <td class="nt">Création testée : elle s'affichait bien mais <b>n'arrivait pas au serveur</b> (blocage majeur, corrigé — voir ci-dessous). Reste publication / collection.</td>
+          <td><span class="badge b-done"><i></i> Validé</span></td>
+          <td class="nt">Création d'un modèle <b>validée de bout en bout</b> (arrive bien au serveur après correction). Reste publication / collection.</td>
         </tr>
         <tr>
           <td class="mod">Collections</td><td class="rt">4</td>
@@ -319,6 +319,12 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
         <p>Dans « Modifier le profil », un numéro de téléphone non valide provoquait une erreur serveur
           générique au lieu d'un message clair « numéro invalide ». Corrigé : le champ renvoie désormais
           un message compréhensible.</p>
+      </div>
+      <div class="bug">
+        <h4>Écran « Atelier » ouvert vide <span class="fx">corrigé</span></h4>
+        <p>Dans Paramètres → Atelier, le formulaire s'ouvrait <b>sans le nom ni la ville</b> de l'atelier
+          pourtant existants — en enregistrant, on risquait d'effacer le nom. Corrigé : le formulaire
+          reprend désormais les informations déjà connues de l'atelier.</p>
       </div>
     </div>
   </section>
