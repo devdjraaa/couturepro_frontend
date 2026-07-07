@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import toast from 'react-hot-toast'
 import { Pencil, Trash2, Plus, X, Eye, EyeOff, ImagePlus, Share2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { AppLayout } from '@/components/layout'
@@ -69,7 +70,8 @@ function CreationForm({ initial, onSave, onCancel, t }) {
       }
       onSave()
     } catch {
-      /* silencieux */
+      // Ne pas échouer en silence : l'utilisateur doit savoir que ça n'a pas marché.
+      toast.error(t('outils_creatifs.erreur'))
     } finally { setSaving(false) }
   }
 
