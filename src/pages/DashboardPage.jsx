@@ -33,11 +33,11 @@ function Greeting({ user, subtitle, hero = false }) {
         <div className="min-w-0">
           <p
             className={cn('mb-1', hero ? 'text-[11px] font-bold uppercase tracking-[.18em]' : 'text-xs capitalize text-ghost')}
-            style={hero ? { color: 'var(--color-gold)' } : undefined}
+            style={hero ? { color: 'var(--color-gold-hi, #E4C486)' } : undefined}
           >
             {dateStr}
           </p>
-          <h1 className={cn('font-bold font-display', hero ? 'text-[34px] leading-[1.08] text-ink' : 'text-xl leading-tight text-ink')}>
+          <h1 className={cn('font-bold font-display', hero ? 'text-[34px] leading-[1.08] text-inverse' : 'text-xl leading-tight text-ink')}>
             {greeting}, {user?.prenom ?? user?.nom?.split(' ')[0] ?? ''} 👋
           </h1>
         </div>
@@ -46,10 +46,10 @@ function Greeting({ user, subtitle, hero = false }) {
             <button
               type="button"
               onClick={toggleTheme}
-              className="w-11 h-11 flex items-center justify-center rounded-2xl bg-subtle hover:bg-edge transition-colors shrink-0"
+              className="w-11 h-11 flex items-center justify-center rounded-2xl bg-inverse/10 hover:bg-inverse/20 transition-colors shrink-0"
               aria-label={isDark ? t('commun.passer_mode_clair') : t('commun.passer_mode_sombre')}
             >
-              {isDark ? <Sun size={17} className="text-ink" /> : <Moon size={17} className="text-ink" />}
+              {isDark ? <Sun size={17} className="text-inverse" /> : <Moon size={17} className="text-inverse" />}
             </button>
             <LanguageSwitcher variant="hero" />
             <button
@@ -65,7 +65,7 @@ function Greeting({ user, subtitle, hero = false }) {
         )}
       </div>
       {subtitle && (
-        <p className={cn('text-sm mt-1.5', hero ? 'text-dim' : 'text-ghost')}>{subtitle}</p>
+        <p className={cn('text-sm mt-1.5', hero ? 'text-inverse/85' : 'text-ghost')}>{subtitle}</p>
       )}
     </div>
   )
@@ -432,7 +432,7 @@ export default function DashboardPage() {
     <AppLayout title={t('dashboard.titre_auj')} noMobileHeader onRefresh={() => queryClient.invalidateQueries()}>
 
       {/* Hero sombre — mobile uniquement */}
-      <div className="bg-app px-4 pt-safe pb-5 lg:hidden sticky top-0 z-20 border-b border-edge/30">
+      <div className="header-gradient px-4 pt-safe pb-5 lg:hidden sticky top-0 z-20">
         <Greeting user={user} subtitle={dynamicSub} hero />
       </div>
 
