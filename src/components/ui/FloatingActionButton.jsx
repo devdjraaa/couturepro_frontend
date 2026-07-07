@@ -1,8 +1,12 @@
 import { Plus } from 'lucide-react'
+import { createPortal } from 'react-dom'
 import { cn } from '@/utils/cn'
 
 export default function FloatingActionButton({ onClick, icon: Icon = Plus, label = 'Ajouter', className }) {
-  return (
+  // Rendu via portal dans <body> : sinon un ancêtre animé (.animate-page-enter
+  // garde un `transform`) devient le bloc conteneur du position:fixed et le FAB
+  // se retrouve ancré à la page (en haut) au lieu d'être fixé au viewport.
+  return createPortal(
     <button
       type="button"
       onClick={onClick}
@@ -19,6 +23,7 @@ export default function FloatingActionButton({ onClick, icon: Icon = Plus, label
       )}
     >
       <Icon size={24} />
-    </button>
+    </button>,
+    document.body,
   )
 }
