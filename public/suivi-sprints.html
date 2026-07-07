@@ -103,9 +103,9 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
     <div class="kpi">
       <div class="row">
         <span class="lbl">Routes validées à travers l'app</span>
-        <span class="big">22<small>&nbsp;/&nbsp;≈140</small></span>
+        <span class="big">40<small>&nbsp;/&nbsp;≈140</small></span>
       </div>
-      <div class="bar"><i style="width:14%"></i></div>
+      <div class="bar"><i style="width:29%"></i></div>
     </div>
   </div>
 </header>
@@ -134,6 +134,27 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
     <span class="pill">Chaque fonctionnalité validée l'est sur écran + local + serveur</span>
   </section>
 
+  <!-- ─── FULL-OFFLINE (grande avancée) ─────────────────────────────── -->
+  <section class="card" style="border-left:4px solid var(--vert);background:linear-gradient(158deg,#fff,var(--vert-bg))">
+    <h2><span class="n" style="background:var(--vert)">✓</span> L'application fonctionne désormais <span style="color:#0f7a3d">hors-ligne</span></h2>
+    <p class="sub">L'app mobile a été transformée en <b>« full-offline »</b> : l'artisan continue de travailler
+      <b>sans connexion</b>. Tout est enregistré sur le téléphone puis <b>synchronisé automatiquement</b>
+      au retour du réseau (et en continu quand il est connecté).</p>
+    <div class="legend" style="margin-top:2px">
+      <span class="badge b-done"><i></i> Clients</span>
+      <span class="badge b-done"><i></i> Commandes (+ détail)</span>
+      <span class="badge b-done"><i></i> Mesures</span>
+      <span class="badge b-done"><i></i> Catalogue</span>
+      <span class="badge b-done"><i></i> Notifications</span>
+      <span class="badge b-done"><i></i> Paiements</span>
+      <span class="badge b-done"><i></i> Articles &amp; échéances</span>
+    </div>
+    <p class="sub" style="margin-top:12px;margin-bottom:0">
+      <b>Reste connecté&nbsp;:</b> la connexion garde la session ouverte jusqu'à <b>30&nbsp;jours</b> hors-ligne
+      (7&nbsp;jours pour l'équipe). <b>Nécessitent internet</b> (avec un message clair) : se connecter /
+      se déconnecter, les <b>réglages</b>, et le paiement d'abonnement.</p>
+  </section>
+
   <!-- ─── COUVERTURE ─────────────────────────────────────────────────── -->
   <section class="card">
     <h2><span class="n">1</span> Où en est la recette</h2>
@@ -145,9 +166,9 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
       <span class="badge b-todo"><i></i> À tester</span>
     </div>
     <div class="stats">
-      <div class="stat d"><div class="v">4</div><div class="k">modules validés de bout en bout</div></div>
-      <div class="stat w"><div class="v">6</div><div class="k">modules en cours</div></div>
-      <div class="stat t"><div class="v">13</div><div class="k">modules à tester</div></div>
+      <div class="stat d"><div class="v">9</div><div class="k">modules validés de bout en bout</div></div>
+      <div class="stat w"><div class="v">2</div><div class="k">modules en cours</div></div>
+      <div class="stat t"><div class="v">12</div><div class="k">modules à tester</div></div>
     </div>
     <p class="sub" style="margin-top:12px;margin-bottom:0">
       À l'échelle des routes : <b>≈ 18 déjà validées à travers l'app</b> sur ≈ 140 côté utilisateur.
@@ -180,23 +201,23 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
         </tr>
         <tr>
           <td class="mod">Clients</td><td class="rt">10</td>
-          <td><span class="badge b-wip"><i></i> En cours</span></td>
-          <td class="nt">Création + import des contacts + liste : OK. Reste modification, archivage, VIP, suppression.</td>
+          <td><span class="badge b-done"><i></i> Validé</span></td>
+          <td class="nt">Création, liste, modification, archivage, VIP, import contacts — <b>hors-ligne</b> (WatermelonDB) &amp; en ligne.</td>
         </tr>
         <tr>
           <td class="mod">Commandes</td><td class="rt">8</td>
-          <td><span class="badge b-wip"><i></i> En cours</span></td>
-          <td class="nt">Assistant de création (client → modèle → date → prix) + fiche détail : OK. Reste étapes, paiements, échéances.</td>
+          <td><span class="badge b-done"><i></i> Validé</span></td>
+          <td class="nt">Assistant de création + fiche détail (référence, articles, paiements, échéances) — <b>hors-ligne</b> &amp; en ligne.</td>
         </tr>
         <tr>
           <td class="mod">Tableau de bord</td><td class="rt">2</td>
-          <td><span class="badge b-wip"><i></i> En cours</span></td>
-          <td class="nt">S'affiche correctement (en-tête rouge). Chiffres à recouper.</td>
+          <td><span class="badge b-done"><i></i> Validé</span></td>
+          <td class="nt">Affichage + chiffres (clients / commandes / stats) lus depuis le local — s'affiche même hors-ligne.</td>
         </tr>
         <tr>
           <td class="mod">Notifications</td><td class="rt">4</td>
-          <td><span class="badge b-wip"><i></i> En cours</span></td>
-          <td class="nt">Notifications locales OK. Reste « marquer comme lu » et jeton push.</td>
+          <td><span class="badge b-done"><i></i> Validé</span></td>
+          <td class="nt">Liste + « marquer comme lu » — <b>hors-ligne</b> (synchronisées). Reste le jeton push (envoi natif).</td>
         </tr>
         <tr>
           <td class="mod">Paramètres</td><td class="rt">16</td>
@@ -336,7 +357,7 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
   </section>
 
   <div class="foot">
-    <b>Gextimo</b> · Recette qualité de l'espace utilisateur — mise à jour du <b>07/07/2026</b><br>
+    <b>Gextimo</b> · Recette qualité de l'espace utilisateur — mise à jour du <b>08/07/2026</b><br>
     Méthode : test à travers l'application réelle, vérification écran + base locale + serveur, cycle hors-ligne/en ligne.
   </div>
 
