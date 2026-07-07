@@ -180,7 +180,15 @@ export async function syncWithServer() {
     pushChanges: async ({ changes }) => {
       const body = adaptPushChanges(changes)
       if (body.operations.length === 0) return
-      await api.post('/sync/push', body)
+      const { data } = await api.post('/sync/push', body)
+      // Le backend répond 200 même si des opérations échouent (statut par-op).
+      // Sans ce contrôle, WatermelonDB marquerait les records « synced » alors
+      // que le serveur les a rejetés → perte silencieuse. On lève pour que la
+      // synchro échoue proprement et retente (les records restent « pending »).
+      const failed = (data?.results ?? []).filter(r => r?.status === 'error')
+      if (failed.length > 0) {
+        throw new Error(`Sync push refusé (${failed.length}) : ${failed[0].message ?? 'erreur serveur'}`)
+      }
     },
   })
 }
