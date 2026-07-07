@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { Sun, Moon, Heart, Globe, X } from 'lucide-react'
+import { Sun, Moon, Heart, Globe, X, Menu, LogIn, UserPlus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useTheme, useLang } from '@/contexts'
 import { cn } from '@/utils/cn'
@@ -11,17 +11,17 @@ const FIRST_VISIT_KEY = 'gx_welcome_done'
 
 /* Symbole orbital + wordmark (charte). */
 export function VitrineLogo({ onDark = false }) {
-  const ring = onDark ? '#FFFFFF' : 'var(--color-text-primary)'
+  const ring = onDark ? 'var(--color-text-inverse)' : 'var(--color-ink)'
   return (
     <span className="inline-flex items-center gap-2.5">
       <svg viewBox="0 0 100 100" className="w-8 h-8 shrink-0" aria-hidden="true">
         <circle cx="50" cy="50" r="46" fill="none" stroke={ring} strokeWidth="3.4" />
         <circle cx="50" cy="50" r="33" fill="none" stroke={ring} strokeWidth="2" opacity="0.45" />
         <circle cx="50" cy="50" r="21" fill="none" stroke={ring} strokeWidth="2" opacity="0.3" />
-        <path d="M50 4 A46 46 0 0 1 96 50" fill="none" stroke="#D00B0B" strokeWidth="6.5" strokeLinecap="round" />
-        <circle cx="50" cy="50" r="8" fill="#D00B0B" />
+        <path d="M50 4 A46 46 0 0 1 96 50" fill="none" stroke="var(--color-primary)" strokeWidth="6.5" strokeLinecap="round" />
+        <circle cx="50" cy="50" r="8" fill="var(--color-primary)" />
       </svg>
-      <span className={`font-display font-extrabold text-[22px] tracking-tight ${onDark ? 'text-white' : 'text-ink'}`}>
+      <span className={`font-display font-extrabold text-[22px] tracking-tight ${onDark ? 'text-inverse' : 'text-ink'}`}>
         gextimo<span className="text-primary">.</span>
       </span>
     </span>
@@ -35,10 +35,106 @@ function LangToggle() {
     <div className="flex items-center rounded-[10px] border border-edge overflow-hidden text-[11px] font-bold">
       {['fr', 'en'].map((l) => (
         <button key={l} type="button" onClick={() => setLangue(l)}
-                className={cn('px-2 py-1.5 transition', langue === l ? 'bg-primary text-white' : 'text-dim hover:text-ink')}>
+                className={cn('px-2 py-1.5 transition', langue === l ? 'bg-primary text-inverse' : 'text-dim hover:text-ink')}>
           {l.toUpperCase()}
         </button>
       ))}
+    </div>
+  )
+}
+
+/* Menu burger : nav mobile + connexion. */
+function NavMenu() {
+  const { t } = useTranslation()
+  const { langue, setLangue } = useLang()
+  const { devise, setDevise } = useDevise()
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+
+  useEffect(() => {
+    if (!open) return
+    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [open])
+
+  const close = () => setOpen(false)
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen(v => !v)}
+        aria-label="Menu"
+        className="w-8 h-8 flex items-center justify-center rounded-[10px] border border-edge text-dim hover:text-ink hover:border-primary/40 transition"
+      >
+        {open ? <X size={15} /> : <Menu size={15} />}
+      </button>
+
+      {open && (
+        <div className="absolute right-0 top-full mt-2 w-60 bg-card border border-edge rounded-xl shadow-xl z-50 py-2 overflow-hidden">
+
+          {/* Nav mobile (masqué sur desktop) */}
+          <div className="lg:hidden px-2 pb-2 border-b border-edge mb-2">
+            {[
+              { label: t('vitrine.nav.how'),         to: '/#how' },
+              { label: t('vitrine.nav.creators'),    to: '/createurs' },
+              { label: t('vitrine.menu2.artisans'),  to: '/artisans' },
+              { label: t('vitrine.nav.collections'), to: '/#gallery' },
+              { label: t('vitrine.nav.suivi'),       to: '/suivi' },
+              { label: t('vitrine.menu2.support'),   to: '/aide' },
+              { label: t('vitrine.menu2.about'),     to: '/qui-sommes-nous' },
+            ].map(({ label, to }) => (
+              <Link key={to} to={to} onClick={close}
+                className="block px-3 py-2 rounded-lg text-[13px] text-dim hover:text-ink hover:bg-subtle transition">
+                {label}
+              </Link>
+            ))}
+          </div>
+
+          {/* Langue */}
+          <div className="px-3 pb-2 border-b border-edge mb-2">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-ghost mb-1.5">{t('vitrine.welcome_popup.langue')}</p>
+            <div className="flex gap-1.5">
+              {['fr', 'en'].map((l) => (
+                <button key={l} type="button" onClick={() => setLangue(l)}
+                  className={cn('flex-1 py-1.5 rounded-lg border text-[11px] font-bold transition',
+                    langue === l ? 'border-primary bg-primary/5 text-primary' : 'border-edge text-dim hover:border-primary/40 hover:text-ink')}>
+                  {l.toUpperCase()}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Devise */}
+          <div className="px-3 pb-2 border-b border-edge mb-2">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-ghost mb-1.5">{t('vitrine.welcome_popup.devise')}</p>
+            <div className="grid grid-cols-4 gap-1">
+              {Object.keys(DEVISES).map((d) => (
+                <button key={d} type="button" onClick={() => setDevise(d)}
+                  className={cn('py-1.5 rounded-lg border text-[10px] font-bold transition',
+                    devise === d ? 'border-primary bg-primary/5 text-primary' : 'border-edge text-dim hover:border-primary/40 hover:text-ink')}>
+                  {d}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Connexion */}
+          <div className="px-2 flex flex-col gap-1">
+            <Link to="/inscription" onClick={close}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg text-[13px] font-semibold text-dim hover:text-ink hover:bg-subtle transition">
+              <UserPlus size={14} />
+              {t('vitrine.nav.signup')}
+            </Link>
+            <Link to="/login" onClick={close}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg text-[13px] font-semibold bg-primary text-inverse hover:bg-primary-600 transition">
+              <LogIn size={14} />
+              {t('vitrine.nav.login')}
+            </Link>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -82,7 +178,7 @@ function VitrineCookies() {
         <p className="text-[13px] text-dim flex-1">{t('vitrine.cookies.text')}</p>
         <div className="flex gap-2 shrink-0">
           <button onClick={() => close('refused')} className="text-[13px] font-semibold px-3.5 py-2 rounded-[10px] border border-edge text-ink hover:border-primary hover:text-primary transition">{t('vitrine.cookies.refuse')}</button>
-          <button onClick={() => close('accepted')} className="text-[13px] font-semibold px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">{t('vitrine.cookies.accept')}</button>
+          <button onClick={() => close('accepted')} className="text-[13px] font-semibold px-3.5 py-2 rounded-[10px] bg-primary text-inverse hover:bg-primary-600 transition">{t('vitrine.cookies.accept')}</button>
         </div>
       </div>
     </div>
@@ -96,7 +192,7 @@ export function VitrineNavbar() {
   const promo = (banniere?.actif && banniere?.texte) ? banniere : null
   return (
     <>
-      <div className="text-center text-[13px] py-2 px-10 bg-[#0D0D0D] text-[#F8F5F0]">
+      <div data-theme="dark" className="text-center text-[13px] py-2 px-10 bg-inset text-ink">
         {promo
           ? (promo.lien
               ? <a href={promo.lien} target="_blank" rel="noopener noreferrer" className="hover:underline">{promo.texte}</a>
@@ -107,21 +203,26 @@ export function VitrineNavbar() {
         <div className="max-w-[1180px] mx-auto px-5 h-16 flex items-center gap-4">
           <Link to="/" aria-label="Gextimo"><VitrineLogo /></Link>
           <nav className="hidden lg:flex gap-5 ml-3">
-            <a href="/#how" className="text-sm text-dim hover:text-ink transition">{t('vitrine.nav.how')}</a>
-            <Link to="/createurs" className="text-sm text-dim hover:text-ink transition">{t('vitrine.nav.creators')}</Link>
-            <Link to="/artisans" className="text-sm text-dim hover:text-ink transition">{t('vitrine.menu2.artisans')}</Link>
-            <a href="/#gallery" className="text-sm text-dim hover:text-ink transition">{t('vitrine.nav.collections')}</a>
-            <Link to="/suivi" className="text-sm text-dim hover:text-ink transition">{t('vitrine.nav.suivi')}</Link>
-            <Link to="/aide" className="text-sm text-dim hover:text-ink transition">{t('vitrine.menu2.support')}</Link>
-            <Link to="/qui-sommes-nous" className="text-sm text-dim hover:text-ink transition">{t('vitrine.menu2.about')}</Link>
+            <a href="/#how" className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.nav.how')}</a>
+            <Link to="/createurs" className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.nav.creators')}</Link>
+            <Link to="/artisans" className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.menu2.artisans')}</Link>
+            <a href="/#gallery" className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.nav.collections')}</a>
+            <Link to="/suivi" className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.nav.suivi')}</Link>
+            <Link to="/aide" className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.menu2.support')}</Link>
+            <Link to="/qui-sommes-nous" className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.menu2.about')}</Link>
           </nav>
           <div className="ml-auto flex items-center gap-2">
-            <Link to="/favoris" aria-label={t('vitrine.favoris.menu')} className="w-8 h-8 flex items-center justify-center rounded-[10px] border border-edge text-dim hover:text-primary hover:border-primary transition"><Heart size={15} /></Link>
+            <Link to="/favoris" aria-label={t('vitrine.favoris.menu')} className="vt-ib w-8 h-8 flex items-center justify-center rounded-[10px] border border-edge text-dim hover:text-primary hover:border-primary transition"><Heart size={15} /></Link>
             <ThemeToggle />
-            <DeviseSelect />
-            <LangToggle />
-            <Link to="/inscription" className="hidden sm:inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] border border-edge text-ink hover:border-primary hover:text-primary transition">{t('vitrine.nav.signup')}</Link>
-            <Link to="/login" className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">{t('vitrine.nav.login')}</Link>
+            {/* Desktop : éléments individuels */}
+            <div className="hidden lg:block"><DeviseSelect /></div>
+            <div className="hidden lg:flex"><LangToggle /></div>
+            <Link to="/inscription" className="vt-btn-ghost hidden lg:inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] border border-edge text-ink hover:border-primary hover:text-primary">{t('vitrine.nav.signup')}</Link>
+            <Link to="/login" className="vt-btn-primary hidden lg:inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-inverse hover:bg-primary-600">{t('vitrine.nav.login')}</Link>
+            {/* Mobile : menu burger */}
+            <div className="lg:hidden">
+              <NavMenu />
+            </div>
           </div>
         </div>
       </header>
@@ -130,7 +231,7 @@ export function VitrineNavbar() {
 }
 
 function FooterLink({ to, children }) {
-  const cls = 'block text-[13.5px] mb-2.5 text-white/60 hover:text-white transition'
+  const cls = 'vt-foot-link text-[13.5px] mb-2.5 text-dim hover:text-ink'
   const isAnchor = to.startsWith('#') || to.includes('/#')
   return isAnchor
     ? <a href={to} className={cls}>{children}</a>
@@ -161,12 +262,12 @@ export function VitrineFooter() {
     ] },
   ]
   return (
-    <footer className="bg-[#0D0D0D] text-white pt-14 pb-6 mt-2">
+    <footer data-theme="dark" className="bg-inset text-ink pt-14 pb-6 mt-2">
       <div className="max-w-[1180px] mx-auto px-5">
-        <div className="grid grid-cols-1 md:grid-cols-[1.6fr_1fr_1fr_1fr_1fr] gap-8 pb-9 border-b border-white/10">
+        <div className="grid grid-cols-1 md:grid-cols-[1.6fr_1fr_1fr_1fr_1fr] gap-8 pb-9 border-b border-edge">
           <div>
             <VitrineLogo onDark />
-            <p className="text-[13px] mt-3.5 max-w-[280px] text-white/60">{t('vitrine.footer.tagline')}</p>
+            <p className="text-[13px] mt-3.5 max-w-[280px] text-dim">{t('vitrine.footer.tagline')}</p>
           </div>
           {cols.map((c) => (
             <div key={c.h}>
@@ -175,8 +276,8 @@ export function VitrineFooter() {
             </div>
           ))}
         </div>
-        <div className="text-center pt-5 text-[12.5px] text-white/55">
-          <span className="font-display font-bold text-white">Une solution NovAfrique<span className="text-primary"> ·</span></span>{' '}
+        <div className="text-center pt-5 text-[12.5px] text-dim">
+          <span className="font-display font-bold text-ink">Une solution NovAfrique<span className="text-primary"> ·</span></span>{' '}
           {t('vitrine.footer.rights')}
         </div>
       </div>
@@ -207,7 +308,7 @@ function WelcomePopup() {
   const devises = Object.keys(DEVISES)
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-[#0D0D0D]/60 backdrop-blur-sm">
+    <div data-theme="dark" className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-app/80 backdrop-blur-sm">
       <div className="bg-card border border-edge rounded-2xl shadow-xl w-full max-w-sm p-6 relative">
         <button onClick={close} aria-label="Fermer" className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full text-ghost hover:text-ink transition">
           <X size={16} />
@@ -259,7 +360,7 @@ function WelcomePopup() {
 
         <button
           onClick={close}
-          className="w-full py-3 rounded-xl bg-primary text-white font-semibold text-sm hover:bg-primary-600 transition"
+          className="w-full py-3 rounded-xl bg-primary text-inverse font-semibold text-sm hover:bg-primary-600 transition"
         >
           {t('vitrine.welcome_popup.cta')}
         </button>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Heart } from 'lucide-react'
+import { Heart, Search } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { getCreators, demoModels, categories } from './vitrineApi'
@@ -8,8 +8,8 @@ import { usePageMeta } from '@/hooks/usePageMeta'
 import { useDevise } from './vitrineCurrency'
 import { useFavoris } from './useFavoris'
 
-const btnPrimary = 'inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-white hover:bg-primary-600 transition'
-const btnOutline = 'inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary transition'
+const btnPrimary = 'vt-btn-primary inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-inverse hover:bg-primary-600'
+const btnOutline = 'vt-btn-ghost inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary'
 
 function HeroSearch({ creators }) {
   const { t } = useTranslation()
@@ -23,8 +23,9 @@ function HeroSearch({ creators }) {
 
   return (
     <div className="relative max-w-[540px] mx-auto mb-6 text-left">
+      <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ghost pointer-events-none" />
       <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('vitrine.search.placeholder')}
-             className="w-full rounded-xl border border-edge bg-card px-4 py-3 text-sm text-ink placeholder:text-ghost focus:outline-none focus:ring-2 focus:ring-primary/30" />
+             className="w-full rounded-xl border border-edge bg-card pl-9 pr-4 py-3 text-sm text-ink placeholder:text-ghost focus:outline-none focus:ring-2 focus:ring-primary/30" />
       {query && (
         <div className="absolute inset-x-0 top-full mt-2 bg-card border border-edge rounded-xl shadow-lg overflow-hidden z-30">
           {!has && <div className="px-4 py-3 text-sm text-dim">{t('vitrine.search.empty')}</div>}
@@ -34,7 +35,7 @@ function HeroSearch({ creators }) {
               {cM.map((c) => (
                 <Link key={c.id} to={`/createurs/${c.id}`} onClick={() => setQ('')}
                       className="flex items-center gap-2.5 px-4 py-2 hover:bg-subtle transition">
-                  <span className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold text-white shrink-0" style={{ background: c.gradient }}>{c.initiales}</span>
+                  <span className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold text-inverse shrink-0" style={{ background: c.gradient }}>{c.initiales}</span>
                   <span className="text-sm text-ink">{c.nom}</span>
                   <span className="text-xs text-ghost ml-auto">{c.specialite}</span>
                 </Link>
@@ -65,7 +66,7 @@ function HeroSearch({ creators }) {
 
 function SectionHead({ eyebrow, title, subtitle }) {
   return (
-    <div className="max-w-[620px] mx-auto mb-9 text-center">
+    <div className="vt-reveal max-w-[620px] mx-auto mb-9 text-center">
       {eyebrow && <div className="text-[12px] font-bold tracking-[0.14em] uppercase text-primary">{eyebrow}</div>}
       <h2 className="font-display text-[clamp(26px,3.4vw,38px)] mt-2.5 mb-2 text-ink">{title}</h2>
       {subtitle && <p className="text-dim">{subtitle}</p>}
@@ -91,6 +92,15 @@ export default function VitrineHome() {
   }, [])
   useEffect(() => { getCreators().then(setCreators) }, [])
 
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target) } }),
+      { threshold: 0.14, rootMargin: '0px 0px -6% 0px' }
+    )
+    document.querySelectorAll('.vt-reveal:not(.in), .vt-stagger:not(.in)').forEach(el => io.observe(el))
+    return () => io.disconnect()
+  }, [creators])
+
   const models = cat === 'all' ? demoModels : demoModels.filter((m) => m.cat === cat)
   const rotMsg = Array.isArray(rotations) && rotations.length ? rotations[rot % rotations.length] : ''
 
@@ -99,8 +109,8 @@ export default function VitrineHome() {
       {/* HERO */}
       <section className="relative overflow-hidden pt-16 pb-12 text-center">
         <div className="pointer-events-none absolute -top-44 -right-28 w-[520px] h-[520px] rounded-full"
-             style={{ background: 'radial-gradient(circle, rgba(208,11,11,.08), transparent 70%)' }} />
-        <div className="max-w-[1180px] mx-auto px-5 relative">
+             style={{ background: 'radial-gradient(circle, color-mix(in srgb, var(--color-primary) 8%, transparent), transparent 70%)' }} />
+        <div className="vt-reveal max-w-[1180px] mx-auto px-5 relative">
           <div className="text-[12px] font-bold tracking-[0.14em] uppercase text-primary">{t('vitrine.hero.eyebrow')}</div>
           <h1 className="font-display font-extrabold mx-auto max-w-[880px] my-3.5 text-[clamp(34px,6vw,60px)] leading-[1.08] text-ink">
             {t('vitrine.hero.title_pre')}<span className="text-primary">{t('vitrine.hero.title_hl')}</span>{t('vitrine.hero.title_post')}
@@ -125,9 +135,9 @@ export default function VitrineHome() {
       <section id="how" className="py-16">
         <div className="max-w-[1180px] mx-auto px-5">
           <SectionHead eyebrow={t('vitrine.how.eyebrow')} title={t('vitrine.how.title')} subtitle={t('vitrine.how.subtitle')} />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="vt-stagger grid grid-cols-1 md:grid-cols-3 gap-5">
             {(Array.isArray(steps) ? steps : []).map((s) => (
-              <div key={s.n} className="bg-card border border-edge rounded-lg p-7 text-center">
+              <div key={s.n} className="vt-item vt-card bg-card border border-edge rounded-lg p-7 text-center">
                 <div className="text-[12px] font-bold text-primary tracking-[0.1em]">{s.n}</div>
                 <h3 className="font-display text-xl my-1.5 text-ink">{s.t}</h3>
                 <p className="text-dim text-sm">{s.d}</p>
@@ -141,20 +151,20 @@ export default function VitrineHome() {
       <section id="creators" className="py-16 bg-elevated">
         <div className="max-w-[1180px] mx-auto px-5">
           <SectionHead eyebrow={t('vitrine.creators.eyebrow')} title={t('vitrine.creators.title')} subtitle={t('vitrine.creators.subtitle')} />
-          <div className="flex gap-4 overflow-x-auto pb-3.5">
+          <div className="vt-stagger flex gap-4 overflow-x-auto pb-3.5">
             {(creators || []).map((c) => (
               <Link key={c.id} to={`/createurs/${c.id}`}
-                    className="relative min-w-[268px] max-w-[268px] bg-card border border-edge rounded-lg p-5 transition hover:-translate-y-0.5 hover:shadow-lg hover:border-primary">
+                    className="vt-item vt-card relative min-w-[268px] max-w-[268px] bg-card border border-edge rounded-lg p-5">
                 <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(c.id) }} className="absolute top-3 right-3 z-10" aria-label="Favori">
                   <Heart size={16} className={has(c.id) ? 'text-primary' : 'text-ghost'} fill={has(c.id) ? 'currentColor' : 'none'} />
                 </button>
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-[50px] h-[50px] rounded-xl overflow-hidden flex items-center justify-center font-display font-bold text-lg text-white shrink-0" style={c.logo_url ? undefined : { background: c.gradient }}>{c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" /> : c.initiales}</div>
+                  <div className="w-[50px] h-[50px] rounded-xl overflow-hidden flex items-center justify-center font-display font-bold text-lg text-inverse shrink-0" style={c.logo_url ? undefined : { background: c.gradient }}>{c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" /> : c.initiales}</div>
                   <div>
                     <h4 className="font-bold text-[15.5px] text-ink flex items-center gap-1.5">
                       {c.nom}
                       {c.verifie && <span className="text-[10.5px] font-bold text-primary bg-primary-50 px-1.5 py-0.5 rounded-full">{t('vitrine.creators.verified')}</span>}
-                      {c.sponsorise && <span title="Sponsorisé" className="text-[10.5px] font-bold text-white bg-primary px-1.5 py-0.5 rounded-full">★</span>}
+                      {c.sponsorise && <span title="Sponsorisé" className="text-[10.5px] font-bold text-inverse bg-primary px-1.5 py-0.5 rounded-full">★</span>}
                     </h4>
                     <div className="text-[12.5px] text-dim">{c.specialite}</div>
                   </div>
@@ -175,19 +185,19 @@ export default function VitrineHome() {
       <section id="gallery" className="py-16">
         <div className="max-w-[1180px] mx-auto px-5">
           <SectionHead eyebrow={t('vitrine.gallery.eyebrow')} title={t('vitrine.gallery.title')} subtitle={t('vitrine.gallery.subtitle')} />
-          <div className="flex gap-2.5 justify-center flex-wrap mb-7">
+          <div className="vt-reveal flex gap-2.5 justify-center flex-wrap mb-7">
             {categories.map((c) => (
               <button key={c.key} onClick={() => setCat(c.key)}
-                      className={`text-[13px] font-medium px-4 py-1.5 rounded-full border transition ${cat === c.key ? 'bg-primary border-primary text-white' : 'bg-card border-edge text-dim hover:border-primary hover:text-primary'}`}>
+                      className={`vt-filter text-[13px] font-medium px-4 py-1.5 rounded-full border ${cat === c.key ? 'bg-primary border-primary text-inverse' : 'bg-card border-edge text-dim hover:border-primary hover:text-primary'}`}>
                 {t(`vitrine.gallery.cats.${c.key}`)}
               </button>
             ))}
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="vt-stagger grid grid-cols-2 md:grid-cols-4 gap-4">
             {models.map((m) => (
-              <div key={m.id} className="bg-card border border-edge rounded-lg overflow-hidden">
+              <div key={m.id} className="vt-item vt-card bg-card border border-edge rounded-lg overflow-hidden">
                 <div className="h-[160px] flex items-center justify-center text-[40px] relative" style={{ background: m.gradient }}>
-                  <span className="absolute top-2.5 left-2.5 text-white text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-[#0D0D0D]">{m.type}</span>
+                  <span data-theme="dark" className="absolute top-2.5 left-2.5 text-inverse text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-inset">{m.type}</span>
                   {m.emoji}
                 </div>
                 <div className="p-3.5">
@@ -205,9 +215,9 @@ export default function VitrineHome() {
       {/* SUIVI CTA */}
       <section className="py-16">
         <div className="max-w-[1180px] mx-auto px-5">
-          <div className="rounded-3xl py-12 px-8 text-center bg-[#0D0D0D] text-white">
+          <div data-theme="dark" className="vt-reveal rounded-3xl py-12 px-8 text-center bg-inset text-ink">
             <h2 className="font-display text-[clamp(24px,3vw,34px)]">{t('vitrine.cta.title')}</h2>
-            <p className="text-white/70 mt-2 mb-6">{t('vitrine.cta.subtitle')}</p>
+            <p className="text-dim mt-2 mb-6">{t('vitrine.cta.subtitle')}</p>
             <Link to="/suivi" className={btnPrimary}>{t('vitrine.cta.button')}</Link>
           </div>
         </div>

@@ -486,3 +486,125 @@ body {
   animation: shimmer 1.5s infinite;
   border-radius: var(--radius-sm);
 }
+
+/* ════════════════════════════════════════════════════════
+   VITRINE — Transitions & micro-interactions Gextimo
+   ════════════════════════════════════════════════════════ */
+
+/* Easing signature — décélération franche, zéro oscillation */
+:root { --ease-gx: cubic-bezier(.16,.8,.3,1); }
+
+/* ── Scroll reveal — fondu + glissement vers le haut (une seule fois) ── */
+.vt-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .8s var(--ease-gx), transform .8s var(--ease-gx);
+}
+.vt-reveal.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Reveal décalé — grilles de cartes (steps, créateurs, galerie) ── */
+.vt-stagger .vt-item {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .7s var(--ease-gx), transform .7s var(--ease-gx);
+}
+.vt-stagger.in .vt-item { opacity: 1; transform: translateY(0); }
+.vt-stagger.in .vt-item:nth-child(1) { transition-delay: 0s; }
+.vt-stagger.in .vt-item:nth-child(2) { transition-delay: .1s; }
+.vt-stagger.in .vt-item:nth-child(3) { transition-delay: .2s; }
+.vt-stagger.in .vt-item:nth-child(4) { transition-delay: .3s; }
+.vt-stagger.in .vt-item:nth-child(5) { transition-delay: .4s; }
+.vt-stagger.in .vt-item:nth-child(6) { transition-delay: .5s; }
+.vt-stagger.in .vt-item:nth-child(7) { transition-delay: .6s; }
+.vt-stagger.in .vt-item:nth-child(8) { transition-delay: .7s; }
+
+/* ── Bouton primaire vitrine — lift + lueur rouge au survol ── */
+.vt-btn-primary {
+  transition: transform .25s var(--ease-gx), box-shadow .25s ease, filter .25s ease;
+}
+.vt-btn-primary:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.08);
+  box-shadow: 0 26px 54px -16px rgba(180,20,10,.75);
+}
+.vt-btn-primary:active { transform: translateY(-1px); }
+.vt-btn-primary svg { transition: transform .25s var(--ease-gx); }
+.vt-btn-primary:hover svg { transform: translateX(3px); }
+
+/* ── Bouton ghost / outline ── */
+.vt-btn-ghost {
+  transition: background .25s ease, border-color .25s ease, transform .25s var(--ease-gx);
+}
+.vt-btn-ghost:hover {
+  border-color: var(--color-hair-gold);
+  transform: translateY(-2px);
+}
+
+/* ── Liens de navigation — soulignement qui se déploie ── */
+.vt-nav-link {
+  position: relative;
+  transition: color .2s ease;
+}
+.vt-nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: -4px;
+  height: 1.5px;
+  background: var(--color-primary);
+  transition: right .25s var(--ease-gx);
+}
+.vt-nav-link:hover::after { right: 0; }
+
+/* ── Cartes vitrine — lift + filet doré au survol ── */
+.vt-card {
+  transition: transform .3s var(--ease-gx), border-color .3s ease, box-shadow .3s ease;
+}
+.vt-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--color-hair-gold);
+  box-shadow: 0 12px 32px -8px rgba(16,11,10,.18);
+}
+
+/* ── Petits boutons icônes ── */
+.vt-ib {
+  transition: background .2s ease, border-color .2s ease, transform .2s ease;
+}
+.vt-ib:hover { transform: translateY(-1px); }
+
+/* ── Liens pied de page — glisse vers la droite ── */
+.vt-foot-link {
+  display: block;
+  transition: color .2s ease, transform .2s ease;
+}
+.vt-foot-link:hover {
+  color: var(--color-text-primary);
+  transform: translateX(3px);
+}
+
+/* ── Filtres / badges de catégorie ── */
+.vt-filter {
+  transition: background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease;
+}
+.vt-filter:hover { transform: translateY(-1px); }
+
+/* ── Accessibilité — désactive tout pour prefers-reduced-motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .vt-reveal, .vt-reveal.in,
+  .vt-stagger .vt-item, .vt-stagger.in .vt-item {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .vt-btn-primary, .vt-btn-ghost, .vt-nav-link,
+  .vt-card, .vt-ib, .vt-foot-link, .vt-filter {
+    transition: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+    filter: none !important;
+  }
+}
