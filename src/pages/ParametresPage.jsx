@@ -114,7 +114,12 @@ function PreferencesTab() {
 
 function AtelierTab() {
   const { t } = useTranslation()
-  const { data: atelier, isLoading } = useAtelierParametres()
+  const { atelier: authAtelier } = useAuth()
+  const { data: atelierData, isLoading } = useAtelierParametres()
+  // Fallback sur l'atelier du contexte : le fetch dédié (/auth/me) peut échouer
+  // ou être annulé → sans ce repli, le formulaire s'ouvrait VIDE (risque d'écraser
+  // le nom de l'atelier à l'enregistrement).
+  const atelier = atelierData ?? authAtelier
   const update = useUpdateAtelier()
   const [edits, setEdits] = useState(null)
   const current = edits ?? atelier
@@ -127,7 +132,7 @@ function AtelierTab() {
     setEdits(null)
   }
 
-  if (isLoading) return <Skeleton className="h-40 rounded-2xl" />
+  if (isLoading && !atelier) return <Skeleton className="h-40 rounded-2xl" />
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
