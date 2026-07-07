@@ -3,338 +3,311 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Gextimo · Suivi des sprints</title>
+<title>Gextimo · Suivi QA — Espace utilisateur</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   /* Charte officielle Gextimo — rouge / noir / blanc / blanc cassé */
-  --rouge:#D00B0B; --ocre:#D00B0B; --ocre-soft:#F2B4B4;        /* accents = rouge signature */
-  --bordeaux:#0D0D0D; --bordeaux-2:#2A2A2A;                    /* institutionnel = noir absolu */
-  --vert:#1FA855; --vert-bg:#E3F4EE; --creme:#FBF9F5; --creme-2:#F1ECE4; --paper:#fff;
-  --noir:#0D0D0D; --gris:#7A6D67; --line:#EBE4DA; --bg:#F8F5F0; /* fond = blanc cassé */
+  --rouge:#D00B0B; --ocre:#D00B0B; --ocre-soft:#F2B4B4;
+  --bordeaux:#0D0D0D; --bordeaux-2:#2A2A2A;
+  --vert:#1FA855; --vert-bg:#E3F4EE;
+  --creme:#FBF9F5; --creme-2:#F1ECE4; --paper:#fff;
+  --noir:#0D0D0D; --gris:#7A6D67; --line:#EBE4DA; --bg:#F8F5F0;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:var(--noir);-webkit-font-smoothing:antialiased;line-height:1.55}
+.wrap{max-width:960px;margin:0 auto;padding:22px 18px 60px}
 
-/* HEADER */
+/* Header */
 .top{position:sticky;top:0;z-index:50;background:linear-gradient(150deg,var(--bordeaux),var(--bordeaux-2));color:#fff;box-shadow:0 6px 24px -10px rgba(13,13,13,.6)}
-.top-in{max-width:1000px;margin:0 auto;padding:18px 20px}
-.brand{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
-.gx{width:38px;height:38px;flex:none}
-.brand h1{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;letter-spacing:.2px}
-.brand .dot{color:var(--ocre-soft)}
-.brand .sub{font-size:12px;color:#E9CDB6;margin-top:1px;font-weight:500}
-.brand .spacer{flex:1}
-.kpi{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.kpi .big{font-family:'Playfair Display',serif;font-weight:800;font-size:30px;line-height:1}
-.kpi .big small{font-size:14px;font-weight:600;color:var(--ocre-soft)}
-.kpi .cnt{font-size:12.5px;color:#EAD2BF}
-.barwrap{flex:1;min-width:200px}
-.bar{height:12px;border-radius:8px;background:rgba(255,255,255,.16);overflow:hidden}
-.bar > i{display:block;height:100%;width:0;border-radius:8px;background:linear-gradient(90deg,var(--ocre),var(--ocre-soft));transition:width .5s cubic-bezier(.4,0,.2,1)}
-.tools{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
-.btn{font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:8px;padding:7px 13px;cursor:pointer;transition:.15s}
-.btn:hover{background:rgba(255,255,255,.22)}
-.btn.danger:hover{background:var(--rouge);border-color:var(--rouge)}
+.top .in{max-width:960px;margin:0 auto;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px}
+.brand .dot{width:11px;height:11px;border-radius:50%;background:var(--rouge);box-shadow:0 0 0 4px rgba(208,11,11,.22)}
+.brand h1{font-family:'Playfair Display',serif;font-size:19px;font-weight:800;letter-spacing:.2px}
+.brand p{font-size:11.5px;color:rgba(255,255,255,.66);margin-top:1px}
+.kpi{min-width:230px}
+.kpi .row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:6px}
+.kpi .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.7)}
+.kpi .big{font-family:'Playfair Display',serif;font-weight:800;font-size:26px;line-height:1}
+.kpi .big small{font-size:14px;font-weight:600;color:rgba(255,255,255,.6)}
+.bar{height:11px;border-radius:8px;background:rgba(255,255,255,.16);overflow:hidden}
+.bar > i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,var(--rouge),var(--ocre-soft))}
 
-/* LAYOUT */
-.wrap{max-width:1000px;margin:0 auto;padding:22px 16px 70px}
-.legend{font-size:12px;color:var(--gris);margin:0 4px 16px;display:flex;align-items:center;gap:8px}
-.legend b{color:var(--bordeaux)}
+/* Cards */
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:16px;box-shadow:0 10px 26px -22px rgba(13,13,13,.5)}
+.card > h2{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--noir);margin-bottom:4px;display:flex;align-items:center;gap:9px}
+.card > h2 .n{width:26px;height:26px;flex:none;border-radius:8px;background:var(--rouge);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
+.card .sub{font-size:12.5px;color:var(--gris);margin-bottom:12px}
 
-/* SPRINT CARD */
-.sprint{background:var(--paper);border:1px solid var(--line);border-radius:14px;margin-bottom:14px;overflow:hidden;box-shadow:0 10px 26px -20px rgba(13,13,13,.5)}
-.sp-head{display:flex;align-items:center;gap:14px;padding:15px 18px;cursor:pointer;user-select:none}
-.sp-num{width:42px;height:42px;flex:none;border-radius:11px;background:linear-gradient(135deg,var(--bordeaux),var(--bordeaux-2));color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:800;font-size:17px;box-shadow:0 5px 12px -6px rgba(13,13,13,.6);position:relative;transition:.3s}
-.sp-num.done{background:linear-gradient(135deg,var(--vert),#15803d)}
-.sp-meta{flex:1;min-width:0}
-.sp-title{font-family:'Playfair Display',serif;font-weight:700;font-size:15.5px;color:var(--bordeaux)}
-.sp-goal{font-size:12.5px;color:var(--gris);margin-top:1px}
-.sp-right{display:flex;align-items:center;gap:12px;flex:none}
-.sp-pct{font-family:'Playfair Display',serif;font-weight:700;font-size:13px;color:var(--ocre);min-width:38px;text-align:right;font-variant-numeric:tabular-nums}
-.sp-pct.done{color:var(--vert)}
-.sp-bar{width:90px;height:7px;border-radius:6px;background:var(--creme-2);overflow:hidden}
-.sp-bar > i{display:block;height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,var(--ocre),var(--ocre-soft));transition:width .4s}
-.sp-bar > i.done{background:linear-gradient(90deg,var(--vert),#34d399)}
-.chev{color:var(--gris);font-size:12px;transition:transform .25s}
-.sprint.collapsed .chev{transform:rotate(-90deg)}
-.sprint.collapsed .sp-body{display:none}
-@media(max-width:560px){.sp-bar{display:none}.sp-goal{display:none}}
+/* Méthode */
+.method{background:linear-gradient(158deg,#fff,var(--creme));border-left:4px solid var(--rouge)}
+.method ol{list-style:none;counter-reset:m;display:grid;gap:9px;margin-top:4px}
+.method li{counter-increment:m;position:relative;padding-left:34px;font-size:13.5px}
+.method li::before{content:counter(m);position:absolute;left:0;top:-1px;width:23px;height:23px;border-radius:7px;background:var(--noir);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.method li b{color:var(--noir)}
+.method .lv{display:inline-flex;align-items:center;gap:5px;background:var(--creme-2);border:1px solid var(--line);border-radius:6px;padding:1px 7px;font-size:12px;font-weight:600;color:var(--bordeaux);margin:2px 3px 0 0}
+.method .lv i{width:7px;height:7px;border-radius:50%;background:var(--rouge)}
+.pill{display:inline-block;background:var(--vert-bg);color:#0f7a3d;border:1px solid #bfe6d1;border-radius:20px;padding:3px 11px;font-size:12px;font-weight:600;margin-top:10px}
 
-/* TASK LIST */
-.sp-body{padding:4px 18px 14px;border-top:1px solid var(--line)}
-.task{display:flex;align-items:flex-start;gap:11px;padding:9px 6px;border-radius:9px;cursor:pointer;transition:background .12s}
-.task:hover{background:var(--creme)}
-.task + .task{border-top:1px solid #F3EBDF}
-.cbx{flex:none;width:21px;height:21px;border-radius:6px;border:2px solid var(--ocre);background:#fff;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:.15s}
-.cbx svg{width:13px;height:13px;stroke:#fff;stroke-width:3.2;fill:none;opacity:0;transform:scale(.4);transition:.15s}
-.task.ok .cbx{background:var(--vert);border-color:var(--vert)}
-.task.ok .cbx svg{opacity:1;transform:scale(1)}
-.task .txt{font-size:13.5px;color:var(--noir);transition:.15s}
-.task.ok .txt{color:var(--gris);text-decoration:line-through}
-.task .txt em{font-style:italic;color:var(--gris)}
-.task .txt code{font-family:'Playfair Display',serif;background:var(--creme-2);color:var(--bordeaux);padding:0 5px;border-radius:4px;font-size:12px}
+/* Légende + résumé */
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;border-radius:20px;padding:3px 11px;border:1px solid transparent}
+.badge i{width:8px;height:8px;border-radius:50%}
+.b-done{background:var(--vert-bg);color:#0f7a3d;border-color:#bfe6d1}   .b-done i{background:var(--vert)}
+.b-wip {background:#FCEBD6;color:#9a5b00;border-color:#f3d2a6}          .b-wip  i{background:#E08600}
+.b-todo{background:var(--creme-2);color:var(--gris);border-color:var(--line)} .b-todo i{background:#B9AE9F}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:2px}
+.stat{flex:1;min-width:120px;background:var(--creme);border:1px solid var(--line);border-radius:11px;padding:12px 14px}
+.stat .v{font-family:'Playfair Display',serif;font-weight:800;font-size:24px;line-height:1}
+.stat .k{font-size:11.5px;color:var(--gris);margin-top:3px}
+.stat.d .v{color:var(--vert)} .stat.w .v{color:#E08600} .stat.t .v{color:var(--gris)}
 
-/* BLOQUANTS */
-.blockers{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--ocre);border-radius:0 12px 12px 0;padding:16px 18px;margin-top:8px}
-.blockers h3{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--bordeaux);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
-.blockers ul{margin-left:18px}
-.blockers li{font-size:13px;color:var(--noir);margin-bottom:4px}
+/* Table modules */
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:4px}
+.tbl th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--gris);padding:8px 10px;border-bottom:2px solid var(--line)}
+.tbl td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+.tbl .mod{font-weight:600;color:var(--noir)}
+.tbl .rt{font-variant-numeric:tabular-nums;color:var(--gris);white-space:nowrap}
+.tbl .nt{color:var(--gris);font-size:12.5px}
+.tbl td .badge{white-space:nowrap}
 
-.foot{text-align:center;font-size:11.5px;color:var(--gris);margin-top:26px}
-.foot b{color:var(--bordeaux)}
-.saved{display:inline-block;font-size:11px;color:var(--vert);font-weight:600;opacity:0;transition:opacity .3s}
-.saved.show{opacity:1}
+/* Bugs */
+.bugs{display:grid;gap:11px;margin-top:4px}
+.bug{border:1px solid var(--line);border-left:3px solid var(--vert);border-radius:0 11px 11px 0;padding:12px 15px;background:#fff}
+.bug h4{font-size:13.5px;color:var(--noir);margin-bottom:3px;display:flex;align-items:center;gap:8px}
+.bug h4 .fx{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#0f7a3d;background:var(--vert-bg);border:1px solid #bfe6d1;border-radius:20px;padding:1px 8px}
+.bug p{font-size:12.5px;color:var(--gris)}
+.bug code{font-family:'Playfair Display',serif;background:var(--creme-2);color:var(--bordeaux);padding:0 5px;border-radius:4px;font-size:12px}
 
-@media print{
-  .top{position:static;box-shadow:none} .tools,.chev,.legend{display:none}
-  body{background:#fff} .sprint.collapsed .sp-body{display:block} .sprint{break-inside:avoid;box-shadow:none}
+.foot{margin-top:22px;font-size:12px;color:var(--gris);text-align:center;line-height:1.7}
+.foot b{color:var(--noir)}
+@media(max-width:560px){
+  .kpi{min-width:100%;width:100%}
+  .tbl .nt{display:none}
 }
 </style>
 </head>
 <body>
 
 <header class="top">
-  <div class="top-in">
+  <div class="in">
     <div class="brand">
-      <svg class="gx" viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="46" fill="none" stroke="#fff" stroke-width="3.4"/>
-        <circle cx="50" cy="50" r="34" fill="none" stroke="#fff" stroke-width="2" opacity=".5"/>
-        <circle cx="50" cy="50" r="22" fill="none" stroke="#fff" stroke-width="2" opacity=".32"/>
-        <path d="M50 4 A46 46 0 0 1 96 50" fill="none" stroke="var(--ocre-soft)" stroke-width="6.5" stroke-linecap="round"/>
-        <circle cx="50" cy="50" r="8.5" fill="var(--rouge)"/>
-      </svg>
+      <span class="dot"></span>
       <div>
-        <h1>gextimo<span class="dot">.</span> — Suivi des sprints</h1>
-        <div class="sub">Vitrine web + Application mobile · cochez au fur et à mesure</div>
+        <h1>Gextimo · Suivi QA</h1>
+        <p>Recette qualité de l'espace utilisateur — testé à travers l'application réelle</p>
       </div>
-      <div class="spacer"></div>
     </div>
-
     <div class="kpi">
-      <div class="big"><span id="pct">0</span><small>%</small></div>
-      <div class="barwrap">
-        <div class="bar"><i id="globalbar"></i></div>
-        <div class="cnt"><span id="doneCount">0</span> / <span id="totalCount">0</span> tâches terminées · <span id="sprintCount">0</span> sprints bouclés</div>
+      <div class="row">
+        <span class="lbl">Routes validées à travers l'app</span>
+        <span class="big">18<small>&nbsp;/&nbsp;≈140</small></span>
       </div>
-    </div>
-
-    <div class="tools">
-      <button class="btn" onclick="expandAll(true)">Tout déplier</button>
-      <button class="btn" onclick="expandAll(false)">Tout replier</button>
-      <button class="btn" onclick="window.print()">Imprimer / PDF</button>
-      <button class="btn danger" onclick="resetAll()">Réinitialiser</button>
-      <span class="saved" id="saved">✓ enregistré</span>
+      <div class="bar"><i style="width:13%"></i></div>
     </div>
   </div>
 </header>
 
-<div class="wrap">
-  <div class="legend">Socle : Web <b>v5</b> · App <b>v5</b> &nbsp;·&nbsp; chaque sprint est livrable indépendamment (produit évolutif). La progression est <b>partagée</b> (visible par tous) ; cocher/modifier est <b>protégé par un code à 6 chiffres</b> 🔒.</div>
-  <div id="sprints"></div>
+<main class="wrap">
 
-  <div class="blockers">
-    <h3>Livrables bloquants à obtenir du client</h3>
-    <ul>
-      <li>Charte graphique (couleurs + police)</li>
-      <li>HTML du footer définitif</li>
-      <li>Confirmation URL/wordmark du pied de facture</li>
-      <li>Validation DGI/SFE pour l'habillage de la facture normalisée</li>
-    </ul>
-  </div>
+  <!-- ─── MÉTHODE (en tête, pour le client) ─────────────────────────── -->
+  <section class="card method">
+    <h2><span class="n">i</span> Comment on teste — la méthode</h2>
+    <p class="sub">On teste chaque fonctionnalité <b>en passant par l'application réelle, côté utilisateur</b>
+      — pas en interrogeant les API « à vide ». C'est plus long, mais ça valide ce que l'utilisateur
+      <b>vit vraiment</b> (affichage + enregistrement + synchronisation), pas seulement qu'un serveur répond.</p>
+    <ol>
+      <li><b>Agir dans l'écran</b> : ouvrir la fonctionnalité sur un vrai téléphone, remplir le formulaire
+        comme un utilisateur, valider.</li>
+      <li><b>Vérifier la vérité à 3 niveaux</b>, jamais l'affichage seul :
+        <span class="lv"><i></i> l'écran</span>
+        <span class="lv"><i></i> la base locale du téléphone</span>
+        <span class="lv"><i></i> le serveur</span></li>
+      <li><b>Tester le cycle hors-ligne ↔ en ligne</b> : en ligne, une modification remonte toute seule ;
+        en mode avion, elle est gardée en local « en attente » ; au retour du réseau, elle remonte
+        automatiquement.</li>
+      <li><b>Tracer &amp; nettoyer</b> : on ne repasse jamais deux fois sur la même route, et on restaure
+        les données de test à leur état d'origine.</li>
+    </ol>
+    <span class="pill">Chaque fonctionnalité validée l'est sur écran + local + serveur</span>
+  </section>
+
+  <!-- ─── COUVERTURE ─────────────────────────────────────────────────── -->
+  <section class="card">
+    <h2><span class="n">1</span> Où en est la recette</h2>
+    <p class="sub">Périmètre : <b>espace utilisateur</b> (professionnels de la mode). L'espace
+      administrateur n'est pas encore dans le périmètre de cette campagne.</p>
+    <div class="legend">
+      <span class="badge b-done"><i></i> Validé de bout en bout</span>
+      <span class="badge b-wip"><i></i> En cours (partiellement testé)</span>
+      <span class="badge b-todo"><i></i> À tester</span>
+    </div>
+    <div class="stats">
+      <div class="stat d"><div class="v">3</div><div class="k">modules validés de bout en bout</div></div>
+      <div class="stat w"><div class="v">6</div><div class="k">modules en cours</div></div>
+      <div class="stat t"><div class="v">14</div><div class="k">modules à tester</div></div>
+    </div>
+    <p class="sub" style="margin-top:12px;margin-bottom:0">
+      À l'échelle des routes : <b>≈ 18 déjà validées à travers l'app</b> sur ≈ 140 côté utilisateur.
+      Les autres répondent déjà correctement au niveau technique (aucune erreur serveur constatée) —
+      elles restent à repasser à travers l'interface, une par une.</p>
+  </section>
+
+  <!-- ─── DÉTAIL PAR MODULE ─────────────────────────────────────────── -->
+  <section class="card">
+    <h2><span class="n">2</span> Détail par fonctionnalité</h2>
+    <p class="sub">Ce qui a été conduit dans l'application, écran par écran.</p>
+    <div style="overflow-x:auto">
+    <table class="tbl">
+      <thead><tr><th>Fonctionnalité</th><th>Routes</th><th>État</th><th>Constat</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="mod">Inscription / Connexion / OTP</td><td class="rt">6</td>
+          <td><span class="badge b-done"><i></i> Validé</span></td>
+          <td class="nt">Inscription → OTP → onboarding → tableau de bord. Numéros de téléphone normalisés.</td>
+        </tr>
+        <tr>
+          <td class="mod">Mesures client</td><td class="rt">8</td>
+          <td><span class="badge b-done"><i></i> Validé</span></td>
+          <td class="nt">Affichage + saisie + modification, vérifiés local &amp; serveur. <b>3 bugs corrigés</b> (voir plus bas).</td>
+        </tr>
+        <tr>
+          <td class="mod">Synchronisation hors-ligne / en ligne</td><td class="rt">2</td>
+          <td><span class="badge b-done"><i></i> Validé</span></td>
+          <td class="nt">Cycle mode avion → reconnexion validé (remontée automatique). <b>1 bug corrigé</b>.</td>
+        </tr>
+        <tr>
+          <td class="mod">Clients</td><td class="rt">10</td>
+          <td><span class="badge b-wip"><i></i> En cours</span></td>
+          <td class="nt">Création + import des contacts + liste : OK. Reste modification, archivage, VIP, suppression.</td>
+        </tr>
+        <tr>
+          <td class="mod">Commandes</td><td class="rt">8</td>
+          <td><span class="badge b-wip"><i></i> En cours</span></td>
+          <td class="nt">Assistant de création (client → modèle → date → prix) + fiche détail : OK. Reste étapes, paiements, échéances.</td>
+        </tr>
+        <tr>
+          <td class="mod">Tableau de bord</td><td class="rt">2</td>
+          <td><span class="badge b-wip"><i></i> En cours</span></td>
+          <td class="nt">S'affiche correctement (en-tête rouge). Chiffres à recouper.</td>
+        </tr>
+        <tr>
+          <td class="mod">Notifications</td><td class="rt">4</td>
+          <td><span class="badge b-wip"><i></i> En cours</span></td>
+          <td class="nt">Notifications locales OK. Reste « marquer comme lu » et jeton push.</td>
+        </tr>
+        <tr>
+          <td class="mod">Paramètres</td><td class="rt">16</td>
+          <td><span class="badge b-wip"><i></i> En cours</span></td>
+          <td class="nt">Type de compte (artisan ↔ designer) OK. Reste profil, atelier, facture, préférences, sécurité.</td>
+        </tr>
+        <tr>
+          <td class="mod">Archives</td><td class="rt">1</td>
+          <td><span class="badge b-wip"><i></i> En cours</span></td>
+          <td class="nt">La liste s'affiche ; parcours de désarchivage à valider.</td>
+        </tr>
+        <tr>
+          <td class="mod">Catalogue (vêtements &amp; modèles)</td><td class="rt">6</td>
+          <td><span class="badge b-todo"><i></i> À tester</span></td>
+          <td class="nt">Création / publication / collection.</td>
+        </tr>
+        <tr>
+          <td class="mod">Collections</td><td class="rt">4</td>
+          <td><span class="badge b-todo"><i></i> À tester</span></td><td class="nt">—</td>
+        </tr>
+        <tr>
+          <td class="mod">Facturation (devis / factures / reçus)</td><td class="rt">8</td>
+          <td><span class="badge b-todo"><i></i> À tester</span></td>
+          <td class="nt">Création, statut, dépôt DGI, normalisation.</td>
+        </tr>
+        <tr>
+          <td class="mod">Outils créatifs</td><td class="rt">5</td>
+          <td><span class="badge b-todo"><i></i> À tester</span></td>
+          <td class="nt">Croquis, fiches techniques, patrons, moodboards.</td>
+        </tr>
+        <tr>
+          <td class="mod">Fidélité</td><td class="rt">2</td>
+          <td><span class="badge b-todo"><i></i> À tester</span></td>
+          <td class="nt">Conversion de points (seuil).</td>
+        </tr>
+        <tr>
+          <td class="mod">Équipe &amp; permissions</td><td class="rt">5</td>
+          <td><span class="badge b-todo"><i></i> À tester</span></td><td class="nt">—</td>
+        </tr>
+        <tr>
+          <td class="mod">Abonnement &amp; paiements</td><td class="rt">7</td>
+          <td><span class="badge b-todo"><i></i> À tester</span></td>
+          <td class="nt">Offres, activation par code, paiement FedaPay.</td>
+        </tr>
+        <tr>
+          <td class="mod">Avis &amp; demandes de devis</td><td class="rt">5</td>
+          <td><span class="badge b-todo"><i></i> À tester</span></td><td class="nt">Modération, traitement.</td>
+        </tr>
+        <tr>
+          <td class="mod">Support (tickets)</td><td class="rt">4</td>
+          <td><span class="badge b-todo"><i></i> À tester</span></td><td class="nt">—</td>
+        </tr>
+        <tr>
+          <td class="mod">Liens WhatsApp</td><td class="rt">4</td>
+          <td><span class="badge b-todo"><i></i> À tester</span></td>
+          <td class="nt">Rappel, confirmation, commande prête, preuve de paiement.</td>
+        </tr>
+        <tr>
+          <td class="mod">Multi-ateliers</td><td class="rt">6</td>
+          <td><span class="badge b-todo"><i></i> À tester</span></td><td class="nt">—</td>
+        </tr>
+        <tr>
+          <td class="mod">Caisse</td><td class="rt">2</td>
+          <td><span class="badge b-todo"><i></i> À tester</span></td>
+          <td class="nt">Selon le plan d'abonnement.</td>
+        </tr>
+        <tr>
+          <td class="mod">Galerie VIP</td><td class="rt">4</td>
+          <td><span class="badge b-todo"><i></i> À tester</span></td>
+          <td class="nt">Selon le plan d'abonnement.</td>
+        </tr>
+        <tr>
+          <td class="mod">Récupération de compte</td><td class="rt">7</td>
+          <td><span class="badge b-todo"><i></i> À tester</span></td>
+          <td class="nt">Question secrète + parcours OTP.</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <!-- ─── BUGS TROUVÉS & CORRIGÉS ────────────────────────────────────── -->
+  <section class="card">
+    <h2><span class="n">3</span> Bugs trouvés &amp; corrigés</h2>
+    <p class="sub">Détectés uniquement grâce au test à travers l'app (invisibles au niveau API).</p>
+    <div class="bugs">
+      <div class="bug">
+        <h4>Mesures jamais affichées <span class="fx">corrigé</span></h4>
+        <p>La fiche mesures d'un client s'ouvrait <b>vide</b> même quand des mesures existaient, et
+          l'éditeur ne pré-remplissait pas — risque d'écraser les données. Cause : une liste était traitée
+          comme un enregistrement unique.</p>
+      </div>
+      <div class="bug">
+        <h4>Enregistrement de mesures à vide <span class="fx">corrigé</span></h4>
+        <p>À la sauvegarde, les valeurs saisies partaient <b>vides</b> et un <b>doublon</b> était créé au lieu
+          de mettre à jour la fiche existante.</p>
+      </div>
+      <div class="bug">
+        <h4>Synchronisation non continue en ligne <span class="fx">corrigé</span></h4>
+        <p>Une modification faite <b>en restant connecté</b> ne remontait pas au serveur (seulement à la
+          reconnexion ou au démarrage). Désormais : remontée automatique après chaque saisie, plus une
+          synchronisation régulière — conforme à l'exigence « connexion allumée = synchro en continu ».</p>
+      </div>
+    </div>
+  </section>
 
   <div class="foot">
-    <b>gextimo.</b> — Créez · Gérez · Rayonnez &nbsp;·&nbsp; une solution NovAfrique
+    <b>Gextimo</b> · Recette qualité de l'espace utilisateur — mise à jour du <b>07/07/2026</b><br>
+    Méthode : test à travers l'application réelle, vérification écran + base locale + serveur, cycle hors-ligne/en ligne.
   </div>
-</div>
 
-<script>
-const API = 'https://gextimoapi.novafriq.africa/api/suivi-sprints';
-
-const DATA = [
-  { t:"Finition & fiabilisation de l'app mobile", goal:"App Android testée sur téléphone réel, propre, cohérente et prête à distribuer.", tasks:[
-    "<b>Tests sur téléphone réel</b> (USB + rechargement instantané du code, sans rebuild)",
-    "<b>Affichage plein écran</b> (barre d'état / zones de sécurité — plus d'espace vide en haut)",
-    "<b>Import des contacts</b> réparé (autorisations, import par lots, contacts sans nom)",
-    "<b>Bouton flottant « + »</b> (Nouveau client + Importer contacts, bien visibles)",
-    "<b>Abonnement visible sur l'accueil</b> (forfait + jours d'essai restants)",
-    "<b>Bouton synchronisation</b> en ligne / hors-ligne sur le tableau de bord",
-    "<b>Notifications à la marque Gextimo</b> (logo + couleur)",
-    "Langues limitées à <b>Français / Anglais</b> (langues non finalisées masquées)",
-    "<b>Zones de sécurité Android récents</b> (edge-to-edge, plugin dédié)",
-  ]},
-  { t:"Robustesse & cohérence (serveur)", goal:"Éviter les échecs silencieux et unifier les données sensibles.", tasks:[
-    "<b>Correctifs bloquants</b> déployés (connexion, création commande / client)",
-    "<b>Nom d'atelier</b> réellement enregistré depuis l'inscription (zéro valeur en dur)",
-    "<b>Numéro de téléphone normalisé</b> (une seule forme, inscription + connexion)",
-    "Notifications système : contrainte de type assouplie (plus d'erreurs en cascade)",
-  ]},
-  { t:"Séparation en deux applications", goal:"Distinguer l'app des professionnels et la console interne.", tasks:[
-    "<b>Gextimo</b> (Artisans / Stylistes / Designers) — destinée au grand public / Play Store",
-    "<b>Gextimo Admin</b> (console interne, quelques comptes) — non publiée",
-    "Identités distinctes (nom, icône, identifiant d'application)",
-    "Génération des <b>deux versions installables</b> (APK)",
-  ]},
-  { t:"Mode hors-ligne mobile", goal:"Utilisation sur le terrain sans connexion permanente.", tasks:[
-    "Fiabiliser la <b>synchronisation</b> des données ↔ serveur",
-    "<b>Indicateur d'état</b> de synchronisation clair",
-    "Sessions longue durée (30 j gérant / 7 j équipe)",
-  ]},
-  { t:"Espace Designer & vitrine — finitions", goal:"Compléter et polir l'existant (déjà construit et branché à l'API).", tasks:[
-    "<b>Page publique d'abonnement Premium</b> (offres, comparatif, parcours)",
-    "<b>Achat de mise en avant</b> (sponsorisation) en self-service",
-    "<b>Filtres avancés</b> de la galerie + tri + rayon géographique",
-    "<b>Formulaire de devis</b> dédié",
-    "<b>Refonte visuelle</b> générale (le design actuel est fonctionnel mais brut)",
-    "Finaliser la <b>traduction anglaise</b>",
-  ]},
-  { t:"Distribution & lancement", goal:"Publier les apps et ouvrir au public.", tasks:[
-    "Publication de <b>Gextimo</b> sur le <b>Play Store</b>",
-    "<b>CGU + politique de confidentialité</b> validées",
-    "<b>Vérifications de sécurité</b> avant ouverture",
-    "<b>iOS</b> : ouverture ultérieure (nécessite un environnement Mac / Xcode)",
-  ]},
-];
-
-let state = {}, locked = false, unlockCode = null;
-
-const elS = document.getElementById('sprints');
-
-function key(si,ti){ return 's'+si+'t'+ti; }
-
-function render(){
-  elS.innerHTML = '';
-  DATA.forEach((sp, si)=>{
-    const total = sp.tasks.length;
-    let done = 0; sp.tasks.forEach((_,ti)=>{ if(state[key(si,ti)]) done++; });
-    const pct = total ? Math.round(done/total*100) : 0;
-    const allDone = done===total && total>0;
-
-    const card = document.createElement('div');
-    card.className = 'sprint' + (allDone ? '' : (done>0 ? '' : ' collapsed')); // closed if not started
-    card.innerHTML = `
-      <div class="sp-head" onclick="toggle(this)">
-        <div class="sp-num ${allDone?'done':''}">${allDone?'✓':si+1}</div>
-        <div class="sp-meta">
-          <div class="sp-title">Sprint ${si+1} — ${sp.t}</div>
-          <div class="sp-goal">${sp.goal}</div>
-        </div>
-        <div class="sp-right">
-          <div class="sp-bar"><i class="${allDone?'done':''}" style="width:${pct}%"></i></div>
-          <div class="sp-pct ${allDone?'done':''}">${pct}%</div>
-          <div class="chev">▾</div>
-        </div>
-      </div>
-      <div class="sp-body">
-        ${sp.tasks.map((tx,ti)=>{
-          const on = !!state[key(si,ti)];
-          return `<div class="task ${on?'ok':''}" onclick="task(${si},${ti},this)">
-            <span class="cbx"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span>
-            <span class="txt">${tx}</span>
-          </div>`;
-        }).join('')}
-      </div>`;
-    elS.appendChild(card);
-  });
-  updateGlobal();
-}
-
-async function task(si,ti,el){
-  const code = await ensureCode();
-  if(!code) return;                         // pas de code → lecture seule
-  const k = key(si,ti);
-  const prev = !!state[k];
-  state[k] = !prev;                          // mise à jour optimiste
-  el.classList.toggle('ok', state[k]);
-  refreshSprint(el.closest('.sprint'), si);
-  updateGlobal();
-  const ok = await persist();
-  if(!ok){                                   // échec → on revient en arrière
-    state[k] = prev;
-    el.classList.toggle('ok', state[k]);
-    refreshSprint(el.closest('.sprint'), si);
-    updateGlobal();
-  }
-}
-
-function refreshSprint(card, si){
-  const sp = DATA[si]; const total = sp.tasks.length;
-  let done=0; sp.tasks.forEach((_,ti)=>{ if(state[key(si,ti)]) done++; });
-  const pct = total?Math.round(done/total*100):0; const allDone = done===total;
-  card.querySelector('.sp-bar > i').style.width = pct+'%';
-  card.querySelector('.sp-bar > i').classList.toggle('done', allDone);
-  const pctEl = card.querySelector('.sp-pct'); pctEl.textContent = pct+'%'; pctEl.classList.toggle('done', allDone);
-  const num = card.querySelector('.sp-num'); num.classList.toggle('done', allDone); num.textContent = allDone?'✓':si+1;
-}
-
-function updateGlobal(){
-  let total=0, done=0, sprintsDone=0;
-  DATA.forEach((sp,si)=>{
-    let d=0; sp.tasks.forEach((_,ti)=>{ total++; if(state[key(si,ti)]){done++; d++;} });
-    if(d===sp.tasks.length && sp.tasks.length) sprintsDone++;
-  });
-  const pct = total?Math.round(done/total*100):0;
-  document.getElementById('pct').textContent = pct;
-  document.getElementById('globalbar').style.width = pct+'%';
-  document.getElementById('doneCount').textContent = done;
-  document.getElementById('totalCount').textContent = total;
-  document.getElementById('sprintCount').textContent = sprintsDone;
-}
-
-function toggle(head){ head.closest('.sprint').classList.toggle('collapsed'); }
-function expandAll(open){ document.querySelectorAll('.sprint').forEach(c=> c.classList.toggle('collapsed', !open)); }
-
-function showSaved(){
-  const s = document.getElementById('saved'); s.classList.add('show');
-  clearTimeout(window._st); window._st = setTimeout(()=>s.classList.remove('show'), 1200);
-}
-
-async function ensureCode(){
-  if(unlockCode) return unlockCode;
-  const c = prompt(locked
-    ? 'Entrez le code à 6 chiffres pour modifier :'
-    : 'Première fois : créez votre code à 6 chiffres :');
-  if(c===null) return null;
-  if(!/^\d{6}$/.test(c)){ alert('Le code doit faire 6 chiffres.'); return null; }
-  unlockCode = c;
-  return c;
-}
-
-async function persist(){
-  try{
-    const r = await fetch(API, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ code: unlockCode, checked: state }),
-    });
-    if(r.status===403){ unlockCode=null; alert('Code incorrect.'); return false; }
-    if(!r.ok) throw 0;
-    locked = true;
-    showSaved();
-    return true;
-  }catch(e){ alert("Échec de l'enregistrement (réseau)."); return false; }
-}
-
-async function load(){
-  try{
-    const r = await fetch(API);
-    if(r.ok){ const d = await r.json(); state = d.checked || {}; locked = !!d.locked; }
-  }catch(e){ /* hors-ligne : rendu vide */ }
-  render();
-}
-
-async function resetAll(){
-  const code = await ensureCode();
-  if(!code) return;
-  if(!confirm('Réinitialiser toute la progression (visible par tout le monde) ?')) return;
-  const prev = state;
-  state = {};
-  render();
-  if(!(await persist())){ state = prev; render(); }
-}
-
-load();
-</script>
+</main>
 </body>
 </html>
