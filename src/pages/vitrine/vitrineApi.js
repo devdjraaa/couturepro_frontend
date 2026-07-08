@@ -19,14 +19,14 @@ export const categories = [
 ]
 
 export const demoModels = [
-  { id: 1, nom: 'Boubou Bazin', par: 'Atelier Jaures', prix: '25 000', cat: 'boubou', emoji: '👘', type: 'Sur mesure', gradient: 'linear-gradient(135deg,#D00B0B,#7a0606)' },
-  { id: 2, nom: 'Robe Racines', par: 'Maison Zinsou', prix: '75 000', cat: 'robe', emoji: '👗', type: 'Sur mesure', gradient: 'linear-gradient(135deg,#1a1a1a,#444)' },
-  { id: 3, nom: 'Costume Slim', par: 'Atelier Moussa', prix: '55 000', cat: 'costume', emoji: '🤵', type: 'Sur mesure', gradient: 'linear-gradient(135deg,#333,#111)' },
-  { id: 4, nom: 'Ensemble Enfant', par: 'Maison Adama', prix: '18 000', cat: 'enfant', emoji: '🧒', type: 'Prêt-à-porter', gradient: 'linear-gradient(135deg,#6F635E,#2A2A2A)' },
-  { id: 5, nom: 'Boubou Royal', par: 'Studio Fatou', prix: '45 000', cat: 'boubou', emoji: '👑', type: 'Sur mesure', gradient: 'linear-gradient(135deg,#D00B0B,#1a1a1a)' },
-  { id: 6, nom: 'Robe Cocktail', par: 'Maison Zinsou', prix: '40 000', cat: 'robe', emoji: '💃', type: 'Sur mesure', gradient: 'linear-gradient(135deg,#444,#D00B0B)' },
-  { id: 7, nom: 'Complet Wax', par: 'Atelier Jaures', prix: '32 000', cat: 'costume', emoji: '🧥', type: 'Sur mesure', gradient: 'linear-gradient(135deg,#222,#555)' },
-  { id: 8, nom: 'Robe Écolière', par: 'Maison Adama', prix: '10 000', cat: 'enfant', emoji: '🎒', type: 'Prêt-à-porter', gradient: 'linear-gradient(135deg,#7a0606,#D00B0B)' },
+  { id: 1, nom: 'Boubou Bazin', par: 'Atelier Jaures', prix: '25 000', cat: 'boubou', type: 'Sur mesure', gradient: 'linear-gradient(135deg,#D00B0B,#7a0606)' },
+  { id: 2, nom: 'Robe Racines', par: 'Maison Zinsou', prix: '75 000', cat: 'robe', type: 'Sur mesure', gradient: 'linear-gradient(135deg,#1a1a1a,#444)' },
+  { id: 3, nom: 'Costume Slim', par: 'Atelier Moussa', prix: '55 000', cat: 'costume', type: 'Sur mesure', gradient: 'linear-gradient(135deg,#333,#111)' },
+  { id: 4, nom: 'Ensemble Enfant', par: 'Maison Adama', prix: '18 000', cat: 'enfant', type: 'Prêt-à-porter', gradient: 'linear-gradient(135deg,#6F635E,#2A2A2A)' },
+  { id: 5, nom: 'Boubou Royal', par: 'Studio Fatou', prix: '45 000', cat: 'boubou', type: 'Sur mesure', gradient: 'linear-gradient(135deg,#D00B0B,#1a1a1a)' },
+  { id: 6, nom: 'Robe Cocktail', par: 'Maison Zinsou', prix: '40 000', cat: 'robe', type: 'Sur mesure', gradient: 'linear-gradient(135deg,#444,#D00B0B)' },
+  { id: 7, nom: 'Complet Wax', par: 'Atelier Jaures', prix: '32 000', cat: 'costume', type: 'Sur mesure', gradient: 'linear-gradient(135deg,#222,#555)' },
+  { id: 8, nom: 'Robe Écolière', par: 'Maison Adama', prix: '10 000', cat: 'enfant', type: 'Prêt-à-porter', gradient: 'linear-gradient(135deg,#7a0606,#D00B0B)' },
 ]
 
 export const demoReviews = [
@@ -57,6 +57,11 @@ export async function getPlans() {
   return safe('/vitrine/plans')
 }
 
+export async function getSponsorisation() {
+  const d = await safe('/vitrine/sponsorisation')
+  return d ?? { actif: false, offres: [] }
+}
+
 export async function getCreators() {
   const d = await safe('/vitrine/createurs')
   return Array.isArray(d) && d.length ? d : demoCreators
@@ -71,6 +76,6 @@ export async function getCreator(slug) {
     ...c,
     creations: demoModels
       .filter((m) => m.par === c.nom)
-      .map((m) => ({ id: m.id, nom: m.nom, prix: m.prix, type: m.type, emoji: m.emoji, gradient: m.gradient, image_url: null })),
+      .map((m) => ({ id: m.id, nom: m.nom, prix: m.prix, type: m.type, cat: m.cat, gradient: m.gradient, image_url: null })),
   }
 }

@@ -1288,6 +1288,11 @@
     "online": "● Online",
     "loading": "Loading…",
     "indicatif": "* Indicative prices, converted for information only.",
+    "page_404": {
+      "title": "Page not found",
+      "subtitle": "This page doesn't exist or has been moved.",
+      "cta": "Back to home"
+    },
     "search": {
       "placeholder": "Search a designer, a model…",
       "empty": "No result.",
@@ -1297,9 +1302,11 @@
     "favoris": {
       "menu": "Favorites",
       "title": "My favorites",
-      "empty": "You don't have any favorites yet."
+      "empty": "You don't have any favorites yet.",
+      "explore": "Explore designers →"
     },
     "inscription": {
+      "eyebrow": "Gextimo",
       "title": "Create your designer account",
       "subtitle": "Sign-up happens on the Gextimo mobile app.",
       "body": "Download the app to create your account, manage your workshop, publish your creations and your public showcase.",
@@ -1365,7 +1372,9 @@
       "subtitle": "Verified talents, near you or anywhere in Africa.",
       "visit": "Visit profile",
       "verified": "✓ Verified",
-      "new": "New"
+      "new": "New",
+      "see_all": "See all designers →",
+      "creations_count": "{{n}} creations"
     },
     "gallery": {
       "eyebrow": "Gallery",
@@ -1384,6 +1393,53 @@
       "title": "Track your order",
       "subtitle": "With your receipt number, no account needed.",
       "button": "Track an order"
+    },
+    "join": {
+      "eyebrow": "For creators",
+      "title": "Your professional showcase, in minutes",
+      "subtitle": "Manage your studio, publish your creations and receive orders — all from one tool.",
+      "benefits": [
+        "Professional and personalised public showcase",
+        "Client, order and measurement management",
+        "Quote requests directly on your page",
+        "Full dashboard (invoicing, stock, team)"
+      ],
+      "cta": "Create my free showcase",
+      "stat_1_v": "100%",
+      "stat_1_l": "free to start",
+      "stat_2_v": "< 5 min",
+      "stat_2_l": "to create an account",
+      "stat_3_v": "0%",
+      "stat_3_l": "commission on your sales",
+      "stat_4_v": "✓ Badge",
+      "stat_4_l": "verification available"
+    },
+    "testimonials": {
+      "eyebrow": "Testimonials",
+      "title": "They trust us",
+      "list": [
+        {
+          "texte": "I received my evening dress in 10 days. The stitching was impeccable and the creator very responsive.",
+          "nom": "Rachida A.",
+          "role": "Client, Cotonou",
+          "initiales": "RA",
+          "gradient": "linear-gradient(135deg,#D00B0B,#7a0606)"
+        },
+        {
+          "texte": "Since I got my Gextimo showcase, I receive requests every week. My studio has really taken off.",
+          "nom": "Kouamé N.",
+          "role": "Tailor, Porto-Novo",
+          "initiales": "KN",
+          "gradient": "linear-gradient(135deg,#1a1a1a,#444)"
+        },
+        {
+          "texte": "Managing orders and measurements has become so much simpler. I'm not going back.",
+          "nom": "Fatou D.",
+          "role": "Stylist, Parakou",
+          "initiales": "FD",
+          "gradient": "linear-gradient(135deg,#6F635E,#2A2A2A)"
+        }
+      ]
     },
     "footer": {
       "tagline": "The showcase connecting designers, artisans and clients of African fashion.",
@@ -1412,7 +1468,8 @@
         "Legal notice",
         "Cookie settings"
       ],
-      "rights": "© 2026 Gextimo. All rights reserved."
+      "rights": "© 2026 Gextimo. All rights reserved.",
+      "pricing": "Pricing"
     },
     "createurs_page": {
       "tri": {
@@ -1427,7 +1484,19 @@
       "filter_all_cities": "All cities",
       "filter_verified": "Verified only",
       "near_me": "Near me",
-      "empty": "No creator matches your search."
+      "empty": "No creator matches your search.",
+      "filter_label": "Filters",
+      "filter_city": "City",
+      "filter_rating": "Minimum rating",
+      "filter_all": "All",
+      "filter_nearby": "Nearby",
+      "clear_all": "Clear all",
+      "retry": "Retry",
+      "reset_filters": "Reset filters",
+      "count_one": "{{count}} creator",
+      "count_other": "{{count}} creators",
+      "in_radius": "within {{rayon}} km",
+      "geo_denied": "Location access denied by the browser."
     },
     "profil": {
       "quote": "Request a quote",
@@ -1457,6 +1526,33 @@
       "report": "Report",
       "report_done": "Reported, thank you."
     },
+    "devis_modal": {
+      "title": "Quote request",
+      "subtitle": "To",
+      "success_title": "Request sent!",
+      "success_wa": "The creator can see it in their space and will reply on WhatsApp.",
+      "success_no_wa": "The creator can see it in their space and will contact you.",
+      "close": "Close",
+      "name": "Your name",
+      "name_placeholder": "Aminata Diallo",
+      "phone": "Phone",
+      "phone_placeholder": "+229 …",
+      "type": "Type of garment",
+      "type_placeholder": "Evening dress, suit, boubou…",
+      "description": "Description",
+      "description_placeholder": "Colours, style, occasion, inspiration…",
+      "budget": "Budget (FCFA)",
+      "budget_placeholder": "e.g. 50 000",
+      "delay": "Desired deadline",
+      "delay_1": "Less than 2 weeks",
+      "delay_2": "2 to 4 weeks",
+      "delay_3": "1 to 2 months",
+      "delay_4": "More than 2 months",
+      "no_wa": "This creator has not activated WhatsApp contact. Your request will be passed on at the next contact.",
+      "sending": "Sending…",
+      "send_wa": "Send (+ WhatsApp)",
+      "send": "Send request"
+    },
     "suivi": {
       "title": "Track your order",
       "subtitle": "Enter your receipt number, no account needed.",
@@ -1471,7 +1567,10 @@
         "Sewing",
         "Fitting",
         "Delivery"
-      ]
+      ],
+      "ref_label": "Ref.",
+      "delivery": "Expected delivery",
+      "progress_label": "Order progress"
     },
     "menu2": {
       "artisans": "Artisans",
@@ -1522,6 +1621,35 @@
       "p1": "Browse a library of models and collections to find inspiration, compare styles and choose the creator who will make your custom outfit.",
       "p2": "Many models are freely accessible to help you express your ideas to your tailor.",
       "cta": "View the gallery"
+    },
+    "sponsor": {
+      "eyebrow": "Featured listing",
+      "title": "Be seen first",
+      "subtitle": "Boost your workshop's visibility and attract more qualified clients.",
+      "badge": "Featured in the designers list",
+      "loading": "Loading offers…",
+      "inactive": "Featured listing offers are not available right now. Check back soon.",
+      "package_days": "{{n}} days",
+      "fcfa": "FCFA",
+      "per_day": "FCFA / day on average",
+      "best_value": "Best value",
+      "package_cta": "Contact the team",
+      "features": [
+        "\"Featured\" badge in the designers list",
+        "Appear at the top of search results",
+        "View statistics included",
+        "Activated within 24 h"
+      ],
+      "how_title": "How it works",
+      "how_steps": [
+        { "t": "Choose an offer", "d": "Select the duration that fits your needs." },
+        { "t": "Contact the team", "d": "Send us a message through the Help page." },
+        { "t": "Fast activation", "d": "Your profile moves to the top of the list within 24 h." }
+      ],
+      "contact_title": "Ready to boost your visibility?",
+      "contact_sub": "Contact the Gextimo team to activate your featured listing.",
+      "contact_cta": "Contact us",
+      "footer_link": "Featured listing"
     },
     "welcome_popup": {
       "title": "Welcome to Gextimo",

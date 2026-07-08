@@ -1288,6 +1288,11 @@
     "online": "● En ligne",
     "loading": "Chargement…",
     "indicatif": "* Prix indicatifs, convertis à titre informatif.",
+    "page_404": {
+      "title": "Page introuvable",
+      "subtitle": "Cette page n'existe pas ou a été déplacée.",
+      "cta": "Retour à l'accueil"
+    },
     "search": {
       "placeholder": "Rechercher un créateur, un modèle…",
       "empty": "Aucun résultat.",
@@ -1297,9 +1302,11 @@
     "favoris": {
       "menu": "Favoris",
       "title": "Mes favoris",
-      "empty": "Vous n'avez pas encore de favoris."
+      "empty": "Vous n'avez pas encore de favoris.",
+      "explore": "Explorer les créateurs →"
     },
     "inscription": {
+      "eyebrow": "Gextimo",
       "title": "Créez votre compte créateur",
       "subtitle": "L'inscription se fait sur l'application mobile Gextimo.",
       "body": "Téléchargez l'application pour créer votre compte, gérer votre atelier, publier vos créations et votre vitrine publique.",
@@ -1365,7 +1372,9 @@
       "subtitle": "Des talents vérifiés, près de chez vous ou partout en Afrique.",
       "visit": "Visiter le profil",
       "verified": "✓ Vérifié",
-      "new": "Nouveau"
+      "new": "Nouveau",
+      "see_all": "Voir tous les créateurs →",
+      "creations_count": "{{n}} créations"
     },
     "gallery": {
       "eyebrow": "Galerie",
@@ -1384,6 +1393,53 @@
       "title": "Suivez votre commande",
       "subtitle": "Avec votre numéro de reçu, sans créer de compte.",
       "button": "Suivre une commande"
+    },
+    "join": {
+      "eyebrow": "Pour les créateurs",
+      "title": "Votre vitrine pro, en quelques minutes",
+      "subtitle": "Gérez votre atelier, publiez vos créations et recevez des commandes — tout depuis un seul outil.",
+      "benefits": [
+        "Vitrine publique professionnelle et personnalisée",
+        "Gestion des clients, commandes et mesures",
+        "Demandes de devis directement sur votre page",
+        "Tableau de bord complet (facturation, stocks, équipe)"
+      ],
+      "cta": "Créer ma vitrine gratuite",
+      "stat_1_v": "100 %",
+      "stat_1_l": "gratuit pour commencer",
+      "stat_2_v": "< 5 min",
+      "stat_2_l": "pour créer son compte",
+      "stat_3_v": "0 %",
+      "stat_3_l": "de commission sur vos ventes",
+      "stat_4_v": "✓ Badge",
+      "stat_4_l": "de vérification disponible"
+    },
+    "testimonials": {
+      "eyebrow": "Témoignages",
+      "title": "Ils nous font confiance",
+      "list": [
+        {
+          "texte": "J'ai reçu ma robe de soirée en 10 jours. La couture était impeccable et le créateur très réactif.",
+          "nom": "Rachida A.",
+          "role": "Cliente, Cotonou",
+          "initiales": "RA",
+          "gradient": "linear-gradient(135deg,#D00B0B,#7a0606)"
+        },
+        {
+          "texte": "Depuis que j'ai ma vitrine Gextimo, je reçois des demandes chaque semaine. Mon atelier a vraiment décollé.",
+          "nom": "Kouamé N.",
+          "role": "Tailleur, Porto-Novo",
+          "initiales": "KN",
+          "gradient": "linear-gradient(135deg,#1a1a1a,#444)"
+        },
+        {
+          "texte": "La gestion des commandes et des mesures est devenue tellement plus simple. Je ne reviens pas en arrière.",
+          "nom": "Fatou D.",
+          "role": "Styliste, Parakou",
+          "initiales": "FD",
+          "gradient": "linear-gradient(135deg,#6F635E,#2A2A2A)"
+        }
+      ]
     },
     "footer": {
       "tagline": "La vitrine qui connecte créateurs, artisans et clients de la mode africaine.",
@@ -1412,7 +1468,8 @@
         "Mentions légales",
         "Paramètres cookies"
       ],
-      "rights": "© 2026 Gextimo. Tous droits réservés."
+      "rights": "© 2026 Gextimo. Tous droits réservés.",
+      "pricing": "Tarifs"
     },
     "createurs_page": {
       "tri": {
@@ -1427,7 +1484,19 @@
       "filter_all_cities": "Toutes les villes",
       "filter_verified": "Vérifiés uniquement",
       "near_me": "Près de moi",
-      "empty": "Aucun créateur ne correspond à votre recherche."
+      "empty": "Aucun créateur ne correspond à votre recherche.",
+      "filter_label": "Filtres",
+      "filter_city": "Ville",
+      "filter_rating": "Note minimum",
+      "filter_all": "Toutes",
+      "filter_nearby": "Proximité",
+      "clear_all": "Tout effacer",
+      "retry": "Réessayer",
+      "reset_filters": "Réinitialiser les filtres",
+      "count_one": "{{count}} créateur",
+      "count_other": "{{count}} créateurs",
+      "in_radius": "dans un rayon de {{rayon}} km",
+      "geo_denied": "Localisation refusée par le navigateur."
     },
     "profil": {
       "quote": "Demander un devis",
@@ -1457,6 +1526,33 @@
       "report": "Signaler",
       "report_done": "Signalé, merci."
     },
+    "devis_modal": {
+      "title": "Demande de devis",
+      "subtitle": "Auprès de",
+      "success_title": "Demande envoyée !",
+      "success_wa": "Le créateur la voit dans son espace et vous répondra sur WhatsApp.",
+      "success_no_wa": "Le créateur la voit dans son espace et vous recontactera.",
+      "close": "Fermer",
+      "name": "Votre nom",
+      "name_placeholder": "Aminata Diallo",
+      "phone": "Téléphone",
+      "phone_placeholder": "+229 …",
+      "type": "Type de vêtement",
+      "type_placeholder": "Robe de soirée, costume, boubou…",
+      "description": "Description",
+      "description_placeholder": "Couleurs, style, occasion, inspirations…",
+      "budget": "Budget (FCFA)",
+      "budget_placeholder": "ex : 50 000",
+      "delay": "Délai souhaité",
+      "delay_1": "Moins de 2 sem.",
+      "delay_2": "2 à 4 semaines",
+      "delay_3": "1 à 2 mois",
+      "delay_4": "Plus de 2 mois",
+      "no_wa": "Ce créateur n'a pas activé le contact WhatsApp. Votre demande sera transmise lors du prochain contact.",
+      "sending": "Envoi…",
+      "send_wa": "Envoyer (+ WhatsApp)",
+      "send": "Envoyer la demande"
+    },
     "suivi": {
       "title": "Suivez votre commande",
       "subtitle": "Entrez votre numéro de reçu, sans créer de compte.",
@@ -1471,7 +1567,10 @@
         "Confection",
         "Essayage",
         "Livraison"
-      ]
+      ],
+      "ref_label": "Réf.",
+      "delivery": "Livraison prévue",
+      "progress_label": "Progression de la commande"
     },
     "menu2": {
       "artisans": "Artisans",
@@ -1522,6 +1621,35 @@
       "p1": "Parcourez une bibliothèque de modèles et de collections pour trouver l'inspiration, comparer les styles et choisir le créateur qui réalisera votre tenue sur mesure.",
       "p2": "De nombreux modèles sont accessibles librement pour vous aider à exprimer vos envies à votre couturier.",
       "cta": "Voir la galerie"
+    },
+    "sponsor": {
+      "eyebrow": "Mise en avant",
+      "title": "Soyez vus en premier",
+      "subtitle": "Boostez la visibilité de votre atelier et attirez plus de clients qualifiés.",
+      "badge": "Mis en avant dans la liste des créateurs",
+      "loading": "Chargement des offres…",
+      "inactive": "Les offres de mise en avant ne sont pas disponibles pour le moment. Revenez bientôt.",
+      "package_days": "{{n}} jours",
+      "fcfa": "FCFA",
+      "per_day": "FCFA / jour en moyenne",
+      "best_value": "Meilleure valeur",
+      "package_cta": "Contacter l'équipe",
+      "features": [
+        "Badge « Mis en avant » dans la liste des créateurs",
+        "Apparition en tête des résultats de recherche",
+        "Statistiques de vues incluses",
+        "Activation sous 24 h"
+      ],
+      "how_title": "Comment ça marche",
+      "how_steps": [
+        { "t": "Choisissez une offre", "d": "Sélectionnez la durée qui correspond à vos besoins." },
+        { "t": "Contactez l'équipe", "d": "Envoyez-nous un message via la page Aide." },
+        { "t": "Activation rapide", "d": "Votre profil passe en tête de liste sous 24 h." }
+      ],
+      "contact_title": "Prêt à booster votre visibilité ?",
+      "contact_sub": "Contactez l'équipe Gextimo pour activer votre mise en avant.",
+      "contact_cta": "Nous contacter",
+      "footer_link": "Mise en avant"
     },
     "welcome_popup": {
       "title": "Bienvenue sur Gextimo",

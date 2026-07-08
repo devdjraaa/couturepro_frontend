@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { X } from 'lucide-react'
 import VitrineShell from './VitrineChrome'
 import { getCreator } from './vitrineApi'
+import GarmentVisual from './GarmentVisual'
 import { useDevise } from './vitrineCurrency'
 import { useFavoris } from './useFavoris'
 import { avisService } from '@/services/avisService'
@@ -12,10 +13,11 @@ import { vitrineStatsService } from '@/services/vitrineStatsService'
 import { signalementService } from '@/services/signalementService'
 import { usePageMeta } from '@/hooks/usePageMeta'
 
-const btnPrimary = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-white hover:bg-primary-600 transition'
+const btnPrimary = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-inverse hover:bg-primary-600 transition'
 const btnOutline = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary transition'
 
 function DevisModal({ atelierId, createur, wa, onClose, onTrack }) {
+  const { t } = useTranslation()
   const [form, setForm] = useState({ nom: '', telephone: '', type_vetement: '', description: '', budget: '', delai: '' })
   const [sent, setSent] = useState(false)
   const [sending, setSending] = useState(false)
@@ -55,75 +57,75 @@ function DevisModal({ atelierId, createur, wa, onClose, onTrack }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0D0D0D]/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
       <div className="bg-card border border-edge rounded-2xl shadow-xl w-full max-w-md p-6 relative max-h-[90dvh] overflow-y-auto">
         <button onClick={onClose} aria-label="Fermer" className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full text-ghost hover:text-ink transition">
           <X size={16} />
         </button>
 
-        <h2 className="font-display font-bold text-xl text-ink mb-1">Demande de devis</h2>
-        <p className="text-sm text-dim mb-4">Auprès de <strong className="text-ink">{createur}</strong></p>
+        <h2 className="font-display font-bold text-xl text-ink mb-1">{t('vitrine.devis_modal.title')}</h2>
+        <p className="text-sm text-dim mb-4">{t('vitrine.devis_modal.subtitle')} <strong className="text-ink">{createur}</strong></p>
 
         {sent ? (
           <div className="py-6 text-center">
             <p className="text-2xl mb-2">✓</p>
-            <p className="text-sm text-success font-medium mb-1">Demande envoyée !</p>
-            <p className="text-xs text-dim">{wa ? 'Le créateur la voit dans son espace et vous répondra sur WhatsApp.' : 'Le créateur la voit dans son espace et vous recontactera.'}</p>
-            <button onClick={onClose} className="mt-4 text-sm font-semibold text-primary hover:underline">Fermer</button>
+            <p className="text-sm text-success font-medium mb-1">{t('vitrine.devis_modal.success_title')}</p>
+            <p className="text-xs text-dim">{wa ? t('vitrine.devis_modal.success_wa') : t('vitrine.devis_modal.success_no_wa')}</p>
+            <button onClick={onClose} className="mt-4 text-sm font-semibold text-primary hover:underline">{t('vitrine.devis_modal.close')}</button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-3">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-dim mb-1">Votre nom *</label>
-                <input required value={form.nom} onChange={set('nom')} placeholder="Aminata Diallo"
+                <label className="block text-xs font-medium text-dim mb-1">{t('vitrine.devis_modal.name')} *</label>
+                <input required value={form.nom} onChange={set('nom')} placeholder={t('vitrine.devis_modal.name_placeholder')}
                        className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
               </div>
               <div>
-                <label className="block text-xs font-medium text-dim mb-1">Téléphone *</label>
-                <input required value={form.telephone} onChange={set('telephone')} placeholder="+229 …"
+                <label className="block text-xs font-medium text-dim mb-1">{t('vitrine.devis_modal.phone')} *</label>
+                <input required value={form.telephone} onChange={set('telephone')} placeholder={t('vitrine.devis_modal.phone_placeholder')}
                        className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-dim mb-1">Type de vêtement *</label>
-              <input required value={form.type_vetement} onChange={set('type_vetement')} placeholder="Robe de soirée, costume, boubou…"
+              <label className="block text-xs font-medium text-dim mb-1">{t('vitrine.devis_modal.type')} *</label>
+              <input required value={form.type_vetement} onChange={set('type_vetement')} placeholder={t('vitrine.devis_modal.type_placeholder')}
                      className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-dim mb-1">Description</label>
+              <label className="block text-xs font-medium text-dim mb-1">{t('vitrine.devis_modal.description')}</label>
               <textarea value={form.description} onChange={set('description')} rows={3} maxLength={500}
-                        placeholder="Couleurs, style, occasion, inspirations…"
+                        placeholder={t('vitrine.devis_modal.description_placeholder')}
                         className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink resize-none focus:outline-none focus:ring-2 focus:ring-primary/30" />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-dim mb-1">Budget (FCFA)</label>
-                <input type="number" min="0" value={form.budget} onChange={set('budget')} placeholder="ex : 50000"
+                <label className="block text-xs font-medium text-dim mb-1">{t('vitrine.devis_modal.budget')}</label>
+                <input type="number" min="0" value={form.budget} onChange={set('budget')} placeholder={t('vitrine.devis_modal.budget_placeholder')}
                        className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
               </div>
               <div>
-                <label className="block text-xs font-medium text-dim mb-1">Délai souhaité</label>
+                <label className="block text-xs font-medium text-dim mb-1">{t('vitrine.devis_modal.delay')}</label>
                 <select value={form.delai} onChange={set('delai')}
                         className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-dim focus:outline-none">
                   <option value="">—</option>
-                  <option value="Moins de 2 semaines">Moins de 2 sem.</option>
-                  <option value="2 à 4 semaines">2 à 4 semaines</option>
-                  <option value="1 à 2 mois">1 à 2 mois</option>
-                  <option value="Plus de 2 mois">Plus de 2 mois</option>
+                  <option value="Moins de 2 semaines">{t('vitrine.devis_modal.delay_1')}</option>
+                  <option value="2 à 4 semaines">{t('vitrine.devis_modal.delay_2')}</option>
+                  <option value="1 à 2 mois">{t('vitrine.devis_modal.delay_3')}</option>
+                  <option value="Plus de 2 mois">{t('vitrine.devis_modal.delay_4')}</option>
                 </select>
               </div>
             </div>
 
             {!wa && (
-              <p className="text-xs text-ghost">Ce créateur n'a pas activé le contact WhatsApp. Votre demande sera transmise lors du prochain contact.</p>
+              <p className="text-xs text-ghost">{t('vitrine.devis_modal.no_wa')}</p>
             )}
 
-            <button type="submit" disabled={sending} className="w-full py-3 rounded-xl bg-primary text-white font-semibold text-sm hover:bg-primary-600 transition disabled:opacity-60">
-              {sending ? 'Envoi…' : (wa ? 'Envoyer (+ WhatsApp)' : 'Envoyer la demande')}
+            <button type="submit" disabled={sending} className="w-full py-3 rounded-xl bg-primary text-inverse font-semibold text-sm hover:bg-primary-600 transition disabled:opacity-60">
+              {sending ? t('vitrine.devis_modal.sending') : (wa ? t('vitrine.devis_modal.send_wa') : t('vitrine.devis_modal.send'))}
             </button>
           </form>
         )}
@@ -166,7 +168,7 @@ function AvisForm({ atelierId }) {
       </div>
       <textarea value={texte} onChange={(e) => setTexte(e.target.value)} rows={3} maxLength={600} placeholder={t('vitrine.profil.avis_text')}
                 className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink resize-none mb-3 focus:outline-none focus:ring-2 focus:ring-primary/30" />
-      <button type="submit" disabled={sending} className="text-sm font-semibold px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-600 transition disabled:opacity-60">
+      <button type="submit" disabled={sending} className="text-sm font-semibold px-4 py-2 rounded-lg bg-primary text-inverse hover:bg-primary-600 transition disabled:opacity-60">
         {t('vitrine.profil.avis_send')}
       </button>
     </form>
@@ -186,11 +188,29 @@ export default function CreateurProfilPage() {
   useEffect(() => { getCreator(slug).then((d) => setC(d ?? null)) }, [slug])
   useEffect(() => { if (c && c.id) vitrineStatsService.track(c.id, 'visite') }, [c?.id])
 
+  useEffect(() => {
+    if (!c) return
+    const s = Object.assign(document.createElement('script'), { type: 'application/ld+json', id: 'gx-creator-ld' })
+    s.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'LocalBusiness',
+      name: c.nom,
+      ...(c.bio ? { description: c.bio } : {}),
+      ...(c.logo_url ? { image: c.logo_url } : {}),
+      address: { '@type': 'PostalAddress', addressLocality: c.ville, addressCountry: 'BJ' },
+      url: `${window.location.origin}/createurs/${slug}`,
+      ...(c.note ? { aggregateRating: { '@type': 'AggregateRating', ratingValue: c.note, ratingCount: Array.isArray(c.avis) ? c.avis.length : (c.avis ?? 1) } } : {}),
+    })
+    document.head.appendChild(s)
+    return () => { document.getElementById('gx-creator-ld')?.remove() }
+  }, [c?.id, slug])
+
   usePageMeta({
     title:       c?.nom ?? undefined,
     description: c?.bio ?? (c ? `Découvrez les créations de ${c.nom} sur Gextimo.` : undefined),
     image:       c?.logo_url ?? undefined,
     path:        c ? `/createurs/${slug}` : undefined,
+    type:        c ? 'profile' : 'website',
   })
 
   if (c === undefined) {
@@ -230,11 +250,11 @@ export default function CreateurProfilPage() {
       {items.map((m) => (
         <div key={m.id} className="bg-card border border-edge rounded-lg overflow-hidden">
           {m.image_url ? (
-            <img src={m.image_url} alt={m.nom} className="h-[170px] w-full object-cover" />
+            <img src={m.image_url} alt={m.nom} className="h-[170px] w-full object-cover" loading="lazy" />
           ) : (
-            <div className="h-[170px] flex items-center justify-center text-[40px] relative" style={{ background: m.gradient }}>
-              <span className="absolute top-2.5 left-2.5 text-white text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-[#0D0D0D]">{m.type}</span>
-              {m.emoji}
+            <div className="h-[170px] relative">
+              <GarmentVisual cat={m.cat} gradient={m.gradient} className="h-full w-full" />
+              <span data-theme="dark" className="absolute top-2.5 left-2.5 text-inverse text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-inset">{m.type}</span>
             </div>
           )}
           <div className="p-3.5 flex items-center justify-between">
@@ -243,8 +263,8 @@ export default function CreateurProfilPage() {
               <div className="font-bold text-primary text-[14px]">{format(m.prix) || t('vitrine.profil.on_quote')}</div>
             </div>
             {wa
-              ? <a href={waHref('vitrine.profil.wa_order', { nom: c.nom, modele: m.nom })} onClick={trackContact} target="_blank" rel="noopener noreferrer" className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">{t('vitrine.profil.order')}</a>
-              : <button className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-white hover:bg-primary-600 transition">{t('vitrine.profil.order')}</button>}
+              ? <a href={waHref('vitrine.profil.wa_order', { nom: c.nom, modele: m.nom })} onClick={trackContact} target="_blank" rel="noopener noreferrer" className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-inverse hover:bg-primary-600 transition">{t('vitrine.profil.order')}</a>
+              : <button className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-inverse hover:bg-primary-600 transition">{t('vitrine.profil.order')}</button>}
           </div>
           <div className="px-3.5 pb-2">
             {signaled.has(m.id)
@@ -257,8 +277,8 @@ export default function CreateurProfilPage() {
   )
   const stats = [
     { v: creations.length, l: t('vitrine.profil.stat_creations') },
-    { v: '247', l: t('vitrine.profil.stat_views') },
-    { v: '94%', l: t('vitrine.profil.stat_punctuality') },
+    { v: c.stats?.vues_mois ?? '—', l: t('vitrine.profil.stat_views') },
+    { v: c.stats?.taux_ponctualite != null ? `${c.stats.taux_ponctualite}%` : '—', l: t('vitrine.profil.stat_punctuality') },
     { v: c.experience || '—', l: t('vitrine.profil.stat_experience') },
   ]
 
@@ -268,8 +288,8 @@ export default function CreateurProfilPage() {
       <div className="max-w-[1180px] mx-auto px-5">
         {/* Carte profil */}
         <div className="bg-card border border-edge rounded-lg -mt-[60px] relative p-6 flex flex-wrap items-start gap-5 shadow-lg">
-          <div className="w-[88px] h-[88px] rounded-2xl overflow-hidden flex items-center justify-center font-display font-bold text-[30px] text-white shrink-0 border-4 border-card" style={c.logo_url ? undefined : { background: c.gradient }}>
-            {c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" /> : c.initiales}
+          <div className="w-[88px] h-[88px] rounded-2xl overflow-hidden flex items-center justify-center font-display font-bold text-[30px] text-inverse shrink-0 border-4 border-card" style={c.logo_url ? undefined : { background: c.gradient }}>
+            {c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" loading="lazy" /> : c.initiales}
           </div>
           <div className="flex-1 min-w-[220px]">
             <h1 className="font-display text-[26px] text-ink flex items-center gap-2.5 flex-wrap">
@@ -278,7 +298,7 @@ export default function CreateurProfilPage() {
             </h1>
             <div className="text-dim text-[15px] mt-1">{c.specialite}</div>
             <div className="text-dim text-[13px] mt-1">📍 {c.ville}, Bénin</div>
-            {c.note && <div className="text-sm mt-2"><span className="text-primary font-bold">★ {c.note}</span> <span className="text-dim">({c.avis})</span></div>}
+            {c.note && <div className="text-sm mt-2"><span className="text-primary font-bold">★ {c.note}</span> <span className="text-dim">({Array.isArray(c.avis) ? c.avis.length : (c.avis ?? 0)})</span></div>}
             {c.bio && <p className="text-ink text-sm mt-3 leading-relaxed">{c.bio}</p>}
             {(igUrl || fbUrl || siteUrl) && (
               <div className="flex gap-2 mt-3 flex-wrap">
