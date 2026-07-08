@@ -2171,6 +2171,7 @@
     "outils_creatifs": "Creative tools"
   },
   "reseau": {
-    "connexion_requise": "Internet connection required for this action."
+    "connexion_requise": "Internet connection required for this action.",
+    "parametres_offline": "Settings require an internet connection. Reconnect to change them."
   }
 }

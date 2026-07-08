@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Building2, Plus, CheckCircle2, ImagePlus, Lock } from 'lucide-react'
+import { Building2, Plus, CheckCircle2, ImagePlus, Lock, WifiOff } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts'
 import {
@@ -14,6 +14,7 @@ import { useAbonnement, usePlans, useInitierPaiementAbonnement, useActivateCode 
 import { useMesAteliers, useCreateSousAtelier } from '@/hooks/useMesAteliers'
 import { usePlanLimit, usePlanFeature } from '@/hooks/usePlanFeature'
 import { useCountdown } from '@/hooks/useCountdown'
+import { useNetwork } from '@/hooks/useNetwork'
 import { AppLayout } from '@/components/layout'
 import { QuotaBar, PlanCard, FeatureGate } from '@/components/abonnement'
 import { TabBar, Input, Select, Button, Skeleton, LanguageSwitcher } from '@/components/ui'
@@ -690,6 +691,24 @@ export default function ParametresPage() {
 
   const location = useLocation()
   const [activeTab, setActiveTab] = useState(location.state?.tab ?? 'profil')
+  const { isOnline } = useNetwork()
+
+  // Toute la zone Paramètres modifie de la configuration côté serveur → nécessite
+  // internet. (Le thème et la langue restent réglables depuis l'en-tête d'accueil,
+  // hors-ligne.)
+  if (!isOnline) {
+    return (
+      <AppLayout title={t('parametres.titre')} showBack>
+        <div className="p-8 mt-6 flex flex-col items-center text-center gap-3">
+          <div className="w-16 h-16 rounded-2xl bg-subtle flex items-center justify-center">
+            <WifiOff size={28} className="text-ghost" />
+          </div>
+          <p className="text-base font-semibold text-ink">{t('reseau.connexion_requise')}</p>
+          <p className="text-sm text-dim max-w-xs">{t('reseau.parametres_offline')}</p>
+        </div>
+      </AppLayout>
+    )
+  }
 
   return (
     <AppLayout title={t('parametres.titre')} showBack>
