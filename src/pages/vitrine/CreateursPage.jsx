@@ -36,6 +36,7 @@ export default function CreateursPage() {
   const [rayon, setRayon] = useState(25)
   const [tri, setTri] = useState('pertinence')
   const [showFilters, setShowFilters] = useState(false)
+  const [geoDenied, setGeoDenied] = useState(false)
 
   const reload = () => {
     setError(false)
@@ -77,13 +78,14 @@ export default function CreateursPage() {
 
   const findNearby = () => {
     if (!navigator.geolocation) return
+    setGeoDenied(false)
     navigator.geolocation.getCurrentPosition(
       (pos) => { setMyPos({ lat: pos.coords.latitude, lng: pos.coords.longitude }); setTri('distance') },
-      () => {},
+      () => { setGeoDenied(true) },
     )
   }
 
-  const clearPos = () => { setMyPos(null); if (tri === 'distance') setTri('pertinence') }
+  const clearPos = () => { setMyPos(null); setGeoDenied(false); if (tri === 'distance') setTri('pertinence') }
 
   const hasActiveFilters = q || ville || verifiedOnly || noteMin > 0 || myPos
 
@@ -122,7 +124,7 @@ export default function CreateursPage() {
               )}
             >
               <SlidersHorizontal size={14} />
-              Filtres
+              {t('vitrine.createurs_page.filter_label')}
               {hasActiveFilters && <span className="w-1.5 h-1.5 rounded-full bg-primary" />}
             </button>
           </div>
@@ -132,7 +134,7 @@ export default function CreateursPage() {
             <div className="bg-card border border-edge rounded-xl p-4 mb-5 flex flex-wrap gap-4">
               {/* Ville */}
               <div className="flex flex-col gap-1 min-w-[160px]">
-                <label className="text-xs font-semibold text-ghost uppercase tracking-wide">Ville</label>
+                <label className="text-xs font-semibold text-ghost uppercase tracking-wide">{t('vitrine.createurs_page.filter_city')}</label>
                 <select value={ville} onChange={(e) => setVille(e.target.value)}
                         className="rounded-lg border border-edge bg-app px-3 py-2 text-sm text-dim focus:outline-none">
                   <option value="">{t('vitrine.createurs_page.filter_all_cities')}</option>
@@ -142,7 +144,7 @@ export default function CreateursPage() {
 
               {/* Note minimale */}
               <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-ghost uppercase tracking-wide">Note minimum</label>
+                <label className="text-xs font-semibold text-ghost uppercase tracking-wide">{t('vitrine.createurs_page.filter_rating')}</label>
                 <div className="flex gap-1">
                   {[0, 3, 4, 4.5].map((n) => (
                     <button key={n} onClick={() => setNoteMin(n)}
@@ -150,7 +152,7 @@ export default function CreateursPage() {
                               'px-3 py-1.5 rounded-lg border text-xs font-bold transition',
                               noteMin === n ? 'border-primary bg-primary/5 text-primary' : 'border-edge text-dim hover:border-primary',
                             )}>
-                      {n === 0 ? 'Toutes' : `★ ${n}+`}
+                      {n === 0 ? t('vitrine.createurs_page.filter_all') : `★ ${n}+`}
                     </button>
                   ))}
                 </div>
@@ -167,7 +169,7 @@ export default function CreateursPage() {
 
               {/* Géolocalisation + rayon */}
               <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-ghost uppercase tracking-wide">Proximité</label>
+                <label className="text-xs font-semibold text-ghost uppercase tracking-wide">{t('vitrine.createurs_page.filter_nearby')}</label>
                 {myPos ? (
                   <div className="flex items-center gap-2">
                     <select value={rayon} onChange={(e) => setRayon(Number(e.target.value))}
@@ -184,6 +186,9 @@ export default function CreateursPage() {
                     📍 {t('vitrine.createurs_page.near_me')}
                   </button>
                 )}
+                {geoDenied && !myPos && (
+                  <p className="text-[11px] text-danger mt-1">{t('vitrine.createurs_page.geo_denied')}</p>
+                )}
               </div>
 
               {/* Reset */}
@@ -193,7 +198,7 @@ export default function CreateursPage() {
                     onClick={() => { setQ(''); setVille(''); setVerifiedOnly(false); setNoteMin(0); clearPos() }}
                     className="text-xs font-semibold text-ghost hover:text-danger transition"
                   >
-                    Tout effacer
+                    {t('vitrine.createurs_page.clear_all')}
                   </button>
                 </div>
               )}
@@ -202,9 +207,9 @@ export default function CreateursPage() {
 
           {/* Résumé actif */}
           {creators && (
-            <p className="text-xs text-ghost mb-4 text-center">
-              {sorted.length} créateur{sorted.length !== 1 ? 's' : ''}
-              {myPos && ` dans un rayon de ${rayon} km`}
+            <p aria-live="polite" className="text-xs text-ghost mb-4 text-center">
+              {t('vitrine.createurs_page.count', { count: sorted.length })}
+              {myPos && ` · ${t('vitrine.createurs_page.in_radius', { rayon })}`}
             </p>
           )}
 
@@ -221,7 +226,7 @@ export default function CreateursPage() {
               <AlertCircle size={28} className="text-danger" />
               <p className="text-sm text-dim">{t('erreurs.chargement')}</p>
               <button onClick={reload} className="text-sm font-semibold text-primary hover:underline">
-                Réessayer
+                {t('vitrine.createurs_page.retry')}
               </button>
             </div>
           )}
@@ -236,7 +241,7 @@ export default function CreateursPage() {
                   onClick={() => { setQ(''); setVille(''); setVerifiedOnly(false); setNoteMin(0); clearPos() }}
                   className="text-sm font-semibold text-primary hover:underline"
                 >
-                  Réinitialiser les filtres
+                  {t('vitrine.createurs_page.reset_filters')}
                 </button>
               )}
             </div>
@@ -246,12 +251,12 @@ export default function CreateursPage() {
             {sorted.map((c) => (
               <Link key={c.id} to={`/createurs/${c.id}`}
                     className="relative bg-card border border-edge rounded-lg p-5 transition hover:-translate-y-0.5 hover:shadow-lg hover:border-primary">
-                <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(c.id) }} className="absolute top-3 right-3 z-10" aria-label="Favori">
+                <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(c.id) }} className="absolute top-3 right-3 z-10" aria-label="Favori" aria-pressed={has(c.id)}>
                   <Heart size={16} className={has(c.id) ? 'text-primary' : 'text-ghost'} fill={has(c.id) ? 'currentColor' : 'none'} />
                 </button>
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-[52px] h-[52px] rounded-xl overflow-hidden flex items-center justify-center font-display font-bold text-lg text-inverse shrink-0" style={c.logo_url ? undefined : { background: c.gradient }}>
-                    {c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" /> : c.initiales}
+                    {c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" loading="lazy" /> : c.initiales}
                   </div>
                   <div>
                     <h3 className="font-bold text-base text-ink flex items-center gap-1.5 flex-wrap">
@@ -264,6 +269,7 @@ export default function CreateursPage() {
                 </div>
                 <div className="flex gap-3.5 text-[13px] text-dim flex-wrap">
                   {c.note ? <span className="text-primary font-bold">★ {c.note}</span> : <span className="text-ghost">{t('vitrine.creators.new')}</span>}
+                  {c.nb_creations > 0 ? <span>· {t('vitrine.creators.creations_count', { n: c.nb_creations })}</span> : null}
                   {c.experience ? <span>· {c.experience}</span> : null}
                   {c._dist != null ? <span>· {c._dist} km</span> : null}
                 </div>

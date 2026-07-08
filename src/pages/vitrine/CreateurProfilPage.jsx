@@ -57,7 +57,7 @@ function DevisModal({ atelierId, createur, wa, onClose, onTrack }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0D0D0D]/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
       <div className="bg-card border border-edge rounded-2xl shadow-xl w-full max-w-md p-6 relative max-h-[90dvh] overflow-y-auto">
         <button onClick={onClose} aria-label="Fermer" className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full text-ghost hover:text-ink transition">
           <X size={16} />
@@ -188,11 +188,29 @@ export default function CreateurProfilPage() {
   useEffect(() => { getCreator(slug).then((d) => setC(d ?? null)) }, [slug])
   useEffect(() => { if (c && c.id) vitrineStatsService.track(c.id, 'visite') }, [c?.id])
 
+  useEffect(() => {
+    if (!c) return
+    const s = Object.assign(document.createElement('script'), { type: 'application/ld+json', id: 'gx-creator-ld' })
+    s.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'LocalBusiness',
+      name: c.nom,
+      ...(c.bio ? { description: c.bio } : {}),
+      ...(c.logo_url ? { image: c.logo_url } : {}),
+      address: { '@type': 'PostalAddress', addressLocality: c.ville, addressCountry: 'BJ' },
+      url: `${window.location.origin}/createurs/${slug}`,
+      ...(c.note ? { aggregateRating: { '@type': 'AggregateRating', ratingValue: c.note, ratingCount: Array.isArray(c.avis) ? c.avis.length : (c.avis ?? 1) } } : {}),
+    })
+    document.head.appendChild(s)
+    return () => { document.getElementById('gx-creator-ld')?.remove() }
+  }, [c?.id, slug])
+
   usePageMeta({
     title:       c?.nom ?? undefined,
     description: c?.bio ?? (c ? `Découvrez les créations de ${c.nom} sur Gextimo.` : undefined),
     image:       c?.logo_url ?? undefined,
     path:        c ? `/createurs/${slug}` : undefined,
+    type:        c ? 'profile' : 'website',
   })
 
   if (c === undefined) {
@@ -232,7 +250,7 @@ export default function CreateurProfilPage() {
       {items.map((m) => (
         <div key={m.id} className="bg-card border border-edge rounded-lg overflow-hidden">
           {m.image_url ? (
-            <img src={m.image_url} alt={m.nom} className="h-[170px] w-full object-cover" />
+            <img src={m.image_url} alt={m.nom} className="h-[170px] w-full object-cover" loading="lazy" />
           ) : (
             <div className="h-[170px] relative">
               <GarmentVisual cat={m.cat} gradient={m.gradient} className="h-full w-full" />
@@ -271,7 +289,7 @@ export default function CreateurProfilPage() {
         {/* Carte profil */}
         <div className="bg-card border border-edge rounded-lg -mt-[60px] relative p-6 flex flex-wrap items-start gap-5 shadow-lg">
           <div className="w-[88px] h-[88px] rounded-2xl overflow-hidden flex items-center justify-center font-display font-bold text-[30px] text-inverse shrink-0 border-4 border-card" style={c.logo_url ? undefined : { background: c.gradient }}>
-            {c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" /> : c.initiales}
+            {c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" loading="lazy" /> : c.initiales}
           </div>
           <div className="flex-1 min-w-[220px]">
             <h1 className="font-display text-[26px] text-ink flex items-center gap-2.5 flex-wrap">

@@ -59,13 +59,19 @@ export default function SuiviPage() {
                 <span className={annule ? 'text-danger font-bold' : 'text-primary font-bold'}>
                   {annule ? t('vitrine.suivi.cancelled') : t('vitrine.suivi.in_progress')}
                 </span>
+                <div className="text-xs text-ghost mt-1.5 tabular-nums">
+                  {t('vitrine.suivi.ref_label')} {result.reference}
+                  {result.date_livraison_prevue && (
+                    <> · {t('vitrine.suivi.delivery')} : {new Date(result.date_livraison_prevue).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</>
+                  )}
+                </div>
                 {!annule && (
-                  <div className="flex justify-between mt-3.5">
+                  <ol aria-label={t('vitrine.suivi.progress_label')} className="flex justify-between mt-3.5 list-none p-0 m-0">
                     {list.map((s, i) => {
                       const ok = i < currentIdx
                       const cur = i === currentIdx
                       return (
-                        <div key={s} className={`flex-1 text-center text-[10.5px] ${ok || cur ? 'text-ink' : 'text-dim'}`}>
+                        <li key={s} aria-current={cur ? 'step' : undefined} className={`flex-1 text-center text-[10.5px] ${ok || cur ? 'text-ink' : 'text-dim'}`}>
                           <div className="w-[26px] h-[26px] rounded-full border-2 flex items-center justify-center mx-auto mb-1.5 text-[11px]"
                                style={{
                                  background: ok ? 'var(--color-primary)' : 'var(--color-bg-card)',
@@ -75,10 +81,10 @@ export default function SuiviPage() {
                             {ok ? '✓' : i + 1}
                           </div>
                           {s}
-                        </div>
+                        </li>
                       )
                     })}
-                  </div>
+                  </ol>
                 )}
               </div>
             )}

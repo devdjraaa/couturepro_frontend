@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Heart, Search } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
@@ -82,6 +82,7 @@ export default function VitrineHome() {
   usePageMeta({ path: '/' })
   const [creators, setCreators] = useState(null)
   const [cat, setCat] = useState('all')
+  const location = useLocation()
 
   const rotations = t('vitrine.rotations', { returnObjects: true })
   const steps = t('vitrine.how.steps', { returnObjects: true })
@@ -91,6 +92,29 @@ export default function VitrineHome() {
     return () => clearInterval(id)
   }, [])
   useEffect(() => { getCreators().then(setCreators) }, [])
+
+  useEffect(() => {
+    const s = Object.assign(document.createElement('script'), { type: 'application/ld+json', id: 'gx-home-ld' })
+    s.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'Gextimo',
+      url: window.location.origin,
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: { '@type': 'EntryPoint', urlTemplate: `${window.location.origin}/createurs?q={search_term_string}` },
+        'query-input': 'required name=search_term_string',
+      },
+    })
+    document.head.appendChild(s)
+    return () => { document.getElementById('gx-home-ld')?.remove() }
+  }, [])
+
+  useEffect(() => {
+    if (!location.hash) return
+    const el = document.querySelector(location.hash)
+    if (el) el.scrollIntoView({ behavior: 'smooth' })
+  }, [location.hash, creators])
 
   useEffect(() => {
     const io = new IntersectionObserver(
@@ -156,11 +180,11 @@ export default function VitrineHome() {
             {(creators || []).map((c) => (
               <Link key={c.id} to={`/createurs/${c.id}`}
                     className="vt-item vt-card relative min-w-[268px] max-w-[268px] bg-card border border-edge rounded-lg p-5">
-                <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(c.id) }} className="absolute top-3 right-3 z-10" aria-label="Favori">
+                <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(c.id) }} className="absolute top-3 right-3 z-10" aria-label="Favori" aria-pressed={has(c.id)}>
                   <Heart size={16} className={has(c.id) ? 'text-primary' : 'text-ghost'} fill={has(c.id) ? 'currentColor' : 'none'} />
                 </button>
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-[50px] h-[50px] rounded-xl overflow-hidden flex items-center justify-center font-display font-bold text-lg text-inverse shrink-0" style={c.logo_url ? undefined : { background: c.gradient }}>{c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" /> : c.initiales}</div>
+                  <div className="w-[50px] h-[50px] rounded-xl overflow-hidden flex items-center justify-center font-display font-bold text-lg text-inverse shrink-0" style={c.logo_url ? undefined : { background: c.gradient }}>{c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" loading="lazy" /> : c.initiales}</div>
                   <div>
                     <h4 className="font-bold text-[15.5px] text-ink flex items-center gap-1.5">
                       {c.nom}
@@ -180,6 +204,9 @@ export default function VitrineHome() {
             {!creators && <div className="text-dim text-sm p-4">{t('vitrine.loading')}</div>}
           </div>
           <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-elevated to-transparent lg:hidden" />
+          </div>
+          <div className="text-center mt-8">
+            <Link to="/createurs" className={btnPrimary}>{t('vitrine.creators.see_all')}</Link>
           </div>
         </div>
       </section>

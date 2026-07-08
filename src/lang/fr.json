@@ -1288,6 +1288,11 @@
     "online": "● En ligne",
     "loading": "Chargement…",
     "indicatif": "* Prix indicatifs, convertis à titre informatif.",
+    "page_404": {
+      "title": "Page introuvable",
+      "subtitle": "Cette page n'existe pas ou a été déplacée.",
+      "cta": "Retour à l'accueil"
+    },
     "search": {
       "placeholder": "Rechercher un créateur, un modèle…",
       "empty": "Aucun résultat.",
@@ -1297,7 +1302,8 @@
     "favoris": {
       "menu": "Favoris",
       "title": "Mes favoris",
-      "empty": "Vous n'avez pas encore de favoris."
+      "empty": "Vous n'avez pas encore de favoris.",
+      "explore": "Explorer les créateurs →"
     },
     "inscription": {
       "eyebrow": "Gextimo",
@@ -1366,7 +1372,9 @@
       "subtitle": "Des talents vérifiés, près de chez vous ou partout en Afrique.",
       "visit": "Visiter le profil",
       "verified": "✓ Vérifié",
-      "new": "Nouveau"
+      "new": "Nouveau",
+      "see_all": "Voir tous les créateurs →",
+      "creations_count": "{{n}} créations"
     },
     "gallery": {
       "eyebrow": "Galerie",
@@ -1476,7 +1484,19 @@
       "filter_all_cities": "Toutes les villes",
       "filter_verified": "Vérifiés uniquement",
       "near_me": "Près de moi",
-      "empty": "Aucun créateur ne correspond à votre recherche."
+      "empty": "Aucun créateur ne correspond à votre recherche.",
+      "filter_label": "Filtres",
+      "filter_city": "Ville",
+      "filter_rating": "Note minimum",
+      "filter_all": "Toutes",
+      "filter_nearby": "Proximité",
+      "clear_all": "Tout effacer",
+      "retry": "Réessayer",
+      "reset_filters": "Réinitialiser les filtres",
+      "count_one": "{{count}} créateur",
+      "count_other": "{{count}} créateurs",
+      "in_radius": "dans un rayon de {{rayon}} km",
+      "geo_denied": "Localisation refusée par le navigateur."
     },
     "profil": {
       "quote": "Demander un devis",
@@ -1547,7 +1567,10 @@
         "Confection",
         "Essayage",
         "Livraison"
-      ]
+      ],
+      "ref_label": "Réf.",
+      "delivery": "Livraison prévue",
+      "progress_label": "Progression de la commande"
     },
     "menu2": {
       "artisans": "Artisans",

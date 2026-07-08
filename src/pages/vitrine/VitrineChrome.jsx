@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Sun, Moon, Heart, Globe, X, Menu, LogIn, UserPlus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useTheme, useLang } from '@/contexts'
 import { cn } from '@/utils/cn'
 import { useDevise, DEVISES } from './vitrineCurrency'
 import { getBanniere } from './vitrineApi'
+import { useFavoris } from './useFavoris'
 
 const FIRST_VISIT_KEY = 'gx_welcome_done'
 
@@ -187,6 +188,8 @@ function VitrineCookies() {
 
 export function VitrineNavbar() {
   const { t } = useTranslation()
+  const { ids: favIds } = useFavoris()
+  const loc = useLocation()
   const [banniere, setBanniere] = useState(null)
   useEffect(() => { getBanniere().then(setBanniere).catch(() => {}) }, [])
   const promo = (banniere?.actif && banniere?.texte) ? banniere : null
@@ -204,15 +207,22 @@ export function VitrineNavbar() {
           <Link to="/" aria-label="Gextimo"><VitrineLogo /></Link>
           <nav className="hidden lg:flex gap-5 ml-3">
             <a href="/#how" className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.nav.how')}</a>
-            <Link to="/createurs" className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.nav.creators')}</Link>
-            <Link to="/artisans" className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.menu2.artisans')}</Link>
+            <Link to="/createurs" aria-current={loc.pathname.startsWith('/createurs') ? 'page' : undefined} className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.nav.creators')}</Link>
+            <Link to="/artisans" aria-current={loc.pathname === '/artisans' ? 'page' : undefined} className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.menu2.artisans')}</Link>
             <a href="/#gallery" className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.nav.collections')}</a>
-            <Link to="/suivi" className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.nav.suivi')}</Link>
-            <Link to="/aide" className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.menu2.support')}</Link>
-            <Link to="/qui-sommes-nous" className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.menu2.about')}</Link>
+            <Link to="/suivi" aria-current={loc.pathname === '/suivi' ? 'page' : undefined} className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.nav.suivi')}</Link>
+            <Link to="/aide" aria-current={loc.pathname === '/aide' ? 'page' : undefined} className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.menu2.support')}</Link>
+            <Link to="/qui-sommes-nous" aria-current={loc.pathname === '/qui-sommes-nous' ? 'page' : undefined} className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.menu2.about')}</Link>
           </nav>
           <div className="ml-auto flex items-center gap-2">
-            <Link to="/favoris" aria-label={t('vitrine.favoris.menu')} className="vt-ib w-8 h-8 flex items-center justify-center rounded-[10px] border border-edge text-dim hover:text-primary hover:border-primary transition"><Heart size={15} /></Link>
+            <Link to="/favoris" aria-label={t('vitrine.favoris.menu')} className="vt-ib relative w-8 h-8 flex items-center justify-center rounded-[10px] border border-edge text-dim hover:text-primary hover:border-primary transition">
+              <Heart size={15} />
+              {favIds.length > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-0.5 rounded-full bg-primary text-inverse text-[9px] font-bold flex items-center justify-center tabular-nums">
+                  {favIds.length > 9 ? '9+' : favIds.length}
+                </span>
+              )}
+            </Link>
             <ThemeToggle />
             {/* Desktop : éléments individuels */}
             <div className="hidden lg:block"><DeviseSelect /></div>

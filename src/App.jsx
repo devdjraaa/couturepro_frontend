@@ -45,6 +45,7 @@ import FavorisPage         from '@/pages/vitrine/FavorisPage'
 import InscriptionPage     from '@/pages/vitrine/InscriptionPage'
 import PremiumPage           from '@/pages/vitrine/PremiumPage'
 import SponsorisationPage    from '@/pages/vitrine/SponsorisationPage'
+import Vitrine404Page        from '@/pages/vitrine/Vitrine404Page'
 
 // Pages admin
 import AdminLoginPage          from '@/pages/admin/AdminLoginPage'
@@ -131,6 +132,7 @@ export default function App() {
             <Route path={ROUTES.VITRINE_INSCRIPTION} element={<InscriptionPage />} />
             <Route path="/premium"               element={<PremiumPage />} />
             <Route path={ROUTES.VITRINE_SPONSORISATION} element={<SponsorisationPage />} />
+            <Route path="*" element={<Vitrine404Page />} />
           </Route>
         )}
 
