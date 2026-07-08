@@ -124,9 +124,9 @@ export default function VitrineHome() {
             <a href="#how" className={btnOutline}>{t('vitrine.hero.cta_how')}</a>
           </div>
           <div className="flex gap-6 justify-center flex-wrap text-dim text-sm">
-            <span><b className="text-ink font-bold">2 547</b> {t('vitrine.hero.stat_creators')}</span>
-            <span><b className="text-ink font-bold">389</b> {t('vitrine.hero.stat_designers')}</span>
-            <span><b className="text-ink font-bold">6</b> {t('vitrine.hero.stat_cities')}</span>
+            <span><b className="text-ink font-bold tabular-nums">{creators ? creators.length.toLocaleString('fr-FR') : '…'}</b> {t('vitrine.hero.stat_creators')}</span>
+            <span><b className="text-ink font-bold tabular-nums">{creators ? creators.filter(c => c.verifie).length : '…'}</b> {t('vitrine.hero.stat_designers')}</span>
+            <span><b className="text-ink font-bold tabular-nums">{creators ? new Set(creators.map(c => c.ville)).size : '…'}</b> {t('vitrine.hero.stat_cities')}</span>
           </div>
         </div>
       </section>

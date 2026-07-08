@@ -257,8 +257,8 @@ export default function CreateurProfilPage() {
   )
   const stats = [
     { v: creations.length, l: t('vitrine.profil.stat_creations') },
-    { v: '247', l: t('vitrine.profil.stat_views') },
-    { v: '94%', l: t('vitrine.profil.stat_punctuality') },
+    { v: c.stats?.vues_mois ?? '—', l: t('vitrine.profil.stat_views') },
+    { v: c.stats?.taux_ponctualite != null ? `${c.stats.taux_ponctualite}%` : '—', l: t('vitrine.profil.stat_punctuality') },
     { v: c.experience || '—', l: t('vitrine.profil.stat_experience') },
   ]
 
