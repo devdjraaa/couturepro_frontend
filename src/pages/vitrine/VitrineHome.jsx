@@ -116,15 +116,6 @@ export default function VitrineHome() {
     if (el) el.scrollIntoView({ behavior: 'smooth' })
   }, [location.hash, creators])
 
-  useEffect(() => {
-    const io = new IntersectionObserver(
-      (entries) => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target) } }),
-      { threshold: 0.14, rootMargin: '0px 0px -6% 0px' }
-    )
-    document.querySelectorAll('.vt-reveal:not(.in), .vt-stagger:not(.in)').forEach(el => io.observe(el))
-    return () => io.disconnect()
-  }, [creators])
-
   const models = cat === 'all' ? demoModels : demoModels.filter((m) => m.cat === cat)
   const rotMsg = Array.isArray(rotations) && rotations.length ? rotations[rot % rotations.length] : ''
 
@@ -134,20 +125,22 @@ export default function VitrineHome() {
       <section className="relative overflow-hidden pt-16 pb-12 text-center">
         <div className="pointer-events-none absolute -top-44 -right-28 w-[520px] h-[520px] rounded-full"
              style={{ background: 'radial-gradient(circle, color-mix(in srgb, var(--color-primary) 8%, transparent), transparent 70%)' }} />
-        <div className="vt-reveal max-w-[1180px] mx-auto px-5 relative">
-          <div className="text-[12px] font-bold tracking-[0.14em] uppercase text-primary">{t('vitrine.hero.eyebrow')}</div>
-          <h1 className="font-display font-extrabold mx-auto max-w-[880px] my-3.5 text-[clamp(34px,6vw,60px)] leading-[1.08] text-ink">
+        <div className="vt-stagger max-w-[1180px] mx-auto px-5 relative">
+          <div className="vt-item text-[12px] font-bold tracking-[0.14em] uppercase text-primary">{t('vitrine.hero.eyebrow')}</div>
+          <h1 className="vt-item font-display font-extrabold mx-auto max-w-[880px] my-3.5 text-[clamp(34px,6vw,60px)] leading-[1.08] text-ink">
             {t('vitrine.hero.title_pre')}<span className="text-primary">{t('vitrine.hero.title_hl')}</span>{t('vitrine.hero.title_post')}
           </h1>
-          <div className="h-7 mb-6 text-dim text-[clamp(15px,2vw,19px)] font-medium">
+          <div className="vt-item h-7 mb-6 text-dim text-[clamp(15px,2vw,19px)] font-medium">
             <b className="text-ink font-semibold">{rotMsg}</b>
           </div>
-          <HeroSearch creators={creators} />
-          <div className="flex gap-3 justify-center flex-wrap mb-5">
+          <div className="vt-item">
+            <HeroSearch creators={creators} />
+          </div>
+          <div className="vt-item flex gap-3 justify-center flex-wrap mb-5">
             <a href="#creators" className={btnPrimary}>{t('vitrine.hero.cta_discover')}</a>
             <a href="#how" className={btnOutline}>{t('vitrine.hero.cta_how')}</a>
           </div>
-          <div className="flex gap-6 justify-center flex-wrap text-dim text-sm">
+          <div className="vt-item flex gap-6 justify-center flex-wrap text-dim text-sm">
             <span><b className="text-ink font-bold tabular-nums">{creators ? creators.length.toLocaleString('fr-FR') : '…'}</b> {t('vitrine.hero.stat_creators')}</span>
             <span><b className="text-ink font-bold tabular-nums">{creators ? creators.filter(c => c.verifie).length : '…'}</b> {t('vitrine.hero.stat_designers')}</span>
             <span><b className="text-ink font-bold tabular-nums">{creators ? new Set(creators.map(c => c.ville)).size : '…'}</b> {t('vitrine.hero.stat_cities')}</span>
