@@ -1385,6 +1385,53 @@
       "subtitle": "With your receipt number, no account needed.",
       "button": "Track an order"
     },
+    "join": {
+      "eyebrow": "For creators",
+      "title": "Your professional showcase, in minutes",
+      "subtitle": "Manage your studio, publish your creations and receive orders — all from one tool.",
+      "benefits": [
+        "Professional and personalised public showcase",
+        "Client, order and measurement management",
+        "Quote requests directly on your page",
+        "Full dashboard (invoicing, stock, team)"
+      ],
+      "cta": "Create my free showcase",
+      "stat_1_v": "100%",
+      "stat_1_l": "free to start",
+      "stat_2_v": "< 5 min",
+      "stat_2_l": "to create an account",
+      "stat_3_v": "0%",
+      "stat_3_l": "commission on your sales",
+      "stat_4_v": "✓ Badge",
+      "stat_4_l": "verification available"
+    },
+    "testimonials": {
+      "eyebrow": "Testimonials",
+      "title": "They trust us",
+      "list": [
+        {
+          "texte": "I received my evening dress in 10 days. The stitching was impeccable and the creator very responsive.",
+          "nom": "Rachida A.",
+          "role": "Client, Cotonou",
+          "initiales": "RA",
+          "gradient": "linear-gradient(135deg,#D00B0B,#7a0606)"
+        },
+        {
+          "texte": "Since I got my Gextimo showcase, I receive requests every week. My studio has really taken off.",
+          "nom": "Kouamé N.",
+          "role": "Tailor, Porto-Novo",
+          "initiales": "KN",
+          "gradient": "linear-gradient(135deg,#1a1a1a,#444)"
+        },
+        {
+          "texte": "Managing orders and measurements has become so much simpler. I'm not going back.",
+          "nom": "Fatou D.",
+          "role": "Stylist, Parakou",
+          "initiales": "FD",
+          "gradient": "linear-gradient(135deg,#6F635E,#2A2A2A)"
+        }
+      ]
+    },
     "footer": {
       "tagline": "The showcase connecting designers, artisans and clients of African fashion.",
       "col_platform": "Platform",

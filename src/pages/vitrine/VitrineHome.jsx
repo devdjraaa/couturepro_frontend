@@ -215,6 +215,63 @@ export default function VitrineHome() {
         </div>
       </section>
 
+      {/* TÉMOIGNAGES */}
+      <section className="py-16 bg-elevated">
+        <div className="max-w-[1180px] mx-auto px-5">
+          <SectionHead eyebrow={t('vitrine.testimonials.eyebrow')} title={t('vitrine.testimonials.title')} />
+          <div className="vt-stagger grid grid-cols-1 md:grid-cols-3 gap-5">
+            {(t('vitrine.testimonials.list', { returnObjects: true }) || []).map((item, i) => (
+              <figure key={i} className="vt-item vt-card bg-card border border-edge rounded-lg p-6">
+                <div className="text-primary text-[13px] mb-3">★★★★★</div>
+                <blockquote className="text-[14.5px] text-ink leading-relaxed mb-5">"{item.texte}"</blockquote>
+                <figcaption className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-[11px] text-inverse shrink-0" style={{ background: item.gradient }}>{item.initiales}</div>
+                  <div>
+                    <div className="text-[13px] font-semibold text-ink">{item.nom}</div>
+                    <div className="text-[12px] text-dim">{item.role}</div>
+                  </div>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* REJOINDRE — créateurs */}
+      <section className="py-16">
+        <div className="max-w-[1180px] mx-auto px-5">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="vt-reveal">
+              <div className="text-[12px] font-bold tracking-[0.14em] uppercase text-primary mb-2.5">{t('vitrine.join.eyebrow')}</div>
+              <h2 className="font-display text-[clamp(26px,3.4vw,38px)] mb-4 text-ink">{t('vitrine.join.title')}</h2>
+              <p className="text-dim mb-6">{t('vitrine.join.subtitle')}</p>
+              <ul className="space-y-3 mb-8">
+                {(t('vitrine.join.benefits', { returnObjects: true }) || []).map((b, i) => (
+                  <li key={i} className="flex items-center gap-3 text-[14px] text-ink">
+                    <span className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[10px] font-bold shrink-0">✓</span>
+                    {b}
+                  </li>
+                ))}
+              </ul>
+              <Link to="/inscription" className={btnPrimary}>{t('vitrine.join.cta')}</Link>
+            </div>
+            <div className="vt-reveal grid grid-cols-2 gap-3">
+              {[
+                { v: t('vitrine.join.stat_1_v'), l: t('vitrine.join.stat_1_l') },
+                { v: t('vitrine.join.stat_2_v'), l: t('vitrine.join.stat_2_l') },
+                { v: t('vitrine.join.stat_3_v'), l: t('vitrine.join.stat_3_l') },
+                { v: t('vitrine.join.stat_4_v'), l: t('vitrine.join.stat_4_l') },
+              ].map((s) => (
+                <div key={s.l} className="bg-card border border-edge rounded-lg p-5 text-center">
+                  <div className="font-display font-bold text-[28px] text-primary leading-none mb-1">{s.v}</div>
+                  <div className="text-[12px] text-dim">{s.l}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* SUIVI CTA */}
       <section className="py-16">
         <div className="max-w-[1180px] mx-auto px-5">

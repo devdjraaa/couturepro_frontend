@@ -1385,6 +1385,53 @@
       "subtitle": "Avec votre numéro de reçu, sans créer de compte.",
       "button": "Suivre une commande"
     },
+    "join": {
+      "eyebrow": "Pour les créateurs",
+      "title": "Votre vitrine pro, en quelques minutes",
+      "subtitle": "Gérez votre atelier, publiez vos créations et recevez des commandes — tout depuis un seul outil.",
+      "benefits": [
+        "Vitrine publique professionnelle et personnalisée",
+        "Gestion des clients, commandes et mesures",
+        "Demandes de devis directement sur votre page",
+        "Tableau de bord complet (facturation, stocks, équipe)"
+      ],
+      "cta": "Créer ma vitrine gratuite",
+      "stat_1_v": "100 %",
+      "stat_1_l": "gratuit pour commencer",
+      "stat_2_v": "< 5 min",
+      "stat_2_l": "pour créer son compte",
+      "stat_3_v": "0 %",
+      "stat_3_l": "de commission sur vos ventes",
+      "stat_4_v": "✓ Badge",
+      "stat_4_l": "de vérification disponible"
+    },
+    "testimonials": {
+      "eyebrow": "Témoignages",
+      "title": "Ils nous font confiance",
+      "list": [
+        {
+          "texte": "J'ai reçu ma robe de soirée en 10 jours. La couture était impeccable et le créateur très réactif.",
+          "nom": "Rachida A.",
+          "role": "Cliente, Cotonou",
+          "initiales": "RA",
+          "gradient": "linear-gradient(135deg,#D00B0B,#7a0606)"
+        },
+        {
+          "texte": "Depuis que j'ai ma vitrine Gextimo, je reçois des demandes chaque semaine. Mon atelier a vraiment décollé.",
+          "nom": "Kouamé N.",
+          "role": "Tailleur, Porto-Novo",
+          "initiales": "KN",
+          "gradient": "linear-gradient(135deg,#1a1a1a,#444)"
+        },
+        {
+          "texte": "La gestion des commandes et des mesures est devenue tellement plus simple. Je ne reviens pas en arrière.",
+          "nom": "Fatou D.",
+          "role": "Styliste, Parakou",
+          "initiales": "FD",
+          "gradient": "linear-gradient(135deg,#6F635E,#2A2A2A)"
+        }
+      ]
+    },
     "footer": {
       "tagline": "La vitrine qui connecte créateurs, artisans et clients de la mode africaine.",
       "col_platform": "Plateforme",
