@@ -4,6 +4,7 @@ import { Heart, Search } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { getCreators, demoModels, categories } from './vitrineApi'
+import GarmentVisual from './GarmentVisual'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { useDevise } from './vitrineCurrency'
 import { useFavoris } from './useFavoris'
@@ -199,9 +200,9 @@ export default function VitrineHome() {
           <div className="vt-stagger grid grid-cols-2 md:grid-cols-4 gap-4">
             {models.map((m) => (
               <div key={m.id} className="vt-item vt-card bg-card border border-edge rounded-lg overflow-hidden">
-                <div className="h-[160px] flex items-center justify-center text-[40px] relative" style={{ background: m.gradient }}>
+                <div className="h-[160px] relative">
+                  <GarmentVisual cat={m.cat} gradient={m.gradient} className="h-full w-full" />
                   <span data-theme="dark" className="absolute top-2.5 left-2.5 text-inverse text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-inset">{m.type}</span>
-                  {m.emoji}
                 </div>
                 <div className="p-3.5">
                   <h4 className="font-semibold text-[14.5px] text-ink">{m.nom}</h4>

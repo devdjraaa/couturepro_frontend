@@ -31,7 +31,7 @@ export default function FavorisPage() {
               {favs.map((c) => (
                 <Link key={c.id} to={`/createurs/${c.id}`}
                       className="bg-card border border-edge rounded-lg p-5 flex items-center gap-3 transition hover:-translate-y-0.5 hover:shadow-lg hover:border-primary">
-                  <div className="w-[52px] h-[52px] rounded-xl overflow-hidden flex items-center justify-center font-display font-bold text-lg text-white shrink-0" style={c.logo_url ? undefined : { background: c.gradient }}>
+                  <div className="w-[52px] h-[52px] rounded-xl overflow-hidden flex items-center justify-center font-display font-bold text-lg text-inverse shrink-0" style={c.logo_url ? undefined : { background: c.gradient }}>
                     {c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" /> : c.initiales}
                   </div>
                   <div className="min-w-0">

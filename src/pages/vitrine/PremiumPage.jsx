@@ -78,7 +78,7 @@ export default function PremiumPage() {
                 onClick={() => setPeriode(p)}
                 className={cn(
                   'px-4 py-2 rounded-[10px] text-sm font-semibold transition',
-                  periode === p ? 'bg-primary text-white' : 'text-ghost hover:text-ink',
+                  periode === p ? 'bg-primary text-inverse' : 'text-ghost hover:text-ink',
                 )}
               >
                 {p === 'mensuel' ? t('premium.mensuel') : t('premium.annuel')}
@@ -117,7 +117,7 @@ export default function PremiumPage() {
                   {plan.description_courte && (
                     <span className={cn(
                       'absolute -top-3 left-1/2 -translate-x-1/2 text-[11px] font-bold px-3 py-1 rounded-full whitespace-nowrap',
-                      isRecommended ? 'bg-primary text-white' : 'bg-warning/20 text-warning border border-warning/30',
+                      isRecommended ? 'bg-primary text-inverse' : 'bg-warning/20 text-warning border border-warning/30',
                     )}>
                       {plan.description_courte}
                     </span>
@@ -152,7 +152,7 @@ export default function PremiumPage() {
                     className={cn(
                       'mt-6 w-full py-3 rounded-xl font-semibold text-sm text-center transition',
                       isRecommended
-                        ? 'bg-primary text-white hover:bg-primary-600'
+                        ? 'bg-primary text-inverse hover:bg-primary-600'
                         : 'border border-edge text-ink hover:border-primary hover:text-primary',
                     )}
                   >

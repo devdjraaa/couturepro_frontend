@@ -32,7 +32,7 @@ export function QuiSommesNousPage() {
             ))}
           </div>
 
-          <div className="rounded-2xl p-6 text-center bg-[#0D0D0D] text-white font-display font-bold">
+          <div data-theme="dark" className="rounded-2xl p-6 text-center bg-inset text-ink font-display font-bold">
             {t('vitrine.about.novafrique')}
           </div>
         </div>
@@ -83,7 +83,7 @@ export function ArtisansPage() {
           <p className="text-ink leading-relaxed mb-4">{t('vitrine.artisans.p1')}</p>
           <p className="text-dim leading-relaxed mb-8">{t('vitrine.artisans.p2')}</p>
           <div className="text-center">
-            <Link to="/#gallery" className="inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-white hover:bg-primary-600 transition">
+            <Link to="/#gallery" className="inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-inverse hover:bg-primary-600 transition">
               {t('vitrine.artisans.cta')}
             </Link>
           </div>
