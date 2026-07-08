@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Heart, Search } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
@@ -14,6 +14,7 @@ const btnOutline = 'vt-btn-ghost inline-flex items-center gap-2 font-semibold te
 
 function HeroSearch({ creators }) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const [q, setQ] = useState('')
   const query = q.trim().toLowerCase()
   const list = creators || []
@@ -22,11 +23,31 @@ function HeroSearch({ creators }) {
   const idByNom = (nom) => list.find((c) => c.nom === nom)?.id
   const has = cM.length || mM.length
 
+  const handleSearch = () => {
+    const dest = q.trim() ? `/createurs?q=${encodeURIComponent(q.trim())}` : '/createurs'
+    navigate(dest)
+    setQ('')
+  }
+
   return (
     <div className="relative max-w-[540px] mx-auto mb-6 text-left">
-      <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ghost pointer-events-none" />
-      <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('vitrine.search.placeholder')}
-             className="w-full rounded-xl border border-edge bg-card pl-9 pr-4 py-3 text-sm text-ink placeholder:text-ghost focus:outline-none focus:ring-2 focus:ring-primary/30" />
+      <div className="flex items-center rounded-xl border border-edge bg-card focus-within:ring-2 focus-within:ring-primary/30 overflow-hidden">
+        <Search size={15} className="ml-3.5 shrink-0 text-ghost pointer-events-none" />
+        <input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+          placeholder={t('vitrine.search.placeholder')}
+          className="flex-1 px-3 py-3 text-sm text-ink placeholder:text-ghost bg-transparent focus:outline-none"
+        />
+        <button
+          type="button"
+          onClick={handleSearch}
+          className="m-1.5 shrink-0 px-4 py-2 rounded-[10px] bg-primary text-inverse font-semibold text-sm hover:bg-primary-600 transition whitespace-nowrap"
+        >
+          {t('vitrine.search.cta')}
+        </button>
+      </div>
       {query && (
         <div className="absolute inset-x-0 top-full mt-2 bg-card border border-edge rounded-xl shadow-lg overflow-hidden z-30">
           {!has && <div className="px-4 py-3 text-sm text-dim">{t('vitrine.search.empty')}</div>}
@@ -116,15 +137,6 @@ export default function VitrineHome() {
     if (el) el.scrollIntoView({ behavior: 'smooth' })
   }, [location.hash, creators])
 
-  useEffect(() => {
-    const io = new IntersectionObserver(
-      (entries) => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target) } }),
-      { threshold: 0.14, rootMargin: '0px 0px -6% 0px' }
-    )
-    document.querySelectorAll('.vt-reveal:not(.in), .vt-stagger:not(.in)').forEach(el => io.observe(el))
-    return () => io.disconnect()
-  }, [creators])
-
   const models = cat === 'all' ? demoModels : demoModels.filter((m) => m.cat === cat)
   const rotMsg = Array.isArray(rotations) && rotations.length ? rotations[rot % rotations.length] : ''
 
@@ -134,20 +146,22 @@ export default function VitrineHome() {
       <section className="relative overflow-hidden pt-16 pb-12 text-center">
         <div className="pointer-events-none absolute -top-44 -right-28 w-[520px] h-[520px] rounded-full"
              style={{ background: 'radial-gradient(circle, color-mix(in srgb, var(--color-primary) 8%, transparent), transparent 70%)' }} />
-        <div className="vt-reveal max-w-[1180px] mx-auto px-5 relative">
-          <div className="text-[12px] font-bold tracking-[0.14em] uppercase text-primary">{t('vitrine.hero.eyebrow')}</div>
-          <h1 className="font-display font-extrabold mx-auto max-w-[880px] my-3.5 text-[clamp(34px,6vw,60px)] leading-[1.08] text-ink">
+        <div className="vt-stagger max-w-[1180px] mx-auto px-5 relative">
+          <div className="vt-item text-[12px] font-bold tracking-[0.14em] uppercase text-primary">{t('vitrine.hero.eyebrow')}</div>
+          <h1 className="vt-item font-display font-extrabold mx-auto max-w-[880px] my-3.5 text-[clamp(34px,6vw,60px)] leading-[1.08] text-ink">
             {t('vitrine.hero.title_pre')}<span className="text-primary">{t('vitrine.hero.title_hl')}</span>{t('vitrine.hero.title_post')}
           </h1>
-          <div className="h-7 mb-6 text-dim text-[clamp(15px,2vw,19px)] font-medium">
+          <div className="vt-item h-7 mb-6 text-dim text-[clamp(15px,2vw,19px)] font-medium">
             <b className="text-ink font-semibold">{rotMsg}</b>
           </div>
-          <HeroSearch creators={creators} />
-          <div className="flex gap-3 justify-center flex-wrap mb-5">
+          <div className="vt-item">
+            <HeroSearch creators={creators} />
+          </div>
+          <div className="vt-item flex gap-3 justify-center flex-wrap mb-5">
             <a href="#creators" className={btnPrimary}>{t('vitrine.hero.cta_discover')}</a>
             <a href="#how" className={btnOutline}>{t('vitrine.hero.cta_how')}</a>
           </div>
-          <div className="flex gap-6 justify-center flex-wrap text-dim text-sm">
+          <div className="vt-item flex gap-6 justify-center flex-wrap text-dim text-sm">
             <span><b className="text-ink font-bold tabular-nums">{creators ? creators.length.toLocaleString('fr-FR') : '…'}</b> {t('vitrine.hero.stat_creators')}</span>
             <span><b className="text-ink font-bold tabular-nums">{creators ? creators.filter(c => c.verifie).length : '…'}</b> {t('vitrine.hero.stat_designers')}</span>
             <span><b className="text-ink font-bold tabular-nums">{creators ? new Set(creators.map(c => c.ville)).size : '…'}</b> {t('vitrine.hero.stat_cities')}</span>

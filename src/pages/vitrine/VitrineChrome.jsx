@@ -29,17 +29,50 @@ export function VitrineLogo({ onDark = false }) {
   )
 }
 
-/* Sélecteur de langue FR / EN (compact). */
-function LangToggle() {
+/* Dropdown Globe : Langue + Devise en un seul bouton compact. */
+function LocaleMenu() {
   const { langue, setLangue } = useLang()
+  const { devise, setDevise } = useDevise()
+  const { t } = useTranslation()
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+  useEffect(() => {
+    if (!open) return
+    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [open])
   return (
-    <div className="flex items-center rounded-[10px] border border-edge overflow-hidden text-[11px] font-bold">
-      {['fr', 'en'].map((l) => (
-        <button key={l} type="button" onClick={() => setLangue(l)}
-                className={cn('px-2 py-1.5 transition', langue === l ? 'bg-primary text-inverse' : 'text-dim hover:text-ink')}>
-          {l.toUpperCase()}
-        </button>
-      ))}
+    <div ref={ref} className="relative hidden lg:block">
+      <button type="button" onClick={() => setOpen(v => !v)} aria-label="Langue et devise"
+              className={cn('w-8 h-8 flex items-center justify-center rounded-[10px] border transition',
+                open ? 'border-primary text-primary' : 'border-edge text-dim hover:text-ink hover:border-primary/40')}>
+        <Globe size={15} />
+      </button>
+      {open && (
+        <div className="absolute right-0 top-full mt-2 w-52 bg-card border border-edge rounded-xl shadow-xl z-50 p-3">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-ghost mb-1.5">{t('vitrine.welcome_popup.langue')}</p>
+          <div className="flex gap-1.5 mb-3">
+            {['fr', 'en'].map((l) => (
+              <button key={l} type="button" onClick={() => setLangue(l)}
+                className={cn('flex-1 py-1.5 rounded-lg border text-[11px] font-bold transition',
+                  langue === l ? 'border-primary bg-primary/5 text-primary' : 'border-edge text-dim hover:border-primary hover:text-ink')}>
+                {l.toUpperCase()}
+              </button>
+            ))}
+          </div>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-ghost mb-1.5">{t('vitrine.welcome_popup.devise')}</p>
+          <div className="grid grid-cols-4 gap-1">
+            {Object.keys(DEVISES).map((d) => (
+              <button key={d} type="button" onClick={() => setDevise(d)}
+                className={cn('py-1.5 rounded-lg border text-[10px] font-bold transition',
+                  devise === d ? 'border-primary bg-primary/5 text-primary' : 'border-edge text-dim hover:border-primary hover:text-ink')}>
+                {d}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -151,16 +184,6 @@ function ThemeToggle() {
   )
 }
 
-/* Sélecteur de devise (multidevise, taux indicatifs). */
-function DeviseSelect() {
-  const { devise, setDevise } = useDevise()
-  return (
-    <select value={devise} onChange={(e) => setDevise(e.target.value)} aria-label="Devise"
-            className="text-[11px] font-bold bg-card border border-edge rounded-[10px] px-1.5 py-[7px] text-dim focus:outline-none focus:ring-2 focus:ring-primary/30 cursor-pointer">
-      {Object.keys(DEVISES).map((k) => <option key={k} value={k}>{k}</option>)}
-    </select>
-  )
-}
 
 /* Bandeau cookies (consentement mémorisé). */
 function VitrineCookies() {
@@ -200,21 +223,25 @@ export function VitrineNavbar() {
           ? (promo.lien
               ? <a href={promo.lien} target="_blank" rel="noopener noreferrer" className="hover:underline">{promo.texte}</a>
               : promo.texte)
-          : t('vitrine.promo')}
+          : <><span className="text-primary">✦</span>{' '}{t('vitrine.promo_a')}{' '}<span className="font-bold text-primary">Gextimo</span>{' '}{t('vitrine.promo_b')}</>}
       </div>
       <header className="sticky top-0 z-40 bg-app/90 backdrop-blur border-b border-edge">
-        <div className="max-w-[1180px] mx-auto px-5 h-16 flex items-center gap-4">
+        <div className="max-w-[1180px] mx-auto pl-4 pr-2 sm:px-5 h-[68px] grid grid-cols-[auto_1fr_auto] items-center gap-4 lg:gap-6">
+          {/* Logo */}
           <Link to="/" aria-label="Gextimo"><VitrineLogo /></Link>
-          <nav className="hidden lg:flex gap-5 ml-3">
-            <a href="/#how" className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.nav.how')}</a>
-            <Link to="/createurs" aria-current={loc.pathname.startsWith('/createurs') ? 'page' : undefined} className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.nav.creators')}</Link>
-            <Link to="/artisans" aria-current={loc.pathname === '/artisans' ? 'page' : undefined} className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.menu2.artisans')}</Link>
-            <a href="/#gallery" className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.nav.collections')}</a>
-            <Link to="/suivi" aria-current={loc.pathname === '/suivi' ? 'page' : undefined} className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.nav.suivi')}</Link>
-            <Link to="/aide" aria-current={loc.pathname === '/aide' ? 'page' : undefined} className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.menu2.support')}</Link>
-            <Link to="/qui-sommes-nous" aria-current={loc.pathname === '/qui-sommes-nous' ? 'page' : undefined} className="vt-nav-link text-sm text-dim hover:text-ink">{t('vitrine.menu2.about')}</Link>
+
+          {/* Nav centré */}
+          <nav className="hidden lg:flex items-center justify-center gap-7">
+            <a href="/#how" className="vt-nav-link text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.nav.how')}</a>
+            <Link to="/createurs" aria-current={loc.pathname.startsWith('/createurs') ? 'page' : undefined} className="vt-nav-link text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.nav.creators')}</Link>
+            <Link to="/artisans" aria-current={loc.pathname === '/artisans' ? 'page' : undefined} className="vt-nav-link text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.menu2.artisans')}</Link>
+            <a href="/#gallery" className="vt-nav-link text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.nav.collections')}</a>
+            <Link to="/suivi" aria-current={loc.pathname === '/suivi' ? 'page' : undefined} className="vt-nav-link text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.nav.suivi')}</Link>
+            <Link to="/aide" aria-current={loc.pathname === '/aide' ? 'page' : undefined} className="vt-nav-link text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.menu2.support')}</Link>
           </nav>
-          <div className="ml-auto flex items-center gap-2">
+
+          {/* Contrôles droite */}
+          <div className="flex items-center gap-2.5">
             <Link to="/favoris" aria-label={t('vitrine.favoris.menu')} className="vt-ib relative w-8 h-8 flex items-center justify-center rounded-[10px] border border-edge text-dim hover:text-primary hover:border-primary transition">
               <Heart size={15} />
               {favIds.length > 0 && (
@@ -224,13 +251,11 @@ export function VitrineNavbar() {
               )}
             </Link>
             <ThemeToggle />
-            {/* Desktop : éléments individuels */}
-            <div className="hidden lg:block"><DeviseSelect /></div>
-            <div className="hidden lg:flex"><LangToggle /></div>
-            <Link to="/inscription" className="vt-btn-ghost hidden lg:inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] border border-edge text-ink hover:border-primary hover:text-primary">{t('vitrine.nav.signup')}</Link>
-            <Link to="/login" className="vt-btn-primary hidden lg:inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-inverse hover:bg-primary-600">{t('vitrine.nav.login')}</Link>
-            {/* Mobile : menu burger */}
-            <div className="lg:hidden">
+            <LocaleMenu />
+            <div className="hidden lg:block h-5 w-px bg-edge mx-1.5" />
+            <Link to="/inscription" className="vt-btn-ghost hidden lg:inline-flex items-center justify-center font-semibold text-[13px] h-9 px-4 rounded-[10px] border border-edge text-ink hover:border-primary hover:text-primary">{t('vitrine.nav.signup')}</Link>
+            <Link to="/login" className="vt-btn-primary hidden lg:inline-flex items-center justify-center font-semibold text-[13px] h-9 px-4 rounded-[10px] border border-transparent bg-primary text-inverse hover:bg-primary-600">{t('vitrine.nav.login')}</Link>
+            <div className="lg:hidden mr-0.5">
               <NavMenu />
             </div>
           </div>
@@ -275,7 +300,7 @@ export function VitrineFooter() {
   return (
     <footer data-theme="dark" className="bg-inset text-ink pt-14 pb-6 mt-2">
       <div className="max-w-[1180px] mx-auto px-5">
-        <div className="grid grid-cols-1 md:grid-cols-[1.6fr_1fr_1fr_1fr_1fr] gap-8 pb-9 border-b border-edge">
+        <div className="vt-reveal grid grid-cols-1 md:grid-cols-[1.6fr_1fr_1fr_1fr_1fr] gap-8 pb-9 border-b border-edge">
           <div>
             <VitrineLogo onDark />
             <p className="text-[13px] mt-3.5 max-w-[280px] text-dim">{t('vitrine.footer.tagline')}</p>
@@ -287,7 +312,7 @@ export function VitrineFooter() {
             </div>
           ))}
         </div>
-        <div className="text-center pt-5 text-[12.5px] text-dim">
+        <div className="vt-reveal text-center pt-5 text-[12.5px] text-dim">
           <span className="font-display font-bold text-ink">Une solution NovAfrique<span className="text-primary"> ·</span></span>{' '}
           {t('vitrine.footer.rights')}
         </div>
@@ -381,6 +406,17 @@ function WelcomePopup() {
 }
 
 export default function VitrineShell({ children }) {
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target) } }),
+      { threshold: 0.1, rootMargin: '0px 0px -5% 0px' }
+    )
+    const observe = () => document.querySelectorAll('.vt-reveal:not(.in), .vt-stagger:not(.in)').forEach(el => io.observe(el))
+    observe()
+    const mo = new MutationObserver(observe)
+    mo.observe(document.body, { childList: true, subtree: true })
+    return () => { io.disconnect(); mo.disconnect() }
+  }, [])
   return (
     <div className="min-h-dvh bg-app text-ink font-sans">
       <VitrineNavbar />
