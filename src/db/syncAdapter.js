@@ -2,7 +2,7 @@ import { synchronize } from '@nozbe/watermelondb/sync'
 import api from '@/services/api'
 import database from './database'
 
-const TABLES = ['clients', 'commandes', 'mesures', 'vetements']
+const TABLES = ['clients', 'commandes', 'mesures', 'vetements', 'collections', 'notifications', 'paiements']
 
 /**
  * Convertit la réponse pull du backend (format maison) vers le format WatermelonDB.
@@ -73,10 +73,20 @@ function normalizeRecord(table, record) {
     }
   }
 
+  // Le backend renvoie created_at (ISO) ; on le range dans une colonne dédiée
+  // pour l'affichage/tri (WatermelonDB gère created_at/updated_at séparément).
+  if (table === 'notifications' && out.created_at !== undefined) {
+    out.date_creation = out.created_at
+  }
+  if (table === 'paiements' && out.created_at !== undefined) {
+    out.date_paiement = out.created_at
+  }
+
   // Supprimer les colonnes calculées backend qui ne sont pas dans le schéma
   delete out.atelier
   delete out.client
   delete out.vetement
+  delete out.commande
   delete out.created_by_role
   delete out.archived_at
   delete out.archived_by
@@ -85,7 +95,7 @@ function normalizeRecord(table, record) {
   delete out.photo_tissu_path  // on garde photo_tissu_url
 
   // WatermelonDB stocke les booleans, pas les integers — forcer le type
-  const boolFields = ['is_vip', 'is_archived', 'urgence', 'rappel_j2_envoye', 'est_gabarit', 'is_systeme']
+  const boolFields = ['is_vip', 'is_archived', 'urgence', 'rappel_j2_envoye', 'est_gabarit', 'is_systeme', 'is_read']
   for (const f of boolFields) {
     if (out[f] !== undefined) out[f] = Boolean(out[f])
   }
