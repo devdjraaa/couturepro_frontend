@@ -2,10 +2,14 @@ import { useMemo } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { Q } from '@nozbe/watermelondb'
-import { useWmQuery, database } from '@/db/useWmQuery'
+import { useWmQuery, useMutation as useWmMutation, database } from '@/db/useWmQuery'
 import { syncWithServer } from '@/db/syncAdapter'
 import { commandeService } from '@/services/commandeService'
 import { QUERY_KEYS } from './queryKeys'
+
+function getAtelierId() {
+  return localStorage.getItem('cp_active_atelier') || ''
+}
 
 // Offline-first : listes, détail & stats des commandes lus dans WatermelonDB
 // (dispo hors-ligne). Les mutations (create/update/statut/delete) restent sur
@@ -106,18 +110,44 @@ function refreshLocal() {
   syncWithServer().catch(() => { /* hors-ligne : la sync repassera */ })
 }
 
+// Création offline-first : la commande est écrite dans WatermelonDB (avec
+// client_nom/vetement_nom résolus depuis le local) puis synchronisée. La
+// référence GEX-… est générée par le serveur au push et revient au pull suivant.
 export function useCreateCommande() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: (payload) => commandeService.create(payload),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notifications })
-      refreshLocal()
-      const client = data?.client?.prenom
-        ? `${data.client.prenom} ${data.client.nom}`
-        : (data?.client?.nom ?? data?.client_nom ?? 'client')
-      toast.success(`Commande pour ${client} créée avec succès.`)
-    },
+  return useWmMutation(async (payload) => {
+    return database.write(async () => {
+      let client_nom = payload.client_nom ?? ''
+      if (!client_nom && payload.client_id) {
+        const c = await database.get('clients').find(payload.client_id).catch(() => null)
+        if (c) client_nom = [c.prenom, c.nom].filter(Boolean).join(' ')
+      }
+      let vetement_nom = payload.vetement_nom ?? ''
+      if (!vetement_nom && payload.vetement_id) {
+        const v = await database.get('vetements').find(payload.vetement_id).catch(() => null)
+        if (v) vetement_nom = v.nom
+      }
+
+      const record = await database.get('commandes').create(c => {
+        c.client_id             = payload.client_id ?? ''
+        c.client_nom            = client_nom
+        c.vetement_id           = payload.vetement_id ?? null
+        c.vetement_nom          = vetement_nom
+        c.quantite              = Number(payload.quantite) || 1
+        c.prix                  = Number(payload.prix) || 0
+        c.acompte               = Number(payload.acompte) || 0
+        c.mode_paiement_acompte = payload.mode_paiement_acompte ?? null
+        c.statut                = 'en_cours'
+        c.etape                 = 'commande'
+        c.description           = payload.description ?? ''
+        c.note_interne          = payload.note_interne ?? ''
+        c.date_livraison_prevue = payload.date_livraison_prevue ?? null
+        c.urgence               = Boolean(payload.urgence)
+        c.is_archived           = false
+        c.atelier_id            = getAtelierId()
+      })
+      toast.success(`Commande pour ${client_nom || 'client'} créée avec succès.`)
+      return toPlain(record)
+    })
   })
 }
 
