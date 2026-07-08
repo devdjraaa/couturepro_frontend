@@ -2,7 +2,7 @@ import { synchronize } from '@nozbe/watermelondb/sync'
 import api from '@/services/api'
 import database from './database'
 
-const TABLES = ['clients', 'commandes', 'mesures', 'vetements', 'collections', 'notifications', 'paiements']
+const TABLES = ['clients', 'commandes', 'mesures', 'vetements', 'collections', 'notifications', 'paiements', 'commande_items', 'commande_echeances']
 
 /**
  * Convertit la réponse pull du backend (format maison) vers le format WatermelonDB.
@@ -95,7 +95,7 @@ function normalizeRecord(table, record) {
   delete out.photo_tissu_path  // on garde photo_tissu_url
 
   // WatermelonDB stocke les booleans, pas les integers — forcer le type
-  const boolFields = ['is_vip', 'is_archived', 'urgence', 'rappel_j2_envoye', 'est_gabarit', 'is_systeme', 'is_read']
+  const boolFields = ['is_vip', 'is_archived', 'urgence', 'rappel_j2_envoye', 'est_gabarit', 'is_systeme', 'is_read', 'livree']
   for (const f of boolFields) {
     if (out[f] !== undefined) out[f] = Boolean(out[f])
   }

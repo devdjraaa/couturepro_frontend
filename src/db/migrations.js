@@ -40,5 +40,33 @@ export default schemaMigrations({
         }),
       ],
     },
+    {
+      toVersion: 3,
+      steps: [
+        createTable({
+          name: 'commande_items',
+          columns: [
+            { name: 'commande_id',   type: 'string' },
+            { name: 'vetement_id',   type: 'string', isOptional: true },
+            { name: 'vetement_nom',  type: 'string', isOptional: true },
+            { name: 'quantite',      type: 'number' },
+            { name: 'prix_unitaire', type: 'number' },
+            { name: 'description',   type: 'string', isOptional: true },
+            { name: 'synced_at',     type: 'number', isOptional: true },
+          ],
+        }),
+        createTable({
+          name: 'commande_echeances',
+          columns: [
+            { name: 'commande_id',   type: 'string' },
+            { name: 'date_echeance', type: 'string' },
+            { name: 'note',          type: 'string', isOptional: true },
+            { name: 'livree',        type: 'boolean' },
+            { name: 'livree_at',     type: 'string', isOptional: true },
+            { name: 'synced_at',     type: 'number', isOptional: true },
+          ],
+        }),
+      ],
+    },
   ],
 })

@@ -10,7 +10,7 @@ import { Q } from '@nozbe/watermelondb'
 const SyncContext = createContext(null)
 
 // Tables suivies par la synchro (miroir de syncAdapter).
-const SYNC_TABLES = ['clients', 'commandes', 'mesures', 'vetements', 'collections', 'notifications', 'paiements']
+const SYNC_TABLES = ['clients', 'commandes', 'mesures', 'vetements', 'collections', 'notifications', 'paiements', 'commande_items', 'commande_echeances']
 // Pull périodique tant qu'on est en ligne : récupère les changements distants.
 const POLL_INTERVAL_MS = 30000
 // Anti-rafale : on regroupe les écritures locales successives avant de pousser.

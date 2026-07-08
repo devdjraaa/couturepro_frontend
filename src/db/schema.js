@@ -1,7 +1,7 @@
 import { appSchema, tableSchema } from '@nozbe/watermelondb'
 
 export default appSchema({
-  version: 2,
+  version: 3,
   tables: [
     tableSchema({
       name: 'clients',
@@ -101,6 +101,30 @@ export default appSchema({
         { name: 'mode_paiement', type: 'string', isOptional: true },
         { name: 'enregistre_par',type: 'string', isOptional: true },
         { name: 'date_paiement', type: 'string', isOptional: true },
+        { name: 'synced_at',     type: 'number', isOptional: true },
+      ],
+    }),
+    // ── v3 : items & échéances de commande (scopés via commande côté serveur) ──
+    tableSchema({
+      name: 'commande_items',
+      columns: [
+        { name: 'commande_id',   type: 'string' },
+        { name: 'vetement_id',   type: 'string', isOptional: true },
+        { name: 'vetement_nom',  type: 'string', isOptional: true },
+        { name: 'quantite',      type: 'number' },
+        { name: 'prix_unitaire', type: 'number' },
+        { name: 'description',   type: 'string', isOptional: true },
+        { name: 'synced_at',     type: 'number', isOptional: true },
+      ],
+    }),
+    tableSchema({
+      name: 'commande_echeances',
+      columns: [
+        { name: 'commande_id',   type: 'string' },
+        { name: 'date_echeance', type: 'string' },
+        { name: 'note',          type: 'string', isOptional: true },
+        { name: 'livree',        type: 'boolean' },
+        { name: 'livree_at',     type: 'string', isOptional: true },
         { name: 'synced_at',     type: 'number', isOptional: true },
       ],
     }),

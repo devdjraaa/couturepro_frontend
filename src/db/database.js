@@ -3,7 +3,7 @@ import * as LokiAdapterMod from '@nozbe/watermelondb/adapters/lokijs'
 import { setGenerator }  from '@nozbe/watermelondb/utils/common/randomId'
 import schema           from './schema'
 import migrations       from './migrations'
-import { Client, Commande, Mesure, Vetement, Collection, Notification, Paiement } from './models'
+import { Client, Commande, Mesure, Vetement, Collection, Notification, Paiement, CommandeItem, CommandeEcheance } from './models'
 
 // Les enregistrements créés hors-ligne sont poussés au serveur AVEC leur id local.
 // Le backend stocke les id en colonnes `uuid` : un id WatermelonDB par défaut
@@ -23,10 +23,12 @@ const LokiJSAdapter =
 // le serveur, on versionne le nom de la base : à chaque changement de schéma qui
 // ajoute des tables, on repart d'une base fraîche (re-sync automatique). L'ancienne
 // est supprimée pour ne pas gaspiller de l'espace.
-const DB_NAME = 'couturepro_v2'
+const DB_NAME = 'couturepro_v3'
 try {
   if (typeof indexedDB !== 'undefined' && localStorage.getItem('cp_wm_db') !== DB_NAME) {
+    // Nettoie les bases des schémas précédents (données re-synchronisées ensuite).
     indexedDB.deleteDatabase('couturepro')
+    indexedDB.deleteDatabase('couturepro_v2')
     localStorage.removeItem('cp_wm_last_pulled_at')
     localStorage.setItem('cp_wm_db', DB_NAME)
   }
@@ -48,7 +50,7 @@ const adapter = new LokiJSAdapter({
 
 const database = new Database({
   adapter,
-  modelClasses: [Client, Commande, Mesure, Vetement, Collection, Notification, Paiement],
+  modelClasses: [Client, Commande, Mesure, Vetement, Collection, Notification, Paiement, CommandeItem, CommandeEcheance],
 })
 
 export default database
