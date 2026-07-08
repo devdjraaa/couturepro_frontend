@@ -223,7 +223,7 @@ export function VitrineNavbar() {
           ? (promo.lien
               ? <a href={promo.lien} target="_blank" rel="noopener noreferrer" className="hover:underline">{promo.texte}</a>
               : promo.texte)
-          : t('vitrine.promo')}
+          : <><span className="text-primary">✦</span>{' '}{t('vitrine.promo_a')}{' '}<span className="font-bold text-primary">Gextimo</span>{' '}{t('vitrine.promo_b')}</>}
       </div>
       <header className="sticky top-0 z-40 bg-app/90 backdrop-blur border-b border-edge">
         <div className="max-w-[1180px] mx-auto px-5 h-16 grid grid-cols-[auto_1fr_auto] items-center gap-6">
