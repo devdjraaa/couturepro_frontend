@@ -219,8 +219,8 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
         </tr>
         <tr>
           <td class="mod">Facturation (devis / factures / reçus)</td><td class="rt">8</td>
-          <td><span class="badge b-todo"><i></i> À tester</span></td>
-          <td class="nt">Création, statut, dépôt DGI, normalisation.</td>
+          <td><span class="badge b-todo"><i></i> Plan payant</span></td>
+          <td class="nt">Nécessite un abonnement supérieur — sera testé plus tard, avec les autres fonctions « plan ».</td>
         </tr>
         <tr>
           <td class="mod">Outils créatifs</td><td class="rt">5</td>
@@ -260,13 +260,13 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
         </tr>
         <tr>
           <td class="mod">Caisse</td><td class="rt">2</td>
-          <td><span class="badge b-todo"><i></i> À tester</span></td>
-          <td class="nt">Selon le plan d'abonnement.</td>
+          <td><span class="badge b-todo"><i></i> Plan payant</span></td>
+          <td class="nt">Nécessite un abonnement supérieur — testé plus tard avec les fonctions « plan ».</td>
         </tr>
         <tr>
           <td class="mod">Galerie VIP</td><td class="rt">4</td>
-          <td><span class="badge b-todo"><i></i> À tester</span></td>
-          <td class="nt">Selon le plan d'abonnement.</td>
+          <td><span class="badge b-todo"><i></i> Plan payant</span></td>
+          <td class="nt">Nécessite un abonnement supérieur — testé plus tard avec les fonctions « plan ».</td>
         </tr>
         <tr>
           <td class="mod">Récupération de compte</td><td class="rt">7</td>
@@ -325,6 +325,12 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
         <p>Dans Paramètres → Atelier, le formulaire s'ouvrait <b>sans le nom ni la ville</b> de l'atelier
           pourtant existants — en enregistrant, on risquait d'effacer le nom. Corrigé : le formulaire
           reprend désormais les informations déjà connues de l'atelier.</p>
+      </div>
+      <div class="bug">
+        <h4>Échec silencieux à l'enregistrement (outils créatifs) <span class="fx">corrigé</span></h4>
+        <p>Si l'enregistrement d'une création échouait, <b>rien ne s'affichait</b> : la fenêtre restait
+          ouverte sans explication et l'utilisateur pouvait croire que c'était fait. Corrigé : un message
+          d'erreur clair est désormais affiché.</p>
       </div>
     </div>
   </section>
