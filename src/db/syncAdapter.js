@@ -158,11 +158,27 @@ function denormalizeRecord(table, record) {
       try { out.images = JSON.parse(out.images_json) } catch { out.images = [] }
       delete out.images_json
     }
-    if (out.libelles_mesures_json !== undefined) {
-      try { out.libelles_mesures = JSON.parse(out.libelles_mesures_json) } catch { out.libelles_mesures = [] }
-      delete out.libelles_mesures_json
-    }
+    // Colonnes locales absentes de la table serveur `vetements` → ne pas pousser
+    // (sinon SQLSTATE 42703 « undefined column »).
+    delete out.libelles_mesures_json
+    delete out.libelles_mesures
+    delete out.categorie
+    delete out.description
+    delete out.image_url
+    delete out.est_gabarit
   }
+
+  // Colonnes calculées/locales absentes de la table serveur `commandes`.
+  if (table === 'commandes') {
+    delete out.client_nom          // dérivé du client côté serveur
+    delete out.vetement_nom        // dérivé du vêtement côté serveur
+    delete out.mode_paiement_acompte
+    delete out.photo_tissu_url     // le serveur utilise photo_tissu_path
+  }
+
+  // Colonnes d'affichage locales (mappées depuis created_at) : jamais poussées.
+  if (table === 'notifications') delete out.date_creation
+  if (table === 'paiements')     delete out.date_paiement
 
   return out
 }
