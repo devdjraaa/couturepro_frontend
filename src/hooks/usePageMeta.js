@@ -18,7 +18,7 @@ function setMeta(property, content) {
   el.setAttribute('content', content)
 }
 
-export function usePageMeta({ title, description, image, path } = {}) {
+export function usePageMeta({ title, description, image, path, type = 'website' } = {}) {
   useEffect(() => {
     const fullTitle = title ? `${title} · Gextimo` : DEFAULT_TITLE
     const desc      = description ?? DEFAULT_DESC
@@ -26,6 +26,7 @@ export function usePageMeta({ title, description, image, path } = {}) {
     const url       = path ? `${BASE_URL}${path}` : BASE_URL
 
     document.title = fullTitle
+    setMeta('og:type',        type)
     setMeta('og:title',       fullTitle)
     setMeta('og:description', desc)
     setMeta('og:image',       img)
@@ -37,5 +38,5 @@ export function usePageMeta({ title, description, image, path } = {}) {
     setMeta('description',    desc)
 
     return () => { document.title = DEFAULT_TITLE }
-  }, [title, description, image, path])
+  }, [title, description, image, path, type])
 }

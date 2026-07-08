@@ -10,13 +10,13 @@ export default function InscriptionPage() {
     <VitrineShell>
       <section className="py-20">
         <div className="max-w-[640px] mx-auto px-5 text-center">
-          <div className="text-[12px] font-bold tracking-[0.14em] uppercase text-primary">Gextimo</div>
+          <div className="text-[12px] font-bold tracking-[0.14em] uppercase text-primary">{t('vitrine.inscription.eyebrow')}</div>
           <h1 className="font-display font-extrabold text-[clamp(28px,4vw,42px)] mt-2 text-ink">{t('vitrine.inscription.title')}</h1>
           <p className="text-dim mt-2">{t('vitrine.inscription.subtitle')}</p>
           <p className="text-ink mt-5 leading-relaxed">{t('vitrine.inscription.body')}</p>
           <div className="mt-7">
             {/* TODO: pointer vers le lien réel de l'app (Play Store / APK) */}
-            <a href="#" className="inline-flex items-center gap-2 font-semibold text-sm px-6 py-3.5 rounded-xl bg-primary text-white hover:bg-primary-600 transition">
+            <a href="#" className="inline-flex items-center gap-2 font-semibold text-sm px-6 py-3.5 rounded-xl bg-primary text-inverse hover:bg-primary-600 transition">
               📱 {t('vitrine.inscription.cta')}
             </a>
           </div>

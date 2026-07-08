@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Heart, Search } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { getCreators, demoModels, categories } from './vitrineApi'
+import GarmentVisual from './GarmentVisual'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { useDevise } from './vitrineCurrency'
 import { useFavoris } from './useFavoris'
@@ -50,7 +51,6 @@ function HeroSearch({ creators }) {
                 return (
                   <Link key={m.id} to={id ? `/createurs/${id}` : '/#gallery'} onClick={() => setQ('')}
                         className="flex items-center gap-2.5 px-4 py-2 hover:bg-subtle transition">
-                    <span className="text-lg">{m.emoji}</span>
                     <span className="text-sm text-ink">{m.nom}</span>
                     <span className="text-xs text-ghost ml-auto">{m.par}</span>
                   </Link>
@@ -82,6 +82,7 @@ export default function VitrineHome() {
   usePageMeta({ path: '/' })
   const [creators, setCreators] = useState(null)
   const [cat, setCat] = useState('all')
+  const location = useLocation()
 
   const rotations = t('vitrine.rotations', { returnObjects: true })
   const steps = t('vitrine.how.steps', { returnObjects: true })
@@ -91,6 +92,29 @@ export default function VitrineHome() {
     return () => clearInterval(id)
   }, [])
   useEffect(() => { getCreators().then(setCreators) }, [])
+
+  useEffect(() => {
+    const s = Object.assign(document.createElement('script'), { type: 'application/ld+json', id: 'gx-home-ld' })
+    s.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'Gextimo',
+      url: window.location.origin,
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: { '@type': 'EntryPoint', urlTemplate: `${window.location.origin}/createurs?q={search_term_string}` },
+        'query-input': 'required name=search_term_string',
+      },
+    })
+    document.head.appendChild(s)
+    return () => { document.getElementById('gx-home-ld')?.remove() }
+  }, [])
+
+  useEffect(() => {
+    if (!location.hash) return
+    const el = document.querySelector(location.hash)
+    if (el) el.scrollIntoView({ behavior: 'smooth' })
+  }, [location.hash, creators])
 
   useEffect(() => {
     const io = new IntersectionObserver(
@@ -124,9 +148,9 @@ export default function VitrineHome() {
             <a href="#how" className={btnOutline}>{t('vitrine.hero.cta_how')}</a>
           </div>
           <div className="flex gap-6 justify-center flex-wrap text-dim text-sm">
-            <span><b className="text-ink font-bold">2 547</b> {t('vitrine.hero.stat_creators')}</span>
-            <span><b className="text-ink font-bold">389</b> {t('vitrine.hero.stat_designers')}</span>
-            <span><b className="text-ink font-bold">6</b> {t('vitrine.hero.stat_cities')}</span>
+            <span><b className="text-ink font-bold tabular-nums">{creators ? creators.length.toLocaleString('fr-FR') : '…'}</b> {t('vitrine.hero.stat_creators')}</span>
+            <span><b className="text-ink font-bold tabular-nums">{creators ? creators.filter(c => c.verifie).length : '…'}</b> {t('vitrine.hero.stat_designers')}</span>
+            <span><b className="text-ink font-bold tabular-nums">{creators ? new Set(creators.map(c => c.ville)).size : '…'}</b> {t('vitrine.hero.stat_cities')}</span>
           </div>
         </div>
       </section>
@@ -151,15 +175,16 @@ export default function VitrineHome() {
       <section id="creators" className="py-16 bg-elevated">
         <div className="max-w-[1180px] mx-auto px-5">
           <SectionHead eyebrow={t('vitrine.creators.eyebrow')} title={t('vitrine.creators.title')} subtitle={t('vitrine.creators.subtitle')} />
+          <div className="relative">
           <div className="vt-stagger flex gap-4 overflow-x-auto pb-3.5">
             {(creators || []).map((c) => (
               <Link key={c.id} to={`/createurs/${c.id}`}
                     className="vt-item vt-card relative min-w-[268px] max-w-[268px] bg-card border border-edge rounded-lg p-5">
-                <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(c.id) }} className="absolute top-3 right-3 z-10" aria-label="Favori">
+                <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(c.id) }} className="absolute top-3 right-3 z-10" aria-label="Favori" aria-pressed={has(c.id)}>
                   <Heart size={16} className={has(c.id) ? 'text-primary' : 'text-ghost'} fill={has(c.id) ? 'currentColor' : 'none'} />
                 </button>
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-[50px] h-[50px] rounded-xl overflow-hidden flex items-center justify-center font-display font-bold text-lg text-inverse shrink-0" style={c.logo_url ? undefined : { background: c.gradient }}>{c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" /> : c.initiales}</div>
+                  <div className="w-[50px] h-[50px] rounded-xl overflow-hidden flex items-center justify-center font-display font-bold text-lg text-inverse shrink-0" style={c.logo_url ? undefined : { background: c.gradient }}>{c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" loading="lazy" /> : c.initiales}</div>
                   <div>
                     <h4 className="font-bold text-[15.5px] text-ink flex items-center gap-1.5">
                       {c.nom}
@@ -177,6 +202,11 @@ export default function VitrineHome() {
               </Link>
             ))}
             {!creators && <div className="text-dim text-sm p-4">{t('vitrine.loading')}</div>}
+          </div>
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-elevated to-transparent lg:hidden" />
+          </div>
+          <div className="text-center mt-8">
+            <Link to="/createurs" className={btnPrimary}>{t('vitrine.creators.see_all')}</Link>
           </div>
         </div>
       </section>
@@ -196,9 +226,9 @@ export default function VitrineHome() {
           <div className="vt-stagger grid grid-cols-2 md:grid-cols-4 gap-4">
             {models.map((m) => (
               <div key={m.id} className="vt-item vt-card bg-card border border-edge rounded-lg overflow-hidden">
-                <div className="h-[160px] flex items-center justify-center text-[40px] relative" style={{ background: m.gradient }}>
+                <div className="h-[160px] relative">
+                  <GarmentVisual cat={m.cat} gradient={m.gradient} className="h-full w-full" />
                   <span data-theme="dark" className="absolute top-2.5 left-2.5 text-inverse text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-inset">{m.type}</span>
-                  {m.emoji}
                 </div>
                 <div className="p-3.5">
                   <h4 className="font-semibold text-[14.5px] text-ink">{m.nom}</h4>
@@ -209,6 +239,63 @@ export default function VitrineHome() {
             ))}
           </div>
           <p className="text-2xs text-ghost mt-4 text-center">{t('vitrine.indicatif')}</p>
+        </div>
+      </section>
+
+      {/* TÉMOIGNAGES */}
+      <section className="py-16 bg-elevated">
+        <div className="max-w-[1180px] mx-auto px-5">
+          <SectionHead eyebrow={t('vitrine.testimonials.eyebrow')} title={t('vitrine.testimonials.title')} />
+          <div className="vt-stagger grid grid-cols-1 md:grid-cols-3 gap-5">
+            {(t('vitrine.testimonials.list', { returnObjects: true }) || []).map((item, i) => (
+              <figure key={i} className="vt-item vt-card bg-card border border-edge rounded-lg p-6">
+                <div className="text-primary text-[13px] mb-3">★★★★★</div>
+                <blockquote className="text-[14.5px] text-ink leading-relaxed mb-5">"{item.texte}"</blockquote>
+                <figcaption className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-[11px] text-inverse shrink-0" style={{ background: item.gradient }}>{item.initiales}</div>
+                  <div>
+                    <div className="text-[13px] font-semibold text-ink">{item.nom}</div>
+                    <div className="text-[12px] text-dim">{item.role}</div>
+                  </div>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* REJOINDRE — créateurs */}
+      <section className="py-16">
+        <div className="max-w-[1180px] mx-auto px-5">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="vt-reveal">
+              <div className="text-[12px] font-bold tracking-[0.14em] uppercase text-primary mb-2.5">{t('vitrine.join.eyebrow')}</div>
+              <h2 className="font-display text-[clamp(26px,3.4vw,38px)] mb-4 text-ink">{t('vitrine.join.title')}</h2>
+              <p className="text-dim mb-6">{t('vitrine.join.subtitle')}</p>
+              <ul className="space-y-3 mb-8">
+                {(t('vitrine.join.benefits', { returnObjects: true }) || []).map((b, i) => (
+                  <li key={i} className="flex items-center gap-3 text-[14px] text-ink">
+                    <span className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[10px] font-bold shrink-0">✓</span>
+                    {b}
+                  </li>
+                ))}
+              </ul>
+              <Link to="/inscription" className={btnPrimary}>{t('vitrine.join.cta')}</Link>
+            </div>
+            <div className="vt-reveal grid grid-cols-2 gap-3">
+              {[
+                { v: t('vitrine.join.stat_1_v'), l: t('vitrine.join.stat_1_l') },
+                { v: t('vitrine.join.stat_2_v'), l: t('vitrine.join.stat_2_l') },
+                { v: t('vitrine.join.stat_3_v'), l: t('vitrine.join.stat_3_l') },
+                { v: t('vitrine.join.stat_4_v'), l: t('vitrine.join.stat_4_l') },
+              ].map((s) => (
+                <div key={s.l} className="bg-card border border-edge rounded-lg p-5 text-center">
+                  <div className="font-display font-bold text-[28px] text-primary leading-none mb-1">{s.v}</div>
+                  <div className="text-[12px] text-dim">{s.l}</div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
