@@ -13,6 +13,12 @@ export default class Commande extends Model {
   get vetement_id()              { return this._getRaw('vetement_id')              ?? null }
   set vetement_id(v)             { this._setRaw('vetement_id', v) }
 
+  get reference()                { return this._getRaw('reference')                ?? '' }
+  set reference(v)               { this._setRaw('reference', v) }
+
+  get etape()                    { return this._getRaw('etape')                    ?? 'commande' }
+  set etape(v)                   { this._setRaw('etape', v) }
+
   get client_nom()               { return this._getRaw('client_nom')               ?? '' }
   set client_nom(v)              { this._setRaw('client_nom', v) }
 

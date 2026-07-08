@@ -1,17 +1,15 @@
 import { useMemo } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { Q } from '@nozbe/watermelondb'
 import { useWmQuery, database } from '@/db/useWmQuery'
 import { syncWithServer } from '@/db/syncAdapter'
 import { commandeService } from '@/services/commandeService'
-import { QUERY_STALE_TIME } from '@/constants/config'
 import { QUERY_KEYS } from './queryKeys'
 
-// Offline-first (lecture) : listes & stats des commandes lues dans WatermelonDB,
-// donc disponibles hors-ligne. Détail + mutations restent sur l'API (le détail
-// dépend des paiements/items non encore synchronisés) — on déclenche une sync
-// après chaque mutation pour rafraîchir le local.
+// Offline-first : listes, détail & stats des commandes lus dans WatermelonDB
+// (dispo hors-ligne). Les mutations (create/update/statut/delete) restent sur
+// l'API (create multi-items) mais déclenchent une sync pour rafraîchir le local.
 
 function isLate(c) {
   return c.date_livraison_prevue && new Date(c.date_livraison_prevue) < new Date() && c.statut === 'en_cours'
@@ -27,6 +25,9 @@ function toPlain(c) {
     id:                      c.id,
     client_id:               c.client_id,
     vetement_id:             c.vetement_id,
+    reference:               c.reference,
+    etape:                   c.etape,
+    client:                  c.client_nom ? { nom: c.client_nom } : null,
     client_nom:              c.client_nom,
     vetement_nom:            c.vetement_nom,
     quantite:                c.quantite,
@@ -63,14 +64,15 @@ export function useCommandes(filters = {}) {
   return { data, isLoading }
 }
 
-// Détail : reste sur l'API (paiements/items/reference non synchronisés).
+// Détail : offline-first (WatermelonDB). Les sous-données (items, paiements,
+// échéances) ont leurs propres hooks WatermelonDB.
 export function useCommande(id) {
-  return useQuery({
-    queryKey: QUERY_KEYS.commande(id),
-    queryFn: () => commandeService.getById(id),
-    enabled: !!id,
-    staleTime: QUERY_STALE_TIME,
-  })
+  const { data: records, isLoading } = useWmQuery(
+    () => database.get('commandes').query(Q.where('id', id ?? '')),
+    [id],
+  )
+  const data = useMemo(() => (records[0] ? toPlain(records[0]) : null), [records])
+  return { data, isLoading }
 }
 
 // Stats calculées localement (offline) depuis commandes + clients.

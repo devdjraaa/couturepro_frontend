@@ -1,4 +1,4 @@
-import { schemaMigrations, createTable } from '@nozbe/watermelondb/Schema/migrations'
+import { schemaMigrations, createTable, addColumns } from '@nozbe/watermelondb/Schema/migrations'
 
 // v1 → v2 : tables ajoutées pour le full-offline (collections, notifications, paiements).
 export default schemaMigrations({
@@ -64,6 +64,18 @@ export default schemaMigrations({
             { name: 'livree',        type: 'boolean' },
             { name: 'livree_at',     type: 'string', isOptional: true },
             { name: 'synced_at',     type: 'number', isOptional: true },
+          ],
+        }),
+      ],
+    },
+    {
+      toVersion: 4,
+      steps: [
+        addColumns({
+          table: 'commandes',
+          columns: [
+            { name: 'reference', type: 'string', isOptional: true },
+            { name: 'etape',     type: 'string', isOptional: true },
           ],
         }),
       ],

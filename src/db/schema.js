@@ -1,7 +1,7 @@
 import { appSchema, tableSchema } from '@nozbe/watermelondb'
 
 export default appSchema({
-  version: 3,
+  version: 4,
   tables: [
     tableSchema({
       name: 'clients',
@@ -24,6 +24,8 @@ export default appSchema({
       columns: [
         { name: 'client_id',                type: 'string' },
         { name: 'vetement_id',              type: 'string', isOptional: true },
+        { name: 'reference',                type: 'string', isOptional: true },
+        { name: 'etape',                    type: 'string', isOptional: true },
         { name: 'client_nom',               type: 'string', isOptional: true },
         { name: 'vetement_nom',             type: 'string', isOptional: true },
         { name: 'quantite',                 type: 'number', isOptional: true },

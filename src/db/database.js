@@ -23,12 +23,11 @@ const LokiJSAdapter =
 // le serveur, on versionne le nom de la base : à chaque changement de schéma qui
 // ajoute des tables, on repart d'une base fraîche (re-sync automatique). L'ancienne
 // est supprimée pour ne pas gaspiller de l'espace.
-const DB_NAME = 'couturepro_v3'
+const DB_NAME = 'couturepro_v4'
 try {
   if (typeof indexedDB !== 'undefined' && localStorage.getItem('cp_wm_db') !== DB_NAME) {
     // Nettoie les bases des schémas précédents (données re-synchronisées ensuite).
-    indexedDB.deleteDatabase('couturepro')
-    indexedDB.deleteDatabase('couturepro_v2')
+    ;['couturepro', 'couturepro_v2', 'couturepro_v3'].forEach(n => indexedDB.deleteDatabase(n))
     localStorage.removeItem('cp_wm_last_pulled_at')
     localStorage.setItem('cp_wm_db', DB_NAME)
   }
