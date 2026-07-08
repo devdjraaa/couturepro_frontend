@@ -251,6 +251,7 @@ export function VitrineFooter() {
       { l: t('vitrine.menu2.about'), to: '/qui-sommes-nous' },
       { l: t('vitrine.menu2.artisans'), to: '/artisans' },
       { l: t('vitrine.footer.pricing'), to: '/premium' },
+      { l: t('vitrine.sponsor.footer_link'), to: '/mise-en-avant' },
     ] },
     { h: t('vitrine.footer.col_support'), links: [
       { l: t('vitrine.menu2.support'), to: '/aide' },

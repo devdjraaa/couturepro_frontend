@@ -57,6 +57,11 @@ export async function getPlans() {
   return safe('/vitrine/plans')
 }
 
+export async function getSponsorisation() {
+  const d = await safe('/vitrine/sponsorisation')
+  return d ?? { actif: false, offres: [] }
+}
+
 export async function getCreators() {
   const d = await safe('/vitrine/createurs')
   return Array.isArray(d) && d.length ? d : demoCreators

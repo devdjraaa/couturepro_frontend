@@ -1598,6 +1598,35 @@
       "p2": "Many models are freely accessible to help you express your ideas to your tailor.",
       "cta": "View the gallery"
     },
+    "sponsor": {
+      "eyebrow": "Featured listing",
+      "title": "Be seen first",
+      "subtitle": "Boost your workshop's visibility and attract more qualified clients.",
+      "badge": "Featured in the designers list",
+      "loading": "Loading offers…",
+      "inactive": "Featured listing offers are not available right now. Check back soon.",
+      "package_days": "{{n}} days",
+      "fcfa": "FCFA",
+      "per_day": "FCFA / day on average",
+      "best_value": "Best value",
+      "package_cta": "Contact the team",
+      "features": [
+        "\"Featured\" badge in the designers list",
+        "Appear at the top of search results",
+        "View statistics included",
+        "Activated within 24 h"
+      ],
+      "how_title": "How it works",
+      "how_steps": [
+        { "t": "Choose an offer", "d": "Select the duration that fits your needs." },
+        { "t": "Contact the team", "d": "Send us a message through the Help page." },
+        { "t": "Fast activation", "d": "Your profile moves to the top of the list within 24 h." }
+      ],
+      "contact_title": "Ready to boost your visibility?",
+      "contact_sub": "Contact the Gextimo team to activate your featured listing.",
+      "contact_cta": "Contact us",
+      "footer_link": "Featured listing"
+    },
     "welcome_popup": {
       "title": "Welcome to Gextimo",
       "subtitle": "Choose your language and currency to continue.",

@@ -43,7 +43,8 @@ import { VitrineLayout }  from '@/pages/vitrine/vitrineCurrency'
 import { QuiSommesNousPage, AidePage, ArtisansPage } from '@/pages/vitrine/VitrineInfoPages'
 import FavorisPage         from '@/pages/vitrine/FavorisPage'
 import InscriptionPage     from '@/pages/vitrine/InscriptionPage'
-import PremiumPage         from '@/pages/vitrine/PremiumPage'
+import PremiumPage           from '@/pages/vitrine/PremiumPage'
+import SponsorisationPage    from '@/pages/vitrine/SponsorisationPage'
 
 // Pages admin
 import AdminLoginPage          from '@/pages/admin/AdminLoginPage'
@@ -129,6 +130,7 @@ export default function App() {
             <Route path={ROUTES.VITRINE_FAVORIS}   element={<FavorisPage />} />
             <Route path={ROUTES.VITRINE_INSCRIPTION} element={<InscriptionPage />} />
             <Route path="/premium"               element={<PremiumPage />} />
+            <Route path={ROUTES.VITRINE_SPONSORISATION} element={<SponsorisationPage />} />
           </Route>
         )}
 

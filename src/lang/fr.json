@@ -1598,6 +1598,35 @@
       "p2": "De nombreux modèles sont accessibles librement pour vous aider à exprimer vos envies à votre couturier.",
       "cta": "Voir la galerie"
     },
+    "sponsor": {
+      "eyebrow": "Mise en avant",
+      "title": "Soyez vus en premier",
+      "subtitle": "Boostez la visibilité de votre atelier et attirez plus de clients qualifiés.",
+      "badge": "Mis en avant dans la liste des créateurs",
+      "loading": "Chargement des offres…",
+      "inactive": "Les offres de mise en avant ne sont pas disponibles pour le moment. Revenez bientôt.",
+      "package_days": "{{n}} jours",
+      "fcfa": "FCFA",
+      "per_day": "FCFA / jour en moyenne",
+      "best_value": "Meilleure valeur",
+      "package_cta": "Contacter l'équipe",
+      "features": [
+        "Badge « Mis en avant » dans la liste des créateurs",
+        "Apparition en tête des résultats de recherche",
+        "Statistiques de vues incluses",
+        "Activation sous 24 h"
+      ],
+      "how_title": "Comment ça marche",
+      "how_steps": [
+        { "t": "Choisissez une offre", "d": "Sélectionnez la durée qui correspond à vos besoins." },
+        { "t": "Contactez l'équipe", "d": "Envoyez-nous un message via la page Aide." },
+        { "t": "Activation rapide", "d": "Votre profil passe en tête de liste sous 24 h." }
+      ],
+      "contact_title": "Prêt à booster votre visibilité ?",
+      "contact_sub": "Contactez l'équipe Gextimo pour activer votre mise en avant.",
+      "contact_cta": "Nous contacter",
+      "footer_link": "Mise en avant"
+    },
     "welcome_popup": {
       "title": "Bienvenue sur Gextimo",
       "subtitle": "Choisissez votre langue et votre devise pour continuer.",
