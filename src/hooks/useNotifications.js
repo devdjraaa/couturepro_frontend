@@ -1,49 +1,55 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { notificationService } from '@/services/notificationService'
-import { useNetwork } from '@/hooks/useNetwork'
-import { QUERY_KEYS } from './queryKeys'
+import { useMemo } from 'react'
+import { Q } from '@nozbe/watermelondb'
+import { useWmQuery, useMutation, database } from '@/db/useWmQuery'
 
-const NOTIF_STALE = 60 * 1000
-const NOTIF_POLL  = 2 * 60 * 1000
+// Offline-first : notifications lues/marquées dans WatermelonDB (sync serveur).
+
+function toPlain(n) {
+  return {
+    id:         n.id,
+    titre:      n.titre,
+    contenu:    n.contenu,
+    type:       n.type,
+    is_read:    n.is_read,
+    created_at: n.date_creation ?? n._raw.created_at ?? null,
+  }
+}
 
 export function useNotifications() {
-  const { isOnline } = useNetwork()
-  return useQuery({
-    queryKey: QUERY_KEYS.notifications,
-    queryFn: () => notificationService.getAll(),
-    staleTime: NOTIF_STALE,
-    refetchInterval: isOnline ? NOTIF_POLL : false,
-  })
+  const { data: records, isLoading } = useWmQuery(
+    () => database.get('notifications').query(),
+    [],
+  )
+  const data = useMemo(() => {
+    return records
+      .map(toPlain)
+      .sort((a, b) => String(b.created_at ?? '').localeCompare(String(a.created_at ?? '')))
+  }, [records])
+  return { data, isLoading }
 }
 
 export function useNotificationsCount() {
-  const { isOnline } = useNetwork()
-  return useQuery({
-    queryKey: QUERY_KEYS.notificationsCount,
-    queryFn: () => notificationService.countNonLues(),
-    staleTime: NOTIF_STALE,
-    refetchInterval: isOnline ? NOTIF_POLL : false,
-  })
+  const { data: records } = useWmQuery(
+    () => database.get('notifications').query(Q.where('is_read', false)),
+    [],
+  )
+  return { data: records.length }
 }
 
 export function useMarquerLue() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: (id) => notificationService.marquerLue(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notifications })
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notificationsCount })
-    },
+  return useMutation(async (id) => {
+    await database.write(async () => {
+      const record = await database.get('notifications').find(id)
+      await record.update(n => { n.is_read = true })
+    })
   })
 }
 
 export function useMarquerToutesLues() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: () => notificationService.marquerToutesLues(),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notifications })
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notificationsCount })
-    },
+  return useMutation(async () => {
+    await database.write(async () => {
+      const unread = await database.get('notifications').query(Q.where('is_read', false)).fetch()
+      await database.batch(...unread.map(n => n.prepareUpdate(r => { r.is_read = true })))
+    })
   })
 }
