@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Eye, EyeOff, ArrowRight, Check } from 'lucide-react'
 import { useAuth } from '@/contexts'
+import { useRequireOnline } from '@/hooks/useRequireOnline'
 import { AuthLayout } from '@/components/layout'
 import { Input, Button, LanguageSwitcher, PhoneInput } from '@/components/ui'
 import { getStableDeviceId } from '@/utils/deviceId'
@@ -16,6 +17,7 @@ export default function LoginPage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { login, equipeLogin } = useAuth()
+  const requireOnline = useRequireOnline()
   const [tab, setTab]         = useState('proprietaire')
   const [propError, setPropError] = useState('')
   const [equipeError, setEquipeError] = useState('')
@@ -44,6 +46,7 @@ export default function LoginPage() {
 
   const handlePropLogin = async e => {
     e.preventDefault()
+    if (!requireOnline()) return   // connexion = action online
     setPropError('')
     setLoading(true)
     try {
@@ -62,6 +65,7 @@ export default function LoginPage() {
 
   const handleEquipeLogin = async e => {
     e.preventDefault()
+    if (!requireOnline()) return   // connexion = action online
     setEquipeError('')
     setLoading(true)
     try {
