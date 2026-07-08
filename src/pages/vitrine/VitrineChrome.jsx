@@ -226,7 +226,7 @@ export function VitrineNavbar() {
           : <><span className="text-primary">✦</span>{' '}{t('vitrine.promo_a')}{' '}<span className="font-bold text-primary">Gextimo</span>{' '}{t('vitrine.promo_b')}</>}
       </div>
       <header className="sticky top-0 z-40 bg-app/90 backdrop-blur border-b border-edge">
-        <div className="max-w-[1180px] mx-auto px-5 h-16 grid grid-cols-[auto_1fr_auto] items-center gap-6">
+        <div className="max-w-[1180px] mx-auto pl-4 pr-2 sm:px-5 h-[68px] grid grid-cols-[auto_1fr_auto] items-center gap-4 lg:gap-6">
           {/* Logo */}
           <Link to="/" aria-label="Gextimo"><VitrineLogo /></Link>
 
@@ -241,7 +241,7 @@ export function VitrineNavbar() {
           </nav>
 
           {/* Contrôles droite */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <Link to="/favoris" aria-label={t('vitrine.favoris.menu')} className="vt-ib relative w-8 h-8 flex items-center justify-center rounded-[10px] border border-edge text-dim hover:text-primary hover:border-primary transition">
               <Heart size={15} />
               {favIds.length > 0 && (
@@ -255,7 +255,7 @@ export function VitrineNavbar() {
             <div className="hidden lg:block h-5 w-px bg-edge mx-1.5" />
             <Link to="/inscription" className="vt-btn-ghost hidden lg:inline-flex items-center justify-center font-semibold text-[13px] h-9 px-4 rounded-[10px] border border-edge text-ink hover:border-primary hover:text-primary">{t('vitrine.nav.signup')}</Link>
             <Link to="/login" className="vt-btn-primary hidden lg:inline-flex items-center justify-center font-semibold text-[13px] h-9 px-4 rounded-[10px] border border-transparent bg-primary text-inverse hover:bg-primary-600">{t('vitrine.nav.login')}</Link>
-            <div className="lg:hidden">
+            <div className="lg:hidden mr-0.5">
               <NavMenu />
             </div>
           </div>
