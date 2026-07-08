@@ -280,7 +280,7 @@ export default function CreateurProfilPage() {
             </h1>
             <div className="text-dim text-[15px] mt-1">{c.specialite}</div>
             <div className="text-dim text-[13px] mt-1">📍 {c.ville}, Bénin</div>
-            {c.note && <div className="text-sm mt-2"><span className="text-primary font-bold">★ {c.note}</span> <span className="text-dim">({c.avis})</span></div>}
+            {c.note && <div className="text-sm mt-2"><span className="text-primary font-bold">★ {c.note}</span> <span className="text-dim">({Array.isArray(c.avis) ? c.avis.length : (c.avis ?? 0)})</span></div>}
             {c.bio && <p className="text-ink text-sm mt-3 leading-relaxed">{c.bio}</p>}
             {(igUrl || fbUrl || siteUrl) && (
               <div className="flex gap-2 mt-3 flex-wrap">

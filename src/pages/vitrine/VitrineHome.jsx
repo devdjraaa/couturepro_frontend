@@ -51,7 +51,6 @@ function HeroSearch({ creators }) {
                 return (
                   <Link key={m.id} to={id ? `/createurs/${id}` : '/#gallery'} onClick={() => setQ('')}
                         className="flex items-center gap-2.5 px-4 py-2 hover:bg-subtle transition">
-                    <span className="text-lg">{m.emoji}</span>
                     <span className="text-sm text-ink">{m.nom}</span>
                     <span className="text-xs text-ghost ml-auto">{m.par}</span>
                   </Link>
