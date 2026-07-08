@@ -1298,7 +1298,8 @@
       "placeholder": "Search a designer, a model…",
       "empty": "No result.",
       "creators": "Designers",
-      "models": "Models"
+      "models": "Models",
+      "cta": "Search"
     },
     "favoris": {
       "menu": "Favorites",

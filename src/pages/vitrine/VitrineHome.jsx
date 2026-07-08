@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Heart, Search } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
@@ -14,6 +14,7 @@ const btnOutline = 'vt-btn-ghost inline-flex items-center gap-2 font-semibold te
 
 function HeroSearch({ creators }) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const [q, setQ] = useState('')
   const query = q.trim().toLowerCase()
   const list = creators || []
@@ -22,11 +23,31 @@ function HeroSearch({ creators }) {
   const idByNom = (nom) => list.find((c) => c.nom === nom)?.id
   const has = cM.length || mM.length
 
+  const handleSearch = () => {
+    const dest = q.trim() ? `/createurs?q=${encodeURIComponent(q.trim())}` : '/createurs'
+    navigate(dest)
+    setQ('')
+  }
+
   return (
     <div className="relative max-w-[540px] mx-auto mb-6 text-left">
-      <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ghost pointer-events-none" />
-      <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('vitrine.search.placeholder')}
-             className="w-full rounded-xl border border-edge bg-card pl-9 pr-4 py-3 text-sm text-ink placeholder:text-ghost focus:outline-none focus:ring-2 focus:ring-primary/30" />
+      <div className="flex items-center rounded-xl border border-edge bg-card focus-within:ring-2 focus-within:ring-primary/30 overflow-hidden">
+        <Search size={15} className="ml-3.5 shrink-0 text-ghost pointer-events-none" />
+        <input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+          placeholder={t('vitrine.search.placeholder')}
+          className="flex-1 px-3 py-3 text-sm text-ink placeholder:text-ghost bg-transparent focus:outline-none"
+        />
+        <button
+          type="button"
+          onClick={handleSearch}
+          className="m-1.5 shrink-0 px-4 py-2 rounded-[10px] bg-primary text-inverse font-semibold text-sm hover:bg-primary-600 transition whitespace-nowrap"
+        >
+          {t('vitrine.search.cta')}
+        </button>
+      </div>
       {query && (
         <div className="absolute inset-x-0 top-full mt-2 bg-card border border-edge rounded-xl shadow-lg overflow-hidden z-30">
           {!has && <div className="px-4 py-3 text-sm text-dim">{t('vitrine.search.empty')}</div>}
