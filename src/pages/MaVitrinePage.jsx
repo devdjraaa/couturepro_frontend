@@ -97,7 +97,11 @@ export default function MaVitrinePage() {
   useEffect(() => { vitrineStatsService.getStats().then(setStats).catch(() => {}) }, [])
 
   const publicPath = atelier?.id ? `/createurs/${atelier.id}` : '/createurs'
-  const publicUrl = typeof window !== 'undefined' ? `${window.location.origin}${publicPath}` : publicPath
+  // Domaine public de la vitrine : sur l'app mobile, window.location.origin vaut
+  // localhost/capacitor:// → on utilise le vrai domaine configuré (VITE_VITRINE_URL).
+  const vitrineBase = import.meta.env.VITE_VITRINE_URL
+    || (typeof window !== 'undefined' ? window.location.origin : '')
+  const publicUrl = `${vitrineBase}${publicPath}`
   const nbCreations = creations?.length ?? null
   const nbPubliees = creations ? creations.filter(isPublie).length : null
 
