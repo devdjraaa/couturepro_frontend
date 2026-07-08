@@ -1,17 +1,69 @@
+import { useMemo } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
+import { Q } from '@nozbe/watermelondb'
+import { useWmQuery, database } from '@/db/useWmQuery'
+import { syncWithServer } from '@/db/syncAdapter'
 import { commandeService } from '@/services/commandeService'
 import { QUERY_STALE_TIME } from '@/constants/config'
 import { QUERY_KEYS } from './queryKeys'
 
-export function useCommandes(filters = {}) {
-  return useQuery({
-    queryKey: [...QUERY_KEYS.commandes, filters],
-    queryFn: () => commandeService.getAll(filters),
-    staleTime: QUERY_STALE_TIME,
-  })
+// Offline-first (lecture) : listes & stats des commandes lues dans WatermelonDB,
+// donc disponibles hors-ligne. Détail + mutations restent sur l'API (le détail
+// dépend des paiements/items non encore synchronisés) — on déclenche une sync
+// après chaque mutation pour rafraîchir le local.
+
+function isLate(c) {
+  return c.date_livraison_prevue && new Date(c.date_livraison_prevue) < new Date() && c.statut === 'en_cours'
+}
+function isIn48h(c) {
+  if (!c.date_livraison_prevue || c.statut !== 'en_cours') return false
+  const diff = new Date(c.date_livraison_prevue) - new Date()
+  return diff > 0 && diff <= 48 * 3_600_000
 }
 
+function toPlain(c) {
+  return {
+    id:                      c.id,
+    client_id:               c.client_id,
+    vetement_id:             c.vetement_id,
+    client_nom:              c.client_nom,
+    vetement_nom:            c.vetement_nom,
+    quantite:                c.quantite,
+    prix:                    c.prix,
+    acompte:                 c.acompte,
+    mode_paiement_acompte:   c.mode_paiement_acompte,
+    statut:                  c.statut,
+    description:             c.description,
+    note_interne:            c.note_interne,
+    date_livraison_prevue:   c.date_livraison_prevue,
+    date_livraison_effective: c.date_livraison_effective,
+    urgence:                 c.urgence,
+    is_archived:             c.is_archived,
+    photo_tissu_url:         c.photo_tissu_url,
+    created_at:              c._raw.created_at ?? null,
+  }
+}
+
+export function useCommandes(filters = {}) {
+  const { data: records, isLoading } = useWmQuery(() => {
+    const conditions = [Q.where('is_archived', false)]
+    if (filters.statut) conditions.push(Q.where('statut', filters.statut))
+    if (filters.search) {
+      const s = Q.sanitizeLikeString(filters.search)
+      conditions.push(Q.or(
+        Q.where('client_nom',   Q.like(`%${s}%`)),
+        Q.where('vetement_nom', Q.like(`%${s}%`)),
+      ))
+    }
+    return database.get('commandes').query(...conditions)
+  }, [filters.statut, filters.search])
+
+  const data = useMemo(() => records.map(toPlain), [records])
+  return { data, isLoading }
+}
+
+// Détail : reste sur l'API (paiements/items/reference non synchronisés).
 export function useCommande(id) {
   return useQuery({
     queryKey: QUERY_KEYS.commande(id),
@@ -21,12 +73,35 @@ export function useCommande(id) {
   })
 }
 
+// Stats calculées localement (offline) depuis commandes + clients.
 export function useCommandeStats() {
-  return useQuery({
-    queryKey: QUERY_KEYS.commandeStats,
-    queryFn: () => commandeService.getStats(),
-    staleTime: QUERY_STALE_TIME,
-  })
+  const { data: commandes } = useWmQuery(
+    () => database.get('commandes').query(Q.where('is_archived', false)), [],
+  )
+  const { data: clients } = useWmQuery(
+    () => database.get('clients').query(Q.where('is_archived', false)), [],
+  )
+  const data = useMemo(() => {
+    let en_cours = 0, en_retard = 0, dans_48h = 0, livre = 0, total_encaisse = 0, total_restant = 0
+    for (const c of commandes) {
+      total_encaisse += Number(c.acompte) || 0
+      if (c.statut === 'en_cours') {
+        en_cours++
+        total_restant += Math.max(0, (Number(c.prix) || 0) - (Number(c.acompte) || 0))
+        if (isLate(c))  en_retard++
+        if (isIn48h(c)) dans_48h++
+      } else if (c.statut === 'livre') {
+        livre++
+      }
+    }
+    return { total_clients: clients.length, total_commandes: commandes.length, en_cours, en_retard, dans_48h, livre, total_encaisse, total_restant }
+  }, [commandes, clients])
+  return { data, isLoading: false }
+}
+
+// ── Mutations : API + sync pour rafraîchir le local ──────────────────────────
+function refreshLocal() {
+  syncWithServer().catch(() => { /* hors-ligne : la sync repassera */ })
 }
 
 export function useCreateCommande() {
@@ -34,15 +109,11 @@ export function useCreateCommande() {
   return useMutation({
     mutationFn: (payload) => commandeService.create(payload),
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.commandes })
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.commandeStats })
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.clients })
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.quota })
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notifications })
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notificationsCount })
+      refreshLocal()
       const client = data?.client?.prenom
         ? `${data.client.prenom} ${data.client.nom}`
-        : (data?.client?.nom ?? 'client')
+        : (data?.client?.nom ?? data?.client_nom ?? 'client')
       toast.success(`Commande pour ${client} créée avec succès.`)
     },
   })
@@ -54,8 +125,7 @@ export function useUpdateCommande() {
     mutationFn: ({ id, ...payload }) => commandeService.update(id, payload),
     onSuccess: (data) => {
       queryClient.setQueryData(QUERY_KEYS.commande(data.id), data)
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.commandes })
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.commandeStats })
+      refreshLocal()
     },
   })
 }
@@ -66,11 +136,8 @@ export function useUpdateStatutCommande() {
     mutationFn: ({ id, statut }) => commandeService.updateStatut(id, statut),
     onSuccess: (data, { statut }) => {
       queryClient.setQueryData(QUERY_KEYS.commande(data.id), data)
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.commandes })
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.commandeStats })
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.clients })
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notifications })
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notificationsCount })
+      refreshLocal()
       const messages = {
         livre:    'Commande marquée comme livrée.',
         annule:   'Commande annulée.',
@@ -87,9 +154,7 @@ export function useDeleteCommande() {
     mutationFn: (id) => commandeService.delete(id),
     onSuccess: (_, id) => {
       queryClient.removeQueries({ queryKey: QUERY_KEYS.commande(id) })
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.commandes })
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.commandeStats })
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.quota })
+      refreshLocal()
     },
   })
 }
