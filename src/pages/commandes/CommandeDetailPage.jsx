@@ -8,6 +8,7 @@ import {
 import { useTranslation } from 'react-i18next'
 import toast from 'react-hot-toast'
 import { useCommande, useUpdateCommande, useUpdateStatutCommande, useDeleteCommande } from '@/hooks/useCommandes'
+import { useRequireOnline } from '@/hooks/useRequireOnline'
 import { usePaiements, useEnregistrerPaiement } from '@/hooks/usePaiements'
 import { useMesures } from '@/hooks/useMesures'
 import { useCommandeItems, useDeleteCommandeItem } from '@/hooks/useCommandeItems'
@@ -68,8 +69,11 @@ function TabApercu({ commande, onEdit, onStatut, onDelete, navigate }) {
   const [newEcheance, setNewEcheance] = useState({ date_echeance: '', note: '' })
 
   const TODAY = new Date().toISOString().split('T')[0]
+  const requireOnline = useRequireOnline()
 
   const handleStatut = async statut => {
+    // Le changement de statut (livraison) passe par le serveur → nécessite internet.
+    if (!requireOnline()) return
     await onStatut(statut)
     if (statut === 'livre' && commsConfig?.whatsapp_enabled && commsConfig?.commande_prete) {
       whatsappPrete.mutate(commande.id)
