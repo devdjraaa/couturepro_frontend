@@ -1412,7 +1412,8 @@
         "Mentions légales",
         "Paramètres cookies"
       ],
-      "rights": "© 2026 Gextimo. Tous droits réservés."
+      "rights": "© 2026 Gextimo. Tous droits réservés.",
+      "pricing": "Tarifs"
     },
     "createurs_page": {
       "tri": {
@@ -1456,6 +1457,33 @@
       "avis_thanks": "Merci ! Votre avis sera publié après validation.",
       "report": "Signaler",
       "report_done": "Signalé, merci."
+    },
+    "devis_modal": {
+      "title": "Demande de devis",
+      "subtitle": "Auprès de",
+      "success_title": "Demande envoyée !",
+      "success_wa": "Le créateur la voit dans son espace et vous répondra sur WhatsApp.",
+      "success_no_wa": "Le créateur la voit dans son espace et vous recontactera.",
+      "close": "Fermer",
+      "name": "Votre nom",
+      "name_placeholder": "Aminata Diallo",
+      "phone": "Téléphone",
+      "phone_placeholder": "+229 …",
+      "type": "Type de vêtement",
+      "type_placeholder": "Robe de soirée, costume, boubou…",
+      "description": "Description",
+      "description_placeholder": "Couleurs, style, occasion, inspirations…",
+      "budget": "Budget (FCFA)",
+      "budget_placeholder": "ex : 50 000",
+      "delay": "Délai souhaité",
+      "delay_1": "Moins de 2 sem.",
+      "delay_2": "2 à 4 semaines",
+      "delay_3": "1 à 2 mois",
+      "delay_4": "Plus de 2 mois",
+      "no_wa": "Ce créateur n'a pas activé le contact WhatsApp. Votre demande sera transmise lors du prochain contact.",
+      "sending": "Envoi…",
+      "send_wa": "Envoyer (+ WhatsApp)",
+      "send": "Envoyer la demande"
     },
     "suivi": {
       "title": "Suivez votre commande",

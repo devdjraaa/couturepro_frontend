@@ -151,6 +151,7 @@ export default function VitrineHome() {
       <section id="creators" className="py-16 bg-elevated">
         <div className="max-w-[1180px] mx-auto px-5">
           <SectionHead eyebrow={t('vitrine.creators.eyebrow')} title={t('vitrine.creators.title')} subtitle={t('vitrine.creators.subtitle')} />
+          <div className="relative">
           <div className="vt-stagger flex gap-4 overflow-x-auto pb-3.5">
             {(creators || []).map((c) => (
               <Link key={c.id} to={`/createurs/${c.id}`}
@@ -177,6 +178,8 @@ export default function VitrineHome() {
               </Link>
             ))}
             {!creators && <div className="text-dim text-sm p-4">{t('vitrine.loading')}</div>}
+          </div>
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-elevated to-transparent lg:hidden" />
           </div>
         </div>
       </section>

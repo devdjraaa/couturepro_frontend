@@ -1412,7 +1412,8 @@
         "Legal notice",
         "Cookie settings"
       ],
-      "rights": "© 2026 Gextimo. All rights reserved."
+      "rights": "© 2026 Gextimo. All rights reserved.",
+      "pricing": "Pricing"
     },
     "createurs_page": {
       "tri": {
@@ -1456,6 +1457,33 @@
       "avis_thanks": "Thank you! Your review will be published after validation.",
       "report": "Report",
       "report_done": "Reported, thank you."
+    },
+    "devis_modal": {
+      "title": "Quote request",
+      "subtitle": "To",
+      "success_title": "Request sent!",
+      "success_wa": "The creator can see it in their space and will reply on WhatsApp.",
+      "success_no_wa": "The creator can see it in their space and will contact you.",
+      "close": "Close",
+      "name": "Your name",
+      "name_placeholder": "Aminata Diallo",
+      "phone": "Phone",
+      "phone_placeholder": "+229 …",
+      "type": "Type of garment",
+      "type_placeholder": "Evening dress, suit, boubou…",
+      "description": "Description",
+      "description_placeholder": "Colours, style, occasion, inspiration…",
+      "budget": "Budget (FCFA)",
+      "budget_placeholder": "e.g. 50 000",
+      "delay": "Desired deadline",
+      "delay_1": "Less than 2 weeks",
+      "delay_2": "2 to 4 weeks",
+      "delay_3": "1 to 2 months",
+      "delay_4": "More than 2 months",
+      "no_wa": "This creator has not activated WhatsApp contact. Your request will be passed on at the next contact.",
+      "sending": "Sending…",
+      "send_wa": "Send (+ WhatsApp)",
+      "send": "Send request"
     },
     "suivi": {
       "title": "Track your order",
