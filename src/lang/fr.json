@@ -1642,9 +1642,18 @@
       ],
       "how_title": "Comment ça marche",
       "how_steps": [
-        { "t": "Choisissez une offre", "d": "Sélectionnez la durée qui correspond à vos besoins." },
-        { "t": "Contactez l'équipe", "d": "Envoyez-nous un message via la page Aide." },
-        { "t": "Activation rapide", "d": "Votre profil passe en tête de liste sous 24 h." }
+        {
+          "t": "Choisissez une offre",
+          "d": "Sélectionnez la durée qui correspond à vos besoins."
+        },
+        {
+          "t": "Contactez l'équipe",
+          "d": "Envoyez-nous un message via la page Aide."
+        },
+        {
+          "t": "Activation rapide",
+          "d": "Votre profil passe en tête de liste sous 24 h."
+        }
       ],
       "contact_title": "Prêt à booster votre visibilité ?",
       "contact_sub": "Contactez l'équipe Gextimo pour activer votre mise en avant.",
@@ -2160,5 +2169,8 @@
   },
   "sidebar": {
     "outils_creatifs": "Outils créatifs"
+  },
+  "reseau": {
+    "connexion_requise": "Connexion internet requise pour cette action."
   }
 }

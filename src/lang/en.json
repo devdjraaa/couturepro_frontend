@@ -1642,9 +1642,18 @@
       ],
       "how_title": "How it works",
       "how_steps": [
-        { "t": "Choose an offer", "d": "Select the duration that fits your needs." },
-        { "t": "Contact the team", "d": "Send us a message through the Help page." },
-        { "t": "Fast activation", "d": "Your profile moves to the top of the list within 24 h." }
+        {
+          "t": "Choose an offer",
+          "d": "Select the duration that fits your needs."
+        },
+        {
+          "t": "Contact the team",
+          "d": "Send us a message through the Help page."
+        },
+        {
+          "t": "Fast activation",
+          "d": "Your profile moves to the top of the list within 24 h."
+        }
       ],
       "contact_title": "Ready to boost your visibility?",
       "contact_sub": "Contact the Gextimo team to activate your featured listing.",
@@ -2160,5 +2169,8 @@
   },
   "sidebar": {
     "outils_creatifs": "Creative tools"
+  },
+  "reseau": {
+    "connexion_requise": "Internet connection required for this action."
   }
 }
