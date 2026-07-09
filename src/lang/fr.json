@@ -25,7 +25,19 @@
     "quota_atteint": "Quota mensuel atteint. Revenez le mois prochain ou passez à un plan supérieur.",
     "vide_titre": "Aucune photo",
     "vide_desc": "Ajoutez des photos de tissus, créations ou inspirations.",
-    "ajouter_photo": "Ajouter une photo"
+    "ajouter_photo": "Ajouter une photo",
+    "confirm_suppr": "Supprimer cette photo ?",
+    "tuto": {
+      "aide": "Comment ça marche",
+      "passer": "Passer",
+      "commencer": "C'est parti",
+      "s1_titre": "Votre galerie de créations",
+      "s1_texte": "Rassemblez les photos de vos vraies réalisations. Elles s'affichent sur votre vitrine et nourrissent le catalogue d'inspiration Gextimo.",
+      "s2_titre": "Ajoutez plusieurs photos d'un coup",
+      "s2_texte": "Tapez « Ajouter » : le sélecteur de photos de votre téléphone s'ouvre. Cochez une ou plusieurs réalisations, puis validez.",
+      "s3_titre": "Des photos qui vous appartiennent",
+      "s3_texte": "Publiez uniquement VOS propres photos (prises par vous), nettes et bien éclairées. Chaque photo devient visible et trouvable sur la vitrine."
+    }
   },
   "premium": {
     "tag": "Tarifs",
@@ -1277,6 +1289,7 @@
     "catalogue": "Catalogue",
     "ma_vitrine": "Ma Vitrine",
     "equipe": "Équipe",
+    "galerie": "Galerie",
     "points": "Fidélité",
     "facturation": "Facturation",
     "notifications": "Notifications",
@@ -1290,8 +1303,7 @@
     "outils_creatifs": "Outils créatifs"
   },
   "vitrine": {
-    "promo_a": "Nouveau — la vitrine",
-    "promo_b": "connecte les créateurs de mode africaine à toute l'Afrique de l'Ouest.",
+    "promo": "✦ Nouveau — la vitrine Gextimo connecte les créateurs de mode africaine à toute l'Afrique de l'Ouest.",
     "online": "● En ligne",
     "loading": "Chargement…",
     "indicatif": "* Prix indicatifs, convertis à titre informatif.",
@@ -1304,8 +1316,7 @@
       "placeholder": "Rechercher un créateur, un modèle…",
       "empty": "Aucun résultat.",
       "creators": "Créateurs",
-      "models": "Modèles",
-      "cta": "Rechercher"
+      "models": "Modèles"
     },
     "favoris": {
       "menu": "Favoris",
@@ -1650,9 +1661,18 @@
       ],
       "how_title": "Comment ça marche",
       "how_steps": [
-        { "t": "Choisissez une offre", "d": "Sélectionnez la durée qui correspond à vos besoins." },
-        { "t": "Contactez l'équipe", "d": "Envoyez-nous un message via la page Aide." },
-        { "t": "Activation rapide", "d": "Votre profil passe en tête de liste sous 24 h." }
+        {
+          "t": "Choisissez une offre",
+          "d": "Sélectionnez la durée qui correspond à vos besoins."
+        },
+        {
+          "t": "Contactez l'équipe",
+          "d": "Envoyez-nous un message via la page Aide."
+        },
+        {
+          "t": "Activation rapide",
+          "d": "Votre profil passe en tête de liste sous 24 h."
+        }
       ],
       "contact_title": "Prêt à booster votre visibilité ?",
       "contact_sub": "Contactez l'équipe Gextimo pour activer votre mise en avant.",
@@ -2168,5 +2188,9 @@
   },
   "sidebar": {
     "outils_creatifs": "Outils créatifs"
+  },
+  "reseau": {
+    "connexion_requise": "Connexion internet requise pour cette action.",
+    "parametres_offline": "Les réglages nécessitent une connexion internet. Reconnectez-vous pour les modifier."
   }
 }
