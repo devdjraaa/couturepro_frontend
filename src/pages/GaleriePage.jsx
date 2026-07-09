@@ -130,26 +130,25 @@ export default function GaleriePage() {
           ) : (
             <div className="grid grid-cols-2 gap-3">
               {photos.map(photo => (
-                <div key={photo.id} className="relative group rounded-2xl overflow-hidden border border-edge bg-subtle aspect-square">
+                <div key={photo.id} className="relative rounded-2xl overflow-hidden border border-edge bg-subtle aspect-square">
                   <img
                     src={photo.file_url}
                     alt={photo.nom}
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
-                  {/* Overlay supprimer */}
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-end justify-between p-2 opacity-0 group-hover:opacity-100">
-                    <p className="text-xs text-inverse font-medium truncate flex-1 pr-2">{photo.nom}</p>
-                    <button
-                      type="button"
-                      onClick={() => deletePhoto.mutate(photo.id)}
-                      className="w-8 h-8 bg-error rounded-full flex items-center justify-center text-inverse shrink-0"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
-                  {/* Date (mobile : toujours visible) */}
-                  <div className="absolute bottom-0 left-0 right-0 px-2 pb-1 bg-gradient-to-t from-black/60 to-transparent group-hover:opacity-0 transition-opacity md:block">
+                  {/* Bouton supprimer — TOUJOURS visible (tactile : pas de survol) + confirmation */}
+                  <button
+                    type="button"
+                    onClick={() => { if (window.confirm(t('galerie.confirm_suppr'))) deletePhoto.mutate(photo.id) }}
+                    disabled={deletePhoto.isPending}
+                    aria-label={t('commun.supprimer')}
+                    className="absolute top-2 right-2 w-9 h-9 rounded-full bg-black/55 backdrop-blur-sm flex items-center justify-center text-white active:scale-90 disabled:opacity-50 transition"
+                  >
+                    <Trash2 size={15} />
+                  </button>
+                  {/* Date */}
+                  <div className="absolute bottom-0 left-0 right-0 px-2 pb-1 bg-gradient-to-t from-black/60 to-transparent">
                     <p className="text-xs text-inverse/80">{formatDate(photo.created_at)}</p>
                   </div>
                 </div>

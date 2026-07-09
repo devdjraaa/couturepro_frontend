@@ -26,6 +26,7 @@
     "vide_titre": "No photos",
     "vide_desc": "Add photos of fabrics, creations or inspirations.",
     "ajouter_photo": "Add a photo",
+    "confirm_suppr": "Delete this photo?",
     "tuto": {
       "aide": "How it works",
       "passer": "Skip",
@@ -1288,6 +1289,7 @@
     "catalogue": "Catalogue",
     "ma_vitrine": "My Showcase",
     "equipe": "Team",
+    "galerie": "Gallery",
     "points": "Loyalty",
     "facturation": "Invoicing",
     "notifications": "Notifications",

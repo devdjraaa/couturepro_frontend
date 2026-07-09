@@ -26,6 +26,7 @@
     "vide_titre": "Aucune photo",
     "vide_desc": "Ajoutez des photos de tissus, créations ou inspirations.",
     "ajouter_photo": "Ajouter une photo",
+    "confirm_suppr": "Supprimer cette photo ?",
     "tuto": {
       "aide": "Comment ça marche",
       "passer": "Passer",
@@ -1288,6 +1289,7 @@
     "catalogue": "Catalogue",
     "ma_vitrine": "Ma Vitrine",
     "equipe": "Équipe",
+    "galerie": "Galerie",
     "points": "Fidélité",
     "facturation": "Facturation",
     "notifications": "Notifications",

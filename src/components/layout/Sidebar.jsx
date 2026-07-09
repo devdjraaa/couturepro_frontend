@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
   Home, Users, ClipboardList, Layers, Settings, Scissors,
-  Bell, Star, Users2, LogOut, HelpCircle, Archive, Wallet, Store, FileText, Palette,
+  Bell, Star, Users2, LogOut, HelpCircle, Archive, Wallet, Store, FileText, Palette, Images,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
@@ -28,6 +28,7 @@ export const NAV_GROUPS = [
     label: 'Gestion',
     items: [
       { to: '/equipe',          icon: Users2,   key: 'equipe'                     },
+      { to: '/galerie',         icon: Images,   key: 'galerie'                    },
       { to: '/points',          icon: Star,     key: 'points'                     },
       { to: ROUTES.FACTURATION,      icon: FileText, key: 'facturation'                },
       { to: ROUTES.OUTILS_CREATIFS, icon: Palette,  key: 'outils_creatifs', designerOnly: true },
