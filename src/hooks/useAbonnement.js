@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
+import i18n from '@/lang/i18n'
 import { abonnementService } from '@/services/abonnementService'
 import { useNetwork } from '@/hooks/useNetwork'
 import { QUERY_STALE_TIME } from '@/constants/config'
@@ -25,11 +26,23 @@ export function usePlans() {
 
 // Lance un paiement FedaPay pour un nouveau niveau d'abonnement
 // payload: { niveau_cle: 'standard_mensuel', provider?: 'fedapay' }
-// Retourne: { paiement_id, checkout_url, expires_at, montant, devise }
+// Retourne: { paiement_id, statut, checkout_url, expires_at, montant, devise }
+// Cas plan gratuit : le backend active directement (statut 'completed', pas de
+// checkout_url) → on rafraîchit et on confirme sans redirection FedaPay.
 export function useInitierPaiementAbonnement() {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ niveau_cle, provider }) =>
       abonnementService.initierPaiement(niveau_cle, provider),
+    onSuccess: (data) => {
+      if (data?.statut === 'completed' || !data?.checkout_url) {
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.abonnement })
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.quota })
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notifications })
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notificationsCount })
+        toast.success(i18n.t('parametres.abonnement.active_succes'))
+      }
+    },
   })
 }
 
