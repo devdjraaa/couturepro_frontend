@@ -699,11 +699,17 @@
     "nouvelle": "New order",
     "recherche_placeholder": "Search an order…",
     "action_sheet": {
-      "titre": "New order",
+      "titre": "Create",
       "simple": "Single order",
       "simple_desc": "One garment for the client",
       "groupee": "Group order",
-      "groupee_desc": "Several garments, one invoice"
+      "groupee_desc": "Several garments, one invoice",
+      "client": "New client",
+      "client_desc": "Add a client to the workshop",
+      "modele": "New model",
+      "modele_desc": "Add to the catalog",
+      "encaisser": "Record payment",
+      "encaisser_desc": "Log an incoming payment"
     },
     "vide": {
       "titre": "No orders in progress",

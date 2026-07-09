@@ -11,7 +11,7 @@ import { ROUTES } from '@/constants/routes'
 import { Avatar } from '@/components/ui'
 import { useNotificationsCount } from '@/hooks/useNotifications'
 
-const NAV_GROUPS = [
+export const NAV_GROUPS = [
   {
     key: 'principal',
     label: null,
