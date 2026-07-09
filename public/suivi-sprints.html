@@ -124,9 +124,9 @@ html{scroll-behavior:smooth}
     <div class="kpi">
       <div class="row">
         <span class="lbl">Modules validés de bout en bout</span>
-        <span class="big">14<small>&nbsp;/&nbsp;23</small></span>
+        <span class="big">17<small>&nbsp;/&nbsp;23</small></span>
       </div>
-      <div class="bar"><i style="width:61%"></i></div>
+      <div class="bar"><i style="width:74%"></i></div>
     </div>
   </div>
 </header>
@@ -140,10 +140,11 @@ html{scroll-behavior:smooth}
       <h2>Dernières mises à jour</h2>
     </div>
     <ul>
-      <li><span class="nd ok"></span><b>Fonctions du plan payant validées</b> — Caisse, Facturation, Équipe, Multi-ateliers, et le passage au plan supérieur par paiement (FedaPay) testé de bout en bout.</li>
-      <li><span class="nd ok"></span><b>Emails réparés</b> — les codes de vérification (OTP) et de réinitialisation ne partaient jamais ; c'est corrigé et revérifié.</li>
-      <li><span class="nd warn"></span><b>Anomalie détectée</b> — le plan gratuit « Free » déclenche un paiement à 0 F au lieu d'être activé directement (à corriger).</li>
+      <li><span class="nd ok"></span><b>Navigation mobile refaite</b> — un onglet « Plus » donne accès à toutes les fonctions (Ma Vitrine, Caisse, Facturation, Équipe…), et le bouton « + » propose plus d'actions (commande, client, modèle, encaissement).</li>
+      <li><span class="nd ok"></span><b>Nouvelles fonctions validées</b> — Facturation (création de devis / factures), Collections, Fidélité.</li>
+      <li><span class="nd ok"></span><b>Galerie &amp; vitrine</b> — on peut ajouter plusieurs photos d'un coup (+ mini-tutoriel), et « Voir ma vitrine » s'ouvre désormais <b>dans l'app</b> (fini le navigateur externe).</li>
       <li><span class="nd info"></span><b>Deux profils de compte</b> — Artisan (gestion d'atelier) et Designer (+ vitrine publique) : l'app n'affiche à chacun que ce qui le concerne.</li>
+      <li><span class="nd warn"></span><b>Anomalie détectée</b> — le plan gratuit « Free » déclenche un paiement à 0 F au lieu d'être activé directement (à corriger).</li>
     </ul>
   </section>
 
@@ -154,6 +155,7 @@ html{scroll-behavior:smooth}
     <a href="#couverture">Où on en est</a>
     <a href="#detail">Détail par fonction</a>
     <a href="#anomalies">Anomalies &amp; corrections</a>
+    <a href="#avenir">À venir</a>
     <a href="#methode">Comment on teste</a>
   </nav>
 
@@ -189,14 +191,14 @@ html{scroll-behavior:smooth}
       <span class="badge b-todo"><i></i> À tester</span>
     </div>
     <div class="stats">
-      <div class="stat d"><div class="v">14</div><div class="k">modules validés de bout en bout</div></div>
-      <div class="stat w"><div class="v">6</div><div class="k">modules en cours (partiels)</div></div>
-      <div class="stat t"><div class="v">3</div><div class="k">modules pas commencés</div></div>
+      <div class="stat d"><div class="v">17</div><div class="k">modules validés de bout en bout</div></div>
+      <div class="stat w"><div class="v">5</div><div class="k">modules en cours (partiels)</div></div>
+      <div class="stat t"><div class="v">1</div><div class="k">module pas commencé</div></div>
     </div>
     <p class="sub" style="margin-top:12px;margin-bottom:0">
-      À l'échelle des routes : <b>≈ 48 endpoints réellement exercés</b> sur <b>152</b> côté utilisateur
-      (l'admin, 38 routes, est hors périmètre). Les <b>6 modules « en cours »</b> gardent encore
-      <b>~40 routes</b> à repasser (rien que les Paramètres en comptent 16) — donc il reste du chemin,
+      À l'échelle des routes : <b>≈ 52 endpoints réellement exercés</b> sur <b>152</b> côté utilisateur
+      (l'admin, 38 routes, est hors périmètre). Les <b>5 modules « en cours »</b> gardent encore
+      <b>~35 routes</b> à repasser (rien que les Paramètres en comptent 16) — donc il reste du chemin,
       c'est normal.</p>
   </section>
 
@@ -239,8 +241,8 @@ html{scroll-behavior:smooth}
         </tr>
         <tr class="fresh">
           <td class="mod">Facturation (devis / factures / reçus)<span class="maj">maj</span></td><td class="rt">8</td>
-          <td><span class="badge b-wip"><i></i> En cours</span></td>
-          <td class="nt">Débloquée par le plan Master : écran « Devis &amp; Factures » accessible avec ses totaux. Reste la création d'une facture à repasser à travers l'app.</td>
+          <td><span class="badge b-done"><i></i> Validé</span></td>
+          <td class="nt">Création d'un devis / facture validée de bout en bout (enregistrée côté serveur). Reste la normalisation DGI (e-MECeF, bloquée côté DGI).</td>
         </tr>
         <tr class="fresh">
           <td class="mod">Équipe &amp; permissions<span class="maj">maj</span></td><td class="rt">5</td>
@@ -249,7 +251,7 @@ html{scroll-behavior:smooth}
         <tr class="fresh">
           <td class="mod">Galerie (banque de photos)<span class="maj">maj</span></td><td class="rt">4</td>
           <td><span class="badge b-wip"><i></i> En cours</span></td>
-          <td class="nt">Débloquée par le plan (accessible aux artisans ET designers). Parcours d'ajout de photo à repasser (upload d'image).</td>
+          <td class="nt">Ajout de <b>plusieurs photos d'un coup</b> (sélecteur système) + <b>mini-tutoriel 3 slides</b>. Upload réel à revalider sur l'appareil.</td>
         </tr>
         <tr class="fresh">
           <td class="mod">Récupération de compte<span class="maj">maj</span></td><td class="rt">7</td>
@@ -309,13 +311,13 @@ html{scroll-behavior:smooth}
           <td class="nt">Création d'un modèle <b>validée de bout en bout</b> (arrive bien au serveur après correction). Reste publication / collection.</td>
         </tr>
         <tr>
-          <td class="mod">Collections</td><td class="rt">4</td>
-          <td><span class="badge b-todo"><i></i> À tester</span></td><td class="nt">—</td>
+          <td class="mod">Collections<span class="maj">maj</span></td><td class="rt">4</td>
+          <td><span class="badge b-done"><i></i> Validé</span></td><td class="nt">Création d'une collection validée (enregistrée côté serveur, apparaît dans « Ma Vitrine »).</td>
         </tr>
         <tr>
-          <td class="mod">Fidélité</td><td class="rt">2</td>
-          <td><span class="badge b-todo"><i></i> À tester</span></td>
-          <td class="nt">Conversion de points (seuil).</td>
+          <td class="mod">Fidélité<span class="maj">maj</span></td><td class="rt">2</td>
+          <td><span class="badge b-done"><i></i> Validé</span></td>
+          <td class="nt">Affichage du solde de points, du palier (Bronze/Argent…) et de la progression vers la conversion.</td>
         </tr>
         <tr>
           <td class="mod">Avis &amp; demandes de devis</td><td class="rt">5</td>
@@ -397,6 +399,30 @@ html{scroll-behavior:smooth}
     </div>
   </section>
 
+  <!-- ─── À VENIR (chantiers produit) ───────────────────────────────── -->
+  <section class="card" id="avenir">
+    <h2><span class="n">4</span> À venir</h2>
+    <p class="sub">Les prochains chantiers identifiés, au-delà de la recette.</p>
+    <div class="bugs">
+      <div class="bug" style="border-left-color:var(--rouge)">
+        <h4>Référencement (SEO) de la vitrine <span class="fx" style="color:#8a0b0b;background:#FCE9E9;border-color:#f3c6c6">prioritaire</span></h4>
+        <p>Rendre les pages créateur <b>trouvables sur Google</b> et jolies au partage (titre, description, photo propres à chaque designer). Indispensable pour que la <b>mise en avant payante (sponsoring)</b> apporte une vraie visibilité — sinon elle ne se voit qu'à l'intérieur de l'app.</p>
+      </div>
+      <div class="bug" style="border-left-color:#E08600">
+        <h4>Preuve d'impact du sponsoring <span class="fx" style="color:#9a5b00;background:#FCEBD6;border-color:#f3d2a6">à faire</span></h4>
+        <p>Montrer au designer qui paie le <b>retour concret</b> : vues et contacts gagnés pendant sa période de mise en avant.</p>
+      </div>
+      <div class="bug">
+        <h4>Changement de type de compte par l'admin</h4>
+        <p>La bascule artisan ↔ designer sera pilotée par l'<b>administrateur</b> (à la demande), pour éviter tout contournement d'offre. Retirée de l'espace utilisateur.</p>
+      </div>
+      <div class="bug">
+        <h4>Adresse email professionnelle</h4>
+        <p>Mise en place de <code>contact@novafriq.africa</code> pour la relation client (l'envoi automatique des emails de l'app est déjà opérationnel).</p>
+      </div>
+    </div>
+  </section>
+
   <!-- ─── MÉTHODE (rappel, en bas — elle ne change pas) ──────────────── -->
   <section class="card method" id="methode">
     <h2><span class="n">i</span> Comment on teste — la méthode</h2>
@@ -420,7 +446,7 @@ html{scroll-behavior:smooth}
   </section>
 
   <div class="foot">
-    Vous avez tout parcouru — merci. <b>14 modules sur 23</b> validés de bout en bout, l'app tourne
+    Vous avez tout parcouru — merci. <b>17 modules sur 23</b> validés de bout en bout, l'app tourne
     désormais <b>hors-ligne</b>, et l'email est réparé. La suite arrive à la prochaine mise à jour.<br>
     <b>Gextimo</b> · Recette qualité de l'espace utilisateur — mise à jour du <b>09/07/2026</b> ·
     <a href="#nouveautes" style="color:var(--rouge);text-decoration:none;font-weight:600">↑ Revenir en haut</a><br>
