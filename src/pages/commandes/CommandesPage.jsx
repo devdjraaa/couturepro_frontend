@@ -218,25 +218,28 @@ export default function CommandesPage() {
     <AppLayout
       title={t('commandes.titre')}
       onRefresh={() => queryClient.invalidateQueries()}
-      rightAction={
-        <button
-          type="button"
-          onClick={() => setView(v => v === 'pipeline' ? 'liste' : 'pipeline')}
-          className="p-2 text-inverse hover:text-inverse/70 transition-colors"
-          aria-label="Changer la vue"
-        >
-          {view === 'pipeline' ? <LayoutList size={18} /> : <Columns2 size={18} />}
-        </button>
-      }
     >
       <div className="flex flex-col h-full">
         {/* Barre de recherche + filtres */}
         <div className="px-4 pt-3 pb-2 space-y-2 border-b border-edge">
-          <SearchBar
-            value={search}
-            onChange={setSearch}
-            placeholder={t('commandes.recherche_placeholder')}
-          />
+          {/* Recherche + bouton de vue (kanban/liste), hors du header rouge */}
+          <div className="flex items-center gap-2">
+            <div className="flex-1 min-w-0">
+              <SearchBar
+                value={search}
+                onChange={setSearch}
+                placeholder={t('commandes.recherche_placeholder')}
+              />
+            </div>
+            <button
+              type="button"
+              onClick={() => setView(v => v === 'pipeline' ? 'liste' : 'pipeline')}
+              className="shrink-0 w-10 h-10 flex items-center justify-center rounded-xl border border-edge bg-subtle text-ghost hover:text-ink transition-colors"
+              aria-label={t('commun.changer_vue') || 'Changer la vue'}
+            >
+              {view === 'pipeline' ? <LayoutList size={18} /> : <Columns2 size={18} />}
+            </button>
+          </div>
           {/* #26 — Tabs statut scrollables horizontalement */}
           <div className="flex gap-1 overflow-x-auto scrollbar-none -mx-1 px-1">
             {[
