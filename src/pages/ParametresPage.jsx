@@ -687,7 +687,8 @@ export default function ParametresPage() {
     { key: 'preferences',  label: t('parametres.onglets.preferences')  },
     { key: 'facture',      label: t('parametres.onglets.facture')      },
     { key: 'abonnement',   label: t('parametres.onglets.abonnement')   },
-    { key: 'type_compte', label: t('parametres.type_compte.titre')    },
+    // « Type de compte » retiré du user : mutation artisan↔designer réservée à l'admin
+    // (évite qu'un artisan se change en designer pour contourner l'offre). Voir feature admin.
     { key: 'securite',     label: t('parametres.onglets.securite')     },
   ]
 
@@ -704,7 +705,6 @@ export default function ParametresPage() {
         {activeTab === 'preferences' && <PreferencesTab />}
         {activeTab === 'facture'     && <FactureTab />}
         {activeTab === 'abonnement'  && <AbonnementTab />}
-        {activeTab === 'type_compte' && <TypeCompteTab />}
         {activeTab === 'securite'    && <SecuriteTab />}
 
         <div className="pt-2 border-t border-edge space-y-2">
