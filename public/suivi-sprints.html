@@ -144,7 +144,7 @@ html{scroll-behavior:smooth}
       <li><span class="nd ok"></span><b>Nouvelles fonctions validées</b> — Facturation (création de devis / factures), Collections, Fidélité.</li>
       <li><span class="nd ok"></span><b>Galerie &amp; vitrine</b> — on peut ajouter plusieurs photos d'un coup (+ mini-tutoriel), et « Voir ma vitrine » s'ouvre désormais <b>dans l'app</b> (fini le navigateur externe).</li>
       <li><span class="nd info"></span><b>Deux profils de compte</b> — Artisan (gestion d'atelier) et Designer (+ vitrine publique) : l'app n'affiche à chacun que ce qui le concerne.</li>
-      <li><span class="nd warn"></span><b>Anomalie détectée</b> — le plan gratuit « Free » déclenche un paiement à 0 F au lieu d'être activé directement (à corriger).</li>
+      <li><span class="nd ok"></span><b>Anomalie corrigée</b> — le plan gratuit « Free » est désormais activé directement au lieu de déclencher un paiement à 0 F (correctif écrit, déploiement en attente).</li>
     </ul>
   </section>
 
@@ -342,10 +342,11 @@ html{scroll-behavior:smooth}
           Revérifié de bout en bout (email de test bien reçu).</p>
       </div>
       <div class="bug" style="border-left-color:#E08600">
-        <h4>Plan « Free » : paiement à 0 F déclenché <span class="maj">maj</span> <span class="fx" style="color:#9a5b00;background:#FCEBD6;border-color:#f3d2a6">à corriger</span></h4>
-        <p>Choisir le plan gratuit « Free » lance quand même un paiement en ligne d'un montant de 0 F, que le
-          prestataire rejette (« montant &gt; 0 requis »). Le plan Free devrait être activé directement, sans
-          passer par le paiement. Détecté pendant la recette ; correction à prévoir.</p>
+        <h4>Plan « Free » : paiement à 0 F déclenché <span class="maj">maj</span> <span class="fx" style="color:#9a5b00;background:#FCEBD6;border-color:#f3d2a6">corrigé · déploiement en attente</span></h4>
+        <p>Choisir le plan gratuit « Free » lançait quand même un paiement en ligne d'un montant de 0 F, que le
+          prestataire rejette (« montant &gt; 0 requis »). <b>Corrigé</b> : un plan à prix 0 est désormais
+          <b>activé directement</b>, sans passer par le paiement. Correctif écrit et vérifié en local ;
+          <b>reste à déployer</b> sur le serveur puis à revérifier de bout en bout.</p>
       </div>
       <div class="bug">
         <h4>Mesures jamais affichées <span class="fx">corrigé</span></h4>
