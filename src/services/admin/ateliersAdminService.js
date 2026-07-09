@@ -31,6 +31,12 @@ export const ateliersAdminService = {
     return data
   },
 
+  // type: 'artisan' | 'designer' — bascule réservée à l'admin
+  async changerType(id, type) {
+    const { data } = await adminApi.post(`/ateliers/${id}/type`, { type })
+    return data
+  },
+
   async getFidelite(id) {
     const { data } = await adminApi.get(`/ateliers/${id}/fidelite`)
     return data

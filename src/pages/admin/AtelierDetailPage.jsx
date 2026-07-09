@@ -7,7 +7,7 @@ import {
   useAdminAtelier, useGelerAtelier, useDegelerAtelier, useVerifierAtelier, useSponsoriserAtelier,
   useAdminAtelierFidelite, useAjusterFidelite,
   useSetDemoMode, useSetTrialDuration,
-  useAdminSousAteliers, useSetTrialGlobal,
+  useAdminSousAteliers, useSetTrialGlobal, useChangerTypeAtelier,
 } from '@/hooks/admin/useAteliers'
 import { formatDate } from '@/utils/formatDate'
 
@@ -127,6 +127,7 @@ export default function AtelierDetailPage() {
   const degeler = useDegelerAtelier()
   const verifier    = useVerifierAtelier()
   const sponsoriser = useSponsoriserAtelier()
+  const changerType = useChangerTypeAtelier()
   const ajuster = useAjusterFidelite(id)
 
   const setDemo  = useSetDemoMode(id)
@@ -187,6 +188,32 @@ export default function AtelierDetailPage() {
             <InfoRow label={t('admin.atelier_detail.cree_le')}      value={formatDate(atelier.created_at)} />
             <InfoRow label={t('admin.ateliers.col_clients')}        value={atelier.clients_count} />
             <InfoRow label={t('admin.ateliers.col_commandes')}      value={atelier.commandes_count} />
+
+            {/* Type de compte — bascule artisan ↔ designer, réservée à l'admin */}
+            {(() => {
+              const typeActuel = atelier.type === 'designer' ? 'designer' : 'artisan'
+              const cible      = typeActuel === 'designer' ? 'artisan' : 'designer'
+              const labelType  = { artisan: 'Artisan', designer: 'Designer' }
+              return (
+                <div className="flex justify-between items-center py-2 border-b border-edge last:border-0">
+                  <span className="text-sm text-dim">Type de compte</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-ink">{labelType[typeActuel]}</span>
+                    <button
+                      onClick={() => {
+                        if (window.confirm(`Basculer ce compte en « ${labelType[cible]} » ? Cela change les fonctionnalités visibles (vitrine, multi-ateliers, outils créatifs).`)) {
+                          changerType.mutate({ id, type: cible })
+                        }
+                      }}
+                      disabled={changerType.isPending}
+                      className="text-xs text-ghost hover:text-primary transition-colors disabled:opacity-50"
+                    >
+                      Passer en {labelType[cible]}
+                    </button>
+                  </div>
+                </div>
+              )
+            })()}
 
             {atelier.verification_demandee_a && !atelier.verifie && (
               <div className="mt-4 bg-warning/10 border border-warning/30 rounded-lg p-4">
