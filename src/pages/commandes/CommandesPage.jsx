@@ -26,7 +26,7 @@ function PipelineColumn({ col, commandes, navigate }) {
   const total   = commandes.reduce((s, c) => s + Math.max(0, (c.prix ?? 0) - (c.acompte ?? 0)), 0)
 
   return (
-    <div className="flex-none w-[280px] flex flex-col">
+    <div className="flex-none w-[78vw] max-w-[290px] snap-start flex flex-col">
       {/* En-tête colonne */}
       <div className="flex items-center justify-between mb-3 px-1">
         <div className="flex items-center gap-2">
@@ -315,7 +315,7 @@ export default function CommandesPage() {
         ) : view === 'pipeline' ? (
           /* Vue pipeline */
           <div className="flex-1 overflow-hidden">
-            <div className="flex gap-4 h-full overflow-x-auto px-4 pt-4 pb-2 scrollbar-none">
+            <div className="flex gap-4 h-full overflow-x-auto px-4 pt-4 pb-2 scrollbar-none snap-x snap-mandatory">
               {PIPELINE_COLS.map(col => (
                 <PipelineColumn
                   key={col.key}
