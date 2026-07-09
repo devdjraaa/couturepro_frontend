@@ -699,11 +699,17 @@
     "nouvelle": "Nouvelle commande",
     "recherche_placeholder": "Rechercher une commande…",
     "action_sheet": {
-      "titre": "Nouvelle commande",
+      "titre": "Créer",
       "simple": "Commande simple",
       "simple_desc": "Un seul vêtement pour le client",
       "groupee": "Commande groupée",
-      "groupee_desc": "Plusieurs vêtements, une seule facture"
+      "groupee_desc": "Plusieurs vêtements, une seule facture",
+      "client": "Nouveau client",
+      "client_desc": "Ajouter un client à l'atelier",
+      "modele": "Nouveau modèle",
+      "modele_desc": "Ajouter au catalogue",
+      "encaisser": "Encaisser",
+      "encaisser_desc": "Enregistrer un paiement"
     },
     "vide": {
       "titre": "Aucune commande en cours",

@@ -1,53 +1,31 @@
 import { useState } from 'react'
-import { useLocation, useNavigate, NavLink } from 'react-router-dom'
-import { Home, ClipboardList, Users, Plus, Settings, Layers, ChevronRight } from 'lucide-react'
+import { useNavigate, NavLink } from 'react-router-dom'
+import { Home, ClipboardList, Users, Plus, Menu, Layers, UserPlus, Shirt, Wallet, ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
 import { BottomSheet } from '@/components/ui'
 import { useNotificationsCount } from '@/hooks/useNotifications'
 import { useCommandeStats } from '@/hooks/useCommandes'
 import { ROUTES } from '@/constants/routes'
+import MobileMenu from './MobileMenu'
 
-// #45-46 — "Paramètres" remplace "Catalogue" pour rendre l'abonnement accessible
+// Barre du bas : Accueil · Commandes · [+ créer] · Clients · Plus (menu complet)
 const NAV_ITEMS = [
   { to: ROUTES.DASHBOARD, icon: Home,          tKey: 'nav.dashboard',  end: true  },
   { to: '/commandes',  icon: ClipboardList, tKey: 'nav.commandes'              },
-  null, // slot FAB central
+  null, // slot FAB central (créer)
   { to: '/clients',    icon: Users,         tKey: 'nav.clients'                },
-  { to: '/parametres', icon: Settings,      tKey: 'nav.parametres'             },
+  { menu: true,        icon: Menu,          tKey: 'nav.plus'                   }, // ouvre le menu complet
 ]
 
-const FAB_ACTIONS = {
-  '/':           '/commandes/new',
-  '/commandes':  '/commandes/new',
-  '/clients':    '/clients',
-  '/catalogue':  '/catalogue',
-}
-
-function getFABTarget(pathname) {
-  if (pathname.startsWith('/commandes')) return '/commandes/new'
-  if (pathname.startsWith('/clients'))   return '/clients'
-  if (pathname.startsWith('/catalogue')) return '/catalogue/modeles'
-  return '/commandes/new'
-}
-
 export default function BottomNavigation() {
-  const location  = useLocation()
   const navigate  = useNavigate()
   const { t } = useTranslation()
   const { data: notifCount = 0 } = useNotificationsCount()
   const { data: cmdStats }       = useCommandeStats()
   const alertCount = (cmdStats?.en_retard ?? 0) + (cmdStats?.dans_48h ?? 0)
   const [showNewSheet, setShowNewSheet] = useState(false)
-
-  const handleFabClick = () => {
-    const target = getFABTarget(location.pathname)
-    if (target === '/commandes/new') {
-      setShowNewSheet(true)
-      return
-    }
-    navigate(target)
-  }
+  const [showMenu,     setShowMenu]     = useState(false)
 
   return (
     <nav className="fixed bottom-0 inset-x-0 z-30 bg-card/80 backdrop-blur-[18px] border-t border-edge lg:hidden bottom-nav-container">
@@ -59,13 +37,30 @@ export default function BottomNavigation() {
                 <button
                   type="button"
                   aria-label={t('commun.nouveau')}
-                  onClick={handleFabClick}
+                  onClick={() => setShowNewSheet(true)}
                   className="w-14 h-14 -mt-5 rounded-[21px] btn-primary-couture text-white flex items-center justify-center active:scale-[0.92] transition-all duration-150"
                   style={{ boxShadow: '0 0 0 6px var(--color-bg-app), 0 18px 36px -12px rgba(180,20,10,.60)' }}
                 >
                   <Plus size={22} strokeWidth={2.5} />
                 </button>
               </div>
+            )
+          }
+
+          if (item.menu) {
+            const { icon: Icon, tKey } = item
+            return (
+              <button
+                key="menu"
+                type="button"
+                onClick={() => setShowMenu(true)}
+                className="flex-1 flex flex-col items-center justify-center gap-0.5 text-ghost active:scale-[0.88] transition-all duration-150"
+              >
+                <div className="flex items-center justify-center w-12 h-7 rounded-2xl">
+                  <Icon size={20} strokeWidth={1.8} />
+                </div>
+                <span className="text-2xs font-medium">{t(tKey)}</span>
+              </button>
             )
           }
 
@@ -141,8 +136,55 @@ export default function BottomNavigation() {
             </div>
             <ChevronRight size={16} className="text-ghost shrink-0" />
           </button>
+
+          <button
+            type="button"
+            onClick={() => { setShowNewSheet(false); navigate('/clients') }}
+            className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-subtle transition-colors text-left"
+          >
+            <div className="w-10 h-10 rounded-xl bg-success/10 text-success flex items-center justify-center shrink-0">
+              <UserPlus size={18} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-ink">{t('commandes.action_sheet.client')}</p>
+              <p className="text-xs text-ghost">{t('commandes.action_sheet.client_desc')}</p>
+            </div>
+            <ChevronRight size={16} className="text-ghost shrink-0" />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => { setShowNewSheet(false); navigate('/catalogue/modeles') }}
+            className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-subtle transition-colors text-left"
+          >
+            <div className="w-10 h-10 rounded-xl bg-warning/10 text-warning flex items-center justify-center shrink-0">
+              <Shirt size={18} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-ink">{t('commandes.action_sheet.modele')}</p>
+              <p className="text-xs text-ghost">{t('commandes.action_sheet.modele_desc')}</p>
+            </div>
+            <ChevronRight size={16} className="text-ghost shrink-0" />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => { setShowNewSheet(false); navigate('/caisse') }}
+            className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-subtle transition-colors text-left"
+          >
+            <div className="w-10 h-10 rounded-xl bg-gold/10 text-gold-dark flex items-center justify-center shrink-0">
+              <Wallet size={18} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-ink">{t('commandes.action_sheet.encaisser')}</p>
+              <p className="text-xs text-ghost">{t('commandes.action_sheet.encaisser_desc')}</p>
+            </div>
+            <ChevronRight size={16} className="text-ghost shrink-0" />
+          </button>
         </div>
       </BottomSheet>
+
+      <MobileMenu isOpen={showMenu} onClose={() => setShowMenu(false)} />
     </nav>
   )
 }
