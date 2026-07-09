@@ -25,7 +25,18 @@
     "quota_atteint": "Monthly quota reached. Come back next month or upgrade your plan.",
     "vide_titre": "No photos",
     "vide_desc": "Add photos of fabrics, creations or inspirations.",
-    "ajouter_photo": "Add a photo"
+    "ajouter_photo": "Add a photo",
+    "tuto": {
+      "aide": "How it works",
+      "passer": "Skip",
+      "commencer": "Let's go",
+      "s1_titre": "Your gallery of creations",
+      "s1_texte": "Gather photos of your real work. They appear on your public showcase and feed the Gextimo inspiration catalog.",
+      "s2_titre": "Add several photos at once",
+      "s2_texte": "Tap “Add”: your phone's photo picker opens. Select one or several creations, then confirm.",
+      "s3_titre": "Photos that belong to you",
+      "s3_texte": "Only publish YOUR own photos (taken by you), sharp and well-lit. Each photo becomes visible and findable on the showcase."
+    }
   },
   "premium": {
     "tag": "Pricing",

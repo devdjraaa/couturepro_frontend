@@ -260,10 +260,21 @@ export default function MaVitrinePage() {
           </div>
           <div className="flex gap-2 mt-4">
             {IS_NATIVE ? (
-              <a href={publicUrl} target="_blank" rel="noopener noreferrer"
-                 className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl bg-primary text-white hover:bg-primary-600 transition">
+              <button
+                type="button"
+                onClick={async () => {
+                  // Ouvre la vitrine dans un navigateur in-app (Custom Tab), comme FedaPay —
+                  // pas de sortie vers le navigateur externe. Import dynamique (plugin natif).
+                  try {
+                    const { Browser } = await import('@capacitor/browser')
+                    await Browser.open({ url: publicUrl, presentationStyle: 'popover' })
+                  } catch {
+                    window.open(publicUrl, '_blank')
+                  }
+                }}
+                className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl bg-primary text-white hover:bg-primary-600 transition">
                 <ExternalLink size={16} /> {t('ma_vitrine.voir_page')}
-              </a>
+              </button>
             ) : (
               <Link to={publicPath}
                     className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl bg-primary text-white hover:bg-primary-600 transition">

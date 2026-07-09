@@ -1,9 +1,10 @@
 import { useRef, useState } from 'react'
-import { ImagePlus, Trash2, X, Images } from 'lucide-react'
+import { ImagePlus, Trash2, X, Images, HelpCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { AppLayout } from '@/components/layout'
 import { Button, Skeleton, EmptyState } from '@/components/ui'
 import FeatureGate from '@/components/abonnement/FeatureGate'
+import GalerieTutorial from '@/components/galerie/GalerieTutorial'
 import { useGalerie, useGalerieQuota, useUploadPhoto, useDeletePhoto } from '@/hooks/useGalerie'
 import { cn } from '@/utils/cn'
 import { formatDate } from '@/utils/formatDate'
@@ -39,10 +40,25 @@ export default function GaleriePage() {
   const upload            = useUploadPhoto()
   const deletePhoto       = useDeletePhoto()
 
+  const [showTuto, setShowTuto] = useState(() => {
+    try { return !localStorage.getItem('gx_galerie_tuto_seen') } catch { return false }
+  })
+  const closeTuto = () => {
+    try { localStorage.setItem('gx_galerie_tuto_seen', '1') } catch { /* indisponible */ }
+    setShowTuto(false)
+  }
+
   const handleFile = async (e) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    await upload.mutateAsync({ file })
+    const files = Array.from(e.target.files || [])
+    if (!files.length) return
+    // Le sélecteur système Android permet de cocher plusieurs photos ; on les envoie
+    // une par une, en respectant le quota restant si le plan est limité.
+    const aEnvoyer = (quota && !quota.illimite)
+      ? files.slice(0, Math.max(0, quota.restant ?? 0))
+      : files
+    for (const file of aEnvoyer) {
+      await upload.mutateAsync({ file })
+    }
     if (fileRef.current) fileRef.current.value = ''
   }
 
@@ -54,18 +70,29 @@ export default function GaleriePage() {
           {/* En-tête quota + bouton upload */}
           <div className="flex items-center justify-between">
             <QuotaBadge quota={quota} />
-            <button
-              type="button"
-              onClick={() => fileRef.current?.click()}
-              disabled={upload.isPending || (quota && !quota.illimite && quota.restant <= 0)}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-inverse text-sm font-medium hover:bg-primary-700 disabled:opacity-50 transition-colors"
-            >
-              <ImagePlus size={15} />
-              {upload.isPending ? t('galerie.upload') : t('commun.ajouter')}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setShowTuto(true)}
+                aria-label={t('galerie.tuto.aide')}
+                className="w-9 h-9 flex items-center justify-center rounded-xl border border-edge text-ghost hover:text-ink transition-colors"
+              >
+                <HelpCircle size={16} />
+              </button>
+              <button
+                type="button"
+                onClick={() => fileRef.current?.click()}
+                disabled={upload.isPending || (quota && !quota.illimite && quota.restant <= 0)}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-inverse text-sm font-medium hover:bg-primary-700 disabled:opacity-50 transition-colors"
+              >
+                <ImagePlus size={15} />
+                {upload.isPending ? t('galerie.upload') : t('commun.ajouter')}
+              </button>
+            </div>
             <input
               ref={fileRef}
               type="file"
+              multiple
               accept="image/jpeg,image/jpg,image/png,image/webp"
               className="hidden"
               onChange={handleFile}
@@ -141,6 +168,8 @@ export default function GaleriePage() {
               <img src={preview} alt="" className="max-w-full max-h-full rounded-xl object-contain" />
             </div>
           )}
+
+          <GalerieTutorial isOpen={showTuto} onClose={closeTuto} />
         </div>
       </FeatureGate>
     </AppLayout>

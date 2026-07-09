@@ -25,7 +25,18 @@
     "quota_atteint": "Quota mensuel atteint. Revenez le mois prochain ou passez à un plan supérieur.",
     "vide_titre": "Aucune photo",
     "vide_desc": "Ajoutez des photos de tissus, créations ou inspirations.",
-    "ajouter_photo": "Ajouter une photo"
+    "ajouter_photo": "Ajouter une photo",
+    "tuto": {
+      "aide": "Comment ça marche",
+      "passer": "Passer",
+      "commencer": "C'est parti",
+      "s1_titre": "Votre galerie de créations",
+      "s1_texte": "Rassemblez les photos de vos vraies réalisations. Elles s'affichent sur votre vitrine et nourrissent le catalogue d'inspiration Gextimo.",
+      "s2_titre": "Ajoutez plusieurs photos d'un coup",
+      "s2_texte": "Tapez « Ajouter » : le sélecteur de photos de votre téléphone s'ouvre. Cochez une ou plusieurs réalisations, puis validez.",
+      "s3_titre": "Des photos qui vous appartiennent",
+      "s3_texte": "Publiez uniquement VOS propres photos (prises par vous), nettes et bien éclairées. Chaque photo devient visible et trouvable sur la vitrine."
+    }
   },
   "premium": {
     "tag": "Tarifs",
