@@ -15,6 +15,7 @@ import { useMesAteliers, useCreateSousAtelier } from '@/hooks/useMesAteliers'
 import { usePlanLimit, usePlanFeature } from '@/hooks/usePlanFeature'
 import { useCountdown } from '@/hooks/useCountdown'
 import { useNetwork } from '@/hooks/useNetwork'
+import { useAccountType } from '@/hooks/useAccountType'
 import { AppLayout } from '@/components/layout'
 import { QuotaBar, PlanCard, FeatureGate } from '@/components/abonnement'
 import { TabBar, Input, Select, Button, Skeleton, LanguageSwitcher } from '@/components/ui'
@@ -677,11 +678,13 @@ function TypeCompteTab() {
 export default function ParametresPage() {
   const { logout } = useAuth()
   const { t } = useTranslation()
+  const { isDesigner } = useAccountType()
 
   const TABS = [
     { key: 'profil',       label: t('parametres.onglets.profil')       },
     { key: 'atelier',      label: t('parametres.onglets.atelier')      },
-    { key: 'ateliers',     label: t('parametres.onglets.ateliers')     },
+    // « Mes ateliers » (multi-ateliers) = designer uniquement.
+    ...(isDesigner ? [{ key: 'ateliers', label: t('parametres.onglets.ateliers') }] : []),
     { key: 'preferences',  label: t('parametres.onglets.preferences')  },
     { key: 'facture',      label: t('parametres.onglets.facture')      },
     { key: 'abonnement',   label: t('parametres.onglets.abonnement')   },
@@ -716,7 +719,7 @@ export default function ParametresPage() {
       <div className="p-4 space-y-4">
         {activeTab === 'profil'      && <ProfilTab />}
         {activeTab === 'atelier'     && <AtelierTab />}
-        {activeTab === 'ateliers'    && <MesAteliersTab />}
+        {activeTab === 'ateliers'    && isDesigner && <MesAteliersTab />}
         {activeTab === 'preferences' && <PreferencesTab />}
         {activeTab === 'facture'     && <FactureTab />}
         {activeTab === 'abonnement'  && <AbonnementTab />}

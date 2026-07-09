@@ -6,6 +6,7 @@ import {
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
 import { useAuth } from '@/contexts'
+import { useAccountType } from '@/hooks/useAccountType'
 import { ROUTES } from '@/constants/routes'
 import { Avatar } from '@/components/ui'
 import { useNotificationsCount } from '@/hooks/useNotifications'
@@ -19,7 +20,7 @@ const NAV_GROUPS = [
       { to: '/commandes',      icon: ClipboardList, key: 'commandes'             },
       { to: '/clients',        icon: Users,         key: 'clients'               },
       { to: '/catalogue',      icon: Layers,        key: 'catalogue'             },
-      { to: ROUTES.MA_VITRINE, icon: Store,         key: 'ma_vitrine'           },
+      { to: ROUTES.MA_VITRINE, icon: Store,         key: 'ma_vitrine', designerOnly: true },
     ],
   },
   {
@@ -29,7 +30,7 @@ const NAV_GROUPS = [
       { to: '/equipe',          icon: Users2,   key: 'equipe'                     },
       { to: '/points',          icon: Star,     key: 'points'                     },
       { to: ROUTES.FACTURATION,      icon: FileText, key: 'facturation'                },
-      { to: ROUTES.OUTILS_CREATIFS, icon: Palette,  key: 'outils_creatifs'            },
+      { to: ROUTES.OUTILS_CREATIFS, icon: Palette,  key: 'outils_creatifs', designerOnly: true },
       { to: '/caisse',          icon: Wallet,   key: 'caisse', proprietaire: true },
     ],
   },
@@ -84,6 +85,7 @@ function NavItem({ to, icon: Icon, navKey, end, notifCount, t }) {
 
 export default function Sidebar() {
   const { user, logout } = useAuth()
+  const { isDesigner } = useAccountType()
   const navigate = useNavigate()
   const { data: notifCount = 0 } = useNotificationsCount()
   const { t } = useTranslation()
@@ -107,7 +109,10 @@ export default function Sidebar() {
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto py-3 px-3 space-y-4 scrollbar-thin">
         {NAV_GROUPS.map(({ key, label, items }) => {
-          const visible = items.filter(item => !item.proprietaire || user?.role === 'proprietaire')
+          const visible = items.filter(item =>
+            (!item.proprietaire || user?.role === 'proprietaire') &&
+            (!item.designerOnly || isDesigner),
+          )
           if (visible.length === 0) return null
 
           return (

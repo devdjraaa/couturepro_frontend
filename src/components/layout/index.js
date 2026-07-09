@@ -1,4 +1,5 @@
 export { default as ProtectedRoute }   from './ProtectedRoute'
+export { default as DesignerRoute }    from './DesignerRoute'
 export { default as AuthLayout }       from './AuthLayout'
 export { default as AppLayout }        from './AppLayout'
 export { default as Header }           from './Header'
