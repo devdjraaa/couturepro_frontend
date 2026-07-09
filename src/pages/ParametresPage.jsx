@@ -470,16 +470,20 @@ function AbonnementTab() {
       <div>
         <p className="text-xs font-semibold text-dim uppercase tracking-wide mb-3">{t('parametres.abonnement.plans_disponibles')}</p>
         <div className="grid grid-cols-2 gap-3">
-          {plans.map(plan => (
-            <PlanCard
-              key={plan.cle}
-              plan={plan}
-              isCurrent={abonnement?.niveau_cle === plan.cle}
-              abonnementStatut={abonnement?.statut}
-              onUpgrade={handleUpgrade}
-              isLoading={initierPaiement.isPending}
-            />
-          ))}
+          {plans
+            // Le plan gratuit n'est pas souscriptible (attribué à la création) :
+            // on ne l'affiche que s'il est le plan actuel de l'utilisateur.
+            .filter(plan => Number(plan.prix_xof) > 0 || abonnement?.niveau_cle === plan.cle)
+            .map(plan => (
+              <PlanCard
+                key={plan.cle}
+                plan={plan}
+                isCurrent={abonnement?.niveau_cle === plan.cle}
+                abonnementStatut={abonnement?.statut}
+                onUpgrade={handleUpgrade}
+                isLoading={initierPaiement.isPending}
+              />
+            ))}
         </div>
       </div>
     </div>

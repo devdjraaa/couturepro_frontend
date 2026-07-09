@@ -143,8 +143,8 @@ html{scroll-behavior:smooth}
       <li><span class="nd ok"></span><b>Navigation mobile refaite</b> — un onglet « Plus » donne accès à toutes les fonctions (Ma Vitrine, Caisse, Facturation, Équipe…), et le bouton « + » propose plus d'actions (commande, client, modèle, encaissement).</li>
       <li><span class="nd ok"></span><b>Nouvelles fonctions validées</b> — Facturation (création de devis / factures), Collections, Fidélité.</li>
       <li><span class="nd ok"></span><b>Galerie &amp; vitrine</b> — on peut ajouter plusieurs photos d'un coup (+ mini-tutoriel), et « Voir ma vitrine » s'ouvre désormais <b>dans l'app</b> (fini le navigateur externe).</li>
-      <li><span class="nd info"></span><b>Deux profils de compte</b> — Artisan (gestion d'atelier) et Designer (+ vitrine publique) : l'app n'affiche à chacun que ce qui le concerne.</li>
-      <li><span class="nd ok"></span><b>Anomalie corrigée</b> — le plan gratuit « Free » est désormais activé directement au lieu de déclencher un paiement à 0 F (correctif écrit, déploiement en attente).</li>
+      <li><span class="nd info"></span><b>Deux profils de compte</b> — Artisan (gestion d'atelier) et Designer (+ vitrine publique) : l'app n'affiche à chacun que ce qui le concerne. Le type est choisi à la création et géré par l'administrateur.</li>
+      <li><span class="nd ok"></span><b>Anomalie corrigée &amp; déployée</b> — le plan gratuit « Free » n'est plus proposé comme option d'abonnement (réservé à la création du compte) : fini le paiement à 0 F.</li>
     </ul>
   </section>
 
@@ -298,7 +298,7 @@ html{scroll-behavior:smooth}
         <tr>
           <td class="mod">Paramètres</td><td class="rt">16</td>
           <td><span class="badge b-wip"><i></i> En cours</span></td>
-          <td class="nt"><b>Type de compte</b> (artisan ↔ designer), <b>profil</b> (nom / tél / email → serveur) et <b>atelier</b> (nom / ville) validés ; <b>garde « connexion requise »</b> posée sur toute la zone Paramètres (online-only) et vérifiée. Abonnement &amp; Multi-ateliers = lignes dédiées (validées). Reste : préférences (devise / unité), réglages de facture, sécurité (mot de passe).</td>
+          <td class="nt"><b>Profil</b> (nom / tél / email → serveur) et <b>atelier</b> (nom / ville) validés ; <b>garde « connexion requise »</b> posée sur toute la zone Paramètres (online-only) et vérifiée. Abonnement &amp; Multi-ateliers = lignes dédiées (validées). Le <b>type de compte</b> (artisan ↔ designer) a été <b>retiré de l'espace utilisateur</b> : il est désormais fixé à la création et modifiable uniquement par l'administrateur (évite tout contournement d'offre). Reste : préférences (devise / unité), réglages de facture, sécurité (mot de passe).</td>
         </tr>
         <tr>
           <td class="mod">Archives</td><td class="rt">1</td>
@@ -341,12 +341,13 @@ html{scroll-behavior:smooth}
           envoyés. Corrigé : identifiants renouvelés + service permanent qui envoie la file en continu.
           Revérifié de bout en bout (email de test bien reçu).</p>
       </div>
-      <div class="bug" style="border-left-color:#E08600">
-        <h4>Plan « Free » : paiement à 0 F déclenché <span class="maj">maj</span> <span class="fx" style="color:#9a5b00;background:#FCEBD6;border-color:#f3d2a6">corrigé · déploiement en attente</span></h4>
+      <div class="bug">
+        <h4>Plan « Free » : paiement à 0 F déclenché <span class="maj">maj</span> <span class="fx">corrigé</span></h4>
         <p>Choisir le plan gratuit « Free » lançait quand même un paiement en ligne d'un montant de 0 F, que le
-          prestataire rejette (« montant &gt; 0 requis »). <b>Corrigé</b> : un plan à prix 0 est désormais
-          <b>activé directement</b>, sans passer par le paiement. Correctif écrit et vérifié en local ;
-          <b>reste à déployer</b> sur le serveur puis à revérifier de bout en bout.</p>
+          prestataire rejette (« montant &gt; 0 requis »). <b>Corrigé et déployé.</b> Le plan gratuit est
+          désormais réservé à la <b>création du compte</b> : il n'est plus proposé comme option
+          d'abonnement (on ne peut pas le « choisir »), et côté serveur un plan à prix 0 est activé
+          directement, sans paiement.</p>
       </div>
       <div class="bug">
         <h4>Mesures jamais affichées <span class="fx">corrigé</span></h4>
