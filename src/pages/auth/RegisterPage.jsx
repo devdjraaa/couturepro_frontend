@@ -26,6 +26,7 @@ export default function RegisterPage() {
   const [step, setStep] = useState('form') // 'form' | 'otp'
   const [form, setForm] = useState({
     nom: '', prenom: '', telephone: '', email: '', nom_atelier: '',
+    type: 'artisan', // artisan (défaut) | designer
     password: '', password_confirmation: '',
     question_secrete: QUESTIONS_SECRETE[0].value,
     question_secrete_custom: '', reponse_secrete: '',
@@ -156,6 +157,25 @@ export default function RegisterPage() {
         {/* Section : Atelier */}
         <p className="section-label mt-2">{t('auth.inscription.nom_atelier') || 'Votre atelier'}</p>
         <Input label={t('auth.inscription.nom_atelier')} value={form.nom_atelier} onChange={set('nom_atelier')} placeholder="Atelier Aminata" required />
+
+        {/* Type de compte : artisan (gestion d'atelier) ou designer (+ vitrine publique) */}
+        <p className="section-label mt-2">{t('parametres.type_compte.titre')}</p>
+        <div className="grid grid-cols-2 gap-3">
+          {['artisan', 'designer'].map(tp => (
+            <button
+              type="button"
+              key={tp}
+              onClick={() => setForm(f => ({ ...f, type: tp }))}
+              className={cn(
+                'text-left p-3 rounded-xl border transition',
+                form.type === tp ? 'border-primary bg-primary/5' : 'border-edge bg-card',
+              )}
+            >
+              <p className="font-semibold text-sm text-ink">{t(`parametres.type_compte.${tp}`)}</p>
+              <p className="text-xs text-dim mt-0.5">{t(`parametres.type_compte.${tp}_desc`)}</p>
+            </button>
+          ))}
+        </div>
 
         {/* Section : Mot de passe */}
         <p className="section-label mt-2">{t('commun.securite') || 'Sécurité'}</p>

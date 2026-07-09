@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { ProtectedRoute } from '@/components/layout'
+import { ProtectedRoute, DesignerRoute } from '@/components/layout'
 import { AdminProtectedRoute } from '@/components/admin'
 import {
   LoginPage, RegisterPage, OnboardingPage,
@@ -151,7 +151,12 @@ export default function App() {
         {/* ── Routes protégées proprietaire ───────────────────────────── */}
         <Route element={<ProtectedRoute />}>
           <Route path={ROUTES.DASHBOARD}        element={<DashboardPage />}      />
-          <Route path={ROUTES.MA_VITRINE}       element={<MaVitrinePage />}      />
+
+          {/* Réservé aux comptes designer (storefront vitrine + outils créatifs) */}
+          <Route element={<DesignerRoute />}>
+            <Route path={ROUTES.MA_VITRINE}       element={<MaVitrinePage />}       />
+            <Route path={ROUTES.OUTILS_CREATIFS}  element={<OutilsCreatifsPage />}  />
+          </Route>
 
           <Route path={ROUTES.CLIENTS}          element={<ClientsPage />}        />
           <Route path={ROUTES.CLIENT_DETAIL}    element={<ClientDetailPage />}   />
@@ -176,7 +181,6 @@ export default function App() {
           <Route path={ROUTES.PHOTOS_VIP}       element={<GaleriePage />} />
           <Route path="/galerie"               element={<GaleriePage />} />
           <Route path={ROUTES.FACTURATION}      element={<FacturationPage />}     />
-          <Route path={ROUTES.OUTILS_CREATIFS} element={<OutilsCreatifsPage />}  />
           <Route path={ROUTES.HISTORIQUE}       element={<HistoriquePage />}      />
           <Route path="/archives"               element={<ArchivesPage />}        />
           <Route path="/caisse"                 element={<CaissePage />}          />

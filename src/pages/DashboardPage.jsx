@@ -10,6 +10,7 @@ import { useAuth, useTheme } from '@/contexts'
 import { useCommandes, useCommandeStats } from '@/hooks/useCommandes'
 import { useClients } from '@/hooks/useClients'
 import { useAbonnement } from '@/hooks/useAbonnement'
+import { useAccountType } from '@/hooks/useAccountType'
 import { ROUTES } from '@/constants/routes'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { cn } from '@/utils/cn'
@@ -218,6 +219,7 @@ const ONBOARDING_DISMISS_KEY = 'gx_onboarding_done'
 
 function WelcomeChecklist({ user, atelier, clients, commandes, isLoading, navigate }) {
   const { t } = useTranslation()
+  const { isDesigner } = useAccountType()
   const [dismissed, setDismissed] = useState(() => {
     try { return !!localStorage.getItem(ONBOARDING_DISMISS_KEY) } catch { return false }
   })
@@ -237,13 +239,13 @@ function WelcomeChecklist({ user, atelier, clients, commandes, isLoading, naviga
       done: !!user?.telephone,
       to: '/parametres/profil',
     },
-    {
+    ...(isDesigner ? [{
       icon: Store,
       label: 'Configurer ma vitrine',
       sub: 'Ajoutez votre bio et spécialité pour attirer des clients',
       done: !!(atelier?.bio),
       to: '/ma-vitrine',
-    },
+    }] : []),
     {
       icon: UserPlus,
       label: t('dashboard.onboarding.step_client'),
@@ -400,6 +402,7 @@ export default function DashboardPage() {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
   const { user, atelier }  = useAuth()
+  const { isDesigner } = useAccountType()
   const { data: commandes = [], isLoading: loadingCmd } = useCommandes()
   const { data: stats,          isLoading: loadingStats } = useCommandeStats()
   const { data: clients = [] }  = useClients()
@@ -515,7 +518,9 @@ export default function DashboardPage() {
           >
             <div className="grid grid-cols-3 gap-3 pt-3">
               <QuickActionTile icon={Layers}   label={t('dashboard.action.atelier')}  color="ghost"   onClick={() => navigate('/catalogue')} />
-              <QuickActionTile icon={Store}    label={t('nav.ma_vitrine')}            color="warning" onClick={() => navigate('/ma-vitrine')} />
+              {isDesigner && (
+                <QuickActionTile icon={Store}    label={t('nav.ma_vitrine')}            color="warning" onClick={() => navigate('/ma-vitrine')} />
+              )}
               <QuickActionTile icon={FileText} label={t('nav.facturation')}           color="primary" onClick={() => navigate('/facturation')} />
               <QuickActionTile icon={Users2}   label={t('nav.equipe')}               color="success" onClick={() => navigate('/equipe')} />
               <QuickActionTile icon={Star}     label={t('nav.points')}               color="gold"    onClick={() => navigate('/points')} />
