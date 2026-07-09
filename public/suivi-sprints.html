@@ -94,6 +94,14 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
 .news li .nd{position:absolute;left:0;top:5px;width:9px;height:9px;border-radius:50%}
 .news .ok{background:var(--vert)} .news .warn{background:#E08600} .news .info{background:var(--rouge)}
 
+/* Sommaire — invite à tout parcourir */
+html{scroll-behavior:smooth}
+.toc{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:16px;padding:12px 16px;background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 26px -22px rgba(13,13,13,.5)}
+.toc .tl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--gris);margin-right:2px}
+.toc a{font-size:12.5px;font-weight:600;color:var(--bordeaux);text-decoration:none;background:var(--creme-2);border:1px solid var(--line);border-radius:20px;padding:4px 11px;transition:all .15s}
+.toc a:hover{background:var(--rouge);color:#fff;border-color:var(--rouge)}
+.toc a .c{color:var(--vert);font-weight:800}
+
 .foot{margin-top:22px;font-size:12px;color:var(--gris);text-align:center;line-height:1.7}
 .foot b{color:var(--noir)}
 @media(max-width:560px){
@@ -115,10 +123,10 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
     </div>
     <div class="kpi">
       <div class="row">
-        <span class="lbl">Routes validées à travers l'app</span>
-        <span class="big">48<small>&nbsp;/&nbsp;≈140</small></span>
+        <span class="lbl">Modules validés de bout en bout</span>
+        <span class="big">14<small>&nbsp;/&nbsp;23</small></span>
       </div>
-      <div class="bar"><i style="width:34%"></i></div>
+      <div class="bar"><i style="width:61%"></i></div>
     </div>
   </div>
 </header>
@@ -126,7 +134,7 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
 <main class="wrap">
 
   <!-- ─── NOUVEAUTÉS (mis en avant pour le client) ─────────────────── -->
-  <section class="card news">
+  <section class="card news" id="nouveautes">
     <div class="nh">
       <span class="tag">Nouveau · 09/07</span>
       <h2>Dernières mises à jour</h2>
@@ -139,8 +147,18 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
     </ul>
   </section>
 
+  <!-- ─── SOMMAIRE (invite à tout parcourir) ────────────────────────── -->
+  <nav class="toc">
+    <span class="tl">Au programme :</span>
+    <a href="#offline">L'avancée hors-ligne</a>
+    <a href="#couverture">Où on en est</a>
+    <a href="#detail">Détail par fonction</a>
+    <a href="#anomalies">Anomalies &amp; corrections</a>
+    <a href="#methode">Comment on teste</a>
+  </nav>
+
   <!-- ─── FULL-OFFLINE (grande avancée) ─────────────────────────────── -->
-  <section class="card" style="border-left:4px solid var(--vert);background:linear-gradient(158deg,#fff,var(--vert-bg))">
+  <section class="card" id="offline" style="border-left:4px solid var(--vert);background:linear-gradient(158deg,#fff,var(--vert-bg))">
     <h2><span class="n" style="background:var(--vert)">✓</span> L'application fonctionne désormais <span style="color:#0f7a3d">hors-ligne</span></h2>
     <p class="sub">L'app mobile a été transformée en <b>« full-offline »</b> : l'artisan continue de travailler
       <b>sans connexion</b>. Tout est enregistré sur le téléphone puis <b>synchronisé automatiquement</b>
@@ -161,7 +179,7 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
   </section>
 
   <!-- ─── COUVERTURE ─────────────────────────────────────────────────── -->
-  <section class="card">
+  <section class="card" id="couverture">
     <h2><span class="n">1</span> Où en est la recette</h2>
     <p class="sub">Périmètre : <b>espace utilisateur</b> (professionnels de la mode). L'espace
       administrateur n'est pas encore dans le périmètre de cette campagne.</p>
@@ -171,18 +189,19 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
       <span class="badge b-todo"><i></i> À tester</span>
     </div>
     <div class="stats">
-      <div class="stat d"><div class="v">15</div><div class="k">modules validés de bout en bout</div></div>
-      <div class="stat w"><div class="v">6</div><div class="k">modules en cours</div></div>
-      <div class="stat t"><div class="v">2</div><div class="k">modules à tester</div></div>
+      <div class="stat d"><div class="v">14</div><div class="k">modules validés de bout en bout</div></div>
+      <div class="stat w"><div class="v">6</div><div class="k">modules en cours (partiels)</div></div>
+      <div class="stat t"><div class="v">3</div><div class="k">modules pas commencés</div></div>
     </div>
     <p class="sub" style="margin-top:12px;margin-bottom:0">
-      À l'échelle des routes : <b>≈ 18 déjà validées à travers l'app</b> sur ≈ 140 côté utilisateur.
-      Les autres répondent déjà correctement au niveau technique (aucune erreur serveur constatée) —
-      elles restent à repasser à travers l'interface, une par une.</p>
+      À l'échelle des routes : <b>≈ 48 endpoints réellement exercés</b> sur <b>152</b> côté utilisateur
+      (l'admin, 38 routes, est hors périmètre). Les <b>6 modules « en cours »</b> gardent encore
+      <b>~40 routes</b> à repasser (rien que les Paramètres en comptent 16) — donc il reste du chemin,
+      c'est normal.</p>
   </section>
 
   <!-- ─── DÉTAIL PAR MODULE ─────────────────────────────────────────── -->
-  <section class="card">
+  <section class="card" id="detail">
     <h2><span class="n">2</span> Détail par fonctionnalité</h2>
     <p class="sub">Ce qui a été conduit dans l'application, écran par écran.</p>
     <div style="overflow-x:auto">
@@ -277,7 +296,7 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
         <tr>
           <td class="mod">Paramètres</td><td class="rt">16</td>
           <td><span class="badge b-wip"><i></i> En cours</span></td>
-          <td class="nt">Type de compte (artisan ↔ designer), <b>profil</b> (nom / tél / email → serveur) et <b>atelier</b> (nom / ville) validés. Reste facture, préférences, sécurité.</td>
+          <td class="nt"><b>Type de compte</b> (artisan ↔ designer), <b>profil</b> (nom / tél / email → serveur) et <b>atelier</b> (nom / ville) validés ; <b>garde « connexion requise »</b> posée sur toute la zone Paramètres (online-only) et vérifiée. Abonnement &amp; Multi-ateliers = lignes dédiées (validées). Reste : préférences (devise / unité), réglages de facture, sécurité (mot de passe).</td>
         </tr>
         <tr>
           <td class="mod">Archives</td><td class="rt">1</td>
@@ -308,7 +327,7 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
   </section>
 
   <!-- ─── BUGS TROUVÉS & CORRIGÉS ────────────────────────────────────── -->
-  <section class="card">
+  <section class="card" id="anomalies">
     <h2><span class="n">3</span> Anomalies détectées à travers l'app</h2>
     <p class="sub">Détectés uniquement grâce au test à travers l'app (invisibles au niveau API).</p>
     <div class="bugs">
@@ -379,7 +398,7 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
   </section>
 
   <!-- ─── MÉTHODE (rappel, en bas — elle ne change pas) ──────────────── -->
-  <section class="card method">
+  <section class="card method" id="methode">
     <h2><span class="n">i</span> Comment on teste — la méthode</h2>
     <p class="sub">On teste chaque fonctionnalité <b>en passant par l'application réelle, côté utilisateur</b>
       — pas en interrogeant les API « à vide ». C'est plus long, mais ça valide ce que l'utilisateur
@@ -401,7 +420,10 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
   </section>
 
   <div class="foot">
-    <b>Gextimo</b> · Recette qualité de l'espace utilisateur — mise à jour du <b>09/07/2026</b><br>
+    Vous avez tout parcouru — merci. <b>14 modules sur 23</b> validés de bout en bout, l'app tourne
+    désormais <b>hors-ligne</b>, et l'email est réparé. La suite arrive à la prochaine mise à jour.<br>
+    <b>Gextimo</b> · Recette qualité de l'espace utilisateur — mise à jour du <b>09/07/2026</b> ·
+    <a href="#nouveautes" style="color:var(--rouge);text-decoration:none;font-weight:600">↑ Revenir en haut</a><br>
     Méthode : test à travers l'application réelle, vérification écran + base locale + serveur, cycle hors-ligne/en ligne.
   </div>
 
