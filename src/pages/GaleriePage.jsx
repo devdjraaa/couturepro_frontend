@@ -6,6 +6,7 @@ import { Button, Skeleton, EmptyState } from '@/components/ui'
 import FeatureGate from '@/components/abonnement/FeatureGate'
 import GalerieTutorial from '@/components/galerie/GalerieTutorial'
 import { useGalerie, useGalerieQuota, useUploadPhoto, useDeletePhoto } from '@/hooks/useGalerie'
+import { compressImage } from '@/utils/compressImage'
 import { cn } from '@/utils/cn'
 import { formatDate } from '@/utils/formatDate'
 
@@ -50,16 +51,20 @@ export default function GaleriePage() {
 
   const handleFile = async (e) => {
     const files = Array.from(e.target.files || [])
+    if (fileRef.current) fileRef.current.value = '' // reset tôt (permet de re-choisir les mêmes)
     if (!files.length) return
-    // Le sélecteur système Android permet de cocher plusieurs photos ; on les envoie
-    // une par une, en respectant le quota restant si le plan est limité.
-    const aEnvoyer = (quota && !quota.illimite)
-      ? files.slice(0, Math.max(0, quota.restant ?? 0))
-      : files
+    // Le sélecteur système permet de cocher plusieurs photos. On les envoie une par
+    // une, APRÈS compression (les photos de téléphone dépassent souvent la limite de
+    // 5 Mo du serveur → 422 silencieux). try/catch par photo : une erreur ne bloque
+    // pas les suivantes (le hook affiche déjà un toast).
+    const restant = (quota && !quota.illimite) ? Math.max(0, quota.restant ?? files.length) : files.length
+    const aEnvoyer = files.slice(0, restant)
     for (const file of aEnvoyer) {
-      await upload.mutateAsync({ file })
+      try {
+        const compressed = await compressImage(file)
+        await upload.mutateAsync({ file: compressed })
+      } catch { /* toast d'erreur déjà géré par le hook ; on continue */ }
     }
-    if (fileRef.current) fileRef.current.value = ''
   }
 
   return (
