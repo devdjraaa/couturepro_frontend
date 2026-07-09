@@ -72,6 +72,8 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
 .tbl .rt{font-variant-numeric:tabular-nums;color:var(--gris);white-space:nowrap}
 .tbl .nt{color:var(--gris);font-size:12.5px}
 .tbl td .badge{white-space:nowrap}
+.maj{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#9a5b00;background:#FCEBD6;border:1px solid #f3d2a6;border-radius:20px;padding:0 6px;margin-left:6px;vertical-align:middle}
+.tbl tr.fresh td{background:#FFFBF3}
 
 /* Bugs */
 .bugs{display:grid;gap:11px;margin-top:4px}
@@ -137,28 +139,6 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
     </ul>
   </section>
 
-  <!-- ─── MÉTHODE (en tête, pour le client) ─────────────────────────── -->
-  <section class="card method">
-    <h2><span class="n">i</span> Comment on teste — la méthode</h2>
-    <p class="sub">On teste chaque fonctionnalité <b>en passant par l'application réelle, côté utilisateur</b>
-      — pas en interrogeant les API « à vide ». C'est plus long, mais ça valide ce que l'utilisateur
-      <b>vit vraiment</b> (affichage + enregistrement + synchronisation), pas seulement qu'un serveur répond.</p>
-    <ol>
-      <li><b>Agir dans l'écran</b> : ouvrir la fonctionnalité sur un vrai téléphone, remplir le formulaire
-        comme un utilisateur, valider.</li>
-      <li><b>Vérifier la vérité à 3 niveaux</b>, jamais l'affichage seul :
-        <span class="lv"><i></i> l'écran</span>
-        <span class="lv"><i></i> la base locale du téléphone</span>
-        <span class="lv"><i></i> le serveur</span></li>
-      <li><b>Tester le cycle hors-ligne ↔ en ligne</b> : en ligne, une modification remonte toute seule ;
-        en mode avion, elle est gardée en local « en attente » ; au retour du réseau, elle remonte
-        automatiquement.</li>
-      <li><b>Tracer &amp; nettoyer</b> : on ne repasse jamais deux fois sur la même route, et on restaure
-        les données de test à leur état d'origine.</li>
-    </ol>
-    <span class="pill">Chaque fonctionnalité validée l'est sur écran + local + serveur</span>
-  </section>
-
   <!-- ─── FULL-OFFLINE (grande avancée) ─────────────────────────────── -->
   <section class="card" style="border-left:4px solid var(--vert);background:linear-gradient(158deg,#fff,var(--vert-bg))">
     <h2><span class="n" style="background:var(--vert)">✓</span> L'application fonctionne désormais <span style="color:#0f7a3d">hors-ligne</span></h2>
@@ -209,6 +189,56 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
     <table class="tbl">
       <thead><tr><th>Fonctionnalité</th><th>Routes</th><th>État</th><th>Constat</th></tr></thead>
       <tbody>
+        <!-- ▼ Récemment mis à jour (cette semaine) — remontés en tête -->
+        <tr class="fresh">
+          <td class="mod">Abonnement &amp; paiements<span class="maj">maj</span></td><td class="rt">7</td>
+          <td><span class="badge b-done"><i></i> Validé</span></td>
+          <td class="nt">Passage au plan <b>Master Annuel</b> par paiement <b>FedaPay</b> validé de bout en bout → abonnement actif côté serveur. Reste l'activation par code.</td>
+        </tr>
+        <tr class="fresh">
+          <td class="mod">Caisse<span class="maj">maj</span></td><td class="rt">2</td>
+          <td><span class="badge b-done"><i></i> Validé</span></td>
+          <td class="nt">Débloquée par le plan Master : écran caisse accessible (encaissements du jour, sélection par mois, export PDF).</td>
+        </tr>
+        <tr class="fresh">
+          <td class="mod">Multi-ateliers<span class="maj">maj</span></td><td class="rt">6</td>
+          <td><span class="badge b-done"><i></i> Validé</span></td><td class="nt">Fonction phare du plan Master : création d'un sous-atelier validée de bout en bout (enregistré côté serveur, compteur 1/1). Réservé au type designer.</td>
+        </tr>
+        <tr class="fresh">
+          <td class="mod">Outils créatifs<span class="maj">maj</span></td><td class="rt">5</td>
+          <td><span class="badge b-done"><i></i> Validé</span></td>
+          <td class="nt">Débloqué par le plan Master : croquis, fiches techniques, patrons, moodboards accessibles et créés. <b>1 bug corrigé</b> (échec silencieux à l'enregistrement).</td>
+        </tr>
+        <tr class="fresh">
+          <td class="mod">Support (tickets)<span class="maj">maj</span></td><td class="rt">4</td>
+          <td><span class="badge b-done"><i></i> Validé</span></td><td class="nt">Création d'un ticket validée (enregistré côté serveur).</td>
+        </tr>
+        <tr class="fresh">
+          <td class="mod">Liens WhatsApp<span class="maj">maj</span></td><td class="rt">4</td>
+          <td><span class="badge b-done"><i></i> Validé</span></td>
+          <td class="nt">Lien de rappel généré correctement (numéro + message pré-rempli).</td>
+        </tr>
+        <tr class="fresh">
+          <td class="mod">Facturation (devis / factures / reçus)<span class="maj">maj</span></td><td class="rt">8</td>
+          <td><span class="badge b-wip"><i></i> En cours</span></td>
+          <td class="nt">Débloquée par le plan Master : écran « Devis &amp; Factures » accessible avec ses totaux. Reste la création d'une facture à repasser à travers l'app.</td>
+        </tr>
+        <tr class="fresh">
+          <td class="mod">Équipe &amp; permissions<span class="maj">maj</span></td><td class="rt">5</td>
+          <td><span class="badge b-wip"><i></i> En cours</span></td><td class="nt">Débloquée par le plan Master : écran équipe + invitation d'assistants accessibles. Ajout d'un membre à repasser.</td>
+        </tr>
+        <tr class="fresh">
+          <td class="mod">Galerie (banque de photos)<span class="maj">maj</span></td><td class="rt">4</td>
+          <td><span class="badge b-wip"><i></i> En cours</span></td>
+          <td class="nt">Débloquée par le plan (accessible aux artisans ET designers). Parcours d'ajout de photo à repasser (upload d'image).</td>
+        </tr>
+        <tr class="fresh">
+          <td class="mod">Récupération de compte<span class="maj">maj</span></td><td class="rt">7</td>
+          <td><span class="badge b-wip"><i></i> En cours</span></td>
+          <td class="nt">Étape 1 validée (question secrète + génération OTP). Livraison de l'email désormais réparée (voir bugs). Parcours complet à finir.</td>
+        </tr>
+
+        <!-- ▼ Déjà validés les semaines précédentes -->
         <tr>
           <td class="mod">Inscription / Connexion / OTP</td><td class="rt">6</td>
           <td><span class="badge b-done"><i></i> Validé</span></td>
@@ -264,60 +294,13 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
           <td><span class="badge b-todo"><i></i> À tester</span></td><td class="nt">—</td>
         </tr>
         <tr>
-          <td class="mod">Facturation (devis / factures / reçus)</td><td class="rt">8</td>
-          <td><span class="badge b-wip"><i></i> En cours</span></td>
-          <td class="nt">Débloquée par le plan Master : écran « Devis &amp; Factures » accessible avec ses totaux. Reste la création d'une facture à repasser à travers l'app.</td>
-        </tr>
-        <tr>
-          <td class="mod">Outils créatifs</td><td class="rt">5</td>
-          <td><span class="badge b-done"><i></i> Validé</span></td>
-          <td class="nt">Débloqué par le plan Master : croquis, fiches techniques, patrons, moodboards accessibles et créés. <b>1 bug corrigé</b> (échec silencieux à l'enregistrement).</td>
-        </tr>
-        <tr>
           <td class="mod">Fidélité</td><td class="rt">2</td>
           <td><span class="badge b-todo"><i></i> À tester</span></td>
           <td class="nt">Conversion de points (seuil).</td>
         </tr>
         <tr>
-          <td class="mod">Équipe &amp; permissions</td><td class="rt">5</td>
-          <td><span class="badge b-wip"><i></i> En cours</span></td><td class="nt">Débloquée par le plan Master : écran équipe + invitation d'assistants accessibles. Ajout d'un membre à repasser.</td>
-        </tr>
-        <tr>
-          <td class="mod">Abonnement &amp; paiements</td><td class="rt">7</td>
-          <td><span class="badge b-done"><i></i> Validé</span></td>
-          <td class="nt">Passage au plan <b>Master Annuel</b> par paiement <b>FedaPay</b> validé de bout en bout → abonnement actif côté serveur. Reste l'activation par code.</td>
-        </tr>
-        <tr>
           <td class="mod">Avis &amp; demandes de devis</td><td class="rt">5</td>
           <td><span class="badge b-todo"><i></i> À tester</span></td><td class="nt">Modération, traitement.</td>
-        </tr>
-        <tr>
-          <td class="mod">Support (tickets)</td><td class="rt">4</td>
-          <td><span class="badge b-done"><i></i> Validé</span></td><td class="nt">Création d'un ticket validée (enregistré côté serveur).</td>
-        </tr>
-        <tr>
-          <td class="mod">Liens WhatsApp</td><td class="rt">4</td>
-          <td><span class="badge b-done"><i></i> Validé</span></td>
-          <td class="nt">Lien de rappel généré correctement (numéro + message pré-rempli).</td>
-        </tr>
-        <tr>
-          <td class="mod">Multi-ateliers</td><td class="rt">6</td>
-          <td><span class="badge b-done"><i></i> Validé</span></td><td class="nt">Fonction phare du plan Master : création d'un sous-atelier validée de bout en bout (enregistré côté serveur, compteur 1/1). Réservé au type designer.</td>
-        </tr>
-        <tr>
-          <td class="mod">Caisse</td><td class="rt">2</td>
-          <td><span class="badge b-done"><i></i> Validé</span></td>
-          <td class="nt">Débloquée par le plan Master : écran caisse accessible (encaissements du jour, sélection par mois, export PDF).</td>
-        </tr>
-        <tr>
-          <td class="mod">Galerie (banque de photos)</td><td class="rt">4</td>
-          <td><span class="badge b-wip"><i></i> En cours</span></td>
-          <td class="nt">Débloquée par le plan (accessible aux artisans ET designers). Parcours d'ajout de photo à repasser (upload d'image).</td>
-        </tr>
-        <tr>
-          <td class="mod">Récupération de compte</td><td class="rt">7</td>
-          <td><span class="badge b-wip"><i></i> En cours</span></td>
-          <td class="nt">Étape 1 validée (question secrète + génération OTP). Livraison de l'email désormais réparée (voir bugs). Parcours complet à finir.</td>
         </tr>
       </tbody>
     </table>
@@ -329,6 +312,20 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
     <h2><span class="n">3</span> Anomalies détectées à travers l'app</h2>
     <p class="sub">Détectés uniquement grâce au test à travers l'app (invisibles au niveau API).</p>
     <div class="bugs">
+      <div class="bug">
+        <h4>Emails jamais délivrés — OTP &amp; réinitialisation <span class="maj">maj</span> <span class="fx">corrigé</span></h4>
+        <p>Les codes de vérification et emails de réinitialisation <b>ne partaient jamais</b>. Deux causes
+          cumulées : le mot de passe d'application de la messagerie était <b>périmé</b>, et surtout
+          <b>aucun service ne traitait la file d'attente</b> côté serveur — les emails s'empilaient sans être
+          envoyés. Corrigé : identifiants renouvelés + service permanent qui envoie la file en continu.
+          Revérifié de bout en bout (email de test bien reçu).</p>
+      </div>
+      <div class="bug" style="border-left-color:#E08600">
+        <h4>Plan « Free » : paiement à 0 F déclenché <span class="maj">maj</span> <span class="fx" style="color:#9a5b00;background:#FCEBD6;border-color:#f3d2a6">à corriger</span></h4>
+        <p>Choisir le plan gratuit « Free » lance quand même un paiement en ligne d'un montant de 0 F, que le
+          prestataire rejette (« montant &gt; 0 requis »). Le plan Free devrait être activé directement, sans
+          passer par le paiement. Détecté pendant la recette ; correction à prévoir.</p>
+      </div>
       <div class="bug">
         <h4>Mesures jamais affichées <span class="fx">corrigé</span></h4>
         <p>La fiche mesures d'un client s'ouvrait <b>vide</b> même quand des mesures existaient, et
@@ -378,21 +375,29 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
           ouverte sans explication et l'utilisateur pouvait croire que c'était fait. Corrigé : un message
           d'erreur clair est désormais affiché.</p>
       </div>
-      <div class="bug">
-        <h4>Emails jamais délivrés — OTP &amp; réinitialisation <span class="fx">corrigé</span></h4>
-        <p>Les codes de vérification et emails de réinitialisation <b>ne partaient jamais</b>. Deux causes
-          cumulées : le mot de passe d'application de la messagerie était <b>périmé</b>, et surtout
-          <b>aucun service ne traitait la file d'attente</b> côté serveur — les emails s'empilaient sans être
-          envoyés. Corrigé : identifiants renouvelés + service permanent qui envoie la file en continu.
-          Revérifié de bout en bout (email de test bien reçu).</p>
-      </div>
-      <div class="bug" style="border-left-color:#E08600">
-        <h4>Plan « Free » : paiement à 0 F déclenché <span class="fx" style="color:#9a5b00;background:#FCEBD6;border-color:#f3d2a6">à corriger</span></h4>
-        <p>Choisir le plan gratuit « Free » lance quand même un paiement en ligne d'un montant de 0 F, que le
-          prestataire rejette (« montant &gt; 0 requis »). Le plan Free devrait être activé directement, sans
-          passer par le paiement. Détecté pendant la recette ; correction à prévoir.</p>
-      </div>
     </div>
+  </section>
+
+  <!-- ─── MÉTHODE (rappel, en bas — elle ne change pas) ──────────────── -->
+  <section class="card method">
+    <h2><span class="n">i</span> Comment on teste — la méthode</h2>
+    <p class="sub">On teste chaque fonctionnalité <b>en passant par l'application réelle, côté utilisateur</b>
+      — pas en interrogeant les API « à vide ». C'est plus long, mais ça valide ce que l'utilisateur
+      <b>vit vraiment</b> (affichage + enregistrement + synchronisation), pas seulement qu'un serveur répond.</p>
+    <ol>
+      <li><b>Agir dans l'écran</b> : ouvrir la fonctionnalité sur un vrai téléphone, remplir le formulaire
+        comme un utilisateur, valider.</li>
+      <li><b>Vérifier la vérité à 3 niveaux</b>, jamais l'affichage seul :
+        <span class="lv"><i></i> l'écran</span>
+        <span class="lv"><i></i> la base locale du téléphone</span>
+        <span class="lv"><i></i> le serveur</span></li>
+      <li><b>Tester le cycle hors-ligne ↔ en ligne</b> : en ligne, une modification remonte toute seule ;
+        en mode avion, elle est gardée en local « en attente » ; au retour du réseau, elle remonte
+        automatiquement.</li>
+      <li><b>Tracer &amp; nettoyer</b> : on ne repasse jamais deux fois sur la même route, et on restaure
+        les données de test à leur état d'origine.</li>
+    </ol>
+    <span class="pill">Chaque fonctionnalité validée l'est sur écran + local + serveur</span>
   </section>
 
   <div class="foot">
