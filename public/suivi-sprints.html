@@ -81,6 +81,17 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
 .bug p{font-size:12.5px;color:var(--gris)}
 .bug code{font-family:'Playfair Display',serif;background:var(--creme-2);color:var(--bordeaux);padding:0 5px;border-radius:4px;font-size:12px}
 
+/* Nouveautés — mis en avant en tête */
+.news{border-left:4px solid var(--vert);background:linear-gradient(158deg,#fff,var(--vert-bg))}
+.news .nh{display:flex;align-items:center;gap:10px;margin-bottom:9px;flex-wrap:wrap}
+.news .nh h2{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--noir)}
+.news .tag{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:var(--rouge);border-radius:20px;padding:3px 10px;white-space:nowrap}
+.news ul{list-style:none;display:grid;gap:9px}
+.news li{position:relative;padding-left:20px;font-size:13px;color:var(--gris);line-height:1.5}
+.news li b{color:var(--noir)}
+.news li .nd{position:absolute;left:0;top:5px;width:9px;height:9px;border-radius:50%}
+.news .ok{background:var(--vert)} .news .warn{background:#E08600} .news .info{background:var(--rouge)}
+
 .foot{margin-top:22px;font-size:12px;color:var(--gris);text-align:center;line-height:1.7}
 .foot b{color:var(--noir)}
 @media(max-width:560px){
@@ -111,6 +122,20 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
 </header>
 
 <main class="wrap">
+
+  <!-- ─── NOUVEAUTÉS (mis en avant pour le client) ─────────────────── -->
+  <section class="card news">
+    <div class="nh">
+      <span class="tag">Nouveau · 09/07</span>
+      <h2>Dernières mises à jour</h2>
+    </div>
+    <ul>
+      <li><span class="nd ok"></span><b>Fonctions du plan payant validées</b> — Caisse, Facturation, Équipe, Multi-ateliers, et le passage au plan supérieur par paiement (FedaPay) testé de bout en bout.</li>
+      <li><span class="nd ok"></span><b>Emails réparés</b> — les codes de vérification (OTP) et de réinitialisation ne partaient jamais ; c'est corrigé et revérifié.</li>
+      <li><span class="nd warn"></span><b>Anomalie détectée</b> — le plan gratuit « Free » déclenche un paiement à 0 F au lieu d'être activé directement (à corriger).</li>
+      <li><span class="nd info"></span><b>Deux profils de compte</b> — Artisan (gestion d'atelier) et Designer (+ vitrine publique) : l'app n'affiche à chacun que ce qui le concerne.</li>
+    </ul>
+  </section>
 
   <!-- ─── MÉTHODE (en tête, pour le client) ─────────────────────────── -->
   <section class="card method">
