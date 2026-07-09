@@ -1118,8 +1118,8 @@
       "description": "Changez votre profil entre artisan et designer.",
       "artisan": "Artisan",
       "designer": "Designer",
-      "artisan_desc": "Gestion d'atelier, commandes, clients, mesures.",
-      "designer_desc": "Vitrine publique, créations, galerie, devis.",
+      "artisan_desc": "Gestion d'atelier : commandes, clients, mesures, caisse, facturation.",
+      "designer_desc": "Tout l'artisan + vitrine publique, exposition des créations, mise en avant.",
       "confirmer": "Confirmer le changement",
       "succes": "Type de compte mis à jour.",
       "erreur": "Erreur lors du changement de type."
