@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 import {
-  ClipboardList, LayoutList, Columns2,
+  ClipboardList,
   X, AlertTriangle, Timer, Zap, Banknote, Calendar,
 } from 'lucide-react'
 import { isPast, parseISO, isThisWeek, isToday } from 'date-fns'
@@ -13,53 +13,6 @@ import { CommandeCard } from '@/components/commandes'
 import { EmptyState, Skeleton, Button, SearchBar } from '@/components/ui'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { cn } from '@/utils/cn'
-
-// ── Colonnes pipeline ─────────────────────────────────────────────────────────
-const PIPELINE_COLS = [
-  { key: 'en_cours', tKey: 'commandes.statut.en_cours',  color: 'text-primary'  },
-  { key: 'essai',    tKey: 'commandes.pipeline.essayage', color: 'text-warning'  },
-  { key: 'livre',    tKey: 'commandes.onglets.livrees',   color: 'text-success'  },
-]
-
-function PipelineColumn({ col, commandes, navigate }) {
-  const { t } = useTranslation()
-  const total   = commandes.reduce((s, c) => s + Math.max(0, (c.prix ?? 0) - (c.acompte ?? 0)), 0)
-
-  return (
-    <div className="flex-none w-[78vw] max-w-[290px] snap-start flex flex-col">
-      {/* En-tête colonne */}
-      <div className="flex items-center justify-between mb-3 px-1">
-        <div className="flex items-center gap-2">
-          <span className={cn('text-sm font-semibold', col.color)}>{t(col.tKey)}</span>
-          <span className="text-xs font-medium text-ghost bg-subtle px-1.5 py-0.5 rounded-full">
-            {commandes.length}
-          </span>
-        </div>
-        {total > 0 && (
-          <span className="text-xs font-mono text-gold-dark">{formatCurrency(total)}</span>
-        )}
-      </div>
-
-      {/* Cartes */}
-      <div className="flex-1 overflow-y-auto space-y-2 pb-4 pr-1">
-        {commandes.length === 0 ? (
-          <div className="py-8 text-center text-xs text-ghost border border-dashed border-edge rounded-2xl">
-            {t('commandes.pipeline.vide')}
-          </div>
-        ) : (
-          commandes.map(cmd => (
-            <CommandeCard
-              key={cmd.id}
-              commande={cmd}
-              onClick={() => navigate(`/commandes/${cmd.id}`)}
-              compact
-            />
-          ))
-        )}
-      </div>
-    </div>
-  )
-}
 
 // ── Vue liste chronologique ───────────────────────────────────────────────────
 function groupByDate(commandes) {
@@ -161,7 +114,6 @@ export default function CommandesPage() {
   const queryClient = useQueryClient()
   const location = useLocation()
   const [searchParams] = useSearchParams()
-  const [view,   setView]   = useState('pipeline')   // 'pipeline' | 'liste'
   const [filter, setFilter] = useState(null)
   const [search, setSearch] = useState('')
   const [statut, setStatut] = useState('tous')       // #26 — tabs statut
@@ -203,15 +155,6 @@ export default function CommandesPage() {
     return list
   }, [commandes, alerte, filter, search, statut])
 
-  const byStatut = useMemo(() => {
-    const map = {}
-    PIPELINE_COLS.forEach(col => { map[col.key] = [] })
-    filtered.forEach(c => {
-      if (map[c.statut]) map[c.statut].push(c)
-    })
-    return map
-  }, [filtered])
-
   const isSearching = !!search.trim() || !!filter || !!alerte
 
   return (
@@ -222,29 +165,17 @@ export default function CommandesPage() {
       <div className="flex flex-col h-full">
         {/* Barre de recherche + filtres */}
         <div className="px-4 pt-3 pb-2 space-y-2 border-b border-edge">
-          {/* Recherche + bouton de vue (kanban/liste), hors du header rouge */}
-          <div className="flex items-center gap-2">
-            <div className="flex-1 min-w-0">
-              <SearchBar
-                value={search}
-                onChange={setSearch}
-                placeholder={t('commandes.recherche_placeholder')}
-              />
-            </div>
-            <button
-              type="button"
-              onClick={() => setView(v => v === 'pipeline' ? 'liste' : 'pipeline')}
-              className="shrink-0 w-10 h-10 flex items-center justify-center rounded-xl border border-edge bg-subtle text-ghost hover:text-ink transition-colors"
-              aria-label={t('commun.changer_vue') || 'Changer la vue'}
-            >
-              {view === 'pipeline' ? <LayoutList size={18} /> : <Columns2 size={18} />}
-            </button>
-          </div>
+          <SearchBar
+            value={search}
+            onChange={setSearch}
+            placeholder={t('commandes.recherche_placeholder')}
+          />
           {/* #26 — Tabs statut scrollables horizontalement */}
           <div className="flex gap-1 overflow-x-auto scrollbar-none -mx-1 px-1">
             {[
               { key: 'tous',     label: t('commandes.onglets.toutes') },
               { key: 'en_cours', label: t('commandes.statut.en_cours') },
+              { key: 'essai',    label: t('commandes.pipeline.essayage') },
               { key: 'livre',    label: t('commandes.onglets.livrees') },
               { key: 'annule',   label: t('commandes.onglets.annulees') },
             ].map(({ key, label }) => (
@@ -312,22 +243,8 @@ export default function CommandesPage() {
               }
             />
           </div>
-        ) : view === 'pipeline' ? (
-          /* Vue pipeline */
-          <div className="flex-1 overflow-hidden">
-            <div className="flex gap-4 h-full overflow-x-auto px-4 pt-4 pb-2 scrollbar-none snap-x snap-mandatory">
-              {PIPELINE_COLS.map(col => (
-                <PipelineColumn
-                  key={col.key}
-                  col={col}
-                  commandes={byStatut[col.key] ?? []}
-                  navigate={navigate}
-                />
-              ))}
-            </div>
-          </div>
         ) : (
-          /* Vue liste */
+          /* Liste filtrée par l'onglet de statut (Toutes / En cours / Essayage / Livrées / Annulées) */
           <div className="flex-1 overflow-y-auto p-4">
             <ListView commandes={filtered} navigate={navigate} />
           </div>
