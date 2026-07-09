@@ -1118,8 +1118,8 @@
       "description": "Switch your profile between artisan and designer.",
       "artisan": "Artisan",
       "designer": "Designer",
-      "artisan_desc": "Workshop management, orders, clients, measurements.",
-      "designer_desc": "Public showcase, creations, gallery, quotes.",
+      "artisan_desc": "Workshop management: orders, clients, measurements, cash register, invoicing.",
+      "designer_desc": "Everything the artisan has + public showcase, creations display, promotion.",
       "confirmer": "Confirm change",
       "succes": "Account type updated.",
       "erreur": "Error changing account type."
