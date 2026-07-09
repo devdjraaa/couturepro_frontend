@@ -8,6 +8,7 @@ import GarmentVisual from './GarmentVisual'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { useDevise } from './vitrineCurrency'
 import { useFavoris } from './useFavoris'
+import { SkeletonCreatorCard } from './VitrineSkeletons'
 
 const btnPrimary = 'vt-btn-primary inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-inverse hover:bg-primary-600'
 const btnOutline = 'vt-btn-ghost inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary'
@@ -215,7 +216,9 @@ export default function VitrineHome() {
                 <span className={btnOutline + ' w-full justify-center !py-2 text-[13px]'}>{t('vitrine.creators.visit')}</span>
               </Link>
             ))}
-            {!creators && <div className="text-dim text-sm p-4">{t('vitrine.loading')}</div>}
+            {!creators && Array.from({ length: 4 }, (_, i) => (
+              <SkeletonCreatorCard key={i} className="min-w-[268px] max-w-[268px] shrink-0" />
+            ))}
           </div>
           <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-elevated to-transparent lg:hidden" />
           </div>

@@ -5,6 +5,7 @@ import VitrineShell from './VitrineChrome'
 import { getCreators } from './vitrineApi'
 import { useFavoris } from './useFavoris'
 import { usePageMeta } from '@/hooks/usePageMeta'
+import { SkeletonCreatorCard } from './VitrineSkeletons'
 
 export default function FavorisPage() {
   const { t } = useTranslation()
@@ -23,7 +24,9 @@ export default function FavorisPage() {
           <h1 className="font-display font-extrabold text-[clamp(28px,4vw,40px)] text-ink mb-6">{t('vitrine.favoris.title')}</h1>
 
           {!creators ? (
-            <p className="text-dim">{t('vitrine.loading')}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {Array.from({ length: 3 }, (_, i) => <SkeletonCreatorCard key={i} />)}
+            </div>
           ) : favs.length === 0 ? (
             <div className="py-12 text-center">
               <p className="text-dim mb-5">{t('vitrine.favoris.empty')}</p>

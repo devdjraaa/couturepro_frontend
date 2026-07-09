@@ -6,8 +6,8 @@ import VitrineShell from './VitrineChrome'
 import { getCreators } from './vitrineApi'
 import { useFavoris } from './useFavoris'
 import { usePageMeta } from '@/hooks/usePageMeta'
-import { Spinner } from '@/components/ui'
 import { cn } from '@/utils/cn'
+import { SkeletonCreatorCard } from './VitrineSkeletons'
 
 function distKm(a, b) {
   const toRad = (d) => (d * Math.PI) / 180
@@ -215,8 +215,8 @@ export default function CreateursPage() {
 
           {/* État chargement */}
           {!creators && !error && (
-            <div className="flex justify-center py-16">
-              <Spinner size="lg" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {Array.from({ length: 6 }, (_, i) => <SkeletonCreatorCard key={i} />)}
             </div>
           )}
 

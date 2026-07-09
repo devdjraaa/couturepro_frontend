@@ -12,6 +12,7 @@ import { devisService } from '@/services/devisService'
 import { vitrineStatsService } from '@/services/vitrineStatsService'
 import { signalementService } from '@/services/signalementService'
 import { usePageMeta } from '@/hooks/usePageMeta'
+import { SkeletonCreatorProfile } from './VitrineSkeletons'
 
 const btnPrimary = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-inverse hover:bg-primary-600 transition'
 const btnOutline = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary transition'
@@ -214,7 +215,7 @@ export default function CreateurProfilPage() {
   })
 
   if (c === undefined) {
-    return <VitrineShell><div className="py-24 text-center text-dim">{t('vitrine.loading')}</div></VitrineShell>
+    return <SkeletonCreatorProfile />
   }
   if (c === null) {
     return (
