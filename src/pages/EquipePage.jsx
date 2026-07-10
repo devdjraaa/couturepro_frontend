@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { UserPlus, Users, Copy, CheckCheck } from 'lucide-react'
+import { createPortal } from 'react-dom'
+import { UserPlus, Users, Copy, CheckCheck, BadgeCheck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useEquipe, useInviterMembre, useRemoveMembre } from '@/hooks/useEquipe'
 import { usePlanLimit } from '@/hooks/usePlanFeature'
@@ -18,33 +19,43 @@ function CodeAccesModal({ membre, onClose }) {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 p-4">
-      <div className="bg-surface border border-border rounded-2xl w-full max-w-sm p-6 space-y-4">
-        <div className="text-center">
-          <p className="font-semibold text-content">{t('equipe.formulaire.titre')} ✓</p>
-          <p className="text-sm text-content-secondary mt-1">
-            Transmettez ce code d'accès à <strong>{membre.prenom} {membre.nom}</strong>.
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-card border border-edge rounded-2xl w-full max-w-sm p-6 space-y-4 shadow-2xl"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="flex flex-col items-center text-center">
+          <span className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-2">
+            <BadgeCheck size={24} />
+          </span>
+          <p className="font-semibold text-ink">{t('equipe.formulaire.titre')}</p>
+          <p className="text-sm text-dim mt-1">
+            Transmettez ce code d'accès à <strong className="text-ink">{membre.prenom} {membre.nom}</strong>.
             Il servira d'identifiant et de mot de passe initial.
           </p>
         </div>
 
-        <div className="flex items-center gap-3 bg-background border border-border rounded-xl px-4 py-3">
-          <span className="flex-1 font-mono text-lg font-bold text-content tracking-widest text-center">
+        <div className="flex items-center gap-3 bg-subtle border border-edge rounded-xl px-4 py-3">
+          <span className="flex-1 font-mono text-lg font-bold text-ink tracking-widest text-center">
             {membre.code_acces}
           </span>
-          <button onClick={copy} className="text-content-secondary hover:text-content transition-colors shrink-0">
+          <button onClick={copy} className="text-dim hover:text-ink transition-colors shrink-0">
             {copied ? <CheckCheck size={18} className="text-success" /> : <Copy size={18} />}
           </button>
         </div>
 
-        <p className="text-xs text-content-secondary text-center">
-          Le membre se connecte via <strong>Accès assistant</strong> sur la page de connexion.
+        <p className="text-xs text-dim text-center">
+          Le membre se connecte via <strong className="text-ink">Accès assistant</strong> sur la page de connexion.
         </p>
 
         <Button className="w-full" onClick={onClose}>{t('commun.confirmer')}</Button>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
 
@@ -120,11 +131,11 @@ export default function EquipePage() {
         {activeTab === 'membres' && (
           <>
             {max === 0 ? (
-              <div className="flex flex-col items-center gap-4 py-10 px-6 text-center bg-surface border border-border rounded-2xl">
-                <Users size={32} className="text-content-secondary" />
+              <div className="flex flex-col items-center gap-4 py-10 px-6 text-center bg-card border border-edge rounded-2xl">
+                <Users size={32} className="text-dim" />
                 <div>
-                  <p className="font-semibold text-content mb-1">Membres d'équipe non inclus</p>
-                  <p className="text-sm text-content-secondary">
+                  <p className="font-semibold text-ink mb-1">Membres d'équipe non inclus</p>
+                  <p className="text-sm text-dim">
                     Votre plan actuel ne permet pas d'ajouter des membres d'équipe. Passez à un plan supérieur pour collaborer.
                   </p>
                 </div>
@@ -142,7 +153,7 @@ export default function EquipePage() {
               />
             ) : (
               membres.map(m => (
-                <MembreCard key={m.id} membre={m} onRemove={id => remove.mutate(id)} />
+                <MembreCard key={m.id} membre={m} onRemove={id => remove.mutate(id)} onShowCode={setNewMembre} />
               ))
             )}
 
