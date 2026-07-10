@@ -70,15 +70,14 @@ function Greeting({ user, subtitle, hero = false }) {
           <Bell size={19} className="text-ink" />
           {notifCount > 0 && (
             <span className="absolute -top-1 -right-1 flex">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-60" />
-              <span className="relative min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-primary text-white text-[10px] font-bold leading-none">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+              <span className="relative min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-primary text-white text-[10px] font-bold leading-none ring-2 ring-white">
                 {notifCount > 9 ? '9+' : notifCount}
               </span>
             </span>
           )}
         </button>
       </div>
-      {subtitle && <p className="text-sm mt-3 text-inverse/85">{subtitle}</p>}
     </div>
   )
 }
