@@ -583,6 +583,7 @@ function MesAteliersTab() {
 
 function SecuriteTab() {
   const { t } = useTranslation()
+  const { logout } = useAuth()
   const changerMdp = useChangerMotDePasse()
   const [form, setForm] = useState({ ancien: '', nouveau: '', confirmation: '' })
   const [error, setError] = useState('')
@@ -602,6 +603,9 @@ function SecuriteTab() {
       await changerMdp.mutateAsync({ ancien: form.ancien, nouveau: form.nouveau })
       setSuccess(true)
       setForm({ ancien: '', nouveau: '', confirmation: '' })
+      // Sécurité : le changement révoque toutes les sessions → on déconnecte
+      // (le temps de lire le message) pour forcer une reconnexion.
+      setTimeout(() => { logout() }, 1800)
     } catch (err) {
       setError(err.message || t('erreurs.inconnu'))
     }
