@@ -10,6 +10,7 @@ function toPlain(n) {
     titre:      n.titre,
     contenu:    n.contenu,
     type:       n.type,
+    lien:       n.lien ?? null,
     is_read:    n.is_read,
     created_at: n.date_creation ?? n._raw.created_at ?? null,
   }

@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Bell, Package, CreditCard, AlertCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useNotifications, useMarquerLue, useMarquerToutesLues } from '@/hooks/useNotifications'
@@ -70,6 +71,7 @@ function groupByDay(notifications) {
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function NotificationsPage() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const [category, setCategory] = useState('toutes')
 
   const { data: notifications = [], isLoading } = useNotifications()
@@ -129,7 +131,10 @@ export default function NotificationsPage() {
                   <NotificationItem
                     key={n.id}
                     notification={n}
-                    onPress={notif => { if (!notif.lu) marquerLue.mutate(notif.id) }}
+                    onPress={notif => {
+                      if (!notif.is_read) marquerLue.mutate(notif.id)
+                      if (notif.lien) navigate(notif.lien)
+                    }}
                   />
                 ))}
               </div>

@@ -12,6 +12,9 @@ export default class Notification extends Model {
   get type()          { return this._getRaw('type')          ?? 'info' }
   set type(v)         { this._setRaw('type', v) }
 
+  get lien()          { return this._getRaw('lien')          ?? null }
+  set lien(v)         { this._setRaw('lien', v) }
+
   get is_read()       { return this._getRaw('is_read')       ?? false }
   set is_read(v)      { this._setRaw('is_read', Boolean(v)) }
 

@@ -4,6 +4,7 @@ import { useNetwork } from '@/hooks/useNetwork'
 import { useAuth } from '@/contexts/AuthContext'
 import { syncWithServer, getLastPulledAt } from '@/db/syncAdapter'
 import { scheduleOrderNotifications } from '@/utils/orderNotifications'
+import { raiseSystemNotifications } from '@/utils/localNotif'
 import database from '@/db/database'
 import { Q } from '@nozbe/watermelondb'
 
@@ -56,6 +57,13 @@ export function SyncProvider({ children }) {
           .query(Q.where('statut', 'en_cours'), Q.where('is_archived', false))
           .fetch()
         scheduleOrderNotifications(commandes)
+
+        // Rideau du téléphone : lever une notif locale pour les notifications
+        // système nouvellement arrivées (remplace le push FCM).
+        const notifs = await database.get('notifications')
+          .query(Q.sortBy('date_creation', Q.desc), Q.take(30))
+          .fetch()
+        raiseSystemNotifications(notifs)
       }
     } catch (err) {
       setSyncError(err?.message ?? 'Erreur de synchronisation.')

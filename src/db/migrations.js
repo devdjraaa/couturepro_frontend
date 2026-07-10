@@ -80,5 +80,16 @@ export default schemaMigrations({
         }),
       ],
     },
+    {
+      toVersion: 5,
+      steps: [
+        addColumns({
+          table: 'notifications',
+          columns: [
+            { name: 'lien', type: 'string', isOptional: true }, // deep-link au tap
+          ],
+        }),
+      ],
+    },
   ],
 })

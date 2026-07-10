@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
+import { setDeepLinkNavigator } from '@/utils/deepLink'
 import { ProtectedRoute, DesignerRoute } from '@/components/layout'
 import { AdminProtectedRoute } from '@/components/admin'
 import {
@@ -79,6 +80,11 @@ const AbonnementRedirect = () => <Navigate to={`${ROUTES.PARAMETRES}?tab=abonnem
 const APP_TARGET = import.meta.env.VITE_APP_TARGET || 'user'
 
 export default function App() {
+  // Deep-link des notifications : on enregistre le navigateur React Router pour que
+  // le tap sur une notification du rideau (listener natif) puisse rediriger.
+  const navigate = useNavigate()
+  useEffect(() => { setDeepLinkNavigator(navigate) }, [navigate])
+
   // App « Gextimo Admin » (com.couturepro.admin) : ouvre directement l'espace admin au lancement.
   // L'app « Gextimo » (com.gextimo.app) garde l'entrée pros par défaut. Détection à l'exécution
   // via l'appId (un seul bundle partagé par les deux applications Android).
