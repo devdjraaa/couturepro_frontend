@@ -592,6 +592,34 @@ body {
 }
 .vt-filter:hover { transform: translateY(-1px); }
 
+/* ── Logo Gextimo — animations orbitales ── */
+
+/* Arc rouge : satellite qui tourne autour du centre du SVG */
+.vt-logo-arc {
+  transform-box: view-box;       /* transform-origin relatif au viewBox (0 0 100 100) */
+  transform-origin: 50% 50%;    /* = centre exact du SVG */
+  animation: vt-logo-orbit 10s linear infinite;
+  will-change: transform;
+}
+
+/* Point central : pulsation subtile */
+.vt-logo-dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: vt-logo-pulse 2.4s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes vt-logo-orbit {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes vt-logo-pulse {
+  0%, 100% { transform: scale(1);    opacity: 1;    }
+  50%       { transform: scale(1.45); opacity: 0.72; }
+}
+
 /* ════════════════════════════════════════════════════════
    HERO VITRINE — Fond animé multicouche (ambiance défilé)
    ════════════════════════════════════════════════════════ */
@@ -827,4 +855,6 @@ body {
   .vt-foot-mesh     { animation: none !important; }
   .vt-foot-glows    { animation: none !important; }
   .vt-foot-shimmer  { display: none; }
+  .vt-logo-arc      { animation: none !important; }
+  .vt-logo-dot      { animation: none !important; }
 }

@@ -19,8 +19,8 @@ export function VitrineLogo({ onDark = false }) {
         <circle cx="50" cy="50" r="46" fill="none" stroke={ring} strokeWidth="3.4" />
         <circle cx="50" cy="50" r="33" fill="none" stroke={ring} strokeWidth="2" opacity="0.45" />
         <circle cx="50" cy="50" r="21" fill="none" stroke={ring} strokeWidth="2" opacity="0.3" />
-        <path d="M50 4 A46 46 0 0 1 96 50" fill="none" stroke="var(--color-primary)" strokeWidth="6.5" strokeLinecap="round" />
-        <circle cx="50" cy="50" r="8" fill="var(--color-primary)" />
+        <path className="vt-logo-arc" d="M50 4 A46 46 0 0 1 96 50" fill="none" stroke="var(--color-primary)" strokeWidth="6.5" strokeLinecap="round" />
+        <circle className="vt-logo-dot" cx="50" cy="50" r="8" fill="var(--color-primary)" />
       </svg>
       <span className={`font-display font-extrabold text-[22px] tracking-tight ${onDark ? 'text-inverse' : 'text-ink'}`}>
         gextimo<span className="text-primary">.</span>
