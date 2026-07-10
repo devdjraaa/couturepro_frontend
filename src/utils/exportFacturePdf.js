@@ -1,5 +1,6 @@
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
+import { IS_NATIVE } from '@/constants/routes'
 
 const formatCFA = (v) =>
   new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 0 }).format(Number(v) || 0) + ' FCFA'
@@ -248,6 +249,29 @@ export async function exportFactureDocPdf({ facture, atelier, factureSettings })
 
 // Télécharge le PDF, ou ouvre le partage natif (WhatsApp, Bluetooth, etc.) si disponible
 export async function shareOrDownloadPdf(pdf, filename, { title = 'Facture', text = '' } = {}) {
+  // Chemin natif (app Capacitor) : le WebView Android n'a NI navigator.share NI un
+  // gestionnaire de téléchargement pour pdf.save() → le PDF ne sortait pas.
+  // On écrit le fichier via Filesystem puis on ouvre le partage natif (Share plugin).
+  if (IS_NATIVE) {
+    try {
+      const [{ Filesystem, Directory }, { Share }] = await Promise.all([
+        import('@capacitor/filesystem'),
+        import('@capacitor/share'),
+      ])
+      const base64 = pdf.output('datauristring').split(',')[1]
+      const safeName = (filename || 'facture.pdf').replace(/[^\w.\-]+/g, '_')
+      const { uri } = await Filesystem.writeFile({
+        path: safeName,
+        data: base64,
+        directory: Directory.Cache,
+      })
+      await Share.share({ title, text, files: [uri] })
+      return 'shared'
+    } catch (e) {
+      if (e?.message && /cancel/i.test(e.message)) return 'cancelled'
+      // dernier recours : on tente la voie navigateur ci-dessous
+    }
+  }
   if (typeof navigator !== 'undefined' && navigator.canShare) {
     try {
       const file = new File([pdf.output('blob')], filename, { type: 'application/pdf' })
