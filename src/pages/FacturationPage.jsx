@@ -270,59 +270,6 @@ function FormulaireModal({ onClose, onCreated }) {
   )
 }
 
-// Formulaire spécial « Importer une facture » : le PDF est déjà complet (montants,
-// lignes…) → on demande juste le client destinataire + le fichier, puis on l'habille.
-function ImporterModal({ onClose, onCreated }) {
-  const { t } = useTranslation()
-  const [clientNom, setClientNom] = useState('')
-  const [fichier, setFichier]     = useState(null)
-  const [busy, setBusy]           = useState(false)
-  const [err, setErr]             = useState('')
-
-  const submit = async () => {
-    if (busy || !clientNom.trim() || !fichier) return
-    setBusy(true); setErr('')
-    try {
-      const created = await factureService.create({ type: 'facture', client_nom: clientNom.trim(), lignes: [] })
-      const withPdf = await factureService.uploadDgi(created.id, fichier)
-      onCreated(withPdf || created)
-      onClose()
-    } catch {
-      setErr(t('facturation.import.err'))
-    } finally { setBusy(false) }
-  }
-
-  return (
-    <BottomSheet isOpen onClose={onClose} title={t('facturation.import.titre')}>
-      <div className="p-5 space-y-4">
-        <p className="text-xs text-dim">{t('facturation.import.desc')}</p>
-        <div>
-          <label className="block text-xs font-medium text-dim mb-1">{t('facturation.import.client')}</label>
-          <input value={clientNom} onChange={(e) => setClientNom(e.target.value)}
-                 placeholder={t('facturation.import.client_ph')}
-                 className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
-        </div>
-        <div>
-          <label className="block text-xs font-medium text-dim mb-1">{t('facturation.import.fichier')}</label>
-          <label className="flex items-center gap-2 cursor-pointer rounded-lg border border-dashed border-edge px-3 py-3 text-sm text-dim hover:border-primary hover:text-primary transition">
-            <Upload size={16} className="shrink-0" />
-            <span className="truncate">{fichier ? fichier.name : t('facturation.import.fichier_ph')}</span>
-            <input type="file" accept="application/pdf" onChange={(e) => setFichier(e.target.files?.[0] || null)} className="hidden" />
-          </label>
-        </div>
-        {err && <p className="text-xs text-danger font-medium">{err}</p>}
-        <div className="flex justify-end gap-2 pt-1">
-          <button onClick={onClose} className="px-4 py-2 rounded-xl border border-edge text-sm font-semibold text-dim hover:text-ink transition">{t('commun.annuler')}</button>
-          <button onClick={submit} disabled={busy || !clientNom.trim() || !fichier}
-                  className="px-5 py-2 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-600 transition disabled:opacity-60">
-            {busy ? t('facturation.import.en_cours') : t('facturation.import.importer')}
-          </button>
-        </div>
-      </div>
-    </BottomSheet>
-  )
-}
-
 function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
   const { t } = useTranslation()
   const { atelier } = useAuth()
@@ -588,7 +535,7 @@ export default function FacturationPage() {
   const { atelier } = useAuth()
   const [docs, setDocs] = useState(null)
   const [showForm, setShowForm] = useState(false)
-  const [showImport, setShowImport] = useState(false)
+  const [importing, setImporting] = useState(false)
   const [filterType, setFilterType] = useState('tous')
   const [filterStatut, setFilterStatut] = useState('tous')
 
@@ -602,6 +549,25 @@ export default function FacturationPage() {
   useEffect(() => { loadDocs() }, [loadDocs])
 
   const handleCreated = (doc) => setDocs((l) => [doc, ...(l || [])])
+
+  // Import direct : on choisit un PDF déjà normalisé → on crée l'entrée facture
+  // (libellée par le nom du fichier) et on y joint le PDF. Pas de saisie.
+  const handleImport = async (e) => {
+    const file = e.target.files?.[0]
+    e.target.value = '' // permet de re-choisir le même fichier
+    if (!file || importing) return
+    setImporting(true)
+    try {
+      const nom = file.name.replace(/\.pdf$/i, '').slice(0, 120) || t('facturation.import.libelle_defaut')
+      const created = await factureService.create({ type: 'facture', client_nom: nom, lignes: [] })
+      const withPdf = await factureService.uploadDgi(created.id, file)
+      handleCreated(withPdf || created)
+    } catch {
+      alert(t('facturation.import.err'))
+    } finally {
+      setImporting(false)
+    }
+  }
 
   const handleStatutChange = (updated) => {
     setDocs((l) => l.map((d) => (d.id === updated.id ? { ...d, ...updated } : d)))
@@ -653,12 +619,13 @@ export default function FacturationPage() {
             >
               <Plus size={16} /> {t('facturation.nouveau')}
             </button>
-            <button
-              onClick={() => setShowImport(true)}
-              className="inline-flex items-center justify-center gap-2 text-sm font-semibold px-4 py-2 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary transition"
-            >
-              <Upload size={15} /> {t('facturation.import.bouton')}
-            </button>
+            <label className={cn(
+              'inline-flex items-center justify-center gap-2 text-sm font-semibold px-4 py-2 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary transition cursor-pointer',
+              importing && 'opacity-60 pointer-events-none',
+            )}>
+              <Upload size={15} /> {importing ? t('facturation.import.en_cours') : t('facturation.import.bouton')}
+              <input type="file" accept="application/pdf" onChange={handleImport} disabled={importing} className="hidden" />
+            </label>
           </div>
         </div>
 
@@ -745,12 +712,6 @@ export default function FacturationPage() {
       {showForm && (
         <FormulaireModal
           onClose={() => setShowForm(false)}
-          onCreated={handleCreated}
-        />
-      )}
-      {showImport && (
-        <ImporterModal
-          onClose={() => setShowImport(false)}
           onCreated={handleCreated}
         />
       )}

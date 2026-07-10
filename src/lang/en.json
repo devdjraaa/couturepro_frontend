@@ -280,7 +280,8 @@
       "fichier_ph": "Choose a PDF file",
       "importer": "Import",
       "en_cours": "Importing…",
-      "err": "Import failed. Check the file (PDF, 20 MB max)."
+      "err": "Import failed. Check the file (PDF, 20 MB max).",
+      "libelle_defaut": "Imported invoice"
     }
   },
   "commun": {

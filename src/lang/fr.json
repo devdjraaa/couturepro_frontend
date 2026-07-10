@@ -280,7 +280,8 @@
       "fichier_ph": "Choisir un fichier PDF",
       "importer": "Importer",
       "en_cours": "Import…",
-      "err": "L'import a échoué. Vérifiez le fichier (PDF, 20 Mo max)."
+      "err": "L'import a échoué. Vérifiez le fichier (PDF, 20 Mo max).",
+      "libelle_defaut": "Facture importée"
     }
   },
   "commun": {
