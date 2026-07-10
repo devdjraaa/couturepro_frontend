@@ -165,7 +165,12 @@
     "publie": "Publié",
     "masque": "Masqué",
     "collection_opt": "— Collection",
-    "aide": "Touchez l'icône œil sur une création pour la publier ou la retirer de votre page publique. Les statistiques de visites et de contacts arrivent prochainement."
+    "aide": "Touchez l'icône œil sur une création pour la publier ou la retirer de votre page publique. Les statistiques de visites et de contacts arrivent prochainement.",
+    "devis_vide": "Aucune demande de devis pour le moment. Elles apparaîtront ici dès qu’un client vous en enverra depuis votre vitrine.",
+    "devis_traite": "Traité",
+    "sponso_jour_restant": "{{n}} jour restant",
+    "sponso_jours_restants": "{{n}} jours restants",
+    "sponso_fin_le": "Se termine le {{date}}"
   },
   "facturation": {
     "titre": "Facturation",
@@ -1792,6 +1797,7 @@
     "chargement": "Vérification du paiement…",
     "succes_titre": "Paiement confirmé !",
     "succes_desc": "Votre abonnement a été activé avec succès.",
+    "succes_desc_sponso": "Votre mise en avant a été activée avec succès.",
     "retour_app": "Retour à l'application",
     "echec_titre": "Paiement échoué",
     "echec_inconnu": "Impossible de vérifier le statut de ce paiement.",

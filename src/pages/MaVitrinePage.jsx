@@ -4,7 +4,7 @@ import {
   Store, ExternalLink, Copy, Check, Eye, EyeOff, MessageCircle,
   Sparkles, ClipboardList, Wallet, Image as ImageIcon,
   ShieldCheck, ShieldAlert, Upload, Link as LinkIcon,
-  Star,
+  Star, Clock,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { AppLayout } from '@/components/layout'
@@ -39,8 +39,8 @@ function Kpi({ icon: Icon, label, value, hint }) {
 }
 
 export default function MaVitrinePage() {
-  const { t } = useTranslation()
-  const { atelier } = useAuth()
+  const { t, i18n } = useTranslation()
+  const { atelier, refreshAtelier } = useAuth()
   const { available: peutSponsoriser } = usePlanFeature('sponsorisation')
   const dash = useDashboard()
   const [creations, setCreations] = useState(null)
@@ -95,6 +95,9 @@ export default function MaVitrinePage() {
     }).catch(() => {})
   }, [])
   useEffect(() => { vitrineStatsService.getStats().then(setStats).catch(() => {}) }, [])
+  // Rafraîchit l'atelier au montage : reflète immédiatement une sponsorisation
+  // fraîchement payée (sponsorise + sponsor_jusqu_a) au retour de paiement.
+  useEffect(() => { refreshAtelier?.().catch(() => {}) }, [refreshAtelier])
 
   const publicPath = atelier?.id ? `/createurs/${atelier.id}` : '/createurs'
   // Domaine public de la vitrine : sur l'app mobile, window.location.origin vaut
@@ -286,6 +289,24 @@ export default function MaVitrinePage() {
           </button>
         </div>
 
+        {/* Statistiques publiques (réelles) — en tête : performance de la vitrine */}
+        <div className="mt-4 bg-subtle border border-edge rounded-xl p-4">
+          <p className="text-sm font-semibold text-ink mb-3">{t('ma_vitrine.stats_titre')}</p>
+          <div className="grid grid-cols-3 gap-3">
+            {[
+              { icon: Eye, label: t('ma_vitrine.visites'), value: stats ? stats.visites.total : '—' },
+              { icon: Store, label: t('ma_vitrine.ce_mois'), value: stats ? stats.visites.mois : '—' },
+              { icon: MessageCircle, label: t('ma_vitrine.contacts'), value: stats ? stats.contacts.total : '—' },
+            ].map((s) => (
+              <div key={s.label} className="text-center">
+                <s.icon size={18} className="mx-auto text-primary" />
+                <div className="text-lg font-bold text-ink mt-1">{s.value}</div>
+                <div className="text-2xs text-dim">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* KPIs réels */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4">
           <Kpi icon={Sparkles} label={t('ma_vitrine.kpi_creations')} value={nbCreations ?? '—'} hint={nbPubliees != null ? t('ma_vitrine.kpi_publiees', { n: nbPubliees }) : t('ma_vitrine.kpi_sur_page')} />
@@ -402,7 +423,23 @@ export default function MaVitrinePage() {
           </div>
 
           {atelier?.sponsorise ? (
-            <p className="text-xs text-dim">{t('ma_vitrine.sponso_actif_desc')}</p>
+            <>
+              <p className="text-xs text-dim">{t('ma_vitrine.sponso_actif_desc')}</p>
+              {atelier?.sponsor_jusqu_a && (() => {
+                const fin = new Date(atelier.sponsor_jusqu_a)
+                const jours = Math.max(0, Math.ceil((fin.getTime() - Date.now()) / 86400000))
+                const dateStr = fin.toLocaleDateString(i18n.language === 'en' ? 'en-GB' : 'fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+                return (
+                  <div className="mt-3 flex items-center gap-3 rounded-xl bg-warning/10 border border-warning/25 px-3 py-3">
+                    <Clock size={20} className="text-warning shrink-0" />
+                    <div className="min-w-0">
+                      <p className="text-sm font-bold text-ink">{t(jours <= 1 ? 'ma_vitrine.sponso_jour_restant' : 'ma_vitrine.sponso_jours_restants', { n: jours })}</p>
+                      <p className="text-[11px] text-dim mt-0.5">{t('ma_vitrine.sponso_fin_le', { date: dateStr })}</p>
+                    </div>
+                  </div>
+                )
+              })()}
+            </>
           ) : sponsoOffres && !sponsoOffres.actif ? (
             <p className="text-xs text-dim">{t('ma_vitrine.sponso_indispo')}</p>
           ) : (
@@ -481,16 +518,23 @@ export default function MaVitrinePage() {
           </div>
         )}
 
-        {/* Demandes de devis reçues */}
-        {devis.some((d) => d.statut === 'nouveau') && (
-          <div className="mt-4 bg-card border border-edge rounded-xl p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <ClipboardList size={16} className="text-primary" />
-              <p className="text-sm font-semibold text-ink">{t('ma_vitrine.devis_titre')} <span className="text-primary">({devis.filter((d) => d.statut === 'nouveau').length})</span></p>
-            </div>
+        {/* Demandes de devis reçues — toujours visible (repère) + état vide + historique */}
+        <div className="mt-4 bg-card border border-edge rounded-xl p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <ClipboardList size={16} className="text-primary" />
+            <p className="text-sm font-semibold text-ink">
+              {t('ma_vitrine.devis_titre')}
+              {devis.filter((d) => d.statut === 'nouveau').length > 0 && (
+                <span className="text-primary"> ({devis.filter((d) => d.statut === 'nouveau').length})</span>
+              )}
+            </p>
+          </div>
+          {devis.length === 0 ? (
+            <p className="text-xs text-dim">{t('ma_vitrine.devis_vide')}</p>
+          ) : (
             <div className="space-y-3">
-              {devis.filter((d) => d.statut === 'nouveau').map((d) => (
-                <div key={d.id} className="border border-edge rounded-lg p-3">
+              {devis.map((d) => (
+                <div key={d.id} className={`border border-edge rounded-lg p-3 ${d.statut === 'traite' ? 'opacity-60' : ''}`}>
                   <div className="flex items-center justify-between">
                     <b className="text-sm text-ink">{d.nom}</b>
                     <span className="text-xs text-dim">{d.contact}</span>
@@ -502,32 +546,18 @@ export default function MaVitrinePage() {
                       {d.delai && <span>{t('ma_vitrine.delai')} {d.delai}</span>}
                     </div>
                   )}
-                  <div className="flex gap-2 mt-2">
-                    <button onClick={() => traiterDevis(d.id)} className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-white hover:bg-primary-600 transition">{t('ma_vitrine.marquer_traite')}</button>
-                    {d.contact && <a href={`https://wa.me/${d.contact.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-edge text-dim hover:text-primary hover:border-primary transition">{t('ma_vitrine.repondre')}</a>}
-                  </div>
+                  {d.statut === 'nouveau' ? (
+                    <div className="flex gap-2 mt-2">
+                      <button onClick={() => traiterDevis(d.id)} className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-white hover:bg-primary-600 transition">{t('ma_vitrine.marquer_traite')}</button>
+                      {d.contact && <a href={`https://wa.me/${d.contact.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-edge text-dim hover:text-primary hover:border-primary transition">{t('ma_vitrine.repondre')}</a>}
+                    </div>
+                  ) : (
+                    <span className="inline-block mt-2 text-[11px] font-medium text-success">{t('ma_vitrine.devis_traite')}</span>
+                  )}
                 </div>
               ))}
             </div>
-          </div>
-        )}
-
-        {/* Statistiques publiques (réelles) */}
-        <div className="mt-4 bg-subtle border border-edge rounded-xl p-4">
-          <p className="text-sm font-semibold text-ink mb-3">{t('ma_vitrine.stats_titre')}</p>
-          <div className="grid grid-cols-3 gap-3">
-            {[
-              { icon: Eye, label: t('ma_vitrine.visites'), value: stats ? stats.visites.total : '—' },
-              { icon: Store, label: t('ma_vitrine.ce_mois'), value: stats ? stats.visites.mois : '—' },
-              { icon: MessageCircle, label: t('ma_vitrine.contacts'), value: stats ? stats.contacts.total : '—' },
-            ].map((s) => (
-              <div key={s.label} className="text-center">
-                <s.icon size={18} className="mx-auto text-primary" />
-                <div className="text-lg font-bold text-ink mt-1">{s.value}</div>
-                <div className="text-2xs text-dim">{s.label}</div>
-              </div>
-            ))}
-          </div>
+          )}
         </div>
 
         {/* Créations */}
