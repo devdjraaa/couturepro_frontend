@@ -6,7 +6,9 @@ const CHANNEL_ID = 'couturepro_actions'
 let _channelCreated = false
 let _nextId = 3000
 let _tapListenerAdded = false
-const LAST_NOTIF_KEY = 'gx_last_notif_at'
+// Suivi par IDs des notifs déjà signalées au rideau (robuste, indépendant des dates).
+const NOTIFIED_KEY = 'gx_notified_ids'
+const INIT_KEY      = 'gx_notif_init'
 
 // Tap sur une notification du rideau → redirige vers l'écran lié (extra.lien).
 async function ensureTapListener() {
@@ -72,37 +74,37 @@ export async function showLocalNotif(title, body, extra = {}) {
  * @param {Array} notifs — enregistrements { titre, contenu, lien, date_creation, is_read }
  */
 export async function raiseSystemNotifications(notifs) {
-  if (!Capacitor.isNativePlatform() || !Array.isArray(notifs)) return []
+  if (!Capacitor.isNativePlatform() || !Array.isArray(notifs) || !notifs.length) return []
 
-  const dated = notifs
-    .filter(n => n?.date_creation)
-    .sort((a, b) => String(a.date_creation).localeCompare(String(b.date_creation)))
-  if (!dated.length) return []
+  const ids = notifs.map(n => n.id).filter(Boolean)
 
-  const newest = String(dated[dated.length - 1].date_creation)
+  let notified
+  try { notified = new Set(JSON.parse(localStorage.getItem(NOTIFIED_KEY) || '[]')) }
+  catch { notified = new Set() }
 
-  let last = null
-  try { last = localStorage.getItem(LAST_NOTIF_KEY) } catch { /* indisponible */ }
-
-  // Premier passage : on mémorise la référence sans notifier (évite une rafale
-  // d'anciennes notifications au premier login / à l'installation).
-  if (!last) {
-    try { localStorage.setItem(LAST_NOTIF_KEY, newest) } catch { /* indisponible */ }
+  // Premier passage (1er login / installation) : on mémorise les notifs existantes
+  // SANS notifier, pour éviter une rafale d'anciennes notifications.
+  if (!localStorage.getItem(INIT_KEY)) {
+    try {
+      localStorage.setItem(NOTIFIED_KEY, JSON.stringify(ids.slice(0, 300)))
+      localStorage.setItem(INIT_KEY, '1')
+    } catch { /* indisponible */ }
     return []
   }
 
-  // Limite anti-spam : au plus 5 notifs par sync.
-  const fresh = dated
-    .filter(n => String(n.date_creation) > last && !n.is_read)
-    .slice(-5)
+  // Nouvelles = non lues ET jamais signalées. Limite anti-spam : 5 max par sync.
+  const fresh = notifs.filter(n => n.id && !n.is_read && !notified.has(n.id)).slice(0, 5)
 
   for (const n of fresh) {
     await showLocalNotif(n.titre || 'Gextimo', n.contenu || '', { lien: n.lien || null })
+    notified.add(n.id)
   }
 
-  try { localStorage.setItem(LAST_NOTIF_KEY, newest) } catch { /* indisponible */ }
+  // Mémoriser toutes les notifs vues (y compris déjà lues) pour ne jamais re-notifier.
+  ids.forEach(id => notified.add(id))
+  try { localStorage.setItem(NOTIFIED_KEY, JSON.stringify([...notified].slice(-300))) }
+  catch { /* indisponible */ }
 
-  // On renvoie les nouvelles notifs (forme simple) pour que l'appelant puisse aussi
-  // faire « pop » une bannière in-app quand l'app est au premier plan.
+  // On renvoie les nouvelles notifs (forme simple) pour la bannière in-app (premier plan).
   return fresh.map(n => ({ titre: n.titre, contenu: n.contenu, lien: n.lien }))
 }

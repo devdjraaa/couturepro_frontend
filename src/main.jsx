@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { DatabaseProvider } from '@nozbe/watermelondb/react'
+import { Toaster } from 'react-hot-toast'
 import database from '@/db/database'
 import { ThemeProvider, AuthProvider, AtelierProvider, AdminAuthProvider, LangProvider, SyncProvider } from '@/contexts'
 import './index.css'
@@ -45,6 +46,11 @@ createRoot(document.getElementById('root')).render(
                   <AtelierProvider>
                     <SyncProvider>
                       <App />
+                      <Toaster
+                        position="top-center"
+                        containerStyle={{ top: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
+                        toastOptions={{ duration: 3500 }}
+                      />
                     </SyncProvider>
                   </AtelierProvider>
                 </AuthProvider>

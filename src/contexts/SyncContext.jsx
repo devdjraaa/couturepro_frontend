@@ -76,33 +76,35 @@ export function SyncProvider({ children }) {
       await syncWithServer()
       setLastSyncedAt(new Date().toISOString())
       queryClient.invalidateQueries({ queryKey: ['notifications'] })
+    } catch (err) {
+      // La synchro peut échouer sur sa phase PUSH ; le PULL a déjà mis à jour le DB
+      // local. On n'empêche donc pas les notifications ci-dessous.
+      setSyncError(err?.message ?? 'Erreur de synchronisation.')
+    }
 
-      // Re-planifier les notifications après chaque sync
-      if (isNative) {
+    // Notifications locales — basées sur le DB local (déjà à jour par le pull),
+    // exécutées même si le push a échoué. Chaque bloc est indépendant.
+    if (isNative) {
+      try {
         const commandes = await database.get('commandes')
           .query(Q.where('statut', 'en_cours'), Q.where('is_archived', false))
           .fetch()
         scheduleOrderNotifications(commandes)
+      } catch { /* planification livraisons indisponible */ }
 
-        // Rideau du téléphone : lever une notif locale pour les notifications
-        // système nouvellement arrivées (remplace le push FCM).
-        const notifs = await database.get('notifications')
-          .query(Q.sortBy('date_creation', Q.desc), Q.take(30))
-          .fetch()
+      try {
+        // Rideau + pop in-app pour les notifications système nouvellement arrivées
+        // (remplace le push FCM ; suivi par IDs pour ne signaler que les nouvelles).
+        const notifs = await database.get('notifications').query().fetch()
         const fresh = await raiseSystemNotifications(notifs)
-
-        // Pop in-app : quand l'app est ouverte, on fait « pop » une bannière
-        // cliquable (le rideau ne montre pas de heads-up en premier plan).
         if (fresh.length && (typeof document === 'undefined' || document.visibilityState === 'visible')) {
           notifierInApp(fresh)
         }
-      }
-    } catch (err) {
-      setSyncError(err?.message ?? 'Erreur de synchronisation.')
-    } finally {
-      isSyncingRef.current = false
-      setIsSyncing(false)
+      } catch { /* notifications indisponibles */ }
     }
+
+    isSyncingRef.current = false
+    setIsSyncing(false)
   }, [isNative, queryClient])
 
   // Push debouncé : déclenché après une écriture locale.
