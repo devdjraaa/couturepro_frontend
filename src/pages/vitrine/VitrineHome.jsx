@@ -3,12 +3,12 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Heart, Search } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
-import { getCreators, demoModels, categories } from './vitrineApi'
+import { getCreators, getCreations, demoModels, categories } from './vitrineApi'
 import GarmentVisual from './GarmentVisual'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { useDevise } from './vitrineCurrency'
 import { useFavoris } from './useFavoris'
-import { SkeletonCreatorCard } from './VitrineSkeletons'
+import { SkeletonCreatorCard, SkeletonGalleryCard } from './VitrineSkeletons'
 
 const btnPrimary = 'vt-btn-primary inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-inverse hover:bg-primary-600'
 const btnOutline = 'vt-btn-ghost inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary'
@@ -104,6 +104,7 @@ export default function VitrineHome() {
   usePageMeta({ path: '/' })
   const [creators, setCreators] = useState(null)
   const [cat, setCat] = useState('all')
+  const [galleryModels, setGalleryModels] = useState(null)
   const location = useLocation()
 
   const rotations = t('vitrine.rotations', { returnObjects: true })
@@ -114,6 +115,7 @@ export default function VitrineHome() {
     return () => clearInterval(id)
   }, [])
   useEffect(() => { getCreators().then(setCreators) }, [])
+  useEffect(() => { getCreations().then(setGalleryModels) }, [])
 
   useEffect(() => {
     const s = Object.assign(document.createElement('script'), { type: 'application/ld+json', id: 'gx-home-ld' })
@@ -138,7 +140,9 @@ export default function VitrineHome() {
     if (el) el.scrollIntoView({ behavior: 'smooth' })
   }, [location.hash, creators])
 
-  const models = cat === 'all' ? demoModels : demoModels.filter((m) => m.cat === cat)
+  const models = galleryModels
+    ? (cat === 'all' ? galleryModels : galleryModels.filter((m) => m.cat === cat))
+    : null
   const rotMsg = Array.isArray(rotations) && rotations.length ? rotations[rot % rotations.length] : ''
 
   return (
@@ -240,21 +244,29 @@ export default function VitrineHome() {
               </button>
             ))}
           </div>
-          <div className="vt-stagger grid grid-cols-2 md:grid-cols-4 gap-4">
-            {models.map((m) => (
-              <div key={m.id} className="vt-item vt-card bg-card border border-edge rounded-lg overflow-hidden">
-                <div className="h-[160px] relative">
-                  <GarmentVisual cat={m.cat} gradient={m.gradient} className="h-full w-full" />
-                  <span data-theme="dark" className="absolute top-2.5 left-2.5 text-inverse text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-inset">{m.type}</span>
+          {models === null ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {Array.from({ length: 8 }, (_, i) => <SkeletonGalleryCard key={i} />)}
+            </div>
+          ) : (
+            <div className="vt-stagger grid grid-cols-2 md:grid-cols-4 gap-4">
+              {models.map((m) => (
+                <div key={m.id} className="vt-item vt-card bg-card border border-edge rounded-lg overflow-hidden">
+                  <div className="h-[160px] relative">
+                    {m.image_url
+                      ? <img src={m.image_url} alt={m.nom} className="h-full w-full object-cover" loading="lazy" />
+                      : <GarmentVisual cat={m.cat} gradient={m.gradient} className="h-full w-full" />}
+                    <span data-theme="dark" className="absolute top-2.5 left-2.5 text-inverse text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-inset">{m.type}</span>
+                  </div>
+                  <div className="p-3.5">
+                    <h4 className="font-semibold text-[14.5px] text-ink">{m.nom}</h4>
+                    <div className="text-[12px] text-dim mt-0.5 mb-1.5">{t('vitrine.gallery.by')} {m.par}</div>
+                    <div className="font-bold text-primary text-[14.5px]">{format(m.prix)}</div>
+                  </div>
                 </div>
-                <div className="p-3.5">
-                  <h4 className="font-semibold text-[14.5px] text-ink">{m.nom}</h4>
-                  <div className="text-[12px] text-dim mt-0.5 mb-1.5">{t('vitrine.gallery.by')} {m.par}</div>
-                  <div className="font-bold text-primary text-[14.5px]">{format(m.prix)}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
           <p className="text-2xs text-ghost mt-4 text-center">{t('vitrine.indicatif')}</p>
         </div>
       </section>
