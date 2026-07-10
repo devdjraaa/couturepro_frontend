@@ -267,7 +267,8 @@
       "joindre_pdf": "Or attach a normalized PDF",
       "envoi": "Uploading…",
       "whatsapp": "Send WhatsApp",
-      "wa_message": "Hello {{client}},\n\nHere is your {{type}} no. {{numero}}.\nTotal amount: {{total}} FCFA\nOutstanding: {{restant}} FCFA\n\nTracking code: {{code}}\n\nThank you for your trust."
+      "wa_message": "Hello {{client}},\n\nHere is your {{type}} no. {{numero}}.\nTotal amount: {{total}} FCFA\nOutstanding: {{restant}} FCFA\n\nTracking code: {{code}}\n\nThank you for your trust.",
+      "telecharger_partager": "Download & share"
     },
     "import": {
       "bouton": "Import",

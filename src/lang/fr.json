@@ -267,7 +267,8 @@
       "joindre_pdf": "Ou joindre un PDF normalisé",
       "envoi": "Envoi…",
       "whatsapp": "Envoyer WhatsApp",
-      "wa_message": "Bonjour {{client}},\n\nVoici votre {{type}} n° {{numero}}.\nMontant total : {{total}} FCFA\nRestant dû : {{restant}} FCFA\n\nCode de suivi : {{code}}\n\nMerci pour votre confiance."
+      "wa_message": "Bonjour {{client}},\n\nVoici votre {{type}} n° {{numero}}.\nMontant total : {{total}} FCFA\nRestant dû : {{restant}} FCFA\n\nCode de suivi : {{code}}\n\nMerci pour votre confiance.",
+      "telecharger_partager": "Télécharger et partager"
     },
     "import": {
       "bouton": "Importer",

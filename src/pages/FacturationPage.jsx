@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import {
   FileText, Plus, X, ChevronDown, ChevronUp, Upload, Send,
   QrCode, Trash2, Check, AlertCircle, Clock, Ban,
-  MessageCircle, Download, ShieldCheck, Printer,
+  Download, ShieldCheck, Printer,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import QRCode from 'qrcode'
@@ -399,34 +399,6 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
     } finally { setNormalisant(false) }
   }
 
-  const sendWhatsApp = async () => {
-    const tel = (doc.client_telephone || '').replace(/\D/g, '')
-    const texte = t('facturation.doc.wa_message', {
-      client: doc.client_nom,
-      type: t(`facturation.types.${doc.type}`),
-      numero: doc.numero,
-      total: fmt(total),
-      restant: fmt(restant < 0 ? 0 : restant),
-      code: doc.code_tracage,
-    })
-    // Sur l'app mobile : wa.me ne peut envoyer QUE du texte (pas de pièce jointe).
-    // On génère le PDF et on ouvre le partage natif → l'utilisateur choisit WhatsApp
-    // et envoie le document (le message part en légende). Facture avec PDF officiel
-    // joint/normalisé → version habillée ; sinon → PDF simple du document.
-    if (IS_NATIVE) {
-      try {
-        if (doc.dgi_pdf_url) {
-          await partagerFactureHabillee(doc, atelier, { text: texte })
-        } else {
-          const { pdf, filename } = await exportFactureDocPdf({ facture: doc, atelier, factureSettings })
-          await shareOrDownloadPdf(pdf, filename, { title: filename, text: texte })
-        }
-        return
-      } catch { /* repli sur le lien texte ci-dessous */ }
-    }
-    window.open(`https://wa.me/${tel}?text=${encodeURIComponent(texte)}`, '_blank', 'noopener,noreferrer')
-  }
-
   return (
     <div className="bg-card border border-edge rounded-xl overflow-hidden">
       {/* En-tête de la carte */}
@@ -592,17 +564,11 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
           {/* Actions */}
           <div className="flex gap-2 pt-1 border-t border-edge">
             <button
-              onClick={sendWhatsApp}
-              className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-xl bg-[#25D366] text-white hover:opacity-90 transition"
-            >
-              <MessageCircle size={15} /> {t('facturation.doc.whatsapp')}
-            </button>
-            <button
               onClick={telechargerPdf}
               disabled={pdfBusy}
-              className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary transition disabled:opacity-60"
+              className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-xl bg-primary text-white hover:bg-primary-600 transition disabled:opacity-60"
             >
-              <Download size={15} /> {pdfBusy ? t('facturation.doc.pdf_generation') : t('facturation.doc.pdf')}
+              <Download size={15} /> {pdfBusy ? t('facturation.doc.pdf_generation') : t('facturation.doc.telecharger_partager')}
             </button>
             <button
               onClick={() => onDelete(doc.id)}
