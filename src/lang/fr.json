@@ -315,7 +315,8 @@
     "requis": "requis",
     "nouveau": "Nouveau",
     "tout": "Tout",
-    "aucun": "Aucun"
+    "aucun": "Aucun",
+    "securite": "Sécurité"
   },
   "erreurs": {
     "reseau": "Erreur de connexion. Vérifiez votre réseau.",

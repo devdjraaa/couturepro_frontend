@@ -315,7 +315,8 @@
     "requis": "required",
     "nouveau": "New",
     "tout": "All",
-    "aucun": "None"
+    "aucun": "None",
+    "securite": "Security"
   },
   "erreurs": {
     "reseau": "Connection error. Check your network.",
