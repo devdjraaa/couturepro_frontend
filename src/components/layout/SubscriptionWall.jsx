@@ -21,13 +21,13 @@ export default function SubscriptionWall() {
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-5 p-6 text-center bg-app/95 backdrop-blur-sm">
-      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-surface border border-border">
-        <Lock size={28} className="text-content-secondary" />
+      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-card border border-border">
+        <Lock size={28} className="text-dim" />
       </div>
 
       <div className="max-w-sm">
-        <h2 className="text-xl font-bold text-content mb-2">Abonnement requis</h2>
-        <p className="text-sm text-content-secondary">{message}</p>
+        <h2 className="text-xl font-bold text-ink mb-2">Abonnement requis</h2>
+        <p className="text-sm text-dim">{message}</p>
       </div>
 
       <Button

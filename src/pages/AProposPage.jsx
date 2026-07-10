@@ -32,7 +32,7 @@ export default function AProposPage() {
         </div>
 
         <div className="bg-card border border-edge rounded-2xl p-4">
-          <p className="text-sm text-content leading-relaxed">
+          <p className="text-sm text-ink leading-relaxed">
             {t('a_propos.description')}
           </p>
         </div>

@@ -68,7 +68,7 @@ import SignalementsPage       from '@/pages/admin/SignalementsPage'
 import BannierePage           from '@/pages/admin/BannierePage'
 
 const PlaceholderPage = ({ title }) => (
-  <div className="flex items-center justify-center h-full p-8 text-content-secondary">
+  <div className="flex items-center justify-center h-full p-8 text-dim">
     {title} — page à implémenter
   </div>
 )
