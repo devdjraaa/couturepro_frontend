@@ -33,7 +33,6 @@ export default function ClientCard({ client, onClick }) {
         <p className="text-xs text-ghost mt-0.5">{client.telephone}</p>
       </div>
       <div className="text-right shrink-0 space-y-0.5">
-        <p className="text-xs text-ghost">{client.commandes_count ?? 0} cmd</p>
         {solde > 0 && (
           <p className="text-xs font-semibold text-gold-dark font-mono">{formatCurrency(solde)}</p>
         )}
