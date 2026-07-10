@@ -1068,7 +1068,7 @@
       "nouveau_mdp": "New password",
       "confirmer_mdp": "Confirm password",
       "modifier": "Change password",
-      "succes": "Password changed successfully"
+      "succes": "Password changed. Signing out…"
     },
     "preferences": {
       "titre": "Preferences",

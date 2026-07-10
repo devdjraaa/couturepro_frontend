@@ -1068,7 +1068,7 @@
       "nouveau_mdp": "Nouveau mot de passe",
       "confirmer_mdp": "Confirmation",
       "modifier": "Modifier le mot de passe",
-      "succes": "Mot de passe modifié avec succès"
+      "succes": "Mot de passe modifié. Reconnexion en cours…"
     },
     "preferences": {
       "titre": "Préférences",
