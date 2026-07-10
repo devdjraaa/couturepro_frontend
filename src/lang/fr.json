@@ -268,6 +268,18 @@
       "envoi": "Envoi…",
       "whatsapp": "Envoyer WhatsApp",
       "wa_message": "Bonjour {{client}},\n\nVoici votre {{type}} n° {{numero}}.\nMontant total : {{total}} FCFA\nRestant dû : {{restant}} FCFA\n\nCode de suivi : {{code}}\n\nMerci pour votre confiance."
+    },
+    "import": {
+      "bouton": "Importer",
+      "titre": "Importer une facture",
+      "desc": "La facture est déjà complète (montants, articles…). Indiquez juste le client destinataire et le PDF officiel : Gextimo l'habille à vos couleurs.",
+      "client": "Client destinataire",
+      "client_ph": "Nom du client",
+      "fichier": "Facture PDF (déjà normalisée)",
+      "fichier_ph": "Choisir un fichier PDF",
+      "importer": "Importer",
+      "en_cours": "Import…",
+      "err": "L'import a échoué. Vérifiez le fichier (PDF, 20 Mo max)."
     }
   },
   "commun": {

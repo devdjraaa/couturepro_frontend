@@ -8,6 +8,7 @@
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib'
 import api from '@/services/api'
 import { IS_NATIVE } from '@/constants/routes'
+import logoUrl from '@/assets/gextimo-logo.png'
 
 // Base64 depuis un Uint8Array (par blocs pour ne pas exploser la pile sur un gros PDF).
 function bytesToBase64(bytes) {
@@ -51,21 +52,41 @@ export async function genererFactureHabillee(doc, atelier) {
   const reg  = await out.embedFont(StandardFonts.Helvetica)
   const pages = await out.embedPdf(srcBytes)
 
+  // Logo GEXTIMO officiel (embarqué une fois, réutilisé sur chaque page).
+  let logoImg = null
+  try {
+    const logoBytes = await (await fetch(logoUrl)).arrayBuffer()
+    logoImg = await out.embedPng(logoBytes)
+  } catch { /* pas de logo : en-tête sans image */ }
+
   const nom = safe(atelier?.nom || 'Mon atelier')
   const sub = safe([atelier?.ville, atelier?.telephone || atelier?.contact_public].filter(Boolean).join(' · '))
+  const top = A4[1]
 
   pages.forEach((ep) => {
     const page = out.addPage(A4)
-    // En-tête GEXTIMO
-    page.drawRectangle({ x: 0, y: A4[1] - 58, width: A4[0], height: 58, color: ACCENT })
-    page.drawText(nom, { x: 24, y: A4[1] - 32, font: bold, size: 15, color: WHITE })
-    if (sub) page.drawText(sub, { x: 24, y: A4[1] - 47, font: reg, size: 9, color: WHITE })
-    page.drawText('GEXTIMO · By Novafriq', { x: A4[0] - 168, y: A4[1] - 32, font: bold, size: 11, color: WHITE })
 
-    // PDF officiel e-SFE embarqué INTACT, mis à l'échelle entre en-tête et pied
-    const maxW = A4[0] - 48, maxH = A4[1] - 58 - 80
+    // En-tête clair : logo + « GEXTIMO » à gauche · nom de l'atelier à l'extrême droite · trait rouge
+    const logoSize = 32
+    if (logoImg) page.drawImage(logoImg, { x: 24, y: top - 22 - logoSize, width: logoSize, height: logoSize })
+    const brandX = 24 + (logoImg ? logoSize + 12 : 0)
+    page.drawText('GEXTIMO', { x: brandX, y: top - 38, font: bold, size: 20, color: ACCENT })
+    page.drawText('By Novafriq', { x: brandX + 2, y: top - 51, font: reg, size: 8, color: GREY })
+    // Atelier aligné à droite, sur la même ligne que GEXTIMO
+    const nomW = bold.widthOfTextAtSize(nom, 14)
+    page.drawText(nom, { x: A4[0] - 24 - nomW, y: top - 36, font: bold, size: 14, color: INK })
+    if (sub) {
+      const subW = reg.widthOfTextAtSize(sub, 9)
+      page.drawText(sub, { x: A4[0] - 24 - subW, y: top - 50, font: reg, size: 9, color: GREY })
+    }
+    page.drawLine({ start: { x: 24, y: top - 64 }, end: { x: A4[0] - 24, y: top - 64 }, thickness: 1.5, color: ACCENT })
+
+    // PDF officiel e-SFE embarqué INTACT, mis à l'échelle entre l'en-tête et le pied
+    const topContent = top - 80
+    const maxW = A4[0] - 48, maxH = topContent - 82
     const s = Math.min(maxW / ep.width, maxH / ep.height)
-    page.drawPage(ep, { x: (A4[0] - ep.width * s) / 2, y: 72, width: ep.width * s, height: ep.height * s })
+    const w = ep.width * s, h = ep.height * s
+    page.drawPage(ep, { x: (A4[0] - w) / 2, y: topContent - h, width: w, height: h })
 
     // Pied de vérification (complète le QR officiel, ne le remplace pas)
     page.drawLine({ start: { x: 24, y: 62 }, end: { x: A4[0] - 24, y: 62 }, thickness: 1.5, color: ACCENT })

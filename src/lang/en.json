@@ -268,6 +268,18 @@
       "envoi": "Uploading…",
       "whatsapp": "Send WhatsApp",
       "wa_message": "Hello {{client}},\n\nHere is your {{type}} no. {{numero}}.\nTotal amount: {{total}} FCFA\nOutstanding: {{restant}} FCFA\n\nTracking code: {{code}}\n\nThank you for your trust."
+    },
+    "import": {
+      "bouton": "Import",
+      "titre": "Import an invoice",
+      "desc": "The invoice is already complete (amounts, items…). Just enter the recipient client and the official PDF: Gextimo dresses it in your colours.",
+      "client": "Recipient client",
+      "client_ph": "Client name",
+      "fichier": "Invoice PDF (already normalised)",
+      "fichier_ph": "Choose a PDF file",
+      "importer": "Import",
+      "en_cours": "Importing…",
+      "err": "Import failed. Check the file (PDF, 20 MB max)."
     }
   },
   "commun": {
