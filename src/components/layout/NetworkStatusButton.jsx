@@ -24,25 +24,25 @@ export default function NetworkStatusButton({ variant = 'default' }) {
   const { isOnline, isSyncing, syncError, sync } = useSync()
   const isHero = variant === 'hero'
 
+  // Pastille claire (bg-subtle) dans les deux variantes → couleurs sémantiques.
   let Icon, color, spin = ''
   let label
   if (isSyncing) {
     Icon  = RefreshCw
-    color = isHero ? 'text-inverse' : 'text-primary'
+    color = 'text-primary'
     spin  = 'animate-spin'
     label = t('sync.en_cours')
   } else if (!isOnline) {
     Icon  = WifiOff
-    // En hero, on garde inverse mais avec opacité pour signaler "ko"
-    color = isHero ? 'text-warning' : 'text-danger'
+    color = 'text-danger'
     label = t('sync.hors_ligne')
   } else if (syncError) {
     Icon  = Wifi
-    color = isHero ? 'text-warning' : 'text-warning'
+    color = 'text-warning'
     label = t('sync.erreur')
   } else {
     Icon  = Wifi
-    color = isHero ? 'text-inverse' : 'text-success'
+    color = 'text-success'
     label = t('sync.online')
   }
 
@@ -57,8 +57,8 @@ export default function NetworkStatusButton({ variant = 'default' }) {
       disabled={!isOnline || isSyncing}
       aria-label={label}
       title={label}
-      className={`w-9 h-9 flex items-center justify-center rounded-xl transition-colors disabled:opacity-60 disabled:cursor-default ${
-        isHero ? 'hover:bg-inverse/10' : 'hover:bg-subtle'
+      className={`flex items-center justify-center transition-colors disabled:opacity-60 disabled:cursor-default ${
+        isHero ? 'w-11 h-11 rounded-2xl bg-subtle hover:bg-edge shrink-0' : 'w-9 h-9 rounded-xl hover:bg-subtle'
       }`}
     >
       <Icon size={18} className={`${color} ${spin}`} />

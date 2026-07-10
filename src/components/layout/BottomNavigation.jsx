@@ -4,7 +4,6 @@ import { Home, ClipboardList, Users, Plus, Menu, Layers, UserPlus, Shirt, Wallet
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
 import { BottomSheet } from '@/components/ui'
-import { useNotificationsCount } from '@/hooks/useNotifications'
 import { useCommandeStats } from '@/hooks/useCommandes'
 import { ROUTES } from '@/constants/routes'
 import MobileMenu from './MobileMenu'
@@ -21,7 +20,6 @@ const NAV_ITEMS = [
 export default function BottomNavigation() {
   const navigate  = useNavigate()
   const { t } = useTranslation()
-  const { data: notifCount = 0 } = useNotificationsCount()
   const { data: cmdStats }       = useCommandeStats()
   const alertCount = (cmdStats?.en_retard ?? 0) + (cmdStats?.dans_48h ?? 0)
   const [showNewSheet, setShowNewSheet] = useState(false)
@@ -82,11 +80,6 @@ export default function BottomNavigation() {
                     isActive ? 'bg-[var(--color-primary-50)] scale-105' : 'scale-100',
                   )}>
                     <Icon size={20} strokeWidth={isActive ? 2.5 : 1.8} />
-                    {to === '/' && notifCount > 0 && (
-                      <span className="absolute -top-1 -right-1 min-w-4 h-4 bg-danger text-inverse text-2xs font-bold rounded-full flex items-center justify-center px-1 leading-none">
-                        {notifCount > 9 ? '9+' : notifCount}
-                      </span>
-                    )}
                     {to === '/commandes' && alertCount > 0 && (
                       <span className="absolute -top-1 -right-1 min-w-4 h-4 bg-danger text-inverse text-2xs font-bold rounded-full flex items-center justify-center px-1 leading-none">
                         {alertCount > 9 ? '9+' : alertCount}
