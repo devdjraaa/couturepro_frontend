@@ -11,6 +11,7 @@ export default function PaiementRetourPage() {
   const navigate = useNavigate()
   const fedapayId = searchParams.get('id')
   const [statut, setStatut] = useState('chargement') // chargement | completed | failed | inconnu
+  const [type, setType]     = useState('abonnement') // abonnement | sponsorisation
 
   useEffect(() => {
     if (!fedapayId) {
@@ -19,11 +20,15 @@ export default function PaiementRetourPage() {
     }
 
     api.get('/paiements/retour', { params: { id: fedapayId } })
-      .then(({ data }) => setStatut(data.statut === 'completed' ? 'completed' : 'failed'))
+      .then(({ data }) => {
+        setType(data.type || 'abonnement')
+        setStatut(data.statut === 'completed' ? 'completed' : 'failed')
+      })
       .catch(() => setStatut('inconnu'))
   }, [fedapayId])
 
-  const goHome = () => navigate('/parametres', { replace: true })
+  const isSponso = type === 'sponsorisation'
+  const goHome = () => navigate(isSponso ? '/ma-vitrine' : '/parametres', { replace: true })
 
   if (statut === 'chargement') {
     return (
@@ -40,7 +45,7 @@ export default function PaiementRetourPage() {
         <CheckCircle size={56} className="text-success" />
         <div>
           <h1 className="text-xl font-bold text-ink mb-1">{t('paiement_retour.succes_titre')}</h1>
-          <p className="text-sm text-dim">{t('paiement_retour.succes_desc')}</p>
+          <p className="text-sm text-dim">{t(isSponso ? 'paiement_retour.succes_desc_sponso' : 'paiement_retour.succes_desc')}</p>
         </div>
         <Button onClick={goHome} className="w-full max-w-xs">
           {t('paiement_retour.retour_app')}

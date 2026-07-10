@@ -165,7 +165,12 @@
     "publie": "Published",
     "masque": "Hidden",
     "collection_opt": "— Collection",
-    "aide": "Tap the eye icon on a creation to publish it to or remove it from your public page. Visit and contact statistics are coming soon."
+    "aide": "Tap the eye icon on a creation to publish it to or remove it from your public page. Visit and contact statistics are coming soon.",
+    "devis_vide": "No quote requests yet. They will show up here as soon as a client sends one from your showcase.",
+    "devis_traite": "Handled",
+    "sponso_jour_restant": "{{n}} day left",
+    "sponso_jours_restants": "{{n}} days left",
+    "sponso_fin_le": "Ends on {{date}}"
   },
   "facturation": {
     "titre": "Invoicing",
@@ -1790,6 +1795,7 @@
     "chargement": "Checking payment…",
     "succes_titre": "Payment confirmed!",
     "succes_desc": "Your subscription has been activated successfully.",
+    "succes_desc_sponso": "Your promotion has been activated successfully.",
     "retour_app": "Back to the app",
     "echec_titre": "Payment failed",
     "echec_inconnu": "Unable to verify the status of this payment.",
