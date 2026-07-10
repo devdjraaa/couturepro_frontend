@@ -7,10 +7,10 @@ import { formatCurrency } from '@/utils/formatCurrency'
 function FeatureRow({ label, value, count }) {
   const included = value && count !== 0
   return (
-    <li className={cn('flex items-center gap-2 text-xs', included ? 'text-content' : 'text-content-secondary line-through')}>
+    <li className={cn('flex items-center gap-2 text-xs', included ? 'text-ink' : 'text-dim line-through')}>
       {included
         ? <Check size={11} className="text-success shrink-0" />
-        : <X size={11} className="text-content-secondary shrink-0" />}
+        : <X size={11} className="text-dim shrink-0" />}
       <span>{count != null && included ? `${count === null ? '∞' : count} ` : ''}{label}</span>
     </li>
   )
@@ -55,7 +55,7 @@ export default function PlanCard({ plan, isCurrent, abonnementStatut, onUpgrade,
       {/* En-tête */}
       <div>
         <div className="flex items-start justify-between mb-1">
-          <p className="text-sm font-semibold text-content">{planName}</p>
+          <p className="text-sm font-semibold text-ink">{planName}</p>
           {isActive && (
             <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-semibold shrink-0">
               {t('plans.actif')}
@@ -67,12 +67,12 @@ export default function PlanCard({ plan, isCurrent, abonnementStatut, onUpgrade,
             </span>
           )}
         </div>
-        <p className="text-xl font-bold text-content">
+        <p className="text-xl font-bold text-ink">
           {formatCurrency(Number(plan.prix_xof))}
-          <span className="text-xs font-normal text-content-secondary ml-1">{dureeLabel}</span>
+          <span className="text-xs font-normal text-dim ml-1">{dureeLabel}</span>
         </p>
         {plan.description_courte && (
-          <p className="text-xs text-content-secondary mt-0.5">{plan.description_courte}</p>
+          <p className="text-xs text-dim mt-0.5">{plan.description_courte}</p>
         )}
       </div>
 
