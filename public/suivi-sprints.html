@@ -124,9 +124,9 @@ html{scroll-behavior:smooth}
     <div class="kpi">
       <div class="row">
         <span class="lbl">Modules validés de bout en bout</span>
-        <span class="big">18<small>&nbsp;/&nbsp;23</small></span>
+        <span class="big">20<small>&nbsp;/&nbsp;23</small></span>
       </div>
-      <div class="bar"><i style="width:78%"></i></div>
+      <div class="bar"><i style="width:87%"></i></div>
     </div>
   </div>
 </header>
@@ -140,6 +140,8 @@ html{scroll-behavior:smooth}
       <h2>Dernières mises à jour</h2>
     </div>
     <ul>
+      <li><span class="nd ok"></span><b>Notifications refaites (majeur)</b> — les événements alertent enfin l'artisan : nouvelle commande, <b>devis reçu</b>, <b>avis reçu</b>… avec une <b>vraie notification Android</b> (qui apparaît par-dessus les autres apps, avec son, et se balaie) <b>+ une bannière dans l'app</b> et un <b>badge</b>. Un tap ouvre directement l'écran concerné.</li>
+      <li><span class="nd ok"></span><b>Équipe &amp; Avis/Devis validés</b> — ajout d'un assistant (avec code d'accès re-consultable), et le cycle avis / demande de devis (réception → validation / traitement) fonctionne de bout en bout.</li>
       <li><span class="nd ok"></span><b>Navigation mobile refaite</b> — un onglet « Plus » donne accès à toutes les fonctions (Ma Vitrine, Caisse, Facturation, Équipe…), et le bouton « + » propose plus d'actions (commande, client, modèle, encaissement).</li>
       <li><span class="nd ok"></span><b>Nouvelles fonctions validées</b> — Facturation (création de devis / factures), Collections, Fidélité.</li>
       <li><span class="nd ok"></span><b>Galerie &amp; vitrine</b> — on peut ajouter plusieurs photos d'un coup (+ mini-tutoriel), et « Voir ma vitrine » s'ouvre désormais <b>dans l'app</b> (fini le navigateur externe).</li>
@@ -192,14 +194,14 @@ html{scroll-behavior:smooth}
       <span class="badge b-todo"><i></i> À tester</span>
     </div>
     <div class="stats">
-      <div class="stat d"><div class="v">18</div><div class="k">modules validés de bout en bout</div></div>
-      <div class="stat w"><div class="v">4</div><div class="k">modules en cours (partiels)</div></div>
-      <div class="stat t"><div class="v">1</div><div class="k">module pas commencé</div></div>
+      <div class="stat d"><div class="v">20</div><div class="k">modules validés de bout en bout</div></div>
+      <div class="stat w"><div class="v">3</div><div class="k">modules en cours (partiels)</div></div>
+      <div class="stat t"><div class="v">0</div><div class="k">module pas commencé</div></div>
     </div>
     <p class="sub" style="margin-top:12px;margin-bottom:0">
-      À l'échelle des routes : <b>≈ 56 endpoints réellement exercés</b> sur <b>152</b> côté utilisateur
-      (l'admin, 38 routes, est hors périmètre). Les <b>4 modules « en cours »</b> gardent encore
-      <b>~31 routes</b> à repasser (rien que les Paramètres en comptent 16) — donc il reste du chemin,
+      À l'échelle des routes : <b>≈ 64 endpoints réellement exercés</b> sur <b>152</b> côté utilisateur
+      (l'admin, 38 routes, est hors périmètre). Les <b>3 modules « en cours »</b> gardent encore
+      <b>~24 routes</b> à repasser (rien que les Paramètres en comptent 16) — donc il reste du chemin,
       c'est normal.</p>
   </section>
 
@@ -247,7 +249,7 @@ html{scroll-behavior:smooth}
         </tr>
         <tr class="fresh">
           <td class="mod">Équipe &amp; permissions<span class="maj">maj</span></td><td class="rt">5</td>
-          <td><span class="badge b-wip"><i></i> En cours</span></td><td class="nt">Débloquée par le plan Master : écran équipe + invitation d'assistants accessibles. Ajout d'un membre à repasser.</td>
+          <td><span class="badge b-done"><i></i> Validé</span></td><td class="nt">Ajout d'un membre <b>validé de bout en bout</b> : le membre est créé et un <b>code d'accès</b> lui est généré (pas d'email — il se connecte via « Accès assistant »). Le code reste <b>consultable ensuite</b> (taper le membre) pour le recommuniquer, et la suppression fonctionne. Permissions par rôle (assistant / membre).</td>
         </tr>
         <tr class="fresh">
           <td class="mod">Galerie (banque de photos)<span class="maj">maj</span></td><td class="rt">4</td>
@@ -292,9 +294,9 @@ html{scroll-behavior:smooth}
           <td class="nt">Affichage + chiffres (clients / commandes / stats) lus depuis le local — s'affiche même hors-ligne.</td>
         </tr>
         <tr>
-          <td class="mod">Notifications</td><td class="rt">4</td>
+          <td class="mod">Notifications<span class="maj">maj</span></td><td class="rt">4</td>
           <td><span class="badge b-done"><i></i> Validé</span></td>
-          <td class="nt">Liste + « marquer comme lu » — <b>hors-ligne</b> (synchronisées). Reste le jeton push (envoi natif).</td>
+          <td class="nt"><b>Refonte complète</b> : les événements notifient enfin (nouvelle commande, <b>devis reçu</b>, <b>avis reçu</b>…). <b>Notification native Android</b> (pop par-dessus les autres apps, son, swipe) + <b>bannière in-app</b> (style WhatsApp) + <b>badge</b>. <b>Redirection au tap</b> vers l'écran concerné. Le vieux push « FCM » (mort côté Google) a été remplacé par un système <b>local</b>. Reçu même app fermée = via FCM (chantier à part, gratuit).</td>
         </tr>
         <tr>
           <td class="mod">Paramètres</td><td class="rt">16</td>
@@ -321,8 +323,8 @@ html{scroll-behavior:smooth}
           <td class="nt">Affichage du solde de points, du palier (Bronze/Argent…) et de la progression vers la conversion.</td>
         </tr>
         <tr>
-          <td class="mod">Avis &amp; demandes de devis</td><td class="rt">5</td>
-          <td><span class="badge b-todo"><i></i> À tester</span></td><td class="nt">Modération, traitement.</td>
+          <td class="mod">Avis &amp; demandes de devis<span class="maj">maj</span></td><td class="rt">5</td>
+          <td><span class="badge b-done"><i></i> Validé</span></td><td class="nt"><b>Validé de bout en bout</b> : un visiteur dépose un <b>avis</b> (→ le créateur le <b>valide / rejette</b>) et une <b>demande de devis</b> (→ le créateur la <b>reçoit et la traite</b>). Chaque arrivée déclenche une notification (voir Notifications).</td>
         </tr>
       </tbody>
     </table>
@@ -451,8 +453,8 @@ html{scroll-behavior:smooth}
   </section>
 
   <div class="foot">
-    Vous avez tout parcouru — merci. <b>18 modules sur 23</b> validés de bout en bout, l'app tourne
-    désormais <b>hors-ligne</b>, l'email est réparé et les pages designers sont optimisées pour le partage. La suite arrive à la prochaine mise à jour.<br>
+    Vous avez tout parcouru — merci. <b>20 modules sur 23</b> validés de bout en bout, l'app tourne
+    désormais <b>hors-ligne</b>, les <b>notifications</b> (natives + in-app) sont opérationnelles, l'email est réparé et les pages designers sont optimisées pour le partage. La suite arrive à la prochaine mise à jour.<br>
     <b>Gextimo</b> · Recette qualité de l'espace utilisateur — mise à jour du <b>10/07/2026</b> ·
     <a href="#nouveautes" style="color:var(--rouge);text-decoration:none;font-weight:600">↑ Revenir en haut</a><br>
     Méthode : test à travers l'application réelle, vérification écran + base locale + serveur, cycle hors-ligne/en ligne.
