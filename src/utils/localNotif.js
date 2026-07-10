@@ -2,7 +2,10 @@ import { Capacitor } from '@capacitor/core'
 import { LocalNotifications } from '@capacitor/local-notifications'
 import { goToDeepLink } from './deepLink'
 
-const CHANNEL_ID = 'couturepro_actions'
+// Canal HIGH (heads-up) : la notif pop par-dessus les autres apps + son + vibration,
+// exactement comme une notif native (WhatsApp/Instagram). Nouveau nom d'ID car Android
+// fige l'importance d'un canal existant (l'ancien 'couturepro_actions' était en DEFAULT).
+const CHANNEL_ID = 'gextimo_alertes'
 let _channelCreated = false
 let _nextId = 3000
 let _tapListenerAdded = false
@@ -34,12 +37,12 @@ async function ensureReady() {
   if (!_channelCreated) {
     await LocalNotifications.createChannel({
       id:          CHANNEL_ID,
-      name:        'Activités',
-      description: "Confirmations des actions dans l'application",
-      importance:  3,
+      name:        'Alertes Gextimo',
+      description: 'Nouveaux devis, avis, commandes, échéances…',
+      importance:  5,          // MAX → heads-up (pop par-dessus les autres apps) + son
       visibility:  1,
       sound:       'default',
-      vibration:   false,
+      vibration:   true,
     })
     _channelCreated = true
   }
