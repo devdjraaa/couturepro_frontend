@@ -97,17 +97,7 @@ export default function EquipePage() {
   ]
 
   return (
-    <AppLayout
-      title={t('equipe.titre')}
-      showBack
-      rightAction={
-        activeTab === 'membres' && can('equipe.manage') && max !== 0 ? (
-          <button onClick={() => setShowInvite(true)} className="p-2 text-dim">
-            <UserPlus size={18} />
-          </button>
-        ) : null
-      }
-    >
+    <AppLayout title={t('equipe.titre')} showBack>
       {/* Onglets */}
       {can('equipe.manage') && (
         <div className="flex border-b border-edge px-4">
@@ -143,18 +133,31 @@ export default function EquipePage() {
                   Voir les plans
                 </Button>
               </div>
-            ) : isLoading ? (
-              [...Array(3)].map((_, i) => <Skeleton key={i} className="h-16 rounded-xl" />)
-            ) : membres.length === 0 ? (
-              <EmptyState
-                icon={Users}
-                title={t('equipe.vide.titre')}
-                description={t('equipe.vide.description')}
-              />
             ) : (
-              membres.map(m => (
-                <MembreCard key={m.id} membre={m} onRemove={id => remove.mutate(id)} onShowCode={setNewMembre} />
-              ))
+              <>
+                {can('equipe.manage') && (
+                  <button
+                    type="button"
+                    onClick={() => setShowInvite(true)}
+                    className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-primary text-inverse font-semibold active:scale-[0.98] transition"
+                  >
+                    <UserPlus size={18} /> Ajouter un membre
+                  </button>
+                )}
+                {isLoading ? (
+                  [...Array(3)].map((_, i) => <Skeleton key={i} className="h-16 rounded-xl" />)
+                ) : membres.length === 0 ? (
+                  <EmptyState
+                    icon={Users}
+                    title={t('equipe.vide.titre')}
+                    description={t('equipe.vide.description')}
+                  />
+                ) : (
+                  membres.map(m => (
+                    <MembreCard key={m.id} membre={m} onRemove={id => remove.mutate(id)} onShowCode={setNewMembre} />
+                  ))
+                )}
+              </>
             )}
 
             {max !== null && max > 0 && membres.length > 0 && (
