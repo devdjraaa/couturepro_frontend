@@ -298,8 +298,14 @@ export function VitrineFooter() {
     ] },
   ]
   return (
-    <footer data-theme="dark" className="bg-inset text-ink pt-14 pb-6 mt-2">
-      <div className="max-w-[1180px] mx-auto px-5">
+    <footer data-theme="dark" className="relative overflow-hidden isolate bg-inset text-ink pt-14 pb-6 mt-2">
+      {/* ── Fond animé multicouche — ambiance défilé ── */}
+      <div className="vt-foot-bg" aria-hidden="true">
+        <div className="vt-foot-mesh" />
+        <div className="vt-foot-glows" />
+        <div className="vt-foot-shimmer" />
+      </div>
+      <div className="relative z-10 max-w-[1180px] mx-auto px-5">
         <div className="vt-reveal grid grid-cols-1 md:grid-cols-[1.6fr_1fr_1fr_1fr_1fr] gap-8 pb-9 border-b border-edge">
           <div>
             <VitrineLogo onDark />

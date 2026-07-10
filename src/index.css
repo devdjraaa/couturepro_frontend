@@ -592,6 +592,218 @@ body {
 }
 .vt-filter:hover { transform: translateY(-1px); }
 
+/* ════════════════════════════════════════════════════════
+   HERO VITRINE — Fond animé multicouche (ambiance défilé)
+   ════════════════════════════════════════════════════════ */
+
+.vt-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Couche 1 — Mesh wash : conic-gradient rouge/or, rotation + respiration */
+.vt-hero-mesh {
+  position: absolute;
+  inset: -40%;
+  background: conic-gradient(
+    from 0deg at 55% 50%,
+    transparent               0deg,
+    rgba(208, 11, 11, .52)   55deg,
+    transparent              110deg,
+    rgba(205, 166, 98, .36)  190deg,
+    transparent              245deg,
+    rgba(208, 11, 11, .44)   305deg,
+    transparent              360deg
+  );
+  filter: blur(110px);
+  opacity: 0.16;
+  /* rotate + breathe combinés : évite le conflit de transform */
+  animation: vt-mesh-anim 100s linear infinite;
+  will-change: transform;
+}
+
+/* Couche 2 — Rubans SVG (SMIL) + dérive verticale CSS */
+.vt-hero-ribbons {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: vt-ribbon-drift 22s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* Couche 3 — Spotlight de podium : faisceau plus visible + pulse */
+.vt-hero-spotlight {
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(
+    from -8deg at 50% -15%,
+    transparent              0deg,
+    rgba(244,236,225,.15)   14deg,
+    transparent             28deg
+  );
+  filter: blur(18px);
+  animation:
+    vt-spot-sweep 24s ease-in-out infinite alternate,
+    vt-spot-pulse 10s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* Couche 4 — Lueurs radiales pulsantes : rouge bas-gauche + or haut-droit */
+.vt-hero-glows {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 14% 88%, rgba(208,11,11,.24)  0%, transparent 44%),
+    radial-gradient(circle at 84% 16%, rgba(205,166,98,.18) 0%, transparent 40%);
+  animation: vt-glows-pulse 14s ease-in-out infinite alternate;
+  will-change: opacity;
+}
+
+/* Couche 5 — Reflet de défilé : raie or diagonale, flash périodique */
+.vt-hero-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    108deg,
+    transparent              38%,
+    rgba(205,166,98,.09)    49%,
+    rgba(244,236,225,.07)   51%,
+    transparent              62%
+  );
+  animation: vt-shimmer-sweep 12s ease-in-out infinite;
+  animation-delay: -2s;
+  will-change: transform;
+}
+
+/* Couche 6 — Grain film statique */
+.vt-hero-grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%220.9%22%20numOctaves%3D%224%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20filter%3D%22url(%23g)%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: repeat;
+  mix-blend-mode: overlay;
+  opacity: 0.030;
+}
+
+/* ── Keyframes ── */
+
+/* Rotation 360° + respiration ×4 combinés dans un seul keyframe */
+@keyframes vt-mesh-anim {
+  0%   { transform: rotate(0deg)   scale(1.00); }
+  25%  { transform: rotate(90deg)  scale(1.10); }
+  50%  { transform: rotate(180deg) scale(1.00); }
+  75%  { transform: rotate(270deg) scale(1.10); }
+  100% { transform: rotate(360deg) scale(1.00); }
+}
+
+/* Dérive verticale + légère compression horizontale des rubans */
+@keyframes vt-ribbon-drift {
+  from { transform: translateY(-18px) scaleX(1.02); }
+  to   { transform: translateY(14px)  scaleX(0.98); }
+}
+
+/* Balayage horizontal du spotlight */
+@keyframes vt-spot-sweep {
+  from { transform: translateX(-35vw) rotate(-6deg); }
+  to   { transform: translateX(35vw)  rotate(6deg); }
+}
+
+/* Pulsation du spotlight */
+@keyframes vt-spot-pulse {
+  0%, 100% { opacity: 0.55; }
+  50%       { opacity: 1.00; }
+}
+
+/* Pulsation des lueurs radiales */
+@keyframes vt-glows-pulse {
+  from { opacity: 0.35; }
+  to   { opacity: 1.00; }
+}
+
+/* Reflet : reste off-screen 35 %, traverse en 30 %, repart 35 % */
+@keyframes vt-shimmer-sweep {
+  0%,  35%  { transform: translateX(-115%); }
+  65%, 100% { transform: translateX(165%); }
+}
+
+/* ════════════════════════════════════════════════════════
+   FOOTER VITRINE — Fond animé subtil (ambiance défilé)
+   ════════════════════════════════════════════════════════ */
+
+.vt-foot-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Couche 1 — Mesh wash : rotation lente côté gauche */
+.vt-foot-mesh {
+  position: absolute;
+  inset: -50%;
+  background: conic-gradient(
+    from 20deg at 25% 70%,
+    transparent               0deg,
+    rgba(208, 11, 11, .32)   45deg,
+    transparent               90deg,
+    rgba(205, 166, 98, .20)  170deg,
+    transparent              220deg,
+    rgba(208, 11, 11, .24)  300deg,
+    transparent              360deg
+  );
+  filter: blur(100px);
+  opacity: 0.22;
+  animation: vt-foot-mesh-spin 130s linear infinite;
+  will-change: transform;
+}
+
+/* Couche 2 — Lueurs radiales pulsantes (rouge bas-gauche, or haut-droit) */
+.vt-foot-glows {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 6%  92%, rgba(208,11,11,.20) 0%, transparent 42%),
+    radial-gradient(ellipse at 94% 12%, rgba(205,166,98,.14) 0%, transparent 38%);
+  animation: vt-foot-glows-pulse 18s ease-in-out infinite alternate;
+  will-change: opacity;
+}
+
+/* Couche 3 — Reflet or diagonal, flash toutes les ~16 s */
+.vt-foot-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent              42%,
+    rgba(205,166,98,.07)    51%,
+    rgba(244,236,225,.05)   53%,
+    transparent              62%
+  );
+  animation: vt-foot-shimmer-sweep 16s ease-in-out infinite;
+  animation-delay: -5s;
+  will-change: transform;
+}
+
+@keyframes vt-foot-mesh-spin {
+  from { transform: rotate(0deg)   scale(1.00); }
+  to   { transform: rotate(360deg) scale(1.08); }
+}
+
+@keyframes vt-foot-glows-pulse {
+  from { opacity: 0.40; }
+  to   { opacity: 1.00; }
+}
+
+@keyframes vt-foot-shimmer-sweep {
+  0%,  40%  { transform: translateX(-120%); }
+  60%, 100% { transform: translateX(180%); }
+}
+
 /* ── Accessibilité — désactive tout pour prefers-reduced-motion ── */
 @media (prefers-reduced-motion: reduce) {
   .vt-reveal, .vt-reveal.in,
@@ -607,4 +819,12 @@ body {
     box-shadow: none !important;
     filter: none !important;
   }
+  .vt-hero-mesh     { animation: none !important; }
+  .vt-hero-ribbons  { animation: none !important; display: none; }
+  .vt-hero-spotlight{ animation: none !important; transform: none !important; }
+  .vt-hero-glows    { animation: none !important; }
+  .vt-hero-shimmer  { display: none; }
+  .vt-foot-mesh     { animation: none !important; }
+  .vt-foot-glows    { animation: none !important; }
+  .vt-foot-shimmer  { display: none; }
 }

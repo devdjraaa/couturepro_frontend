@@ -144,13 +144,75 @@ export default function VitrineHome() {
     ? (cat === 'all' ? galleryModels : galleryModels.filter((m) => m.cat === cat))
     : null
   const rotMsg = Array.isArray(rotations) && rotations.length ? rotations[rot % rotations.length] : ''
+  const prm = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   return (
     <VitrineShell>
       {/* HERO */}
-      <section className="relative overflow-hidden pt-16 pb-12 text-center">
-        <div className="pointer-events-none absolute -top-44 -right-28 w-[520px] h-[520px] rounded-full"
-             style={{ background: 'radial-gradient(circle, color-mix(in srgb, var(--color-primary) 8%, transparent), transparent 70%)' }} />
+      <section className="relative overflow-hidden pt-16 pb-12 text-center isolate">
+        {/* ── Fond animé multicouche — ambiance défilé ── */}
+        <div className="vt-hero-bg" aria-hidden="true">
+
+          {/* Couche 1 — Mesh wash */}
+          <div className="vt-hero-mesh" />
+
+          {/* Couche 2 — Rubans de soie (SMIL) */}
+          <svg className="vt-hero-ribbons" viewBox="0 0 1220 640" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="vt-rb1" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#7A0606" />
+                <stop offset="50%" stopColor="#D00B0B" />
+                <stop offset="100%" stopColor="#7A0606" />
+              </linearGradient>
+              <linearGradient id="vt-rb2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#A87F3E" />
+                <stop offset="50%" stopColor="#CDA662" />
+                <stop offset="100%" stopColor="#A87F3E" />
+              </linearGradient>
+              <linearGradient id="vt-rb3" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"   stopColor="#E82A1E" stopOpacity="0" />
+                <stop offset="30%"  stopColor="#E82A1E" />
+                <stop offset="70%"  stopColor="#D00B0B" />
+                <stop offset="100%" stopColor="#D00B0B" stopOpacity="0" />
+              </linearGradient>
+              <filter id="vt-soft"><feGaussianBlur stdDeviation="1" /></filter>
+            </defs>
+
+            {/* Ruban rouge large — bas-gauche → haut-droit, 16 s, amplitude ×3 */}
+            <path fill="url(#vt-rb1)" filter="url(#vt-soft)" opacity="0.60"
+              d="M 0,530 C 300,395 600,195 900,105 C 1050,60 1150,35 1220,25 L 1220,125 C 1150,138 1050,162 900,208 C 600,305 300,512 0,645 Z">
+              {!prm && <animate attributeName="d" dur="16s" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45,0,.55,1;.45,0,.55,1" repeatCount="indefinite"
+                values="M 0,530 C 300,395 600,195 900,105 C 1050,60 1150,35 1220,25 L 1220,125 C 1150,138 1050,162 900,208 C 600,305 300,512 0,645 Z;M 0,460 C 300,458 600,172 900,172 C 1050,128 1150,98 1220,88 L 1220,182 C 1150,196 1050,224 900,272 C 600,272 300,448 0,570 Z;M 0,530 C 300,395 600,195 900,105 C 1050,60 1150,35 1220,25 L 1220,125 C 1150,138 1050,162 900,208 C 600,305 300,512 0,645 Z" />}
+            </path>
+
+            {/* Ruban or moyen — haut-gauche → bas-droit, 22 s, amplitude ×2.5 */}
+            <path fill="url(#vt-rb2)" filter="url(#vt-soft)" opacity="0.48"
+              d="M 0,45 C 300,165 600,295 900,380 C 1050,422 1150,462 1220,472 L 1220,548 C 1150,534 1050,496 900,450 C 600,358 300,225 0,118 Z">
+              {!prm && <animate attributeName="d" dur="22s" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45,0,.55,1;.45,0,.55,1" repeatCount="indefinite"
+                values="M 0,45 C 300,165 600,295 900,380 C 1050,422 1150,462 1220,472 L 1220,548 C 1150,534 1050,496 900,450 C 600,358 300,225 0,118 Z;M 0,105 C 300,125 600,315 900,330 C 1050,368 1150,412 1220,422 L 1220,500 C 1150,490 1050,448 900,398 C 600,302 300,188 0,178 Z;M 0,45 C 300,165 600,295 900,380 C 1050,422 1150,462 1220,472 L 1220,548 C 1150,534 1050,496 900,450 C 600,358 300,225 0,118 Z" />}
+            </path>
+
+            {/* Ruban rouge vif fin — courbe centrale, 10 s, amplitude ×2.5 */}
+            <path fill="url(#vt-rb3)" filter="url(#vt-soft)" opacity="0.35"
+              d="M 0,305 C 250,255 550,418 800,348 C 1000,298 1120,272 1220,255 L 1220,285 C 1120,302 1000,328 800,378 C 550,448 250,295 0,348 Z">
+              {!prm && <animate attributeName="d" dur="10s" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45,0,.55,1;.45,0,.55,1" repeatCount="indefinite"
+                values="M 0,305 C 250,255 550,418 800,348 C 1000,298 1120,272 1220,255 L 1220,285 C 1120,302 1000,328 800,378 C 550,448 250,295 0,348 Z;M 0,375 C 250,298 550,372 800,295 C 1000,248 1120,225 1220,208 L 1220,242 C 1120,258 1000,285 800,332 C 550,405 250,332 0,415 Z;M 0,305 C 250,255 550,418 800,348 C 1000,298 1120,272 1220,255 L 1220,285 C 1120,302 1000,328 800,378 C 550,448 250,295 0,348 Z" />}
+            </path>
+          </svg>
+
+          {/* Couche 3 — Spotlight de podium */}
+          <div className="vt-hero-spotlight" />
+
+          {/* Couche 4 — Lueurs radiales pulsantes */}
+          <div className="vt-hero-glows" />
+
+          {/* Couche 5 — Reflet de défilé */}
+          <div className="vt-hero-shimmer" />
+
+          {/* Couche 6 — Grain film statique */}
+          <div className="vt-hero-grain" />
+        </div>
+
         <div className="vt-stagger max-w-[1180px] mx-auto px-5 relative">
           <div className="vt-item text-[12px] font-bold tracking-[0.14em] uppercase text-primary">{t('vitrine.hero.eyebrow')}</div>
           <h1 className="vt-item font-display font-extrabold mx-auto max-w-[880px] my-3.5 text-[clamp(34px,6vw,60px)] leading-[1.08] text-ink">
