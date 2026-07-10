@@ -9,6 +9,7 @@ import QRCode from 'qrcode'
 import { partagerFactureHabillee } from '@/utils/imprimerFactureHabillee'
 import { exportFactureDocPdf, shareOrDownloadPdf } from '@/utils/exportFacturePdf'
 import { AppLayout } from '@/components/layout'
+import { BottomSheet } from '@/components/ui'
 import { useAuth } from '@/contexts'
 import { factureService } from '@/services/factureService'
 import { useFactureSettings } from '@/hooks/useParametres'
@@ -50,23 +51,23 @@ function LigneRow({ ligne, onChange, onRemove, index }) {
         value={ligne.description}
         onChange={(e) => onChange(index, 'description', e.target.value)}
         placeholder={t('facturation.ligne.description')}
-        className="flex-1 rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30"
+        className="flex-1 min-w-0 rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30"
       />
       <input
         type="number" min="1"
         value={ligne.quantite}
         onChange={(e) => onChange(index, 'quantite', e.target.value)}
         placeholder={t('facturation.ligne.qte')}
-        className="w-16 rounded-lg border border-edge bg-app px-2 py-2 text-sm text-ink text-center focus:outline-none focus:ring-2 focus:ring-primary/30"
+        className="w-16 shrink-0 rounded-lg border border-edge bg-app px-2 py-2 text-sm text-ink text-center focus:outline-none focus:ring-2 focus:ring-primary/30"
       />
       <input
         type="number" min="0"
         value={ligne.prix_unitaire}
         onChange={(e) => onChange(index, 'prix_unitaire', e.target.value)}
         placeholder={t('facturation.ligne.prix')}
-        className="w-28 rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30"
+        className="w-24 shrink-0 rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30"
       />
-      <button onClick={() => onRemove(index)} className="mt-2 text-ghost hover:text-danger transition">
+      <button onClick={() => onRemove(index)} className="mt-2 shrink-0 text-ghost hover:text-danger transition">
         <X size={15} />
       </button>
     </div>
@@ -137,15 +138,7 @@ function FormulaireModal({ onClose, onCreated }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-12 bg-[#0D0D0D]/60 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-card border border-edge rounded-2xl shadow-xl w-full max-w-xl relative">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-edge">
-          <h2 className="font-display font-bold text-lg text-ink">{t('facturation.modal.titre')}</h2>
-          <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full text-ghost hover:text-ink transition">
-            <X size={17} />
-          </button>
-        </div>
-
+    <BottomSheet isOpen onClose={onClose} title={t('facturation.modal.titre')}>
         <div className="p-5 space-y-4">
           {/* Type de document */}
           <div>
@@ -272,8 +265,7 @@ function FormulaireModal({ onClose, onCreated }) {
             {saving ? t('facturation.modal.creation') : t('facturation.modal.creer')}
           </button>
         </div>
-      </div>
-    </div>
+    </BottomSheet>
   )
 }
 
