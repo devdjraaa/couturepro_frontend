@@ -72,12 +72,12 @@ export async function showLocalNotif(title, body, extra = {}) {
  * @param {Array} notifs — enregistrements { titre, contenu, lien, date_creation, is_read }
  */
 export async function raiseSystemNotifications(notifs) {
-  if (!Capacitor.isNativePlatform() || !Array.isArray(notifs)) return
+  if (!Capacitor.isNativePlatform() || !Array.isArray(notifs)) return []
 
   const dated = notifs
     .filter(n => n?.date_creation)
     .sort((a, b) => String(a.date_creation).localeCompare(String(b.date_creation)))
-  if (!dated.length) return
+  if (!dated.length) return []
 
   const newest = String(dated[dated.length - 1].date_creation)
 
@@ -88,14 +88,21 @@ export async function raiseSystemNotifications(notifs) {
   // d'anciennes notifications au premier login / à l'installation).
   if (!last) {
     try { localStorage.setItem(LAST_NOTIF_KEY, newest) } catch { /* indisponible */ }
-    return
+    return []
   }
 
-  const fresh = dated.filter(n => String(n.date_creation) > last && !n.is_read)
-  // Limite anti-spam : au plus 5 notifs rideau par sync.
-  for (const n of fresh.slice(-5)) {
+  // Limite anti-spam : au plus 5 notifs par sync.
+  const fresh = dated
+    .filter(n => String(n.date_creation) > last && !n.is_read)
+    .slice(-5)
+
+  for (const n of fresh) {
     await showLocalNotif(n.titre || 'Gextimo', n.contenu || '', { lien: n.lien || null })
   }
 
   try { localStorage.setItem(LAST_NOTIF_KEY, newest) } catch { /* indisponible */ }
+
+  // On renvoie les nouvelles notifs (forme simple) pour que l'appelant puisse aussi
+  // faire « pop » une bannière in-app quand l'app est au premier plan.
+  return fresh.map(n => ({ titre: n.titre, contenu: n.contenu, lien: n.lien }))
 }

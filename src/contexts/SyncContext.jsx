@@ -1,14 +1,40 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
+import { Bell } from 'lucide-react'
 import { useNetwork } from '@/hooks/useNetwork'
 import { useAuth } from '@/contexts/AuthContext'
 import { syncWithServer, getLastPulledAt } from '@/db/syncAdapter'
 import { scheduleOrderNotifications } from '@/utils/orderNotifications'
 import { raiseSystemNotifications } from '@/utils/localNotif'
+import { goToDeepLink } from '@/utils/deepLink'
 import database from '@/db/database'
 import { Q } from '@nozbe/watermelondb'
 
 const SyncContext = createContext(null)
+
+// Bannière in-app cliquable pour les nouvelles notifications (app au premier plan).
+// Tap → redirige vers l'écran lié (même deep-link que le rideau).
+function notifierInApp(fresh) {
+  const n = fresh[fresh.length - 1]           // la plus récente
+  if (!n?.titre) return
+  const extra = fresh.length > 1 ? ` (+${fresh.length - 1})` : ''
+  toast.custom((tp) => (
+    <button
+      type="button"
+      onClick={() => { toast.dismiss(tp.id); if (n.lien) goToDeepLink(n.lien) }}
+      className="flex items-start gap-3 bg-card border border-edge rounded-2xl shadow-lg px-4 py-3 w-[min(92vw,22rem)] text-left active:scale-[0.98] transition"
+    >
+      <span className="mt-0.5 w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+        <Bell size={16} />
+      </span>
+      <span className="min-w-0">
+        <span className="block text-sm font-semibold text-ink truncate">{n.titre}{extra}</span>
+        {n.contenu ? <span className="block text-xs text-dim truncate">{n.contenu}</span> : null}
+      </span>
+    </button>
+  ), { duration: 5000, position: 'top-center' })
+}
 
 // Tables suivies par la synchro (miroir de syncAdapter).
 const SYNC_TABLES = ['clients', 'commandes', 'mesures', 'vetements', 'collections', 'notifications', 'paiements', 'commande_items', 'commande_echeances']
@@ -63,7 +89,13 @@ export function SyncProvider({ children }) {
         const notifs = await database.get('notifications')
           .query(Q.sortBy('date_creation', Q.desc), Q.take(30))
           .fetch()
-        raiseSystemNotifications(notifs)
+        const fresh = await raiseSystemNotifications(notifs)
+
+        // Pop in-app : quand l'app est ouverte, on fait « pop » une bannière
+        // cliquable (le rideau ne montre pas de heads-up en premier plan).
+        if (fresh.length && (typeof document === 'undefined' || document.visibilityState === 'visible')) {
+          notifierInApp(fresh)
+        }
       }
     } catch (err) {
       setSyncError(err?.message ?? 'Erreur de synchronisation.')
