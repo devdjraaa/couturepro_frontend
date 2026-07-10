@@ -22,7 +22,10 @@ export default function PlanCard({ plan, isCurrent, abonnementStatut, onUpgrade,
   const dureeLabel = plan.duree_jours >= 365 ? t('plans.par_an') : t('plans.par_mois')
   const isActive   = isCurrent && abonnementStatut === 'actif'
   const isEssai    = isCurrent && abonnementStatut === 'essai'
-  const canPay     = !isActive
+  // Le plan gratuit est attribué une seule fois, à la création du compte : on ne
+  // peut pas le « choisir »/souscrire ensuite. Jamais de bouton d'action dessus.
+  const isFree     = Number(plan.prix_xof) <= 0
+  const canPay     = !isActive && !isFree
 
   const planName = t(`plans.${plan.cle}`, { defaultValue: plan.label })
 

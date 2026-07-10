@@ -25,7 +25,19 @@
     "quota_atteint": "Monthly quota reached. Come back next month or upgrade your plan.",
     "vide_titre": "No photos",
     "vide_desc": "Add photos of fabrics, creations or inspirations.",
-    "ajouter_photo": "Add a photo"
+    "ajouter_photo": "Add a photo",
+    "confirm_suppr": "Delete this photo?",
+    "tuto": {
+      "aide": "How it works",
+      "passer": "Skip",
+      "commencer": "Let's go",
+      "s1_titre": "Your gallery of creations",
+      "s1_texte": "Gather photos of your real work. They appear on your public showcase and feed the Gextimo inspiration catalog.",
+      "s2_titre": "Add several photos at once",
+      "s2_texte": "Tap “Add”: your phone's photo picker opens. Select one or several creations, then confirm.",
+      "s3_titre": "Photos that belong to you",
+      "s3_texte": "Only publish YOUR own photos (taken by you), sharp and well-lit. Each photo becomes visible and findable on the showcase."
+    }
   },
   "premium": {
     "tag": "Pricing",
@@ -1277,6 +1289,7 @@
     "catalogue": "Catalogue",
     "ma_vitrine": "My Showcase",
     "equipe": "Team",
+    "galerie": "Gallery",
     "points": "Loyalty",
     "facturation": "Invoicing",
     "notifications": "Notifications",
@@ -1290,8 +1303,7 @@
     "outils_creatifs": "Creative tools"
   },
   "vitrine": {
-    "promo_a": "New — the",
-    "promo_b": "showcase connects African fashion designers across West Africa.",
+    "promo": "✦ New — the Gextimo showcase connects African fashion designers across West Africa.",
     "online": "● Online",
     "loading": "Loading…",
     "indicatif": "* Indicative prices, converted for information only.",
@@ -1304,8 +1316,7 @@
       "placeholder": "Search a designer, a model…",
       "empty": "No result.",
       "creators": "Designers",
-      "models": "Models",
-      "cta": "Search"
+      "models": "Models"
     },
     "favoris": {
       "menu": "Favorites",
@@ -1650,9 +1661,18 @@
       ],
       "how_title": "How it works",
       "how_steps": [
-        { "t": "Choose an offer", "d": "Select the duration that fits your needs." },
-        { "t": "Contact the team", "d": "Send us a message through the Help page." },
-        { "t": "Fast activation", "d": "Your profile moves to the top of the list within 24 h." }
+        {
+          "t": "Choose an offer",
+          "d": "Select the duration that fits your needs."
+        },
+        {
+          "t": "Contact the team",
+          "d": "Send us a message through the Help page."
+        },
+        {
+          "t": "Fast activation",
+          "d": "Your profile moves to the top of the list within 24 h."
+        }
       ],
       "contact_title": "Ready to boost your visibility?",
       "contact_sub": "Contact the Gextimo team to activate your featured listing.",
@@ -2168,5 +2188,9 @@
   },
   "sidebar": {
     "outils_creatifs": "Creative tools"
+  },
+  "reseau": {
+    "connexion_requise": "Internet connection required for this action.",
+    "parametres_offline": "Settings require an internet connection. Reconnect to change them."
   }
 }

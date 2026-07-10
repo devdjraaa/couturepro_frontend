@@ -61,6 +61,17 @@ export function useSponsoriserAtelier() {
   })
 }
 
+export function useChangerTypeAtelier() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, type }) => ateliersAdminService.changerType(id, type),
+    onSuccess: (_, { id }) => {
+      qc.invalidateQueries({ queryKey: ADMIN_KEYS.ateliers })
+      qc.invalidateQueries({ queryKey: ADMIN_KEYS.atelier(id) })
+    },
+  })
+}
+
 export function useAdminAtelierFidelite(id) {
   return useQuery({
     queryKey: ADMIN_KEYS.atelierFid(id),
