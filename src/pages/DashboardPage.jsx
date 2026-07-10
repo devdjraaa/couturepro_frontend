@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, ChevronDown, CheckCircle2, CircleUser, Sun, Moon, Store, X, Layers, Users2, Star, FileText, Crown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -29,10 +29,32 @@ function Greeting({ user, subtitle, hero = false }) {
   const initials = [user?.prenom?.[0], user?.nom?.split(' ')[0]?.[0]]
     .filter(Boolean).join('').toUpperCase() || '?'
 
+  // Salutation animée : affichée à l'ouverture, une seule fois par demi-journée
+  // (matin / après-midi / soir), puis elle se replie pour réduire la hauteur du
+  // header — plus discrète, pas affichée en permanence.
+  const periodKey = `${new Date().toDateString()}|${hour < 12 ? 'm' : hour < 18 ? 'a' : 's'}`
+  const [greetOpen, setGreetOpen] = useState(() => {
+    if (!hero) return true
+    try { return localStorage.getItem('gx_greet_period') !== periodKey } catch { return true }
+  })
+  useEffect(() => {
+    if (!hero || !greetOpen) return
+    try { localStorage.setItem('gx_greet_period', periodKey) } catch { /* indisponible */ }
+    const id = setTimeout(() => setGreetOpen(false), 3800)
+    return () => clearTimeout(id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <div className={hero ? 'pt-2 pb-1' : 'pt-4 pb-2'}>
       <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0">
+        <div
+          className={cn(
+            'min-w-0',
+            hero && 'transition-all duration-700 ease-out overflow-hidden',
+            hero && !greetOpen && 'max-h-0 opacity-0',
+          )}
+        >
           <p
             className={cn('mb-1', hero ? 'text-[11px] font-bold uppercase tracking-[.18em]' : 'text-xs capitalize text-ghost')}
             style={hero ? { color: 'var(--color-gold-hi, #E4C486)' } : undefined}
@@ -40,7 +62,7 @@ function Greeting({ user, subtitle, hero = false }) {
             {dateStr}
           </p>
           <h1 className={cn('font-bold font-display', hero ? 'text-[34px] leading-[1.08] text-inverse' : 'text-xl leading-tight text-ink')}>
-            {greeting}, {user?.prenom ?? user?.nom?.split(' ')[0] ?? ''} 👋
+            {greeting}, {user?.prenom ?? user?.nom?.split(' ')[0] ?? ''}
           </h1>
         </div>
         {hero && (
