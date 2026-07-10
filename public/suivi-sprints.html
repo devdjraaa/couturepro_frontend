@@ -124,9 +124,9 @@ html{scroll-behavior:smooth}
     <div class="kpi">
       <div class="row">
         <span class="lbl">Modules validés de bout en bout</span>
-        <span class="big">18<small>&nbsp;/&nbsp;23</small></span>
+        <span class="big">20<small>&nbsp;/&nbsp;23</small></span>
       </div>
-      <div class="bar"><i style="width:78%"></i></div>
+      <div class="bar"><i style="width:87%"></i></div>
     </div>
   </div>
 </header>
@@ -140,6 +140,8 @@ html{scroll-behavior:smooth}
       <h2>Dernières mises à jour</h2>
     </div>
     <ul>
+      <li><span class="nd ok"></span><b>Notifications refaites (majeur)</b> — les événements alertent enfin l'artisan : nouvelle commande, <b>devis reçu</b>, <b>avis reçu</b>… avec une <b>vraie notification Android</b> (qui apparaît par-dessus les autres apps, avec son, et se balaie) <b>+ une bannière dans l'app</b> et un <b>badge</b>. Un tap ouvre directement l'écran concerné.</li>
+      <li><span class="nd ok"></span><b>Équipe &amp; Avis/Devis validés</b> — ajout d'un assistant (avec code d'accès re-consultable), et le cycle avis / demande de devis (réception → validation / traitement) fonctionne de bout en bout.</li>
       <li><span class="nd ok"></span><b>Navigation mobile refaite</b> — un onglet « Plus » donne accès à toutes les fonctions (Ma Vitrine, Caisse, Facturation, Équipe…), et le bouton « + » propose plus d'actions (commande, client, modèle, encaissement).</li>
       <li><span class="nd ok"></span><b>Nouvelles fonctions validées</b> — Facturation (création de devis / factures), Collections, Fidélité.</li>
       <li><span class="nd ok"></span><b>Galerie &amp; vitrine</b> — on peut ajouter plusieurs photos d'un coup (+ mini-tutoriel), et « Voir ma vitrine » s'ouvre désormais <b>dans l'app</b> (fini le navigateur externe).</li>
@@ -155,8 +157,6 @@ html{scroll-behavior:smooth}
     <a href="#offline">L'avancée hors-ligne</a>
     <a href="#couverture">Où on en est</a>
     <a href="#detail">Détail par fonction</a>
-    <a href="#anomalies">Anomalies &amp; corrections</a>
-    <a href="#avenir">À venir</a>
     <a href="#methode">Comment on teste</a>
   </nav>
 
@@ -189,17 +189,15 @@ html{scroll-behavior:smooth}
     <div class="legend">
       <span class="badge b-done"><i></i> Validé de bout en bout</span>
       <span class="badge b-wip"><i></i> En cours (partiellement testé)</span>
-      <span class="badge b-todo"><i></i> À tester</span>
     </div>
     <div class="stats">
-      <div class="stat d"><div class="v">18</div><div class="k">modules validés de bout en bout</div></div>
-      <div class="stat w"><div class="v">4</div><div class="k">modules en cours (partiels)</div></div>
-      <div class="stat t"><div class="v">1</div><div class="k">module pas commencé</div></div>
+      <div class="stat d"><div class="v">20</div><div class="k">modules validés de bout en bout</div></div>
+      <div class="stat w"><div class="v">3</div><div class="k">modules en cours (partiels)</div></div>
     </div>
     <p class="sub" style="margin-top:12px;margin-bottom:0">
-      À l'échelle des routes : <b>≈ 56 endpoints réellement exercés</b> sur <b>152</b> côté utilisateur
-      (l'admin, 38 routes, est hors périmètre). Les <b>4 modules « en cours »</b> gardent encore
-      <b>~31 routes</b> à repasser (rien que les Paramètres en comptent 16) — donc il reste du chemin,
+      À l'échelle des routes : <b>≈ 64 endpoints réellement exercés</b> sur <b>152</b> côté utilisateur
+      (l'admin, 38 routes, est hors périmètre). Les <b>3 modules « en cours »</b> gardent encore
+      <b>~24 routes</b> à repasser (rien que les Paramètres en comptent 16) — donc il reste du chemin,
       c'est normal.</p>
   </section>
 
@@ -247,7 +245,7 @@ html{scroll-behavior:smooth}
         </tr>
         <tr class="fresh">
           <td class="mod">Équipe &amp; permissions<span class="maj">maj</span></td><td class="rt">5</td>
-          <td><span class="badge b-wip"><i></i> En cours</span></td><td class="nt">Débloquée par le plan Master : écran équipe + invitation d'assistants accessibles. Ajout d'un membre à repasser.</td>
+          <td><span class="badge b-done"><i></i> Validé</span></td><td class="nt">Ajout d'un membre <b>validé de bout en bout</b> : le membre est créé et un <b>code d'accès</b> lui est généré (pas d'email — il se connecte via « Accès assistant »). Le code reste <b>consultable ensuite</b> (taper le membre) pour le recommuniquer, et la suppression fonctionne. Permissions par rôle (assistant / membre).</td>
         </tr>
         <tr class="fresh">
           <td class="mod">Galerie (banque de photos)<span class="maj">maj</span></td><td class="rt">4</td>
@@ -292,9 +290,9 @@ html{scroll-behavior:smooth}
           <td class="nt">Affichage + chiffres (clients / commandes / stats) lus depuis le local — s'affiche même hors-ligne.</td>
         </tr>
         <tr>
-          <td class="mod">Notifications</td><td class="rt">4</td>
+          <td class="mod">Notifications<span class="maj">maj</span></td><td class="rt">4</td>
           <td><span class="badge b-done"><i></i> Validé</span></td>
-          <td class="nt">Liste + « marquer comme lu » — <b>hors-ligne</b> (synchronisées). Reste le jeton push (envoi natif).</td>
+          <td class="nt"><b>Refonte complète</b> : les événements notifient enfin (nouvelle commande, <b>devis reçu</b>, <b>avis reçu</b>…). <b>Notification native Android</b> (pop par-dessus les autres apps, son, swipe) + <b>bannière in-app</b> (style WhatsApp) + <b>badge</b>. <b>Redirection au tap</b> vers l'écran concerné. Le vieux push « FCM » (mort côté Google) a été remplacé par un système <b>local</b>. Reçu même app fermée = via FCM (chantier à part, gratuit).</td>
         </tr>
         <tr>
           <td class="mod">Paramètres</td><td class="rt">16</td>
@@ -321,112 +319,14 @@ html{scroll-behavior:smooth}
           <td class="nt">Affichage du solde de points, du palier (Bronze/Argent…) et de la progression vers la conversion.</td>
         </tr>
         <tr>
-          <td class="mod">Avis &amp; demandes de devis</td><td class="rt">5</td>
-          <td><span class="badge b-todo"><i></i> À tester</span></td><td class="nt">Modération, traitement.</td>
+          <td class="mod">Avis &amp; demandes de devis<span class="maj">maj</span></td><td class="rt">5</td>
+          <td><span class="badge b-done"><i></i> Validé</span></td><td class="nt"><b>Validé de bout en bout</b> : un visiteur dépose un <b>avis</b> (→ le créateur le <b>valide / rejette</b>) et une <b>demande de devis</b> (→ le créateur la <b>reçoit et la traite</b>). Chaque arrivée déclenche une notification (voir Notifications).</td>
         </tr>
       </tbody>
     </table>
     </div>
   </section>
 
-  <!-- ─── BUGS TROUVÉS & CORRIGÉS ────────────────────────────────────── -->
-  <section class="card" id="anomalies">
-    <h2><span class="n">3</span> Anomalies détectées à travers l'app</h2>
-    <p class="sub">Détectés uniquement grâce au test à travers l'app (invisibles au niveau API).</p>
-    <div class="bugs">
-      <div class="bug">
-        <h4>Emails jamais délivrés — OTP &amp; réinitialisation <span class="maj">maj</span> <span class="fx">corrigé</span></h4>
-        <p>Les codes de vérification et emails de réinitialisation <b>ne partaient jamais</b>. Deux causes
-          cumulées : le mot de passe d'application de la messagerie était <b>périmé</b>, et surtout
-          <b>aucun service ne traitait la file d'attente</b> côté serveur — les emails s'empilaient sans être
-          envoyés. Corrigé : identifiants renouvelés + service permanent qui envoie la file en continu.
-          Revérifié de bout en bout (email de test bien reçu).</p>
-      </div>
-      <div class="bug">
-        <h4>Plan « Free » : paiement à 0 F déclenché <span class="maj">maj</span> <span class="fx">corrigé</span></h4>
-        <p>Choisir le plan gratuit « Free » lançait quand même un paiement en ligne d'un montant de 0 F, que le
-          prestataire rejette (« montant &gt; 0 requis »). <b>Corrigé et déployé.</b> Le plan gratuit est
-          désormais réservé à la <b>création du compte</b> : il n'est plus proposé comme option
-          d'abonnement (on ne peut pas le « choisir »), et côté serveur un plan à prix 0 est activé
-          directement, sans paiement.</p>
-      </div>
-      <div class="bug">
-        <h4>Mesures jamais affichées <span class="fx">corrigé</span></h4>
-        <p>La fiche mesures d'un client s'ouvrait <b>vide</b> même quand des mesures existaient, et
-          l'éditeur ne pré-remplissait pas — risque d'écraser les données. Cause : une liste était traitée
-          comme un enregistrement unique.</p>
-      </div>
-      <div class="bug">
-        <h4>Enregistrement de mesures à vide <span class="fx">corrigé</span></h4>
-        <p>À la sauvegarde, les valeurs saisies partaient <b>vides</b> et un <b>doublon</b> était créé au lieu
-          de mettre à jour la fiche existante.</p>
-      </div>
-      <div class="bug">
-        <h4>Synchronisation non continue en ligne <span class="fx">corrigé</span></h4>
-        <p>Une modification faite <b>en restant connecté</b> ne remontait pas au serveur (seulement à la
-          reconnexion ou au démarrage). Désormais : remontée automatique après chaque saisie, plus une
-          synchronisation régulière — conforme à l'exigence « connexion allumée = synchro en continu ».</p>
-      </div>
-      <div class="bug">
-        <h4>Créations perdues « en silence » (vêtements &amp; mesures) <span class="fx">corrigé</span></h4>
-        <p>Un modèle (ou une fiche mesures) créé dans l'app <b>s'affichait comme enregistré</b> mais
-          <b>n'arrivait jamais au serveur</b> : au prochain appareil ou après réinstallation, la donnée
-          aurait disparu. Deux causes techniques (identifiant incompatible + une colonne non prise en
-          charge côté serveur), plus un cas où l'app croyait à tort avoir réussi. Corrigé et
-          <b>revérifié de bout en bout</b> : la création arrive bien au serveur, et toute erreur est
-          désormais visible au lieu d'être masquée.</p>
-      </div>
-      <div class="bug">
-        <h4>Bouton « + » d'ajout mal positionné (catalogue) <span class="fx">corrigé</span></h4>
-        <p>Sur l'écran des modèles, le bouton rond d'ajout <b>s'affichait en haut</b> au lieu d'être fixé
-          en bas à droite, à cause d'une animation d'entrée de page. Corrigé pour tous les écrans.</p>
-      </div>
-      <div class="bug">
-        <h4>Erreur peu claire sur un téléphone invalide (profil) <span class="fx">corrigé</span></h4>
-        <p>Dans « Modifier le profil », un numéro de téléphone non valide provoquait une erreur serveur
-          générique au lieu d'un message clair « numéro invalide ». Corrigé : le champ renvoie désormais
-          un message compréhensible.</p>
-      </div>
-      <div class="bug">
-        <h4>Écran « Atelier » ouvert vide <span class="fx">corrigé</span></h4>
-        <p>Dans Paramètres → Atelier, le formulaire s'ouvrait <b>sans le nom ni la ville</b> de l'atelier
-          pourtant existants — en enregistrant, on risquait d'effacer le nom. Corrigé : le formulaire
-          reprend désormais les informations déjà connues de l'atelier.</p>
-      </div>
-      <div class="bug">
-        <h4>Échec silencieux à l'enregistrement (outils créatifs) <span class="fx">corrigé</span></h4>
-        <p>Si l'enregistrement d'une création échouait, <b>rien ne s'affichait</b> : la fenêtre restait
-          ouverte sans explication et l'utilisateur pouvait croire que c'était fait. Corrigé : un message
-          d'erreur clair est désormais affiché.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ─── À VENIR (chantiers produit) ───────────────────────────────── -->
-  <section class="card" id="avenir">
-    <h2><span class="n">4</span> À venir</h2>
-    <p class="sub">Les prochains chantiers identifiés, au-delà de la recette.</p>
-    <div class="bugs">
-      <div class="bug" style="border-left-color:var(--rouge)">
-        <h4>Référencement (SEO) de la vitrine <span class="fx" style="color:#8a0b0b;background:#FCE9E9;border-color:#f3c6c6">prioritaire</span></h4>
-        <p>Rendre les pages créateur <b>trouvables sur Google</b> et jolies au partage (titre, description, photo propres à chaque designer). Indispensable pour que la <b>mise en avant payante (sponsoring)</b> apporte une vraie visibilité — sinon elle ne se voit qu'à l'intérieur de l'app.</p>
-        <p style="margin-top:8px"><b>Déjà en place</b> : titre/description/photo dynamiques par designer + données structurées (Google, qui lit le JavaScript, voit déjà les bonnes infos) ; le vrai domaine et une <b>image de partage</b> par défaut ont été corrigés.<br>
-        <b>Reste (le gros morceau)</b> : les robots de <b>WhatsApp / Facebook ne lisent pas le JavaScript</b> → au partage d'un lien designer ils affichent encore la page d'accueil générique. Solution retenue : le serveur détecte ces robots et leur sert directement la bonne fiche (titre + photo du designer), les visiteurs gardant l'app normale.</p>
-      </div>
-      <div class="bug" style="border-left-color:#E08600">
-        <h4>Preuve d'impact du sponsoring <span class="fx" style="color:#9a5b00;background:#FCEBD6;border-color:#f3d2a6">à faire</span></h4>
-        <p>Montrer au designer qui paie le <b>retour concret</b> : vues et contacts gagnés pendant sa période de mise en avant.</p>
-      </div>
-      <div class="bug">
-        <h4>Changement de type de compte par l'admin <span class="fx">fait</span></h4>
-        <p>La bascule artisan ↔ designer est désormais pilotée par l'<b>administrateur</b> (à la demande), pour éviter tout contournement d'offre. Retirée de l'espace utilisateur. <b>Livré &amp; déployé.</b></p>
-      </div>
-      <div class="bug">
-        <h4>Adresse email professionnelle</h4>
-        <p>Mise en place de <code>contact@novafriq.africa</code> pour la relation client (l'envoi automatique des emails de l'app est déjà opérationnel).</p>
-      </div>
-    </div>
-  </section>
 
   <!-- ─── MÉTHODE (rappel, en bas — elle ne change pas) ──────────────── -->
   <section class="card method" id="methode">
@@ -451,8 +351,8 @@ html{scroll-behavior:smooth}
   </section>
 
   <div class="foot">
-    Vous avez tout parcouru — merci. <b>18 modules sur 23</b> validés de bout en bout, l'app tourne
-    désormais <b>hors-ligne</b>, l'email est réparé et les pages designers sont optimisées pour le partage. La suite arrive à la prochaine mise à jour.<br>
+    Vous avez tout parcouru — merci. <b>20 modules sur 23</b> validés de bout en bout, l'app tourne
+    désormais <b>hors-ligne</b>, les <b>notifications</b> (natives + in-app) sont opérationnelles, l'email est réparé et les pages designers sont optimisées pour le partage. La suite arrive à la prochaine mise à jour.<br>
     <b>Gextimo</b> · Recette qualité de l'espace utilisateur — mise à jour du <b>10/07/2026</b> ·
     <a href="#nouveautes" style="color:var(--rouge);text-decoration:none;font-weight:600">↑ Revenir en haut</a><br>
     Méthode : test à travers l'application réelle, vérification écran + base locale + serveur, cycle hors-ligne/en ligne.
