@@ -487,7 +487,7 @@
       "titre": "Today's cash",
       "voir_detail": "See details",
       "vide": "Your first deposits will appear here.",
-      "enregistrer": "Record a payment →",
+      "enregistrer": "View cash register →",
       "encaisse_auj": "Collected today"
     },
     "todo": {
@@ -720,8 +720,8 @@
       "client_desc": "Add a client to the workshop",
       "modele": "New model",
       "modele_desc": "Add to the catalog",
-      "encaisser": "Record payment",
-      "encaisser_desc": "Log an incoming payment"
+      "encaisser": "View cash register",
+      "encaisser_desc": "See today's cash"
     },
     "vide": {
       "titre": "No orders in progress",
