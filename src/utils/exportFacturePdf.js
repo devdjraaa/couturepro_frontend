@@ -1,5 +1,6 @@
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
+import QRCode from 'qrcode'
 import { IS_NATIVE } from '@/constants/routes'
 
 const formatCFA = (v) =>
@@ -120,7 +121,22 @@ function buildFooterHtml(factureSettings) {
   `
 }
 
-function buildFactureHtml({ atelier, factureSettings, ref, date, client, lignes, total, acompte, reste, note, titre }) {
+// Sceau de normalisation e-MECeF (code MECeF/DGI + QR) imprimé sur la facture.
+function buildDgiHtml(dgi) {
+  if (!dgi?.code) return ''
+  return `
+    <div style="margin: 8px 0 16px; border: 1.5px solid #D00B0B; border-radius: 10px; padding: 14px 16px; display: flex; gap: 16px; align-items: center;">
+      ${dgi.qrDataUrl ? `<img src="${dgi.qrDataUrl}" alt="QR e-MECeF" style="width: 92px; height: 92px; flex-shrink: 0;" />` : ''}
+      <div style="min-width: 0;">
+        <p style="font-size: 12px; font-weight: 800; color: #D00B0B; margin: 0 0 5px;">FACTURE NORMALISÉE e-MECeF · DGI Bénin</p>
+        <p style="font-size: 12px; color: #111; margin: 0; font-family: monospace;"><strong>Code MECeF/DGI :</strong> ${dgi.code}</p>
+        <p style="font-size: 10px; color: #6b7280; margin: 6px 0 0;">Vérification : sygmef.impots.bj — saisir le code MECeF/DGI ci-dessus.</p>
+      </div>
+    </div>
+  `
+}
+
+function buildFactureHtml({ atelier, factureSettings, ref, date, client, lignes, total, acompte, reste, note, titre, dgi }) {
   return `
     ${buildHeaderHtml({ atelier, factureSettings, ref, date, titre })}
     ${buildClientHtml(client)}
@@ -128,7 +144,20 @@ function buildFactureHtml({ atelier, factureSettings, ref, date, client, lignes,
     ${buildTotauxHtml({ total, acompte, reste })}
     ${note ? `<p style="font-size: 11px; color: #6b7280; margin-bottom: 16px;"><strong>Note :</strong> ${note}</p>` : ''}
     ${buildFooterHtml(factureSettings)}
+    ${buildDgiHtml(dgi)}
   `
+}
+
+// Génère l'image QR (data URL) à partir du contenu QR e-MECeF, si la facture est normalisée.
+async function buildDgiData(facture) {
+  if (!facture?.emecef_code) return null
+  let qrDataUrl = ''
+  const contenu = facture.qr_code_url || facture.emecef_qr_url
+  if (contenu) {
+    try { qrDataUrl = await QRCode.toDataURL(String(contenu), { width: 200, margin: 1 }) }
+    catch { /* QR indisponible : on imprime au moins le code */ }
+  }
+  return { code: facture.emecef_code, qrDataUrl }
 }
 
 async function renderPdf(html) {
@@ -232,6 +261,7 @@ export async function exportFactureDocPdf({ facture, atelier, factureSettings })
   const total   = lignes.reduce((s, l) => s + l.total, 0)
   const acompte = Number(facture?.acompte) || 0
   const reste   = Math.max(0, total - acompte)
+  const dgi     = await buildDgiData(facture)
 
   const html = buildFactureHtml({
     atelier, factureSettings,
@@ -240,7 +270,7 @@ export async function exportFactureDocPdf({ facture, atelier, factureSettings })
     client: { nom: facture?.client_nom, telephone: facture?.client_telephone },
     lignes, total, acompte, reste,
     note: facture?.notes,
-    titre,
+    titre, dgi,
   })
 
   const pdf = await renderPdf(html)

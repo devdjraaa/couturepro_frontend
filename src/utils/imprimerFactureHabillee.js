@@ -7,6 +7,17 @@
 // PDF e-SFE reproduit tel quel.
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib'
 import api from '@/services/api'
+import { IS_NATIVE } from '@/constants/routes'
+
+// Base64 depuis un Uint8Array (par blocs pour ne pas exploser la pile sur un gros PDF).
+function bytesToBase64(bytes) {
+  let bin = ''
+  const chunk = 0x8000
+  for (let i = 0; i < bytes.length; i += chunk) {
+    bin += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk))
+  }
+  return btoa(bin)
+}
 
 const A4 = [595.28, 841.89]
 const ACCENT = rgb(0.816, 0.043, 0.043) // charte GEXTIMO (#D00B0B)
@@ -67,14 +78,35 @@ export async function genererFactureHabillee(doc, atelier) {
 }
 
 // Génère puis partage (mobile) ou télécharge (web) le PDF habillé.
-export async function partagerFactureHabillee(doc, atelier) {
+export async function partagerFactureHabillee(doc, atelier, { text = '' } = {}) {
   const bytes = await genererFactureHabillee(doc, atelier)
-  const blob = new Blob([bytes], { type: 'application/pdf' })
   const filename = `facture-${(doc?.numero || 'gextimo')}.pdf`
-  const file = new File([blob], filename, { type: 'application/pdf' })
 
+  // Chemin natif (Capacitor) : le WebView Android n'a ni navigator.share ni de
+  // gestionnaire pour a.download → on écrit le fichier puis partage natif.
+  if (IS_NATIVE) {
+    try {
+      const [{ Filesystem, Directory }, { Share }] = await Promise.all([
+        import('@capacitor/filesystem'),
+        import('@capacitor/share'),
+      ])
+      const { uri } = await Filesystem.writeFile({
+        path: filename.replace(/[^\w.\-]+/g, '_'),
+        data: bytesToBase64(bytes),
+        directory: Directory.Cache,
+      })
+      await Share.share({ title: filename, text, files: [uri] })
+      return 'shared'
+    } catch (e) {
+      if (e?.message && /cancel/i.test(e.message)) return 'cancelled'
+      // repli navigateur ci-dessous
+    }
+  }
+
+  const blob = new Blob([bytes], { type: 'application/pdf' })
+  const file = new File([blob], filename, { type: 'application/pdf' })
   if (typeof navigator !== 'undefined' && navigator.canShare && navigator.canShare({ files: [file] })) {
-    try { await navigator.share({ files: [file], title: filename }); return 'shared' }
+    try { await navigator.share({ files: [file], title: filename, text }); return 'shared' }
     catch (e) { if (e?.name === 'AbortError') return 'cancelled' }
   }
   const url = URL.createObjectURL(blob)

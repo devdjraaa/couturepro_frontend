@@ -10,6 +10,7 @@ import { partagerFactureHabillee } from '@/utils/imprimerFactureHabillee'
 import { exportFactureDocPdf, shareOrDownloadPdf } from '@/utils/exportFacturePdf'
 import { AppLayout } from '@/components/layout'
 import { BottomSheet } from '@/components/ui'
+import { IS_NATIVE } from '@/constants/routes'
 import { useAuth } from '@/contexts'
 import { factureService } from '@/services/factureService'
 import { useFactureSettings } from '@/hooks/useParametres'
@@ -345,19 +346,32 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
     } finally { setNormalisant(false) }
   }
 
-  const sendWhatsApp = () => {
+  const sendWhatsApp = async () => {
     const tel = (doc.client_telephone || '').replace(/\D/g, '')
-    const msg = encodeURIComponent(
-      t('facturation.doc.wa_message', {
-        client: doc.client_nom,
-        type: t(`facturation.types.${doc.type}`),
-        numero: doc.numero,
-        total: fmt(total),
-        restant: fmt(restant < 0 ? 0 : restant),
-        code: doc.code_tracage,
-      })
-    )
-    window.open(`https://wa.me/${tel}?text=${msg}`, '_blank', 'noopener,noreferrer')
+    const texte = t('facturation.doc.wa_message', {
+      client: doc.client_nom,
+      type: t(`facturation.types.${doc.type}`),
+      numero: doc.numero,
+      total: fmt(total),
+      restant: fmt(restant < 0 ? 0 : restant),
+      code: doc.code_tracage,
+    })
+    // Sur l'app mobile : wa.me ne peut envoyer QUE du texte (pas de pièce jointe).
+    // On génère le PDF et on ouvre le partage natif → l'utilisateur choisit WhatsApp
+    // et envoie le document (le message part en légende). Facture avec PDF officiel
+    // joint/normalisé → version habillée ; sinon → PDF simple du document.
+    if (IS_NATIVE) {
+      try {
+        if (doc.dgi_pdf_url) {
+          await partagerFactureHabillee(doc, atelier, { text: texte })
+        } else {
+          const { pdf, filename } = await exportFactureDocPdf({ facture: doc, atelier, factureSettings })
+          await shareOrDownloadPdf(pdf, filename, { title: filename, text: texte })
+        }
+        return
+      } catch { /* repli sur le lien texte ci-dessous */ }
+    }
+    window.open(`https://wa.me/${tel}?text=${encodeURIComponent(texte)}`, '_blank', 'noopener,noreferrer')
   }
 
   return (
