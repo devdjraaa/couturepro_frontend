@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Building2, Plus, CheckCircle2, ImagePlus, Lock, WifiOff } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import toast from 'react-hot-toast'
+import { getNativeVersion, checkAppVersion, openApkDownload } from '@/utils/appUpdate'
 import { useAuth } from '@/contexts'
 import {
   useProfil, useUpdateProfil,
@@ -89,28 +91,68 @@ function PreferencesTab() {
   if (isLoading) return <Skeleton className="h-40 rounded-2xl" />
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <Select
-        label={t('parametres.preferences.devise')}
-        value={form.devise}
-        onChange={e => setForm(f => ({ ...f, devise: e.target.value }))}
-        options={DEVISES}
-      />
-      <Select
-        label={t('parametres.preferences.unite_mesure')}
-        value={form.unite_mesure}
-        onChange={e => setForm(f => ({ ...f, unite_mesure: e.target.value }))}
-        options={UNITES}
-      />
-      <div>
-        <label className="block text-xs font-medium text-dim mb-2">{t('parametres.preferences.langue')}</label>
-        <LanguageSwitcher />
+    <>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <Select
+          label={t('parametres.preferences.devise')}
+          value={form.devise}
+          onChange={e => setForm(f => ({ ...f, devise: e.target.value }))}
+          options={DEVISES}
+        />
+        <Select
+          label={t('parametres.preferences.unite_mesure')}
+          value={form.unite_mesure}
+          onChange={e => setForm(f => ({ ...f, unite_mesure: e.target.value }))}
+          options={UNITES}
+        />
+        <div>
+          <label className="block text-xs font-medium text-dim mb-2">{t('parametres.preferences.langue')}</label>
+          <LanguageSwitcher />
+        </div>
+        {success && <p className="text-sm text-success">{t('parametres.preferences.succes')}</p>}
+        <Button type="submit" loading={update.isPending} className="w-full">
+          {t('commun.enregistrer')}
+        </Button>
+      </form>
+      <MajSection />
+    </>
+  )
+}
+
+// Bloc « Mises à jour » : version installée + vérification manuelle.
+function MajSection() {
+  const { t } = useTranslation()
+  const [version, setVersion] = useState('—')
+  const [checking, setChecking] = useState(false)
+
+  useEffect(() => { getNativeVersion().then((v) => setVersion(v || '—')) }, [])
+
+  const check = async () => {
+    setChecking(true)
+    const res = await checkAppVersion()
+    setChecking(false)
+    if (res.status === 'required' || res.status === 'optional') {
+      toast(t('maj.dispo'))
+      if (res.apkUrl) openApkDownload(res.apkUrl)
+    } else {
+      toast.success(t('maj.a_jour'))
+    }
+  }
+
+  return (
+    <div className="mt-6 pt-5 border-t border-edge">
+      <p className="text-xs font-semibold text-ghost uppercase tracking-wider mb-2">{t('maj.titre')}</p>
+      <div className="flex items-center justify-between gap-3">
+        <span className="text-sm text-dim">{t('maj.version')} {version}</span>
+        <button
+          onClick={check}
+          disabled={checking}
+          className="text-sm font-semibold text-primary hover:underline disabled:opacity-60"
+        >
+          {checking ? '…' : t('maj.verifier')}
+        </button>
       </div>
-      {success && <p className="text-sm text-success">{t('parametres.preferences.succes')}</p>}
-      <Button type="submit" loading={update.isPending} className="w-full">
-        {t('commun.enregistrer')}
-      </Button>
-    </form>
+    </div>
   )
 }
 

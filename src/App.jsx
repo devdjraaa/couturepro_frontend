@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { setDeepLinkNavigator } from '@/utils/deepLink'
+import AppUpdateGate from '@/components/AppUpdateGate'
 import { ProtectedRoute, DesignerRoute } from '@/components/layout'
 import { AdminProtectedRoute } from '@/components/admin'
 import {
@@ -132,6 +133,7 @@ export default function App() {
 
   return (
     <>
+      <AppUpdateGate />
       <Routes>
 
         {/* ── Routes admin ────────────────────────────────────────────── */}

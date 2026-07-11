@@ -20,6 +20,10 @@ CapApp.addListener('backButton', ({ canGoBack }) => {
   }
 })
 
+// OTA : confirme à Capgo que le bundle web démarre bien (sinon rollback auto).
+import { notifyAppReady } from '@/utils/appUpdate'
+notifyAppReady()
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

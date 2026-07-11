@@ -2213,5 +2213,18 @@
   "reseau": {
     "connexion_requise": "Connexion internet requise pour cette action.",
     "parametres_offline": "Les réglages nécessitent une connexion internet. Reconnectez-vous pour les modifier."
+  },
+  "maj": {
+    "dispo": "Une nouvelle version de l’application est disponible.",
+    "requise_titre": "Mise à jour requise",
+    "requise_desc": "Une nouvelle version est nécessaire pour continuer. Téléchargez-la pour poursuivre.",
+    "telecharger": "Télécharger la mise à jour",
+    "a_jour": "Votre application est à jour.",
+    "verifier": "Vérifier les mises à jour",
+    "version": "Version",
+    "titre": "Mises à jour",
+    "dispo_titre": "Mise à jour disponible",
+    "plus_tard": "Plus tard",
+    "changelog": "Nouveautés et corrections"
   }
 }

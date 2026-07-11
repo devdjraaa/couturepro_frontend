@@ -2213,5 +2213,18 @@
   "reseau": {
     "connexion_requise": "Internet connection required for this action.",
     "parametres_offline": "Settings require an internet connection. Reconnect to change them."
+  },
+  "maj": {
+    "dispo": "A new version of the app is available.",
+    "requise_titre": "Update required",
+    "requise_desc": "A new version is required to continue. Please download it to proceed.",
+    "telecharger": "Download update",
+    "a_jour": "Your app is up to date.",
+    "verifier": "Check for updates",
+    "version": "Version",
+    "titre": "Updates",
+    "dispo_titre": "Update available",
+    "plus_tard": "Later",
+    "changelog": "What's new & fixes"
   }
 }

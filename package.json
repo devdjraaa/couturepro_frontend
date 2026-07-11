@@ -25,6 +25,7 @@
     "@capacitor/preferences": "^8.0.1",
     "@capacitor/share": "^8.0.1",
     "@capacitor/status-bar": "^8.0.2",
+    "@capgo/capacitor-updater": "^7.50.1",
     "@hookform/resolvers": "^5.2.2",
     "@nozbe/watermelondb": "^0.28.0",
     "@tanstack/react-query": "^5.99.2",

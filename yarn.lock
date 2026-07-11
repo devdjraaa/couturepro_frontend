@@ -255,6 +255,11 @@
   resolved "https://registry.npmjs.org/@capacitor/synapse/-/synapse-1.0.4.tgz"
   integrity sha512-/C1FUo8/OkKuAT4nCIu/34ny9siNHr9qtFezu4kxm6GY1wNFxrCFWjfYx5C1tUhVGz3fxBABegupkpjXvjCHrw==
 
+"@capgo/capacitor-updater@^7.50.1":
+  version "7.50.1"
+  resolved "https://registry.npmjs.org/@capgo/capacitor-updater/-/capacitor-updater-7.50.1.tgz"
+  integrity sha512-48bgx5rNGJOXIHOyY2/EZZhB8i04aevKgmIbHfYe29NYTrWIyUvvhOojeeLCQBbnMjeKi8sPvbsnTR4verEPQQ==
+
 "@eslint-community/eslint-utils@^4.8.0":
   version "4.9.1"
   resolved "https://registry.npmjs.org/@eslint-community/eslint-utils/-/eslint-utils-4.9.1.tgz"

@@ -21,6 +21,12 @@
     "Preferences": {},
     "SystemBars": {
       "insetsHandling": "disable"
+    },
+    "CapacitorUpdater": {
+      "autoUpdate": true,
+      "updateUrl": "https://gextimoapi.novafriq.africa/api/app/updates",
+      "autoDeleteFailed": true,
+      "autoDeletePrevious": true
     }
   }
 }
