@@ -66,7 +66,7 @@ fi
 if [[ "$TARGET" == "admin" ]]; then
   BG_COLOR="#991B1B"
 else
-  BG_COLOR="#7E14FF"
+  BG_COLOR="#FFFFFF"
 fi
 sed -i "s|<color name=\"ic_launcher_background\">[^<]*</color>|<color name=\"ic_launcher_background\">$BG_COLOR</color>|" android/app/src/main/res/values/ic_launcher_background.xml
 

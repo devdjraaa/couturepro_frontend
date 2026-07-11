@@ -20,9 +20,16 @@ async function notifyBigUpdateOnce(res, t) {
 // forcé). Une MAJ obligatoire (min_version) est toujours bloquante.
 const SNOOZE_KEY = 'gx_maj_snooze' // { version, until }
 const SNOOZE_MS = 7 * 24 * 60 * 60 * 1000
+// Version pour laquelle l'utilisateur a déjà lancé le téléchargement : on ne
+// re-affiche plus le popup pour CETTE version (il l'installe). Il ne reviendra
+// qu'à la sortie d'une version encore plus récente.
+const HANDLED_KEY = 'gx_maj_handled' // string = version téléchargée
 
 function readSnooze() {
   try { return JSON.parse(localStorage.getItem(SNOOZE_KEY) || 'null') } catch { return null }
+}
+function readHandled() {
+  try { return localStorage.getItem(HANDLED_KEY) } catch { return null }
 }
 
 export default function AppUpdateGate() {
@@ -36,10 +43,13 @@ export default function AppUpdateGate() {
     done.current = true
     checkAppVersion().then((res) => {
       if (res.status === 'ok') {
-        // À jour → on efface un éventuel snooze (repart propre pour la prochaine version).
-        try { localStorage.removeItem(SNOOZE_KEY) } catch { /* indispo */ }
+        // À jour → on repart propre (efface snooze + « déjà téléchargé ») pour la prochaine version.
+        try { localStorage.removeItem(SNOOZE_KEY); localStorage.removeItem(HANDLED_KEY) } catch { /* indispo */ }
         return
       }
+      // Déjà téléchargée par l'utilisateur → on n'insiste plus (ni popup ni notif)
+      // jusqu'à ce qu'une version encore plus récente sorte.
+      if (readHandled() === res.latest) return
       // Grosse MAJ détectée → notification système (tap = deep-link vers Réglages).
       notifyBigUpdateOnce(res, t)
       if (res.status === 'required') {
@@ -66,6 +76,14 @@ export default function AppUpdateGate() {
     setDismissed(true)
   }
 
+  // « Télécharger » : on lance le téléchargement, on marque la version comme traitée
+  // (plus de popup pour cette version) et on ferme le popup.
+  const download = () => {
+    try { localStorage.setItem(HANDLED_KEY, info.latest) } catch { /* indispo */ }
+    openApkDownload(info.apkUrl)
+    setDismissed(true)
+  }
+
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-app/95 backdrop-blur">
       <div className="w-full max-w-sm bg-card border border-edge rounded-2xl p-6 shadow-xl">
@@ -89,7 +107,7 @@ export default function AppUpdateGate() {
           : <p className="mt-2 text-sm text-dim text-center">{t('maj.requise_desc')}</p>}
 
         <button
-          onClick={() => openApkDownload(info.apkUrl)}
+          onClick={download}
           className="mt-5 w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary text-white font-semibold hover:bg-primary-600 transition"
         >
           <Download size={17} /> {t('maj.telecharger')}
