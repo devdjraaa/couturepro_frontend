@@ -1,14 +1,18 @@
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   Scissors, Ruler, Building2, Users, MapPin,
   Palette, MessageCircle, Globe, CreditCard,
-  Lock, HelpCircle, ChevronRight,
+  Lock, HelpCircle, ChevronRight, RefreshCw,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import toast from 'react-hot-toast'
 import { useAuth } from '@/contexts'
 import { useAtelierParametres } from '@/hooks/useParametres'
 import { useVetements } from '@/hooks/useVetements'
 import { AppLayout } from '@/components/layout'
+import { IS_NATIVE } from '@/constants/routes'
+import { getNativeVersion, forceCheckOta, checkAppVersion, openApkDownload } from '@/utils/appUpdate'
 import { cn } from '@/utils/cn'
 
 // ── Composants internes ────────────────────────────────────────────────────────
@@ -49,6 +53,41 @@ function SettingsRow({ icon: Icon, label, value, onClick, danger = false }) {
   )
 }
 
+// ── Section Mises à jour (natif) ────────────────────────────────────────────────
+function MajReglagesSection() {
+  const { t } = useTranslation()
+  const [version, setVersion] = useState('—')
+  const [busy, setBusy] = useState(false)
+
+  useEffect(() => { getNativeVersion().then((v) => setVersion(v || '—')) }, [])
+
+  const majMaintenant = async () => {
+    if (busy) return
+    setBusy(true)
+    const ota = await forceCheckOta()
+    if (ota.updated) return // l'app se recharge sur le nouveau bundle
+    const res = await checkAppVersion()
+    setBusy(false)
+    if (res.status !== 'ok') {
+      toast(t('maj.dispo'))
+      if (res.apkUrl) openApkDownload(res.apkUrl)
+    } else {
+      toast.success(t('maj.a_jour'))
+    }
+  }
+
+  return (
+    <Section title={t('maj.titre')}>
+      <SettingsRow
+        icon={RefreshCw}
+        label={t('maj.maintenant')}
+        value={busy ? '…' : version}
+        onClick={majMaintenant}
+      />
+    </Section>
+  )
+}
+
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function AtelierPage() {
   const navigate = useNavigate()
@@ -63,7 +102,7 @@ export default function AtelierPage() {
   const mesModeles = vetements.filter(v => !v.is_systeme).length
 
   return (
-    <AppLayout title={t('atelier.titre')}>
+    <AppLayout title={t('atelier.mes_reglages')}>
       <div className="pb-safe">
         {/* Hero atelier */}
         <div className="px-4 py-6 flex items-center gap-4">
@@ -154,6 +193,9 @@ export default function AtelierPage() {
             onClick={() => navigate('/support')}
           />
         </Section>
+
+        {/* Mises à jour (app mobile) */}
+        {IS_NATIVE && <MajReglagesSection />}
 
         {/* Déconnexion */}
         <div className="px-4 pt-6 pb-10 text-center">

@@ -498,7 +498,7 @@
       "nouvelle_commande": "Nouvelle commande",
       "nouveau_client": "Nouveau client",
       "paiement": "Encaisser",
-      "atelier": "Mon Atelier"
+      "atelier": "Mes Réglages"
     },
     "titre_auj": "Aujourd'hui",
     "a_faire": "À faire aujourd'hui",
@@ -1716,7 +1716,8 @@
     "fiches_mesures": "Fiches de mesures clients",
     "mon_equipe": "Mon équipe",
     "informations": "Informations de l'atelier",
-    "confirmer_deconnexion": "Se déconnecter ?"
+    "confirmer_deconnexion": "Se déconnecter ?",
+    "mes_reglages": "Mes Réglages"
   },
   "profil": {
     "titre": "Mon profil",

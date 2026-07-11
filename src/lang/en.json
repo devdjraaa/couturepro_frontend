@@ -498,7 +498,7 @@
       "nouvelle_commande": "New order",
       "nouveau_client": "New client",
       "paiement": "Collect payment",
-      "atelier": "My Workshop"
+      "atelier": "My Settings"
     },
     "titre_auj": "Today",
     "a_faire": "Today's tasks",
@@ -1716,7 +1716,8 @@
     "fiches_mesures": "Client measurement sheets",
     "mon_equipe": "My team",
     "informations": "Workshop information",
-    "confirmer_deconnexion": "Log out?"
+    "confirmer_deconnexion": "Log out?",
+    "mes_reglages": "My Settings"
   },
   "profil": {
     "titre": "My profile",
