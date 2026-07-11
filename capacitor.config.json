@@ -1,6 +1,6 @@
 {
-  "appId": "com.couturepro.admin",
-  "appName": "Gextimo Admin",
+  "appId": "com.couturepro.app",
+  "appName": "Gextimo",
   "webDir": "dist",
   "server": {
     "androidScheme": "https",

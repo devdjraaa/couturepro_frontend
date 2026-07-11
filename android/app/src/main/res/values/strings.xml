@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Gextimo Admin</string>
-    <string name="title_activity_main">Gextimo Admin</string>
+    <string name="app_name">Gextimo</string>
+    <string name="title_activity_main">Gextimo</string>
     <string name="package_name">com.couturepro.app</string>
     <string name="custom_url_scheme">com.couturepro.app</string>
 </resources>
