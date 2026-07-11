@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { Building2, Plus, CheckCircle2, ImagePlus, Lock, WifiOff } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import toast from 'react-hot-toast'
-import { getNativeVersion, checkAppVersion, openApkDownload } from '@/utils/appUpdate'
+import { getNativeVersion, checkAppVersion, openApkDownload, forceCheckOta } from '@/utils/appUpdate'
 import { useAuth } from '@/contexts'
 import {
   useProfil, useUpdateProfil,
@@ -129,6 +129,10 @@ function MajSection() {
 
   const check = async () => {
     setChecking(true)
+    // 1) OTA (bundle web) : si dispo, l'app se recharge automatiquement.
+    const ota = await forceCheckOta()
+    if (ota.updated) return // l'app va recharger sur le nouveau bundle
+    // 2) Version native (grosse MAJ = APK).
     const res = await checkAppVersion()
     setChecking(false)
     if (res.status === 'required' || res.status === 'optional') {
@@ -149,7 +153,7 @@ function MajSection() {
           disabled={checking}
           className="text-sm font-semibold text-primary hover:underline disabled:opacity-60"
         >
-          {checking ? '…' : t('maj.verifier')}
+          {checking ? '…' : t('maj.maintenant')}
         </button>
       </div>
     </div>

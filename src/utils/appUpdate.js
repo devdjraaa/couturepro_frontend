@@ -55,6 +55,27 @@ export async function checkAppVersion() {
   }
 }
 
+// Force une vérification OTA (bundle web) + application immédiate.
+// Utilisé par le bouton « Mettre à jour maintenant ». Si une MAJ est trouvée,
+// l'app se recharge automatiquement (set) → pas de cache à vider.
+export async function forceCheckOta() {
+  if (!IS_NATIVE) return { updated: false }
+  try {
+    const { CapacitorUpdater } = await import('@capgo/capacitor-updater')
+    const latest = await CapacitorUpdater.getLatest()
+    if (!latest?.url || !latest?.version) return { updated: false }
+    const current = await CapacitorUpdater.current().catch(() => null)
+    if (current?.bundle?.version && current.bundle.version === latest.version) {
+      return { updated: false } // déjà sur ce bundle
+    }
+    const bundle = await CapacitorUpdater.download({ version: latest.version, url: latest.url })
+    await CapacitorUpdater.set({ id: bundle.id }) // applique + recharge l'app
+    return { updated: true }
+  } catch {
+    return { updated: false, error: true }
+  }
+}
+
 // Ouvre le téléchargement de l'APK (navigateur in-app), avec repli.
 export async function openApkDownload(apkUrl) {
   const url = apkUrl || 'https://gextimo.novafriq.africa/'

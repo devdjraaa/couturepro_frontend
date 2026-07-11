@@ -24,6 +24,7 @@
     },
     "CapacitorUpdater": {
       "autoUpdate": true,
+      "directUpdate": true,
       "updateUrl": "https://gextimoapi.novafriq.africa/api/app/updates",
       "autoDeleteFailed": true,
       "autoDeletePrevious": true

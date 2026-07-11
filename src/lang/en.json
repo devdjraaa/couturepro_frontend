@@ -2225,6 +2225,7 @@
     "titre": "Updates",
     "dispo_titre": "Update available",
     "plus_tard": "Later",
-    "changelog": "What's new & fixes"
+    "changelog": "What's new & fixes",
+    "maintenant": "Update now"
   }
 }
