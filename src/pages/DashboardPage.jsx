@@ -527,7 +527,7 @@ export default function DashboardPage() {
             style={{ maxHeight: actionsExpanded ? '400px' : '0px' }}
           >
             <div className="grid grid-cols-3 gap-3 pt-3">
-              <QuickActionTile icon={Layers}   label={t('dashboard.action.atelier')}  color="ghost"   onClick={() => navigate('/catalogue')} />
+              <QuickActionTile icon={Layers}   label={t('nav.catalogue')}  color="ghost"   onClick={() => navigate('/catalogue/modeles')} />
               {isDesigner && (
                 <QuickActionTile icon={Store}    label={t('nav.ma_vitrine')}            color="warning" onClick={() => navigate('/ma-vitrine')} />
               )}
