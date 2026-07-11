@@ -13,8 +13,14 @@
       "*.ngrok.app"
     ]
   },
+  "android": {
+    "adjustMarginsForEdgeToEdge": "disable"
+  },
   "plugins": {
     "Network": {},
-    "Preferences": {}
+    "Preferences": {},
+    "SystemBars": {
+      "insetsHandling": "disable"
+    }
   }
 }
