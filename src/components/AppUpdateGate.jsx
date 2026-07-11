@@ -3,13 +3,19 @@ import { useTranslation } from 'react-i18next'
 import { Download } from 'lucide-react'
 import { checkAppVersion, openApkDownload } from '@/utils/appUpdate'
 
-// Vérifie la version native au démarrage et affiche un popup :
-//  - 'required' → bloquant (pas de « plus tard »)
-//  - 'optional' → « Plus tard » possible
-// Le popup montre le changelog (nouveautés + corrections) fourni par le backend.
+// Snooze du popup de mise à jour optionnelle : « Plus tard » masque le popup
+// pendant 7 jours ; au-delà, il revient mais SANS « Plus tard » (téléchargement
+// forcé). Une MAJ obligatoire (min_version) est toujours bloquante.
+const SNOOZE_KEY = 'gx_maj_snooze' // { version, until }
+const SNOOZE_MS = 7 * 24 * 60 * 60 * 1000
+
+function readSnooze() {
+  try { return JSON.parse(localStorage.getItem(SNOOZE_KEY) || 'null') } catch { return null }
+}
+
 export default function AppUpdateGate() {
   const { t } = useTranslation()
-  const [info, setInfo] = useState(null)     // { status, apkUrl, note, latest }
+  const [info, setInfo] = useState(null) // { status, latest, apkUrl, note, forced }
   const [dismissed, setDismissed] = useState(false)
   const done = useRef(false)
 
@@ -17,12 +23,34 @@ export default function AppUpdateGate() {
     if (done.current) return
     done.current = true
     checkAppVersion().then((res) => {
-      if (res.status === 'required' || res.status === 'optional') setInfo(res)
+      if (res.status === 'ok') {
+        // À jour → on efface un éventuel snooze (repart propre pour la prochaine version).
+        try { localStorage.removeItem(SNOOZE_KEY) } catch { /* indispo */ }
+        return
+      }
+      if (res.status === 'required') {
+        setInfo({ ...res, forced: true }) // obligatoire : toujours bloquant
+        return
+      }
+      // Optionnelle : gestion du snooze
+      const snooze = readSnooze()
+      if (snooze && snooze.version === res.latest) {
+        if (Date.now() < snooze.until) return            // encore dans les 7 jours → rien
+        setInfo({ ...res, forced: true })                // 7 jours passés → forcé (sans « Plus tard »)
+        return
+      }
+      setInfo({ ...res, forced: false })                 // 1ʳᵉ fois → avec « Plus tard »
     })
   }, [])
 
   if (!info || dismissed) return null
-  const required = info.status === 'required'
+
+  const later = () => {
+    try {
+      localStorage.setItem(SNOOZE_KEY, JSON.stringify({ version: info.latest, until: Date.now() + SNOOZE_MS }))
+    } catch { /* indispo */ }
+    setDismissed(true)
+  }
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-app/95 backdrop-blur">
@@ -31,7 +59,7 @@ export default function AppUpdateGate() {
           <Download size={26} />
         </div>
         <h2 className="text-lg font-bold font-display text-ink text-center">
-          {required ? t('maj.requise_titre') : t('maj.dispo_titre')}
+          {info.status === 'required' ? t('maj.requise_titre') : t('maj.dispo_titre')}
           {info.latest ? <span className="text-dim font-normal"> · v{info.latest}</span> : null}
         </h2>
 
@@ -53,9 +81,9 @@ export default function AppUpdateGate() {
           <Download size={17} /> {t('maj.telecharger')}
         </button>
 
-        {!required && (
+        {!info.forced && (
           <button
-            onClick={() => setDismissed(true)}
+            onClick={later}
             className="mt-2 w-full text-sm font-semibold text-dim hover:text-ink py-2 transition"
           >
             {t('maj.plus_tard')}
