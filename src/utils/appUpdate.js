@@ -79,6 +79,13 @@ export async function forceCheckOta() {
 // Ouvre le téléchargement de l'APK (navigateur in-app), avec repli.
 export async function openApkDownload(apkUrl) {
   const url = apkUrl || 'https://gextimo.novafriq.africa/'
+  // 1) Navigateur SYSTÈME (Chrome en app) → téléchargement via DownloadManager.
+  //    Un Custom Tab (Browser.open) laisse le téléchargement « en attente » (bug connu).
+  try {
+    const { AppLauncher } = await import('@capacitor/app-launcher')
+    await AppLauncher.openUrl({ url })
+    return
+  } catch { /* plugin absent (ancienne APK / web) : replis ci-dessous */ }
   try {
     const { Browser } = await import('@capacitor/browser')
     await Browser.open({ url })
