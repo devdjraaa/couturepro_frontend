@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { Smartphone } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { usePageMeta } from '@/hooks/usePageMeta'
@@ -15,9 +16,8 @@ export default function InscriptionPage() {
           <p className="text-dim mt-2">{t('vitrine.inscription.subtitle')}</p>
           <p className="text-ink mt-5 leading-relaxed">{t('vitrine.inscription.body')}</p>
           <div className="mt-7">
-            {/* TODO: pointer vers le lien réel de l'app (Play Store / APK) */}
-            <a href="#" className="inline-flex items-center gap-2 font-semibold text-sm px-6 py-3.5 rounded-xl bg-primary text-inverse hover:bg-primary-600 transition">
-              📱 {t('vitrine.inscription.cta')}
+            <a href="/Gextimo-v1.0.apk" download className="inline-flex items-center gap-2 font-semibold text-sm px-6 py-3.5 rounded-xl bg-primary text-inverse hover:bg-primary-600 transition">
+              <Smartphone size={16} /> {t('vitrine.inscription.cta')}
             </a>
           </div>
           <p className="text-sm text-dim mt-6">
