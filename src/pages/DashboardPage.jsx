@@ -466,6 +466,23 @@ export default function DashboardPage() {
           navigate={navigate}
         />
 
+        {/* KPIs secondaires — remontés en tête */}
+        <div className="bg-card border border-edge rounded-2xl overflow-x-auto scrollbar-none">
+          <div className="flex divide-x divide-edge">
+            {loadingStats ? (
+              [...Array(4)].map((_, i) => <Skeleton key={i} className="shrink-0 w-24 h-[72px] rounded-xl m-3" />)
+            ) : (
+              <>
+                <KpiChip label={t('dashboard.kpi.en_attente')}        value={formatCurrency(totalRestant)} color="gold" />
+                <KpiChip label={t('dashboard.kpi.commandes_actives')} value={activeCount}                  color="primary" />
+                <KpiChip label={t('dashboard.kpi.nvx_clients')}       value={nouveauxClients}              color={nouveauxClients > 0 ? 'success' : 'default'} trend={tendanceClients !== 0 ? tendanceClients : null} />
+                <KpiChip label={t('dashboard.kpi.livrees_mois')}      value={livreCeMois}                  color="success" />
+                <KpiChip label={t('dashboard.kpi.en_retard')}         value={lateCount}                    color={lateCount > 0 ? 'danger' : 'default'} />
+              </>
+            )}
+          </div>
+        </div>
+
         {/* Abonnement — accès rapide au plan (plan + temps restant) */}
         <AbonnementCard navigate={navigate} />
 
@@ -488,23 +505,6 @@ export default function DashboardPage() {
             </button>
           </div>
           <TodoList commandes={commandes} isLoading={loadingCmd} navigate={navigate} />
-        </div>
-
-        {/* KPIs secondaires */}
-        <div className="bg-card border border-edge rounded-2xl overflow-x-auto scrollbar-none">
-          <div className="flex divide-x divide-edge">
-            {loadingStats ? (
-              [...Array(4)].map((_, i) => <Skeleton key={i} className="shrink-0 w-24 h-[72px] rounded-xl m-3" />)
-            ) : (
-              <>
-                <KpiChip label={t('dashboard.kpi.en_attente')}        value={formatCurrency(totalRestant)} color="gold" />
-                <KpiChip label={t('dashboard.kpi.commandes_actives')} value={activeCount}                  color="primary" />
-                <KpiChip label={t('dashboard.kpi.nvx_clients')}       value={nouveauxClients}              color={nouveauxClients > 0 ? 'success' : 'default'} trend={tendanceClients !== 0 ? tendanceClients : null} />
-                <KpiChip label={t('dashboard.kpi.livrees_mois')}      value={livreCeMois}                  color="success" />
-                <KpiChip label={t('dashboard.kpi.en_retard')}         value={lateCount}                    color={lateCount > 0 ? 'danger' : 'default'} />
-              </>
-            )}
-          </div>
         </div>
 
         {/* Actions rapides */}
