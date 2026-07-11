@@ -46,6 +46,9 @@ export const ROUTES = {
   // Vêtements (CataloguePage)
   VETEMENTS:        '/catalogue',
 
+  // Mes Réglages (AtelierPage) — hub de réglages mobile
+  MES_REGLAGES:     '/mes-reglages',
+
   // Mesures (accessibles via ClientDetailPage — pas de page standalone)
   MESURES:          '/mesures',
 

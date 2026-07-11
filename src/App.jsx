@@ -206,7 +206,8 @@ export default function App() {
           <Route path={ROUTES.COMMANDE_DETAIL}  element={<CommandeDetailPage />} />
           <Route path={ROUTES.COMMANDES}        element={<CommandesPage />}      />
 
-          <Route path={ROUTES.VETEMENTS}        element={<AtelierPage />}         />
+          <Route path={ROUTES.MES_REGLAGES}     element={<AtelierPage />}         />
+          <Route path={ROUTES.VETEMENTS}        element={<CataloguePage />}       />
           <Route path="/catalogue/modeles"      element={<CataloguePage />}       />
           <Route path={ROUTES.ABONNEMENT}       element={<AbonnementRedirect />} />
           <Route path={ROUTES.POINTS}           element={<PointsPage />}         />
