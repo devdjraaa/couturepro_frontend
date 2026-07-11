@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { Building2, Plus, CheckCircle2, ImagePlus, Lock, WifiOff } from 'lucide-react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import {
+  Building2, Plus, CheckCircle2, ImagePlus, Lock, WifiOff,
+  User, MapPin, SlidersHorizontal, FileText, CreditCard,
+  Palette, MessageCircle, HelpCircle, ChevronRight, RefreshCw,
+} from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import toast from 'react-hot-toast'
 import { getNativeVersion, checkAppVersion, openApkDownload, forceCheckOta } from '@/utils/appUpdate'
@@ -22,7 +26,37 @@ import { AppLayout } from '@/components/layout'
 import { QuotaBar, PlanCard, FeatureGate } from '@/components/abonnement'
 import { TabBar, Input, Select, Button, Skeleton, LanguageSwitcher } from '@/components/ui'
 import { parametresService } from '@/services/parametresService'
+import { IS_NATIVE } from '@/constants/routes'
 import { cn } from '@/utils/cn'
+
+// ── Menu-liste (design « Mes Réglages ») ────────────────────────────────────────
+function Section({ title, children }) {
+  return (
+    <div className="px-4">
+      <p className="text-xs font-semibold text-ghost uppercase tracking-widest px-0.5 pb-1.5 pt-5">{title}</p>
+      <div className="bg-card border border-edge rounded-2xl overflow-hidden divide-y divide-edge">
+        {children}
+      </div>
+    </div>
+  )
+}
+
+function SettingsRow({ icon: Icon, label, value, onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex items-center gap-3 w-full px-4 py-3.5 hover:bg-subtle transition-colors text-left"
+    >
+      <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center shrink-0">
+        <Icon size={15} className="text-primary-700" />
+      </div>
+      <span className="flex-1 text-sm font-medium text-ink">{label}</span>
+      {value !== undefined && <span className="text-xs text-ghost mr-1">{value}</span>}
+      <ChevronRight size={14} className="text-ghost shrink-0" />
+    </button>
+  )
+}
 
 const DEVISES = [
   { value: 'XOF', label: 'FCFA (XOF)'            },
@@ -91,50 +125,46 @@ function PreferencesTab() {
   if (isLoading) return <Skeleton className="h-40 rounded-2xl" />
 
   return (
-    <>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <Select
-          label={t('parametres.preferences.devise')}
-          value={form.devise}
-          onChange={e => setForm(f => ({ ...f, devise: e.target.value }))}
-          options={DEVISES}
-        />
-        <Select
-          label={t('parametres.preferences.unite_mesure')}
-          value={form.unite_mesure}
-          onChange={e => setForm(f => ({ ...f, unite_mesure: e.target.value }))}
-          options={UNITES}
-        />
-        <div>
-          <label className="block text-xs font-medium text-dim mb-2">{t('parametres.preferences.langue')}</label>
-          <LanguageSwitcher />
-        </div>
-        {success && <p className="text-sm text-success">{t('parametres.preferences.succes')}</p>}
-        <Button type="submit" loading={update.isPending} className="w-full">
-          {t('commun.enregistrer')}
-        </Button>
-      </form>
-      <MajSection />
-    </>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <Select
+        label={t('parametres.preferences.devise')}
+        value={form.devise}
+        onChange={e => setForm(f => ({ ...f, devise: e.target.value }))}
+        options={DEVISES}
+      />
+      <Select
+        label={t('parametres.preferences.unite_mesure')}
+        value={form.unite_mesure}
+        onChange={e => setForm(f => ({ ...f, unite_mesure: e.target.value }))}
+        options={UNITES}
+      />
+      <div>
+        <label className="block text-xs font-medium text-dim mb-2">{t('parametres.preferences.langue')}</label>
+        <LanguageSwitcher />
+      </div>
+      {success && <p className="text-sm text-success">{t('parametres.preferences.succes')}</p>}
+      <Button type="submit" loading={update.isPending} className="w-full">
+        {t('commun.enregistrer')}
+      </Button>
+    </form>
   )
 }
 
-// Bloc « Mises à jour » : version installée + vérification manuelle.
+// Section « Mises à jour » du menu (natif) : version + « Mettre à jour maintenant ».
 function MajSection() {
   const { t } = useTranslation()
   const [version, setVersion] = useState('—')
-  const [checking, setChecking] = useState(false)
+  const [busy, setBusy] = useState(false)
 
   useEffect(() => { getNativeVersion().then((v) => setVersion(v || '—')) }, [])
 
-  const check = async () => {
-    setChecking(true)
-    // 1) OTA (bundle web) : si dispo, l'app se recharge automatiquement.
+  const majMaintenant = async () => {
+    if (busy) return
+    setBusy(true)
     const ota = await forceCheckOta()
-    if (ota.updated) return // l'app va recharger sur le nouveau bundle
-    // 2) Version native (grosse MAJ = APK).
+    if (ota.updated) return // l'app se recharge
     const res = await checkAppVersion()
-    setChecking(false)
+    setBusy(false)
     if (res.status === 'required' || res.status === 'optional') {
       toast(t('maj.dispo'))
       if (res.apkUrl) openApkDownload(res.apkUrl)
@@ -144,19 +174,9 @@ function MajSection() {
   }
 
   return (
-    <div className="mt-6 pt-5 border-t border-edge">
-      <p className="text-xs font-semibold text-ghost uppercase tracking-wider mb-2">{t('maj.titre')}</p>
-      <div className="flex items-center justify-between gap-3">
-        <span className="text-sm text-dim">{t('maj.version')} {version}</span>
-        <button
-          onClick={check}
-          disabled={checking}
-          className="text-sm font-semibold text-primary hover:underline disabled:opacity-60"
-        >
-          {checking ? '…' : t('maj.maintenant')}
-        </button>
-      </div>
-    </div>
+    <Section title={t('maj.titre')}>
+      <SettingsRow icon={RefreshCw} label={t('maj.maintenant')} value={busy ? '…' : version} onClick={majMaintenant} />
+    </Section>
   )
 }
 
@@ -734,22 +754,12 @@ export default function ParametresPage() {
   const { t } = useTranslation()
   const { isDesigner } = useAccountType()
 
-  const TABS = [
-    { key: 'profil',       label: t('parametres.onglets.profil')       },
-    { key: 'atelier',      label: t('parametres.onglets.atelier')      },
-    // « Mes ateliers » (multi-ateliers) = designer uniquement.
-    ...(isDesigner ? [{ key: 'ateliers', label: t('parametres.onglets.ateliers') }] : []),
-    { key: 'preferences',  label: t('parametres.onglets.preferences')  },
-    { key: 'facture',      label: t('parametres.onglets.facture')      },
-    { key: 'abonnement',   label: t('parametres.onglets.abonnement')   },
-    // « Type de compte » retiré du user : mutation artisan↔designer réservée à l'admin
-    // (évite qu'un artisan se change en designer pour contourner l'offre). Voir feature admin.
-    { key: 'securite',     label: t('parametres.onglets.securite')     },
-  ]
-
+  const navigate = useNavigate()
   const location = useLocation()
-  const [activeTab, setActiveTab] = useState(location.state?.tab ?? 'profil')
   const { isOnline } = useNetwork()
+  // Deep-link possible : /parametres?tab=xxx (depuis « Mes Réglages » ou une notif).
+  const initialSection = location.state?.tab ?? new URLSearchParams(location.search).get('tab') ?? null
+  const [section, setSection] = useState(initialSection)
 
   // Toute la zone Paramètres modifie de la configuration côté serveur → nécessite
   // internet. (Le thème et la langue restent réglables depuis l'en-tête d'accueil,
@@ -768,49 +778,77 @@ export default function ParametresPage() {
     )
   }
 
+  // Métadonnées des sections (drill-in). Chaque clé = un écran de réglage.
+  const SECTIONS = {
+    profil:      { title: t('parametres.onglets.profil'),      node: <ProfilTab /> },
+    atelier:     { title: t('parametres.onglets.atelier'),     node: <AtelierTab /> },
+    ateliers:    { title: t('parametres.onglets.ateliers'),    node: <MesAteliersTab /> },
+    preferences: { title: t('parametres.onglets.preferences'), node: <PreferencesTab /> },
+    facture:     { title: t('parametres.onglets.facture'),     node: <FactureTab /> },
+    abonnement:  { title: t('parametres.onglets.abonnement'),  node: <AbonnementTab /> },
+    securite:    { title: t('parametres.onglets.securite'),    node: <SecuriteTab /> },
+  }
+
+  // Vue d'une section (drill-in) : retour = revient au menu, pas à la page précédente.
+  const cur = section && SECTIONS[section]
+  if (cur) {
+    return (
+      <AppLayout title={cur.title} showBack onBack={() => setSection(null)}>
+        <div className="p-4 space-y-4">
+          {cur.node}
+          {section === 'profil' && (
+            <div className="pt-2">
+              <Button variant="danger" className="w-full" onClick={logout}>
+                {t('auth.deconnexion')}
+              </Button>
+            </div>
+          )}
+        </div>
+      </AppLayout>
+    )
+  }
+
+  // Menu-liste (landing) — même design que « Mes Réglages » (AtelierPage).
   return (
     <AppLayout title={t('parametres.titre')} showBack>
-      <TabBar tabs={TABS} activeTab={activeTab} onChange={setActiveTab} />
-      <div className="p-4 space-y-4">
-        {activeTab === 'profil'      && <ProfilTab />}
-        {activeTab === 'atelier'     && <AtelierTab />}
-        {activeTab === 'ateliers'    && isDesigner && <MesAteliersTab />}
-        {activeTab === 'preferences' && <PreferencesTab />}
-        {activeTab === 'facture'     && <FactureTab />}
-        {activeTab === 'abonnement'  && <AbonnementTab />}
-        {activeTab === 'securite'    && <SecuriteTab />}
+      <div className="pb-safe">
+        {/* Compte */}
+        <Section title={t('parametres.section_compte')}>
+          <SettingsRow icon={User}       label={t('parametres.onglets.profil')}  onClick={() => setSection('profil')} />
+          <SettingsRow icon={Building2}  label={t('parametres.onglets.atelier')} onClick={() => setSection('atelier')} />
+          {isDesigner && (
+            <SettingsRow icon={MapPin} label={t('parametres.onglets.ateliers')} onClick={() => setSection('ateliers')} />
+          )}
+          <SettingsRow icon={Lock}       label={t('parametres.onglets.securite')} onClick={() => setSection('securite')} />
+        </Section>
 
-        <div className="pt-2 border-t border-edge space-y-2">
-          <Link
-            to="/parametres/theme"
-            className="flex items-center justify-between w-full px-4 py-3 rounded-xl bg-card border border-edge text-sm text-ink hover:bg-subtle transition-colors"
+        {/* Facturation & abonnement */}
+        <Section title={t('parametres.section_facturation')}>
+          <SettingsRow icon={FileText}   label={t('parametres.onglets.facture')}    onClick={() => setSection('facture')} />
+          <SettingsRow icon={CreditCard} label={t('parametres.onglets.abonnement')} onClick={() => setSection('abonnement')} />
+        </Section>
+
+        {/* Application */}
+        <Section title={t('parametres.section_app')}>
+          <SettingsRow icon={SlidersHorizontal} label={t('parametres.onglets.preferences')} onClick={() => setSection('preferences')} />
+          <SettingsRow icon={Palette}       label={t('parametres.liens.theme')}          onClick={() => navigate('/parametres/theme')} />
+          <SettingsRow icon={MessageCircle} label={t('parametres.liens.communications')} onClick={() => navigate('/parametres/communications')} />
+          <SettingsRow icon={HelpCircle}    label={t('parametres.liens.support')}        onClick={() => navigate('/support')} />
+        </Section>
+
+        {/* Mises à jour (app mobile uniquement) */}
+        {IS_NATIVE && <MajSection />}
+
+        {/* Déconnexion */}
+        <div className="px-4 pt-6 pb-10 text-center">
+          <button
+            type="button"
+            onClick={logout}
+            className="text-sm font-medium text-danger/70 hover:text-danger transition-colors py-2"
           >
-            <span>{t('parametres.liens.theme')}</span>
-            <span className="text-ghost text-xs">›</span>
-          </Link>
-          <Link
-            to="/parametres/communications"
-            className="flex items-center justify-between w-full px-4 py-3 rounded-xl bg-card border border-edge text-sm text-ink hover:bg-subtle transition-colors"
-          >
-            <span>{t('parametres.liens.communications')}</span>
-            <span className="text-ghost text-xs">›</span>
-          </Link>
-          <Link
-            to="/support"
-            className="flex items-center justify-between w-full px-4 py-3 rounded-xl bg-card border border-edge text-sm text-ink hover:bg-subtle transition-colors"
-          >
-            <span>{t('parametres.liens.support')}</span>
-            <span className="text-ghost text-xs">›</span>
-          </Link>
+            {t('auth.deconnexion')}
+          </button>
         </div>
-
-        {activeTab === 'profil' && (
-          <div className="pt-2">
-            <Button variant="danger" className="w-full" onClick={logout}>
-              {t('auth.deconnexion')}
-            </Button>
-          </div>
-        )}
       </div>
     </AppLayout>
   )

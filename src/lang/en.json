@@ -1150,6 +1150,9 @@
       "theme": "Appearance & theme",
       "a_propos": "About"
     },
+    "section_compte": "Account",
+    "section_facturation": "Billing & subscription",
+    "section_app": "Application",
     "deconnexion": "Sign out",
     "type_compte": {
       "titre": "Account type",
@@ -2227,6 +2230,7 @@
     "dispo_titre": "Update available",
     "plus_tard": "Later",
     "changelog": "What's new & fixes",
-    "maintenant": "Update now"
+    "maintenant": "Update now",
+    "notif_body": "New version v{{version}} available — tap to update."
   }
 }

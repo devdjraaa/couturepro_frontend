@@ -2,6 +2,18 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Download } from 'lucide-react'
 import { checkAppVersion, openApkDownload } from '@/utils/appUpdate'
+import { showLocalNotif } from '@/utils/localNotif'
+
+// Ne notifie qu'une fois par version (évite le spam à chaque ouverture).
+const NOTIFIED_KEY = 'gx_update_notified'
+async function notifyBigUpdateOnce(res, t) {
+  try {
+    if (!res.latest || localStorage.getItem(NOTIFIED_KEY) === res.latest) return
+    localStorage.setItem(NOTIFIED_KEY, res.latest)
+  } catch { /* localStorage indispo : on notifie quand même */ }
+  // Tap → deep-link vers Réglages (la zone « Mises à jour » y figure).
+  await showLocalNotif('Gextimo', t('maj.notif_body', { version: res.latest }), { lien: '/parametres' })
+}
 
 // Snooze du popup de mise à jour optionnelle : « Plus tard » masque le popup
 // pendant 7 jours ; au-delà, il revient mais SANS « Plus tard » (téléchargement
@@ -28,6 +40,8 @@ export default function AppUpdateGate() {
         try { localStorage.removeItem(SNOOZE_KEY) } catch { /* indispo */ }
         return
       }
+      // Grosse MAJ détectée → notification système (tap = deep-link vers Réglages).
+      notifyBigUpdateOnce(res, t)
       if (res.status === 'required') {
         setInfo({ ...res, forced: true }) // obligatoire : toujours bloquant
         return

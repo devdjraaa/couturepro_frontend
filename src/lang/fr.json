@@ -1150,6 +1150,9 @@
       "theme": "Apparence & thème",
       "a_propos": "À propos"
     },
+    "section_compte": "Compte",
+    "section_facturation": "Facturation & abonnement",
+    "section_app": "Application",
     "deconnexion": "Se déconnecter",
     "type_compte": {
       "titre": "Type de compte",
@@ -2227,6 +2230,7 @@
     "dispo_titre": "Mise à jour disponible",
     "plus_tard": "Plus tard",
     "changelog": "Nouveautés et corrections",
-    "maintenant": "Mettre à jour maintenant"
+    "maintenant": "Mettre à jour maintenant",
+    "notif_body": "Nouvelle version v{{version}} disponible — appuyez pour mettre à jour."
   }
 }
