@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+#
+# Hook pre-push : lance la release automatique (OTA à chaud OU nouvelle APK)
+# quand on pousse la branche `android`. Voir scripts/release.sh pour la logique.
+#
+# git envoie sur stdin, pour chaque ref poussée :
+#     <local_ref> <local_sha> <remote_ref> <remote_sha>
+#
+# La release est "best-effort" : si elle échoue (VPS injoignable, etc.), on
+# PRÉVIENT mais on ne bloque PAS le push (le code part quand même). Relance
+# alors `./scripts/release.sh` à la main une fois le souci réglé.
+#
+set -uo pipefail
+ROOT="$(git rev-parse --show-toplevel)"
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [[ "$remote_ref" == "refs/heads/android" ]] || continue
+  echo "▶ pre-push : déclenchement de la release Gextimo…"
+  if GEXTIMO_PUSH_LOCAL_SHA="$local_sha" GEXTIMO_PUSH_REMOTE_SHA="$remote_sha" \
+       bash "$ROOT/scripts/release.sh"; then
+    echo "✓ Release OK."
+  else
+    echo "⚠ La release a échoué — le push continue quand même." >&2
+    echo "  Relance manuellement : ./scripts/release.sh" >&2
+  fi
+done
+
+exit 0

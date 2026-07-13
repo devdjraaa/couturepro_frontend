@@ -27,3 +27,11 @@ capacitor.config.json.bak
 *.sln
 *.sw?
 public/screentest/
+
+# Secrets de déploiement (mot de passe sudo VPS) — NE PAS versionner
+scripts/.deploy.env
+
+# Artefacts de release (ne jamais versionner)
+ota-*.zip
+*.apk
+apk/
