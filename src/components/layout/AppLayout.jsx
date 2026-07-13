@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { AlertTriangle, RefreshCw, Ban } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -11,6 +11,7 @@ import { GlobalSearch } from '@/components/ui'
 import { usePullToRefresh } from '@/hooks/usePullToRefresh'
 import { useAuth } from '@/contexts'
 import { ROUTES } from '@/constants/routes'
+import { initPush } from '@/utils/push'
 
 function ExpiryBanner() {
   const navigate = useNavigate()
@@ -70,6 +71,9 @@ export default function AppLayout({
   const location = useLocation()
   const autoShowBack = showBack !== undefined ? showBack : location.pathname !== ROUTES.DASHBOARD
   const { containerRef, pullY, refreshing, threshold } = usePullToRefresh(onRefresh)
+
+  // Enregistrement push FCM (zone authentifiée → le token est lié à l'utilisateur).
+  useEffect(() => { initPush() }, [])
 
   return (
     <div className="flex h-dvh bg-app overflow-hidden">

@@ -250,6 +250,11 @@
   resolved "https://registry.npmjs.org/@capacitor/preferences/-/preferences-8.0.1.tgz"
   integrity sha512-T6no3ebi79XJCk91U3Jp/liJUwgBdvHR+s6vhvPkPxSuch7z3zx5Rv1bdWM6sWruNx+pViuEGqZvbfCdyBvcHQ==
 
+"@capacitor/push-notifications@^8.1.1":
+  version "8.1.1"
+  resolved "https://registry.npmjs.org/@capacitor/push-notifications/-/push-notifications-8.1.1.tgz"
+  integrity sha512-WqzjPKIbYbARMN+GC0XMAJcxJpUUzqgzS/Ny8RODLrro38pQhm3GXYwX2Mwd+LZlLY39rGImkCkrKyQSNfuikA==
+
 "@capacitor/share@^8.0.1":
   version "8.0.1"
   resolved "https://registry.npmjs.org/@capacitor/share/-/share-8.0.1.tgz"
