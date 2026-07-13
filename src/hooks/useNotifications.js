@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Q } from '@nozbe/watermelondb'
 import { useWmQuery, useMutation, database } from '@/db/useWmQuery'
+import api from '@/services/api'
 
 // Offline-first : notifications lues/marquées dans WatermelonDB (sync serveur).
 
@@ -39,18 +40,28 @@ export function useNotificationsCount() {
 
 export function useMarquerLue() {
   return useMutation(async (id) => {
-    await database.write(async () => {
-      const record = await database.get('notifications').find(id)
-      await record.update(n => { n.is_read = true })
-    })
+    // 1) Local (WatermelonDB) → l'UI réagit tout de suite.
+    try {
+      await database.write(async () => {
+        const record = await database.get('notifications').find(id)
+        await record.update(n => { n.is_read = true })
+      })
+    } catch { /* record absent en local : on marque quand même côté serveur */ }
+    // 2) Serveur (autorité) → le prochain pull ne re-marquera plus non-lu.
+    try { await api.post('/notifications/mark-as-read', { ids: [id] }) } catch { /* offline : la sync poussera */ }
   })
 }
 
 export function useMarquerToutesLues() {
   return useMutation(async () => {
-    await database.write(async () => {
-      const unread = await database.get('notifications').query(Q.where('is_read', false)).fetch()
-      await database.batch(...unread.map(n => n.prepareUpdate(r => { r.is_read = true })))
-    })
+    // 1) Local
+    try {
+      await database.write(async () => {
+        const unread = await database.get('notifications').query(Q.where('is_read', false)).fetch()
+        await database.batch(...unread.map(n => n.prepareUpdate(r => { r.is_read = true })))
+      })
+    } catch { /* rien à marquer en local */ }
+    // 2) Serveur
+    try { await api.post('/notifications/mark-as-read', { all: true }) } catch { /* offline */ }
   })
 }
