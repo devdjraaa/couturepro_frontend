@@ -35,3 +35,7 @@ scripts/.deploy.env
 ota-*.zip
 *.apk
 apk/
+
+# Signature release (SECRET — ne jamais versionner)
+android/gextimo-release.jks
+android/keystore.properties

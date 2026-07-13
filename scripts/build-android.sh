@@ -70,15 +70,24 @@ else
 fi
 sed -i "s|<color name=\"ic_launcher_background\">[^<]*</color>|<color name=\"ic_launcher_background\">$BG_COLOR</color>|" android/app/src/main/res/values/ic_launcher_background.xml
 
-# 5) Build l'APK
+# 5) Build l'APK — RELEASE (signée) si keystore.properties présent, sinon debug.
+FLAVOR_CAP="$( [ "$TARGET" = admin ] && echo Admin || echo Gextimo )"
+if [ -f android/keystore.properties ]; then
+  BUILD_TASK="assemble${FLAVOR_CAP}Release"; BUILD_KIND="release"
+else
+  BUILD_TASK="assemble${FLAVOR_CAP}Debug";   BUILD_KIND="debug"
+fi
+echo "🏗️  Tâche Gradle : $BUILD_TASK"
 JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64 \
   ANDROID_HOME=/home/kaido/Android/Sdk \
-  ./android/gradlew -p android assembleDebug
+  ./android/gradlew -p android "$BUILD_TASK"
 
-# 6) Copier l'APK avec le suffixe target
+# 6) Copier l'APK produit (chemin par flavor + type)
 mkdir -p apk
-APK_OUT="apk/couturepro-$TARGET.apk"
-cp android/app/build/outputs/apk/debug/app-debug.apk "$APK_OUT"
+FLAVOR_LC="$( [ "$TARGET" = admin ] && echo admin || echo gextimo )"
+APK_SRC="android/app/build/outputs/apk/${FLAVOR_LC}/${BUILD_KIND}/app-${FLAVOR_LC}-${BUILD_KIND}.apk"
+APK_OUT="apk/gextimo-${TARGET}-${BUILD_KIND}.apk"
+cp "$APK_SRC" "$APK_OUT" && echo "📦 APK : $APK_OUT ($BUILD_KIND)"
 
 # 7) Restaurer capacitor.config.json
 mv capacitor.config.json.bak capacitor.config.json
