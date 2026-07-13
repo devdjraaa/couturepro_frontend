@@ -1,8 +1,8 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Bell, Package, CreditCard, AlertCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useNotifications, useMarquerLue, useMarquerToutesLues } from '@/hooks/useNotifications'
+import { useNotifications, useMarquerLue, useMarquerToutesLues, reconcileNotifications } from '@/hooks/useNotifications'
 import { AppLayout } from '@/components/layout'
 import { NotificationItem } from '@/components/notifications'
 import { Skeleton, EmptyState } from '@/components/ui'
@@ -77,6 +77,9 @@ export default function NotificationsPage() {
   const { data: notifications = [], isLoading } = useNotifications()
   const marquerLue       = useMarquerLue()
   const marquerToutesLues = useMarquerToutesLues()
+
+  // Au chargement : purge les notifications orphelines (absentes du serveur).
+  useEffect(() => { reconcileNotifications() }, [])
 
   const filtered = useMemo(() => {
     if (category === 'toutes') return notifications

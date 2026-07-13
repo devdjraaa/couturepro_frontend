@@ -38,6 +38,24 @@ export function useNotificationsCount() {
   return { data: records.length }
 }
 
+// Réconcilie les notifications locales avec le serveur (source de vérité) :
+// supprime en local toute notification qui n'existe plus côté serveur (orphelines
+// dont le lien mène au vide). Ne fait rien hors-ligne (pour ne pas tout effacer).
+export async function reconcileNotifications() {
+  try {
+    const { data } = await api.get('/notifications')
+    if (!Array.isArray(data)) return
+    const serverIds = new Set(data.map(n => String(n.id)))
+    const locals = await database.get('notifications').query().fetch()
+    const orphans = locals.filter(n => !serverIds.has(String(n.id)))
+    if (orphans.length) {
+      await database.write(async () => {
+        await database.batch(...orphans.map(n => n.prepareDestroyPermanently()))
+      })
+    }
+  } catch { /* hors-ligne / erreur : on ne touche à rien */ }
+}
+
 export function useMarquerLue() {
   return useMutation(async (id) => {
     // 1) Local (WatermelonDB) → l'UI réagit tout de suite.
