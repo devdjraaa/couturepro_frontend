@@ -2232,6 +2232,7 @@
     "changelog": "Nouveautés et corrections",
     "maintenant": "Mettre à jour maintenant",
     "telechargement": "Téléchargement",
+    "installation_auto": "L’installation se lancera automatiquement à la fin.",
     "notif_body": "Nouvelle version v{{version}} disponible — appuyez pour mettre à jour."
   }
 }

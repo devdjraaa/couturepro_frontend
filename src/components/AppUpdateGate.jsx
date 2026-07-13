@@ -84,57 +84,65 @@ export default function AppUpdateGate() {
     if (busy) return
     try { localStorage.setItem(HANDLED_KEY, info.latest) } catch { /* indispo */ }
     setBusy(true); setProgress(0)
+    // Notif visible s'il quitte l'app pendant le téléchargement.
+    showLocalNotif('Gextimo', `${t('maj.telechargement')}…`, { lien: '/' })
     await downloadAndInstallApk(info.apkUrl, setProgress)
     setBusy(false)
     setDismissed(true) // l'installateur Android (ou le repli navigateur) a pris le relais
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-app/95 backdrop-blur">
-      <div className="w-full max-w-sm bg-card border border-edge rounded-2xl p-6 shadow-xl">
-        <div className="w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-3">
-          <Download size={26} />
+    <div className="fixed inset-0 z-[100] flex flex-col bg-app">
+      {/* Haut : logo officiel */}
+      <div className="flex-1 flex flex-col items-center justify-center px-8 gap-6">
+        <div className="w-28 h-28 rounded-[26px] bg-white shadow-xl flex items-center justify-center">
+          <img src="/favicon-512.png" alt="Gextimo" className="w-20 h-20" draggable="false" />
         </div>
-        <h2 className="text-lg font-bold font-display text-ink text-center">
-          {info.status === 'required' ? t('maj.requise_titre') : t('maj.dispo_titre')}
-          {info.latest ? <span className="text-dim font-normal"> · v{info.latest}</span> : null}
-        </h2>
+        <div className="text-center">
+          <h1 className="text-2xl font-bold font-display text-ink text-balance">
+            {info.status === 'required' ? t('maj.requise_titre') : t('maj.dispo_titre')}
+          </h1>
+          {info.latest && <p className="text-dim mt-1 text-sm">v{info.latest}</p>}
+        </div>
+      </div>
 
-        {info.note
-          ? (
-            <div className="mt-3">
-              <p className="text-xs font-semibold text-ghost uppercase tracking-wider mb-1.5">{t('maj.changelog')}</p>
-              <div className="text-sm text-dim whitespace-pre-line max-h-52 overflow-y-auto bg-subtle rounded-xl p-3">
-                {info.note}
-              </div>
-            </div>
-          )
-          : <p className="mt-2 text-sm text-dim text-center">{t('maj.requise_desc')}</p>}
-
-        <button
-          onClick={download}
-          disabled={busy}
-          className="mt-5 w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary text-white font-semibold hover:bg-primary-600 transition disabled:opacity-80"
-        >
-          <Download size={17} />
-          {busy
-            ? `${t('maj.telechargement')}${progress != null ? ` ${progress}%` : '…'}`
-            : t('maj.telecharger')}
-        </button>
-
-        {busy && progress != null && (
-          <div className="mt-2 h-1.5 rounded-full bg-subtle overflow-hidden">
-            <div className="h-full bg-primary transition-all duration-200" style={{ width: `${progress}%` }} />
+      {/* Bas : nouveautés + actions (les boutons cèdent la place à la progression) */}
+      <div className="px-6 pb-10 pt-2 space-y-4 w-full max-w-md mx-auto">
+        {info.note && (
+          <div className="bg-card border border-edge rounded-2xl p-4 max-h-40 overflow-y-auto">
+            <p className="text-xs font-semibold text-ghost uppercase tracking-wider mb-1.5">{t('maj.changelog')}</p>
+            <div className="text-sm text-dim whitespace-pre-line">{info.note}</div>
           </div>
         )}
 
-        {!info.forced && !busy && (
-          <button
-            onClick={later}
-            className="mt-2 w-full text-sm font-semibold text-dim hover:text-ink py-2 transition"
-          >
-            {t('maj.plus_tard')}
-          </button>
+        {busy ? (
+          <div className="space-y-2 pt-2">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-dim">{t('maj.telechargement')}</span>
+              <span className="font-bold text-ink tabular-nums">{progress != null ? `${progress}%` : '…'}</span>
+            </div>
+            <div className="h-2.5 rounded-full bg-subtle overflow-hidden">
+              <div className="h-full bg-primary transition-all duration-200" style={{ width: `${progress || 0}%` }} />
+            </div>
+            <p className="text-xs text-ghost text-center pt-1">{t('maj.installation_auto')}</p>
+          </div>
+        ) : (
+          <>
+            <button
+              onClick={download}
+              className="w-full inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-primary text-white font-semibold hover:bg-primary-600 transition shadow-lg shadow-primary/20"
+            >
+              <Download size={18} /> {t('maj.telecharger')}
+            </button>
+            {!info.forced && (
+              <button
+                onClick={later}
+                className="w-full text-sm font-semibold text-dim hover:text-ink py-2.5 transition"
+              >
+                {t('maj.plus_tard')}
+              </button>
+            )}
+          </>
         )}
       </div>
     </div>

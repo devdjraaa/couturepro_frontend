@@ -2232,6 +2232,7 @@
     "changelog": "What's new & fixes",
     "maintenant": "Update now",
     "telechargement": "Downloading",
+    "installation_auto": "Installation will start automatically when done.",
     "notif_body": "New version v{{version}} available — tap to update."
   }
 }
