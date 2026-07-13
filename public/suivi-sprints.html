@@ -124,9 +124,10 @@ a{color:var(--rouge)}
 
   <section class="note">
     <h2>Suivi de l'écosystème NovAfriq</h2>
-    <p>Chaque ligne = une demande de la direction. La <b>pastille</b> indique l'état constaté dans le
-       code ; la <b>case</b> est la <b>validation officielle</b> (réservée au propriétaire via un code).
-       La direction consulte simplement. Passe en <b>mode édition</b> pour cocher ce qui est réellement fini.</p>
+    <p>Chaque ligne = une demande de la direction. Les lignes déjà <b>« Fait »</b> sont <b>cochées d'office</b> ;
+       <b>cocher</b> une ligne (bug, à faire…) la fait passer à <b>« Fait »</b> en même temps. La <b>case</b> est la
+       validation officielle (réservée au propriétaire via un code) ; la direction consulte simplement.
+       Passe en <b>mode édition</b> pour valider ce qui est réellement fini.</p>
     <div class="legend" id="auditStats"></div>
   </section>
 
@@ -364,8 +365,9 @@ function render(){
     let shown=0, done=0;
     list.forEach(it=>{
       const isChecked = !!state.checked[it.id];
+      const es = isChecked ? 'done' : it.s;      // statut effectif : coché ⇒ « Fait »
       if(isChecked) done++;
-      const matchF = state.filter==='all' || state.filter===it.s;
+      const matchF = state.filter==='all' || state.filter===es;
       const matchQ = !q || it.t.toLowerCase().includes(q) || it.ref.toLowerCase().includes(q);
       const row = el('div','item'+(isChecked?' done':'')+((matchF&&matchQ)?'':' hide'));
       if(matchF&&matchQ) shown++;
@@ -376,7 +378,7 @@ function render(){
       lab.appendChild(cb);
       const body = el('div','body');
       body.appendChild(el('div','t','<span class="id">'+it.ref+'</span>'+it.t));
-      body.appendChild(el('span','badge b-'+it.s,SLABEL[it.s]));
+      body.appendChild(el('span','badge b-'+es,SLABEL[es]));
       row.appendChild(lab); row.appendChild(body);
       items.appendChild(row);
     });
@@ -440,11 +442,13 @@ function exitEdit(){
 }
 
 async function load(){
+  const known = new Set(ITEMS.map(i=>i.id));
+  // Base : les lignes « Fait » sont cochées d'office.
+  state.checked = {};
+  ITEMS.forEach(it=>{ if(it.s==='done') state.checked[it.id]=true; });
   try{
     const r = await fetch(API); const d = await r.json();
-    // ne garder que les clés connues de CE tracker
-    const known = new Set(ITEMS.map(i=>i.id));
-    state.checked = {};
+    // On ajoute les validations enregistrées (clés connues de CE tracker).
     Object.keys(d.checked||{}).forEach(k=>{ if(known.has(k)) state.checked[k]=true; });
     if(d.updated_at){ const h=new Date(d.updated_at).toLocaleDateString('fr-FR'); $('#savedMsg').textContent='Dernière validation : '+h; }
   }catch(e){ $('#savedMsg').textContent='Hors ligne (lecture locale)'; }
