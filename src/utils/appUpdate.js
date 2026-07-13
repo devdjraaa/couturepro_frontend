@@ -77,6 +77,39 @@ export async function forceCheckOta() {
 }
 
 // Ouvre le téléchargement de l'APK (navigateur in-app), avec repli.
+// Télécharge l'APK DANS l'app (barre de progression) puis ouvre directement
+// l'installateur Android — sans passer par le navigateur. C'est le vrai
+// self-update : l'utilisateur reste dans l'app, tape « Installer », c'est fini.
+// onProgress(pct) est appelé pendant le téléchargement (0..100).
+// Repli automatique sur le navigateur si un plugin manque (anciennes APK).
+export async function downloadAndInstallApk(apkUrl, onProgress) {
+  const url = apkUrl || 'https://gextimo.novafriq.africa/Gextimo.apk'
+  if (!IS_NATIVE) { window.open(url, '_blank', 'noopener,noreferrer'); return { ok: false, web: true } }
+  let handle
+  try {
+    const { Filesystem, Directory } = await import('@capacitor/filesystem')
+    const { FileOpener } = await import('@capacitor-community/file-opener')
+    if (onProgress) {
+      handle = await Filesystem.addListener('progress', (e) => {
+        if (e?.contentLength) onProgress(Math.min(100, Math.round((e.bytes / e.contentLength) * 100)))
+      })
+    }
+    // Nom unique par session pour éviter de rouvrir un vieux fichier en cache.
+    const name = `Gextimo-${Date.now()}.apk`
+    const res = await Filesystem.downloadFile({ url, path: name, directory: Directory.Cache, progress: true })
+    if (handle) { await handle.remove(); handle = null }
+    let filePath = res?.path
+    if (!filePath) filePath = (await Filesystem.getUri({ path: name, directory: Directory.Cache })).uri
+    await FileOpener.open({ filePath, contentType: 'application/vnd.android.package-archive' })
+    return { ok: true }
+  } catch (e) {
+    if (handle) { try { await handle.remove() } catch { /* noop */ } }
+    // Repli : ouvre le navigateur système (comportement précédent).
+    await openApkDownload(url)
+    return { ok: false, fallback: true, error: String(e) }
+  }
+}
+
 export async function openApkDownload(apkUrl) {
   const url = apkUrl || 'https://gextimo.novafriq.africa/'
   // 1) Navigateur SYSTÈME (Chrome en app) → téléchargement via DownloadManager.

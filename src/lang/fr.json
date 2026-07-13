@@ -267,7 +267,21 @@
       "joindre_pdf": "Ou joindre un PDF normalisé",
       "envoi": "Envoi…",
       "whatsapp": "Envoyer WhatsApp",
-      "wa_message": "Bonjour {{client}},\n\nVoici votre {{type}} n° {{numero}}.\nMontant total : {{total}} FCFA\nRestant dû : {{restant}} FCFA\n\nCode de suivi : {{code}}\n\nMerci pour votre confiance."
+      "wa_message": "Bonjour {{client}},\n\nVoici votre {{type}} n° {{numero}}.\nMontant total : {{total}} FCFA\nRestant dû : {{restant}} FCFA\n\nCode de suivi : {{code}}\n\nMerci pour votre confiance.",
+      "telecharger_partager": "Télécharger et partager"
+    },
+    "import": {
+      "bouton": "Importer",
+      "titre": "Importer une facture",
+      "desc": "La facture est déjà complète (montants, articles…). Indiquez juste le client destinataire et le PDF officiel : Gextimo l'habille à vos couleurs.",
+      "client": "Client destinataire",
+      "client_ph": "Nom du client",
+      "fichier": "Facture PDF (déjà normalisée)",
+      "fichier_ph": "Choisir un fichier PDF",
+      "importer": "Importer",
+      "en_cours": "Import…",
+      "err": "L'import a échoué. Vérifiez le fichier (PDF, 20 Mo max).",
+      "libelle_defaut": "Facture importée"
     }
   },
   "commun": {
@@ -484,7 +498,7 @@
       "nouvelle_commande": "Nouvelle commande",
       "nouveau_client": "Nouveau client",
       "paiement": "Encaisser",
-      "atelier": "Mon Atelier"
+      "atelier": "Mes Réglages"
     },
     "titre_auj": "Aujourd'hui",
     "a_faire": "À faire aujourd'hui",
@@ -1136,6 +1150,9 @@
       "theme": "Apparence & thème",
       "a_propos": "À propos"
     },
+    "section_compte": "Compte",
+    "section_facturation": "Facturation & abonnement",
+    "section_app": "Application",
     "deconnexion": "Se déconnecter",
     "type_compte": {
       "titre": "Type de compte",
@@ -1310,8 +1327,6 @@
   },
   "vitrine": {
     "promo": "✦ Nouveau — la vitrine Gextimo connecte les créateurs de mode africaine à toute l'Afrique de l'Ouest.",
-    "promo_a": "Nouveau — la vitrine",
-    "promo_b": "connecte les créateurs de mode africaine à toute l'Afrique de l'Ouest.",
     "online": "● En ligne",
     "loading": "Chargement…",
     "indicatif": "* Prix indicatifs, convertis à titre informatif.",
@@ -1704,7 +1719,8 @@
     "fiches_mesures": "Fiches de mesures clients",
     "mon_equipe": "Mon équipe",
     "informations": "Informations de l'atelier",
-    "confirmer_deconnexion": "Se déconnecter ?"
+    "confirmer_deconnexion": "Se déconnecter ?",
+    "mes_reglages": "Mes Réglages"
   },
   "profil": {
     "titre": "Mon profil",
@@ -2201,5 +2217,21 @@
   "reseau": {
     "connexion_requise": "Connexion internet requise pour cette action.",
     "parametres_offline": "Les réglages nécessitent une connexion internet. Reconnectez-vous pour les modifier."
+  },
+  "maj": {
+    "dispo": "Une nouvelle version de l’application est disponible.",
+    "requise_titre": "Mise à jour requise",
+    "requise_desc": "Une nouvelle version est nécessaire pour continuer. Téléchargez-la pour poursuivre.",
+    "telecharger": "Télécharger la mise à jour",
+    "a_jour": "Votre application est à jour.",
+    "verifier": "Vérifier les mises à jour",
+    "version": "Version",
+    "titre": "Mises à jour",
+    "dispo_titre": "Mise à jour disponible",
+    "plus_tard": "Plus tard",
+    "changelog": "Nouveautés et corrections",
+    "maintenant": "Mettre à jour maintenant",
+    "telechargement": "Téléchargement",
+    "notif_body": "Nouvelle version v{{version}} disponible — appuyez pour mettre à jour."
   }
 }

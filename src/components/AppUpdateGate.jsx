@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Download } from 'lucide-react'
-import { checkAppVersion, openApkDownload } from '@/utils/appUpdate'
+import { checkAppVersion, downloadAndInstallApk } from '@/utils/appUpdate'
 import { showLocalNotif } from '@/utils/localNotif'
 
 // Ne notifie qu'une fois par version (évite le spam à chaque ouverture).
@@ -36,6 +36,8 @@ export default function AppUpdateGate() {
   const { t } = useTranslation()
   const [info, setInfo] = useState(null) // { status, latest, apkUrl, note, forced }
   const [dismissed, setDismissed] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const [progress, setProgress] = useState(null) // 0..100 pendant le téléchargement
   const done = useRef(false)
 
   useEffect(() => {
@@ -76,12 +78,15 @@ export default function AppUpdateGate() {
     setDismissed(true)
   }
 
-  // « Télécharger » : on lance le téléchargement, on marque la version comme traitée
-  // (plus de popup pour cette version) et on ferme le popup.
-  const download = () => {
+  // « Télécharger » : télécharge l'APK DANS l'app (barre de progression) puis
+  // ouvre directement l'installateur Android. On marque la version comme traitée.
+  const download = async () => {
+    if (busy) return
     try { localStorage.setItem(HANDLED_KEY, info.latest) } catch { /* indispo */ }
-    openApkDownload(info.apkUrl)
-    setDismissed(true)
+    setBusy(true); setProgress(0)
+    await downloadAndInstallApk(info.apkUrl, setProgress)
+    setBusy(false)
+    setDismissed(true) // l'installateur Android (ou le repli navigateur) a pris le relais
   }
 
   return (
@@ -108,12 +113,22 @@ export default function AppUpdateGate() {
 
         <button
           onClick={download}
-          className="mt-5 w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary text-white font-semibold hover:bg-primary-600 transition"
+          disabled={busy}
+          className="mt-5 w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary text-white font-semibold hover:bg-primary-600 transition disabled:opacity-80"
         >
-          <Download size={17} /> {t('maj.telecharger')}
+          <Download size={17} />
+          {busy
+            ? `${t('maj.telechargement')}${progress != null ? ` ${progress}%` : '…'}`
+            : t('maj.telecharger')}
         </button>
 
-        {!info.forced && (
+        {busy && progress != null && (
+          <div className="mt-2 h-1.5 rounded-full bg-subtle overflow-hidden">
+            <div className="h-full bg-primary transition-all duration-200" style={{ width: `${progress}%` }} />
+          </div>
+        )}
+
+        {!info.forced && !busy && (
           <button
             onClick={later}
             className="mt-2 w-full text-sm font-semibold text-dim hover:text-ink py-2 transition"

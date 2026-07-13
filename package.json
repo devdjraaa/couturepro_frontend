@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@capacitor-community/contacts": "^7.2.0",
+    "@capacitor-community/file-opener": "^8.0.1",
     "@capacitor-community/safe-area": "^8.0.1",
     "@capacitor/android": "^8.4.0",
     "@capacitor/app": "^8.1.0",
