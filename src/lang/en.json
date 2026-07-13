@@ -267,21 +267,7 @@
       "joindre_pdf": "Or attach a normalized PDF",
       "envoi": "Uploading…",
       "whatsapp": "Send WhatsApp",
-      "wa_message": "Hello {{client}},\n\nHere is your {{type}} no. {{numero}}.\nTotal amount: {{total}} FCFA\nOutstanding: {{restant}} FCFA\n\nTracking code: {{code}}\n\nThank you for your trust.",
-      "telecharger_partager": "Download & share"
-    },
-    "import": {
-      "bouton": "Import",
-      "titre": "Import an invoice",
-      "desc": "The invoice is already complete (amounts, items…). Just enter the recipient client and the official PDF: Gextimo dresses it in your colours.",
-      "client": "Recipient client",
-      "client_ph": "Client name",
-      "fichier": "Invoice PDF (already normalised)",
-      "fichier_ph": "Choose a PDF file",
-      "importer": "Import",
-      "en_cours": "Importing…",
-      "err": "Import failed. Check the file (PDF, 20 MB max).",
-      "libelle_defaut": "Imported invoice"
+      "wa_message": "Hello {{client}},\n\nHere is your {{type}} no. {{numero}}.\nTotal amount: {{total}} FCFA\nOutstanding: {{restant}} FCFA\n\nTracking code: {{code}}\n\nThank you for your trust."
     }
   },
   "commun": {
@@ -498,7 +484,7 @@
       "nouvelle_commande": "New order",
       "nouveau_client": "New client",
       "paiement": "Collect payment",
-      "atelier": "My Settings"
+      "atelier": "My Workshop"
     },
     "titre_auj": "Today",
     "a_faire": "Today's tasks",
@@ -1150,9 +1136,6 @@
       "theme": "Appearance & theme",
       "a_propos": "About"
     },
-    "section_compte": "Account",
-    "section_facturation": "Billing & subscription",
-    "section_app": "Application",
     "deconnexion": "Sign out",
     "type_compte": {
       "titre": "Account type",
@@ -1327,6 +1310,8 @@
   },
   "vitrine": {
     "promo": "✦ New — the Gextimo showcase connects African fashion designers across West Africa.",
+    "promo_a": "New — the",
+    "promo_b": "showcase connects African fashion designers across West Africa.",
     "online": "● Online",
     "loading": "Loading…",
     "indicatif": "* Indicative prices, converted for information only.",
@@ -1630,7 +1615,7 @@
         "Transparency and trust",
         "Simplicity and accessibility"
       ],
-      "novafrique": "Gextimo is a NovAfrique solution."
+      "novafrique": "Gextimo is a NovAfriq solution."
     },
     "aide": {
       "eyebrow": "Help",
@@ -1719,8 +1704,7 @@
     "fiches_mesures": "Client measurement sheets",
     "mon_equipe": "My team",
     "informations": "Workshop information",
-    "confirmer_deconnexion": "Log out?",
-    "mes_reglages": "My Settings"
+    "confirmer_deconnexion": "Log out?"
   },
   "profil": {
     "titre": "My profile",
@@ -2217,20 +2201,5 @@
   "reseau": {
     "connexion_requise": "Internet connection required for this action.",
     "parametres_offline": "Settings require an internet connection. Reconnect to change them."
-  },
-  "maj": {
-    "dispo": "A new version of the app is available.",
-    "requise_titre": "Update required",
-    "requise_desc": "A new version is required to continue. Please download it to proceed.",
-    "telecharger": "Download update",
-    "a_jour": "Your app is up to date.",
-    "verifier": "Check for updates",
-    "version": "Version",
-    "titre": "Updates",
-    "dispo_titre": "Update available",
-    "plus_tard": "Later",
-    "changelog": "What's new & fixes",
-    "maintenant": "Update now",
-    "notif_body": "New version v{{version}} available — tap to update."
   }
 }
