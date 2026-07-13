@@ -3,75 +3,100 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Gextimo · Suivi — Session du 10/07/2026</title>
+<meta name="robots" content="noindex,nofollow"/>
+<title>NovAfriq · Suivi de l'écosystème</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  /* Charte officielle Gextimo — rouge / noir / blanc / blanc cassé */
-  --rouge:#D00B0B; --ocre:#D00B0B; --ocre-soft:#F2B4B4;
+  --rouge:#D00B0B; --ocre-soft:#F2B4B4;
   --bordeaux:#0D0D0D; --bordeaux-2:#2A2A2A;
-  --vert:#1FA855; --vert-bg:#E3F4EE;
-  --creme:#FBF9F5; --creme-2:#F1ECE4; --paper:#fff;
-  --noir:#0D0D0D; --gris:#7A6D67; --line:#EBE4DA; --bg:#F8F5F0;
+  --noir:#0D0D0D; --gris:#7A6D67; --line:#EBE4DA; --bg:#F8F5F0; --paper:#fff; --creme:#FBF9F5;
+  /* statuts (sémantique, distincte de l'accent rouge marque) */
+  --done:#1FA855; --done-bg:#E6F5EC;
+  --part:#C98A00; --part-bg:#FBF1D9;
+  --bug:#E4571B;  --bug-bg:#FCE9DF;
+  --todo:#8A7F79; --todo-bg:#EFEAE3;
+  --spec:#2563EB; --spec-bg:#E5EDFD;
+  --info:#5B6470; --info-bg:#ECEEF1;
+}
+:root[data-theme="dark"]{
+  --noir:#F3EFE8; --gris:#A79C93; --line:#33302B; --bg:#141310; --paper:#1D1B17; --creme:#221F1A;
+  --done-bg:#132a1e; --part-bg:#2c2410; --bug-bg:#301a10; --todo-bg:#26231e; --spec-bg:#141d33; --info-bg:#20242a;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:var(--noir);-webkit-font-smoothing:antialiased;line-height:1.55}
-.wrap{max-width:960px;margin:0 auto;padding:22px 18px 60px}
+body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:var(--noir);-webkit-font-smoothing:antialiased;line-height:1.5}
+.wrap{max-width:1000px;margin:0 auto;padding:20px 16px 70px}
+a{color:var(--rouge)}
 
 /* Header */
-.top{position:sticky;top:0;z-index:50;background:linear-gradient(150deg,var(--bordeaux),var(--bordeaux-2));color:#fff;box-shadow:0 6px 24px -10px rgba(13,13,13,.6)}
-.top .in{max-width:960px;margin:0 auto;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.top{position:sticky;top:0;z-index:50;background:linear-gradient(150deg,var(--bordeaux),var(--bordeaux-2));color:#fff;box-shadow:0 6px 24px -10px rgba(0,0,0,.6)}
+.top .in{max-width:1000px;margin:0 auto;padding:15px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:11px}
 .brand .dot{width:11px;height:11px;border-radius:50%;background:var(--rouge);box-shadow:0 0 0 4px rgba(208,11,11,.22)}
 .brand h1{font-family:'Playfair Display',serif;font-size:19px;font-weight:800;letter-spacing:.2px}
 .brand p{font-size:11.5px;color:rgba(255,255,255,.66);margin-top:1px}
-.kpi{min-width:230px}
+.kpi{min-width:240px}
 .kpi .row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:6px}
 .kpi .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.7)}
-.kpi .big{font-family:'Playfair Display',serif;font-weight:800;font-size:26px;line-height:1}
-.kpi .big small{font-size:14px;font-weight:600;color:rgba(255,255,255,.6)}
-.bar{height:11px;border-radius:8px;background:rgba(255,255,255,.16);overflow:hidden}
-.bar > i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,var(--rouge),var(--ocre-soft))}
+.kpi .big{font-family:'Playfair Display',serif;font-weight:800;font-size:24px;line-height:1;font-variant-numeric:tabular-nums}
+.kpi .big small{font-size:13px;font-weight:600;color:rgba(255,255,255,.6)}
+.bar{height:10px;border-radius:8px;background:rgba(255,255,255,.16);overflow:hidden}
+.bar > i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,var(--done),#5bd08e);transition:width .5s ease}
 
-/* Cards */
-.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:16px;box-shadow:0 10px 26px -22px rgba(13,13,13,.5)}
-.card > h2{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--noir);margin-bottom:4px;display:flex;align-items:center;gap:9px}
-.card > h2 .n{width:26px;height:26px;flex:none;border-radius:8px;background:var(--rouge);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
-.card .sub{font-size:12.5px;color:var(--gris);margin-bottom:12px}
+/* Barre d'outils */
+.toolbar{position:sticky;top:74px;z-index:40;background:var(--bg);padding:12px 0 8px;margin-bottom:4px;border-bottom:1px solid var(--line)}
+.toolbar .line{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.search{flex:1;min-width:180px;border:1px solid var(--line);background:var(--paper);color:var(--noir);border-radius:10px;padding:9px 12px;font-size:13px}
+.search:focus{outline:2px solid var(--rouge);outline-offset:1px}
+.chip{border:1px solid var(--line);background:var(--paper);color:var(--gris);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;user-select:none}
+.chip[aria-pressed="true"]{background:var(--noir);color:#fff;border-color:var(--noir)}
+.edit{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{border:1px solid var(--rouge);background:var(--rouge);color:#fff;border-radius:10px;padding:9px 14px;font-size:13px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--rouge)}
+.code-in{width:120px;border:1px solid var(--line);background:var(--paper);color:var(--noir);border-radius:10px;padding:9px 12px;font-size:14px;letter-spacing:3px;text-align:center}
+.saved{font-size:12px;color:var(--gris)}
+.saved b{color:var(--done)}
 
-/* Méthode */
-.method{background:linear-gradient(158deg,#fff,var(--creme));border-left:4px solid var(--rouge)}
-.method ol{list-style:none;counter-reset:m;display:grid;gap:9px;margin-top:4px}
-.method li{counter-increment:m;position:relative;padding-left:34px;font-size:13.5px}
-.method li::before{content:counter(m);position:absolute;left:0;top:-1px;width:23px;height:23px;border-radius:7px;background:var(--noir);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
-.method li b{color:var(--noir)}
+/* Bloc */
+.block{background:var(--paper);border:1px solid var(--line);border-radius:14px;margin-top:16px;overflow:hidden;box-shadow:0 10px 26px -22px rgba(0,0,0,.5)}
+.block > header{display:flex;align-items:center;gap:11px;padding:15px 18px;cursor:pointer}
+.block > header .n{width:28px;height:28px;flex:none;border-radius:8px;background:var(--rouge);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;font-family:'Playfair Display',serif}
+.block > header h2{font-family:'Playfair Display',serif;font-size:16.5px;font-weight:700;flex:1}
+.block > header .meta{font-size:12px;color:var(--gris);font-variant-numeric:tabular-nums;white-space:nowrap}
+.block > header .mini{height:6px;width:70px;border-radius:6px;background:var(--todo-bg);overflow:hidden;margin-left:4px}
+.block > header .mini i{display:block;height:100%;background:var(--done)}
+.items{border-top:1px solid var(--line)}
+.block.collapsed .items{display:none}
 
-/* Groupes de livrables */
-.grp{margin-top:16px}
-.grp h3{font-size:13px;font-weight:700;color:var(--noir);display:flex;align-items:center;gap:8px;margin-bottom:9px;text-transform:uppercase;letter-spacing:.04em}
-.grp h3 .ic{width:9px;height:9px;border-radius:3px;background:var(--rouge)}
-.grp ul{list-style:none;display:grid;gap:9px}
-.grp li{position:relative;padding-left:26px;font-size:13.5px;color:var(--gris);line-height:1.5}
-.grp li b{color:var(--noir)}
-.grp li::before{content:"";position:absolute;left:0;top:3px;width:15px;height:15px;border-radius:50%;background:var(--vert-bg);border:1px solid #bfe6d1}
-.grp li::after{content:"";position:absolute;left:5px;top:7px;width:4px;height:7px;border:solid var(--vert);border-width:0 2px 2px 0;transform:rotate(45deg)}
+/* Item */
+.item{display:flex;gap:12px;align-items:flex-start;padding:11px 18px;border-top:1px solid var(--line)}
+.item:first-child{border-top:none}
+.item.hide{display:none}
+.item label.cb{position:relative;flex:none;margin-top:1px;cursor:pointer}
+.item input[type=checkbox]{appearance:none;-webkit-appearance:none;width:20px;height:20px;border:2px solid var(--line);border-radius:6px;background:var(--paper);cursor:pointer;display:block}
+.item input[type=checkbox]:checked{background:var(--done);border-color:var(--done)}
+.item input[type=checkbox]:checked::after{content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.item input[type=checkbox]:disabled{cursor:not-allowed;opacity:.85}
+.item input[type=checkbox]:focus-visible{outline:2px solid var(--rouge);outline-offset:2px}
+.item .body{flex:1;min-width:0}
+.item .t{font-size:13.5px;color:var(--noir)}
+.item.done .t{color:var(--gris);text-decoration:line-through;text-decoration-color:var(--line)}
+.item .id{font-size:11px;color:var(--gris);font-weight:600;margin-right:6px;font-variant-numeric:tabular-nums}
+.badge{display:inline-block;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;border-radius:20px;padding:2px 8px;margin-top:5px;white-space:nowrap}
+.b-done{color:var(--done);background:var(--done-bg)} .b-part{color:var(--part);background:var(--part-bg)}
+.b-bug{color:var(--bug);background:var(--bug-bg)} .b-todo{color:var(--todo);background:var(--todo-bg)}
+.b-spec{color:var(--spec);background:var(--spec-bg)} .b-info{color:var(--info);background:var(--info-bg)}
 
-/* Highlight facturation */
-.hl{border-left:4px solid var(--rouge);background:linear-gradient(158deg,#fff,#FFF3F0)}
+/* Encadré intro */
+.note{background:linear-gradient(158deg,var(--paper),var(--creme));border:1px solid var(--line);border-left:4px solid var(--rouge);border-radius:14px;padding:16px 18px;margin-top:16px}
+.note h2{font-family:'Playfair Display',serif;font-size:17px;font-weight:800;margin-bottom:5px}
+.note p{font-size:13px;color:var(--gris)}
+.note .legend{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
 
-/* Nouveautés en tête */
-.news{border-left:4px solid var(--vert);background:linear-gradient(158deg,#fff,var(--vert-bg))}
-.news .nh{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap}
-.news .nh h2{font-family:'Playfair Display',serif;font-size:18px;font-weight:800;color:var(--noir)}
-.news .tag{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:var(--rouge);border-radius:20px;padding:3px 10px;white-space:nowrap}
-.news p{font-size:13px;color:var(--gris)}
-
-.foot{margin-top:22px;font-size:12px;color:var(--gris);text-align:center;line-height:1.7}
+.foot{margin-top:24px;font-size:12px;color:var(--gris);text-align:center;line-height:1.7}
 .foot b{color:var(--noir)}
-@media(max-width:560px){
-  .kpi{min-width:100%;width:100%}
-}
+@media(max-width:560px){.kpi{min-width:100%;width:100%}.toolbar{top:0;position:static}}
 </style>
 </head>
 <body>
@@ -81,102 +106,362 @@ body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:v
     <div class="brand">
       <span class="dot"></span>
       <div>
-        <h1>Gextimo · Suivi</h1>
-        <p>Session de recette — testé à travers l'application réelle</p>
+        <h1>NovAfriq · Suivi de l'écosystème</h1>
+        <p>Gextimo &amp; NovAfriq — avancement par blocs · le propriétaire valide, l'équipe consulte</p>
       </div>
     </div>
     <div class="kpi">
       <div class="row">
-        <span class="lbl">Livrables de la session</span>
-        <span class="big">17<small>&nbsp;validés</small></span>
+        <span class="lbl">Validé</span>
+        <span class="big" id="kpiCount">0<small id="kpiTot">&nbsp;/ 0</small></span>
       </div>
-      <div class="bar"><i style="width:100%"></i></div>
+      <div class="bar"><i id="kpiBar" style="width:0%"></i></div>
     </div>
   </div>
 </header>
 
 <main class="wrap">
 
-  <!-- ─── EN TÊTE : résumé de session ─────────────────────────────── -->
-  <section class="card news">
-    <div class="nh">
-      <span class="tag">Session · 10/07</span>
-      <h2>Ce qui a été livré cette session</h2>
-    </div>
-    <p>Une grosse session centrée sur la <b>facturation normalisée (DGI Bénin)</b> et son partage,
-       plus des améliorations de la vitrine, de la sécurité du compte et des finitions. Tout a été
-       <b>testé de bout en bout sur un vrai téléphone</b>, puis nettoyé.</p>
+  <section class="note">
+    <h2>Suivi de l'écosystème NovAfriq</h2>
+    <p>Chaque ligne = une demande de la direction. La <b>pastille</b> indique l'état constaté dans le
+       code ; la <b>case</b> est la <b>validation officielle</b> (réservée au propriétaire via un code).
+       La direction consulte simplement. Passe en <b>mode édition</b> pour cocher ce qui est réellement fini.</p>
+    <div class="legend" id="auditStats"></div>
   </section>
 
-  <!-- ─── FACTURATION / DGI (le gros morceau) ─────────────────────── -->
-  <section class="card hl">
-    <h2><span class="n">1</span> Facturation normalisée (DGI Bénin) &amp; partage</h2>
-    <div class="grp">
-      <ul>
-        <li><b>Normalisation e-MECeF</b> — chaque atelier normalise sa facture avec son propre jeton DGI ; on récupère le <b>code MECeF/DGI</b> et le <b>QR officiels</b>. Testé de bout en bout sur le bac à sable de la DGI.</li>
-        <li><b>Sceau sur le PDF</b> — le PDF d'une facture normalisée imprime désormais le <b>code MECeF/DGI + le QR</b> en bas du document (avant : la facture sortait « nue », sans le sceau).</li>
-        <li><b>Habillage GEXTIMO</b> — une facture déjà normalisée (PDF officiel) est reproduite <b>intacte</b> entre un <b>en-tête</b> (logo Gextimo + nom de l'atelier) et un <b>pied de vérification</b> aux couleurs de l'atelier.</li>
-        <li><b>Bouton « Importer une facture »</b> — importer un PDF déjà complet en indiquant juste le <b>client destinataire</b> : la facture apparaît dans la liste et peut être habillée (pas besoin de re-saisir les montants).</li>
-        <li><b>Partage du PDF réparé sur mobile</b> — le document ne « sortait » pas dans l'app ; désormais un seul bouton <b>« Télécharger et partager »</b> ouvre le partage natif (WhatsApp, enregistrer, imprimer…).</li>
-        <li><b>Fenêtre de création au format mobile</b> — la création de facture s'ouvre en feuille glissante (comme Clients / Commandes) et les champs ne débordent plus.</li>
-        <li><b>Import de PDF jusqu'à 20 Mo</b> (avant : bloqué à ~2 Mo).</li>
-      </ul>
+  <div class="toolbar">
+    <div class="line">
+      <input id="search" class="search" type="search" placeholder="Rechercher (ex. « facture », « OTP », « P42 »)…" aria-label="Rechercher"/>
+      <button class="chip" data-f="all" aria-pressed="true">Tout</button>
+      <button class="chip" data-f="todo" aria-pressed="false">À faire</button>
+      <button class="chip" data-f="bug" aria-pressed="false">Bugs</button>
+      <button class="chip" data-f="part" aria-pressed="false">Partiel</button>
+      <button class="chip" data-f="done" aria-pressed="false">Fait</button>
+      <div class="edit">
+        <span class="saved" id="savedMsg">Lecture seule</span>
+        <input class="code-in" id="codeIn" type="password" inputmode="numeric" maxlength="6" placeholder="Code" style="display:none" aria-label="Code à 6 chiffres"/>
+        <button class="btn" id="editBtn">Mode édition</button>
+      </div>
     </div>
-  </section>
+  </div>
 
-  <!-- ─── VITRINE / DESIGNER ──────────────────────────────────────── -->
-  <section class="card">
-    <h2><span class="n">2</span> Vitrine &amp; mise en avant (designers)</h2>
-    <div class="grp">
-      <ul>
-        <li><b>Demandes de devis toujours visibles</b> — avec l'historique des demandes traitées et un état vide clair.</li>
-        <li><b>Statistiques publiques en tête</b> — visites, contacts et vues du mois remontées en haut de « Ma Vitrine ».</li>
-        <li><b>Sponsorisation : suivi en temps réel</b> — après paiement, un bloc <b>« Actif »</b> affiche le <b>compte à rebours</b> (jours restants + date de fin), au lieu de ne rien voir changer.</li>
-        <li><b>Retour de paiement clarifié</b> — l'écran de confirmation distingue enfin <b>sponsorisation</b> et <b>abonnement</b> (bon message + bonne redirection).</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- ─── SÉCURITÉ & COMPTE ───────────────────────────────────────── -->
-  <section class="card">
-    <h2><span class="n">3</span> Sécurité &amp; compte</h2>
-    <div class="grp">
-      <ul>
-        <li><b>Changement de mot de passe → déconnexion forcée</b> — toutes les sessions sont déconnectées (reconnexion obligatoire). Testé : changement → retour à l'écran de connexion → nouveau mot de passe accepté.</li>
-        <li><b>Récupération de compte</b> — parcours par code (OTP envoyé par e-mail) testé de bout en bout, mot de passe réinitialisé.</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- ─── FINITIONS ───────────────────────────────────────────────── -->
-  <section class="card">
-    <h2><span class="n">4</span> Finitions</h2>
-    <div class="grp">
-      <ul>
-        <li>Retrait d'un compteur inutile sur les fiches <b>Clients</b>.</li>
-        <li>Corrections d'affichage : texte non traduit sur l'écran de récupération, libellés de boutons.</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- ─── MÉTHODE QA ──────────────────────────────────────────────── -->
-  <section class="card method">
-    <h2><span class="n">✓</span> Méthode de recette</h2>
-    <p class="sub">Chaque fonction a été validée dans l'application réelle, pas seulement sur l'API.</p>
-    <ol>
-      <li><b>À travers l'app</b> — parcours réel sur un téléphone (création, normalisation, partage, sécurité…).</li>
-      <li><b>Vérification à la source</b> — écran, base de données et retours de la DGI (sandbox) recoupés.</li>
-      <li><b>Nettoyage</b> — toutes les données de test créées ont été supprimées / restaurées.</li>
-    </ol>
-  </section>
+  <div id="blocks"></div>
 
   <div class="foot">
-    <b>17 livrables</b> validés de bout en bout cette session — facturation normalisée DGI &amp; habillage,
-    partage PDF mobile, vitrine, sécurité et finitions.<br>
-    <b>Gextimo</b> · Recette qualité de l'espace utilisateur — mise à jour du <b>10/07/2026</b>.<br>
-    Méthode : test à travers l'application réelle, vérification écran + base + retour DGI, nettoyage.
+    <b>NovAfriq</b> — suivi vivant de l'écosystème (Gextimo + NovAfriq). Mise à jour par le propriétaire.<br>
+    Source détaillée : <b>docs/SUIVI_NOVAFRIQ.md</b>. Validation protégée par code · consultation libre.
   </div>
 
 </main>
+
+<script>
+const API = 'https://gextimoapi.novafriq.africa/api/suivi-sprints';
+
+// Blocs (ordre d'affichage)
+const BLOCKS = {
+  1:'Backlog produit Gextimo', 2:'Veille auto (SEO / technique)', 3:'APK Admin (codes · dashboard · comptes)',
+  4:'Gestion VPS', 5:'Gestion mailing', 6:'Gestion NovAfriq (site mère)', 7:'Updates Gextimo (release / OTA)'
+};
+const SLABEL = {done:'Fait',part:'Partiel',bug:'Bug à corriger',todo:'À faire',spec:'Spec à suivre',info:'Info'};
+
+// id = clé serveur stable (s10 = points volet 1, s20 = suggestions). b = bloc. s = statut audité. t = libellé.
+const V = (n,b,s,t)=>({id:'s10t'+n,ref:'P'+n,b,s,t});
+const G = (n,b,s,t)=>({id:'s20t'+n,ref:'SUG-'+n,b,s,t});
+const ITEMS = [
+  V(1,3,'todo',"Espace admin : créer des codes d'activation / promo"),
+  V(2,3,'bug',"Message en anglais après gel d'un compte"),
+  V(3,1,'bug',"Icône profil non cliquable → doit ouvrir les paramètres"),
+  V(4,1,'bug',"Bouton « Retour » Android = bouton « Annuler »"),
+  V(5,1,'done',"Accès aux contacts du téléphone"),
+  V(6,1,'done',"Import de contacts avec confirmation (jamais auto)"),
+  V(7,1,'done',"Bouton « Importer des contacts » (multi-sélection)"),
+  V(8,1,'done',"Clients affichant « 0 commande » à tort — corrigé"),
+  V(9,1,'bug',"Recherche clients en direct (au fil de la frappe)"),
+  V(10,1,'part',"Clic sur l'avatar client → modifier ses infos"),
+  V(11,1,'done',"Export des mesures depuis la fiche client"),
+  V(12,1,'part',"Export mesures vers WhatsApp / CSV"),
+  V(13,1,'bug',"Animation d'ajout de commande peu fluide"),
+  V(14,1,'todo',"Acompte > total → bloc supplémentaire automatique"),
+  V(15,1,'todo',"Bloc différence calculée + raison obligatoire"),
+  V(16,1,'todo',"Interdire acompte > total sans justification"),
+  V(17,1,'done',"Bouton « + » ajouter un vêtement à la commande"),
+  V(18,1,'done',"Dates de livraison passées grisées"),
+  V(19,1,'done',"Interdire la validation d'une date passée"),
+  V(20,1,'done',"Plusieurs exemplaires d'un même vêtement"),
+  V(21,1,'part',"Sélecteur de quantité par type de vêtement"),
+  V(22,1,'done',"Plusieurs catégories → une seule facture"),
+  V(23,1,'done',"Échéances multiples de livraison + note"),
+  V(24,1,'bug',"Photos de tissu plus grandes (commandes groupées)"),
+  V(25,1,'done',"Mode « commande groupée »"),
+  V(26,1,'part',"Tri auto par date de livraison la plus proche"),
+  V(27,1,'part',"Commandes urgentes affichées en premier"),
+  V(28,1,'part',"Défilement horizontal entre catégories de commandes"),
+  V(29,1,'done',"Compteur de caractères tickets (255 / 5000 + blocage)  ·  P29-34"),
+  V(35,1,'bug',"Timeout 15000 ms à l'envoi d'un ticket"),
+  V(36,1,'bug',"Tickets avec photos → timeout plus fréquent"),
+  V(37,1,'bug',"Langue affiche « EN » alors que l'app est en français"),
+  V(38,1,'bug',"Système de points / gamification défaillant"),
+  V(39,1,'bug',"Points de fidélité peu visibles après une action"),
+  V(40,1,'part',"Meilleur affichage des points de fidélité"),
+  V(41,1,'part',"Badge qui change automatiquement au nouveau niveau"),
+  V(42,7,'todo',"Notifs de commande même application fermée (push FCM)  ·  P42-43"),
+  V(44,1,'done',"Galerie photos (annoncée) — disponible"),
+  V(45,1,'done',"Espace galerie activé (abonnement)"),
+  V(46,1,'part',"Rendre le module abonnement plus visible"),
+  V(47,1,'bug',"Cumuler le temps restant essai + abonnement souscrit"),
+  V(48,1,'part',"Appliquer la MAJ d'abonnement à tous les ateliers"),
+  V(49,1,'part',"Points + message de bienvenue après souscription"),
+  V(50,1,'bug',"Premium annuel : créer assistants / viewers"),
+  V(51,1,'bug',"Magnat annuel (7 ateliers) bloqué à 3 ateliers"),
+  V(52,1,'done',"Magnat mensuel : points bien ajoutés"),
+  V(53,1,'todo',"Définir le comportement au changement / downgrade de plan  ·  P53-55"),
+  V(56,1,'done',"Caisse : message « plan insuffisant »"),
+  V(57,1,'bug',"Bouton « voir les plans » mal redirigé"),
+  V(58,1,'part',"Bouton → page abonnements / plan conseillé"),
+  V(59,1,'done',"Consulter les mesures enregistrées"),
+  V(60,1,'done',"Modifier les mesures après création"),
+  V(61,1,'part',"Export mesures WhatsApp / CSV (réponse rapide)"),
+  V(62,1,'bug',"Isolation stricte des ateliers (données mélangées)  ·  P62-65"),
+  V(66,1,'part',"Validation du champ téléphone (chiffres + « + »)  ·  P66-67"),
+  V(68,1,'todo',"Recherche client entre ateliers + mesures partagées  ·  P68-77"),
+  V(78,1,'bug',"WhatsApp preuve de paiement (PDF/image attaché)  ·  P78-81"),
+  V(82,1,'done',"Module facturation par plan + modèles + DGI  ·  P82-91"),
+  V(92,3,'todo',"Dashboard admin temps réel (refresh, filtres, delta)  ·  P92-103"),
+  V(104,1,'part',"Permissions synchronisées au changement de plan  ·  P104-106"),
+  V(107,1,'part',"Transitions d'écran plus fluides"),
+  V(108,1,'done',"Skeleton loaders (aperçu pendant chargement)"),
+  V(109,1,'part',"Expérience mobile (petits écrans, réseau lent)"),
+  V(110,3,'todo',"Journaux d'erreurs + outil de diagnostic admin  ·  P110-111"),
+  V(112,1,'bug',"Ne jamais afficher les erreurs techniques brutes  ·  P112-113"),
+  V(114,1,'part',"Tâches longues en arrière-plan"),
+  V(115,1,'part',"Hors-ligne + file de synchronisation « en attente »  ·  P115-117"),
+  V(118,1,'part',"Séparation stricte des données + sync fiable (synthèse)"),
+  V(119,3,'bug',"Comptes gelés / expirés / récupération (bugs)  ·  P119-124"),
+  V(125,1,'bug',"Point après « gextimo » sur l'accueil — à retirer"),
+  V(126,6,'done',"Logo officiel (#5) partout"),
+  V(127,6,'bug',"« novafrique » → « novafriq »"),
+  V(128,6,'part',"Police gothique cohérente (nom stylisé)"),
+  V(129,1,'done',"Logo ciseaux (connexion) → logo officiel"),
+  V(130,1,'done',"Favicon violet → logo officiel"),
+  V(131,6,'part',"Bouton « S'inscrire » absent sur mobile"),
+  V(132,6,'todo',"Header / retour sur les pages inscription-connexion"),
+  V(133,1,'bug',"Profil créateur s'ouvre au milieu (pas en haut)"),
+  V(134,1,'todo',"Bannière profil : photo / GIF / vidéo"),
+  V(135,6,'part',"Détection pays/devise + message de confirmation"),
+  V(136,6,'done',"Bandeau cookies + personnalisation"),
+  V(137,1,'todo',"Photos dans les avis clients"),
+  V(138,6,'todo',"Footer « devenir créateur » : afficher le tarif"),
+  V(139,6,'part',"CGV complètes (marketplace)"),
+  V(140,6,'part',"Renommer « Mentions légales » → « CGU », page unique"),
+  V(141,1,'done',"Case à cocher CGU obligatoire à l'inscription"),
+  V(142,6,'part',"Footer page confidentialité (liens légaux)"),
+  V(143,1,'part',"Nom du menu « Galerie des artisans »"),
+  V(144,1,'todo',"Format numéro de reçu (majuscules + tirets auto)"),
+  V(145,1,'bug',"Indicateur « FR » mais texte en anglais"),
+  V(146,1,'bug',"OTP par e-mail ET SMS + bouton « Renvoyer l'OTP »  ·  P146-147"),
+  V(148,1,'bug',"Double icône « œil » sur le mot de passe"),
+  V(149,1,'done',"Récupération via « mot de passe oublié » (OTP e-mail)"),
+  V(150,1,'todo',"Connexion Google / Facebook / Apple"),
+  V(151,1,'part',"Renommer le catalogue « Modèles Courants »"),
+  V(152,1,'part',"Bibliothèque photos catégorisée (réf/sexe/occasion…)"),
+  V(153,1,'todo',"Codes promo + ambassadeurs (système complet, rate-limit, admin)  ·  P153-158"),
+  V(159,1,'todo',"Likes (cœur) + 4 boutons par création  ·  P159-160"),
+  V(161,1,'todo',"Téléchargement de patrons payants + récup par code  ·  P161-163"),
+  V(164,1,'part',"Formulaire « passer commande » en 3 étapes"),
+  V(165,1,'spec',"Paiement en 2 phases (mise en relation → commission 15%)"),
+  V(166,1,'done',"Tickets = canal de support créateur"),
+  V(167,1,'part',"« Messages » = communications officielles (lecture seule)"),
+  V(168,7,'part',"Notifications temps réel + purge automatique à 30 j"),
+  V(169,1,'done',"Photo de profil du créateur"),
+  V(170,1,'todo',"Nom/prénom internes, pseudo public"),
+  V(171,1,'todo',"4 compteurs publics (abonnés / avis / publi / commandes)"),
+  V(172,1,'todo',"Date d'inscription intelligente (jours / mois / ans)"),
+  V(173,1,'todo',"Bouton « S'abonner / Enregistrer » sur le profil"),
+  V(174,1,'todo',"Espace « Mérites » (6 catégories × niveaux)  ·  P174-176"),
+  V(177,1,'done',"Liens réseaux sociaux du profil"),
+  V(178,1,'part',"Mention « Bientôt / Soon » sur le non-prêt"),
+  V(179,6,'info',"Rappel du header existant"),
+  V(180,6,'todo',"Barre de contact fine (téléphone + WhatsApp)"),
+  V(181,6,'todo',"Menu déroulant « Solutions »"),
+  V(182,6,'todo',"Menu déroulant « Tarifs »"),
+  V(183,6,'todo',"Menu « Documentation » (cartes) + page  ·  P183-184"),
+  V(185,7,'done',"APK sur le site + guide d'installation"),
+  V(186,7,'todo',"PWA (manifest.json + service worker + bannière)"),
+  V(187,6,'part',"Texte d'accueil de la page inscription"),
+  V(188,6,'bug',"Remplacer « novafrique » (Qui sommes-nous, footer)"),
+  V(189,5,'todo',"E-mail « support@gextimo.africa » erroné dans la FAQ"),
+  V(190,6,'part',"Contenu du footer depuis le doc APDP"),
+  V(191,6,'bug',"Bouton « Se connecter » dépasse l'écran (mobile)"),
+  V(192,6,'part',"Nouvelle phrase d'accroche vitrine"),
+  V(193,6,'part',"Phrase « né en Afrique, pour le monde »"),
+  V(194,6,'part',"Logo plus à gauche / bouton connexion plus à droite"),
+  V(195,6,'done',"Bloquer overscroll / pull-to-refresh (desktop)"),
+  V(196,6,'todo',"Anti-robot (reCAPTCHA v3 / hCaptcha) sur l'inscription"),
+  V(197,6,'todo',"Migration Cloudflare (NS Namecheap → SSL/DDoS/DNSSEC)"),
+  V(198,5,'todo',"Config Brevo (domaine validé, from, délivrabilité)"),
+  V(199,6,'todo',"Search Console + Bing + sitemap.xml (novafriq.africa)"),
+  V(200,2,'todo',"Veille technique SEO hebdo — 2 sites (PageSpeed + Search Console + HTTPS + alertes)"),
+  V(201,5,'part',"Alerte d'inscription + messages bienvenue / retour"),
+  V(202,1,'spec',"Spécification « espace client » — à suivre telle quelle"),
+  V(203,4,'spec',"Spéc. sécurité mobile v5 + sauvegardes VPS chiffrées"),
+  V(204,1,'spec',"Note « Partenaires » (document maître)"),
+  V(205,6,'info',"Coordination du lancement commun (NovAfriq + Gextimo)"),
+  // Suggestions (message.txt)
+  G(1,7,'part',"Splash screen animé (favicon → logo → connexion)"),
+  G(2,1,'bug',"Slogan à l'impératif : « Créez, Gérez, Rayonnez »"),
+  G(3,1,'bug',"Indicateur de langue (affiche la mauvaise)"),
+  G(4,1,'done',"Case CGU obligatoire à l'inscription"),
+  G(5,1,'part',"Le lien CGU ouvre le site web"),
+  G(6,1,'bug',"Bug : clic sur CGU renvoie à la connexion"),
+  G(7,1,'bug',"Bouton « Déjà inscrit ? Se connecter »"),
+  G(8,1,'bug',"Bouton « Se connecter » trop proche de la barre système"),
+  G(9,1,'todo',"Placeholders selon le profil (artisan / designer)"),
+  G(10,1,'todo',"Références béninoises (au lieu d'autres pays)"),
+  G(11,1,'todo',"Placeholders Nom / Prénom béninois"),
+  G(12,1,'done',"Champ Prénom dans le profil"),
+  G(13,1,'bug',"Bug import contacts (erreur puis import)"),
+  G(14,1,'part',"PDF : pied de page marketing (logo / slogan / site)"),
+  G(15,1,'part',"Coordonnées de l'artisan dans les exports"),
+  G(16,1,'bug',"Export WhatsApp avec toutes les mesures"),
+  G(17,1,'bug',"Icône du module « Nouveau modèle »"),
+  G(18,1,'bug',"Champ Quantité (défaut 1, bug « 12 »)"),
+  G(19,1,'bug',"Onglet « Mesures » (page blanche)"),
+  G(20,1,'bug',"Onglet « Historique » vide"),
+  G(21,1,'bug',"Profil client affiche « / » ou « Key »"),
+  G(22,1,'done',"Abonnements en 2 onglets (Mensuel / Annuel)"),
+  G(23,1,'part',"Mieux valoriser les cartes d'abonnement"),
+  G(24,1,'part',"Revue UX générale (cohérence, sécu Android)"),
+];
+
+let state = { checked:{}, code:null, editing:false, filter:'all', q:'' };
+const $ = s => document.querySelector(s);
+const el = (t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;};
+
+// État constaté au code (audit) — compteurs par statut, indépendant des validations.
+function renderAuditStats(){
+  const order=['done','bug','part','todo','spec','info'];
+  const c={}; ITEMS.forEach(it=>c[it.s]=(c[it.s]||0)+1);
+  const host=$('#auditStats'); host.innerHTML='<span style="font-size:11px;color:var(--gris);width:100%;margin-bottom:2px">Constaté dans le code ('+ITEMS.length+' demandes) :</span>';
+  order.forEach(s=>{ if(c[s]) host.appendChild(el('span','badge b-'+s,c[s]+' '+SLABEL[s])); });
+}
+
+function render(){
+  const host = $('#blocks'); host.innerHTML='';
+  const q = state.q.trim().toLowerCase();
+  Object.keys(BLOCKS).forEach(bk=>{
+    const list = ITEMS.filter(it=>String(it.b)===bk);
+    if(!list.length) return;
+    const block = el('div','block');
+    const head = el('header');
+    head.appendChild(el('span','n',bk));
+    head.appendChild(el('h2',null,BLOCKS[bk]));
+    const mini = el('span','mini','<i></i>');
+    const meta = el('span','meta');
+    head.appendChild(meta); head.appendChild(mini);
+    block.appendChild(head);
+    const items = el('div','items');
+    let shown=0, done=0;
+    list.forEach(it=>{
+      const isChecked = !!state.checked[it.id];
+      if(isChecked) done++;
+      const matchF = state.filter==='all' || state.filter===it.s;
+      const matchQ = !q || it.t.toLowerCase().includes(q) || it.ref.toLowerCase().includes(q);
+      const row = el('div','item'+(isChecked?' done':'')+((matchF&&matchQ)?'':' hide'));
+      if(matchF&&matchQ) shown++;
+      const lab = el('label','cb');
+      const cb = el('input'); cb.type='checkbox'; cb.checked=isChecked; cb.disabled=!state.editing;
+      cb.dataset.id=it.id;
+      cb.addEventListener('change',()=>onToggle(it.id,cb.checked));
+      lab.appendChild(cb);
+      const body = el('div','body');
+      body.appendChild(el('div','t','<span class="id">'+it.ref+'</span>'+it.t));
+      body.appendChild(el('span','badge b-'+it.s,SLABEL[it.s]));
+      row.appendChild(lab); row.appendChild(body);
+      items.appendChild(row);
+    });
+    block.appendChild(items);
+    meta.textContent = done+' / '+list.length+' validé'+(done>1?'s':'');
+    mini.querySelector('i').style.width = Math.round(done/list.length*100)+'%';
+    host.appendChild(block);
+    head.addEventListener('click',()=>block.classList.toggle('collapsed'));
+  });
+  updateKpi();
+}
+
+function updateKpi(){
+  const tot = ITEMS.length;
+  const done = ITEMS.filter(it=>state.checked[it.id]).length;
+  $('#kpiCount').firstChild.textContent = done;
+  $('#kpiTot').textContent = ' / '+tot;
+  $('#kpiBar').style.width = Math.round(done/tot*100)+'%';
+}
+
+function onToggle(id,val){
+  if(!state.editing) return;
+  if(val) state.checked[id]=true; else delete state.checked[id];
+  // maj visuelle ligne + compteurs sans tout re-render
+  render(); save();
+}
+
+let saveT=null;
+function save(){
+  clearTimeout(saveT);
+  $('#savedMsg').textContent='Enregistrement…';
+  saveT=setTimeout(async()=>{
+    try{
+      const r = await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({code:state.code, checked:state.checked})});
+      if(r.status===403){ throw new Error('Code incorrect'); }
+      if(!r.ok){ throw new Error('Erreur '+r.status); }
+      const d = await r.json();
+      const h = new Date(d.updated_at||Date.now()).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+      $('#savedMsg').innerHTML='<b>Enregistré ✓</b> '+h;
+    }catch(e){
+      $('#savedMsg').textContent = e.message;
+      if(e.message==='Code incorrect'){ exitEdit(); }
+    }
+  },500);
+}
+
+function enterEdit(){
+  const code = $('#codeIn').value.trim();
+  if(!/^\d{6}$/.test(code)){ $('#codeIn').style.display='inline-block'; $('#codeIn').focus(); $('#savedMsg').textContent='Entre ton code à 6 chiffres'; return; }
+  state.code=code; state.editing=true;
+  $('#editBtn').textContent='Quitter l’édition'; $('#editBtn').classList.add('ghost');
+  $('#codeIn').style.display='none';
+  $('#savedMsg').textContent='Mode édition — coches enregistrées automatiquement';
+  render();
+}
+function exitEdit(){
+  state.editing=false; state.code=null;
+  $('#editBtn').textContent='Mode édition'; $('#editBtn').classList.remove('ghost');
+  render();
+}
+
+async function load(){
+  try{
+    const r = await fetch(API); const d = await r.json();
+    // ne garder que les clés connues de CE tracker
+    const known = new Set(ITEMS.map(i=>i.id));
+    state.checked = {};
+    Object.keys(d.checked||{}).forEach(k=>{ if(known.has(k)) state.checked[k]=true; });
+    if(d.updated_at){ const h=new Date(d.updated_at).toLocaleDateString('fr-FR'); $('#savedMsg').textContent='Dernière validation : '+h; }
+  }catch(e){ $('#savedMsg').textContent='Hors ligne (lecture locale)'; }
+  renderAuditStats();
+  render();
+}
+
+// Contrôles
+$('#editBtn').addEventListener('click',()=>{ state.editing?exitEdit():enterEdit(); });
+$('#codeIn').addEventListener('keydown',e=>{ if(e.key==='Enter') enterEdit(); });
+$('#search').addEventListener('input',e=>{ state.q=e.target.value; render(); });
+document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
+  document.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed','false'));
+  c.setAttribute('aria-pressed','true'); state.filter=c.dataset.f; render();
+}));
+
+load();
+</script>
 </body>
 </html>
