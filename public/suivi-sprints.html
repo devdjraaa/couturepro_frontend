@@ -94,17 +94,6 @@ a{color:var(--rouge)}
 .note p{font-size:13px;color:var(--gris)}
 .note .legend{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
 
-/* Priorités */
-.star{border:none;background:none;cursor:pointer;font-size:16px;line-height:1;flex:none;opacity:.28;filter:grayscale(1);padding:2px 0;margin-top:1px}
-.star.on{opacity:1;filter:none}
-.star:focus-visible{outline:2px solid var(--rouge);outline-offset:2px;border-radius:4px}
-.item.prio{box-shadow:inset 3px 0 0 var(--part);background:linear-gradient(90deg,var(--part-bg),transparent 60%)}
-.priocard{background:var(--paper);border:1px solid var(--part);border-radius:14px;margin-top:16px;overflow:hidden;box-shadow:0 10px 26px -22px rgba(0,0,0,.5)}
-.priocard > header{display:flex;align-items:center;gap:10px;padding:14px 18px;background:linear-gradient(120deg,var(--part-bg),transparent)}
-.priocard > header h2{font-family:'Playfair Display',serif;font-size:16px;font-weight:800;color:var(--noir);flex:1}
-.priocard > header .n{width:26px;height:26px;flex:none;border-radius:8px;background:var(--part);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px}
-.priocard > header .meta{font-size:12px;color:var(--part);font-weight:700}
-.priocard .empty{padding:14px 18px;font-size:12.5px;color:var(--gris)}
 .foot{margin-top:24px;font-size:12px;color:var(--gris);text-align:center;line-height:1.7}
 .foot b{color:var(--noir)}
 @media(max-width:560px){.kpi{min-width:100%;width:100%}.toolbar{top:0;position:static}}
@@ -138,8 +127,7 @@ a{color:var(--rouge)}
     <p>Chaque ligne = une demande de la direction. Les lignes déjà <b>« Fait »</b> sont <b>cochées d'office</b> ;
        <b>cocher</b> une ligne (bug, à faire…) la fait passer à <b>« Fait »</b> en même temps. La <b>case</b> est la
        validation officielle (réservée au propriétaire via un code) ; la direction consulte simplement.
-       Passe en <b>mode édition</b> pour valider ce qui est réellement fini. Le <b>chef</b>, avec son
-       <b>propre code</b>, active <b>🔥 Priorités</b> : les lignes qu'il marque remontent tout en haut.</p>
+       Passe en <b>mode édition</b> pour valider ce qui est réellement fini.</p>
     <div class="legend" id="auditStats"></div>
   </section>
 
@@ -155,12 +143,10 @@ a{color:var(--rouge)}
         <span class="saved" id="savedMsg">Lecture seule</span>
         <input class="code-in" id="codeIn" type="password" inputmode="numeric" maxlength="6" placeholder="Code" style="display:none" aria-label="Code à 6 chiffres"/>
         <button class="btn" id="editBtn">Mode édition</button>
-        <button class="btn ghost" id="prioBtn">🔥 Priorités (chef)</button>
       </div>
     </div>
   </div>
 
-  <div id="prioTop"></div>
   <div id="blocks"></div>
 
   <div class="foot">
@@ -349,8 +335,7 @@ const ITEMS = [
   G(24,1,'part',"Revue UX générale (cohérence, sécu Android)"),
 ];
 
-let state = { checked:{}, priorities:new Set(), code:null, editing:false,
-              prioCode:null, prioEditing:false, pendingMode:null, filter:'all', q:'' };
+let state = { checked:{}, code:null, editing:false, filter:'all', q:'' };
 const $ = s => document.querySelector(s);
 const el = (t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;};
 
@@ -377,8 +362,26 @@ function render(){
     head.appendChild(meta); head.appendChild(mini);
     block.appendChild(head);
     const items = el('div','items');
-    const done = list.filter(x=>state.checked[x.id]).length;
-    list.forEach(it=>{ items.appendChild(makeRow(it)); });
+    let shown=0, done=0;
+    list.forEach(it=>{
+      const isChecked = !!state.checked[it.id];
+      const es = isChecked ? 'done' : it.s;      // statut effectif : coché ⇒ « Fait »
+      if(isChecked) done++;
+      const matchF = state.filter==='all' || state.filter===es;
+      const matchQ = !q || it.t.toLowerCase().includes(q) || it.ref.toLowerCase().includes(q);
+      const row = el('div','item'+(isChecked?' done':'')+((matchF&&matchQ)?'':' hide'));
+      if(matchF&&matchQ) shown++;
+      const lab = el('label','cb');
+      const cb = el('input'); cb.type='checkbox'; cb.checked=isChecked; cb.disabled=!state.editing;
+      cb.dataset.id=it.id;
+      cb.addEventListener('change',()=>onToggle(it.id,cb.checked));
+      lab.appendChild(cb);
+      const body = el('div','body');
+      body.appendChild(el('div','t','<span class="id">'+it.ref+'</span>'+it.t));
+      body.appendChild(el('span','badge b-'+es,SLABEL[es]));
+      row.appendChild(lab); row.appendChild(body);
+      items.appendChild(row);
+    });
     block.appendChild(items);
     meta.textContent = done+' / '+list.length+' validé'+(done>1?'s':'');
     mini.querySelector('i').style.width = Math.round(done/list.length*100)+'%';
@@ -386,55 +389,6 @@ function render(){
     head.addEventListener('click',()=>block.classList.toggle('collapsed'));
   });
   updateKpi();
-  renderPriorities();
-}
-
-// Construit une ligne (case + libellé + pastille effective + étoile priorité).
-// always=true → ignore les filtres (utilisé par la section Priorités en haut).
-function makeRow(it, always){
-  const q = state.q.trim().toLowerCase();
-  const isChecked = !!state.checked[it.id];
-  const isPrio = state.priorities.has(it.id);
-  const es = isChecked ? 'done' : it.s;               // coché ⇒ « Fait »
-  const matchF = always || state.filter==='all' || state.filter===es;
-  const matchQ = always || !q || it.t.toLowerCase().includes(q) || it.ref.toLowerCase().includes(q);
-  const row = el('div','item'+(isChecked?' done':'')+(isPrio?' prio':'')+((matchF&&matchQ)?'':' hide'));
-  const lab = el('label','cb');
-  const cb = el('input'); cb.type='checkbox'; cb.checked=isChecked; cb.disabled=!state.editing;
-  cb.addEventListener('change',()=>onToggle(it.id,cb.checked));
-  lab.appendChild(cb);
-  const body = el('div','body');
-  body.appendChild(el('div','t','<span class="id">'+it.ref+'</span>'+it.t));
-  body.appendChild(el('span','badge b-'+es,SLABEL[es]));
-  const star = el('button','star'+(isPrio?' on':''),'🔥');
-  star.type='button';
-  star.title = state.prioEditing ? 'Prioriser / retirer' : 'Priorité (mode chef requis)';
-  star.setAttribute('aria-label','Priorité');
-  star.addEventListener('click',()=>onStar(it.id));
-  row.appendChild(lab); row.appendChild(body); row.appendChild(star);
-  return row;
-}
-
-// Section « Priorités du chef » — en haut, ce qu'il faut traiter d'abord.
-function renderPriorities(){
-  const host = $('#prioTop'); host.innerHTML='';
-  const ids = ITEMS.filter(it=>state.priorities.has(it.id));
-  if(!ids.length && !state.prioEditing) return;
-  const card = el('div','priocard');
-  const head = el('header');
-  head.appendChild(el('span','n','🔥'));
-  head.appendChild(el('h2',null,'Priorités du chef'));
-  head.appendChild(el('span','meta',ids.length+' à traiter d’abord'));
-  card.appendChild(head);
-  if(ids.length){ const box=el('div','items'); ids.forEach(it=>box.appendChild(makeRow(it,true))); card.appendChild(box); }
-  else{ card.appendChild(el('div','empty','Aucune priorité pour l’instant. En mode chef, clique sur 🔥 pour en ajouter.')); }
-  host.appendChild(card);
-}
-
-function onStar(id){
-  if(!state.prioEditing){ $('#savedMsg').textContent='Active « 🔥 Priorités (chef) » pour modifier'; return; }
-  if(state.priorities.has(id)) state.priorities.delete(id); else state.priorities.add(id);
-  render(); savePrio();
 }
 
 function updateKpi(){
@@ -472,81 +426,39 @@ function save(){
   },500);
 }
 
-function promptCode(mode){
-  state.pendingMode=mode;
-  const inp=$('#codeIn'); inp.style.display='inline-block'; inp.value='';
-  inp.placeholder = mode==='prio'?'Code chef':'Code'; inp.focus();
-  $('#savedMsg').textContent = mode==='prio' ? 'Entre le code chef puis Entrée' : 'Entre ton code puis Entrée';
-}
-function submitCode(){
-  const code=$('#codeIn').value.trim();
-  if(!/^\d{6}$/.test(code)){ $('#savedMsg').textContent='Code à 6 chiffres requis.'; return; }
-  $('#codeIn').style.display='none';
-  const m=state.pendingMode; state.pendingMode=null;
-  if(m==='prio') enterPrio(code); else enterEdit(code);
-}
-function enterEdit(code){
-  exitPrio();
+function enterEdit(){
+  const code = $('#codeIn').value.trim();
+  if(!/^\d{6}$/.test(code)){ $('#codeIn').style.display='inline-block'; $('#codeIn').focus(); $('#savedMsg').textContent='Entre ton code à 6 chiffres'; return; }
   state.code=code; state.editing=true;
-  $('#editBtn').textContent='Quitter l’édition';
-  $('#savedMsg').textContent='Mode édition — validations enregistrées automatiquement';
+  $('#editBtn').textContent='Quitter l’édition'; $('#editBtn').classList.add('ghost');
+  $('#codeIn').style.display='none';
+  $('#savedMsg').textContent='Mode édition — coches enregistrées automatiquement';
   render();
 }
 function exitEdit(){
-  if(!state.editing) return;
   state.editing=false; state.code=null;
-  $('#editBtn').textContent='Mode édition';
+  $('#editBtn').textContent='Mode édition'; $('#editBtn').classList.remove('ghost');
   render();
-}
-function enterPrio(code){
-  exitEdit();
-  state.prioCode=code; state.prioEditing=true;
-  $('#prioBtn').textContent='🔥 Quitter priorités';
-  $('#savedMsg').textContent='Mode chef — clique 🔥 pour prioriser (enregistré auto)';
-  render();
-}
-function exitPrio(){
-  if(!state.prioEditing) return;
-  state.prioEditing=false; state.prioCode=null;
-  $('#prioBtn').textContent='🔥 Priorités (chef)';
-  render();
-}
-
-let saveP=null;
-function savePrio(){
-  clearTimeout(saveP);
-  $('#savedMsg').textContent='Enregistrement des priorités…';
-  saveP=setTimeout(async()=>{
-    try{
-      const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({prio_code:state.prioCode, priorities:[...state.priorities]})});
-      if(r.status===403) throw new Error('Code chef incorrect');
-      if(!r.ok) throw new Error('Erreur '+r.status);
-      const d=await r.json();
-      const h=new Date(d.updated_at||Date.now()).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
-      $('#savedMsg').innerHTML='<b>Priorités enregistrées ✓</b> '+h;
-    }catch(e){ $('#savedMsg').textContent=e.message; if(e.message==='Code chef incorrect') exitPrio(); }
-  },500);
 }
 
 async function load(){
   const known = new Set(ITEMS.map(i=>i.id));
+  // Base : les lignes « Fait » sont cochées d'office.
   state.checked = {};
-  ITEMS.forEach(it=>{ if(it.s==='done') state.checked[it.id]=true; });   // « Fait » coché d'office
+  ITEMS.forEach(it=>{ if(it.s==='done') state.checked[it.id]=true; });
   try{
     const r = await fetch(API); const d = await r.json();
+    // On ajoute les validations enregistrées (clés connues de CE tracker).
     Object.keys(d.checked||{}).forEach(k=>{ if(known.has(k)) state.checked[k]=true; });
-    state.priorities = new Set((d.priorities||[]).filter(k=>known.has(k)));
-    if(d.updated_at){ const h=new Date(d.updated_at).toLocaleDateString('fr-FR'); $('#savedMsg').textContent='Dernière mise à jour : '+h; }
+    if(d.updated_at){ const h=new Date(d.updated_at).toLocaleDateString('fr-FR'); $('#savedMsg').textContent='Dernière validation : '+h; }
   }catch(e){ $('#savedMsg').textContent='Hors ligne (lecture locale)'; }
   renderAuditStats();
   render();
 }
 
 // Contrôles
-$('#editBtn').addEventListener('click',()=>{ state.editing?exitEdit():promptCode('owner'); });
-$('#prioBtn').addEventListener('click',()=>{ state.prioEditing?exitPrio():promptCode('prio'); });
-$('#codeIn').addEventListener('keydown',e=>{ if(e.key==='Enter') submitCode(); });
+$('#editBtn').addEventListener('click',()=>{ state.editing?exitEdit():enterEdit(); });
+$('#codeIn').addEventListener('keydown',e=>{ if(e.key==='Enter') enterEdit(); });
 $('#search').addEventListener('input',e=>{ state.q=e.target.value; render(); });
 document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
   document.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed','false'));
