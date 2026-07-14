@@ -7,11 +7,6 @@ import './index.css'
 import './lang/i18n.js'
 import App from './App.jsx'
 
-// Désactive la restauration native du scroll (le navigateur ne repositionne plus au refresh)
-if ('scrollRestoration' in window.history) {
-  window.history.scrollRestoration = 'manual'
-}
-
 // #2 — Bouton Retour Android synchronisé avec React Router
 import { App as CapApp } from '@capacitor/app'
 CapApp.addListener('backButton', ({ canGoBack }) => {
