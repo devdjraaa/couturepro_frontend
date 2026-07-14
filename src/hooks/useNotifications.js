@@ -83,3 +83,27 @@ export function useMarquerToutesLues() {
     try { await api.post('/notifications/mark-as-read', { all: true }) } catch { /* offline */ }
   })
 }
+
+export function useSupprimerNotif() {
+  return useMutation(async (id) => {
+    try {
+      await database.write(async () => {
+        const record = await database.get('notifications').find(id)
+        await record.destroyPermanently()
+      })
+    } catch { /* absente en local */ }
+    try { await api.post('/notifications/delete', { ids: [id] }) } catch { /* offline */ }
+  })
+}
+
+export function useToutSupprimer() {
+  return useMutation(async () => {
+    try {
+      await database.write(async () => {
+        const all = await database.get('notifications').query().fetch()
+        await database.batch(...all.map(n => n.prepareDestroyPermanently()))
+      })
+    } catch { /* rien */ }
+    try { await api.post('/notifications/delete', { all: true }) } catch { /* offline */ }
+  })
+}

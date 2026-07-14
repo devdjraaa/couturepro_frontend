@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Bell, Package, CreditCard, AlertCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useNotifications, useMarquerLue, useMarquerToutesLues, reconcileNotifications } from '@/hooks/useNotifications'
+import { useNotifications, useMarquerLue, useMarquerToutesLues, useSupprimerNotif, useToutSupprimer, reconcileNotifications } from '@/hooks/useNotifications'
 import { AppLayout } from '@/components/layout'
 import { NotificationItem } from '@/components/notifications'
 import { Skeleton, EmptyState } from '@/components/ui'
@@ -77,6 +77,8 @@ export default function NotificationsPage() {
   const { data: notifications = [], isLoading } = useNotifications()
   const marquerLue       = useMarquerLue()
   const marquerToutesLues = useMarquerToutesLues()
+  const supprimerNotif   = useSupprimerNotif()
+  const toutSupprimer    = useToutSupprimer()
 
   // Au chargement : purge les notifications orphelines (absentes du serveur).
   useEffect(() => { reconcileNotifications() }, [])
@@ -87,21 +89,42 @@ export default function NotificationsPage() {
   }, [notifications, category])
 
   const groups  = useMemo(() => groupByDay(filtered), [filtered])
-  const nonLues = notifications.filter(n => !n.lu).length
+  const nonLues = notifications.filter(n => !(n.is_read ?? n.lu)).length
+
+  const confirmerToutEffacer = () => {
+    if (notifications.length === 0) return
+    if (window.confirm(t('notifications.confirm_tout_effacer'))) toutSupprimer.mutate()
+  }
+  const confirmerSuppr = (notif) => {
+    if (window.confirm(t('notifications.confirm_supprimer'))) supprimerNotif.mutate(notif.id)
+  }
 
   return (
     <AppLayout
       title={t('notifications.titre')}
       showBack
       rightAction={
-        nonLues > 0 ? (
-          <button
-            type="button"
-            onClick={() => marquerToutesLues.mutate()}
-            className="text-xs font-medium text-inverse/80 hover:text-inverse px-2 py-1"
-          >
-            {t('notifications.tout_lire')}
-          </button>
+        (nonLues > 0 || notifications.length > 0) ? (
+          <div className="flex items-center gap-1">
+            {nonLues > 0 && (
+              <button
+                type="button"
+                onClick={() => marquerToutesLues.mutate()}
+                className="text-xs font-medium text-inverse/80 hover:text-inverse px-2 py-1"
+              >
+                {t('notifications.tout_lire')}
+              </button>
+            )}
+            {notifications.length > 0 && (
+              <button
+                type="button"
+                onClick={confirmerToutEffacer}
+                className="text-xs font-medium text-inverse/80 hover:text-inverse px-2 py-1"
+              >
+                {t('notifications.tout_effacer')}
+              </button>
+            )}
+          </div>
         ) : null
       }
     >
@@ -138,6 +161,7 @@ export default function NotificationsPage() {
                       if (!notif.is_read) marquerLue.mutate(notif.id)
                       if (notif.lien) navigate(notif.lien)
                     }}
+                    onDelete={confirmerSuppr}
                   />
                 ))}
               </div>

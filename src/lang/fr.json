@@ -1001,6 +1001,9 @@
       "alerte_archive": "Archive"
     },
     "tout_lire": "Tout lire",
+    "tout_effacer": "Tout effacer",
+    "confirm_tout_effacer": "Supprimer toutes les notifications ?",
+    "confirm_supprimer": "Supprimer cette notification ?",
     "vide_categorie": "Aucune notification dans cette catégorie.",
     "cat": {
       "toutes": "Toutes",

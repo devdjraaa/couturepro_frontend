@@ -76,7 +76,7 @@ export async function showLocalNotif(title, body, extra = {}) {
  *
  * @param {Array} notifs — enregistrements { titre, contenu, lien, date_creation, is_read }
  */
-export async function raiseSystemNotifications(notifs) {
+export async function raiseSystemNotifications(notifs, { silent = false } = {}) {
   if (!Capacitor.isNativePlatform() || !Array.isArray(notifs) || !notifs.length) return []
 
   const ids = notifs.map(n => n.id).filter(Boolean)
@@ -99,7 +99,9 @@ export async function raiseSystemNotifications(notifs) {
   const fresh = notifs.filter(n => n.id && !n.is_read && !notified.has(n.id)).slice(0, 5)
 
   for (const n of fresh) {
-    await showLocalNotif(n.titre || 'Gextimo', n.contenu || '', { lien: n.lien || null })
+    // silent : le rideau natif est déjà alimenté par le push FCM (temps réel) →
+    // on ne refait PAS de notification native au sync (évitait le doublon + les ~30 s).
+    if (!silent) await showLocalNotif(n.titre || 'Gextimo', n.contenu || '', { lien: n.lien || null })
     notified.add(n.id)
   }
 

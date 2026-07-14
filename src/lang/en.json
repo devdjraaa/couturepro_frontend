@@ -1001,6 +1001,9 @@
       "alerte_archive": "Archive"
     },
     "tout_lire": "Mark all read",
+    "tout_effacer": "Clear all",
+    "confirm_tout_effacer": "Delete all notifications?",
+    "confirm_supprimer": "Delete this notification?",
     "vide_categorie": "No notifications in this category.",
     "cat": {
       "toutes": "All",

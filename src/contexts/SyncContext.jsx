@@ -96,7 +96,9 @@ export function SyncProvider({ children }) {
         // Rideau + pop in-app pour les notifications système nouvellement arrivées
         // (remplace le push FCM ; suivi par IDs pour ne signaler que les nouvelles).
         const notifs = await database.get('notifications').query().fetch()
-        const fresh = await raiseSystemNotifications(notifs)
+        // silent : la notification native (rideau) arrive en TEMPS RÉEL via FCM.
+        // Ici on ne détecte que les nouvelles pour la bannière in-app (app au 1er plan).
+        const fresh = await raiseSystemNotifications(notifs, { silent: true })
         if (fresh.length && (typeof document === 'undefined' || document.visibilityState === 'visible')) {
           notifierInApp(fresh)
         }
