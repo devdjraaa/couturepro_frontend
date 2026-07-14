@@ -29,6 +29,20 @@ export async function initPush() {
     }
     if (perm.receive !== 'granted') return
 
+    // Canal haute importance (heads-up) référencé par les push FCM (channel_id côté serveur).
+    try {
+      await PushNotifications.createChannel({
+        id: 'gextimo_push',
+        name: 'Alertes Gextimo',
+        description: 'Commandes, paiements, devis, avis…',
+        importance: 5,   // MAX → apparaît par-dessus (heads-up) + son
+        visibility: 1,
+        sound: 'default',
+        vibration: true,
+        lights: true,
+      })
+    } catch { /* canal déjà présent / indisponible */ }
+
     PushNotifications.addListener('registration', (token) => {
       lastToken = token?.value || null
       registerPushToken()

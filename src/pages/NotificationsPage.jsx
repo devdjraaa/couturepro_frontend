@@ -105,32 +105,30 @@ export default function NotificationsPage() {
     <AppLayout
       title={t('notifications.titre')}
       showBack
-      rightAction={
-        (nonLues > 0 || notifications.length > 0) ? (
-          <div className="flex items-center gap-1">
-            {nonLues > 0 && (
-              <button
-                type="button"
-                onClick={() => marquerToutesLues.mutate()}
-                className="text-xs font-medium text-inverse/80 hover:text-inverse px-2 py-1"
-              >
-                {t('notifications.tout_lire')}
-              </button>
-            )}
-            {notifications.length > 0 && (
-              <button
-                type="button"
-                onClick={confirmerToutEffacer}
-                className="text-xs font-medium text-inverse/80 hover:text-inverse px-2 py-1"
-              >
-                {t('notifications.tout_effacer')}
-              </button>
-            )}
-          </div>
-        ) : null
-      }
     >
       <CategoryChips active={category} onChange={setCategory} />
+
+      {/* Actions groupées — dans la page (plus dans le header, pour ne pas l'encombrer). */}
+      {notifications.length > 0 && (
+        <div className="flex items-center justify-end gap-4 px-4 pt-2 pb-1">
+          {nonLues > 0 && (
+            <button
+              type="button"
+              onClick={() => marquerToutesLues.mutate()}
+              className="text-xs font-semibold text-primary hover:underline"
+            >
+              {t('notifications.tout_lire')}
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={confirmerToutEffacer}
+            className="text-xs font-semibold text-danger hover:underline"
+          >
+            {t('notifications.tout_effacer')}
+          </button>
+        </div>
+      )}
 
       {isLoading ? (
         <div className="p-4 space-y-2">
