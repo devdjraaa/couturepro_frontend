@@ -1002,6 +1002,7 @@
     },
     "tout_lire": "Mark all read",
     "tout_effacer": "Clear all",
+    "ouvrir": "Open",
     "confirm_tout_effacer": "Delete all notifications?",
     "confirm_supprimer": "Delete this notification?",
     "vide_categorie": "No notifications in this category.",

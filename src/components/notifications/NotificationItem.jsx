@@ -1,4 +1,4 @@
-import { Bell, Package, CreditCard, Star, AlertCircle, Trash2 } from 'lucide-react'
+import { Bell, Package, CreditCard, Star, AlertCircle, Trash2, Check } from 'lucide-react'
 import { cn } from '@/utils/cn'
 import { formatRelative } from '@/utils/formatDate'
 
@@ -9,7 +9,7 @@ const TYPE_CONFIG = {
   systeme:    { icon: AlertCircle, className: 'bg-warning/10 text-warning'    },
 }
 
-export default function NotificationItem({ notification, onPress, onDelete }) {
+export default function NotificationItem({ notification, onPress, onDelete, onMarkRead }) {
   const config = TYPE_CONFIG[notification.type] ?? { icon: Bell, className: 'bg-subtle text-dim' }
   const Icon = config.icon
   const lu = notification.is_read ?? notification.lu
@@ -29,22 +29,37 @@ export default function NotificationItem({ notification, onPress, onDelete }) {
             {notification.titre}
           </p>
           {notification.contenu && (
-            <p className="text-xs text-dim leading-snug mt-0.5">{notification.contenu}</p>
+            <p className="text-xs text-dim leading-snug mt-0.5 line-clamp-2">{notification.contenu}</p>
           )}
           <p className="text-xs text-ghost mt-0.5">{formatRelative(notification.created_at)}</p>
         </div>
         {!lu && <div className="w-2 h-2 bg-primary rounded-full shrink-0 mt-2" />}
       </button>
-      {onDelete && (
-        <button
-          type="button"
-          onClick={(e) => { e.stopPropagation(); onDelete(notification) }}
-          className="px-3 flex items-center text-ghost hover:text-danger transition-colors shrink-0"
-          aria-label="Supprimer la notification"
-        >
-          <Trash2 size={16} />
-        </button>
-      )}
+
+      <div className="flex items-center shrink-0">
+        {!lu && onMarkRead && (
+          <button
+            type="button"
+            onClick={(e) => { e.stopPropagation(); onMarkRead(notification) }}
+            className="px-2.5 h-full flex items-center text-ghost hover:text-success transition-colors"
+            aria-label="Marquer comme lu"
+            title="Marquer comme lu"
+          >
+            <Check size={17} />
+          </button>
+        )}
+        {onDelete && (
+          <button
+            type="button"
+            onClick={(e) => { e.stopPropagation(); onDelete(notification) }}
+            className="px-2.5 h-full flex items-center text-ghost hover:text-danger transition-colors"
+            aria-label="Supprimer la notification"
+            title="Supprimer"
+          >
+            <Trash2 size={16} />
+          </button>
+        )}
+      </div>
     </div>
   )
 }

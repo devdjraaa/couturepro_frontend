@@ -7,6 +7,7 @@ import { AppLayout } from '@/components/layout'
 import { NotificationItem } from '@/components/notifications'
 import { Skeleton, EmptyState } from '@/components/ui'
 import { cn } from '@/utils/cn'
+import { formatRelative } from '@/utils/formatDate'
 
 // ── Catégories (libellés résolus via i18n : notifications.cat.<key>) ────────────
 const CATEGORIES = [
@@ -73,6 +74,7 @@ export default function NotificationsPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [category, setCategory] = useState('toutes')
+  const [selected, setSelected] = useState(null)   // notif ouverte en popup (lecture complète)
 
   const { data: notifications = [], isLoading } = useNotifications()
   const marquerLue       = useMarquerLue()
@@ -159,14 +161,52 @@ export default function NotificationsPage() {
                     notification={n}
                     onPress={notif => {
                       if (!notif.is_read) marquerLue.mutate(notif.id)
-                      if (notif.lien) navigate(notif.lien)
+                      setSelected(notif)          // ouvre le popup pour lire tout le contenu
                     }}
+                    onMarkRead={notif => marquerLue.mutate(notif.id)}
                     onDelete={confirmerSuppr}
                   />
                 ))}
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Popup lecture complète (utile pour les longs messages de l'admin) */}
+      {selected && (
+        <div
+          className="fixed inset-0 z-[90] flex items-end sm:items-center justify-center bg-black/50 p-4"
+          onClick={() => setSelected(null)}
+        >
+          <div
+            className="w-full max-w-md bg-card rounded-2xl shadow-xl p-5 max-h-[80vh] flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-base font-bold text-ink font-display leading-snug">{selected.titre}</h3>
+            <p className="text-xs text-ghost mt-0.5 mb-3">{formatRelative(selected.created_at)}</p>
+            {selected.contenu && (
+              <div className="text-sm text-dim whitespace-pre-line overflow-y-auto flex-1">{selected.contenu}</div>
+            )}
+            <div className="flex gap-2 mt-4">
+              {selected.lien && (
+                <button
+                  type="button"
+                  onClick={() => { const l = selected.lien; setSelected(null); navigate(l) }}
+                  className="flex-1 px-4 py-2.5 rounded-xl bg-primary text-white font-semibold text-sm hover:bg-primary-600 transition"
+                >
+                  {t('notifications.ouvrir')}
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => setSelected(null)}
+                className={cn('px-4 py-2.5 rounded-xl bg-subtle text-ink font-semibold text-sm hover:bg-edge transition', selected.lien ? '' : 'flex-1')}
+              >
+                {t('commun.fermer')}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </AppLayout>
