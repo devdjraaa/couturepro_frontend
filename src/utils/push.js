@@ -6,6 +6,7 @@
 import { IS_NATIVE } from '@/constants/routes'
 import api from '@/services/api'
 import { goToDeepLink } from './deepLink'
+import { showLocalNotif } from './localNotif'
 
 let started = false
 let lastToken = null
@@ -33,6 +34,15 @@ export async function initPush() {
       registerPushToken()
     })
     PushNotifications.addListener('registrationError', () => { /* silencieux */ })
+
+    // Push reçue app OUVERTE (premier plan) : Android ne l'affiche pas seul →
+    // on la montre nous-mêmes dans le rideau (via notif locale).
+    PushNotifications.addListener('pushNotificationReceived', (notif) => {
+      const title = notif?.title || notif?.data?.title || 'Gextimo'
+      const body  = notif?.body  || notif?.data?.body  || ''
+      const lien  = notif?.data?.lien || null
+      showLocalNotif(title, body, { lien })
+    })
 
     // Tap sur une push (app en arrière-plan/fermée) → deep-link vers l'écran lié.
     PushNotifications.addListener('pushNotificationActionPerformed', (action) => {
