@@ -186,7 +186,7 @@ export default function VitrineHome() {
             </path>
 
             {/* Ruban or moyen — haut-gauche → bas-droit, 22 s, amplitude ×2.5 */}
-            <path fill="url(#vt-rb2)" filter="url(#vt-soft)" opacity="0.48"
+            <path fill="url(#vt-rb2)" filter="url(#vt-soft)" opacity="0.48" style={{ mixBlendMode: 'screen' }}
               d="M 0,45 C 300,165 600,295 900,380 C 1050,422 1150,462 1220,472 L 1220,548 C 1150,534 1050,496 900,450 C 600,358 300,225 0,118 Z">
               {!prm && <animate attributeName="d" dur="22s" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45,0,.55,1;.45,0,.55,1" repeatCount="indefinite"
                 values="M 0,45 C 300,165 600,295 900,380 C 1050,422 1150,462 1220,472 L 1220,548 C 1150,534 1050,496 900,450 C 600,358 300,225 0,118 Z;M 0,105 C 300,125 600,315 900,330 C 1050,368 1150,412 1220,422 L 1220,500 C 1150,490 1050,448 900,398 C 600,302 300,188 0,178 Z;M 0,45 C 300,165 600,295 900,380 C 1050,422 1150,462 1220,472 L 1220,548 C 1150,534 1050,496 900,450 C 600,358 300,225 0,118 Z" />}
@@ -211,6 +211,9 @@ export default function VitrineHome() {
 
           {/* Couche 6 — Grain film statique */}
           <div className="vt-hero-grain" />
+
+          {/* Couche 7 — Voile lamé : micro-points or screen */}
+          <div className="vt-hero-lame" />
         </div>
 
         <div className="vt-stagger max-w-[1180px] mx-auto px-5 relative">

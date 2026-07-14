@@ -187,6 +187,7 @@ export default function CreateurProfilPage() {
   const [devisOpen, setDevisOpen] = useState(false)
 
   useEffect(() => { getCreator(slug).then((d) => setC(d ?? null)) }, [slug])
+  useEffect(() => { window.scrollTo(0, 0) }, [slug])
   useEffect(() => { if (c && c.id) vitrineStatsService.track(c.id, 'visite') }, [c?.id])
 
   useEffect(() => {

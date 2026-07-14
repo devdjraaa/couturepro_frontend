@@ -23,7 +23,7 @@ export function VitrineLogo({ onDark = false }) {
         <circle className="vt-logo-dot" cx="50" cy="50" r="8" fill="var(--color-primary)" />
       </svg>
       <span className={`font-display font-extrabold text-[22px] tracking-tight ${onDark ? 'text-inverse' : 'text-ink'}`}>
-        gextimo<span className="text-primary">.</span>
+        gextimo
       </span>
     </span>
   )

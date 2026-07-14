@@ -647,9 +647,9 @@ body {
     transparent              360deg
   );
   filter: blur(110px);
-  opacity: 0.16;
+  opacity: 0.08;
   /* rotate + breathe combinés : évite le conflit de transform */
-  animation: vt-mesh-anim 100s linear infinite;
+  animation: vt-mesh-anim 140s linear infinite;
   will-change: transform;
 }
 
@@ -675,7 +675,7 @@ body {
   );
   filter: blur(18px);
   animation:
-    vt-spot-sweep 24s ease-in-out infinite alternate,
+    vt-spot-sweep 34s ease-in-out infinite alternate,
     vt-spot-pulse 10s ease-in-out infinite;
   will-change: transform, opacity;
 }
@@ -714,7 +714,17 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%220.9%22%20numOctaves%3D%224%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20filter%3D%22url(%23g)%22%2F%3E%3C%2Fsvg%3E");
   background-repeat: repeat;
   mix-blend-mode: overlay;
-  opacity: 0.030;
+  opacity: 0.025;
+}
+
+/* Couche 7 — Voile lamé : micro-points or, mix-blend-mode screen */
+.vt-hero-lame {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2260%22%20height%3D%2260%22%3E%3Ccircle%20cx%3D%2210%22%20cy%3D%2215%22%20r%3D%220.7%22%20fill%3D%22%23CDA662%22%2F%3E%3Ccircle%20cx%3D%2235%22%20cy%3D%228%22%20r%3D%220.5%22%20fill%3D%22%23CDA662%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2240%22%20r%3D%220.7%22%20fill%3D%22%23CDA662%22%2F%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%2250%22%20r%3D%220.5%22%20fill%3D%22%23CDA662%22%2F%3E%3Ccircle%20cx%3D%2248%22%20cy%3D%2222%22%20r%3D%220.6%22%20fill%3D%22%23CDA662%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: repeat;
+  mix-blend-mode: screen;
+  opacity: 0.04;
 }
 
 /* ── Keyframes ── */
@@ -736,8 +746,8 @@ body {
 
 /* Balayage horizontal du spotlight */
 @keyframes vt-spot-sweep {
-  from { transform: translateX(-35vw) rotate(-6deg); }
-  to   { transform: translateX(35vw)  rotate(6deg); }
+  from { transform: translateX(0)    rotate(-6deg); }
+  to   { transform: translateX(60vw) rotate(6deg); }
 }
 
 /* Pulsation du spotlight */
@@ -852,6 +862,7 @@ body {
   .vt-hero-spotlight{ animation: none !important; transform: none !important; }
   .vt-hero-glows    { animation: none !important; }
   .vt-hero-shimmer  { display: none; }
+  .vt-hero-lame     { display: none; }
   .vt-foot-mesh     { animation: none !important; }
   .vt-foot-glows    { animation: none !important; }
   .vt-foot-shimmer  { display: none; }
