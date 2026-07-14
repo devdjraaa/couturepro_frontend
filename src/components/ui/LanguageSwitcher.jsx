@@ -18,18 +18,19 @@ export default function LanguageSwitcher({ variant = 'pills' }) {
     )
   }
 
-  // Compact badge: affiche la langue cible (cliquer = basculer)
+  // Compact badge: affiche la langue COURANTE (cliquer = basculer vers l'autre)
   if (variant === 'badge') {
-    const other = languesDispo.find(l => l.code !== langue) ?? languesDispo[0]
+    const current = languesDispo.find(l => l.code === langue) ?? languesDispo[0]
+    const other   = languesDispo.find(l => l.code !== langue) ?? languesDispo[0]
     return (
       <button
         type="button"
         onClick={() => setLangue(other.code)}
         className="flex items-center gap-1 text-xs font-semibold text-dim hover:text-ink bg-subtle hover:bg-edge px-2 py-1 rounded-lg transition-all duration-150 active:scale-90"
-        title={other.label}
+        title={`Passer en ${other.label}`}
       >
-        <span>{other.flag}</span>
-        <span>{other.code.toUpperCase()}</span>
+        <span>{current.flag}</span>
+        <span>{langue.toUpperCase()}</span>
       </button>
     )
   }
