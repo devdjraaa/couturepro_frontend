@@ -193,7 +193,7 @@ export function ProtectionDonneesPage() {
 }
 
 export function CguPage() {
-  return <LegalPage ns="cgu" path="/cgu" />
+  return <RichLegalPage ns="cgu" path="/cgu" />
 }
 
 export function DroitsCreateursPage() {

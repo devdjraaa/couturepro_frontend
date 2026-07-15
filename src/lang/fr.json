@@ -2477,40 +2477,170 @@
       "cgu": {
         "title": "Conditions Générales d'Utilisation",
         "eyebrow": "CGU",
-        "subtitle": "Les règles qui régissent l'utilisation de la plateforme Gextimo.",
-        "date": "Dernière mise à jour : juillet 2026",
-        "sections": [
+        "subtitle": "Application : GEXTIMO | Éditeur : NOVAFRIQ, SASU",
+        "meta_lines": [
+          "Date d'entrée en vigueur : [DATE — à compléter]"
+        ],
+        "version": "Version 4.0 — Établies selon le droit béninois et le droit OHADA.",
+        "articles": [
           {
-            "h": "Article 1 — Objet",
-            "p": "Les présentes Conditions Générales d'Utilisation (CGU) ont pour objet de définir les modalités et conditions d'utilisation de la plateforme Gextimo, accessible à l'adresse gextimo.com, et les droits et obligations des utilisateurs."
+            "title": "ARTICLE 1 — OBJET ET PRÉSENTATION DU SERVICE",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Ces conditions (CGU) fixent les règles d'utilisation de GEXTIMO, le marketplace de mode africaine édité par NOVAFRIQ. GEXTIMO connecte créateurs, artisans et stylistes avec leurs clients à travers une vitrine en ligne (gextimo.novafriq.africa) et une application mobile."
+              },
+              {
+                "type": "p",
+                "t": "Sur GEXTIMO, les designers et stylistes exposent leurs collections. Les paiements transitent par FedaPay, agrégateur de paiement agréé : NOVAFRIQ ne détient jamais les fonds des clients. FedaPay encaisse pour le compte du créateur, NOVAFRIQ prélève sa commission, puis FedaPay reverse le solde au créateur. L'accès de base est gratuit ; les fonctions avancées sont en abonnement."
+              },
+              {
+                "type": "box",
+                "title": "À noter — Mode de lancement",
+                "t": "Au lancement, GEXTIMO fonctionne en mode mise en relation. Le paiement en ligne, la commission et le reversement via FedaPay ne sont pas encore actifs : les paiements se règlent directement entre le client et le créateur, hors plateforme. Ces fonctionnalités seront activées plus tard, avec un préavis de 30 jours. Dès leur activation, les Conditions de vente & commissions (Document 9) et la politique Livraison, retours & remboursements (Document 16) s'appliquent automatiquement. Tant que le paiement n'est pas actif, nous ne collectons ni vos données de paiement ni vos coordonnées de reversement."
+              }
+            ]
           },
           {
-            "h": "Article 2 — Accès à la plateforme",
-            "p": "L'accès à certaines fonctionnalités de la plateforme nécessite la création d'un compte. L'utilisateur doit être âgé d'au moins 18 ans et fournir des informations exactes lors de son inscription."
+            "title": "ARTICLE 2 — ACCEPTATION DES CGU",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "En créant un compte ou en utilisant l'application, vous acceptez ces CGU. Si nous les modifions de façon importante, nous vous prévenons 30 jours avant."
+              }
+            ]
           },
           {
-            "h": "Article 3 — Obligations des utilisateurs",
-            "p": "Les utilisateurs s'engagent à utiliser la plateforme de manière licite, à ne pas usurper l'identité d'un tiers, à ne pas diffuser de contenus illicites ou portant atteinte aux droits de tiers, et à respecter la propriété intellectuelle des créateurs."
+            "title": "ARTICLE 3 — ACCÈS ET COMPTE UTILISATEUR",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Pour accéder à GEXTIMO, vous créez un compte avec des informations exactes. Vous gardez vos identifiants secrets et répondez de tout ce qui se passe sur votre compte."
+              },
+              {
+                "type": "p",
+                "t": "Nous garantissons une disponibilité de 99 % par mois calendaire, hors maintenances planifiées annoncées 48 h à l'avance."
+              }
+            ]
           },
           {
-            "h": "Article 4 — Responsabilité de Gextimo",
-            "p": "Gextimo est une plateforme de mise en relation entre créateurs et clients. Nous ne sommes pas partie aux contrats conclus entre utilisateurs. La responsabilité de Gextimo est limitée aux obligations de moyens concernant la disponibilité de la plateforme."
+            "title": "ARTICLE 4 — OFFRES ET CONDITIONS TARIFAIRES",
+            "blocks": [
+              {
+                "type": "table",
+                "headers": [
+                  "Formule",
+                  "Commission sur les ventes",
+                  "Abonnement mensuel"
+                ],
+                "rows": [
+                  [
+                    "Gratuite (Découverte)",
+                    "15 % sur chaque vente réalisée via GEXTIMO (applicable dès l'activation du paiement en ligne)",
+                    "0 FCFA"
+                  ],
+                  [
+                    "Standard",
+                    "0 % — aucune commission sur les ventes",
+                    "Tarif affiché dans l'application"
+                  ],
+                  [
+                    "Premium",
+                    "0 % — aucune commission sur les ventes",
+                    "Tarif affiché dans l'application"
+                  ]
+                ]
+              },
+              {
+                "type": "p",
+                "t": "La commission appliquée aux ventes en formule Gratuite est de 15 % du prix de vente. Aucune commission n'est prélevée sur les ventes des créateurs disposant d'un abonnement actif (Standard ou Premium). Cette commission s'applique à compter de l'activation du paiement en ligne."
+              },
+              {
+                "type": "p",
+                "t": "Les tarifs d'abonnement en vigueur sont affichés dans l'application GEXTIMO, à la souscription, et constituent la référence contractuelle opposable. Tout changement de tarif est communiqué à l'utilisateur avec un préavis de 30 jours."
+              },
+              {
+                "type": "p",
+                "t": "Les tarifs peuvent varier selon le pays de résidence de l'utilisateur. Le tarif applicable est celui affiché dans l'application au moment de la souscription, en devise locale ou en FCFA selon la région."
+              },
+              {
+                "type": "p",
+                "t": "Moyens de paiement acceptés : Mobile Money (MTN, Moov, Celtiis) et cartes bancaires, via FedaPay."
+              }
+            ]
           },
           {
-            "h": "Article 5 — Propriété intellectuelle",
-            "p": "Le contenu de la plateforme (hors créations des artisans) est la propriété exclusive de NovAfriq. Toute reproduction, représentation ou diffusion sans autorisation préalable est interdite."
+            "title": "ARTICLE 5 — DONNÉES DES UTILISATEURS PROFESSIONNELS",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Les données que vous saisissez dans GEXTIMO — inventaires, clients, commandes, stocks, créations — vous appartiennent. NOVAFRIQ n'en devient jamais propriétaire et ne s'en sert que pour faire fonctionner le service."
+              },
+              {
+                "type": "p",
+                "t": "Vous pouvez exporter vos données à tout moment : au format CSV (données de compte et commandes) et PDF (documents contractuels), depuis votre espace personnel ou sur demande à dpo@novafriq.africa. Si vous résiliez, nous les gardons 90 jours, puis nous les supprimons définitivement."
+              }
+            ]
           },
           {
-            "h": "Article 6 — Suspension et résiliation",
-            "p": "Gextimo se réserve le droit de suspendre ou de supprimer tout compte en cas de violation des présentes CGU, sans préavis ni indemnité. L'utilisateur peut clôturer son compte à tout moment depuis ses paramètres."
+            "title": "ARTICLE 6 — OBLIGATIONS DE L'UTILISATEUR",
+            "blocks": [
+              {
+                "type": "list",
+                "items": [
+                  "Donner des informations exactes et à jour",
+                  "Utiliser GEXTIMO normalement et selon ces CGU",
+                  "Ne pas contourner la sécurité",
+                  "Ne pas utiliser l'application pour des activités illégales",
+                  "Signaler tout de suite un problème de sécurité",
+                  "Ne pas reproduire, copier ou utiliser sans autorisation les créations des autres utilisateurs"
+                ]
+              }
+            ]
           },
           {
-            "h": "Article 7 — Modifications",
-            "p": "Gextimo peut modifier les présentes CGU à tout moment. Les utilisateurs seront informés des modifications substantielles par e-mail ou notification sur la plateforme. La poursuite de l'utilisation vaut acceptation des nouvelles conditions."
+            "title": "ARTICLE 7 — PROPRIÉTÉ INTELLECTUELLE",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "GEXTIMO — son code, ses algorithmes, son design — appartient à NOVAFRIQ. Toute copie ou exploitation sans accord écrit est interdite. Pour les contenus des créateurs (photos, collections, modèles), voir Document 8 — Droits des créateurs & propriété intellectuelle."
+              }
+            ]
           },
           {
-            "h": "Article 8 — Droit applicable",
-            "p": "Les présentes CGU sont soumises au droit béninois. En cas de litige, les parties s'engagent à rechercher une solution amiable avant tout recours judiciaire."
+            "title": "ARTICLE 8 — RESPONSABILITÉ ET LIMITATION DE GARANTIE",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Nous fournissons le service avec sérieux. Notre responsabilité totale ne peut pas dépasser ce que vous avez payé durant les 12 mois précédant le problème."
+              },
+              {
+                "type": "p",
+                "t": "Nous ne sommes pas responsables des dommages indirects, des pertes d'exploitation, ni des décisions que vous prenez à partir des informations de l'application."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 9 — RÉSILIATION",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Vous pouvez résilier votre compte à tout moment depuis les paramètres. Nous pouvons suspendre ou fermer un compte en cas de non-respect des CGU, de fraude, de violation des droits des créateurs, ou de non-paiement répété."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 10 — DROIT APPLICABLE ET RÈGLEMENT DES LITIGES",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Ces CGU suivent le droit béninois et le droit OHADA. En cas de litige, nous cherchons d'abord une solution à l'amiable sous 30 jours. Sinon, le Tribunal de Commerce de Cotonou est seul compétent."
+              },
+              {
+                "type": "p",
+                "t": "Contact : support@novafriq.africa | gextimo.novafriq.africa | Quartier Agblangandan, Sèmè-Podji, Bénin"
+              }
+            ]
           }
         ]
       },
