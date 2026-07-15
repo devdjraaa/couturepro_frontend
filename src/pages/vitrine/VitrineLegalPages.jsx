@@ -185,7 +185,7 @@ export function MentionsLegalesPage() {
 }
 
 export function CookiesPage() {
-  return <LegalPage ns="cookies" path="/cookies" />
+  return <RichLegalPage ns="cookies" path="/cookies" />
 }
 
 export function ProtectionDonneesPage() {

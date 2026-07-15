@@ -2258,34 +2258,155 @@
         ]
       },
       "cookies": {
-        "title": "Politique de cookies",
+        "title": "Politique de gestion des cookies",
         "eyebrow": "Cookies & Traceurs",
-        "subtitle": "Comprendre comment Gextimo utilise les cookies pour améliorer votre expérience.",
-        "date": "Dernière mise à jour : juillet 2026",
-        "sections": [
+        "subtitle": "Application : GEXTIMO | Éditeur : NOVAFRIQ, SASU",
+        "meta_lines": [
+          "Date de mise à jour : [DATE — à compléter]"
+        ],
+        "version": "Version 4.0 — Établie selon la Loi n° 2017-20 portant Code du Numérique en République du Bénin.",
+        "articles": [
           {
-            "h": "Qu'est-ce qu'un cookie ?",
-            "p": "Un cookie est un petit fichier texte déposé sur votre terminal (ordinateur, smartphone) lors de votre visite sur notre site. Il nous permet de mémoriser vos préférences et d'améliorer votre expérience de navigation."
+            "title": "ARTICLE 1 — QU'EST-CE QU'UN COOKIE ?",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Un cookie est un petit fichier texte déposé sur votre appareil (téléphone, ordinateur, tablette) lorsque vous utilisez GEXTIMO. Il permet à l'application de vous reconnaître, de mémoriser vos préférences et de mesurer l'utilisation du service."
+              },
+              {
+                "type": "p",
+                "t": "Les traceurs désignent l'ensemble des technologies similaires aux cookies : pixels de suivi, identifiants d'appareil, stockage local."
+              }
+            ]
           },
           {
-            "h": "Cookies strictement nécessaires",
-            "p": "Ces cookies sont indispensables au fonctionnement de la plateforme : authentification, panier, préférences de langue et de devise. Ils ne peuvent pas être désactivés."
+            "title": "ARTICLE 2 — POURQUOI GEXTIMO UTILISE DES COOKIES ?",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "GEXTIMO utilise des cookies pour trois raisons essentielles :"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "Faire fonctionner le service : sans ces cookies, vous ne pouvez pas vous connecter, accéder à vos collections ni effectuer des transactions. Ils sont indispensables.",
+                  "Améliorer votre expérience : ces cookies mémorisent vos préférences (langue, affichage) pour vous offrir une navigation personnalisée.",
+                  "Mesurer et améliorer la plateforme : ces cookies nous permettent de comprendre comment vous utilisez GEXTIMO afin d'identifier les problèmes et d'améliorer nos fonctionnalités."
+                ]
+              }
+            ]
           },
           {
-            "h": "Cookies de performance",
-            "p": "Nous utilisons des outils d'analyse anonymisés pour mesurer la fréquentation de nos pages et identifier les parcours les plus utilisés. Ces données nous aident à améliorer nos services."
+            "title": "ARTICLE 3 — TYPES DE COOKIES UTILISÉS",
+            "blocks": [
+              {
+                "type": "table",
+                "headers": [
+                  "Type",
+                  "Finalité",
+                  "Durée",
+                  "Consentement requis"
+                ],
+                "rows": [
+                  [
+                    "Cookies essentiels",
+                    "Connexion, session, sécurité, panier",
+                    "Session / 12 mois",
+                    "Non — indispensables"
+                  ],
+                  [
+                    "Cookies de préférences",
+                    "Langue, affichage, paramètres utilisateur",
+                    "12 mois",
+                    "Oui"
+                  ],
+                  [
+                    "Cookies analytiques",
+                    "Mesure d'audience, statistiques d'usage, amélioration",
+                    "25 mois",
+                    "Oui"
+                  ],
+                  [
+                    "Cookies de communication",
+                    "Notifications, messagerie transactionnelle",
+                    "Session",
+                    "Oui"
+                  ]
+                ]
+              }
+            ]
           },
           {
-            "h": "Cookies de personnalisation",
-            "p": "Ces cookies mémorisent vos préférences (thème clair/sombre, devise, langue) pour vous offrir une expérience personnalisée à chaque visite."
+            "title": "ARTICLE 4 — COOKIES TIERS",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "GEXTIMO peut intégrer des services tiers qui déposent leurs propres cookies :"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "[Outil analytics — à préciser] : mesure d'audience anonymisée",
+                  "FedaPay : sécurisation des transactions de paiement",
+                  "[WhatsApp Business — si intégré] : communication avec le support"
+                ]
+              },
+              {
+                "type": "p",
+                "t": "Ces prestataires sont soumis à leurs propres politiques de confidentialité. NOVAFRIQ ne contrôle pas les cookies déposés par ces services tiers."
+              }
+            ]
           },
           {
-            "h": "Gestion de vos cookies",
-            "p": "Vous pouvez accepter ou refuser les cookies non essentiels via notre bannière de consentement. Vous pouvez également configurer votre navigateur pour bloquer ou supprimer les cookies. Notez que la désactivation de certains cookies peut affecter votre expérience sur la plateforme."
+            "title": "ARTICLE 5 — COMMENT GÉRER VOS COOKIES ?",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Vous disposez de plusieurs moyens pour contrôler les cookies :"
+              },
+              {
+                "type": "subtitle",
+                "t": "5.1 — Via GEXTIMO"
+              },
+              {
+                "type": "p",
+                "t": "Accédez à GEXTIMO > Paramètres > Confidentialité > Paramètres cookies pour activer ou désactiver les cookies non essentiels. Les cookies essentiels ne peuvent pas être désactivés car ils sont indispensables au fonctionnement du service."
+              },
+              {
+                "type": "subtitle",
+                "t": "5.2 — Via votre appareil"
+              },
+              {
+                "type": "p",
+                "t": "Android : Paramètres > Applications > GEXTIMO > Autorisations | iOS : Réglages > GEXTIMO > Confidentialité"
+              },
+              {
+                "type": "subtitle",
+                "t": "5.3 — Via votre navigateur (site web)"
+              },
+              {
+                "type": "p",
+                "t": "Si vous accédez à la vitrine GEXTIMO via un navigateur, vous pouvez gérer les cookies dans les paramètres de votre navigateur (Chrome, Firefox, Safari, Edge)."
+              }
+            ]
           },
           {
-            "h": "Durée de conservation",
-            "p": "Les cookies de session expirent à la fermeture de votre navigateur. Les cookies persistants ont une durée maximale de 13 mois, conformément aux recommandations des autorités de protection des données."
+            "title": "ARTICLE 6 — DURÉE DE CONSERVATION",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Les cookies sont conservés pour la durée indiquée dans le tableau de l'Article 3. À l'expiration, ils sont automatiquement supprimés. Vous pouvez les supprimer à tout moment via les paramètres de votre appareil ou de l'application."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 7 — CONTACT",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Pour toute question sur notre utilisation des cookies : dpo@novafriq.africa"
+              }
+            ]
           }
         ]
       },
