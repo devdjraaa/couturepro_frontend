@@ -1116,6 +1116,11 @@
       "activer_code_titre": "Activate a code",
       "activer_code_desc": "Have an activation code? Enter it here.",
       "activer_btn": "Activate",
+      "code_promo_titre": "Promo / ambassador code",
+      "code_promo_desc": "A promo or ambassador code adds days to your remaining time.",
+      "code_promo_placeholder": "e.g. GEXT-AMB-001",
+      "code_promo_btn": "Apply",
+      "code_promo_invalide": "Invalid, expired or already used code.",
       "active_succes": "Subscription activated!",
       "code_invalide": "Invalid or already used code",
       "statuts": {

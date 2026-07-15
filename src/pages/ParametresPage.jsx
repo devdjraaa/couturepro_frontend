@@ -16,7 +16,7 @@ import {
   usePreferences, useUpdatePreferences,
   useFactureSettings, useUpdateFactureSettings, useUploadFactureLogo,
 } from '@/hooks/useParametres'
-import { useAbonnement, usePlans, useInitierPaiementAbonnement, useActivateCode } from '@/hooks/useAbonnement'
+import { useAbonnement, usePlans, useInitierPaiementAbonnement, useActivateCode, useCodePromo } from '@/hooks/useAbonnement'
 import { useMesAteliers, useCreateSousAtelier } from '@/hooks/useMesAteliers'
 import { usePlanLimit, usePlanFeature } from '@/hooks/usePlanFeature'
 import { useCountdown } from '@/hooks/useCountdown'
@@ -413,6 +413,50 @@ function CountdownDisplay({ targetDate, statut }) {
   )
 }
 
+// P153-158 : code promo / ambassadeur — champ dédié (format libre, pas de tirets forcés)
+function CodePromoSection() {
+  const { t } = useTranslation()
+  const codePromo = useCodePromo()
+  const [code, setCode]       = useState('')
+  const [success, setSuccess] = useState('')
+  const [error, setError]     = useState('')
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    setError('')
+    setSuccess('')
+    try {
+      const res = await codePromo.mutateAsync(code.trim().toUpperCase())
+      setSuccess(res?.message ?? t('parametres.abonnement.active_succes'))
+      setCode('')
+    } catch (err) {
+      setError(err?.message || t('parametres.abonnement.code_promo_invalide'))
+    }
+  }
+
+  return (
+    <div className="bg-card border border-edge rounded-2xl p-4 space-y-3">
+      <p className="text-sm font-semibold text-ink">{t('parametres.abonnement.code_promo_titre')}</p>
+      <p className="text-xs text-dim">{t('parametres.abonnement.code_promo_desc')}</p>
+      <form onSubmit={handleSubmit} className="flex gap-2">
+        <Input
+          value={code}
+          onChange={e => setCode(e.target.value.toUpperCase())}
+          placeholder={t('parametres.abonnement.code_promo_placeholder')}
+          className="font-mono tracking-wide flex-1"
+          maxLength={40}
+          required
+        />
+        <Button type="submit" loading={codePromo.isPending} className="shrink-0">
+          {t('parametres.abonnement.code_promo_btn')}
+        </Button>
+      </form>
+      {success && <p className="text-xs text-success">{success}</p>}
+      {error && <p className="text-xs text-danger">{error}</p>}
+    </div>
+  )
+}
+
 function ActiverCodeSection() {
   const { t } = useTranslation()
   const activerCode = useActivateCode()
@@ -537,6 +581,7 @@ function AbonnementTab() {
       )}
 
       <ActiverCodeSection />
+      <CodePromoSection />
 
       <div>
         <p className="text-xs font-semibold text-dim uppercase tracking-wide mb-3">{t('parametres.abonnement.plans_disponibles')}</p>

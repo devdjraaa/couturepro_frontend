@@ -60,6 +60,19 @@ export function useStatusPaiement() {
   })
 }
 
+// P153-158 : code promo / ambassadeur (+N jours au temps restant)
+export function useCodePromo() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (code) => abonnementService.utiliserCodePromo(code),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.abonnement })
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notifications })
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notificationsCount })
+    },
+  })
+}
+
 // Activation manuelle par code admin (TODO: endpoint backend à implémenter)
 export function useActivateCode() {
   const queryClient = useQueryClient()
