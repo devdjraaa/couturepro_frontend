@@ -1336,6 +1336,20 @@
     "installer_desc": "Ajoutez Gextimo à votre écran d'accueil pour un accès rapide.",
     "installer_btn": "Installer"
   },
+  "patron": {
+    "section_title": "Vendre le patron (payant)",
+    "hint": "Proposez le patron de ce modèle au téléchargement payant.",
+    "titre_label": "Titre du patron",
+    "prix_label": "Prix (FCFA)",
+    "fichier_label": "Choisir un fichier (PDF, ZIP, image — max 20 Mo)",
+    "publier": "Mettre en vente",
+    "ventes": "{{n}} vente(s)",
+    "retirer": "Retirer de la vente",
+    "retirer_confirm": "Retirer ce patron de la vente ?",
+    "err_fichier": "Choisissez un fichier.",
+    "err_prix": "Indiquez un prix (minimum 100 FCFA).",
+    "err_generic": "La mise en vente a échoué. Réessayez."
+  },
   "vitrine": {
     "promo": "✦ Nouveau — la vitrine Gextimo connecte les créateurs de mode africaine à toute l'Afrique de l'Ouest.",
     "promo_a": "Nouveau — la vitrine",
