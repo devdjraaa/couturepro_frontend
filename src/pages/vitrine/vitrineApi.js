@@ -71,14 +71,15 @@ export async function getCreations() {
   const d = await safe('/vitrine/creations')
   if (!Array.isArray(d) || !d.length) return demoModels
   return d.map((m) => ({
-    id:        m.id,
-    nom:       m.titre       ?? m.nom       ?? '',
-    par:       m.atelier_nom ?? m.creator_nom ?? m.par ?? '',
-    prix:      m.prix        ?? m.price      ?? null,
-    cat:       m.categorie   ?? m.cat        ?? 'robe',
-    type:      m.type        ?? (m.sur_mesure ? 'Sur mesure' : 'Prêt-à-porter'),
-    gradient:  m.gradient    ?? m.atelier_gradient ?? 'linear-gradient(135deg,#1a1a1a,#444)',
-    image_url: m.image_url   ?? (Array.isArray(m.images_urls) ? m.images_urls[0] : null) ?? null,
+    id:          m.id,
+    nom:         m.titre       ?? m.nom       ?? '',
+    par:         m.atelier_nom ?? m.creator_nom ?? m.par ?? '',
+    atelier_id:  m.atelier_id  ?? m.atelier_slug ?? m.createur_id ?? null,
+    prix:        m.prix        ?? m.price      ?? null,
+    cat:         m.categorie   ?? m.cat        ?? 'robe',
+    type:        m.type        ?? (m.sur_mesure ? 'Sur mesure' : 'Prêt-à-porter'),
+    gradient:    m.gradient    ?? m.atelier_gradient ?? 'linear-gradient(135deg,#1a1a1a,#444)',
+    image_url:   m.image_url   ?? (Array.isArray(m.images_urls) ? m.images_urls[0] : null) ?? null,
   }))
 }
 
