@@ -3081,64 +3081,151 @@
       "regles_communaute": {
         "title": "Règles de la communauté",
         "eyebrow": "Communauté Gextimo",
-        "subtitle": "Les valeurs et comportements attendus de tous les membres de la plateforme.",
-        "date": "Dernière mise à jour : juillet 2026",
-        "sections": [
+        "subtitle": "Application : GEXTIMO — Marketplace de mode africaine | Éditeur : NOVAFRIQ, SASU",
+        "meta_lines": [
+          "Date d'entrée en vigueur : [DATE — à compléter]"
+        ],
+        "version": "Version 7.0 — Règles de la communauté GEXTIMO.",
+        "articles": [
           {
-            "h": "Nos valeurs",
-            "p": "Gextimo est une communauté bâtie sur le respect mutuel, la valorisation du talent africain et la transparence. Nous croyons que la mode africaine mérite une vitrine digne — et cela commence par des échanges respectueux entre tous les membres."
+            "title": "ARTICLE 1 — L'ESPRIT GEXTIMO",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "GEXTIMO est un espace de mode bienveillant et professionnel. En l'utilisant, vous acceptez de respecter les autres membres et ces règles. Elles s'appliquent à tout le contenu : photos, descriptions, commentaires et messages."
+              }
+            ]
           },
           {
-            "h": "Respect et inclusion",
-            "p": "Tout propos discriminatoire, haineux ou irrespectueux envers un créateur, un client ou un membre de l'équipe Gextimo est strictement interdit. La communauté Gextimo accueille les talents de toute l'Afrique sans distinction."
+            "title": "ARTICLE 2 — CONTENUS ET COMPORTEMENTS INTERDITS",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Ne sont pas autorisés sur GEXTIMO :"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "La haine, la discrimination, les insultes et le harcèlement.",
+                  "La violence, les menaces et l'incitation à la violence.",
+                  "La nudité et les contenus à caractère sexuel.",
+                  "Tout contenu mettant en danger ou sexualisant un mineur — tolérance zéro.",
+                  "La désinformation et l'usurpation d'identité.",
+                  "Le spam, la publicité non sollicitée et les fausses évaluations.",
+                  "La divulgation d'informations privées d'autrui sans accord.",
+                  "La contrefaçon et la copie des créations d'autres créateurs."
+                ]
+              }
+            ]
           },
           {
-            "h": "Honnêteté et transparence",
-            "p": "Les créateurs s'engagent à afficher des photos et descriptions fidèles à leurs créations, à communiquer honnêtement sur les délais et à respecter les engagements pris envers les clients. Les avis et témoignages publiés doivent être authentiques."
+            "title": "ARTICLE 3 — MESSAGERIE ENTRE MEMBRES",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "La messagerie sert à échanger sur les créations et les commandes. Il est interdit d'y harceler un membre, d'y partager des contenus interdits, ou d'organiser une vente hors plateforme pour contourner GEXTIMO."
+              }
+            ]
           },
           {
-            "h": "Comportements interdits",
-            "p": "Sont interdits sur la plateforme : le spam et les sollicitations commerciales non autorisées, le harcèlement ou l'intimidation d'autres membres, la publication de faux avis, la manipulation des évaluations, les tentatives de contournement de la plateforme pour effectuer des transactions hors Gextimo, et toute activité frauduleuse."
+            "title": "ARTICLE 4 — MODÉRATION ET SANCTIONS",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Nous pouvons retirer un contenu, limiter sa diffusion ou suspendre un compte qui enfreint ces règles. Les sanctions sont graduées : rappel, avertissement, suspension, fermeture."
+              },
+              {
+                "type": "box",
+                "title": "Droit d'appel",
+                "t": "Vous pouvez contester toute sanction à : contact@novafriq.africa"
+              }
+            ]
           },
           {
-            "h": "Signalement",
-            "p": "Chaque membre de la communauté peut signaler un comportement inapproprié via le bouton de signalement présent sur les profils et créations. Les signalements sont traités par notre équipe de modération dans un délai de 48 heures."
-          },
-          {
-            "h": "Sanctions progressives",
-            "p": "Les manquements aux règles de la communauté entraînent des sanctions progressives : avertissement, restriction temporaire, suspension du compte. Les violations graves (fraude, harcèlement, contrefaçon) peuvent entraîner une suspension immédiate et définitive."
+            "title": "ARTICLE 5 — SIGNALER",
+            "blocks": [
+              {
+                "type": "box",
+                "title": "Signalement",
+                "t": "contact@novafriq.africa — Nous examinons chaque signalement et agissons rapidement."
+              }
+            ]
           }
         ]
       },
       "contact_reclamations": {
         "title": "Contact & réclamations",
         "eyebrow": "Support",
-        "subtitle": "Comment nous contacter et soumettre une réclamation sur la plateforme Gextimo.",
-        "date": "Dernière mise à jour : juillet 2026",
-        "sections": [
+        "subtitle": "Application : GEXTIMO — Marketplace de mode africaine | Éditeur : NOVAFRIQ, SASU",
+        "meta_lines": [
+          "Éditeur : NOVAFRIQ, SASU — Quartier Agblangandan, Sèmè-Podji, République du Bénin."
+        ],
+        "version": "Version 7.0 — Contact & réclamations GEXTIMO.",
+        "articles": [
           {
-            "h": "Nous contacter",
-            "p": "Pour toute question ou demande d'information, notre équipe est joignable par e-mail à : contact@gextimo.com. Vous pouvez également utiliser le formulaire de contact accessible depuis la rubrique Aide de la plateforme."
+            "title": "ARTICLE 1 — NOS CANAUX",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Selon votre besoin, écrivez à la bonne adresse :"
+              },
+              {
+                "type": "table",
+                "headers": [
+                  "Besoin",
+                  "Adresse"
+                ],
+                "rows": [
+                  [
+                    "Assistance et litiges de commande",
+                    "support@novafriq.africa"
+                  ],
+                  [
+                    "Données personnelles et exercice de vos droits",
+                    "dpo@novafriq.africa"
+                  ],
+                  [
+                    "Question générale, presse, partenariat",
+                    "contact@novafriq.africa"
+                  ],
+                  [
+                    "Paiements et factures",
+                    "facturation@novafriq.africa"
+                  ]
+                ]
+              },
+              {
+                "type": "p",
+                "t": "Téléphone : +229 01 66 55 29 92 · Site : gextimo.novafriq.africa"
+              }
+            ]
           },
           {
-            "h": "Support technique",
-            "p": "Pour tout problème technique (connexion, paiement, affichage), contactez notre support à : support@gextimo.com. Précisez votre identifiant, le navigateur utilisé et une description détaillée du problème. Notre équipe s'engage à répondre dans les 24 heures ouvrables."
+            "title": "ARTICLE 2 — DÉPOSER UNE RÉCLAMATION",
+            "blocks": [
+              {
+                "type": "box",
+                "title": "Réclamation",
+                "t": "support@novafriq.africa — Décrivez votre demande et, si possible, le numéro de commande."
+              },
+              {
+                "type": "p",
+                "t": "Nous accusons réception et vous répondons dans les meilleurs délais."
+              }
+            ]
           },
           {
-            "h": "Soumettre une réclamation",
-            "p": "Une réclamation peut concerner : une commande non conforme, un litige avec un créateur, un signalement de contrefaçon ou un problème de facturation. Envoyez votre réclamation détaillée à reclamations@gextimo.com en joignant tout document utile (photos, échanges, références de commande)."
-          },
-          {
-            "h": "Délai de traitement",
-            "p": "Toute réclamation est accusée de réception sous 24 heures. Le traitement complet intervient dans un délai de 7 jours ouvrables. En cas de litige complexe, ce délai peut être porté à 21 jours, avec communication régulière sur l'avancement."
-          },
-          {
-            "h": "Médiation",
-            "p": "En cas d'insatisfaction persistante après notre traitement, vous pouvez recourir à un médiateur indépendant. Gextimo s'engage à participer de bonne foi à toute procédure de médiation visant à résoudre un litige à l'amiable."
-          },
-          {
-            "h": "Protection des données",
-            "p": "Pour toute demande relative à vos données personnelles (accès, rectification, suppression), adressez-vous à notre délégué à la protection des données : privacy@gextimo.com."
+            "title": "ARTICLE 3 — RECOURS",
+            "blocks": [
+              {
+                "type": "list",
+                "items": [
+                  "Protection des données : vous pouvez saisir l'APDP (contact@apdp.bj · www.apdp.bj).",
+                  "Litige commercial : à défaut d'accord amiable, le Tribunal de Commerce de Cotonou est compétent.",
+                  "Acheteur hors Bénin : vous pouvez aussi recourir aux dispositifs de médiation de la consommation de votre pays."
+                ]
+              }
+            ]
           }
         ]
       }

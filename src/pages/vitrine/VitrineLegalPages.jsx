@@ -219,9 +219,9 @@ export function LivraisonRetoursPage() {
 }
 
 export function ReglesCommunautePage() {
-  return <LegalPage ns="regles_communaute" path="/regles-communaute" />
+  return <RichLegalPage ns="regles_communaute" path="/regles-communaute" />
 }
 
 export function ContactReclamationsPage() {
-  return <LegalPage ns="contact_reclamations" path="/contact-reclamations" />
+  return <RichLegalPage ns="contact_reclamations" path="/contact-reclamations" />
 }
