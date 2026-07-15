@@ -145,11 +145,17 @@ function RichLegalPage({ ns, path }) {
 
   const metaLines = t(`vitrine.legal_pages.${ns}.meta_lines`, { returnObjects: true, defaultValue: [] })
   const version   = t(`vitrine.legal_pages.${ns}.version`,    { defaultValue: '' })
+  const note      = t(`vitrine.legal_pages.${ns}.note`,       { defaultValue: '' })
 
   return (
     <VitrineShell>
       <section className="py-14 px-5">
         <div className="max-w-[820px] mx-auto">
+          {note && (
+            <div className="mb-8 bg-primary/8 border border-primary/30 rounded-xl px-5 py-4 text-[13px] text-ink leading-relaxed">
+              {note}
+            </div>
+          )}
           <LegalHead
             eyebrow={t(`vitrine.legal_pages.${ns}.eyebrow`)}
             title={t(`vitrine.legal_pages.${ns}.title`)}
@@ -201,7 +207,7 @@ export function DroitsCreateursPage() {
 }
 
 export function ConditionsVentePage() {
-  return <LegalPage ns="conditions_vente" path="/conditions-vente" />
+  return <RichLegalPage ns="conditions_vente" path="/conditions-vente" />
 }
 
 export function ProduitsInterditesPage() {

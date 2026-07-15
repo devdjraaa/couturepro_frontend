@@ -2767,32 +2767,208 @@
       "conditions_vente": {
         "title": "Conditions de vente & commissions",
         "eyebrow": "Vente & Commissions",
-        "subtitle": "Tarification, commissions et processus de paiement sur Gextimo.",
-        "date": "Dernière mise à jour : juillet 2026",
-        "sections": [
+        "subtitle": "Application : GEXTIMO — Marketplace de mode africaine | Éditeur : NOVAFRIQ, SASU",
+        "meta_lines": [
+          "Date d'entrée en vigueur : [DATE — à compléter]"
+        ],
+        "note": "À noter — Dispositions applicables à compter de l'activation du paiement en ligne sur GEXTIMO (voir CGU — Phase de lancement). Au lancement, le service fonctionne en mise en relation : ces règles ne sont pas encore actives.",
+        "version": "Version 4.0 — NOVAFRIQ / GEXTIMO.",
+        "articles": [
           {
-            "h": "Processus de commande",
-            "p": "Toute commande sur Gextimo suit un processus en plusieurs étapes : sélection de la création et du créateur, envoi d'une demande de devis, confirmation par le créateur, paiement sécurisé, et suivi de la réalisation. La commande est définitivement confirmée à la validation du paiement."
+            "title": "ARTICLE 1 — FONCTIONNEMENT DU MARKETPLACE",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "GEXTIMO est un marketplace : les créateurs (designers, stylistes, artisans) exposent leurs collections et NOVAFRIQ gère l'intégralité du processus de vente pour leur compte."
+              },
+              {
+                "type": "p",
+                "t": "Le flux de vente fonctionne ainsi :"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "Le client choisit une création et passe commande sur GEXTIMO",
+                  "Le paiement est effectué intégralement sur la plateforme GEXTIMO (via FedaPay — Mobile Money ou carte bancaire)",
+                  "Les fonds sont collectés par FedaPay (agrégateur agréé) pour le compte du créateur — NOVAFRIQ ne détient jamais les fonds des clients",
+                  "NOVAFRIQ prélève sa commission sur le montant total",
+                  "FedaPay reverse le solde net au créateur, sur instruction de NOVAFRIQ, dans les délais convenus"
+                ]
+              },
+              {
+                "type": "p",
+                "t": "Aucune vente directe entre créateur et client en dehors de GEXTIMO n'est autorisée dans le cadre des commandes passées sur la plateforme."
+              }
+            ]
           },
           {
-            "h": "Tarification",
-            "p": "Les prix affichés sur les fiches créateurs sont indicatifs. Le prix définitif est fixé lors du devis validé entre le client et le créateur. Les prix sont exprimés hors frais de livraison, qui sont indiqués séparément lors de la commande."
+            "title": "ARTICLE 2 — COMMISSIONS NOVAFRIQ",
+            "blocks": [
+              {
+                "type": "table",
+                "headers": [
+                  "Type de transaction",
+                  "Commission NOVAFRIQ",
+                  "Montant reversé au créateur"
+                ],
+                "rows": [
+                  [
+                    "Vente — formule Gratuite",
+                    "15 %",
+                    "85 % du prix de vente"
+                  ],
+                  [
+                    "Vente — formule Standard",
+                    "0 %",
+                    "100 % du prix de vente"
+                  ],
+                  [
+                    "Vente — formule Premium",
+                    "0 %",
+                    "100 % du prix de vente"
+                  ],
+                  [
+                    "Commande sur mesure",
+                    "Selon la formule du créateur",
+                    "Solde après commission éventuelle"
+                  ]
+                ]
+              },
+              {
+                "type": "p",
+                "t": "Les taux de commission sont communiqués au créateur lors de son inscription et peuvent être révisés avec un préavis de 30 jours."
+              }
+            ]
           },
           {
-            "h": "Commission Gextimo",
-            "p": "Gextimo perçoit une commission sur chaque transaction réalisée via la plateforme. Le taux de commission est communiqué aux créateurs lors de leur inscription et peut varier selon le plan d'abonnement souscrit. La commission est prélevée automatiquement au moment du règlement."
+            "title": "ARTICLE 3 — DÉLAIS DE REVERSEMENT",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Le solde net est reversé au créateur, via FedaPay, dans un délai de 7 jours ouvrés après confirmation de la réception de la commande par le client."
+              },
+              {
+                "type": "p",
+                "t": "À défaut de confirmation de réception par le client, le reversement est libéré automatiquement après 14 jours, en l'absence de litige."
+              },
+              {
+                "type": "p",
+                "t": "Le reversement est effectué via FedaPay (Mobile Money ou virement bancaire)."
+              },
+              {
+                "type": "p",
+                "t": "En cas de litige en cours sur une commande, le reversement correspondant est suspendu jusqu'à résolution du litige."
+              }
+            ]
           },
           {
-            "h": "Paiements sécurisés",
-            "p": "Les paiements sont sécurisés par nos prestataires agréés. Gextimo ne stocke jamais vos informations bancaires. Les devises acceptées sont affichées lors du paiement."
+            "title": "ARTICLE 4 — PRIX ET AFFICHAGE",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Chaque créateur fixe librement le prix de ses créations. NOVAFRIQ affiche le prix public (incluant la commission) sur la vitrine. Le créateur est informé du prix net qu'il percevra avant publication."
+              },
+              {
+                "type": "p",
+                "t": "Les prix sont affichés en FCFA. NOVAFRIQ se réserve le droit d'afficher les équivalences dans d'autres devises à titre indicatif."
+              }
+            ]
           },
           {
-            "h": "Litiges de paiement",
-            "p": "En cas de litige relatif à un paiement, contactez notre support dans les 30 jours suivant la transaction. Nous ferons notre meilleur effort pour résoudre le différend. En cas d'échec, les parties peuvent recourir à la médiation."
+            "title": "ARTICLE 5 — REMBOURSEMENTS ET LITIGES",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "En cas de demande de remboursement par un client :"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "Si la demande est fondée (article non conforme, non livré) : remboursement intégral au client. Le créateur est informé et le montant est déduit du prochain reversement.",
+                  "Si la demande est non fondée : NOVAFRIQ tranche après examen des éléments fournis par les deux parties."
+                ]
+              },
+              {
+                "type": "p",
+                "t": "Tout litige entre créateur et client doit être signalé à : support@novafriq.africa"
+              }
+            ]
           },
           {
-            "h": "Facturation",
-            "p": "Un récapitulatif de chaque transaction est disponible dans votre espace personnel. Les créateurs reçoivent une confirmation de chaque virement avec le détail des commissions prélevées."
+            "title": "ARTICLE 6 — OBLIGATIONS DU CRÉATEUR VENDEUR",
+            "blocks": [
+              {
+                "type": "list",
+                "items": [
+                  "Décrire honnêtement et précisément ses créations (matières, dimensions, délais de fabrication)",
+                  "Respecter les délais de livraison annoncés",
+                  "Informer NOVAFRIQ immédiatement en cas d'indisponibilité d'un article",
+                  "Ne pas proposer hors plateforme des articles disponibles sur GEXTIMO",
+                  "Respecter les droits de propriété intellectuelle des autres créateurs"
+                ]
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 7 — OBLIGATIONS DE NOVAFRIQ",
+            "blocks": [
+              {
+                "type": "list",
+                "items": [
+                  "Afficher fidèlement les créations du créateur",
+                  "Collecter les paiements de manière sécurisée",
+                  "Reverser le solde net dans les délais convenus",
+                  "Informer le créateur de chaque commande et de chaque reversement",
+                  "Protéger les créations du créateur contre la copie non autorisée (voir Document 8)"
+                ]
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 8 — CHARTE DU VENDEUR (STANDARDS DE SERVICE)",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "En vendant sur GEXTIMO, le créateur s'engage à respecter ces standards :"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "Répondre aux messages des clients sous 48 heures.",
+                  "Accepter ou refuser une commande sous 48 heures. Sans réponse, la commande est annulée et le client remboursé automatiquement.",
+                  "Préparer et expédier la commande dans le délai annoncé sur la fiche produit.",
+                  "Prévenir le client au moins une fois par semaine si la fabrication dépasse 15 jours.",
+                  "Décrire fidèlement ses créations (matières, dimensions, délais) ; les photos doivent correspondre au produit réel.",
+                  "Ne pas vendre hors plateforme un article disponible sur GEXTIMO."
+                ]
+              },
+              {
+                "type": "subtitle",
+                "t": "Sanctions graduées en cas de manquement :"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "1er niveau — rappel : message rappelant la règle non respectée.",
+                  "2e niveau — avertissement : avertissement formel et suspension de la mise en avant.",
+                  "3e niveau — suspension : 3 annulations en 5 jours = boutique hors ligne ; 10 annulations ou remboursements en 30 jours = boutique suspendue et examinée pour fermeture.",
+                  "Récidive grave — fermeture du compte créateur, après notification et droit d'appel."
+                ]
+              },
+              {
+                "type": "p",
+                "t": "Le créateur peut contester toute sanction à support@novafriq.africa (droit d'appel)."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 9 — DROIT APPLICABLE",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Ces conditions suivent le droit béninois, le droit OHADA et la Loi n° 2017-20 portant Code du Numérique. En cas de litige, le Tribunal de Commerce de Cotonou est seul compétent."
+              }
+            ]
           }
         ]
       },
