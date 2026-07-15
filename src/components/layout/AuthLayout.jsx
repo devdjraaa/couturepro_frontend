@@ -32,8 +32,11 @@ export default function AuthLayout({ children, subtitle, className }) {
         </div>
       </div>
 
-      {/* Formulaire */}
-      <div className="flex-1 flex flex-col lg:justify-center bg-card px-5 pb-8 lg:px-16">
+      {/* Formulaire — SUG-8 : marge basse + safe-area pour ne pas coller le bouton à la barre système */}
+      <div
+        className="flex-1 flex flex-col lg:justify-center bg-card px-5 lg:px-16"
+        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 2.5rem)' }}
+      >
         {/* Logo — mobile (grand, centré) */}
         <div className="lg:hidden pt-8 pb-1 text-center">
           <img

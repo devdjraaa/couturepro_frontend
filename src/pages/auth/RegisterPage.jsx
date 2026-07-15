@@ -148,15 +148,16 @@ export default function RegisterPage() {
         {/* Section : Identité */}
         <p className="section-label">{t('commun.identite') || 'Identité'}</p>
         <div className="grid grid-cols-2 gap-3">
-          <Input label={t('commun.prenom')} value={form.prenom} onChange={set('prenom')} placeholder="Aminata" required />
-          <Input label={t('commun.nom')}    value={form.nom}    onChange={set('nom')}    placeholder="Diallo"  required />
+          <Input label={t('commun.prenom')} value={form.prenom} onChange={set('prenom')} placeholder={t('auth.inscription.prenom_placeholder')} required />
+          <Input label={t('commun.nom')}    value={form.nom}    onChange={set('nom')}    placeholder={t('auth.inscription.nom_placeholder')}  required />
         </div>
         <PhoneInput label={t('commun.telephone')} value={form.telephone} onChange={set('telephone')} required />
-        <Input label={t('commun.email')} type="email" value={form.email} onChange={set('email')} placeholder="aminata@atelier.com" required />
+        <Input label={t('commun.email')} type="email" value={form.email} onChange={set('email')} placeholder={t('auth.inscription.email_placeholder')} required />
 
         {/* Section : Atelier */}
         <p className="section-label mt-2">{t('auth.inscription.nom_atelier') || 'Votre atelier'}</p>
-        <Input label={t('auth.inscription.nom_atelier')} value={form.nom_atelier} onChange={set('nom_atelier')} placeholder="Atelier Aminata" required />
+        {/* SUG-9/10 : placeholder adapté au type choisi + références béninoises */}
+        <Input label={t('auth.inscription.nom_atelier')} value={form.nom_atelier} onChange={set('nom_atelier')} placeholder={t(`auth.inscription.nom_atelier_placeholder_${form.type}`, { defaultValue: t('auth.inscription.nom_atelier_placeholder') })} required />
 
         {/* Type de compte : artisan (gestion d'atelier) ou designer (+ vitrine publique) */}
         <p className="section-label mt-2">{t('parametres.type_compte.titre')}</p>

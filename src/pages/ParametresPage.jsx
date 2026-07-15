@@ -440,7 +440,12 @@ function ActiverCodeSection() {
       <form onSubmit={handleSubmit} className="flex gap-2">
         <Input
           value={code}
-          onChange={e => setCode(e.target.value.toUpperCase())}
+          onChange={e => {
+            // P144 : majuscules forcées + tirets ajoutés automatiquement (format XXXX-XXXX-XXXX) —
+            // l'utilisateur ne tape que les lettres/chiffres.
+            const raw = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 12)
+            setCode(raw.match(/.{1,4}/g)?.join('-') ?? '')
+          }}
           placeholder="XXXX-XXXX-XXXX"
           className="font-mono tracking-widest flex-1"
           maxLength={14}
