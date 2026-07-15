@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
   Home, Users, ClipboardList, Layers, Settings, Scissors,
-  Bell, Star, Users2, LogOut, HelpCircle, Archive, Wallet, Store, FileText, Palette, Images,
+  Bell, Star, Users2, LogOut, HelpCircle, Archive, Wallet, Store, FileText, Palette, Images, History,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
@@ -40,6 +40,7 @@ export const NAV_GROUPS = [
     label: 'Système',
     items: [
       { to: '/notifications', icon: Bell,       key: 'notifications'              },
+      { to: ROUTES.HISTORIQUE, icon: History,   key: 'historique'                 },
       { to: '/archives',      icon: Archive,    key: 'archives', proprietaire: true },
       { to: '/parametres',    icon: Settings,   key: 'parametres'                 },
       { to: '/support',       icon: HelpCircle, key: 'support'                    },
