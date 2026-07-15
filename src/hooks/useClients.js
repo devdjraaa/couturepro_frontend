@@ -27,6 +27,7 @@ function toPlain(record, count) {
     is_archived:     record.is_archived,
     notes:           record.notes,
     nomComplet:      record.nomComplet,
+    atelier_id:      record.atelier_id,
     created_at:      record._raw.created_at ?? null,
     commandes_count: count ?? 0,
   }
@@ -36,9 +37,11 @@ export function useClients(filters = {}) {
   // Scope depuis le contexte (synchrone au switch) — pas localStorage (mis à jour trop tard).
   const { atelier } = useAuth()
   const atelierId = atelier?.id ?? ''
+  // P69-70/76 : recherche cross-ateliers — scope 'tous' = tous les ateliers du compte.
+  const tousAteliers = filters.scope === 'tous'
   const { data: clients, isLoading } = useWmQuery(() => {
     const conditions = [Q.where('is_archived', false)]
-    if (atelierId) conditions.push(Q.where('atelier_id', atelierId))   // isolation par atelier (P62-65)
+    if (atelierId && !tousAteliers) conditions.push(Q.where('atelier_id', atelierId))   // isolation par atelier (P62-65)
     if (filters.type_profil) conditions.push(Q.where('type_profil', filters.type_profil))
     if (filters.search) {
       const s = Q.sanitizeLikeString(filters.search)
@@ -49,7 +52,7 @@ export function useClients(filters = {}) {
       ))
     }
     return database.get('clients').query(...conditions)
-  }, [filters.type_profil, filters.search, atelierId])
+  }, [filters.type_profil, filters.search, atelierId, tousAteliers])
 
   // Commandes locales pour le compteur par client (même atelier).
   const { data: commandes } = useWmQuery(
