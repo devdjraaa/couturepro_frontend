@@ -24,6 +24,16 @@ export const mesureService = {
     return data // { lien, message }
   },
 
+  // P74 : historique versionné des mesures (en ligne uniquement — lecture seule).
+  async getHistorique(clientId) {
+    if (isMock()) {
+      await delay()
+      return []
+    }
+    const { data } = await api.get(`/clients/${clientId}/mesures/historique`)
+    return data // [{ id, version, champs, date, atelier, auteur, auteur_role }]
+  },
+
   async save(clientId, champs) {
     if (isMock()) {
       await delay()

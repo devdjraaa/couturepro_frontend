@@ -191,6 +191,7 @@ export default function ClientDetailPage() {
               <div>
                 <MesureDisplay
                   mesures={mesure.champs}
+                  clientId={clientId}
                   clientNom={`${client.prenom ?? ''} ${client.nom}`.trim()}
                   atelierNom={atelier?.nom}
                 />
