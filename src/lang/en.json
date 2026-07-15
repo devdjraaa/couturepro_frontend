@@ -257,6 +257,7 @@
       "telecharger": "Download",
       "imprimer_habillage": "Print / Share (GEXTIMO layout)",
       "habillage_generation": "Generating…",
+      "facture_generation": "Generating the invoice…",
       "habillage_erreur": "Could not generate the branded invoice. Download the official PDF instead.",
       "pdf": "PDF",
       "pdf_generation": "PDF…",
