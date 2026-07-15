@@ -1326,6 +1326,11 @@
     "menu": "Menu",
     "outils_creatifs": "Creative tools"
   },
+  "pwa": {
+    "installer_titre": "Install Gextimo",
+    "installer_desc": "Add Gextimo to your home screen for quick access.",
+    "installer_btn": "Install"
+  },
   "vitrine": {
     "promo": "✦ New — the Gextimo showcase connects African fashion designers across West Africa.",
     "promo_a": "New — the",

@@ -1326,6 +1326,11 @@
     "menu": "Menu",
     "outils_creatifs": "Outils créatifs"
   },
+  "pwa": {
+    "installer_titre": "Installer Gextimo",
+    "installer_desc": "Ajoutez Gextimo à votre écran d'accueil pour un accès rapide.",
+    "installer_btn": "Installer"
+  },
   "vitrine": {
     "promo": "✦ Nouveau — la vitrine Gextimo connecte les créateurs de mode africaine à toute l'Afrique de l'Ouest.",
     "promo_a": "Nouveau — la vitrine",

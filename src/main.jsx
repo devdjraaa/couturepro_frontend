@@ -17,6 +17,11 @@ CapApp.addListener('backButton', ({ canGoBack }) => {
   }
 })
 
+// PWA (P186) — bannière d'installation + service worker (web).
+import { registerPwa } from '@/utils/pwa'
+import PwaInstallBanner from '@/components/ui/PwaInstallBanner'
+registerPwa()
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -37,6 +42,7 @@ createRoot(document.getElementById('root')).render(
               <AuthProvider>
                 <AtelierProvider>
                   <App />
+                  <PwaInstallBanner />
                 </AtelierProvider>
               </AuthProvider>
             </AdminAuthProvider>

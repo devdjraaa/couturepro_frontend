@@ -1,0 +1,16 @@
+{
+  "name": "Gextimo — La marketplace des créateurs de mode africains",
+  "short_name": "Gextimo",
+  "description": "Trouvez les meilleurs designers et tailleurs africains. Commandez des tenues sur mesure, suivez vos commandes en temps réel.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "lang": "fr",
+  "background_color": "#100B0A",
+  "theme_color": "#D00B0B",
+  "icons": [
+    { "src": "/favicon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/favicon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/favicon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
