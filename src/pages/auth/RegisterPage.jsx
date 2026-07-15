@@ -186,6 +186,7 @@ export default function RegisterPage() {
           onChange={set('password')}
           placeholder="••••••••"
           required
+          autoComplete="new-password"
           suffix={
             <button type="button" tabIndex={-1} onClick={() => setShowPwd(v => !v)} className="hover:text-ink transition-colors">
               {showPwd ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -199,6 +200,7 @@ export default function RegisterPage() {
           onChange={set('password_confirmation')}
           placeholder="••••••••"
           required
+          autoComplete="new-password"
           error={pwdMatch === false ? t('auth.inscription.mdp_non_concordants') : undefined}
           suffix={
             <div className="flex items-center gap-1">

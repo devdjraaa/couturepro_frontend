@@ -893,3 +893,12 @@ body {
   .vt-logo-arc2     { animation: none !important; }
   .vt-logo-dot      { animation: none !important; }
 }
+
+/* ── P148 — un seul « œil » sur les champs mot de passe ──────────────────────
+   Certains navigateurs (Edge, Samsung Internet, IE) ajoutent leur propre icône
+   « révéler / effacer » dès qu'on tape, qui doublait notre bouton personnalisé.
+   On masque l'icône native ; notre bouton Eye/EyeOff reste le seul contrôle. */
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
