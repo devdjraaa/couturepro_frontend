@@ -177,6 +177,24 @@ export const parametresService = {
     return data
   },
 
+  // P134 : bannière du profil (photo/GIF/vidéo).
+  async uploadAtelierBanniere(file) {
+    if (isMock()) {
+      await delay()
+      return { banniere_url: URL.createObjectURL(file), banniere_type: file.type.startsWith('video') ? 'video' : 'image' }
+    }
+    const fd = new FormData()
+    fd.append('banniere', file)
+    const { data } = await api.post('/parametres/atelier/banniere', fd)
+    return data
+  },
+
+  async supprimerAtelierBanniere() {
+    if (isMock()) { await delay(); return { message: 'ok' } }
+    const { data } = await api.delete('/parametres/atelier/banniere')
+    return data
+  },
+
   async registerFcmToken(fcm_token, platform = null) {
     try {
       await api.post('/notifications/fcm-token', { fcm_token, platform })

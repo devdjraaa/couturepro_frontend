@@ -449,7 +449,14 @@ export default function CreateurProfilPage() {
 
   return (
     <VitrineShell>
-      <div className="h-[180px]" style={{ background: c.gradient }} />
+      {/* P134 : bannière photo/GIF/vidéo, sinon dégradé par défaut */}
+      {c.banniere_url ? (
+        c.banniere_type === 'video'
+          ? <video src={c.banniere_url} className="h-[180px] w-full object-cover" autoPlay muted loop playsInline />
+          : <img src={c.banniere_url} alt="" className="h-[180px] w-full object-cover" />
+      ) : (
+        <div className="h-[180px]" style={{ background: c.gradient }} />
+      )}
       <div className="max-w-[1180px] mx-auto px-5">
         {/* Carte profil */}
         <div className="bg-card border border-edge rounded-lg -mt-[60px] relative p-6 flex flex-wrap items-start gap-5 shadow-lg">
