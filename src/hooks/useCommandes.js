@@ -5,6 +5,7 @@ import { Q } from '@nozbe/watermelondb'
 import { useWmQuery, useMutation as useWmMutation, database } from '@/db/useWmQuery'
 import { syncWithServer } from '@/db/syncAdapter'
 import { commandeService } from '@/services/commandeService'
+import { logAction } from '@/utils/historique'
 import { QUERY_KEYS } from './queryKeys'
 
 function getAtelierId() {
@@ -146,6 +147,7 @@ export function useCreateCommande() {
         c.atelier_id            = getAtelierId()
       })
       toast.success(`Commande pour ${client_nom || 'client'} créée avec succès.`)
+      logAction('commande_creee', client_nom || '')
       return toPlain(record)
     })
   })
@@ -176,6 +178,7 @@ export function useUpdateStatutCommande() {
         en_cours: 'Commande remise en cours.',
       }
       toast.success(messages[statut] ?? 'Statut mis à jour.')
+      if (statut === 'livre') logAction('commande_livree', data?.client_nom || '')
     },
   })
 }

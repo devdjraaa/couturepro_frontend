@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Q } from '@nozbe/watermelondb'
 import { useWmQuery, useMutation, database } from '@/db/useWmQuery'
+import { logAction } from '@/utils/historique'
 
 // Offline-first : paiements de commande lus/écrits dans WatermelonDB (sync serveur).
 
@@ -40,6 +41,7 @@ export function useEnregistrerPaiement() {
         p.mode_paiement = mode_paiement ?? 'especes'
         p.atelier_id    = getAtelierId()
       })
+      logAction('paiement_ajoute', `${Number(montant) || 0} XOF`)
       return toPlain(record)
     })
   })

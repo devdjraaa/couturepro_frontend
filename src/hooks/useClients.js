@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import toast from 'react-hot-toast'
 import { Q } from '@nozbe/watermelondb'
 import { useWmQuery, useMutation, database } from '@/db/useWmQuery'
+import { logAction } from '@/utils/historique'
 
 // Offline-first : clients lus/écrits dans WatermelonDB (comme mesures/vêtements).
 // La sync (syncAdapter) pousse/tire ces données ; l'app fonctionne donc hors-ligne.
@@ -107,6 +108,7 @@ export function useCreateClient() {
       })
       const nomComplet = [record.prenom, record.nom].filter(Boolean).join(' ')
       toast.success(`Client ${nomComplet} ajouté avec succès.`)
+      logAction('client_cree', nomComplet)
       return toPlain(record, 0)
     })
   })
@@ -125,6 +127,7 @@ export function useUpdateClient() {
         if (payload.is_vip       !== undefined) c.is_vip       = Boolean(payload.is_vip)
         if (payload.notes        !== undefined) c.notes        = payload.notes
       })
+      logAction('client_modifie', [record.prenom, record.nom].filter(Boolean).join(' '))
       return toPlain(record, 0)
     })
   })

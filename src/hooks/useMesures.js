@@ -1,5 +1,6 @@
 import { Q } from '@nozbe/watermelondb'
 import { useWmQuery, useMutation, database } from '@/db/useWmQuery'
+import { logAction } from '@/utils/historique'
 
 function getAtelierId() {
   return localStorage.getItem('cp_active_atelier') || ''
@@ -49,5 +50,6 @@ export function useSaveMesures(clientId) {
         })
       }
     })
+    logAction('mesure_sauvegardee', '')
   })
 }
