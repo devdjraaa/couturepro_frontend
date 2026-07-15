@@ -5,6 +5,9 @@ export const API_BASE_URL = useNgrok
 
 export const APP_VERSION = '1.0.0'
 
+// Site vitrine public (pages légales, liens externes depuis l'app)
+export const SITE_BASE_URL = import.meta.env.VITE_SITE_URL || 'https://gextimo.novafriq.africa'
+
 // TanStack Query
 export const QUERY_STALE_TIME    = 5 * 60 * 1000  // 5 min
 export const QUERY_CACHE_TIME    = 10 * 60 * 1000 // 10 min

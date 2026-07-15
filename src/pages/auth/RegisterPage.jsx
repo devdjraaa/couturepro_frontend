@@ -5,6 +5,7 @@ import { Eye, EyeOff, Check, X, ArrowRight, MessageSquare } from 'lucide-react'
 import { useAuth } from '@/contexts'
 import { AuthLayout } from '@/components/layout'
 import { Input, Button, Select, PhoneInput, LanguageSwitcher } from '@/components/ui'
+import { SITE_BASE_URL } from '@/constants/config'
 import { cn } from '@/utils/cn'
 
 const EASING = 'cubic-bezier(0.65, 0, 0.35, 1)'
@@ -256,9 +257,17 @@ export default function RegisterPage() {
           </div>
           <span className="text-sm text-dim leading-snug">
             {t('auth.inscription.accepter_cgu_debut')}{' '}
-            <Link to="/a-propos" className="underline underline-offset-2" style={{ color: 'var(--color-gold)' }}>
+            {/* SUG-5/6 : la page CGU publique du site s'ouvre en externe — le formulaire
+               reste intact (avant : route interne protégée → redirection login + données perdues). */}
+            <a
+              href={`${SITE_BASE_URL}/cgu`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-2"
+              style={{ color: 'var(--color-gold)' }}
+            >
               {t('auth.inscription.accepter_cgu_lien')}
-            </Link>
+            </a>
           </span>
         </label>
 
