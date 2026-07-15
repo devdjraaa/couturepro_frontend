@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { ImagePlus, X } from 'lucide-react'
+import { ImagePlus, X, Shirt } from 'lucide-react'
 import { Input, Button } from '@/components/ui'
 import { cn } from '@/utils/cn'
 
@@ -93,7 +93,9 @@ export default function VetementForm({ initialData, onSubmit, onCancel, isLoadin
             onClick={() => fileRef.current?.click()}
             className="w-full aspect-[4/3] rounded-xl border-2 border-dashed border-edge flex flex-col items-center justify-center gap-2 text-ghost hover:border-primary hover:text-primary transition-colors"
           >
-            <ImagePlus size={28} />
+            {/* SUG-17 : icône officielle du module « modèle » (Shirt, cohérente avec la nav
+                et l'action-sheet « Nouveau modèle ») au lieu d'un placeholder image générique. */}
+            <Shirt size={28} />
             <span className="text-xs">Ajouter des photos</span>
           </button>
         )}
