@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { X, Heart, MessageCircle, Send, ShoppingBag, Award, Download, Lock } from 'lucide-react'
+import { X, Heart, MessageCircle, Send, ShoppingBag, Award, Download, Lock, ImagePlus } from 'lucide-react'
 import VitrineShell from './VitrineChrome'
 import { getCreator, toggleLike, toggleAbonnement, acheterPatron } from './vitrineApi'
 import GarmentVisual from './GarmentVisual'
@@ -201,20 +201,36 @@ function PatronModal({ patron, format, onClose }) {
   )
 }
 
+const MAX_AVIS_PHOTOS = 3
+
 function AvisForm({ atelierId }) {
   const { t } = useTranslation()
   const [nom, setNom] = useState('')
   const [note, setNote] = useState(5)
   const [texte, setTexte] = useState('')
+  const [photos, setPhotos] = useState([])   // P137 : File[]
+  const [previews, setPreviews] = useState([])
   const [sent, setSent] = useState(false)
   const [sending, setSending] = useState(false)
+
+  const addPhotos = (e) => {
+    const files = Array.from(e.target.files ?? []).slice(0, MAX_AVIS_PHOTOS - photos.length)
+    if (files.length === 0) return
+    setPhotos((p) => [...p, ...files])
+    setPreviews((p) => [...p, ...files.map((f) => URL.createObjectURL(f))])
+    e.target.value = ''
+  }
+  const removePhoto = (i) => {
+    setPhotos((p) => p.filter((_, j) => j !== i))
+    setPreviews((p) => p.filter((_, j) => j !== i))
+  }
 
   const submit = async (e) => {
     e.preventDefault()
     if (!nom.trim() || sending) return
     setSending(true)
     try {
-      await avisService.submit(atelierId, { auteur_nom: nom.trim(), note, texte: texte.trim() || null })
+      await avisService.submit(atelierId, { auteur_nom: nom.trim(), note, texte: texte.trim() || null, photos })
       setSent(true)
     } catch { /* erreur silencieuse */ } finally {
       setSending(false)
@@ -235,6 +251,24 @@ function AvisForm({ atelierId }) {
       </div>
       <textarea value={texte} onChange={(e) => setTexte(e.target.value)} rows={3} maxLength={600} placeholder={t('vitrine.profil.avis_text')}
                 className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink resize-none mb-3 focus:outline-none focus:ring-2 focus:ring-primary/30" />
+
+      {/* P137 : photos de l'avis (ex. le client portant l'article) */}
+      <div className="flex items-center gap-2 mb-3 flex-wrap">
+        {previews.map((src, i) => (
+          <div key={i} className="relative w-14 h-14 rounded-lg overflow-hidden border border-edge">
+            <img src={src} alt={`photo ${i + 1}`} className="w-full h-full object-cover" />
+            <button type="button" onClick={() => removePhoto(i)} aria-label="Retirer"
+                    className="absolute top-0.5 right-0.5 w-5 h-5 bg-black/60 rounded-full flex items-center justify-center text-white"><X size={11} /></button>
+          </div>
+        ))}
+        {photos.length < MAX_AVIS_PHOTOS && (
+          <label className="w-14 h-14 rounded-lg border-2 border-dashed border-edge flex items-center justify-center text-ghost hover:border-primary hover:text-primary transition cursor-pointer" title={t('vitrine.profil.avis_photos')}>
+            <ImagePlus size={18} />
+            <input type="file" accept="image/*" multiple className="hidden" onChange={addPhotos} />
+          </label>
+        )}
+      </div>
+
       <button type="submit" disabled={sending} className="text-sm font-semibold px-4 py-2 rounded-lg bg-primary text-inverse hover:bg-primary-600 transition disabled:opacity-60">
         {t('vitrine.profil.avis_send')}
       </button>
@@ -540,6 +574,15 @@ export default function CreateurProfilPage() {
                 </div>
                 <div className="text-primary text-[13px] mb-2">{'★'.repeat(r.note)}{'☆'.repeat(5 - r.note)}</div>
                 {r.texte && <p className="text-[13.5px] leading-relaxed text-ink">{r.texte}</p>}
+                {Array.isArray(r.photos_urls) && r.photos_urls.length > 0 && (
+                  <div className="flex gap-2 mt-2 flex-wrap">
+                    {r.photos_urls.map((u, k) => (
+                      <a key={k} href={u} target="_blank" rel="noopener noreferrer" className="block w-16 h-16 rounded-lg overflow-hidden border border-edge">
+                        <img src={u} alt={`avis ${k + 1}`} className="w-full h-full object-cover" loading="lazy" />
+                      </a>
+                    ))}
+                  </div>
+                )}
                 {r.id && (reported.has(r.id)
                   ? <span className="text-[11px] text-ghost mt-2 inline-block">{t('vitrine.profil.report_done')}</span>
                   : <button onClick={() => reportAvis(r.id)} className="text-[11px] text-ghost hover:text-danger mt-2">{t('vitrine.profil.report')}</button>)}
