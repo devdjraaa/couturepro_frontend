@@ -1710,40 +1710,431 @@
       "confidentialite": {
         "title": "Politique de confidentialité",
         "eyebrow": "Légal & Vie privée",
-        "subtitle": "Nous nous engageons à protéger vos données personnelles et à respecter votre vie privée.",
-        "date": "Dernière mise à jour : juillet 2026",
-        "sections": [
+        "subtitle": "Application : GEXTIMO | Éditeur : NOVAFRIQ, SASU",
+        "meta_responsible": "Responsable du traitement : ADJAHO Patrick Dona",
+        "meta_date": "Date d'entrée en vigueur : [DATE — à compléter]",
+        "version": "Version 4.0 — Établie selon l'article 415 du Code du Numérique (Loi n° 2017-20 du 20 avril 2018).",
+        "articles": [
           {
-            "h": "1. Responsable du traitement",
-            "p": "Gextimo (marque de NovAfriq), société exerçant au Bénin, est responsable du traitement de vos données personnelles collectées via la plateforme gextimo.com."
+            "title": "ARTICLE 1 — IDENTITÉ DU RESPONSABLE DU TRAITEMENT",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Le responsable de vos données est ADJAHO Patrick Dona, Président et fondateur de NOVAFRIQ. Il en est le seul responsable."
+              },
+              {
+                "type": "p",
+                "t": "Adresse : Quartier Agblangandan, Sèmè-Podji, République du Bénin."
+              },
+              {
+                "type": "p",
+                "t": "Contact : dpo@novafriq.africa | +229 01 66 55 29 92"
+              },
+              {
+                "type": "p",
+                "t": "NOVAFRIQ n'est pas tenue de désigner un DPO. Pour tout ce qui touche à vos données, écrivez directement au responsable : dpo@novafriq.africa."
+              }
+            ]
           },
           {
-            "h": "2. Données collectées",
-            "p": "Nous collectons les données que vous fournissez lors de la création de votre compte (nom, adresse e-mail, numéro de téléphone), les informations de transaction, ainsi que les données de navigation (adresse IP, type de navigateur, pages consultées) via des cookies techniques."
+            "title": "ARTICLE 2 — FORMALITÉS PRÉALABLES AUPRÈS DE L'APDP",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Ce traitement est déclaré à l'APDP sous la délibération n° [NUMÉRO DE DÉLIBÉRATION APDP — à compléter après dépôt]"
+              },
+              {
+                "type": "p",
+                "t": "Vous pouvez joindre l'APDP : Rue 6.076, Aïdjèdo, Cotonou · +229 21 32 57 88 / 69 55 00 00 · contact@apdp.bj · www.apdp.bj"
+              }
+            ]
           },
           {
-            "h": "3. Finalités du traitement",
-            "p": "Vos données sont utilisées pour : la gestion de votre compte, le traitement des commandes, la communication sur l'état de vos projets, l'amélioration de nos services et, avec votre consentement, l'envoi de communications marketing."
+            "title": "ARTICLE 3 — DONNÉES COLLECTÉES ET TRAITÉES",
+            "blocks": [
+              {
+                "type": "table",
+                "headers": [
+                  "Catégorie",
+                  "Données collectées",
+                  "Base légale",
+                  "Durée de conservation"
+                ],
+                "rows": [
+                  [
+                    "Données d'identification",
+                    "Nom, prénom, email, téléphone",
+                    "Exécution du contrat (Art. 415)",
+                    "Durée compte + 3 ans"
+                  ],
+                  [
+                    "Données de connexion",
+                    "IP, session, horodatages",
+                    "Intérêt légitime (Art. 415)",
+                    "12 mois"
+                  ],
+                  [
+                    "Données d'usage",
+                    "Navigation app, fonctionnalités, durée session",
+                    "Intérêt légitime (Art. 415)",
+                    "25 mois"
+                  ],
+                  [
+                    "Données métier GEXTIMO",
+                    "Boutiques, créations, commandes, transactions, mesures",
+                    "Exécution du contrat (Art. 415)",
+                    "Durée compte + 3 ans"
+                  ],
+                  [
+                    "Données techniques",
+                    "Appareil, OS, version app, crash",
+                    "Intérêt légitime (Art. 415)",
+                    "12 mois"
+                  ],
+                  [
+                    "Données de paiement",
+                    "Mobile Money et cartes (via FedaPay) — collectées dès l'activation du paiement",
+                    "Exécution du contrat (Art. 415)",
+                    "10 ans (obligation comptable OHADA)"
+                  ]
+                ]
+              },
+              {
+                "type": "p",
+                "t": "Deux profils coexistent sur GEXTIMO. Le profil Designer est public : les créations sont exposées sur la vitrine de la plateforme et peuvent générer des ventes (dès l'activation du paiement). Le profil Artisan est réservé à l'application mobile : il n'est pas publié sur la vitrine de la plateforme et ne donne lieu à aucune transaction via GEXTIMO. Les données collectées sont identiques pour les deux ; seules l'exposition et la finalité diffèrent."
+              },
+              {
+                "type": "box",
+                "title": "Connexion via un fournisseur d'identité tiers (si activée)",
+                "t": "Si vous choisissez de vous connecter à GEXTIMO via un service tiers (ex. : Google), nous recevons de ce fournisseur : votre adresse e-mail, votre nom et, le cas échéant, votre photo de profil. Nous n'accédons pas à votre mot de passe. Ces données sont utilisées uniquement pour créer et gérer votre compte GEXTIMO."
+              }
+            ]
           },
           {
-            "h": "4. Base légale",
-            "p": "Le traitement de vos données repose sur l'exécution du contrat (commandes, compte), le respect de nos obligations légales, votre consentement (newsletters) et notre intérêt légitime à améliorer nos services."
+            "title": "ARTICLE 4 — FINALITÉS DU TRAITEMENT",
+            "blocks": [
+              {
+                "type": "list",
+                "items": [
+                  "Créer et gérer votre compte professionnel",
+                  "Faire fonctionner GEXTIMO : créateurs, collections, commandes et vitrine",
+                  "Traiter vos paiements et commissions",
+                  "Améliorer l'application et votre expérience",
+                  "Sécuriser la plateforme et prévenir la fraude",
+                  "Vous tenir informé : notifications, mises à jour, assistance",
+                  "Respecter nos obligations légales"
+                ]
+              }
+            ]
           },
           {
-            "h": "5. Partage des données",
-            "p": "Vos données peuvent être partagées avec les créateurs sélectionnés pour exécuter votre commande, nos prestataires de paiement sécurisé (sous contrat de confidentialité), et les autorités compétentes si la loi l'exige. Nous ne vendons jamais vos données à des tiers."
+            "title": "ARTICLE 5 — OPÉRATIONS EFFECTUÉES SUR LES DONNÉES",
+            "blocks": [
+              {
+                "type": "list",
+                "items": [
+                  "Nous les collectons à l'inscription et pendant que vous utilisez GEXTIMO",
+                  "Nous les stockons de façon sécurisée (voir Article 8)",
+                  "Nous les traitons seulement pour les raisons de l'Article 4",
+                  "Nous les supprimons une fois les durées de l'Article 3 atteintes"
+                ]
+              }
+            ]
           },
           {
-            "h": "6. Conservation",
-            "p": "Vos données sont conservées pendant la durée de votre compte et jusqu'à 5 ans après votre dernière activité, conformément aux délais légaux applicables au Bénin."
+            "title": "ARTICLE 6 — DESTINATAIRES DES DONNÉES",
+            "blocks": [
+              {
+                "type": "subtitle",
+                "t": "6.1 — Accès internes"
+              },
+              {
+                "type": "p",
+                "t": "À l'intérieur de NOVAFRIQ, le seul responsable de vos données est ADJAHO Patrick Dona. Les accès internes sont limités au strict nécessaire. Aucun associé, prestataire ou investisseur n'est responsable de vos données."
+              },
+              {
+                "type": "subtitle",
+                "t": "6.2 — Prestataires techniques"
+              },
+              {
+                "type": "table",
+                "headers": [
+                  "Prestataire",
+                  "Rôle dans le traitement",
+                  "Localisation",
+                  "Données transmises"
+                ],
+                "rows": [
+                  [
+                    "Hostinger International Ltd",
+                    "Hébergement VPS — serveur principal et sauvegardes chiffrées",
+                    "France (Paris, UE)",
+                    "Toutes données stockées"
+                  ],
+                  [
+                    "FedaPay",
+                    "Traitement des paiements Mobile Money (MTN / Moov / Orange)",
+                    "Bénin / Afrique de l'Ouest",
+                    "Référence de transaction, montant, opérateur"
+                  ],
+                  [
+                    "[Outil analytics — si retenu]",
+                    "Mesure d'audience, statistiques d'usage",
+                    "[À préciser]",
+                    "Données d'usage agrégées, IP"
+                  ],
+                  [
+                    "[WhatsApp Business / Email — à préciser]",
+                    "Envoi de notifications et communications transactionnelles",
+                    "[À préciser]",
+                    "Email, numéro de téléphone"
+                  ]
+                ]
+              },
+              {
+                "type": "p",
+                "t": "Ces prestataires agissent en qualité de sous-traitants. Ils traitent les données uniquement sur instruction de NOVAFRIQ dans le cadre d'engagements contractuels de confidentialité (voir Document 10)."
+              },
+              {
+                "type": "subtitle",
+                "t": "6.3 — Destinataires légaux"
+              },
+              {
+                "type": "p",
+                "t": "Nous communiquons vos données aux autorités béninoises (justice, fisc, administration) uniquement sur demande officielle. Nous ne vendons, ne louons et ne cédons jamais vos données à des tiers à des fins commerciales."
+              }
+            ]
           },
           {
-            "h": "7. Vos droits (APDP)",
-            "p": "Conformément à la loi n° 2009-09 portant protection des données personnelles au Bénin, vous disposez d'un droit d'accès, de rectification, d'effacement et d'opposition. Pour exercer ces droits, contactez-nous à : privacy@gextimo.com."
+            "title": "ARTICLE 7 — DIVULGATION PROÉMINENTE DES PERMISSIONS IN-APP",
+            "blocks": [
+              {
+                "type": "table",
+                "headers": [
+                  "Permission",
+                  "Pourquoi",
+                  "Conséquence du refus"
+                ],
+                "rows": [
+                  [
+                    "Notifications",
+                    "Alertes commandes, échéances et messages clients",
+                    "Pas de notifications push"
+                  ],
+                  [
+                    "Appareil photo",
+                    "Photo de profil, de tissu ou de création",
+                    "Photo désactivée"
+                  ],
+                  [
+                    "Stockage / Galerie",
+                    "Importer des images depuis la galerie",
+                    "Import d'images impossible"
+                  ]
+                ]
+              },
+              {
+                "type": "subtitle",
+                "t": "Texte affiché à l'utilisateur au moment de chaque demande de permission :"
+              },
+              {
+                "type": "permission",
+                "name": "Permission : Appareil photo",
+                "t": "GEXTIMO souhaite accéder à votre Appareil photo. Pourquoi : pour vous permettre de photographier vos créations, vos tissus ou votre profil professionnel directement depuis l'application. En appuyant sur « Autoriser », vous acceptez cet accès. Vous pouvez refuser et continuer à utiliser GEXTIMO sans cette fonctionnalité."
+              },
+              {
+                "type": "permission",
+                "name": "Permission : Stockage / Galerie",
+                "t": "GEXTIMO souhaite accéder à votre Galerie. Pourquoi : pour vous permettre d'importer des images depuis votre galerie. GEXTIMO n'accède pas à l'ensemble de votre galerie ; seule l'image choisie est importée. En cas de refus, l'import d'images est désactivé ; les autres fonctions restent disponibles."
+              },
+              {
+                "type": "permission",
+                "name": "Permission : Notifications",
+                "t": "GEXTIMO souhaite vous envoyer des Notifications. Pourquoi : pour vous informer des nouvelles commandes, des échéances, des messages de vos clients et des mises à jour importantes. En cas de refus, aucune notification push ne vous parviendra ; vous devrez consulter l'application manuellement."
+              }
+            ]
           },
           {
-            "h": "8. Sécurité",
-            "p": "Nous mettons en œuvre des mesures techniques et organisationnelles adaptées : chiffrement TLS des communications, accès restreint aux données, hébergement sécurisé."
+            "title": "ARTICLE 8 — STOCKAGE ET HÉBERGEMENT",
+            "blocks": [
+              {
+                "type": "table",
+                "headers": [
+                  "Fournisseur",
+                  "Pays",
+                  "Localisation datacenter",
+                  "Site web"
+                ],
+                "rows": [
+                  [
+                    "Hostinger International Ltd",
+                    "France (UE)",
+                    "Paris, France",
+                    "hostinger.com"
+                  ]
+                ]
+              },
+              {
+                "type": "p",
+                "t": "Les données sont hébergées dans le datacenter de Paris (France, Union Européenne). Ce transfert hors du Bénin fait l'objet de la formalité d'autorisation de flux transfrontière auprès de l'APDP."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 9 — SÉCURITÉ DES DONNÉES",
+            "blocks": [
+              {
+                "type": "list",
+                "items": [
+                  "Échanges chiffrés (HTTPS/TLS)",
+                  "Accès limités au strict nécessaire",
+                  "Connexion protégée par jetons d'authentification",
+                  "Sauvegardes chiffrées chaque semaine",
+                  "Mises à jour de sécurité régulières du serveur (Debian)",
+                  "L'espace de chaque utilisateur est isolé des autres"
+                ]
+              },
+              {
+                "type": "p",
+                "t": "En cas d'incident, nous prévenons l'APDP dans les meilleurs délais. Si le risque est élevé, nous vous prévenons aussi (voir Document 6)."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 10 — DROITS DES PERSONNES CONCERNÉES",
+            "blocks": [
+              {
+                "type": "table",
+                "headers": [
+                  "Droit",
+                  "Description"
+                ],
+                "rows": [
+                  [
+                    "Droit à l'information préalable",
+                    "Être informé avant toute collecte"
+                  ],
+                  [
+                    "Droit d'accès",
+                    "Obtenir une copie des données vous concernant"
+                  ],
+                  [
+                    "Droit d'interrogation",
+                    "Interroger NOVAFRIQ sur les traitements effectués"
+                  ],
+                  [
+                    "Droit de rectification",
+                    "Corriger des données inexactes ou incomplètes"
+                  ],
+                  [
+                    "Droit d'opposition",
+                    "Vous opposer à tout traitement de vos données"
+                  ],
+                  [
+                    "Droit à la portabilité",
+                    "Recevoir vos données dans un format structuré"
+                  ],
+                  [
+                    "Droit de suppression",
+                    "Demander l'effacement de vos données"
+                  ],
+                  [
+                    "Droit à l'oubli",
+                    "Obtenir que vos données ne soient plus utilisées"
+                  ],
+                  [
+                    "Droit à réparation",
+                    "Obtenir réparation en cas de préjudice causé par un traitement illicite"
+                  ]
+                ]
+              },
+              {
+                "type": "subtitle",
+                "t": "Retrait du consentement — Mécanismes pratiques"
+              },
+              {
+                "type": "p",
+                "t": "Vous pouvez retirer votre consentement à tout moment sans que cela ne remette en cause les traitements effectués avant le retrait."
+              },
+              {
+                "type": "list",
+                "items": [
+                  "Permissions d'appareil : Paramètres téléphone > Applications > GEXTIMO > Autorisations > désactivez la permission. Effet immédiat.",
+                  "Préférences analytique : GEXTIMO > Paramètres > Confidentialité > Préférences de données. Appliqué sous 48 heures.",
+                  "Suppression de compte : dpo@novafriq.africa en indiquant « Suppression de mon compte ». Effacement sous 30 jours (sauf obligations légales)."
+                ]
+              },
+              {
+                "type": "p",
+                "t": "Pour exercer ces droits : dpo@novafriq.africa — Nous répondons sous 60 jours (Code du Numérique)."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 11 — PROTECTION DES MINEURS",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "GEXTIMO n'est pas destinée aux mineurs de moins de 18 ans. C'est un outil professionnel réservé aux artisans et entrepreneurs majeurs : il faut avoir 18 ans pour créer un compte."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 12 — DROIT DE PLAINTE AUPRÈS DE L'APDP",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Vous pouvez déposer une plainte auprès de l'APDP : Rue 6.076, Aïdjèdo, Cotonou · contact@apdp.bj · www.apdp.bj"
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 13 — COOKIES ET TRACEURS",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Voir Document 4 — Politique de Gestion des Cookies et Traceurs du présent dossier."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 14 — LIENS VERS DES SERVICES TIERS",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "GEXTIMO peut contenir des liens ou des redirections vers des services que nous n'exploitons pas : pages de paiement Mobile Money (MTN, Moov, Orange), application WhatsApp pour le support, ou tout autre service externe."
+              },
+              {
+                "type": "p",
+                "t": "Dès lors que vous quittez GEXTIMO pour accéder à l'un de ces services : leurs propres conditions d'utilisation et politiques de confidentialité s'appliquent. NOVAFRIQ n'est pas responsable du contenu, des pratiques ou des données collectées par ces services."
+              },
+              {
+                "type": "p",
+                "t": "Les liens vers la vitrine GEXTIMO (gextimo.novafriq.africa) restent soumis à la présente politique et aux CGU de NOVAFRIQ."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 15 — MODIFICATIONS",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "En cas de modification importante de cette politique :"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "Nous vous prévenons au moins 30 jours avant l'entrée en vigueur, par email ou via une notification dans l'application.",
+                  "La nouvelle version vous est présentée clairement, avec un résumé des changements effectués.",
+                  "Si vous continuez à utiliser GEXTIMO après la date d'entrée en vigueur, vous êtes réputé avoir accepté la version révisée.",
+                  "Si vous n'acceptez pas les modifications, vous pouvez cesser d'utiliser GEXTIMO avant la date d'entrée en vigueur, ou nous contacter à dpo@novafriq.africa pour exercer votre droit à la suppression de compte."
+                ]
+              },
+              {
+                "type": "p",
+                "t": "Les modifications mineures (corrections de formulation, mise à jour de coordonnées) peuvent être effectuées sans préavis de 30 jours et sont signalées par la mise à jour de la date en haut de la politique."
+              }
+            ]
           }
         ]
       },
