@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ChevronLeft, Search, Check, Plus, Trash2, AlertTriangle } from 'lucide-react'
+import { ChevronLeft, Search, Check, Plus, Trash2, AlertTriangle, ImagePlus, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useClients } from '@/hooks/useClients'
 import { useVetements } from '@/hooks/useVetements'
@@ -26,6 +26,8 @@ const emptySousCommande = () => ({
   date_livraison_prevue: '',
   description: '',
   urgence: false,
+  photo_tissu: null,      // P24 : photo du tissu par article
+  _photoPreview: null,
 })
 
 // ── Indicateur de progression ─────────────────────────────────────────────────
@@ -190,10 +192,18 @@ function SousCommandeCard({ index, sc, vetements, onChange, onRemove, canRemove 
           <label className="block text-xs text-ghost mb-1">{t('commandes.groupe_form.qte')}</label>
           <input
             type="number"
+            inputMode="numeric"
             min="1"
             max="999"
             value={sc.quantite}
-            onChange={e => set('quantite', Number(e.target.value) || 1)}
+            onFocus={e => e.target.select()}
+            onChange={e => {
+              const v = e.target.value
+              // SUG-18 : autorise le champ vide pendant la saisie (pouvoir effacer)
+              if (v === '') { set('quantite', ''); return }
+              set('quantite', Math.min(999, Math.max(1, Math.floor(Number(v)) || 1)))
+            }}
+            onBlur={e => { if (e.target.value === '' || Number(e.target.value) < 1) set('quantite', 1) }}
             className="w-full bg-subtle border border-edge rounded-lg px-2 py-1.5 text-sm text-ink text-center focus:outline-none focus:ring-2 focus:ring-primary/30"
           />
         </div>
@@ -263,6 +273,36 @@ function SousCommandeCard({ index, sc, vetements, onChange, onRemove, canRemove 
         rows={2}
         className="w-full bg-subtle border border-edge rounded-lg px-2.5 py-1.5 text-sm text-ink placeholder:text-ghost focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
       />
+
+      {/* P24 — Photo du tissu (grande zone, comme la commande simple) */}
+      {sc._photoPreview ? (
+        <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-edge">
+          <img src={sc._photoPreview} alt="tissu" className="w-full h-full object-cover" />
+          <button
+            type="button"
+            onClick={() => { set('photo_tissu', null); set('_photoPreview', null) }}
+            className="absolute top-2 right-2 w-7 h-7 bg-black/50 rounded-full flex items-center justify-center text-inverse hover:bg-black/70 transition-colors"
+          >
+            <X size={14} />
+          </button>
+        </div>
+      ) : (
+        <label className="w-full py-5 rounded-xl border-2 border-dashed border-edge flex flex-col items-center gap-1.5 text-ghost hover:border-primary hover:text-primary transition-colors cursor-pointer">
+          <ImagePlus size={20} />
+          <span className="text-xs">{t('commandes.creation.ajouter_photo')}</span>
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={e => {
+              const file = e.target.files?.[0]
+              if (!file) return
+              set('photo_tissu', file)
+              set('_photoPreview', URL.createObjectURL(file))
+            }}
+          />
+        </label>
+      )}
 
       {/* Urgence */}
       <button
@@ -436,6 +476,7 @@ export default function NouvelleCommandeGroupeePage() {
         date_livraison_prevue: sc.date_livraison_prevue || undefined,
         description:           sc.description || undefined,
         urgence:               sc.urgence,
+        photo_tissu:           sc.photo_tissu || undefined,   // P24
       }))
 
     const groupe = await createGroupe.mutateAsync({
