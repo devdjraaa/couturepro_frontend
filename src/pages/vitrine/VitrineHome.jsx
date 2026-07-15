@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Heart, Search } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Heart, Search } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { getCreators, getCreations, demoModels, categories } from './vitrineApi'
@@ -106,6 +106,15 @@ export default function VitrineHome() {
   const [cat, setCat] = useState('all')
   const [galleryModels, setGalleryModels] = useState(null)
   const location = useLocation()
+  const carouselRef = useRef(null)
+  const [carouselEdge, setCarouselEdge] = useState({ left: false, right: false })
+
+  const checkCarouselEdge = () => {
+    const el = carouselRef.current
+    if (!el) return
+    setCarouselEdge({ left: el.scrollLeft > 4, right: el.scrollLeft + el.clientWidth < el.scrollWidth - 4 })
+  }
+  const scrollCarousel = (dir) => carouselRef.current?.scrollBy({ left: dir * 290, behavior: 'smooth' })
 
   const rotations = t('vitrine.rotations', { returnObjects: true })
   const steps = t('vitrine.how.steps', { returnObjects: true })
@@ -116,6 +125,13 @@ export default function VitrineHome() {
   }, [])
   useEffect(() => { getCreators().then(setCreators) }, [])
   useEffect(() => { getCreations().then(setGalleryModels) }, [])
+  useEffect(() => {
+    const el = carouselRef.current
+    if (!el) return
+    checkCarouselEdge()
+    el.addEventListener('scroll', checkCarouselEdge, { passive: true })
+    return () => el.removeEventListener('scroll', checkCarouselEdge)
+  }, [creators])
 
   useEffect(() => {
     const s = Object.assign(document.createElement('script'), { type: 'application/ld+json', id: 'gx-home-ld' })
@@ -282,36 +298,50 @@ export default function VitrineHome() {
         <div className="max-w-[1180px] mx-auto px-5">
           <SectionHead eyebrow={t('vitrine.creators.eyebrow')} title={t('vitrine.creators.title')} subtitle={t('vitrine.creators.subtitle')} />
           <div className="relative">
-          <div className="vt-stagger flex gap-4 overflow-x-auto pb-3.5">
-            {(creators || []).map((c) => (
-              <Link key={c.id} to={`/createurs/${c.id}`}
-                    className="vt-item vt-card relative min-w-[268px] max-w-[268px] bg-card border border-edge rounded-lg p-5">
-                <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(c.id) }} className="absolute top-3 right-3 z-10" aria-label="Favori" aria-pressed={has(c.id)}>
-                  <Heart size={16} className={has(c.id) ? 'text-primary' : 'text-ghost'} fill={has(c.id) ? 'currentColor' : 'none'} />
-                </button>
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-[50px] h-[50px] rounded-xl overflow-hidden flex items-center justify-center font-display font-bold text-lg text-inverse shrink-0" style={c.logo_url ? undefined : { background: c.gradient }}>{c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" loading="lazy" /> : c.initiales}</div>
-                  <div>
-                    <h4 className="font-bold text-[15.5px] text-ink flex items-center gap-1.5">
-                      {c.nom}
-                      {c.verifie && <span className="text-[10.5px] font-bold text-primary bg-primary-50 px-1.5 py-0.5 rounded-full">{t('vitrine.creators.verified')}</span>}
-                      {c.sponsorise && <span title="Sponsorisé" className="text-[10.5px] font-bold text-inverse bg-primary px-1.5 py-0.5 rounded-full">★</span>}
-                    </h4>
-                    <div className="text-[12.5px] text-dim">{c.specialite}</div>
+            <div ref={carouselRef} className="vt-stagger vt-carousel flex gap-4 overflow-x-auto">
+              {(creators || []).map((c) => (
+                <Link key={c.id} to={`/createurs/${c.id}`}
+                      className="vt-item vt-card relative min-w-[268px] max-w-[268px] bg-card border border-edge rounded-lg p-5">
+                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(c.id) }} className="absolute top-3 right-3 z-10" aria-label="Favori" aria-pressed={has(c.id)}>
+                    <Heart size={16} className={has(c.id) ? 'text-primary' : 'text-ghost'} fill={has(c.id) ? 'currentColor' : 'none'} />
+                  </button>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-[50px] h-[50px] rounded-xl overflow-hidden flex items-center justify-center font-display font-bold text-lg text-inverse shrink-0" style={c.logo_url ? undefined : { background: c.gradient }}>{c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" loading="lazy" /> : c.initiales}</div>
+                    <div>
+                      <h4 className="font-bold text-[15.5px] text-ink flex items-center gap-1.5">
+                        {c.nom}
+                        {c.verifie && <span className="text-[10.5px] font-bold text-primary bg-primary-50 px-1.5 py-0.5 rounded-full">{t('vitrine.creators.verified')}</span>}
+                        {c.sponsorise && <span title="Sponsorisé" className="text-[10.5px] font-bold text-inverse bg-primary px-1.5 py-0.5 rounded-full">★</span>}
+                      </h4>
+                      <div className="text-[12.5px] text-dim">{c.specialite}</div>
+                    </div>
                   </div>
-                </div>
-                <div className="text-[13px] text-dim mb-3.5">
-                  {c.note ? <span className="text-primary font-bold">★ {c.note}</span> : <span className="text-ghost">{t('vitrine.creators.new')}</span>}
-                  {' · '}📍 {c.ville}
-                </div>
-                <span className={btnOutline + ' w-full justify-center !py-2 text-[13px]'}>{t('vitrine.creators.visit')}</span>
-              </Link>
-            ))}
-            {!creators && Array.from({ length: 4 }, (_, i) => (
-              <SkeletonCreatorCard key={i} className="min-w-[268px] max-w-[268px] shrink-0" />
-            ))}
-          </div>
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-elevated to-transparent lg:hidden" />
+                  <div className="text-[13px] text-dim mb-3.5">
+                    {c.note ? <span className="text-primary font-bold">★ {c.note}</span> : <span className="text-ghost">{t('vitrine.creators.new')}</span>}
+                    {' · '}📍 {c.ville}
+                  </div>
+                  <span className={btnOutline + ' w-full justify-center !py-2 text-[13px]'}>{t('vitrine.creators.visit')}</span>
+                </Link>
+              ))}
+              {!creators && Array.from({ length: 4 }, (_, i) => (
+                <SkeletonCreatorCard key={i} className="min-w-[268px] max-w-[268px] shrink-0" />
+              ))}
+            </div>
+            {/* Flèche gauche */}
+            {carouselEdge.left && (
+              <button onClick={() => scrollCarousel(-1)} aria-label="Précédent"
+                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 w-9 h-9 rounded-full bg-card border border-edge shadow-md flex items-center justify-center text-ink hover:border-primary hover:text-primary transition">
+                <ChevronLeft size={18} />
+              </button>
+            )}
+            {/* Flèche droite + dégradé */}
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-elevated to-transparent" />
+            {carouselEdge.right && (
+              <button onClick={() => scrollCarousel(1)} aria-label="Suivant"
+                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 w-9 h-9 rounded-full bg-card border border-edge shadow-md flex items-center justify-center text-ink hover:border-primary hover:text-primary transition">
+                <ChevronRight size={18} />
+              </button>
+            )}
           </div>
           <div className="text-center mt-8">
             <Link to="/createurs" className={btnPrimary}>{t('vitrine.creators.see_all')}</Link>

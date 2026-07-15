@@ -494,6 +494,10 @@ body {
 /* Easing signature — décélération franche, zéro oscillation */
 :root { --ease-gx: cubic-bezier(.16,.8,.3,1); }
 
+/* ── Carousel horizontal sans scrollbar native ── */
+.vt-carousel { scrollbar-width: none; -ms-overflow-style: none; }
+.vt-carousel::-webkit-scrollbar { display: none; }
+
 /* ── Scroll reveal — fondu + glissement vers le haut (une seule fois) ── */
 .vt-reveal {
   opacity: 0;
