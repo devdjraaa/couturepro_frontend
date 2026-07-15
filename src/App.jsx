@@ -60,6 +60,7 @@ import AdminPaiementsPage      from '@/pages/admin/AdminPaiementsPage'
 import TicketsPage             from '@/pages/admin/TicketsPage'
 import TicketDetailPage        from '@/pages/admin/TicketDetailPage'
 import OffresPage              from '@/pages/admin/OffresPage'
+import CodesPromoPage          from '@/pages/admin/CodesPromoPage'
 import ListeNoirePage          from '@/pages/admin/ListeNoirePage'
 import AuditPage               from '@/pages/admin/AuditPage'
 import AdminNotificationsPage  from '@/pages/admin/AdminNotificationsPage'
@@ -119,6 +120,7 @@ export default function App() {
             <Route path="/admin/tickets"          element={<TicketsPage />} />
             <Route path="/admin/tickets/:id"      element={<TicketDetailPage />} />
             <Route path="/admin/offres"           element={<OffresPage />} />
+            <Route path="/admin/codes-promo"      element={<CodesPromoPage />} />
             <Route path="/admin/liste-noire"      element={<ListeNoirePage />} />
             <Route path="/admin/audit"            element={<AuditPage />} />
             <Route path="/admin/notifications"    element={<AdminNotificationsPage />} />
@@ -148,6 +150,7 @@ export default function App() {
           <Route path="/admin/tickets"          element={<TicketsPage />} />
           <Route path="/admin/tickets/:id"      element={<TicketDetailPage />} />
           <Route path="/admin/offres"           element={<OffresPage />} />
+          <Route path="/admin/codes-promo"      element={<CodesPromoPage />} />
           <Route path="/admin/liste-noire"      element={<ListeNoirePage />} />
           <Route path="/admin/audit"            element={<AuditPage />} />
           <Route path="/admin/notifications"    element={<AdminNotificationsPage />} />

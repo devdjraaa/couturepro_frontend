@@ -1860,6 +1860,7 @@
       "paiements": "Paiements",
       "tickets": "Tickets",
       "offres": "Offres spéciales",
+      "codes_promo": "Codes promo",
       "signalements": "Signalements",
       "banniere": "Bannière",
       "liste_noire": "Liste noire",
@@ -2134,6 +2135,25 @@
       "permissions_sauvees": "Permissions mises à jour.",
       "revoquer_confirm": "Révoquer le compte de {{nom}} ?",
       "erreur": "Une erreur est survenue."
+    },
+    "codes_promo": {
+      "nouveau_titre": "Nouveau code promo",
+      "nouveau_btn": "Nouveau code",
+      "creer_btn": "Créer le code",
+      "col_code": "Code",
+      "col_type": "Type",
+      "col_jours": "Jours bonus",
+      "col_max": "Utilisations max",
+      "col_utilisations": "Utilisations",
+      "col_expire": "Expire le",
+      "col_statut": "Statut",
+      "col_note": "Note interne",
+      "type_evenement": "Événement",
+      "type_ambassadeur": "Ambassadeur",
+      "illimite": "Illimité",
+      "aucun": "Aucun code promo. Créez-en un ou lancez le seeder ambassadeurs.",
+      "desactiver": "Désactiver",
+      "activer": "Réactiver"
     },
     "offres": {
       "titre": "Offres spéciales",
