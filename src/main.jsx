@@ -27,6 +27,11 @@ CapApp.addListener('backButton', ({ canGoBack }) => {
 import { notifyAppReady } from '@/utils/appUpdate'
 notifyAppReady()
 
+// PWA (P186) — web uniquement (inerte en natif : ne doit jamais toucher l'OTA Capgo).
+import { registerPwa } from '@/utils/pwa'
+import PwaInstallBanner from '@/components/ui/PwaInstallBanner'
+registerPwa()
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -53,6 +58,7 @@ createRoot(document.getElementById('root')).render(
                   <AtelierProvider>
                     <SyncProvider>
                       <App />
+                      <PwaInstallBanner />
                       <Toaster
                         position="top-center"
                         containerStyle={{ top: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
