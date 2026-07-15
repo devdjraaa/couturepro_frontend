@@ -197,7 +197,7 @@ export function CguPage() {
 }
 
 export function DroitsCreateursPage() {
-  return <LegalPage ns="droits_createurs" path="/droits-createurs" />
+  return <RichLegalPage ns="droits_createurs" path="/droits-createurs" />
 }
 
 export function ConditionsVentePage() {

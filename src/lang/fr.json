@@ -2652,28 +2652,115 @@
       "droits_createurs": {
         "title": "Droits des créateurs & propriété intellectuelle",
         "eyebrow": "Créateurs & PI",
-        "subtitle": "Comprendre la protection de vos créations sur la plateforme Gextimo.",
-        "date": "Dernière mise à jour : juillet 2026",
-        "sections": [
+        "subtitle": "Application : GEXTIMO — Marketplace de mode africaine | Éditeur : NOVAFRIQ, SASU",
+        "meta_lines": [
+          "Date d'entrée en vigueur : [DATE — à compléter]"
+        ],
+        "articles": [
           {
-            "h": "Propriété de vos créations",
-            "p": "Vous conservez l'intégralité des droits de propriété intellectuelle sur vos créations publiées sur Gextimo : modèles, dessins, photos, descriptions. En publiant sur la plateforme, vous nous accordez uniquement une licence non-exclusive et limitée à l'affichage de votre portfolio."
+            "title": "ARTICLE 1 — OBJET",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Ce document définit les droits des créateurs (designers, stylistes, artisans) qui exposent leurs créations sur GEXTIMO, ainsi que les règles de protection de leur propriété intellectuelle sur la plateforme."
+              }
+            ]
           },
           {
-            "h": "Licence accordée à Gextimo",
-            "p": "En téléversant vos créations, vous accordez à Gextimo une licence mondiale, non exclusive, gratuite et sous-licenciable uniquement pour les besoins de promotion de votre atelier sur la plateforme et ses canaux de communication officiels."
+            "title": "ARTICLE 2 — PROPRIÉTÉ DES CRÉATIONS",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Chaque créateur reste l'unique propriétaire de ses créations publiées sur GEXTIMO : photos, modèles, designs, collections, descriptions, vidéos. NOVAFRIQ n'acquiert aucun droit de propriété sur ces contenus."
+              },
+              {
+                "type": "p",
+                "t": "En publiant sur GEXTIMO, le créateur accorde à NOVAFRIQ une licence limitée, non exclusive et révocable permettant uniquement d'afficher, promouvoir et distribuer ses créations dans le cadre du fonctionnement normal de la plateforme."
+              },
+              {
+                "type": "p",
+                "t": "Cette licence prend fin automatiquement à la résiliation du compte du créateur."
+              }
+            ]
           },
           {
-            "h": "Protection contre la copie",
-            "p": "Il est formellement interdit à tout utilisateur de la plateforme de reproduire, télécharger sans autorisation, diffuser ou commercialiser les créations d'un autre créateur. Tout manquement expose son auteur à des poursuites civiles et pénales."
+            "title": "ARTICLE 3 — CE QUE NOVAFRIQ PEUT FAIRE AVEC LES CRÉATIONS",
+            "blocks": [
+              {
+                "type": "list",
+                "items": [
+                  "Afficher les créations sur la vitrine GEXTIMO (gextimo.novafriq.africa)",
+                  "Utiliser les images pour promouvoir GEXTIMO sur les réseaux sociaux et supports marketing, avec mention du créateur",
+                  "Indexer les créations dans les moteurs de recherche pour leur visibilité"
+                ]
+              },
+              {
+                "type": "box",
+                "title": "NOVAFRIQ ne peut PAS :",
+                "t": "Vendre les créations à des tiers, les modifier sans accord, les utiliser hors du cadre de GEXTIMO, ou les céder à d'autres plateformes."
+              }
+            ]
           },
           {
-            "h": "Signalement de contrefaçon",
-            "p": "Si vous estimez qu'une création publiée sur Gextimo porte atteinte à vos droits, vous pouvez soumettre un signalement via la page Contact & réclamations. Notre équipe traitera votre demande dans les 72 heures."
+            "title": "ARTICLE 4 — PROTECTION CONTRE LA COPIE ET LE PLAGIAT",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "La copie, la reproduction ou l'utilisation non autorisée des créations publiées sur GEXTIMO est strictement interdite, conformément aux lois sur la propriété intellectuelle en vigueur au Bénin et aux conventions internationales."
+              },
+              {
+                "type": "p",
+                "t": "Tout utilisateur (client, visiteur ou autre créateur) qui copierait, reproduirait ou s'approprierait une création sans l'accord explicite du créateur s'expose à des poursuites civiles et pénales."
+              }
+            ]
           },
           {
-            "h": "Originalité des créations",
-            "p": "Chaque créateur garantit que les créations publiées sont originales et n'enfreignent pas les droits de propriété intellectuelle d'un tiers. En cas de litige sur ce point, la responsabilité incombe exclusivement au créateur."
+            "title": "ARTICLE 5 — PROCÉDURE DE SIGNALEMENT",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Si vous constatez une violation de vos droits sur GEXTIMO (copie de photo, plagiat de design, utilisation non autorisée), vous pouvez le signaler à :"
+              },
+              {
+                "type": "box",
+                "title": "Contact signalement",
+                "t": "Email : contact@novafriq.africa | Objet : « Signalement violation droits créateur »"
+              },
+              {
+                "type": "p",
+                "t": "NOVAFRIQ s'engage à traiter chaque signalement sous 72 heures ouvrées et à retirer tout contenu litigieux dans les meilleurs délais après vérification."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 6 — GARANTIES DU CRÉATEUR",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "En publiant sur GEXTIMO, le créateur garantit que :"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "Il est bien l'auteur ou le titulaire des droits sur les créations publiées",
+                  "Les créations ne violent pas les droits d'un tiers",
+                  "Les créations ne contiennent pas de contenus illicites, offensants ou contraires à la loi béninoise"
+                ]
+              },
+              {
+                "type": "p",
+                "t": "En cas de fausse déclaration, le créateur est seul responsable des conséquences juridiques."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 7 — LOGO ET MARQUE GEXTIMO",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Le logo, la marque et le nom « GEXTIMO » sont la propriété exclusive de NOVAFRIQ. Toute utilisation sans accord écrit préalable est interdite."
+              }
+            ]
           }
         ]
       },
