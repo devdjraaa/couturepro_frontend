@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { X } from 'lucide-react'
+import { X, Heart, MessageCircle, Send, ShoppingBag, Award } from 'lucide-react'
 import VitrineShell from './VitrineChrome'
-import { getCreator } from './vitrineApi'
+import { getCreator, toggleLike, toggleAbonnement } from './vitrineApi'
 import GarmentVisual from './GarmentVisual'
 import { useDevise } from './vitrineCurrency'
 import { useFavoris } from './useFavoris'
@@ -179,16 +179,46 @@ function AvisForm({ atelierId }) {
 export default function CreateurProfilPage() {
   const { t } = useTranslation()
   const { format } = useDevise()
-  const { has, toggle } = useFavoris()
+  const { toggle } = useFavoris()
   const { slug } = useParams()
   const [c, setC] = useState(undefined) // undefined = loading, null = introuvable
   const [reported, setReported] = useState(() => new Set())
   const [signaled, setSignaled] = useState(() => new Set())
   const [devisOpen, setDevisOpen] = useState(false)
+  const [likeState, setLikeState] = useState({})              // P159 : { [vetementId]: { likes, liked } }
+  const [abo, setAbo] = useState({ abonne: false, abonnes: 0 }) // P173
 
   useEffect(() => { getCreator(slug).then((d) => setC(d ?? null)) }, [slug])
   useEffect(() => { window.scrollTo(0, 0) }, [slug])
   useEffect(() => { if (c && c.id) vitrineStatsService.track(c.id, 'visite') }, [c?.id])
+
+  // Initialise l'état likes/abonnement depuis la réponse API (état propre à ce visiteur).
+  useEffect(() => {
+    if (!c || !c.id) return
+    const init = {}
+    for (const cr of c.creations || []) init[cr.id] = { likes: cr.likes ?? 0, liked: !!cr.liked }
+    setLikeState(init)
+    setAbo({ abonne: !!c.abonne, abonnes: c.abonnes ?? 0 })
+  }, [c?.id]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // P159 : like/unlike optimiste d'une création.
+  const onLike = async (vetementId) => {
+    setLikeState((s) => {
+      const cur = s[vetementId] || { likes: 0, liked: false }
+      const liked = !cur.liked
+      return { ...s, [vetementId]: { liked, likes: Math.max(0, cur.likes + (liked ? 1 : -1)) } }
+    })
+    const res = await toggleLike(vetementId)
+    if (res) setLikeState((s) => ({ ...s, [vetementId]: { likes: res.likes, liked: res.liked } }))
+  }
+
+  // P173 : s'abonner / se désabonner (optimiste). On garde aussi le favori local (FavorisPage).
+  const onSubscribe = async () => {
+    toggle(c.id)
+    setAbo((a) => ({ abonne: !a.abonne, abonnes: Math.max(0, a.abonnes + (a.abonne ? -1 : 1)) }))
+    const res = await toggleAbonnement(c.id)
+    if (res) setAbo({ abonne: res.abonne, abonnes: res.abonnes })
+  }
 
   useEffect(() => {
     if (!c) return
@@ -236,7 +266,12 @@ export default function CreateurProfilPage() {
   const igUrl = r.instagram ? (r.instagram.startsWith('http') ? r.instagram : `https://instagram.com/${r.instagram.replace(/^@/, '')}`) : null
   const fbUrl = r.facebook ? (r.facebook.startsWith('http') ? r.facebook : `https://facebook.com/${r.facebook}`) : null
   const siteUrl = r.site_web ? (r.site_web.startsWith('http') ? r.site_web : `https://${r.site_web}`) : null
+  // P177 : réseaux supplémentaires.
+  const liUrl = r.linkedin ? (r.linkedin.startsWith('http') ? r.linkedin : `https://linkedin.com/in/${r.linkedin.replace(/^@/, '')}`) : null
+  const ytUrl = r.youtube ? (r.youtube.startsWith('http') ? r.youtube : `https://youtube.com/@${r.youtube.replace(/^@/, '')}`) : null
+  const ttUrl = r.tiktok ? (r.tiktok.startsWith('http') ? r.tiktok : `https://tiktok.com/@${r.tiktok.replace(/^@/, '')}`) : null
   const socialCls = 'text-xs font-semibold px-3 py-1.5 rounded-full border border-edge text-dim hover:text-primary hover:border-primary transition'
+  const merites = Array.isArray(c.merites) ? c.merites : []
 
   const reportAvis = async (id) => {
     setReported((s) => new Set(s).add(id))
@@ -244,6 +279,7 @@ export default function CreateurProfilPage() {
   }
 
   const trackContact = () => vitrineStatsService.track(c?.id, 'contact')
+  const goToAvis = () => document.getElementById('avis-section')?.scrollIntoView({ behavior: 'smooth' })
   const signaler = (type, id) => { setSignaled((s) => new Set(s).add(id)); signalementService.report(type, id) }
   const cols = c.collections || []
 
@@ -259,16 +295,30 @@ export default function CreateurProfilPage() {
               <span data-theme="dark" className="absolute top-2.5 left-2.5 text-inverse text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-inset">{m.type}</span>
             </div>
           )}
-          <div className="p-3.5 flex items-center justify-between">
-            <div>
-              <h4 className="font-semibold text-[14.5px] text-ink">{m.nom}</h4>
-              <div className="font-bold text-primary text-[14px]">{format(m.prix) || t('vitrine.profil.on_quote')}</div>
-            </div>
-            {wa
-              ? <a href={waHref('vitrine.profil.wa_order', { nom: c.nom, modele: m.nom })} onClick={trackContact} target="_blank" rel="noopener noreferrer" className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-inverse hover:bg-primary-600 transition">{t('vitrine.profil.order')}</a>
-              : <button className="inline-flex items-center font-semibold text-[13px] px-3.5 py-2 rounded-[10px] bg-primary text-inverse hover:bg-primary-600 transition">{t('vitrine.profil.order')}</button>}
+          <div className="px-3.5 pt-3">
+            <h4 className="font-semibold text-[14.5px] text-ink">{m.nom}</h4>
+            <div className="font-bold text-primary text-[14px]">{format(m.prix) || t('vitrine.profil.on_quote')}</div>
           </div>
-          <div className="px-3.5 pb-2">
+          {/* P160 : 4 boutons par création — ❤️ J'aime, 💬 Commenter, 📩 Contacter, 🛒 Commander */}
+          <div className="px-3 py-2.5 flex items-center gap-0.5">
+            <button onClick={() => onLike(m.id)} title={t('vitrine.profil.like')} aria-label={t('vitrine.profil.like')}
+                    className="flex items-center gap-1 text-[13px] px-2 py-1.5 rounded-lg hover:bg-app transition">
+              <Heart size={16} className={likeState[m.id]?.liked ? 'fill-primary text-primary' : 'text-dim'} />
+              <span className="text-dim tabular-nums">{likeState[m.id]?.likes ?? 0}</span>
+            </button>
+            <button onClick={goToAvis} title={t('vitrine.profil.comment')} aria-label={t('vitrine.profil.comment')}
+                    className="p-1.5 rounded-lg text-dim hover:bg-app hover:text-primary transition">
+              <MessageCircle size={16} />
+            </button>
+            {wa
+              ? <a href={waHref('vitrine.profil.wa_message', { nom: c.nom })} onClick={trackContact} target="_blank" rel="noopener noreferrer" title={t('vitrine.profil.contact')} aria-label={t('vitrine.profil.contact')} className="p-1.5 rounded-lg text-dim hover:bg-app hover:text-primary transition"><Send size={16} /></a>
+              : <button title={t('vitrine.profil.contact')} aria-label={t('vitrine.profil.contact')} className="p-1.5 rounded-lg text-ghost cursor-default"><Send size={16} /></button>}
+            <div className="flex-1" />
+            {wa
+              ? <a href={waHref('vitrine.profil.wa_order', { nom: c.nom, modele: m.nom })} onClick={trackContact} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-semibold text-[12.5px] px-3 py-1.5 rounded-[10px] bg-primary text-inverse hover:bg-primary-600 transition"><ShoppingBag size={14} />{t('vitrine.profil.order')}</a>
+              : <button className="inline-flex items-center gap-1 font-semibold text-[12.5px] px-3 py-1.5 rounded-[10px] bg-primary text-inverse hover:bg-primary-600 transition"><ShoppingBag size={14} />{t('vitrine.profil.order')}</button>}
+          </div>
+          <div className="px-3.5 pb-2.5">
             {signaled.has(m.id)
               ? <span className="text-[10px] text-ghost">⚑ {t('vitrine.profil.report_done')}</span>
               : <button onClick={() => signaler('creation', m.id)} className="text-[10px] text-ghost hover:text-danger">⚑ {t('vitrine.profil.report')}</button>}
@@ -277,11 +327,13 @@ export default function CreateurProfilPage() {
       ))}
     </div>
   )
+  // P171 : 4 compteurs publics officiels — 👥 Abonnés, ⭐ Avis, 🖼️ Publications, 🛒 Commandes.
+  const avisCount = Array.isArray(c.avis) ? c.avis.length : (c.avis ?? 0)
   const stats = [
-    { v: creations.length, l: t('vitrine.profil.stat_creations') },
-    { v: c.stats?.vues_mois ?? '—', l: t('vitrine.profil.stat_views') },
-    { v: c.stats?.taux_ponctualite != null ? `${c.stats.taux_ponctualite}%` : '—', l: t('vitrine.profil.stat_punctuality') },
-    { v: c.experience || '—', l: t('vitrine.profil.stat_experience') },
+    { v: abo.abonnes,                        l: t('vitrine.profil.stat_abonnes') },
+    { v: avisCount,                          l: t('vitrine.profil.stat_avis') },
+    { v: c.nb_creations ?? creations.length, l: t('vitrine.profil.stat_publications') },
+    { v: c.commandes ?? 0,                   l: t('vitrine.profil.stat_commandes') },
   ]
 
   return (
@@ -300,12 +352,16 @@ export default function CreateurProfilPage() {
             </h1>
             <div className="text-dim text-[15px] mt-1">{c.specialite}</div>
             <div className="text-dim text-[13px] mt-1">📍 {c.ville}, Bénin</div>
-            {c.note && <div className="text-sm mt-2"><span className="text-primary font-bold">★ {c.note}</span> <span className="text-dim">({Array.isArray(c.avis) ? c.avis.length : (c.avis ?? 0)})</span></div>}
+            {c.inscrit_depuis && <div className="text-ghost text-[12.5px] mt-1">🕐 {c.inscrit_depuis}</div>}
+            {c.note && <div className="text-sm mt-2"><span className="text-primary font-bold">★ {c.note}</span> <span className="text-dim">({avisCount})</span></div>}
             {c.bio && <p className="text-ink text-sm mt-3 leading-relaxed">{c.bio}</p>}
-            {(igUrl || fbUrl || siteUrl) && (
+            {(igUrl || fbUrl || siteUrl || liUrl || ytUrl || ttUrl) && (
               <div className="flex gap-2 mt-3 flex-wrap">
                 {igUrl && <a href={igUrl} target="_blank" rel="noopener noreferrer" className={socialCls}>Instagram</a>}
                 {fbUrl && <a href={fbUrl} target="_blank" rel="noopener noreferrer" className={socialCls}>Facebook</a>}
+                {ttUrl && <a href={ttUrl} target="_blank" rel="noopener noreferrer" className={socialCls}>TikTok</a>}
+                {ytUrl && <a href={ytUrl} target="_blank" rel="noopener noreferrer" className={socialCls}>YouTube</a>}
+                {liUrl && <a href={liUrl} target="_blank" rel="noopener noreferrer" className={socialCls}>LinkedIn</a>}
                 {siteUrl && <a href={siteUrl} target="_blank" rel="noopener noreferrer" className={socialCls}>Site web</a>}
               </div>
             )}
@@ -315,7 +371,10 @@ export default function CreateurProfilPage() {
             {wa
               ? <a href={waHref('vitrine.profil.wa_message', { nom: c.nom })} onClick={trackContact} target="_blank" rel="noopener noreferrer" className={btnOutline}>{t('vitrine.profil.contact')}</a>
               : <button className={btnOutline}>{t('vitrine.profil.contact')}</button>}
-            <button onClick={() => toggle(c.id)} className={btnOutline}>{has(c.id) ? '♥ ' : '♡ '}{t('vitrine.profil.save')}</button>
+            <button onClick={onSubscribe} className={abo.abonne ? btnPrimary : btnOutline}>
+              <Heart size={15} className={abo.abonne ? 'fill-current' : ''} />
+              {abo.abonne ? t('vitrine.profil.subscribed') : t('vitrine.profil.subscribe')}
+            </button>
           </div>
         </div>
 
@@ -328,6 +387,42 @@ export default function CreateurProfilPage() {
             </div>
           ))}
         </div>
+
+        {/* Mérites (P174-176) — badges par catégorie, niveaux non atteints grisés. */}
+        {merites.length > 0 && (
+          <div className="mt-8">
+            <div className="flex items-center gap-2 mb-1">
+              <Award size={20} className="text-primary" />
+              <h2 className="font-display text-2xl text-ink">{t('vitrine.profil.merites')}</h2>
+            </div>
+            <p className="text-dim text-sm mb-4">{t('vitrine.profil.merites_intro')}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {merites.map((cat) => (
+                <div key={cat.cle} className="bg-card border border-edge rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">{cat.emoji}</span>
+                      <span className="font-semibold text-ink text-[14px]">{cat.label}</span>
+                    </div>
+                    <span className="text-[11px] text-dim tabular-nums">{cat.valeur}</span>
+                  </div>
+                  <div className="mb-2.5">
+                    <span className="inline-block text-[13px] font-bold text-primary bg-primary-50 px-2.5 py-0.5 rounded-full">{cat.nom}</span>
+                    <span className="text-[11px] text-dim ml-2">{t('vitrine.profil.level', { n: cat.niveau })}</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    {cat.niveaux.map((n) => (
+                      <span key={n.niveau} title={t('vitrine.profil.level', { n: n.niveau })}
+                            className={`text-[10.5px] px-2 py-0.5 rounded-full border ${n.obtenu ? 'border-primary/40 text-primary bg-primary-50' : 'border-edge text-ghost opacity-60'}`}>
+                        {n.nom}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Créations */}
         <h2 className="font-display text-2xl mt-10 mb-5 text-ink">{t('vitrine.profil.catalogue')}</h2>
@@ -359,7 +454,7 @@ export default function CreateurProfilPage() {
         )}
 
         {/* Avis */}
-        <h2 className="font-display text-2xl mt-12 mb-5 text-ink">{t('vitrine.profil.reviews')}</h2>
+        <h2 id="avis-section" className="font-display text-2xl mt-12 mb-5 text-ink">{t('vitrine.profil.reviews')}</h2>
         {(c.avis && c.avis.length > 0) ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             {c.avis.map((r, i) => (
