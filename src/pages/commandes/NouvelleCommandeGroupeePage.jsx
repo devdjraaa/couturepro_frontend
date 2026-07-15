@@ -23,6 +23,7 @@ const emptySousCommande = () => ({
   prix: '',
   acompte: '',
   mode_paiement_acompte: 'especes',
+  motif_surplus_acompte: '',   // P14-16 : motif si acompte > total de l'article
   date_livraison_prevue: '',
   description: '',
   urgence: false,
@@ -326,8 +327,24 @@ function SousCommandeCard({ index, sc, vetements, onChange, onRemove, canRemove 
         </p>
       )}
 
+      {/* P14-16 — Bloc surplus auto : différence calculée + motif obligatoire */}
       {surplus && (
-        <p className="text-xs text-error">{t('commandes.groupe_form.acompte_surplus')}</p>
+        <div className="space-y-1.5 rounded-lg border border-error/30 bg-error/5 px-2.5 py-2">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-error">{t('commandes.creation.acompte_surplus_label')}</span>
+            <span className="font-mono font-semibold text-error">+ {formatCurrency(acompte - total)}</span>
+          </div>
+          <label className="block text-xs font-medium text-error">
+            {t('commandes.creation.motif_surplus')} <span>*</span>
+          </label>
+          <textarea
+            value={sc.motif_surplus_acompte}
+            onChange={e => set('motif_surplus_acompte', e.target.value)}
+            placeholder={t('commandes.creation.motif_surplus_ph')}
+            rows={2}
+            className="w-full bg-card border border-error/40 rounded-lg px-2.5 py-1.5 text-sm text-ink placeholder:text-ghost focus:outline-none focus:ring-2 focus:ring-error/30 resize-none"
+          />
+        </div>
       )}
     </div>
   )
@@ -361,6 +378,15 @@ function StepSousCommandes({ data, setData, onSubmit, isLoading }) {
     const valides = data.sous_commandes.filter(sc => sc.vetement_id && Number(sc.prix) > 0)
     if (valides.length < 2) {
       setError(t('commandes.groupe_form.err_min'))
+      return
+    }
+    // P14-16 : un article dont l'acompte dépasse son total doit avoir un motif.
+    const surplusSansMotif = valides.some(sc => {
+      const total = (Number(sc.quantite) || 1) * Number(sc.prix || 0)
+      return Number(sc.acompte || 0) > total && !sc.motif_surplus_acompte?.trim()
+    })
+    if (surplusSansMotif) {
+      setError(t('commandes.creation.err_surplus'))
       return
     }
     setError('')
@@ -473,6 +499,7 @@ export default function NouvelleCommandeGroupeePage() {
         prix:                  Number(sc.prix),
         acompte:               Number(sc.acompte) || 0,
         mode_paiement_acompte: Number(sc.acompte) > 0 ? sc.mode_paiement_acompte : undefined,
+        motif_surplus_acompte: sc.motif_surplus_acompte?.trim() || undefined, // P14-16
         date_livraison_prevue: sc.date_livraison_prevue || undefined,
         description:           sc.description || undefined,
         urgence:               sc.urgence,
