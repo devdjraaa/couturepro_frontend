@@ -22,7 +22,7 @@ export default function CommandeGroupeDetailPage() {
   const { data: groupe, isLoading } = useCommandeGroupe(id)
   const { data: factureSettings }   = useFactureSettings()
   const { available: whatsappFactureAvailable } = usePlanFeature('facture_whatsapp')
-  const { atelier, can, role } = useAuth()
+  const { atelier, can, role, user } = useAuth()
 
   const [exporting, setExporting] = useState(null)
 
@@ -30,7 +30,7 @@ export default function CommandeGroupeDetailPage() {
     if (!groupe) return
     setExporting(mode)
     try {
-      const { pdf, filename } = await exportFactureGroupePdf({ groupe, atelier, factureSettings })
+      const { pdf, filename } = await exportFactureGroupePdf({ groupe, atelier, factureSettings, contact: { telephone: user?.telephone, email: user?.email } })
       const result = await shareOrDownloadPdf(pdf, filename, {
         title: t('commandes.groupe.partage_titre', { client: groupe.client_nom }),
         text: t('commandes.groupe.partage_texte', { client: groupe.client_nom }),
