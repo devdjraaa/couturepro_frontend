@@ -366,7 +366,8 @@ function AbonnementCard({ navigate }) {
   const jours  = typeof abo.jours_restants === 'number' ? abo.jours_restants : null
   const essai  = abo.statut === 'essai'
   const urgent = jours !== null && jours <= 3
-  const statutLabel = t(`abonnement.statut.${abo.statut}`, { defaultValue: abo.statut })
+  // Garde-fou : jamais afficher une clé i18n brute si le statut manque (« abonnement.statut.undefined »).
+  const statutLabel = abo.statut ? t(`abonnement.statut.${abo.statut}`, { defaultValue: abo.statut }) : null
 
   return (
     <button
@@ -387,12 +388,14 @@ function AbonnementCard({ navigate }) {
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5">
           <span className="text-sm font-semibold text-ink truncate">{abo.niveau_label}</span>
-          <span className={cn(
-            'text-2xs font-medium px-1.5 py-0.5 rounded-full shrink-0',
-            urgent ? 'bg-danger/15 text-danger' : essai ? 'bg-accent/15 text-accent-700' : 'bg-success/15 text-success',
-          )}>
-            {statutLabel}
-          </span>
+          {statutLabel && (
+            <span className={cn(
+              'text-2xs font-medium px-1.5 py-0.5 rounded-full shrink-0',
+              urgent ? 'bg-danger/15 text-danger' : essai ? 'bg-accent/15 text-accent-700' : 'bg-success/15 text-success',
+            )}>
+              {statutLabel}
+            </span>
+          )}
         </div>
         {jours !== null && (
           <p className={cn('text-xs mt-0.5', urgent ? 'text-danger font-medium' : 'text-ghost')}>

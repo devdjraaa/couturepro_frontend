@@ -153,11 +153,15 @@ export function AuthProvider({ children }) {
     setActiveAtelierId(isMaitre ? null : newAtelier.id)
   }, [])
 
-  // Scope local (WatermelonDB) : id RÉEL de l'atelier actif, maître inclus.
-  // Séparé de cp_active_atelier (entête API) → sert au filtrage local pour
-  // isoler strictement les données par atelier (P62-65). Aucun impact serveur.
+  // Cohérence atelier actif (même au reload, pas seulement au switch) :
+  //  - cp_atelier_local : id RÉEL (maître inclus) → filtrage local WatermelonDB (P62-65).
+  //  - cp_active_atelier : entête API X-Atelier-Id → null = maître (défaut serveur), sinon l'id
+  //    du sous-atelier. Sans ça, l'entête restait sur un ancien atelier → requêtes serveur
+  //    (abonnement, etc.) ciblaient le mauvais atelier (bug i18n « abonnement.statut.undefined »).
   useEffect(() => {
-    if (atelier?.id) localStorage.setItem('cp_atelier_local', atelier.id)
+    if (!atelier?.id) return
+    localStorage.setItem('cp_atelier_local', atelier.id)
+    setActiveAtelierId(atelier.is_maitre ? null : atelier.id)
   }, [atelier])
 
   const can = useCallback((permission) => {
