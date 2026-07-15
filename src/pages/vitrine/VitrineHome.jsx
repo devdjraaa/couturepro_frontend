@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { ChevronLeft, ChevronRight, Heart, Search } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Heart, Search, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { getCreators, getCreations, demoModels, categories } from './vitrineApi'
@@ -105,6 +105,7 @@ export default function VitrineHome() {
   const [creators, setCreators] = useState(null)
   const [cat, setCat] = useState('all')
   const [galleryModels, setGalleryModels] = useState(null)
+  const [lightbox, setLightbox] = useState(null)
   const location = useLocation()
   const carouselRef = useRef(null)
   const [carouselEdge, setCarouselEdge] = useState({ left: false, right: false })
@@ -125,6 +126,12 @@ export default function VitrineHome() {
   }, [])
   useEffect(() => { getCreators().then(setCreators) }, [])
   useEffect(() => { getCreations().then(setGalleryModels) }, [])
+  useEffect(() => {
+    if (!lightbox) return
+    const onKey = (e) => { if (e.key === 'Escape') setLightbox(null) }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [lightbox])
   useEffect(() => {
     const el = carouselRef.current
     if (!el) return
@@ -386,12 +393,14 @@ export default function VitrineHome() {
               <div className="vt-stagger columns-2 md:columns-4 gap-3">
                 {models.map((m, i) => (
                   <div key={m.id} className="vt-item break-inside-avoid mb-3">
-                    <div className="vt-card bg-card border border-edge rounded-xl overflow-hidden">
+                    <div className="vt-card bg-card border border-edge rounded-xl overflow-hidden group cursor-pointer"
+                         onClick={() => setLightbox(m)}>
                       <div className={`${heights[i % heights.length]} relative w-full`}>
                         {m.image_url
-                          ? <img src={m.image_url} alt={m.nom} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+                          ? <img src={m.image_url} alt={m.nom} className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
                           : <GarmentVisual cat={m.cat} gradient={m.gradient} className="absolute inset-0 h-full w-full" />}
                         <span data-theme="dark" className="absolute top-2.5 left-2.5 text-inverse text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-inset/80 backdrop-blur-sm">{m.type}</span>
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
                       </div>
                       <div className="p-3">
                         <h4 className="font-semibold text-[14px] text-ink leading-snug">{m.nom}</h4>
@@ -477,6 +486,35 @@ export default function VitrineHome() {
       </section>
 
       </div>{/* fin vt-page-motif */}
+
+      {/* LIGHTBOX */}
+      {lightbox && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+          onClick={() => setLightbox(null)}
+        >
+          <div
+            className="relative max-w-lg w-full bg-card rounded-2xl overflow-hidden shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setLightbox(null)}
+              className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/70 transition"
+              aria-label="Fermer"
+            >
+              <X size={16} />
+            </button>
+            {lightbox.image_url
+              ? <img src={lightbox.image_url} alt={lightbox.nom} className="w-full max-h-[70vh] object-contain bg-black" />
+              : <div className="h-72"><GarmentVisual cat={lightbox.cat} gradient={lightbox.gradient} className="w-full h-full" /></div>}
+            <div className="p-5">
+              <h3 className="font-display font-bold text-[17px] text-ink">{lightbox.nom}</h3>
+              <div className="text-[13px] text-dim mt-1">{t('vitrine.gallery.by')} {lightbox.par}</div>
+              <div className="font-bold text-primary text-[16px] mt-2">{format(lightbox.prix)}</div>
+            </div>
+          </div>
+        </div>
+      )}
     </VitrineShell>
   )
 }
