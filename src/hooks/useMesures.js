@@ -37,19 +37,18 @@ export function useSaveMesures(clientId) {
       const general = existing.find(m => !m.vetement_id)
 
       if (general) {
+        // Met à jour la fiche existante quel que soit son atelier (cross-atelier compris) :
+        // on ne change pas son atelier_id.
         await general.update(m => {
           m.champs_json = JSON.stringify(champs ?? {})
         })
       } else {
-        // P72-73 : rattacher la mesure à l'atelier DU CLIENT (cohérence cross-atelier),
-        // pas à l'atelier actif.
-        const client = await database.get('clients').find(clientId).catch(() => null)
         await database.get('mesures').create(m => {
           m.client_id   = clientId ?? ''
           m.vetement_id = null
           m.champs_json = JSON.stringify(champs ?? {})
           m.is_archived = false
-          m.atelier_id  = client?.atelier_id || getAtelierId()
+          m.atelier_id  = getAtelierId()
         })
       }
     })

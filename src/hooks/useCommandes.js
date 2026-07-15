@@ -133,15 +133,9 @@ export function useCreateCommande() {
   return useWmMutation(async (payload) => {
     return database.write(async () => {
       let client_nom = payload.client_nom ?? ''
-      // P72-73 : la commande est rattachée à l'atelier DU CLIENT (pas forcément l'atelier actif),
-      // pour rester cohérente en multi-ateliers (commande cross-atelier sans ressaisie).
-      let clientAtelierId = null
-      if (payload.client_id) {
+      if (!client_nom && payload.client_id) {
         const c = await database.get('clients').find(payload.client_id).catch(() => null)
-        if (c) {
-          if (!client_nom) client_nom = [c.prenom, c.nom].filter(Boolean).join(' ')
-          clientAtelierId = c.atelier_id || null
-        }
+        if (c) client_nom = [c.prenom, c.nom].filter(Boolean).join(' ')
       }
       let vetement_nom = payload.vetement_nom ?? ''
       if (!vetement_nom && payload.vetement_id) {
@@ -165,7 +159,10 @@ export function useCreateCommande() {
         c.date_livraison_prevue = payload.date_livraison_prevue ?? null
         c.urgence               = Boolean(payload.urgence)
         c.is_archived           = false
-        c.atelier_id            = clientAtelierId || getAtelierId()
+        // P72-73 : la commande est rattachée à l'atelier ACTIF (là où le travail est pris),
+        // même pour un client d'un autre de mes ateliers (référence cross-atelier autorisée
+        // côté backend). Cohérent avec le sync per-atelier.
+        c.atelier_id            = getAtelierId()
       })
       toast.success(`Commande pour ${client_nom || 'client'} créée avec succès.`)
       logAction('commande_creee', client_nom || '')
