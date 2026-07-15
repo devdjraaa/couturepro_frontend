@@ -88,7 +88,6 @@ export default function AppLayout({
             showBack={autoShowBack}
             onBack={onBack}
             rightAction={rightAction}
-            onSearch={() => setSearchOpen(true)}
           />
         </div>
 
