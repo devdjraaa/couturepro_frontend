@@ -2413,32 +2413,64 @@
       "protection_donnees": {
         "title": "Protection des données (APDP)",
         "eyebrow": "APDP · Bénin",
-        "subtitle": "Conformité à la loi béninoise n° 2009-09 relative à la protection des données personnelles.",
-        "date": "Dernière mise à jour : juillet 2026",
-        "sections": [
+        "subtitle": "Application : GEXTIMO — Marketplace de mode africaine | Éditeur : NOVAFRIQ, SASU",
+        "meta_lines": [
+          "Page publique de conformité. Pour le détail, voir Document 1 (Confidentialité) et Document 4 (Cookies)."
+        ],
+        "version": "Version 7.0 — Synthèse publique de conformité APDP. Voir Documents 1, 4, 5, 6, 7 pour le détail.",
+        "articles": [
           {
-            "h": "Cadre légal",
-            "p": "La plateforme Gextimo se conforme à la loi n° 2009-09 du 22 mai 2009 portant protection des données à caractère personnel en République du Bénin, ainsi qu'aux recommandations de l'Autorité de Protection des Données Personnelles (APDP)."
+            "title": "ARTICLE 1 — NOTRE ENGAGEMENT",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "NOVAFRIQ protège vos données personnelles conformément à la Loi n° 2017-20 portant Code du Numérique en République du Bénin et aux exigences de l'APDP (Autorité de Protection des Données Personnelles)."
+              }
+            ]
           },
           {
-            "h": "Déclaration à l'APDP",
-            "p": "Conformément à l'article 14 de la loi n° 2009-09, les traitements de données personnelles mis en œuvre par Gextimo ont été déclarés auprès de l'APDP du Bénin."
+            "title": "ARTICLE 2 — DÉCLARATION APDP",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Le traitement de vos données est déclaré à l'APDP sous la délibération n° [NUMÉRO DE DÉLIBÉRATION APDP — à compléter après dépôt]."
+              },
+              {
+                "type": "p",
+                "t": "Responsable du traitement : ADJAHO Patrick Dona — NOVAFRIQ. Contact : dpo@novafriq.africa."
+              }
+            ]
           },
           {
-            "h": "Données sensibles",
-            "p": "Nous ne collectons pas de données sensibles au sens de la loi (origine raciale ou ethnique, opinions politiques, croyances religieuses, données de santé). Seules les données nécessaires à la fourniture de nos services sont collectées."
+            "title": "ARTICLE 3 — VOS DROITS",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Vous disposez des droits d'accès, de rectification, de suppression, d'opposition, de portabilité et d'oubli sur vos données."
+              },
+              {
+                "type": "p",
+                "t": "Pour les exercer : dpo@novafriq.africa. Nous répondons sous 60 jours."
+              }
+            ]
           },
           {
-            "h": "Droits des personnes concernées",
-            "p": "Conformément aux articles 21 à 30 de la loi n° 2009-09, vous disposez d'un droit d'accès, de rectification, d'effacement, d'opposition et de portabilité de vos données personnelles. Ces droits s'exercent par e-mail à : privacy@gextimo.com, accompagné d'une pièce d'identité."
+            "title": "ARTICLE 4 — OÙ SONT VOS DONNÉES",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Vos données sont hébergées dans un datacenter situé à Paris (France, Union Européenne), chez Hostinger International Ltd. Ce transfert hors du Bénin fait l'objet de la formalité de flux transfrontière auprès de l'APDP."
+              }
+            ]
           },
           {
-            "h": "Délai de réponse",
-            "p": "Toute demande relative à vos droits sera traitée dans un délai maximum de 30 jours à compter de la réception de votre demande complète."
-          },
-          {
-            "h": "Réclamation auprès de l'APDP",
-            "p": "Si vous estimez que vos droits ne sont pas respectés, vous pouvez adresser une réclamation à l'Autorité de Protection des Données Personnelles du Bénin (APDP), dont les coordonnées sont disponibles sur le site officiel du gouvernement béninois."
+            "title": "ARTICLE 5 — CONTACTER L'APDP",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Vous pouvez à tout moment saisir l'APDP : Rue 6.076, Aïdjèdo, Cotonou · contact@apdp.bj · www.apdp.bj · +229 21 32 57 88."
+              }
+            ]
           }
         ]
       },

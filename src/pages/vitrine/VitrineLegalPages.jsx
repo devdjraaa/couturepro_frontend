@@ -189,7 +189,7 @@ export function CookiesPage() {
 }
 
 export function ProtectionDonneesPage() {
-  return <LegalPage ns="protection_donnees" path="/protection-donnees" />
+  return <RichLegalPage ns="protection_donnees" path="/protection-donnees" />
 }
 
 export function CguPage() {
