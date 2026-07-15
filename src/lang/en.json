@@ -399,7 +399,13 @@
       "renvoyer": "Resend code",
       "renvoyer_dans": "Resend in {{secondes}}s",
       "instruction": "Enter the 6-digit code received by SMS.",
-      "renvoye_succes": "Code resent!"
+      "renvoye_succes": "Code resent!",
+      "email_incorrect": "Wrong e-mail? Fix it",
+      "email_incorrect_desc": "If you entered a wrong e-mail at sign-up, fix it here: the OTP code will be resent to the new address.",
+      "nouvel_email": "New e-mail",
+      "votre_mot_de_passe": "Your password",
+      "corriger_email_btn": "Fix and resend OTP",
+      "email_corrige": "E-mail fixed. A new code has been sent."
     },
     "mot_de_passe_oublie": {
       "titre": "Forgot password",
