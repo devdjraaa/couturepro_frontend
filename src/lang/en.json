@@ -1357,6 +1357,20 @@
     "installer_desc": "Add Gextimo to your home screen for quick access.",
     "installer_btn": "Install"
   },
+  "patron": {
+    "section_title": "Sell the pattern (paid)",
+    "hint": "Offer this model's pattern as a paid download.",
+    "titre_label": "Pattern title",
+    "prix_label": "Price (FCFA)",
+    "fichier_label": "Choose a file (PDF, ZIP, image — max 20 MB)",
+    "publier": "Put on sale",
+    "ventes": "{{n}} sale(s)",
+    "retirer": "Remove from sale",
+    "retirer_confirm": "Remove this pattern from sale?",
+    "err_fichier": "Please choose a file.",
+    "err_prix": "Please set a price (minimum 100 FCFA).",
+    "err_generic": "Putting on sale failed. Please try again."
+  },
   "vitrine": {
     "promo": "✦ New — the Gextimo showcase connects African fashion designers across West Africa.",
     "online": "● Online",

@@ -4,11 +4,14 @@ import { useTranslation } from 'react-i18next'
 import { useVetements, useCreateVetement, useUpdateVetement, useDeleteVetement } from '@/hooks/useVetements'
 import { AppLayout } from '@/components/layout'
 import { VetementCard, VetementForm } from '@/components/vetements'
+import PatronManager from '@/components/vetements/PatronManager'
 import { EmptyState, Skeleton, BottomSheet, FloatingActionButton } from '@/components/ui'
 import { isMock } from '@/services/mockFlag'
+import { useAccountType } from '@/hooks/useAccountType'
 
 export default function CataloguePage() {
   const { t } = useTranslation()
+  const { isDesigner } = useAccountType()
   const [editing, setEditing] = useState(null) // null | 'new' | vetement object
   const { data: vetements = [], isLoading } = useVetements()
   const createVetement = useCreateVetement()
@@ -107,6 +110,12 @@ export default function CataloguePage() {
           onCancel={() => setEditing(null)}
           isLoading={isLoading_}
         />
+        {/* P161-163 : vente de patron — création existante, compte designer (hors démo). */}
+        {!isNew && isDesigner && !isMock() && editing?.id && (
+          <div className="px-5 pb-5">
+            <PatronManager vetement={editing} />
+          </div>
+        )}
       </BottomSheet>
     </AppLayout>
   )
