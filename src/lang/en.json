@@ -1061,7 +1061,9 @@
       "texte": "Your trial period {{label}}.",
       "expire_auj": "expires today",
       "expire_dans": "expires in {{jours}} day(s)",
-      "action": "Choose a plan →"
+      "action": "Choose a plan →",
+      "mode_gratuit": "Subscription expired — you are on the free plan (limited features).",
+      "renouveler": "Renew →"
     },
     "code": {
       "titre": "Activation code",

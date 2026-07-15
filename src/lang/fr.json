@@ -1061,7 +1061,9 @@
       "texte": "Votre période d'essai {{label}}.",
       "expire_auj": "expire aujourd'hui",
       "expire_dans": "expire dans {{jours}} jour(s)",
-      "action": "Choisir un plan →"
+      "action": "Choisir un plan →",
+      "mode_gratuit": "Abonnement expiré — vous êtes en mode gratuit (fonctionnalités limitées).",
+      "renouveler": "Renouveler →"
     },
     "code": {
       "titre": "Code d'activation",
