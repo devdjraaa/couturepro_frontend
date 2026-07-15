@@ -44,7 +44,11 @@ function AccountStatusBanner() {
   // 'gele' = compte suspendu (action admin, ou blocage auto sur récidive de signalements).
   if (atelier.statut === 'gele') {
     return (
-      <div className="flex items-center gap-2 px-4 py-2 bg-danger/10 border-b border-danger/30 text-sm text-danger cursor-pointer" onClick={() => navigate('/support')}>
+      <div
+        className="flex items-center gap-2 px-4 pb-2 bg-danger/10 border-b border-danger/30 text-sm text-danger cursor-pointer"
+        style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 0.5rem)' }}
+        onClick={() => navigate('/support')}
+      >
         <Ban size={14} className="shrink-0" />
         <span>Votre compte est temporairement suspendu. <span className="underline font-medium">Contacter le support</span></span>
       </div>
