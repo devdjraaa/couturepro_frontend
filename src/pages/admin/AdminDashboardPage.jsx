@@ -1,8 +1,10 @@
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useQueryClient } from '@tanstack/react-query'
 import {
   Building2, TicketCheck, CreditCard, KeyRound,
-  ArrowUpRight, ArrowDownRight, Minus, ChevronRight,
+  ArrowUpRight, ArrowDownRight, Minus, ChevronRight, RotateCw,
 } from 'lucide-react'
 import { AdminLayout } from '@/components/admin'
 import { useAdminAuth } from '@/contexts'
@@ -89,9 +91,23 @@ function QuickItem({ icon: Icon, color = 'primary', title, subtitle, to }) {
 export default function AdminDashboardPage() {
   const { t } = useTranslation()
   const { admin } = useAdminAuth()
+  const queryClient = useQueryClient()
+  const [refreshing, setRefreshing] = useState(false)
   const { data: ateliers  } = useAdminAteliers()
   const { data: tickets   } = useAdminTickets({ statut: 'ouvert' })
   const { data: paiements } = useAdminPaiements({ statut: 'pending' })
+
+  // P92-95 : dashboard « temps réel » — les stats se rafraîchissent seules (30 s)
+  // + bouton rafraîchir manuel dans le header.
+  const refresh = async () => {
+    setRefreshing(true)
+    await queryClient.invalidateQueries({ queryKey: ['admin'] })
+    setTimeout(() => setRefreshing(false), 600)
+  }
+  useEffect(() => {
+    const id = setInterval(() => queryClient.invalidateQueries({ queryKey: ['admin'] }), 30_000)
+    return () => clearInterval(id)
+  }, [queryClient])
 
   const totalAteliers    = ateliers?.total ?? 0
   const ticketsOuverts   = tickets?.total ?? 0
@@ -138,7 +154,20 @@ export default function AdminDashboardPage() {
   ]
 
   return (
-    <AdminLayout title={t('admin.nav.dashboard')}>
+    <AdminLayout
+      title={t('admin.nav.dashboard')}
+      action={
+        <button
+          type="button"
+          onClick={refresh}
+          className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl border border-edge text-dim hover:text-ink hover:border-primary transition-colors"
+          title={t('sync.refresh')}
+        >
+          <RotateCw size={13} className={refreshing ? 'animate-spin' : ''} />
+          {t('sync.refresh')}
+        </button>
+      }
+    >
       {/* Greeting */}
       <p className="text-sm text-ghost mb-6">
         {greeting},{' '}
