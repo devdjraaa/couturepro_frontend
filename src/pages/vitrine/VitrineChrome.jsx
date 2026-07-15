@@ -265,6 +265,7 @@ export function VitrineFooter() {
     ] },
     { h: t('vitrine.footer.col_support'), links: [
       { l: t('vitrine.menu2.support'), to: '/aide' },
+      { l: t('vitrine.patron.recuperer_title'), to: '/patrons/recuperer' },
     ] },
     { h: t('vitrine.footer.col_legal'), links: [
       { l: t('vitrine.footer.legal_mentions'), to: '#' },

@@ -48,6 +48,8 @@ import InscriptionPage     from '@/pages/vitrine/InscriptionPage'
 import PremiumPage           from '@/pages/vitrine/PremiumPage'
 import SponsorisationPage    from '@/pages/vitrine/SponsorisationPage'
 import Vitrine404Page        from '@/pages/vitrine/Vitrine404Page'
+import PatronRecuPage         from '@/pages/vitrine/PatronRecuPage'
+import PatronRecupererPage    from '@/pages/vitrine/PatronRecupererPage'
 
 // Pages admin
 import AdminLoginPage          from '@/pages/admin/AdminLoginPage'
@@ -174,6 +176,9 @@ export default function App() {
             <Route path={ROUTES.VITRINE_INSCRIPTION} element={<InscriptionPage />} />
             <Route path="/premium"               element={<PremiumPage />} />
             <Route path={ROUTES.VITRINE_SPONSORISATION} element={<SponsorisationPage />} />
+            {/* P161-163 : patrons payants — reçu (après paiement) + menu récupération. */}
+            <Route path="/patrons/recu/:code" element={<PatronRecuPage />} />
+            <Route path="/patrons/recuperer"  element={<PatronRecupererPage />} />
             <Route path="*" element={<Vitrine404Page />} />
           </Route>
         )}

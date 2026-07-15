@@ -84,6 +84,16 @@ export function toggleAbonnement(atelierId) {
   return postJson(`/vitrine/createurs/${atelierId}/abonnement`, { visitor_key: getVisitorKey() })
 }
 
+// P161-162 : achat d'un patron → { code_transaction, checkout_url } (redirection paiement).
+export function acheterPatron(patronId, buyer) {
+  return postJson(`/vitrine/patrons/${patronId}/acheter`, buyer)
+}
+
+// P162-163 : statut d'un achat par code de transaction (récupération).
+export function getAchatStatut(code) {
+  return safe(`/vitrine/patrons/achats/${encodeURIComponent(code)}`)
+}
+
 export async function getSuivi(reference) {
   return safe(`/vitrine/suivi/${encodeURIComponent(reference)}`)
 }
