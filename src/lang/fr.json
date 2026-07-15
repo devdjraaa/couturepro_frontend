@@ -1705,6 +1705,368 @@
       "devise": "Devise",
       "devise_hint": "Prix indicatifs — convertis au taux du jour.",
       "cta": "Commencer"
+    },
+    "legal_pages": {
+      "confidentialite": {
+        "title": "Politique de confidentialité",
+        "eyebrow": "Légal & Vie privée",
+        "subtitle": "Nous nous engageons à protéger vos données personnelles et à respecter votre vie privée.",
+        "date": "Dernière mise à jour : juillet 2026",
+        "sections": [
+          {
+            "h": "1. Responsable du traitement",
+            "p": "Gextimo (marque de NovAfriq), société exerçant au Bénin, est responsable du traitement de vos données personnelles collectées via la plateforme gextimo.com."
+          },
+          {
+            "h": "2. Données collectées",
+            "p": "Nous collectons les données que vous fournissez lors de la création de votre compte (nom, adresse e-mail, numéro de téléphone), les informations de transaction, ainsi que les données de navigation (adresse IP, type de navigateur, pages consultées) via des cookies techniques."
+          },
+          {
+            "h": "3. Finalités du traitement",
+            "p": "Vos données sont utilisées pour : la gestion de votre compte, le traitement des commandes, la communication sur l'état de vos projets, l'amélioration de nos services et, avec votre consentement, l'envoi de communications marketing."
+          },
+          {
+            "h": "4. Base légale",
+            "p": "Le traitement de vos données repose sur l'exécution du contrat (commandes, compte), le respect de nos obligations légales, votre consentement (newsletters) et notre intérêt légitime à améliorer nos services."
+          },
+          {
+            "h": "5. Partage des données",
+            "p": "Vos données peuvent être partagées avec les créateurs sélectionnés pour exécuter votre commande, nos prestataires de paiement sécurisé (sous contrat de confidentialité), et les autorités compétentes si la loi l'exige. Nous ne vendons jamais vos données à des tiers."
+          },
+          {
+            "h": "6. Conservation",
+            "p": "Vos données sont conservées pendant la durée de votre compte et jusqu'à 5 ans après votre dernière activité, conformément aux délais légaux applicables au Bénin."
+          },
+          {
+            "h": "7. Vos droits (APDP)",
+            "p": "Conformément à la loi n° 2009-09 portant protection des données personnelles au Bénin, vous disposez d'un droit d'accès, de rectification, d'effacement et d'opposition. Pour exercer ces droits, contactez-nous à : privacy@gextimo.com."
+          },
+          {
+            "h": "8. Sécurité",
+            "p": "Nous mettons en œuvre des mesures techniques et organisationnelles adaptées : chiffrement TLS des communications, accès restreint aux données, hébergement sécurisé."
+          }
+        ]
+      },
+      "mentions": {
+        "title": "Mentions légales",
+        "eyebrow": "Légal",
+        "subtitle": "Informations légales relatives à la plateforme Gextimo.",
+        "date": "Dernière mise à jour : juillet 2026",
+        "sections": [
+          {
+            "h": "Éditeur du site",
+            "p": "Gextimo est une marque déposée de NovAfriq, entreprise immatriculée au Registre du Commerce et du Crédit Mobilier (RCCM) du Bénin. Siège social : Cotonou, République du Bénin. Contact : contact@gextimo.com"
+          },
+          {
+            "h": "Directeur de la publication",
+            "p": "Le directeur de la publication est le représentant légal de NovAfriq."
+          },
+          {
+            "h": "Hébergement",
+            "p": "La plateforme est hébergée sur des serveurs sécurisés. Pour toute question relative à l'infrastructure technique, contactez notre service support."
+          },
+          {
+            "h": "Propriété intellectuelle",
+            "p": "L'ensemble des éléments composant le site Gextimo (textes, graphiques, logo, images, interface) sont protégés par le droit de la propriété intellectuelle et sont la propriété exclusive de NovAfriq, sauf mention contraire."
+          },
+          {
+            "h": "Responsabilité",
+            "p": "NovAfriq s'efforce d'assurer l'exactitude des informations diffusées sur la plateforme mais ne saurait être tenue responsable des erreurs ou omissions. Les créateurs sont seuls responsables des créations qu'ils publient."
+          },
+          {
+            "h": "Droit applicable",
+            "p": "Les présentes mentions légales sont soumises au droit béninois. Tout litige sera soumis à la juridiction compétente de Cotonou."
+          }
+        ]
+      },
+      "cookies": {
+        "title": "Politique de cookies",
+        "eyebrow": "Cookies & Traceurs",
+        "subtitle": "Comprendre comment Gextimo utilise les cookies pour améliorer votre expérience.",
+        "date": "Dernière mise à jour : juillet 2026",
+        "sections": [
+          {
+            "h": "Qu'est-ce qu'un cookie ?",
+            "p": "Un cookie est un petit fichier texte déposé sur votre terminal (ordinateur, smartphone) lors de votre visite sur notre site. Il nous permet de mémoriser vos préférences et d'améliorer votre expérience de navigation."
+          },
+          {
+            "h": "Cookies strictement nécessaires",
+            "p": "Ces cookies sont indispensables au fonctionnement de la plateforme : authentification, panier, préférences de langue et de devise. Ils ne peuvent pas être désactivés."
+          },
+          {
+            "h": "Cookies de performance",
+            "p": "Nous utilisons des outils d'analyse anonymisés pour mesurer la fréquentation de nos pages et identifier les parcours les plus utilisés. Ces données nous aident à améliorer nos services."
+          },
+          {
+            "h": "Cookies de personnalisation",
+            "p": "Ces cookies mémorisent vos préférences (thème clair/sombre, devise, langue) pour vous offrir une expérience personnalisée à chaque visite."
+          },
+          {
+            "h": "Gestion de vos cookies",
+            "p": "Vous pouvez accepter ou refuser les cookies non essentiels via notre bannière de consentement. Vous pouvez également configurer votre navigateur pour bloquer ou supprimer les cookies. Notez que la désactivation de certains cookies peut affecter votre expérience sur la plateforme."
+          },
+          {
+            "h": "Durée de conservation",
+            "p": "Les cookies de session expirent à la fermeture de votre navigateur. Les cookies persistants ont une durée maximale de 13 mois, conformément aux recommandations des autorités de protection des données."
+          }
+        ]
+      },
+      "protection_donnees": {
+        "title": "Protection des données (APDP)",
+        "eyebrow": "APDP · Bénin",
+        "subtitle": "Conformité à la loi béninoise n° 2009-09 relative à la protection des données personnelles.",
+        "date": "Dernière mise à jour : juillet 2026",
+        "sections": [
+          {
+            "h": "Cadre légal",
+            "p": "La plateforme Gextimo se conforme à la loi n° 2009-09 du 22 mai 2009 portant protection des données à caractère personnel en République du Bénin, ainsi qu'aux recommandations de l'Autorité de Protection des Données Personnelles (APDP)."
+          },
+          {
+            "h": "Déclaration à l'APDP",
+            "p": "Conformément à l'article 14 de la loi n° 2009-09, les traitements de données personnelles mis en œuvre par Gextimo ont été déclarés auprès de l'APDP du Bénin."
+          },
+          {
+            "h": "Données sensibles",
+            "p": "Nous ne collectons pas de données sensibles au sens de la loi (origine raciale ou ethnique, opinions politiques, croyances religieuses, données de santé). Seules les données nécessaires à la fourniture de nos services sont collectées."
+          },
+          {
+            "h": "Droits des personnes concernées",
+            "p": "Conformément aux articles 21 à 30 de la loi n° 2009-09, vous disposez d'un droit d'accès, de rectification, d'effacement, d'opposition et de portabilité de vos données personnelles. Ces droits s'exercent par e-mail à : privacy@gextimo.com, accompagné d'une pièce d'identité."
+          },
+          {
+            "h": "Délai de réponse",
+            "p": "Toute demande relative à vos droits sera traitée dans un délai maximum de 30 jours à compter de la réception de votre demande complète."
+          },
+          {
+            "h": "Réclamation auprès de l'APDP",
+            "p": "Si vous estimez que vos droits ne sont pas respectés, vous pouvez adresser une réclamation à l'Autorité de Protection des Données Personnelles du Bénin (APDP), dont les coordonnées sont disponibles sur le site officiel du gouvernement béninois."
+          }
+        ]
+      },
+      "cgu": {
+        "title": "Conditions Générales d'Utilisation",
+        "eyebrow": "CGU",
+        "subtitle": "Les règles qui régissent l'utilisation de la plateforme Gextimo.",
+        "date": "Dernière mise à jour : juillet 2026",
+        "sections": [
+          {
+            "h": "Article 1 — Objet",
+            "p": "Les présentes Conditions Générales d'Utilisation (CGU) ont pour objet de définir les modalités et conditions d'utilisation de la plateforme Gextimo, accessible à l'adresse gextimo.com, et les droits et obligations des utilisateurs."
+          },
+          {
+            "h": "Article 2 — Accès à la plateforme",
+            "p": "L'accès à certaines fonctionnalités de la plateforme nécessite la création d'un compte. L'utilisateur doit être âgé d'au moins 18 ans et fournir des informations exactes lors de son inscription."
+          },
+          {
+            "h": "Article 3 — Obligations des utilisateurs",
+            "p": "Les utilisateurs s'engagent à utiliser la plateforme de manière licite, à ne pas usurper l'identité d'un tiers, à ne pas diffuser de contenus illicites ou portant atteinte aux droits de tiers, et à respecter la propriété intellectuelle des créateurs."
+          },
+          {
+            "h": "Article 4 — Responsabilité de Gextimo",
+            "p": "Gextimo est une plateforme de mise en relation entre créateurs et clients. Nous ne sommes pas partie aux contrats conclus entre utilisateurs. La responsabilité de Gextimo est limitée aux obligations de moyens concernant la disponibilité de la plateforme."
+          },
+          {
+            "h": "Article 5 — Propriété intellectuelle",
+            "p": "Le contenu de la plateforme (hors créations des artisans) est la propriété exclusive de NovAfriq. Toute reproduction, représentation ou diffusion sans autorisation préalable est interdite."
+          },
+          {
+            "h": "Article 6 — Suspension et résiliation",
+            "p": "Gextimo se réserve le droit de suspendre ou de supprimer tout compte en cas de violation des présentes CGU, sans préavis ni indemnité. L'utilisateur peut clôturer son compte à tout moment depuis ses paramètres."
+          },
+          {
+            "h": "Article 7 — Modifications",
+            "p": "Gextimo peut modifier les présentes CGU à tout moment. Les utilisateurs seront informés des modifications substantielles par e-mail ou notification sur la plateforme. La poursuite de l'utilisation vaut acceptation des nouvelles conditions."
+          },
+          {
+            "h": "Article 8 — Droit applicable",
+            "p": "Les présentes CGU sont soumises au droit béninois. En cas de litige, les parties s'engagent à rechercher une solution amiable avant tout recours judiciaire."
+          }
+        ]
+      },
+      "droits_createurs": {
+        "title": "Droits des créateurs & propriété intellectuelle",
+        "eyebrow": "Créateurs & PI",
+        "subtitle": "Comprendre la protection de vos créations sur la plateforme Gextimo.",
+        "date": "Dernière mise à jour : juillet 2026",
+        "sections": [
+          {
+            "h": "Propriété de vos créations",
+            "p": "Vous conservez l'intégralité des droits de propriété intellectuelle sur vos créations publiées sur Gextimo : modèles, dessins, photos, descriptions. En publiant sur la plateforme, vous nous accordez uniquement une licence non-exclusive et limitée à l'affichage de votre portfolio."
+          },
+          {
+            "h": "Licence accordée à Gextimo",
+            "p": "En téléversant vos créations, vous accordez à Gextimo une licence mondiale, non exclusive, gratuite et sous-licenciable uniquement pour les besoins de promotion de votre atelier sur la plateforme et ses canaux de communication officiels."
+          },
+          {
+            "h": "Protection contre la copie",
+            "p": "Il est formellement interdit à tout utilisateur de la plateforme de reproduire, télécharger sans autorisation, diffuser ou commercialiser les créations d'un autre créateur. Tout manquement expose son auteur à des poursuites civiles et pénales."
+          },
+          {
+            "h": "Signalement de contrefaçon",
+            "p": "Si vous estimez qu'une création publiée sur Gextimo porte atteinte à vos droits, vous pouvez soumettre un signalement via la page Contact & réclamations. Notre équipe traitera votre demande dans les 72 heures."
+          },
+          {
+            "h": "Originalité des créations",
+            "p": "Chaque créateur garantit que les créations publiées sont originales et n'enfreignent pas les droits de propriété intellectuelle d'un tiers. En cas de litige sur ce point, la responsabilité incombe exclusivement au créateur."
+          }
+        ]
+      },
+      "conditions_vente": {
+        "title": "Conditions de vente & commissions",
+        "eyebrow": "Vente & Commissions",
+        "subtitle": "Tarification, commissions et processus de paiement sur Gextimo.",
+        "date": "Dernière mise à jour : juillet 2026",
+        "sections": [
+          {
+            "h": "Processus de commande",
+            "p": "Toute commande sur Gextimo suit un processus en plusieurs étapes : sélection de la création et du créateur, envoi d'une demande de devis, confirmation par le créateur, paiement sécurisé, et suivi de la réalisation. La commande est définitivement confirmée à la validation du paiement."
+          },
+          {
+            "h": "Tarification",
+            "p": "Les prix affichés sur les fiches créateurs sont indicatifs. Le prix définitif est fixé lors du devis validé entre le client et le créateur. Les prix sont exprimés hors frais de livraison, qui sont indiqués séparément lors de la commande."
+          },
+          {
+            "h": "Commission Gextimo",
+            "p": "Gextimo perçoit une commission sur chaque transaction réalisée via la plateforme. Le taux de commission est communiqué aux créateurs lors de leur inscription et peut varier selon le plan d'abonnement souscrit. La commission est prélevée automatiquement au moment du règlement."
+          },
+          {
+            "h": "Paiements sécurisés",
+            "p": "Les paiements sont sécurisés par nos prestataires agréés. Gextimo ne stocke jamais vos informations bancaires. Les devises acceptées sont affichées lors du paiement."
+          },
+          {
+            "h": "Litiges de paiement",
+            "p": "En cas de litige relatif à un paiement, contactez notre support dans les 30 jours suivant la transaction. Nous ferons notre meilleur effort pour résoudre le différend. En cas d'échec, les parties peuvent recourir à la médiation."
+          },
+          {
+            "h": "Facturation",
+            "p": "Un récapitulatif de chaque transaction est disponible dans votre espace personnel. Les créateurs reçoivent une confirmation de chaque virement avec le détail des commissions prélevées."
+          }
+        ]
+      },
+      "produits_interdits": {
+        "title": "Produits interdits & créations autorisées",
+        "eyebrow": "Charte des créations",
+        "subtitle": "Ce qui peut et ne peut pas être publié sur la plateforme Gextimo.",
+        "date": "Dernière mise à jour : juillet 2026",
+        "sections": [
+          {
+            "h": "Créations autorisées",
+            "p": "Gextimo est dédié à la mode africaine et à l'artisanat textile. Sont autorisées : toutes les créations vestimentaires (robes, costumes, boubous, ensembles enfants, accessoires de mode), les créations sur mesure ou prêt-à-porter, ainsi que les créations inspirées des textiles et traditions africaines."
+          },
+          {
+            "h": "Qualité et authenticité",
+            "p": "Chaque création publiée doit correspondre fidèlement aux photos et descriptions. Les images doivent être de bonne qualité et représenter fidèlement la création. Les photos volées, retouchées de manière trompeuse ou ne correspondant pas à la réalité sont interdites."
+          },
+          {
+            "h": "Produits et pratiques interdits",
+            "p": "Sont formellement interdits sur Gextimo : la vente de contrefaçons ou de copies de marques protégées, les créations portant atteinte à la dignité humaine, les annonces trompeuses ou frauduleuses, la vente de produits hors du secteur mode/textile, et toute activité illicite au regard de la législation béninoise."
+          },
+          {
+            "h": "Propriété intellectuelle des tiers",
+            "p": "Il est interdit de reproduire ou de s'inspirer trop directement des créations originales d'autres designers sans leur autorisation explicite. Gextimo respecte et fait respecter les droits de propriété intellectuelle."
+          },
+          {
+            "h": "Sanctions",
+            "p": "Tout manquement aux présentes règles entraînera le retrait immédiat de la création concernée, un avertissement, et en cas de récidive, la suspension définitive du compte sans remboursement des frais d'abonnement. Les cas de contrefaçon seront signalés aux autorités compétentes."
+          }
+        ]
+      },
+      "livraison_retours": {
+        "title": "Livraison, retours & remboursements",
+        "eyebrow": "Livraison & Retours",
+        "subtitle": "Modalités de livraison, politique de retour et conditions de remboursement.",
+        "date": "Dernière mise à jour : juillet 2026",
+        "sections": [
+          {
+            "h": "Livraison",
+            "p": "Les délais et frais de livraison sont définis par chaque créateur et indiqués sur leur fiche et lors du devis. Gextimo n'est pas directement responsable de la livraison mais accompagne les parties en cas de litige. Des options de livraison locale (Cotonou et villes principales) et internationale sont disponibles selon le créateur."
+          },
+          {
+            "h": "Suivi de commande",
+            "p": "Vous pouvez suivre l'état de votre commande depuis votre espace client ou via la page de suivi public (en saisissant votre référence de commande). Le créateur est tenu de mettre à jour le statut de la commande à chaque étape importante."
+          },
+          {
+            "h": "Créations sur mesure",
+            "p": "Les créations sur mesure sont réalisées spécifiquement pour vous selon vos mesures et préférences. En raison de leur nature personnalisée, elles ne sont pas éligibles au retour sauf en cas de défaut de conformité avéré."
+          },
+          {
+            "h": "Politique de retour",
+            "p": "Pour les articles prêt-à-porter, un retour est possible dans les 14 jours suivant la réception, à condition que l'article soit dans son état d'origine (non porté, étiquettes attachées). Les frais de retour sont à la charge du client sauf en cas de défaut."
+          },
+          {
+            "h": "Remboursements",
+            "p": "En cas de retour accepté ou d'annulation avant le début de la réalisation, le remboursement sera effectué sur le mode de paiement d'origine dans un délai de 7 à 14 jours ouvrables. La commission Gextimo n'est pas remboursable sauf en cas de faute de notre part."
+          },
+          {
+            "h": "Litiges",
+            "p": "En cas de litige avec un créateur concernant la livraison ou la conformité d'une commande, contactez notre support via le formulaire de réclamation. Notre équipe arbitre les différends en s'appuyant sur les preuves fournies par les deux parties."
+          }
+        ]
+      },
+      "regles_communaute": {
+        "title": "Règles de la communauté",
+        "eyebrow": "Communauté Gextimo",
+        "subtitle": "Les valeurs et comportements attendus de tous les membres de la plateforme.",
+        "date": "Dernière mise à jour : juillet 2026",
+        "sections": [
+          {
+            "h": "Nos valeurs",
+            "p": "Gextimo est une communauté bâtie sur le respect mutuel, la valorisation du talent africain et la transparence. Nous croyons que la mode africaine mérite une vitrine digne — et cela commence par des échanges respectueux entre tous les membres."
+          },
+          {
+            "h": "Respect et inclusion",
+            "p": "Tout propos discriminatoire, haineux ou irrespectueux envers un créateur, un client ou un membre de l'équipe Gextimo est strictement interdit. La communauté Gextimo accueille les talents de toute l'Afrique sans distinction."
+          },
+          {
+            "h": "Honnêteté et transparence",
+            "p": "Les créateurs s'engagent à afficher des photos et descriptions fidèles à leurs créations, à communiquer honnêtement sur les délais et à respecter les engagements pris envers les clients. Les avis et témoignages publiés doivent être authentiques."
+          },
+          {
+            "h": "Comportements interdits",
+            "p": "Sont interdits sur la plateforme : le spam et les sollicitations commerciales non autorisées, le harcèlement ou l'intimidation d'autres membres, la publication de faux avis, la manipulation des évaluations, les tentatives de contournement de la plateforme pour effectuer des transactions hors Gextimo, et toute activité frauduleuse."
+          },
+          {
+            "h": "Signalement",
+            "p": "Chaque membre de la communauté peut signaler un comportement inapproprié via le bouton de signalement présent sur les profils et créations. Les signalements sont traités par notre équipe de modération dans un délai de 48 heures."
+          },
+          {
+            "h": "Sanctions progressives",
+            "p": "Les manquements aux règles de la communauté entraînent des sanctions progressives : avertissement, restriction temporaire, suspension du compte. Les violations graves (fraude, harcèlement, contrefaçon) peuvent entraîner une suspension immédiate et définitive."
+          }
+        ]
+      },
+      "contact_reclamations": {
+        "title": "Contact & réclamations",
+        "eyebrow": "Support",
+        "subtitle": "Comment nous contacter et soumettre une réclamation sur la plateforme Gextimo.",
+        "date": "Dernière mise à jour : juillet 2026",
+        "sections": [
+          {
+            "h": "Nous contacter",
+            "p": "Pour toute question ou demande d'information, notre équipe est joignable par e-mail à : contact@gextimo.com. Vous pouvez également utiliser le formulaire de contact accessible depuis la rubrique Aide de la plateforme."
+          },
+          {
+            "h": "Support technique",
+            "p": "Pour tout problème technique (connexion, paiement, affichage), contactez notre support à : support@gextimo.com. Précisez votre identifiant, le navigateur utilisé et une description détaillée du problème. Notre équipe s'engage à répondre dans les 24 heures ouvrables."
+          },
+          {
+            "h": "Soumettre une réclamation",
+            "p": "Une réclamation peut concerner : une commande non conforme, un litige avec un créateur, un signalement de contrefaçon ou un problème de facturation. Envoyez votre réclamation détaillée à reclamations@gextimo.com en joignant tout document utile (photos, échanges, références de commande)."
+          },
+          {
+            "h": "Délai de traitement",
+            "p": "Toute réclamation est accusée de réception sous 24 heures. Le traitement complet intervient dans un délai de 7 jours ouvrables. En cas de litige complexe, ce délai peut être porté à 21 jours, avec communication régulière sur l'avancement."
+          },
+          {
+            "h": "Médiation",
+            "p": "En cas d'insatisfaction persistante après notre traitement, vous pouvez recourir à un médiateur indépendant. Gextimo s'engage à participer de bonne foi à toute procédure de médiation visant à résoudre un litige à l'amiable."
+          },
+          {
+            "h": "Protection des données",
+            "p": "Pour toute demande relative à vos données personnelles (accès, rectification, suppression), adressez-vous à notre délégué à la protection des données : privacy@gextimo.com."
+          }
+        ]
+      }
     }
   },
   "atelier": {

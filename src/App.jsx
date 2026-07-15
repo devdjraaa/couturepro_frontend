@@ -46,6 +46,19 @@ import InscriptionPage     from '@/pages/vitrine/InscriptionPage'
 import PremiumPage           from '@/pages/vitrine/PremiumPage'
 import SponsorisationPage    from '@/pages/vitrine/SponsorisationPage'
 import Vitrine404Page        from '@/pages/vitrine/Vitrine404Page'
+import {
+  ConfidentialitePage,
+  MentionsLegalesPage,
+  CookiesPage,
+  ProtectionDonneesPage,
+  CguPage,
+  DroitsCreateursPage,
+  ConditionsVentePage,
+  ProduitsInterditesPage,
+  LivraisonRetoursPage,
+  ReglesCommunautePage,
+  ContactReclamationsPage,
+} from '@/pages/vitrine/VitrineLegalPages'
 
 // Pages admin
 import AdminLoginPage          from '@/pages/admin/AdminLoginPage'
@@ -132,6 +145,17 @@ export default function App() {
             <Route path={ROUTES.VITRINE_INSCRIPTION} element={<InscriptionPage />} />
             <Route path="/premium"               element={<PremiumPage />} />
             <Route path={ROUTES.VITRINE_SPONSORISATION} element={<SponsorisationPage />} />
+            <Route path={ROUTES.VITRINE_CONFIDENTIALITE}    element={<ConfidentialitePage />} />
+            <Route path={ROUTES.VITRINE_MENTIONS}           element={<MentionsLegalesPage />} />
+            <Route path={ROUTES.VITRINE_COOKIES}            element={<CookiesPage />} />
+            <Route path={ROUTES.VITRINE_PROTECTION_DONNEES} element={<ProtectionDonneesPage />} />
+            <Route path={ROUTES.VITRINE_CGU}                element={<CguPage />} />
+            <Route path={ROUTES.VITRINE_DROITS_CREATEURS}   element={<DroitsCreateursPage />} />
+            <Route path={ROUTES.VITRINE_CONDITIONS_VENTE}   element={<ConditionsVentePage />} />
+            <Route path={ROUTES.VITRINE_PRODUITS_INTERDITS} element={<ProduitsInterditesPage />} />
+            <Route path={ROUTES.VITRINE_LIVRAISON_RETOURS}  element={<LivraisonRetoursPage />} />
+            <Route path={ROUTES.VITRINE_REGLES_COMMUNAUTE}  element={<ReglesCommunautePage />} />
+            <Route path={ROUTES.VITRINE_CONTACT_RECLAMATIONS} element={<ContactReclamationsPage />} />
             <Route path="*" element={<Vitrine404Page />} />
           </Route>
         )}
