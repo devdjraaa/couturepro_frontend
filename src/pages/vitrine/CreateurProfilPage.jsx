@@ -17,45 +17,68 @@ import { SkeletonCreatorProfile } from './VitrineSkeletons'
 const btnPrimary = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-inverse hover:bg-primary-600 transition'
 const btnOutline = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary transition'
 
+// P164 : « Passer commande » en 3 étapes — coordonnées → détails → récapitulatif.
 function DevisModal({ atelierId, createur, wa, onClose, onTrack }) {
   const { t } = useTranslation()
-  const [form, setForm] = useState({ nom: '', telephone: '', type_vetement: '', description: '', budget: '', delai: '' })
+  const [step, setStep] = useState(1)
+  const [form, setForm] = useState({
+    nom: '', prenom: '', telephone: '', email: '',              // étape 1
+    modele: '', type_vetement: '', taille: '', particularites: '', budget: '', delai: '', // étape 2
+  })
   const [sent, setSent] = useState(false)
   const [sending, setSending] = useState(false)
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }))
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const step1Ok = form.nom.trim() && form.telephone.trim()
+  const step2Ok = form.type_vetement.trim()
+
+  const nomComplet = `${form.prenom} ${form.nom}`.trim()
+  const buildDescription = () => {
+    const lines = []
+    if (form.modele.trim()) lines.push(`${t('vitrine.devis_modal.model')} : ${form.modele.trim()}`)
+    if (form.type_vetement.trim()) lines.push(`${t('vitrine.devis_modal.type')} : ${form.type_vetement.trim()}`)
+    if (form.taille.trim()) lines.push(`${t('vitrine.devis_modal.size')} : ${form.taille.trim()}`)
+    if (form.particularites.trim()) lines.push(`${t('vitrine.devis_modal.specifics')} : ${form.particularites.trim()}`)
+    return lines.join('\n')
+  }
+
+  const handleSubmit = async () => {
     if (sending) return
     setSending(true)
     onTrack()
-
-    // 1. On enregistre la demande côté créateur (visible dans « Ma vitrine »).
+    const contact = form.telephone.trim() + (form.email.trim() ? ` / ${form.email.trim()}` : '')
     try {
       await devisService.submit(atelierId, {
-        nom:         form.nom.trim(),
-        contact:     form.telephone.trim(),
-        description: form.type_vetement.trim() + (form.description.trim() ? `\n${form.description.trim()}` : ''),
+        nom:         nomComplet,
+        contact,
+        description: buildDescription() || form.type_vetement.trim(),
         budget:      form.budget ? String(form.budget) : null,
         delai:       form.delai || null,
       })
     } catch { /* la demande WhatsApp reste possible même si l'enregistrement échoue */ }
 
-    // 2. Si le créateur a activé WhatsApp, on pré-remplit aussi le message.
     if (wa) {
       const msg =
-        `Bonjour ${createur}, je souhaite un devis.\n` +
-        `Nom : ${form.nom}\n` +
-        `Tél : ${form.telephone}\n` +
-        `Vêtement : ${form.type_vetement}\n` +
-        (form.description ? `Détails : ${form.description}\n` : '') +
-        (form.budget ? `Budget : ${form.budget} FCFA\n` : '') +
-        (form.delai ? `Délai souhaité : ${form.delai}\n` : '')
+        `Bonjour ${createur}, je souhaite passer commande.\n` +
+        `${t('vitrine.devis_modal.name')} : ${nomComplet}\n` +
+        `${t('vitrine.devis_modal.phone')} : ${form.telephone}\n` +
+        (form.email ? `${t('vitrine.devis_modal.email')} : ${form.email}\n` : '') +
+        buildDescription() + '\n' +
+        (form.budget ? `${t('vitrine.devis_modal.budget')} : ${form.budget} FCFA\n` : '') +
+        (form.delai ? `${t('vitrine.devis_modal.delay')} : ${form.delai}\n` : '')
       window.open(`${wa}?text=${encodeURIComponent(msg)}`, '_blank')
     }
     setSending(false)
     setSent(true)
   }
+
+  const inputCls = 'w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30'
+  const labelCls = 'block text-xs font-medium text-dim mb-1'
+  const recapRow = (label, val) => val ? (
+    <div className="flex justify-between gap-3 text-[13px] py-1 border-b border-edge/60">
+      <span className="text-dim">{label}</span><span className="text-ink text-right font-medium">{val}</span>
+    </div>
+  ) : null
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
@@ -75,60 +98,119 @@ function DevisModal({ atelierId, createur, wa, onClose, onTrack }) {
             <button onClick={onClose} className="mt-4 text-sm font-semibold text-primary hover:underline">{t('vitrine.devis_modal.close')}</button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-3">
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-xs font-medium text-dim mb-1">{t('vitrine.devis_modal.name')} *</label>
-                <input required value={form.nom} onChange={set('nom')} placeholder={t('vitrine.devis_modal.name_placeholder')}
-                       className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-dim mb-1">{t('vitrine.devis_modal.phone')} *</label>
-                <input required value={form.telephone} onChange={set('telephone')} placeholder={t('vitrine.devis_modal.phone_placeholder')}
-                       className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
-              </div>
+          <>
+            {/* Indicateur d'étapes */}
+            <div className="flex items-center mb-4">
+              {[1, 2, 3].map((n) => (
+                <div key={n} className="flex items-center flex-1 last:flex-none">
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 ${n <= step ? 'bg-primary text-inverse' : 'bg-subtle text-ghost'}`}>{n}</div>
+                  {n < 3 && <div className={`flex-1 h-0.5 mx-1 ${n < step ? 'bg-primary' : 'bg-edge'}`} />}
+                </div>
+              ))}
             </div>
 
-            <div>
-              <label className="block text-xs font-medium text-dim mb-1">{t('vitrine.devis_modal.type')} *</label>
-              <input required value={form.type_vetement} onChange={set('type_vetement')} placeholder={t('vitrine.devis_modal.type_placeholder')}
-                     className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
-            </div>
-
-            <div>
-              <label className="block text-xs font-medium text-dim mb-1">{t('vitrine.devis_modal.description')}</label>
-              <textarea value={form.description} onChange={set('description')} rows={3} maxLength={500}
-                        placeholder={t('vitrine.devis_modal.description_placeholder')}
-                        className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink resize-none focus:outline-none focus:ring-2 focus:ring-primary/30" />
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-xs font-medium text-dim mb-1">{t('vitrine.devis_modal.budget')}</label>
-                <input type="number" min="0" value={form.budget} onChange={set('budget')} placeholder={t('vitrine.devis_modal.budget_placeholder')}
-                       className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
+            {step === 1 && (
+              <div className="space-y-3">
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className={labelCls}>{t('vitrine.devis_modal.firstname')}</label>
+                    <input value={form.prenom} onChange={set('prenom')} className={inputCls} />
+                  </div>
+                  <div>
+                    <label className={labelCls}>{t('vitrine.devis_modal.name')} *</label>
+                    <input value={form.nom} onChange={set('nom')} placeholder={t('vitrine.devis_modal.name_placeholder')} className={inputCls} />
+                  </div>
+                </div>
+                <div>
+                  <label className={labelCls}>{t('vitrine.devis_modal.phone')} *</label>
+                  <input value={form.telephone} onChange={set('telephone')} placeholder={t('vitrine.devis_modal.phone_placeholder')} className={inputCls} />
+                </div>
+                <div>
+                  <label className={labelCls}>{t('vitrine.devis_modal.email')}</label>
+                  <input type="email" value={form.email} onChange={set('email')} className={inputCls} />
+                </div>
               </div>
-              <div>
-                <label className="block text-xs font-medium text-dim mb-1">{t('vitrine.devis_modal.delay')}</label>
-                <select value={form.delai} onChange={set('delai')}
-                        className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-dim focus:outline-none">
-                  <option value="">—</option>
-                  <option value="Moins de 2 semaines">{t('vitrine.devis_modal.delay_1')}</option>
-                  <option value="2 à 4 semaines">{t('vitrine.devis_modal.delay_2')}</option>
-                  <option value="1 à 2 mois">{t('vitrine.devis_modal.delay_3')}</option>
-                  <option value="Plus de 2 mois">{t('vitrine.devis_modal.delay_4')}</option>
-                </select>
-              </div>
-            </div>
-
-            {!wa && (
-              <p className="text-xs text-ghost">{t('vitrine.devis_modal.no_wa')}</p>
             )}
 
-            <button type="submit" disabled={sending} className="w-full py-3 rounded-xl bg-primary text-inverse font-semibold text-sm hover:bg-primary-600 transition disabled:opacity-60">
-              {sending ? t('vitrine.devis_modal.sending') : (wa ? t('vitrine.devis_modal.send_wa') : t('vitrine.devis_modal.send'))}
-            </button>
-          </form>
+            {step === 2 && (
+              <div className="space-y-3">
+                <div>
+                  <label className={labelCls}>{t('vitrine.devis_modal.model')}</label>
+                  <input value={form.modele} onChange={set('modele')} className={inputCls} />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className={labelCls}>{t('vitrine.devis_modal.type')} *</label>
+                    <input value={form.type_vetement} onChange={set('type_vetement')} placeholder={t('vitrine.devis_modal.type_placeholder')} className={inputCls} />
+                  </div>
+                  <div>
+                    <label className={labelCls}>{t('vitrine.devis_modal.size')}</label>
+                    <input value={form.taille} onChange={set('taille')} className={inputCls} />
+                  </div>
+                </div>
+                <div>
+                  <label className={labelCls}>{t('vitrine.devis_modal.specifics')}</label>
+                  <textarea value={form.particularites} onChange={set('particularites')} rows={2} maxLength={500}
+                            placeholder={t('vitrine.devis_modal.description_placeholder')} className={`${inputCls} resize-none`} />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className={labelCls}>{t('vitrine.devis_modal.budget')}</label>
+                    <input type="number" min="0" value={form.budget} onChange={set('budget')} placeholder={t('vitrine.devis_modal.budget_placeholder')} className={inputCls} />
+                  </div>
+                  <div>
+                    <label className={labelCls}>{t('vitrine.devis_modal.delay')}</label>
+                    <select value={form.delai} onChange={set('delai')} className={`${inputCls} text-dim`}>
+                      <option value="">—</option>
+                      <option value="Moins de 2 semaines">{t('vitrine.devis_modal.delay_1')}</option>
+                      <option value="2 à 4 semaines">{t('vitrine.devis_modal.delay_2')}</option>
+                      <option value="1 à 2 mois">{t('vitrine.devis_modal.delay_3')}</option>
+                      <option value="Plus de 2 mois">{t('vitrine.devis_modal.delay_4')}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {step === 3 && (
+              <div>
+                <p className="text-xs text-dim mb-2">{t('vitrine.devis_modal.recap_intro')}</p>
+                <div className="bg-subtle rounded-lg px-3 py-2">
+                  {recapRow(t('vitrine.devis_modal.name'), nomComplet)}
+                  {recapRow(t('vitrine.devis_modal.phone'), form.telephone)}
+                  {recapRow(t('vitrine.devis_modal.email'), form.email)}
+                  {recapRow(t('vitrine.devis_modal.model'), form.modele)}
+                  {recapRow(t('vitrine.devis_modal.type'), form.type_vetement)}
+                  {recapRow(t('vitrine.devis_modal.size'), form.taille)}
+                  {recapRow(t('vitrine.devis_modal.specifics'), form.particularites)}
+                  {recapRow(t('vitrine.devis_modal.budget'), form.budget ? `${form.budget} FCFA` : '')}
+                  {recapRow(t('vitrine.devis_modal.delay'), form.delai)}
+                </div>
+                {!wa && <p className="text-xs text-ghost mt-2">{t('vitrine.devis_modal.no_wa')}</p>}
+              </div>
+            )}
+
+            {/* Navigation */}
+            <div className="flex gap-2 mt-4">
+              {step > 1 && (
+                <button type="button" onClick={() => setStep((s) => s - 1)}
+                        className="px-4 py-2.5 rounded-xl border border-edge text-ink text-sm font-semibold hover:border-primary hover:text-primary transition">
+                  {t('vitrine.devis_modal.back')}
+                </button>
+              )}
+              {step < 3 ? (
+                <button type="button" onClick={() => setStep((s) => s + 1)} disabled={(step === 1 && !step1Ok) || (step === 2 && !step2Ok)}
+                        className="flex-1 py-2.5 rounded-xl bg-primary text-inverse font-semibold text-sm hover:bg-primary-600 transition disabled:opacity-50">
+                  {t('vitrine.devis_modal.next')}
+                </button>
+              ) : (
+                <button type="button" onClick={handleSubmit} disabled={sending}
+                        className="flex-1 py-2.5 rounded-xl bg-primary text-inverse font-semibold text-sm hover:bg-primary-600 transition disabled:opacity-60">
+                  {sending ? t('vitrine.devis_modal.sending') : (wa ? t('vitrine.devis_modal.send_wa') : t('vitrine.devis_modal.send'))}
+                </button>
+              )}
+            </div>
+          </>
         )}
       </div>
     </div>
