@@ -56,9 +56,16 @@ function toPlain(c) {
 export function useCommandes(filters = {}) {
   const { atelier } = useAuth()
   const atelierId = atelier?.id ?? ''
+  // P72-73 : vue centrée sur un client (fiche) → on filtre par client_id SANS filtre d'atelier,
+  // pour afficher aussi les commandes d'un client d'un autre de mes ateliers (cross-atelier).
+  const byClient = filters.clientId ?? null
   const { data: records, isLoading } = useWmQuery(() => {
     const conditions = [Q.where('is_archived', false)]
-    if (atelierId) conditions.push(Q.where('atelier_id', atelierId))   // isolation par atelier (P62-65)
+    if (byClient) {
+      conditions.push(Q.where('client_id', byClient))
+    } else if (atelierId) {
+      conditions.push(Q.where('atelier_id', atelierId))   // isolation par atelier (P62-65)
+    }
     if (filters.statut) conditions.push(Q.where('statut', filters.statut))
     if (filters.search) {
       const s = Q.sanitizeLikeString(filters.search)
@@ -68,7 +75,7 @@ export function useCommandes(filters = {}) {
       ))
     }
     return database.get('commandes').query(...conditions)
-  }, [filters.statut, filters.search, atelierId])
+  }, [filters.statut, filters.search, atelierId, byClient])
 
   const data = useMemo(() => records.map(toPlain), [records])
   return { data, isLoading }
@@ -126,9 +133,15 @@ export function useCreateCommande() {
   return useWmMutation(async (payload) => {
     return database.write(async () => {
       let client_nom = payload.client_nom ?? ''
-      if (!client_nom && payload.client_id) {
+      // P72-73 : la commande est rattachée à l'atelier DU CLIENT (pas forcément l'atelier actif),
+      // pour rester cohérente en multi-ateliers (commande cross-atelier sans ressaisie).
+      let clientAtelierId = null
+      if (payload.client_id) {
         const c = await database.get('clients').find(payload.client_id).catch(() => null)
-        if (c) client_nom = [c.prenom, c.nom].filter(Boolean).join(' ')
+        if (c) {
+          if (!client_nom) client_nom = [c.prenom, c.nom].filter(Boolean).join(' ')
+          clientAtelierId = c.atelier_id || null
+        }
       }
       let vetement_nom = payload.vetement_nom ?? ''
       if (!vetement_nom && payload.vetement_id) {
@@ -152,7 +165,7 @@ export function useCreateCommande() {
         c.date_livraison_prevue = payload.date_livraison_prevue ?? null
         c.urgence               = Boolean(payload.urgence)
         c.is_archived           = false
-        c.atelier_id            = getAtelierId()
+        c.atelier_id            = clientAtelierId || getAtelierId()
       })
       toast.success(`Commande pour ${client_nom || 'client'} créée avec succès.`)
       logAction('commande_creee', client_nom || '')

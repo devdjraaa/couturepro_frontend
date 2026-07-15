@@ -6,6 +6,7 @@ import toast from 'react-hot-toast'
 import { useClient, useUpdateClient, useDeleteClient, useToggleVip } from '@/hooks/useClients'
 import { useMesures, useSaveMesures } from '@/hooks/useMesures'
 import { useCommandes } from '@/hooks/useCommandes'
+import { useMesAteliers } from '@/hooks/useMesAteliers'
 import { useWhatsappRappel } from '@/hooks/useWhatsapp'
 import { useAuth } from '@/contexts'
 import { mesureService } from '@/services/mesureService'
@@ -38,14 +39,20 @@ export default function ClientDetailPage() {
 
   const { data: client, isLoading } = useClient(clientId)
   const { data: mesure } = useMesures(clientId)
-  const { data: allCommandes = [] } = useCommandes()
+  // P72-73 : commandes du client par client_id (cross-atelier compris), pas filtrées par atelier actif.
+  const { data: clientCommandes = [] } = useCommandes({ clientId })
   const updateClient = useUpdateClient()
   const deleteClient = useDeleteClient()
   const toggleVip = useToggleVip()
   const saveMesures = useSaveMesures(clientId)
   const whatsappRappel = useWhatsappRappel()
 
-  const clientCommandes = allCommandes.filter(c => c.client_id === clientId)
+  // Le client appartient-il à un autre de mes ateliers que l'atelier actif ? (P72-73)
+  const { data: mesAteliers = [] } = useMesAteliers()
+  const isCrossAtelier = client?.atelier_id && atelier?.id && client.atelier_id !== atelier.id
+  const atelierOrigineNom = isCrossAtelier
+    ? (mesAteliers.find(a => a.id === client.atelier_id)?.nom ?? t('clients.autre_atelier'))
+    : null
 
   const handleUpdate = async ({ _photo, ...data }) => {
     await updateClient.mutateAsync({ id: clientId, ...data })
@@ -104,7 +111,15 @@ export default function ClientDetailPage() {
             <h1 className="font-bold text-ink truncate">{client.prenom} {client.nom}</h1>
             {isVip && <Badge color="accent" size="sm">VIP</Badge>}
           </div>
-          {client.telephone && <p className="text-sm text-dim">{client.telephone}</p>}
+          {/* P72-73 : badge d'origine si le client vient d'un autre de mes ateliers */}
+          {atelierOrigineNom && (
+            <div className="mt-1">
+              <Badge variant="primary" size="sm">
+                <ClipboardList size={11} />{atelierOrigineNom}
+              </Badge>
+            </div>
+          )}
+          {client.telephone && <p className="text-sm text-dim mt-0.5">{client.telephone}</p>}
           <p className="text-xs text-ghost mt-0.5">{t('clients.detail.depuis', { date: formatDate(client.created_at) })}</p>
         </div>
         <div className="flex flex-col items-end gap-1.5 shrink-0">
