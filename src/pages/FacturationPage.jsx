@@ -272,7 +272,7 @@ function FormulaireModal({ onClose, onCreated }) {
 
 function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
   const { t } = useTranslation()
-  const { atelier } = useAuth()
+  const { atelier, user } = useAuth()
   const [open, setOpen] = useState(false)
   const [updatingStatut, setUpdatingStatut] = useState(false)
   const [uploadingDgi, setUploadingDgi] = useState(false)
@@ -298,7 +298,7 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
     if (pdfBusy) return
     setPdfBusy(true)
     try {
-      const { pdf, filename } = await exportFactureDocPdf({ facture: doc, atelier, factureSettings })
+      const { pdf, filename } = await exportFactureDocPdf({ facture: doc, atelier, factureSettings, contact: { telephone: user?.telephone, email: user?.email } })
       await shareOrDownloadPdf(pdf, filename, { title: filename })
     } catch { alert(t('facturation.doc.pdf_erreur')) }
     finally { setPdfBusy(false) }

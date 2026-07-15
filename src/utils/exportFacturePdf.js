@@ -109,15 +109,30 @@ function buildTotauxHtml({ total, acompte, reste }) {
   `
 }
 
-function buildFooterHtml(factureSettings) {
+function buildFooterHtml(factureSettings, { atelier, contact } = {}) {
   const personnalise = factureSettings?.format_facture === 'personnalise'
   const piedPage = factureSettings?.facture_pied_page
 
+  // SUG-15 : coordonnées de l'artisan — le destinataire du PDF peut le contacter directement.
+  const contactLigne = [
+    atelier?.nom,
+    contact?.telephone,
+    contact?.email,
+    [atelier?.adresse, atelier?.ville].filter(Boolean).join(', ') || null,
+  ].filter(Boolean).join(' · ')
+
   return `
     ${piedPage ? `<p style="font-size: 11px; color: #4b5563; white-space: pre-wrap; border-top: 1px solid #e5e7eb; padding-top: 12px; margin-top: 8px;">${piedPage}</p>` : ''}
-    <p style="margin-top: 24px; font-size: 10px; color: #bbb; text-align: center;">
-      ${personnalise ? 'Facture générée via Gextimo' : 'Document généré par Gextimo — facture standard'}
-    </p>
+    ${contactLigne ? `<p style="margin-top: 14px; font-size: 10.5px; color: #374151; text-align: center; border-top: 1px solid #e5e7eb; padding-top: 10px;">${contactLigne}</p>` : ''}
+    <!-- SUG-14 : pied de page marketing Gextimo — chaque PDF sert aussi de support marketing -->
+    <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid #f3f4f6; display: flex; align-items: center; justify-content: center; gap: 8px;">
+      <img src="/favicon-192.png" style="width: 18px; height: 18px; border-radius: 4px;" />
+      <p style="font-size: 9.5px; color: #9ca3af; margin: 0; text-align: center;">
+        <strong style="color:#D00B0B;">Gextimo</strong> — Créez, Gérez, Rayonnez ·
+        La plateforme des créateurs &amp; ateliers de mode africains ·
+        <strong>gextimo.novafriq.africa</strong>
+      </p>
+    </div>
   `
 }
 
@@ -136,14 +151,14 @@ function buildDgiHtml(dgi) {
   `
 }
 
-function buildFactureHtml({ atelier, factureSettings, ref, date, client, lignes, total, acompte, reste, note, titre, dgi }) {
+function buildFactureHtml({ atelier, factureSettings, ref, date, client, lignes, total, acompte, reste, note, titre, dgi, contact }) {
   return `
     ${buildHeaderHtml({ atelier, factureSettings, ref, date, titre })}
     ${buildClientHtml(client)}
     ${buildLignesHtml(lignes)}
     ${buildTotauxHtml({ total, acompte, reste })}
     ${note ? `<p style="font-size: 11px; color: #6b7280; margin-bottom: 16px;"><strong>Note :</strong> ${note}</p>` : ''}
-    ${buildFooterHtml(factureSettings)}
+    ${buildFooterHtml(factureSettings, { atelier, contact })}
     ${buildDgiHtml(dgi)}
   `
 }
@@ -187,7 +202,7 @@ async function renderPdf(html) {
 const slug = (s) => String(s ?? 'client').trim().replace(/\s+/g, '-').toLowerCase() || 'client'
 
 // Facture pour une seule commande (un type de vêtement)
-export async function exportFacturePdf({ commande, items = [], client, atelier, factureSettings }) {
+export async function exportFacturePdf({ commande, items = [], client, atelier, factureSettings, contact }) {
   const ref = `F-${String(commande.id).slice(0, 8).toUpperCase()}`
   const c = client ?? commande.client
 
@@ -210,7 +225,7 @@ export async function exportFacturePdf({ commande, items = [], client, atelier, 
   const reste   = Math.max(0, total - acompte)
 
   const html = buildFactureHtml({
-    atelier, factureSettings, ref,
+    atelier, factureSettings, ref, contact,
     date: formatDate(commande.date_commande ?? new Date()),
     client: c, lignes, total, acompte, reste,
     note: commande.description,
@@ -221,7 +236,7 @@ export async function exportFacturePdf({ commande, items = [], client, atelier, 
 }
 
 // Facture consolidée pour une commande groupée (plusieurs types de vêtements)
-export async function exportFactureGroupePdf({ groupe, atelier, factureSettings }) {
+export async function exportFactureGroupePdf({ groupe, atelier, factureSettings, contact }) {
   const ref = `G-${String(groupe.id).slice(0, 8).toUpperCase()}`
   const client = groupe.client
 
@@ -237,7 +252,7 @@ export async function exportFactureGroupePdf({ groupe, atelier, factureSettings 
   const reste   = Math.max(0, total - acompte)
 
   const html = buildFactureHtml({
-    atelier, factureSettings, ref,
+    atelier, factureSettings, ref, contact,
     date: formatDate(groupe.created_at ?? new Date()),
     client, lignes, total, acompte, reste,
     note: groupe.note,
@@ -250,7 +265,7 @@ export async function exportFactureGroupePdf({ groupe, atelier, factureSettings 
 // Devis / facture / reçu « simple » du module Facturation (modèle Facture).
 const TITRES_DOC = { devis: 'DEVIS', facture: 'FACTURE', recu: 'REÇU' }
 
-export async function exportFactureDocPdf({ facture, atelier, factureSettings }) {
+export async function exportFactureDocPdf({ facture, atelier, factureSettings, contact }) {
   const titre = TITRES_DOC[facture?.type] ?? 'FACTURE'
   const lignes = (facture?.lignes ?? []).map(l => ({
     designation: l.description ?? 'Article',
@@ -264,7 +279,7 @@ export async function exportFactureDocPdf({ facture, atelier, factureSettings })
   const dgi     = await buildDgiData(facture)
 
   const html = buildFactureHtml({
-    atelier, factureSettings,
+    atelier, factureSettings, contact,
     ref: facture?.numero ?? '',
     date: formatDate(facture?.date_emission ?? new Date()),
     client: { nom: facture?.client_nom, telephone: facture?.client_telephone },

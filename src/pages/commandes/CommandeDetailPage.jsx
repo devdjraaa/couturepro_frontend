@@ -322,7 +322,7 @@ function TabApercu({ commande, onEdit, onStatut, onDelete, navigate }) {
 // ── Onglet Paiements ──────────────────────────────────────────────────────────
 function TabPaiements({ commande, commandeId }) {
   const { t } = useTranslation()
-  const { atelier, can, role }  = useAuth()
+  const { atelier, can, role, user }  = useAuth()
   const { data: paiements = [] } = usePaiements({ commande_id: commandeId })
   const { data: items = [] }     = useCommandeItems(commandeId)
   const { data: factureSettings } = useFactureSettings()
@@ -374,7 +374,7 @@ function TabPaiements({ commande, commandeId }) {
     // P81 : message explicite pendant la génération (l'utilisateur sait ce qui se passe)
     const progressToast = toast.loading(t('facturation.doc.facture_generation'))
     try {
-      const { pdf, filename } = await exportFacturePdf({ commande, items, client: commande.client, atelier, factureSettings })
+      const { pdf, filename } = await exportFacturePdf({ commande, items, client: commande.client, atelier, factureSettings, contact: { telephone: user?.telephone, email: user?.email } })
       toast.dismiss(progressToast)
       const result = await shareOrDownloadPdf(pdf, filename, {
         title: `Facture — ${commande.client_nom}`,
