@@ -143,6 +143,9 @@ function RichLegalPage({ ns, path }) {
     return <LegalPage ns={ns} path={path} />
   }
 
+  const metaLines = t(`vitrine.legal_pages.${ns}.meta_lines`, { returnObjects: true, defaultValue: [] })
+  const version   = t(`vitrine.legal_pages.${ns}.version`,    { defaultValue: '' })
+
   return (
     <VitrineShell>
       <section className="py-14 px-5">
@@ -152,18 +155,19 @@ function RichLegalPage({ ns, path }) {
             title={t(`vitrine.legal_pages.${ns}.title`)}
             subtitle={t(`vitrine.legal_pages.${ns}.subtitle`)}
           />
-          <div className="bg-card border border-edge rounded-2xl p-5 md:p-8 mb-4 text-[12px] text-ghost space-y-0.5">
-            <p>{t(`vitrine.legal_pages.${ns}.meta_responsible`)}</p>
-            <p>{t(`vitrine.legal_pages.${ns}.meta_date`)}</p>
-          </div>
+          {Array.isArray(metaLines) && metaLines.some(Boolean) && (
+            <div className="bg-card border border-edge rounded-2xl p-5 md:p-8 mb-4 text-[12px] text-ghost space-y-0.5">
+              {metaLines.filter(Boolean).map((l) => <p key={l}>{l}</p>)}
+            </div>
+          )}
           <div className="bg-card border border-edge rounded-2xl p-5 md:p-8">
             {articles.map((article) => (
               <RichArticle key={article.title} title={article.title} blocks={article.blocks} />
             ))}
           </div>
-          <p className="text-center text-ghost text-[11.5px] mt-6">
-            {t(`vitrine.legal_pages.${ns}.version`)}
-          </p>
+          {version && (
+            <p className="text-center text-ghost text-[11.5px] mt-6">{version}</p>
+          )}
         </div>
       </section>
     </VitrineShell>
@@ -177,7 +181,7 @@ export function ConfidentialitePage() {
 }
 
 export function MentionsLegalesPage() {
-  return <LegalPage ns="mentions" path="/mentions-legales" />
+  return <RichLegalPage ns="mentions" path="/mentions-legales" />
 }
 
 export function CookiesPage() {

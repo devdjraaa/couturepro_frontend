@@ -1711,8 +1711,6 @@
         "title": "Politique de confidentialité",
         "eyebrow": "Légal & Vie privée",
         "subtitle": "Application : GEXTIMO | Éditeur : NOVAFRIQ, SASU",
-        "meta_responsible": "Responsable du traitement : ADJAHO Patrick Dona",
-        "meta_date": "Date d'entrée en vigueur : [DATE — à compléter]",
         "version": "Version 4.0 — Établie selon l'article 415 du Code du Numérique (Loi n° 2017-20 du 20 avril 2018).",
         "articles": [
           {
@@ -2136,37 +2134,125 @@
               }
             ]
           }
+        ],
+        "meta_lines": [
+          "Responsable du traitement : ADJAHO Patrick Dona",
+          "Date d'entrée en vigueur : [DATE — à compléter]"
         ]
       },
       "mentions": {
         "title": "Mentions légales",
         "eyebrow": "Légal",
-        "subtitle": "Informations légales relatives à la plateforme Gextimo.",
-        "date": "Dernière mise à jour : juillet 2026",
-        "sections": [
+        "subtitle": "Application et site web : GEXTIMO | URL : gextimo.novafriq.africa",
+        "meta_lines": [
+          "Date de mise à jour : [DATE — à compléter]"
+        ],
+        "articles": [
           {
-            "h": "Éditeur du site",
-            "p": "Gextimo est une marque déposée de NovAfriq, entreprise immatriculée au Registre du Commerce et du Crédit Mobilier (RCCM) du Bénin. Siège social : Cotonou, République du Bénin. Contact : contact@gextimo.com"
+            "title": "ÉDITEUR DU SERVICE",
+            "blocks": [
+              {
+                "type": "table",
+                "headers": [
+                  "Champ",
+                  "Information"
+                ],
+                "rows": [
+                  [
+                    "Raison sociale",
+                    "NOVAFRIQ"
+                  ],
+                  [
+                    "Forme juridique",
+                    "Société par Actions Simplifiée Unipersonnelle (SASU)"
+                  ],
+                  [
+                    "Capital social",
+                    "1 000 000 FCFA"
+                  ],
+                  [
+                    "Siège social",
+                    "Quartier Agblangandan, Commune de Sèmè-Podji, Arrondissement d'Agblangandan, C/160 Adjaho, République du Bénin"
+                  ],
+                  [
+                    "Numéro RCCM",
+                    "[NUMÉRO RCCM — à compléter après immatriculation sur monentreprise.bj]"
+                  ],
+                  [
+                    "Numéro IFU",
+                    "[NUMÉRO IFU — à compléter après immatriculation]"
+                  ],
+                  [
+                    "Directeur de la publication",
+                    "ADJAHO Patrick Dona — Président"
+                  ],
+                  [
+                    "Téléphone",
+                    "+229 01 66 55 29 92"
+                  ],
+                  [
+                    "Email",
+                    "contact@novafriq.africa"
+                  ]
+                ]
+              }
+            ]
           },
           {
-            "h": "Directeur de la publication",
-            "p": "Le directeur de la publication est le représentant légal de NovAfriq."
+            "title": "HÉBERGEUR",
+            "blocks": [
+              {
+                "type": "table",
+                "headers": [
+                  "Champ",
+                  "Information"
+                ],
+                "rows": [
+                  [
+                    "Raison sociale",
+                    "Hostinger International Ltd"
+                  ],
+                  [
+                    "Pays d'hébergement",
+                    "France (Union Européenne)"
+                  ],
+                  [
+                    "Localisation datacenter",
+                    "Paris, France"
+                  ],
+                  [
+                    "Siège social de l'hébergeur",
+                    "61 Lordou Vyronos Street, Lumiel Building, 4e étage, 6023 Larnaca, Chypre"
+                  ],
+                  [
+                    "Site web",
+                    "hostinger.com"
+                  ]
+                ]
+              }
+            ]
           },
           {
-            "h": "Hébergement",
-            "p": "La plateforme est hébergée sur des serveurs sécurisés. Pour toute question relative à l'infrastructure technique, contactez notre service support."
+            "title": "PROPRIÉTÉ INTELLECTUELLE",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "L'ensemble du contenu de GEXTIMO (code, design, logo, textes, structure) est la propriété exclusive de NOVAFRIQ, protégée par le droit béninois et les conventions internationales sur la propriété intellectuelle."
+              },
+              {
+                "type": "p",
+                "t": "Les créations exposées par les designers et stylistes sur la plateforme (photos, modèles, collections) restent la propriété exclusive de leurs auteurs. NOVAFRIQ agit en tant qu'hébergeur de ces contenus et ne peut être tenue responsable des contenus publiés par les utilisateurs."
+              }
+            ]
           },
           {
-            "h": "Propriété intellectuelle",
-            "p": "L'ensemble des éléments composant le site Gextimo (textes, graphiques, logo, images, interface) sont protégés par le droit de la propriété intellectuelle et sont la propriété exclusive de NovAfriq, sauf mention contraire."
-          },
-          {
-            "h": "Responsabilité",
-            "p": "NovAfriq s'efforce d'assurer l'exactitude des informations diffusées sur la plateforme mais ne saurait être tenue responsable des erreurs ou omissions. Les créateurs sont seuls responsables des créations qu'ils publient."
-          },
-          {
-            "h": "Droit applicable",
-            "p": "Les présentes mentions légales sont soumises au droit béninois. Tout litige sera soumis à la juridiction compétente de Cotonou."
+            "title": "DONNÉES PERSONNELLES",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Voir Document 1 — Politique de confidentialité et Document 4 — Politique des cookies du présent dossier. Autorité de contrôle : APDP — www.apdp.bj"
+              }
+            ]
           }
         ]
       },
