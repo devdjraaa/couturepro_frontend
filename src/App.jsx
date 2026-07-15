@@ -107,38 +107,6 @@ export default function App() {
     return () => { cancelled = true }
   }, [])
 
-<<<<<<< HEAD
-=======
-  // Build ciblé admin (VITE_APP_TARGET=admin) : n'expose que les routes admin.
-  if (APP_TARGET === 'admin') {
-    return (
-      <>
-        <Routes>
-          <Route path="/admin/login" element={<AdminLoginPage />} />
-          <Route element={<AdminProtectedRoute />}>
-            <Route path="/admin"                  element={<AdminDashboardPage />} />
-            <Route path="/admin/ateliers"         element={<AteliersPage />} />
-            <Route path="/admin/ateliers/:id"     element={<AtelierDetailPage />} />
-            <Route path="/admin/plans"            element={<PlansPage />} />
-            <Route path="/admin/transactions"     element={<TransactionsPage />} />
-            <Route path="/admin/paiements"        element={<AdminPaiementsPage />} />
-            <Route path="/admin/tickets"          element={<TicketsPage />} />
-            <Route path="/admin/tickets/:id"      element={<TicketDetailPage />} />
-            <Route path="/admin/offres"           element={<OffresPage />} />
-            <Route path="/admin/codes-promo"      element={<CodesPromoPage />} />
-            <Route path="/admin/liste-noire"      element={<ListeNoirePage />} />
-            <Route path="/admin/audit"            element={<AuditPage />} />
-            <Route path="/admin/notifications"    element={<AdminNotificationsPage />} />
-            <Route path="/admin/parametres"       element={<AdminParametresPage />} />
-            <Route path="/admin/admins"           element={<AdminsPage />} />
-          </Route>
-          <Route path="*" element={<Navigate to="/admin" replace />} />
-        </Routes>
-      </>
-    )
-  }
-
->>>>>>> 6128b99 (feat(admin): page Codes promo — liste, compteur d'utilisations, création, activer/désactiver (P153/P158))
   return (
     <>
       <Routes>
