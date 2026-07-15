@@ -211,7 +211,7 @@ export function ConditionsVentePage() {
 }
 
 export function ProduitsInterditesPage() {
-  return <LegalPage ns="produits_interdits" path="/produits-interdits" />
+  return <RichLegalPage ns="produits_interdits" path="/produits-interdits" />
 }
 
 export function LivraisonRetoursPage() {

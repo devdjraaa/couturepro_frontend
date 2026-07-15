@@ -2975,28 +2975,74 @@
       "produits_interdits": {
         "title": "Produits interdits & créations autorisées",
         "eyebrow": "Charte des créations",
-        "subtitle": "Ce qui peut et ne peut pas être publié sur la plateforme Gextimo.",
-        "date": "Dernière mise à jour : juillet 2026",
-        "sections": [
+        "subtitle": "Application : GEXTIMO — Marketplace de mode africaine | Éditeur : NOVAFRIQ, SASU",
+        "meta_lines": [
+          "Date d'entrée en vigueur : [DATE — à compléter]"
+        ],
+        "version": "Version 7.0 — Établie pour GEXTIMO, marketplace de mode.",
+        "articles": [
           {
-            "h": "Créations autorisées",
-            "p": "Gextimo est dédié à la mode africaine et à l'artisanat textile. Sont autorisées : toutes les créations vestimentaires (robes, costumes, boubous, ensembles enfants, accessoires de mode), les créations sur mesure ou prêt-à-porter, ainsi que les créations inspirées des textiles et traditions africaines."
+            "title": "ARTICLE 1 — CRÉATIONS AUTORISÉES",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "GEXTIMO est dédiée à la mode et à l'artisanat. Vous pouvez publier et vendre :"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "Vêtements, tenues traditionnelles et sur-mesure (couture, prêt-à-porter).",
+                  "Accessoires de mode : sacs, chaussures, bijoux, chapeaux, foulards.",
+                  "Textiles, tissus et matières.",
+                  "Créations originales, conçues ou réalisées par vous-même."
+                ]
+              }
+            ]
           },
           {
-            "h": "Qualité et authenticité",
-            "p": "Chaque création publiée doit correspondre fidèlement aux photos et descriptions. Les images doivent être de bonne qualité et représenter fidèlement la création. Les photos volées, retouchées de manière trompeuse ou ne correspondant pas à la réalité sont interdites."
+            "title": "ARTICLE 2 — PRODUITS ET CONTENUS INTERDITS",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Sont strictement interdits sur GEXTIMO :"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "Contrefaçons et copies de marques, modèles ou créations d'autrui.",
+                  "Produits illégaux, volés, ou portant atteinte aux droits d'un tiers.",
+                  "Armes, munitions, explosifs, produits dangereux ou inflammables.",
+                  "Drogues, tabac, médicaments et substances réglementées.",
+                  "Produits issus d'espèces protégées (ivoire, peaux, etc.).",
+                  "Contenus haineux, violents, discriminatoires ou à caractère sexuel.",
+                  "Tout contenu sexualisant un mineur — tolérance zéro.",
+                  "Articles sans rapport avec une création de mode tangible."
+                ]
+              }
+            ]
           },
           {
-            "h": "Produits et pratiques interdits",
-            "p": "Sont formellement interdits sur Gextimo : la vente de contrefaçons ou de copies de marques protégées, les créations portant atteinte à la dignité humaine, les annonces trompeuses ou frauduleuses, la vente de produits hors du secteur mode/textile, et toute activité illicite au regard de la législation béninoise."
+            "title": "ARTICLE 3 — CONSÉQUENCES",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Tout produit ou contenu interdit est retiré. Selon la gravité : rappel, avertissement, suspension, puis fermeture du compte en cas de récidive (voir Charte du vendeur, Document 9)."
+              }
+            ]
           },
           {
-            "h": "Propriété intellectuelle des tiers",
-            "p": "Il est interdit de reproduire ou de s'inspirer trop directement des créations originales d'autres designers sans leur autorisation explicite. Gextimo respecte et fait respecter les droits de propriété intellectuelle."
-          },
-          {
-            "h": "Sanctions",
-            "p": "Tout manquement aux présentes règles entraînera le retrait immédiat de la création concernée, un avertissement, et en cas de récidive, la suspension définitive du compte sans remboursement des frais d'abonnement. Les cas de contrefaçon seront signalés aux autorités compétentes."
+            "title": "ARTICLE 4 — SIGNALER UN PRODUIT INTERDIT",
+            "blocks": [
+              {
+                "type": "box",
+                "title": "Signalement",
+                "t": "contact@novafriq.africa — Objet : « Signalement produit interdit »"
+              },
+              {
+                "type": "p",
+                "t": "Nous examinons chaque signalement et agissons rapidement."
+              }
+            ]
           }
         ]
       },
