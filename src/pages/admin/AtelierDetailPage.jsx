@@ -120,6 +120,14 @@ function SousAteliersSection({ atelierId }) {
 
 export default function AtelierDetailPage() {
   const { t } = useTranslation()
+  // P120 : ces options étaient déclarées seulement dans SousAteliersSection → la section
+  // « Durée d'essai » (rendue quand l'abonnement n'est pas actif : essai/expiré/dégelé) référençait
+  // une variable hors scope → ReferenceError → page admin toute blanche. On la définit ici aussi.
+  const UNITE_OPTIONS = [
+    { value: 'minutes', label: t('admin.atelier_detail.unite_minutes') },
+    { value: 'heures',  label: t('admin.atelier_detail.unite_heures')  },
+    { value: 'jours',   label: t('admin.atelier_detail.unite_jours')   },
+  ]
   const { id } = useParams()
   const { data: atelier, isLoading } = useAdminAtelier(id)
   const { data: fidelite }           = useAdminAtelierFidelite(id)
