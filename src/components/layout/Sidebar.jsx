@@ -146,7 +146,7 @@ export default function Sidebar() {
         <div className="border-t border-edge p-3 shrink-0 space-y-0.5">
           <button
             type="button"
-            onClick={() => navigate('/profil')}
+            onClick={() => navigate('/parametres/profil')}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-subtle transition-colors"
           >
             <Avatar name={user.nom} src={user.avatar} size="sm" />

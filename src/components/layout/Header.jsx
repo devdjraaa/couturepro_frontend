@@ -132,7 +132,7 @@ export default function Header({ title, showBack = false, onBack, rightAction, o
           {user && (
             <button
               type="button"
-              onClick={() => navigate('/profil')}
+              onClick={() => navigate('/parametres/profil')}
               className="ml-1 rounded-full"
             >
               <Avatar name={user.nom} src={user.avatar} size="sm" />
