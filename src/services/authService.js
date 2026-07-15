@@ -21,6 +21,26 @@ export const authService = {
     return normalizeMe(meData)
   },
 
+  // P150 : liste des providers de connexion sociale actifs (vide si aucune clé configurée).
+  async getSocialProviders() {
+    try {
+      const { data } = await api.get('/auth/social/providers')
+      return Array.isArray(data?.providers) ? data.providers : []
+    } catch {
+      return []
+    }
+  },
+
+  // P150 : connexion à partir d'un token reçu du callback social.
+  async loginWithToken(token) {
+    setToken(token)
+    const { data: meData } = await api.get('/auth/me')
+    return normalizeMe(meData)
+  },
+
+  // Best-effort : tente d'invalider le token côté serveur.
+  // Le clear local est géré par AuthContext.logout (qui appelle ce service
+  // dans un try/catch pour ne jamais bloquer en cas d'offline).
   async logout() {
     await api.post('/auth/logout')
     clearAll()

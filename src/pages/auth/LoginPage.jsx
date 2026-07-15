@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Eye, EyeOff, ArrowRight, Check } from 'lucide-react'
 import { useAuth } from '@/contexts'
+import SocialLoginButtons from '@/components/auth/SocialLoginButtons'
 import { AuthLayout } from '@/components/layout'
 import { Input, Button, LanguageSwitcher, PhoneInput } from '@/components/ui'
 import { ROUTES, IS_NATIVE } from '@/constants/routes'
@@ -209,6 +210,7 @@ export default function LoginPage() {
                 </Link>
               </p>
             </form>
+            <SocialLoginButtons />
           </div>
 
           {/* ── Panneau Équipe ── */}
