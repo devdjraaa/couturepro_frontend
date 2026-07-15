@@ -59,6 +59,8 @@ import {
   ReglesCommunautePage,
   ContactReclamationsPage,
 } from '@/pages/vitrine/VitrineLegalPages'
+import PatronRecuPage         from '@/pages/vitrine/PatronRecuPage'
+import PatronRecupererPage    from '@/pages/vitrine/PatronRecupererPage'
 
 // Pages admin
 import AdminLoginPage          from '@/pages/admin/AdminLoginPage'
@@ -158,6 +160,9 @@ export default function App() {
             <Route path={ROUTES.VITRINE_LIVRAISON_RETOURS}  element={<LivraisonRetoursPage />} />
             <Route path={ROUTES.VITRINE_REGLES_COMMUNAUTE}  element={<ReglesCommunautePage />} />
             <Route path={ROUTES.VITRINE_CONTACT_RECLAMATIONS} element={<ContactReclamationsPage />} />
+            {/* P161-163 : patrons payants — reçu (après paiement) + menu récupération. */}
+            <Route path="/patrons/recu/:code" element={<PatronRecuPage />} />
+            <Route path="/patrons/recuperer"  element={<PatronRecupererPage />} />
             <Route path="*" element={<Vitrine404Page />} />
           </Route>
         )}

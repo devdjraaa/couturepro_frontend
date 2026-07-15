@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { X, Heart, MessageCircle, Send, ShoppingBag, Award } from 'lucide-react'
+import { X, Heart, MessageCircle, Send, ShoppingBag, Award, Download, Lock } from 'lucide-react'
 import VitrineShell from './VitrineChrome'
-import { getCreator, toggleLike, toggleAbonnement } from './vitrineApi'
+import { getCreator, toggleLike, toggleAbonnement, acheterPatron } from './vitrineApi'
 import GarmentVisual from './GarmentVisual'
 import { useDevise } from './vitrineCurrency'
 import { useFavoris } from './useFavoris'
@@ -135,6 +135,73 @@ function DevisModal({ atelierId, createur, wa, onClose, onTrack }) {
   )
 }
 
+// P161-162 : achat d'un patron payant. Collecte les coordonnées (pour le reçu) puis
+// redirige vers la page de paiement FedaPay. Après paiement, retour sur le reçu (code).
+function PatronModal({ patron, format, onClose }) {
+  const { t } = useTranslation()
+  const [form, setForm] = useState({ acheteur_nom: '', acheteur_email: '', acheteur_tel: '' })
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState('')
+  const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }))
+
+  const submit = async (e) => {
+    e.preventDefault()
+    if (sending) return
+    if (!form.acheteur_nom.trim()) { setError(t('vitrine.patron.buy_name_required')); return }
+    if (!form.acheteur_email.trim() && !form.acheteur_tel.trim()) { setError(t('vitrine.patron.buy_contact_hint')); return }
+    setError('')
+    setSending(true)
+    const res = await acheterPatron(patron.id, {
+      acheteur_nom:   form.acheteur_nom.trim(),
+      acheteur_email: form.acheteur_email.trim() || null,
+      acheteur_tel:   form.acheteur_tel.trim() || null,
+    })
+    if (res?.checkout_url) {
+      window.location.href = res.checkout_url // redirection vers le paiement
+    } else {
+      setSending(false)
+      setError(t('vitrine.patron.buy_error'))
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
+      <div className="bg-card border border-edge rounded-2xl shadow-xl w-full max-w-md p-6 relative">
+        <button onClick={onClose} aria-label="Fermer" className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full text-ghost hover:text-ink transition">
+          <X size={16} />
+        </button>
+        <h2 className="font-display font-bold text-xl text-ink mb-1">{t('vitrine.patron.buy_title', { titre: patron.titre })}</h2>
+        <p className="text-sm text-primary font-bold mb-4">{format(patron.prix)}</p>
+
+        <form onSubmit={submit} className="space-y-3">
+          <div>
+            <label className="block text-xs font-medium text-dim mb-1">{t('vitrine.patron.buy_name')} *</label>
+            <input value={form.acheteur_nom} onChange={set('acheteur_nom')} maxLength={120}
+                   className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-medium text-dim mb-1">{t('vitrine.patron.buy_email')}</label>
+              <input type="email" value={form.acheteur_email} onChange={set('acheteur_email')}
+                     className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-dim mb-1">{t('vitrine.patron.buy_tel')}</label>
+              <input value={form.acheteur_tel} onChange={set('acheteur_tel')}
+                     className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
+            </div>
+          </div>
+          <p className="text-xs text-ghost">{t('vitrine.patron.buy_contact_hint')}</p>
+          {error && <p className="text-xs text-danger">{error}</p>}
+          <button type="submit" disabled={sending} className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-primary text-inverse font-semibold text-sm hover:bg-primary-600 transition disabled:opacity-60">
+            <Download size={16} />{sending ? t('vitrine.patron.buy_paying') : t('vitrine.patron.buy_pay')}
+          </button>
+        </form>
+      </div>
+    </div>
+  )
+}
+
 function AvisForm({ atelierId }) {
   const { t } = useTranslation()
   const [nom, setNom] = useState('')
@@ -185,6 +252,7 @@ export default function CreateurProfilPage() {
   const [reported, setReported] = useState(() => new Set())
   const [signaled, setSignaled] = useState(() => new Set())
   const [devisOpen, setDevisOpen] = useState(false)
+  const [patronBuy, setPatronBuy] = useState(null)            // P161 : patron en cours d'achat
   const [likeState, setLikeState] = useState({})              // P159 : { [vetementId]: { likes, liked } }
   const [abo, setAbo] = useState({ abonne: false, abonnes: 0 }) // P173
 
@@ -318,6 +386,15 @@ export default function CreateurProfilPage() {
               ? <a href={waHref('vitrine.profil.wa_order', { nom: c.nom, modele: m.nom })} onClick={trackContact} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-semibold text-[12.5px] px-3 py-1.5 rounded-[10px] bg-primary text-inverse hover:bg-primary-600 transition"><ShoppingBag size={14} />{t('vitrine.profil.order')}</a>
               : <button className="inline-flex items-center gap-1 font-semibold text-[12.5px] px-3 py-1.5 rounded-[10px] bg-primary text-inverse hover:bg-primary-600 transition"><ShoppingBag size={14} />{t('vitrine.profil.order')}</button>}
           </div>
+          {/* P161 : bouton Télécharger (contenu payant) */}
+          {m.patron && (
+            <div className="px-3.5 pb-2">
+              <button onClick={() => setPatronBuy(m.patron)}
+                      className="w-full inline-flex items-center justify-center gap-2 text-[13px] font-semibold px-3 py-2 rounded-[10px] border border-primary/40 text-primary hover:bg-primary-50 transition">
+                <Lock size={13} />{t('vitrine.patron.download_paid', { prix: format(m.patron.prix) })}
+              </button>
+            </div>
+          )}
           <div className="px-3.5 pb-2.5">
             {signaled.has(m.id)
               ? <span className="text-[10px] text-ghost">⚑ {t('vitrine.profil.report_done')}</span>
@@ -492,6 +569,10 @@ export default function CreateurProfilPage() {
           onClose={() => setDevisOpen(false)}
           onTrack={trackContact}
         />
+      )}
+
+      {patronBuy && (
+        <PatronModal patron={patronBuy} format={format} onClose={() => setPatronBuy(null)} />
       )}
     </VitrineShell>
   )
