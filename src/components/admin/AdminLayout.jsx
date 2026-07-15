@@ -12,6 +12,7 @@ const ROUTE_KEYS = {
   '/admin/paiements':     'admin.nav.paiements',
   '/admin/tickets':       'admin.nav.tickets',
   '/admin/offres':        'admin.nav.offres',
+  '/admin/codes-promo':   'admin.nav.codes_promo',
   '/admin/liste-noire':   'admin.nav.liste_noire',
   '/admin/audit':         'admin.nav.audit',
   '/admin/notifications': 'admin.nav.notifications',
