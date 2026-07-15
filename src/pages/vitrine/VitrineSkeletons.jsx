@@ -19,11 +19,11 @@ export function SkeletonCreatorCard({ className }) {
 }
 
 /* Carte galerie — section collections de VitrineHome */
-export function SkeletonGalleryCard() {
+export function SkeletonGalleryCard({ imgClass = 'aspect-[2/3]' }) {
   return (
-    <div className="bg-card border border-edge rounded-lg overflow-hidden">
-      <div className="skeleton h-[160px] w-full" style={{ borderRadius: 0 }} />
-      <div className="p-3.5 space-y-2">
+    <div className="bg-card border border-edge rounded-xl overflow-hidden">
+      <div className={cn('skeleton w-full', imgClass)} style={{ borderRadius: 0 }} />
+      <div className="p-3 space-y-2">
         <div className="skeleton h-4 w-3/4" />
         <div className="skeleton h-3 w-1/2" />
         <div className="skeleton h-4 w-1/4 mt-1" />

@@ -602,6 +602,19 @@ body {
   will-change: transform;
 }
 
+/* Arc 2 — anneau r=33, rotation anti-horaire */
+.vt-logo-arc2 {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: vt-logo-orbit2 8s linear infinite;
+  will-change: transform;
+}
+
+@keyframes vt-logo-orbit2 {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+
 /* Point central : pulsation subtile */
 .vt-logo-dot {
   transform-box: fill-box;
@@ -632,25 +645,15 @@ body {
   pointer-events: none;
 }
 
-/* Couche 1 — Mesh wash : conic-gradient rouge/or, rotation + respiration */
-.vt-hero-mesh {
+/* Couche 1 — Fils tombants : lignes verticales or/rouge, dérive lente */
+.vt-hero-threads {
   position: absolute;
-  inset: -40%;
-  background: conic-gradient(
-    from 0deg at 55% 50%,
-    transparent               0deg,
-    rgba(208, 11, 11, .52)   55deg,
-    transparent              110deg,
-    rgba(205, 166, 98, .36)  190deg,
-    transparent              245deg,
-    rgba(208, 11, 11, .44)   305deg,
-    transparent              360deg
-  );
-  filter: blur(110px);
-  opacity: 0.08;
-  /* rotate + breathe combinés : évite le conflit de transform */
-  animation: vt-mesh-anim 140s linear infinite;
-  will-change: transform;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22240%22%20height%3D%22400%22%3E%3Cline%20x1%3D%2218%22%20y1%3D%220%22%20x2%3D%2218%22%20y2%3D%22400%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%220.8%22%20opacity%3D%220.18%22%2F%3E%3Cline%20x1%3D%2252%22%20y1%3D%2280%22%20x2%3D%2252%22%20y2%3D%22400%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%220.5%22%20opacity%3D%220.09%22%2F%3E%3Cline%20x1%3D%2288%22%20y1%3D%220%22%20x2%3D%2288%22%20y2%3D%22360%22%20stroke%3D%22%23D00B0B%22%20stroke-width%3D%220.6%22%20opacity%3D%220.12%22%2F%3E%3Cline%20x1%3D%22124%22%20y1%3D%2240%22%20x2%3D%22124%22%20y2%3D%22400%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%221.0%22%20opacity%3D%220.14%22%2F%3E%3Cline%20x1%3D%22162%22%20y1%3D%2210%22%20x2%3D%22162%22%20y2%3D%22380%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%220.5%22%20opacity%3D%220.08%22%2F%3E%3Cline%20x1%3D%22200%22%20y1%3D%220%22%20x2%3D%22200%22%20y2%3D%22340%22%20stroke%3D%22%23D00B0B%22%20stroke-width%3D%220.7%22%20opacity%3D%220.10%22%2F%3E%3Cline%20x1%3D%22230%22%20y1%3D%2260%22%20x2%3D%22230%22%20y2%3D%22400%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%220.6%22%20opacity%3D%220.13%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: repeat-x;
+  background-size: 240px 100%;
+  animation: vt-threads-drift 55s linear infinite;
+  will-change: background-position;
 }
 
 /* Couche 2 — Rubans SVG (SMIL) + dérive verticale CSS */
@@ -663,21 +666,21 @@ body {
   will-change: transform;
 }
 
-/* Couche 3 — Spotlight de podium : faisceau plus visible + pulse */
-.vt-hero-spotlight {
+/* Couche 3 — Faisceau de podium : cône doré centré, pulse lent */
+.vt-hero-podium {
   position: absolute;
   inset: 0;
   background: conic-gradient(
-    from -8deg at 50% -15%,
-    transparent              0deg,
-    rgba(244,236,225,.15)   14deg,
-    transparent             28deg
+    from -10deg at 50% -8%,
+    transparent            0deg,
+    rgba(244,236,225,.06)  8deg,
+    rgba(205,166,98,.14)  13deg,
+    rgba(244,236,225,.06) 18deg,
+    transparent           26deg
   );
-  filter: blur(18px);
-  animation:
-    vt-spot-sweep 34s ease-in-out infinite alternate,
-    vt-spot-pulse 10s ease-in-out infinite;
-  will-change: transform, opacity;
+  filter: blur(22px);
+  animation: vt-podium-pulse 9s ease-in-out infinite;
+  will-change: opacity;
 }
 
 /* Couche 4 — Lueurs radiales pulsantes : rouge bas-gauche + or haut-droit */
@@ -707,6 +710,23 @@ body {
   will-change: transform;
 }
 
+
+/* Corps de page — motif rondelles or (::before pour opacité indépendante du contenu) */
+.vt-page-motif {
+  position: relative;
+}
+.vt-page-motif::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%3E%3Ccircle%20cx%3D%2280%22%20cy%3D%2280%22%20r%3D%2272%22%20fill%3D%22none%22%20stroke%3D%22%23E4C486%22%20stroke-width%3D%222%22%2F%3E%3Ccircle%20cx%3D%2280%22%20cy%3D%2280%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%221.2%22%2F%3E%3Ccircle%20cx%3D%2280%22%20cy%3D%2280%22%20r%3D%2240%22%20fill%3D%22none%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%221%22%2F%3E%3Ccircle%20cx%3D%2280%22%20cy%3D%2280%22%20r%3D%2224%22%20fill%3D%22none%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%221%22%2F%3E%3Ccircle%20cx%3D%2280%22%20cy%3D%2280%22%20r%3D%2210%22%20fill%3D%22none%22%20stroke%3D%22%23E4C486%22%20stroke-width%3D%221%22%2F%3E%3Cline%20x1%3D%228%22%20y1%3D%2280%22%20x2%3D%22152%22%20y2%3D%2280%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%22.8%22%2F%3E%3Cline%20x1%3D%2280%22%20y1%3D%228%22%20x2%3D%2280%22%20y2%3D%22152%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%22.8%22%2F%3E%3Cline%20x1%3D%2228%22%20y1%3D%2228%22%20x2%3D%22132%22%20y2%3D%22132%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%22.6%22%2F%3E%3Cline%20x1%3D%22132%22%20y1%3D%2228%22%20x2%3D%2228%22%20y2%3D%22132%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%22.6%22%2F%3E%3Ccircle%20cx%3D%220%22%20cy%3D%220%22%20r%3D%2218%22%20fill%3D%22none%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%221.2%22%2F%3E%3Ccircle%20cx%3D%22160%22%20cy%3D%220%22%20r%3D%2218%22%20fill%3D%22none%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%221.2%22%2F%3E%3Ccircle%20cx%3D%220%22%20cy%3D%22160%22%20r%3D%2218%22%20fill%3D%22none%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%221.2%22%2F%3E%3Ccircle%20cx%3D%22160%22%20cy%3D%22160%22%20r%3D%2218%22%20fill%3D%22none%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%221.2%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: repeat;
+  background-size: 160px 160px;
+  background-attachment: fixed;
+  opacity: 0.18;
+  pointer-events: none;
+}
+
 /* Couche 6 — Grain film statique */
 .vt-hero-grain {
   position: absolute;
@@ -729,13 +749,10 @@ body {
 
 /* ── Keyframes ── */
 
-/* Rotation 360° + respiration ×4 combinés dans un seul keyframe */
-@keyframes vt-mesh-anim {
-  0%   { transform: rotate(0deg)   scale(1.00); }
-  25%  { transform: rotate(90deg)  scale(1.10); }
-  50%  { transform: rotate(180deg) scale(1.00); }
-  75%  { transform: rotate(270deg) scale(1.10); }
-  100% { transform: rotate(360deg) scale(1.00); }
+/* Dérive des fils tombants — déplace le SVG d'un cycle complet */
+@keyframes vt-threads-drift {
+  from { background-position: 0 0; }
+  to   { background-position: 240px 0; }
 }
 
 /* Dérive verticale + légère compression horizontale des rubans */
@@ -744,14 +761,8 @@ body {
   to   { transform: translateY(14px)  scaleX(0.98); }
 }
 
-/* Balayage horizontal du spotlight */
-@keyframes vt-spot-sweep {
-  from { transform: translateX(0)    rotate(-6deg); }
-  to   { transform: translateX(60vw) rotate(6deg); }
-}
-
-/* Pulsation du spotlight */
-@keyframes vt-spot-pulse {
+/* Pulsation du faisceau de podium */
+@keyframes vt-podium-pulse {
   0%, 100% { opacity: 0.55; }
   50%       { opacity: 1.00; }
 }
@@ -800,6 +811,16 @@ body {
   will-change: transform;
 }
 
+/* Couche 2 — Rubans de soie (SMIL) */
+.vt-foot-ribbons {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: vt-ribbon-drift 24s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
 /* Couche 2 — Lueurs radiales pulsantes (rouge bas-gauche, or haut-droit) */
 .vt-foot-glows {
   position: absolute;
@@ -842,6 +863,7 @@ body {
   60%, 100% { transform: translateX(180%); }
 }
 
+
 /* ── Accessibilité — désactive tout pour prefers-reduced-motion ── */
 @media (prefers-reduced-motion: reduce) {
   .vt-reveal, .vt-reveal.in,
@@ -857,15 +879,17 @@ body {
     box-shadow: none !important;
     filter: none !important;
   }
-  .vt-hero-mesh     { animation: none !important; }
+  .vt-hero-threads  { animation: none !important; }
   .vt-hero-ribbons  { animation: none !important; display: none; }
-  .vt-hero-spotlight{ animation: none !important; transform: none !important; }
+  .vt-hero-podium   { animation: none !important; }
   .vt-hero-glows    { animation: none !important; }
   .vt-hero-shimmer  { display: none; }
   .vt-hero-lame     { display: none; }
   .vt-foot-mesh     { animation: none !important; }
+  .vt-foot-ribbons  { animation: none !important; display: none; }
   .vt-foot-glows    { animation: none !important; }
   .vt-foot-shimmer  { display: none; }
   .vt-logo-arc      { animation: none !important; }
+  .vt-logo-arc2     { animation: none !important; }
   .vt-logo-dot      { animation: none !important; }
 }

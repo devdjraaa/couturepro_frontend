@@ -19,7 +19,14 @@ export function VitrineLogo({ onDark = false }) {
         <circle cx="50" cy="50" r="46" fill="none" stroke={ring} strokeWidth="3.4" />
         <circle cx="50" cy="50" r="33" fill="none" stroke={ring} strokeWidth="2" opacity="0.45" />
         <circle cx="50" cy="50" r="21" fill="none" stroke={ring} strokeWidth="2" opacity="0.3" />
-        <path className="vt-logo-arc" d="M50 4 A46 46 0 0 1 96 50" fill="none" stroke="var(--color-primary)" strokeWidth="6.5" strokeLinecap="round" />
+        {/* Arc 1 — anneau externe r=46, sens horaire */}
+        <g className="vt-logo-arc">
+          <path d="M50 4 A46 46 0 0 1 96 50" fill="none" stroke="var(--color-primary)" strokeWidth="6.5" strokeLinecap="round" />
+        </g>
+        {/* Arc 2 — anneau r=33, sens anti-horaire */}
+        <g className="vt-logo-arc2">
+          <path d="M50 17 A33 33 0 0 1 50 83" fill="none" stroke="var(--color-primary)" strokeWidth="5" strokeLinecap="round" />
+        </g>
         <circle className="vt-logo-dot" cx="50" cy="50" r="8" fill="var(--color-primary)" />
       </svg>
       <span className={`font-display font-extrabold text-[22px] tracking-tight ${onDark ? 'text-inverse' : 'text-ink'}`}>
@@ -225,24 +232,24 @@ export function VitrineNavbar() {
               : promo.texte)
           : <><span className="text-primary">✦</span>{' '}{t('vitrine.promo_a')}{' '}<span className="font-bold text-primary">Gextimo</span>{' '}{t('vitrine.promo_b')}</>}
       </div>
-      <header className="sticky top-0 z-40 bg-app/90 backdrop-blur border-b border-edge">
+      <header className="sticky top-0 z-40 bg-app border-b border-edge">
         <div className="max-w-[1180px] mx-auto pl-4 pr-2 sm:px-5 h-[68px] grid grid-cols-[auto_1fr_auto] items-center gap-4 lg:gap-6">
           {/* Logo */}
           <Link to="/" aria-label="Gextimo"><VitrineLogo /></Link>
 
           {/* Nav centré */}
           <nav className="hidden lg:flex items-center justify-center gap-7">
-            <a href="/#how" className="vt-nav-link text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.nav.how')}</a>
-            <Link to="/createurs" aria-current={loc.pathname.startsWith('/createurs') ? 'page' : undefined} className="vt-nav-link text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.nav.creators')}</Link>
-            <Link to="/artisans" aria-current={loc.pathname === '/artisans' ? 'page' : undefined} className="vt-nav-link text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.menu2.artisans')}</Link>
-            <a href="/#gallery" className="vt-nav-link text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.nav.collections')}</a>
-            <Link to="/suivi" aria-current={loc.pathname === '/suivi' ? 'page' : undefined} className="vt-nav-link text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.nav.suivi')}</Link>
-            <Link to="/aide" aria-current={loc.pathname === '/aide' ? 'page' : undefined} className="vt-nav-link text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.menu2.support')}</Link>
+            <a href="/#how" className="text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.nav.how')}</a>
+            <Link to="/createurs" aria-current={loc.pathname.startsWith('/createurs') ? 'page' : undefined} className="text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.nav.creators')}</Link>
+            <Link to="/artisans" aria-current={loc.pathname === '/artisans' ? 'page' : undefined} className="text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.menu2.artisans')}</Link>
+            <a href="/#gallery" className="text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.nav.collections')}</a>
+            <Link to="/suivi" aria-current={loc.pathname === '/suivi' ? 'page' : undefined} className="text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.nav.suivi')}</Link>
+            <Link to="/aide" aria-current={loc.pathname === '/aide' ? 'page' : undefined} className="text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.menu2.support')}</Link>
           </nav>
 
           {/* Contrôles droite */}
           <div className="flex items-center gap-2.5">
-            <Link to="/favoris" aria-label={t('vitrine.favoris.menu')} className="vt-ib relative w-8 h-8 flex items-center justify-center rounded-[10px] border border-edge text-dim hover:text-primary hover:border-primary transition">
+            <Link to="/favoris" aria-label={t('vitrine.favoris.menu')} className="relative w-8 h-8 flex items-center justify-center rounded-[10px] border border-edge text-dim hover:text-primary hover:border-primary transition">
               <Heart size={15} />
               {favIds.length > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-0.5 rounded-full bg-primary text-inverse text-[9px] font-bold flex items-center justify-center tabular-nums">
@@ -275,6 +282,7 @@ function FooterLink({ to, children }) {
 
 export function VitrineFooter() {
   const { t } = useTranslation()
+  const prm = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   const cols = [
     { h: t('vitrine.footer.col_platform'), links: [
       { l: t('vitrine.nav.creators'), to: '/createurs' },
@@ -301,8 +309,65 @@ export function VitrineFooter() {
     <footer data-theme="dark" className="relative overflow-hidden isolate bg-inset text-ink pt-14 pb-6 mt-2">
       {/* ── Fond animé multicouche — ambiance défilé ── */}
       <div className="vt-foot-bg" aria-hidden="true">
+        {/* Couche 1 — Mesh wash */}
         <div className="vt-foot-mesh" />
+        {/* Couche 2 — Rubans de soie (IDs ft- pour éviter collision avec le hero) */}
+        <svg className="vt-foot-ribbons" viewBox="0 0 1220 640" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vt-ft-sg1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%"   stopColor="#7A0606" stopOpacity="0" />
+              <stop offset="28%"  stopColor="#D00B0B" stopOpacity="0.9" />
+              <stop offset="48%"  stopColor="#E82A1E" stopOpacity="0.95" />
+              <stop offset="70%"  stopColor="#7A0606" stopOpacity="0.7" />
+              <stop offset="100%" stopColor="#7A0606" stopOpacity="0" />
+            </linearGradient>
+            <linearGradient id="vt-ft-sg2" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%"   stopColor="#A87F3E" stopOpacity="0" />
+              <stop offset="40%"  stopColor="#E4C486" stopOpacity="0.9" />
+              <stop offset="55%"  stopColor="#F7E4B8" stopOpacity="1" />
+              <stop offset="72%"  stopColor="#CDA662" stopOpacity="0.75" />
+              <stop offset="100%" stopColor="#CDA662" stopOpacity="0" />
+            </linearGradient>
+            <linearGradient id="vt-ft-sg3" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%"   stopColor="#E82A1E" stopOpacity="0" />
+              <stop offset="50%"  stopColor="#FF6B60" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#E82A1E" stopOpacity="0" />
+            </linearGradient>
+            <linearGradient id="vt-ft-sheen" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%"   stopColor="#F7E4B8" stopOpacity="0" />
+              <stop offset="50%"  stopColor="#FBF0D4" stopOpacity="0.9" />
+              <stop offset="100%" stopColor="#F7E4B8" stopOpacity="0" />
+            </linearGradient>
+            <filter id="vt-ft-soft"><feGaussianBlur stdDeviation="1" /></filter>
+          </defs>
+          {/* Ruban rouge large */}
+          <path fill="url(#vt-ft-sg1)" filter="url(#vt-ft-soft)" opacity="0.65"
+            d="M-100,70 C160,10 380,150 630,95 S 980,15 1360,120 L1360,250 C980,150 720,235 630,225 S 350,275 -100,200 Z">
+            {!prm && <animate attributeName="d" dur="28s" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45,0,.55,1;.45,0,.55,1" repeatCount="indefinite"
+              values="M-100,70 C160,10 380,150 630,95 S 980,15 1360,120 L1360,250 C980,150 720,235 630,225 S 350,275 -100,200 Z;M-100,110 C180,190 400,60 630,150 S 1000,210 1360,80 L1360,210 C1000,300 700,170 630,190 S 340,80 -100,150 Z;M-100,70 C160,10 380,150 630,95 S 980,15 1360,120 L1360,250 C980,150 720,235 630,225 S 350,275 -100,200 Z" />}
+          </path>
+          {/* Reflet satiné */}
+          <path fill="none" stroke="url(#vt-ft-sheen)" strokeWidth="1.4" opacity="0.55" style={{ mixBlendMode: 'screen' }}
+            d="M-100,135 C160,80 380,220 630,160 S 980,90 1360,185">
+            {!prm && <animate attributeName="d" dur="28s" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45,0,.55,1;.45,0,.55,1" repeatCount="indefinite"
+              values="M-100,135 C160,80 380,220 630,160 S 980,90 1360,185;M-100,180 C180,275 400,130 630,220 S 1000,285 1360,145;M-100,135 C160,80 380,220 630,160 S 980,90 1360,185" />}
+          </path>
+          {/* Ruban or moyen */}
+          <path fill="url(#vt-ft-sg2)" filter="url(#vt-ft-soft)" opacity="0.45" style={{ mixBlendMode: 'screen' }}
+            d="M-100,420 C220,470 430,330 700,400 S 1040,480 1360,380 L1360,470 C1040,560 750,490 700,500 S 260,600 -100,520 Z">
+            {!prm && <animate attributeName="d" dur="36s" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45,0,.55,1;.45,0,.55,1" repeatCount="indefinite"
+              values="M-100,420 C220,470 430,330 700,400 S 1040,480 1360,380 L1360,470 C1040,560 750,490 700,500 S 260,600 -100,520 Z;M-100,470 C240,360 420,520 700,440 S 1020,360 1360,500 L1360,590 C1020,480 760,570 700,560 S 300,470 -100,600 Z;M-100,420 C220,470 430,330 700,400 S 1040,480 1360,380 L1360,470 C1040,560 750,490 700,500 S 260,600 -100,520 Z" />}
+          </path>
+          {/* Ruban rouge fin */}
+          <path fill="url(#vt-ft-sg3)" filter="url(#vt-ft-soft)" opacity="0.30"
+            d="M-100,260 C200,230 420,310 660,260 S 1000,220 1360,280 L1360,320 C1000,270 680,300 660,300 S 240,270 -100,300 Z">
+            {!prm && <animate attributeName="d" dur="20s" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45,0,.55,1;.45,0,.55,1" repeatCount="indefinite"
+              values="M-100,260 C200,230 420,310 660,260 S 1000,220 1360,280 L1360,320 C1000,270 680,300 660,300 S 240,270 -100,300 Z;M-100,300 C220,300 400,240 660,300 S 980,300 1360,240 L1360,285 C980,340 700,280 660,340 S 260,335 -100,340 Z;M-100,260 C200,230 420,310 660,260 S 1000,220 1360,280 L1360,320 C1000,270 680,300 660,300 S 240,270 -100,300 Z" />}
+          </path>
+        </svg>
+        {/* Couche 3 — Lueurs radiales */}
         <div className="vt-foot-glows" />
+        {/* Couche 4 — Reflet or diagonal */}
         <div className="vt-foot-shimmer" />
       </div>
       <div className="relative z-10 max-w-[1180px] mx-auto px-5">
