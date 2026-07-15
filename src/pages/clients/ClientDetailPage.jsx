@@ -210,6 +210,23 @@ export default function ClientDetailPage() {
                   <button
                     type="button"
                     onClick={async () => {
+                      // SUG-16 : message construit LOCALEMENT (offline-first) — le serveur peut ne pas
+                      // encore avoir les mesures (sync différée) → mesures manquantes dans WhatsApp.
+                      const phone = (client?.telephone || '').replace(/\D/g, '')
+                      if (!phone) { toast.error(t('erreurs.champ_requis')); return }
+                      const champs = mesure?.champs ?? {}
+                      const entries = Object.entries(champs).filter(([, v]) => v !== null && v !== '' && v !== undefined)
+                      if (entries.length > 0) {
+                        const nom = [client?.prenom, client?.nom].filter(Boolean).join(' ')
+                        const lignes = [
+                          `📏 *Mesures de ${nom}* — ${atelier?.nom ?? ''}`.trim(), '',
+                          ...entries.map(([k, v]) => `${k.charAt(0).toUpperCase()}${k.slice(1).replace(/_/g, ' ')} : ${v} cm`),
+                          '', `_Exporté le ${new Date().toLocaleDateString('fr-FR')}_`,
+                        ]
+                        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(lignes.join('\n'))}`, '_blank', 'noopener,noreferrer')
+                        return
+                      }
+                      // Repli : lien généré côté serveur
                       try {
                         const { lien } = await mesureService.getWhatsAppLink(clientId)
                         window.open(lien, '_blank', 'noopener,noreferrer')

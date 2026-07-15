@@ -257,6 +257,7 @@
       "telecharger": "Télécharger",
       "imprimer_habillage": "Imprimer / Partager (habillage GEXTIMO)",
       "habillage_generation": "Génération…",
+      "facture_generation": "Génération de la facture en cours…",
       "habillage_erreur": "Impossible de générer la facture habillée. Téléchargez le PDF officiel.",
       "pdf": "PDF",
       "pdf_generation": "PDF…",

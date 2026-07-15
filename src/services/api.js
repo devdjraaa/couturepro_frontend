@@ -28,6 +28,9 @@ api.interceptors.request.use(config => {
   if (activeAtelierId) config.headers['X-Atelier-Id'] = activeAtelierId
   if (config.data instanceof FormData) {
     delete config.headers['Content-Type']
+    // P35-36 : les uploads (photos tickets/tissus/galerie) dépassent facilement 15 s
+    // sur réseau mobile lent → timeout étendu pour les requêtes multipart.
+    config.timeout = 120000
   }
   return config
 })

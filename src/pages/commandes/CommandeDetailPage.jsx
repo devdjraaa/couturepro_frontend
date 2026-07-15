@@ -371,14 +371,18 @@ function TabPaiements({ commande, commandeId }) {
 
   const handleFacture = async (mode) => {
     setExportingFacture(mode)
+    // P81 : message explicite pendant la génération (l'utilisateur sait ce qui se passe)
+    const progressToast = toast.loading(t('facturation.doc.facture_generation'))
     try {
       const { pdf, filename } = await exportFacturePdf({ commande, items, client: commande.client, atelier, factureSettings })
+      toast.dismiss(progressToast)
       const result = await shareOrDownloadPdf(pdf, filename, {
         title: `Facture — ${commande.client_nom}`,
         text: `Facture pour ${commande.client_nom}`,
       })
       if (result === 'downloaded') toast.success('Facture téléchargée.')
     } catch {
+      toast.dismiss(progressToast)
       toast.error("Impossible de générer la facture.")
     } finally {
       setExportingFacture(null)

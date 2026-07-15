@@ -102,7 +102,9 @@ export const clientService = {
   },
 
   async importBatch(contacts) {
-    const { data } = await api.post('/clients/import', { contacts })
+    // SUG-13 : un lot de 200 contacts sur réseau lent dépasse les 15 s par défaut →
+    // le front affichait « erreur » alors que le serveur finissait l'import.
+    const { data } = await api.post('/clients/import', { contacts }, { timeout: 60000 })
     return data
   },
 }
