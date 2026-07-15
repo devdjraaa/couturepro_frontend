@@ -45,6 +45,45 @@ async function safe(path) {
   }
 }
 
+// Clé visiteur anonyme stable (P159/P173) : permet de liker / s'abonner sans compte,
+// et de retrouver son état (liked / abonné) au rechargement. Stockée en localStorage.
+export function getVisitorKey() {
+  try {
+    let k = localStorage.getItem('gx_visitor_key')
+    if (!k) {
+      k = (crypto?.randomUUID?.() || `v-${Date.now()}-${Math.random().toString(36).slice(2)}`).slice(0, 64)
+      localStorage.setItem('gx_visitor_key', k)
+    }
+    return k
+  } catch {
+    return 'anon'
+  }
+}
+
+async function postJson(path, body) {
+  try {
+    const r = await fetch(`${API_BASE_URL}${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify(body),
+    })
+    if (!r.ok) return null
+    return await r.json()
+  } catch {
+    return null
+  }
+}
+
+// P159-160 : like/unlike public d'une création → { liked, likes }.
+export function toggleLike(vetementId) {
+  return postJson(`/vitrine/creations/${vetementId}/like`, { visitor_key: getVisitorKey() })
+}
+
+// P173 : s'abonner / se désabonner d'un créateur → { abonne, abonnes }.
+export function toggleAbonnement(atelierId) {
+  return postJson(`/vitrine/createurs/${atelierId}/abonnement`, { visitor_key: getVisitorKey() })
+}
+
 export async function getSuivi(reference) {
   return safe(`/vitrine/suivi/${encodeURIComponent(reference)}`)
 }
@@ -68,7 +107,7 @@ export async function getCreators() {
 }
 
 export async function getCreator(slug) {
-  const d = await safe(`/vitrine/createurs/${slug}`)
+  const d = await safe(`/vitrine/createurs/${slug}?visitor_key=${encodeURIComponent(getVisitorKey())}`)
   if (d && d.id) return d
   const c = demoCreators.find((x) => x.id === slug)
   if (!c) return null
