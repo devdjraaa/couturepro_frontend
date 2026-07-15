@@ -5,7 +5,7 @@ import { mockClients } from './mockData'
 const delay = (ms = 300) => new Promise(r => setTimeout(r, ms))
 
 export const clientService = {
-  async getAll({ search = '', type_profil = '' } = {}) {
+  async getAll({ search = '', type_profil = '', scope = '' } = {}) {
     if (isMock()) {
       await delay()
       let list = [...mockClients]
@@ -23,6 +23,7 @@ export const clientService = {
     const params = {}
     if (search)      params.search      = search
     if (type_profil) params.type_profil = type_profil
+    if (scope)       params.scope       = scope   // P69-70/76 : 'tous' = tous les ateliers du compte
     const { data } = await api.get('/clients', { params })
     return data
   },

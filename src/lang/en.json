@@ -629,7 +629,10 @@
     "tous_titre": "All clients",
     "ajouter_aria": "Add a client",
     "import_resultat": "{{imported}} contact(s) imported, {{skipped}} duplicate(s) skipped.",
-    "import_erreur": "Import failed."
+    "import_erreur": "Import failed.",
+    "scope_atelier": "This workshop",
+    "scope_tous": "All my workshops",
+    "autre_atelier": "Other workshop"
   },
   "commandes": {
     "titre": "Orders",

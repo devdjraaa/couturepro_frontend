@@ -629,7 +629,10 @@
     "tous_titre": "Tous les clients",
     "ajouter_aria": "Ajouter un client",
     "import_resultat": "{{imported}} contact(s) importé(s), {{skipped}} doublon(s) ignoré(s).",
-    "import_erreur": "Erreur lors de l'import."
+    "import_erreur": "Erreur lors de l'import.",
+    "scope_atelier": "Cet atelier",
+    "scope_tous": "Tous mes ateliers",
+    "autre_atelier": "Autre atelier"
   },
   "commandes": {
     "titre": "Commandes",

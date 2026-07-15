@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { useClients, useCreateClient } from '@/hooks/useClients'
+import { useMesAteliers } from '@/hooks/useMesAteliers'
+import { useAuth } from '@/contexts'
 import { clientService } from '@/services/clientService'
 import { AppLayout } from '@/components/layout'
 import { ClientCard, ClientForm } from '@/components/clients'
@@ -105,8 +107,21 @@ export default function ClientsPage() {
   const [selectedContacts, setSelectedContacts] = useState(new Set())
   const [importing, setImporting] = useState(false)
 
-  const { data: clients = [], isLoading } = useClients()
+  // P69-70/76 : recherche cross-ateliers (comptes multi-ateliers uniquement)
+  const { atelier } = useAuth()
+  const { data: ateliers = [] } = useMesAteliers()
+  const [scope, setScope] = useState('atelier')     // 'atelier' | 'tous'
+  const multiAteliers = ateliers.length > 1
+  const ateliersById = useMemo(() => Object.fromEntries(ateliers.map(a => [a.id, a.nom])), [ateliers])
+
+  const { data: clients = [], isLoading } = useClients(multiAteliers && scope === 'tous' ? { scope: 'tous' } : {})
   const createClient = useCreateClient()
+
+  // Badge de provenance : seulement en vue « tous » et si le client vient d'un autre atelier (P71)
+  const badgeFor = (client) =>
+    scope === 'tous' && client.atelier_id && client.atelier_id !== atelier?.id
+      ? (ateliersById[client.atelier_id] ?? t('clients.autre_atelier'))
+      : undefined
 
   const filtered = useMemo(() => {
     let list = clients.filter(c =>
@@ -200,6 +215,24 @@ export default function ClientsPage() {
       <div className="p-4 space-y-3">
         <SearchBar value={search} onChange={setSearch} placeholder={t('clients.recherche_placeholder')} />
 
+        {/* P69-70/76 : portée de la recherche (multi-ateliers) */}
+        {multiAteliers && (
+          <div className="flex gap-2">
+            {[['atelier', t('clients.scope_atelier')], ['tous', t('clients.scope_tous')]].map(([key, label]) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setScope(key)}
+                className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                  scope === key ? 'bg-primary text-inverse' : 'bg-subtle text-ghost hover:text-ink'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        )}
+
         {!isLoading && clients.length > 0 && (
           <SortChips active={sort} onChange={setSort} />
         )}
@@ -228,7 +261,7 @@ export default function ClientsPage() {
                 <p className="text-2xs font-semibold uppercase tracking-widest text-ghost px-1 mb-2">{t('clients.vip_titre')}</p>
                 <div className="space-y-2">
                   {favorites.map(client => (
-                    <ClientCard key={client.id} client={client} onClick={() => navigate(`/clients/${client.id}`)} />
+                    <ClientCard key={client.id} client={client} badge={badgeFor(client)} onClick={() => navigate(`/clients/${client.id}`)} />
                   ))}
                 </div>
               </div>
@@ -238,7 +271,7 @@ export default function ClientsPage() {
                 <p className="text-2xs font-semibold uppercase tracking-widest text-ghost px-1 mb-2">{letter}</p>
                 <div className="space-y-2">
                   {group.map(client => (
-                    <ClientCard key={client.id} client={client} onClick={() => navigate(`/clients/${client.id}`)} />
+                    <ClientCard key={client.id} client={client} badge={badgeFor(client)} onClick={() => navigate(`/clients/${client.id}`)} />
                   ))}
                 </div>
               </div>
@@ -252,7 +285,7 @@ export default function ClientsPage() {
                 <p className="text-2xs font-semibold uppercase tracking-widest text-ghost px-1 mb-2">{t('clients.vip_titre')}</p>
                 <div className="space-y-2 mb-4">
                   {favorites.map(client => (
-                    <ClientCard key={client.id} client={client} onClick={() => navigate(`/clients/${client.id}`)} />
+                    <ClientCard key={client.id} client={client} badge={badgeFor(client)} onClick={() => navigate(`/clients/${client.id}`)} />
                   ))}
                 </div>
                 {nonFavorites.length > 0 && (
@@ -262,7 +295,7 @@ export default function ClientsPage() {
             )}
             <div className="space-y-2">
               {(favorites.length > 0 && !search ? nonFavorites : filtered).map(client => (
-                <ClientCard key={client.id} client={client} onClick={() => navigate(`/clients/${client.id}`)} />
+                <ClientCard key={client.id} client={client} badge={badgeFor(client)} onClick={() => navigate(`/clients/${client.id}`)} />
               ))}
             </div>
           </>

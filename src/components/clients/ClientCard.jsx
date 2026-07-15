@@ -10,7 +10,7 @@ const TYPE_LABELS = {
   mixte:  'Mixte',
 }
 
-export default function ClientCard({ client, onClick }) {
+export default function ClientCard({ client, onClick, badge }) {
   const fullName  = `${client.prenom ?? ''} ${client.nom}`.trim()
   const typeLabel = TYPE_LABELS[client.type_profil] ?? client.type_profil ?? ''
   const solde     = client.total_restant ?? 0
@@ -21,6 +21,12 @@ export default function ClientCard({ client, onClick }) {
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <p className="text-sm font-semibold text-ink truncate">{fullName}</p>
+          {/* P71 : provenance (recherche cross-ateliers) */}
+          {badge && (
+            <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-info/10 text-info shrink-0 truncate max-w-28">
+              {badge}
+            </span>
+          )}
           {client.is_vip && (
             <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full border bg-gold-light text-gold-dark border-gold/20 shrink-0">
               VIP
