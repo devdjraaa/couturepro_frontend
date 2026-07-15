@@ -84,11 +84,6 @@ export default function ClientDetailPage() {
     <AppLayout
       showBack
       title={client.nom}
-      rightAction={
-        <button onClick={() => setShowEdit(true)} className="p-2 text-inverse/80 hover:text-inverse transition-colors">
-          <Edit2 size={18} />
-        </button>
-      }
     >
       {/* Header client */}
       <div className="bg-card border-b border-edge px-4 py-4 flex items-center gap-3">
@@ -112,12 +107,21 @@ export default function ClientDetailPage() {
           {client.telephone && <p className="text-sm text-dim">{client.telephone}</p>}
           <p className="text-xs text-ghost mt-0.5">{t('clients.detail.depuis', { date: formatDate(client.created_at) })}</p>
         </div>
-        <button
-          onClick={() => toggleVip.mutate(client.id)}
-          className="text-xs text-dim underline shrink-0"
-        >
-          {isVip ? t('clients.detail.retirer_vip') : t('clients.detail.ajouter_vip')}
-        </button>
+        <div className="flex flex-col items-end gap-1.5 shrink-0">
+          <button
+            type="button"
+            onClick={() => setShowEdit(true)}
+            className="flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
+          >
+            <Edit2 size={14} /> {t('commun.modifier')}
+          </button>
+          <button
+            onClick={() => toggleVip.mutate(client.id)}
+            className="text-xs text-dim underline"
+          >
+            {isVip ? t('clients.detail.retirer_vip') : t('clients.detail.ajouter_vip')}
+          </button>
+        </div>
       </div>
 
       <TabBar tabs={TABS} activeTab={activeTab} onChange={setActiveTab} />

@@ -1771,6 +1771,7 @@
   },
   "historique": {
     "titre": "History",
+    "effacer_tout": "Clear history",
     "vide_titre": "No activity",
     "vide_description": "Your recent actions will appear here",
     "local_label": "Local history · 8 last days",

@@ -53,13 +53,6 @@ export default function HistoriquePage() {
     <AppLayout
       title={t('historique.titre')}
       showBack
-      rightAction={
-        items.length > 0 ? (
-          <button onClick={handleClear} className="p-2 text-dim hover:text-danger transition-colors">
-            <Trash2 size={18} />
-          </button>
-        ) : null
-      }
     >
       <div className="p-4">
         {items.length === 0 ? (
@@ -70,6 +63,14 @@ export default function HistoriquePage() {
           />
         ) : (
           <div className="space-y-5">
+            <div className="flex justify-end">
+              <button
+                onClick={handleClear}
+                className="flex items-center gap-1 text-xs font-semibold text-danger hover:underline"
+              >
+                <Trash2 size={14} /> {t('historique.effacer_tout')}
+              </button>
+            </div>
             {groups.map(([day, dayItems]) => (
               <div key={day}>
                 <p className="text-xs font-semibold text-dim uppercase tracking-wide mb-2 capitalize">{day}</p>
