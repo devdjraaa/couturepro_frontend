@@ -35,10 +35,25 @@ function ExpiryBanner() {
 }
 
 function AccountStatusBanner() {
+  const { t } = useTranslation()
   const { atelier } = useAuth()
   const navigate = useNavigate()
 
   if (!atelier) return null
+
+  // P156 : abonnement expiré → mode gratuit (bannière persistante, invite à renouveler).
+  if (atelier.statut === 'expire') {
+    return (
+      <div
+        className="flex items-center gap-2 px-4 pb-2 bg-warning/10 border-b border-warning/30 text-sm text-warning cursor-pointer"
+        style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 0.5rem)' }}
+        onClick={() => navigate('/parametres?tab=abonnement')}
+      >
+        <Ban size={14} className="shrink-0" />
+        <span>{t('abonnement.banniere.mode_gratuit')} <span className="underline font-medium">{t('abonnement.banniere.renouveler')}</span></span>
+      </div>
+    )
+  }
 
   // statut réel de l'atelier : 'actif' | 'essai' | 'expire' | 'gele'.
   // 'gele' = compte suspendu (action admin, ou blocage auto sur récidive de signalements).
