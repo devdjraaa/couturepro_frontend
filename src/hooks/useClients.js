@@ -3,6 +3,7 @@ import toast from 'react-hot-toast'
 import { Q } from '@nozbe/watermelondb'
 import { useWmQuery, useMutation, database } from '@/db/useWmQuery'
 import { logAction } from '@/utils/historique'
+import { useAuth } from '@/contexts'
 
 // Offline-first : clients lus/écrits dans WatermelonDB (comme mesures/vêtements).
 // La sync (syncAdapter) pousse/tire ces données ; l'app fonctionne donc hors-ligne.
@@ -32,7 +33,9 @@ function toPlain(record, count) {
 }
 
 export function useClients(filters = {}) {
-  const atelierId = getAtelierId()
+  // Scope depuis le contexte (synchrone au switch) — pas localStorage (mis à jour trop tard).
+  const { atelier } = useAuth()
+  const atelierId = atelier?.id ?? ''
   const { data: clients, isLoading } = useWmQuery(() => {
     const conditions = [Q.where('is_archived', false)]
     if (atelierId) conditions.push(Q.where('atelier_id', atelierId))   // isolation par atelier (P62-65)

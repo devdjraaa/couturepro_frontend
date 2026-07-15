@@ -6,6 +6,7 @@ import { useWmQuery, useMutation as useWmMutation, database } from '@/db/useWmQu
 import { syncWithServer } from '@/db/syncAdapter'
 import { commandeService } from '@/services/commandeService'
 import { logAction } from '@/utils/historique'
+import { useAuth } from '@/contexts'
 import { QUERY_KEYS } from './queryKeys'
 
 // Id RÉEL de l'atelier actif (maître inclus), pour isoler les données (P62-65).
@@ -53,7 +54,8 @@ function toPlain(c) {
 }
 
 export function useCommandes(filters = {}) {
-  const atelierId = getAtelierId()
+  const { atelier } = useAuth()
+  const atelierId = atelier?.id ?? ''
   const { data: records, isLoading } = useWmQuery(() => {
     const conditions = [Q.where('is_archived', false)]
     if (atelierId) conditions.push(Q.where('atelier_id', atelierId))   // isolation par atelier (P62-65)
@@ -85,7 +87,8 @@ export function useCommande(id) {
 
 // Stats calculées localement (offline) depuis commandes + clients.
 export function useCommandeStats() {
-  const atelierId = getAtelierId()
+  const { atelier } = useAuth()
+  const atelierId = atelier?.id ?? ''
   const scoped = (table) => () => {
     const conds = [Q.where('is_archived', false)]
     if (atelierId) conds.push(Q.where('atelier_id', atelierId))

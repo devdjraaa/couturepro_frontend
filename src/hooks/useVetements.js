@@ -1,5 +1,6 @@
 import { Q } from '@nozbe/watermelondb'
 import { useWmQuery, useWmRecord, useMutation, database } from '@/db/useWmQuery'
+import { useAuth } from '@/contexts'
 
 // Id RÉEL de l'atelier actif (maître inclus), pour isoler les données (P62-65).
 function getAtelierId() {
@@ -7,7 +8,8 @@ function getAtelierId() {
 }
 
 export function useVetements(filters = {}) {
-  const atelierId = getAtelierId()
+  const { atelier } = useAuth()
+  const atelierId = atelier?.id ?? ''
   return useWmQuery(() => {
     const conditions = [Q.where('is_archived', false)]
     // Isolation par atelier, mais on garde les modèles système (partagés).
