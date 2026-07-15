@@ -38,7 +38,7 @@ export default function AuthLayout({ children, subtitle, className }) {
         <div className="lg:hidden pt-8 pb-1 text-center">
           <img
             src="/logoforlogin.png"
-            alt="Gextimo — Créer · Gérer · Rayonner"
+            alt="Gextimo — Créez · Gérez · Rayonnez"
             className="w-60 max-w-[72%] mx-auto select-none pointer-events-none"
             draggable="false"
           />

@@ -218,10 +218,18 @@ function StepModele({ data, setData, onNext }) {
                     <label className="block text-xs text-ghost mb-1">{t('commandes.creation.qte')}</label>
                     <input
                       type="number"
+                      inputMode="numeric"
                       min="1"
                       max="999"
                       value={item.quantite}
-                      onChange={e => updateItem(idx, 'quantite', Number(e.target.value) || 1)}
+                      onFocus={e => e.target.select()}
+                      onChange={e => {
+                        const v = e.target.value
+                        // Autorise le champ vide pendant la saisie (SUG-18 : pouvoir effacer)
+                        if (v === '') { updateItem(idx, 'quantite', ''); return }
+                        updateItem(idx, 'quantite', Math.min(999, Math.max(1, Math.floor(Number(v)) || 1)))
+                      }}
+                      onBlur={e => { if (e.target.value === '' || Number(e.target.value) < 1) updateItem(idx, 'quantite', 1) }}
                       className="w-full bg-subtle border border-edge rounded-lg px-2 py-1.5 text-sm text-ink text-center focus:outline-none focus:ring-2 focus:ring-primary/30"
                     />
                   </div>
