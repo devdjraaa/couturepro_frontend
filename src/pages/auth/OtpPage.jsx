@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { ArrowRight, MessageSquare } from 'lucide-react'
 import { useAuth } from '@/contexts'
 import { AuthLayout } from '@/components/layout'
-import { Button } from '@/components/ui'
+import { Button, Input } from '@/components/ui'
+import api from '@/services/api'
 
 export default function OtpPage() {
   const navigate  = useNavigate()
@@ -17,6 +18,11 @@ export default function OtpPage() {
   const [error, setError]     = useState('')
   const [loading, setLoading] = useState(false)
   const [resent, setResent]   = useState(false)
+  // P123 : correction d'un e-mail fictif/mal saisi à l'inscription
+  const [showFixEmail, setShowFixEmail] = useState(false)
+  const [fixForm, setFixForm] = useState({ email: '', password: '' })
+  const [fixMsg, setFixMsg]   = useState('')
+  const [fixing, setFixing]   = useState(false)
 
   if (!telephone) {
     navigate('/login', { replace: true })
@@ -43,6 +49,24 @@ export default function OtpPage() {
       setResent(true)
       setTimeout(() => setResent(false), 4000)
     } catch { /* ignore */ }
+  }
+
+  // P123 : e-mail fictif → l'OTP n'arrive jamais. Corrige l'e-mail (tél + mot de passe)
+  // et renvoie l'OTP sur la nouvelle adresse.
+  const handleFixEmail = async e => {
+    e.preventDefault()
+    setFixMsg('')
+    setFixing(true)
+    try {
+      const { data } = await api.post('/auth/corriger-email', { telephone, ...fixForm })
+      setFixMsg(data?.message || t('auth.otp.email_corrige'))
+      setShowFixEmail(false)
+      setFixForm({ email: '', password: '' })
+    } catch (err) {
+      setFixMsg(err?.message || t('erreurs.inconnu'))
+    } finally {
+      setFixing(false)
+    }
   }
 
   return (
@@ -102,6 +126,13 @@ export default function OtpPage() {
           </button>
           <button
             type="button"
+            onClick={() => setShowFixEmail(v => !v)}
+            className="text-sm text-ghost hover:text-dim transition-colors"
+          >
+            {t('auth.otp.email_incorrect')}
+          </button>
+          <button
+            type="button"
             onClick={() => navigate('/login')}
             className="text-sm text-ghost hover:text-dim transition-colors"
           >
@@ -109,6 +140,36 @@ export default function OtpPage() {
           </button>
         </div>
       </form>
+
+      {/* P123 : corriger un e-mail fictif/mal saisi puis renvoyer l'OTP dessus */}
+      {fixMsg && (
+        <p className="text-sm text-center py-1.5 px-3 rounded-xl bg-success/10 border border-success/20 text-success mt-4">
+          {fixMsg}
+        </p>
+      )}
+      {showFixEmail && (
+        <form onSubmit={handleFixEmail} className="mt-4 space-y-3 bg-card border border-edge rounded-2xl p-4">
+          <p className="text-xs text-dim">{t('auth.otp.email_incorrect_desc')}</p>
+          <Input
+            type="email"
+            value={fixForm.email}
+            onChange={e => setFixForm(f => ({ ...f, email: e.target.value }))}
+            placeholder={t('auth.otp.nouvel_email')}
+            required
+          />
+          <Input
+            type="password"
+            value={fixForm.password}
+            onChange={e => setFixForm(f => ({ ...f, password: e.target.value }))}
+            placeholder={t('auth.otp.votre_mot_de_passe')}
+            autoComplete="current-password"
+            required
+          />
+          <Button type="submit" size="sm" className="w-full" loading={fixing}>
+            {t('auth.otp.corriger_email_btn')}
+          </Button>
+        </form>
+      )}
     </AuthLayout>
   )
 }

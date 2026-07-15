@@ -413,7 +413,13 @@
       "renvoyer": "Renvoyer le code",
       "renvoyer_dans": "Renvoyer dans {{secondes}}s",
       "instruction": "Entrez le code à 6 chiffres reçu par SMS.",
-      "renvoye_succes": "Code renvoyé !"
+      "renvoye_succes": "Code renvoyé !",
+      "email_incorrect": "E-mail incorrect ? Corrigez-le",
+      "email_incorrect_desc": "Si vous avez saisi un mauvais e-mail à l'inscription, corrigez-le ici : le code OTP sera renvoyé sur la nouvelle adresse.",
+      "nouvel_email": "Nouvel e-mail",
+      "votre_mot_de_passe": "Votre mot de passe",
+      "corriger_email_btn": "Corriger et renvoyer l'OTP",
+      "email_corrige": "E-mail corrigé. Un nouveau code a été envoyé."
     },
     "mot_de_passe_oublie": {
       "titre": "Mot de passe oublié",
