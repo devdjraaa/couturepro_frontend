@@ -107,4 +107,10 @@ export const abonnementService = {
     const { data } = await api.post('/abonnement/activer-code', { code })
     return data
   },
+
+  // P153-158 : code promo / ambassadeur (ajoute des jours au temps restant)
+  async utiliserCodePromo(code) {
+    const { data } = await api.post('/codes-promo/utiliser', { code })
+    return data
+  },
 }

@@ -1098,6 +1098,11 @@
       "activer_code_titre": "Activer un code",
       "activer_code_desc": "Vous avez reçu un code d'activation ? Saisissez-le ici.",
       "activer_btn": "Activer",
+      "code_promo_titre": "Code promo / ambassadeur",
+      "code_promo_desc": "Un code promo ou ambassadeur ajoute des jours à votre temps restant.",
+      "code_promo_placeholder": "ex : GEXT-AMB-001",
+      "code_promo_btn": "Appliquer",
+      "code_promo_invalide": "Code invalide, expiré ou déjà utilisé.",
       "active_succes": "Abonnement activé !",
       "code_invalide": "Code invalide ou déjà utilisé",
       "statuts": {
