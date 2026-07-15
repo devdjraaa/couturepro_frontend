@@ -6,7 +6,7 @@ import { logAction } from '@/utils/historique'
 // Offline-first : paiements de commande lus/écrits dans WatermelonDB (sync serveur).
 
 function getAtelierId() {
-  return localStorage.getItem('cp_active_atelier') || ''
+  return localStorage.getItem('cp_atelier_local') || localStorage.getItem('cp_active_atelier') || ''
 }
 
 function toPlain(p) {

@@ -3,7 +3,7 @@ import { useWmQuery, useMutation, database } from '@/db/useWmQuery'
 import { logAction } from '@/utils/historique'
 
 function getAtelierId() {
-  return localStorage.getItem('cp_active_atelier') || ''
+  return localStorage.getItem('cp_atelier_local') || localStorage.getItem('cp_active_atelier') || ''
 }
 
 export function useMesures(clientId) {

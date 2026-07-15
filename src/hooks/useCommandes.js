@@ -8,8 +8,9 @@ import { commandeService } from '@/services/commandeService'
 import { logAction } from '@/utils/historique'
 import { QUERY_KEYS } from './queryKeys'
 
+// Id RÉEL de l'atelier actif (maître inclus), pour isoler les données (P62-65).
 function getAtelierId() {
-  return localStorage.getItem('cp_active_atelier') || ''
+  return localStorage.getItem('cp_atelier_local') || localStorage.getItem('cp_active_atelier') || ''
 }
 
 // Offline-first : listes, détail & stats des commandes lus dans WatermelonDB
@@ -52,8 +53,10 @@ function toPlain(c) {
 }
 
 export function useCommandes(filters = {}) {
+  const atelierId = getAtelierId()
   const { data: records, isLoading } = useWmQuery(() => {
     const conditions = [Q.where('is_archived', false)]
+    if (atelierId) conditions.push(Q.where('atelier_id', atelierId))   // isolation par atelier (P62-65)
     if (filters.statut) conditions.push(Q.where('statut', filters.statut))
     if (filters.search) {
       const s = Q.sanitizeLikeString(filters.search)
@@ -63,7 +66,7 @@ export function useCommandes(filters = {}) {
       ))
     }
     return database.get('commandes').query(...conditions)
-  }, [filters.statut, filters.search])
+  }, [filters.statut, filters.search, atelierId])
 
   const data = useMemo(() => records.map(toPlain), [records])
   return { data, isLoading }
@@ -82,12 +85,14 @@ export function useCommande(id) {
 
 // Stats calculées localement (offline) depuis commandes + clients.
 export function useCommandeStats() {
-  const { data: commandes } = useWmQuery(
-    () => database.get('commandes').query(Q.where('is_archived', false)), [],
-  )
-  const { data: clients } = useWmQuery(
-    () => database.get('clients').query(Q.where('is_archived', false)), [],
-  )
+  const atelierId = getAtelierId()
+  const scoped = (table) => () => {
+    const conds = [Q.where('is_archived', false)]
+    if (atelierId) conds.push(Q.where('atelier_id', atelierId))
+    return database.get(table).query(...conds)
+  }
+  const { data: commandes } = useWmQuery(scoped('commandes'), [atelierId])
+  const { data: clients }   = useWmQuery(scoped('clients'),   [atelierId])
   const data = useMemo(() => {
     let en_cours = 0, en_retard = 0, dans_48h = 0, livre = 0, total_encaisse = 0, total_restant = 0
     for (const c of commandes) {

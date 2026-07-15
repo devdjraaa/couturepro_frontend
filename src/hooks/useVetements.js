@@ -1,20 +1,24 @@
 import { Q } from '@nozbe/watermelondb'
 import { useWmQuery, useWmRecord, useMutation, database } from '@/db/useWmQuery'
 
+// Id RÉEL de l'atelier actif (maître inclus), pour isoler les données (P62-65).
 function getAtelierId() {
-  return localStorage.getItem('cp_active_atelier') || ''
+  return localStorage.getItem('cp_atelier_local') || localStorage.getItem('cp_active_atelier') || ''
 }
 
 export function useVetements(filters = {}) {
+  const atelierId = getAtelierId()
   return useWmQuery(() => {
     const conditions = [Q.where('is_archived', false)]
+    // Isolation par atelier, mais on garde les modèles système (partagés).
+    if (atelierId) conditions.push(Q.or(Q.where('atelier_id', atelierId), Q.where('is_systeme', true)))
     if (filters.is_systeme !== undefined) conditions.push(Q.where('is_systeme', Boolean(filters.is_systeme)))
     if (filters.search) {
       const s = Q.sanitizeLikeString(filters.search)
       conditions.push(Q.where('nom', Q.like(`%${s}%`)))
     }
     return database.get('vetements').query(...conditions)
-  }, [filters.is_systeme, filters.search])
+  }, [filters.is_systeme, filters.search, atelierId])
 }
 
 export function useVetement(id) {

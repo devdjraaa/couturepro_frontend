@@ -153,6 +153,13 @@ export function AuthProvider({ children }) {
     setActiveAtelierId(isMaitre ? null : newAtelier.id)
   }, [])
 
+  // Scope local (WatermelonDB) : id RÉEL de l'atelier actif, maître inclus.
+  // Séparé de cp_active_atelier (entête API) → sert au filtrage local pour
+  // isoler strictement les données par atelier (P62-65). Aucun impact serveur.
+  useEffect(() => {
+    if (atelier?.id) localStorage.setItem('cp_atelier_local', atelier.id)
+  }, [atelier])
+
   const can = useCallback((permission) => {
     if (!user) return false
     // Proprietaire : permissions statiques complètes

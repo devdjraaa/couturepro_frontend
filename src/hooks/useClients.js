@@ -7,8 +7,9 @@ import { logAction } from '@/utils/historique'
 // Offline-first : clients lus/écrits dans WatermelonDB (comme mesures/vêtements).
 // La sync (syncAdapter) pousse/tire ces données ; l'app fonctionne donc hors-ligne.
 
+// Id RÉEL de l'atelier actif (maître inclus), pour isoler strictement les données (P62-65).
 function getAtelierId() {
-  return localStorage.getItem('cp_active_atelier') || ''
+  return localStorage.getItem('cp_atelier_local') || localStorage.getItem('cp_active_atelier') || ''
 }
 
 // Mappe un record WatermelonDB vers l'objet « plat » attendu par les écrans
@@ -31,8 +32,10 @@ function toPlain(record, count) {
 }
 
 export function useClients(filters = {}) {
+  const atelierId = getAtelierId()
   const { data: clients, isLoading } = useWmQuery(() => {
     const conditions = [Q.where('is_archived', false)]
+    if (atelierId) conditions.push(Q.where('atelier_id', atelierId))   // isolation par atelier (P62-65)
     if (filters.type_profil) conditions.push(Q.where('type_profil', filters.type_profil))
     if (filters.search) {
       const s = Q.sanitizeLikeString(filters.search)
@@ -43,12 +46,16 @@ export function useClients(filters = {}) {
       ))
     }
     return database.get('clients').query(...conditions)
-  }, [filters.type_profil, filters.search])
+  }, [filters.type_profil, filters.search, atelierId])
 
-  // Commandes locales pour le compteur par client.
+  // Commandes locales pour le compteur par client (même atelier).
   const { data: commandes } = useWmQuery(
-    () => database.get('commandes').query(Q.where('is_archived', false)),
-    [],
+    () => {
+      const conds = [Q.where('is_archived', false)]
+      if (atelierId) conds.push(Q.where('atelier_id', atelierId))
+      return database.get('commandes').query(...conds)
+    },
+    [atelierId],
   )
 
   const data = useMemo(() => {
