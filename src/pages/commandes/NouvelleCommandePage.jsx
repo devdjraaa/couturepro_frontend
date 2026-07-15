@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { ChevronLeft, Search, ImagePlus, X, AlertTriangle, Check, Plus, Trash2, Info } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useClients } from '@/hooks/useClients'
+import { useMesAteliers } from '@/hooks/useMesAteliers'
+import { useAuth } from '@/contexts'
 import { useVetements } from '@/hooks/useVetements'
 import { useCreateCommande } from '@/hooks/useCommandes'
 import { useCreateCommandeItems } from '@/hooks/useCommandeItems'
@@ -60,12 +62,26 @@ function StepHeader({ step, onBack }) {
 function StepClient({ data, setData, onNext }) {
   const { t } = useTranslation()
   const [search, setSearch] = useState('')
-  const { data: clients = [], isLoading } = useClients()
+  const { atelier } = useAuth()
+  // P72-73 : commande cross-atelier sans ressaisie — on peut choisir un client d'un autre
+  // de mes ateliers (la commande sera rattachée à l'atelier du client).
+  const { data: mesAteliers = [] } = useMesAteliers()
+  const multiAteliers = mesAteliers.length > 1
+  const [scope, setScope] = useState('atelier') // 'atelier' | 'tous'
+  const ateliersById = mesAteliers.reduce((acc, a) => (acc[a.id] = a.nom, acc), {})
+  const { data: clients = [], isLoading } = useClients(
+    multiAteliers && scope === 'tous' ? { scope: 'tous' } : {},
+  )
 
   const filtered = clients.filter(c =>
     `${c.prenom ?? ''} ${c.nom}`.toLowerCase().includes(search.toLowerCase()) ||
     c.telephone?.includes(search)
   )
+
+  const badgeFor = (c) =>
+    scope === 'tous' && c.atelier_id && c.atelier_id !== atelier?.id
+      ? (ateliersById[c.atelier_id] ?? t('clients.autre_atelier'))
+      : null
 
   const handleSelect = (client) => {
     setData(d => ({ ...d, client_id: client.id, _clientNom: `${client.prenom ?? ''} ${client.nom}`.trim() }))
@@ -74,7 +90,7 @@ function StepClient({ data, setData, onNext }) {
 
   return (
     <div className="flex flex-col flex-1 min-h-0">
-      <div className="px-4 pb-3">
+      <div className="px-4 pb-3 space-y-2.5">
         <div className="relative">
           <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-ghost pointer-events-none" />
           <input
@@ -86,6 +102,24 @@ function StepClient({ data, setData, onNext }) {
             autoFocus
           />
         </div>
+        {/* P72-73 : portée cross-ateliers (comptes multi-ateliers) */}
+        {multiAteliers && (
+          <div className="flex gap-1.5">
+            {[['atelier', t('clients.scope_atelier')], ['tous', t('clients.scope_tous')]].map(([key, label]) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setScope(key)}
+                className={cn(
+                  'px-3 py-1.5 rounded-lg text-xs font-medium transition-colors',
+                  scope === key ? 'bg-primary text-inverse' : 'bg-subtle text-ghost hover:text-ink',
+                )}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 space-y-1 pb-4">
@@ -115,6 +149,11 @@ function StepClient({ data, setData, onNext }) {
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-ink truncate">{nom}</p>
                   <p className="text-xs text-ghost">{client.telephone}</p>
+                  {badgeFor(client) && (
+                    <span className="inline-block mt-0.5 text-[10px] font-medium text-primary bg-primary-50 rounded px-1.5 py-0.5">
+                      {badgeFor(client)}
+                    </span>
+                  )}
                 </div>
                 {selected && <Check size={16} className="text-primary shrink-0" />}
               </button>
