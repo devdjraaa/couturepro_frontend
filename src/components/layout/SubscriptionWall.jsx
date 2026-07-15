@@ -20,7 +20,7 @@ export default function SubscriptionWall() {
       : 'Votre période d\'essai ou abonnement a expiré. Souscrivez un plan pour continuer à utiliser l\'application.'
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-5 p-6 text-center bg-app/95 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-5 p-6 text-center bg-app/95 backdrop-blur-sm">
       <div className="flex items-center justify-center w-16 h-16 rounded-full bg-card border border-border">
         <Lock size={28} className="text-dim" />
       </div>
