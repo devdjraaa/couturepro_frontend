@@ -54,6 +54,9 @@ export default function MaVitrinePage() {
   const [profileSaved, setProfileSaved] = useState(false)
   const [logoUrl, setLogoUrl] = useState(() => atelier?.logo_url || null)
   const [uploadingLogo, setUploadingLogo] = useState(false)
+  const [banniereUrl, setBanniereUrl] = useState(() => atelier?.banniere_url || null)   // P134
+  const [banniereType, setBanniereType] = useState(() => atelier?.banniere_type || null)
+  const [uploadingBanniere, setUploadingBanniere] = useState(false)
   const [instagram, setInstagram] = useState(() => atelier?.instagram || '')
   const [facebook, setFacebook] = useState(() => atelier?.facebook || '')
   const [siteWeb, setSiteWeb] = useState(() => atelier?.site_web || '')
@@ -181,6 +184,29 @@ export default function MaVitrinePage() {
       setLogoUrl(logo_url)
     } catch { /* erreur silencieuse */ } finally {
       setUploadingLogo(false)
+    }
+  }
+
+  // P134 : bannière photo/GIF/vidéo.
+  const onBanniereChange = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploadingBanniere(true)
+    try {
+      const { banniere_url, banniere_type } = await parametresService.uploadAtelierBanniere(file)
+      setBanniereUrl(banniere_url); setBanniereType(banniere_type)
+    } catch { /* erreur silencieuse */ } finally {
+      setUploadingBanniere(false)
+      e.target.value = ''
+    }
+  }
+  const onBanniereRemove = async () => {
+    setUploadingBanniere(true)
+    try {
+      await parametresService.supprimerAtelierBanniere()
+      setBanniereUrl(null); setBanniereType(null)
+    } catch { /* erreur silencieuse */ } finally {
+      setUploadingBanniere(false)
     }
   }
 
@@ -328,6 +354,28 @@ export default function MaVitrinePage() {
         {/* Profil public éditable */}
         <div className="mt-4 bg-card border border-edge rounded-xl p-4">
           <p className="text-sm font-semibold text-ink mb-3">{t('ma_vitrine.mon_profil')}</p>
+
+          {/* P134 : bannière de couverture (photo / GIF / vidéo) */}
+          <div className="mb-4">
+            <div className="relative h-24 rounded-lg overflow-hidden bg-subtle border border-edge">
+              {banniereUrl ? (
+                banniereType === 'video'
+                  ? <video src={banniereUrl} className="w-full h-full object-cover" autoPlay muted loop playsInline />
+                  : <img src={banniereUrl} alt="" className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-ghost text-xs">{t('ma_vitrine.banniere_vide')}</div>
+              )}
+            </div>
+            <div className="flex items-center gap-3 mt-1.5">
+              <label className="text-xs font-semibold text-primary cursor-pointer hover:underline">
+                {uploadingBanniere ? t('ma_vitrine.envoi') : t('ma_vitrine.changer_banniere')}
+                <input type="file" accept="image/*,video/mp4,video/webm" onChange={onBanniereChange} disabled={uploadingBanniere} className="hidden" />
+              </label>
+              {banniereUrl && <button type="button" onClick={onBanniereRemove} disabled={uploadingBanniere} className="text-xs text-error hover:opacity-80">{t('ma_vitrine.retirer_banniere')}</button>}
+            </div>
+            <p className="text-[11px] text-ghost mt-1">{t('ma_vitrine.banniere_hint')}</p>
+          </div>
+
           <div className="flex items-center gap-3 mb-4">
             <div className="w-14 h-14 rounded-xl overflow-hidden bg-subtle flex items-center justify-center shrink-0">
               {logoUrl ? <img src={logoUrl} alt="Logo" className="w-full h-full object-cover" /> : <Store size={20} className="text-ghost" />}
