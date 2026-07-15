@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Camera, X } from 'lucide-react'
 import { Input, Select, Button } from '@/components/ui'
 import Avatar, { AVATAR_PALETTES } from '@/components/ui/Avatar'
@@ -13,6 +14,7 @@ const PROFIL_OPTIONS = [
 ]
 
 export default function ClientForm({ initialData, onSubmit, onCancel, isLoading }) {
+  const { t } = useTranslation()
   const [form, setForm] = useState({
     nom:          initialData?.nom          ?? '',
     prenom:       initialData?.prenom       ?? '',
@@ -129,8 +131,8 @@ export default function ClientForm({ initialData, onSubmit, onCancel, isLoading 
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <Input label="Prénom" value={form.prenom} onChange={set('prenom')} placeholder="Fatou" autoFocus />
-        <Input label="Nom" value={form.nom} onChange={set('nom')} placeholder="Diallo" required />
+        <Input label={t('commun.prenom')} value={form.prenom} onChange={set('prenom')} placeholder={t('clients.formulaire.prenom_placeholder')} autoFocus />
+        <Input label={t('commun.nom')} value={form.nom} onChange={set('nom')} placeholder={t('clients.formulaire.nom_placeholder')} required />
       </div>
       <Input
         label="Téléphone"
