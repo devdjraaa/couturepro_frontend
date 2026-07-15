@@ -128,6 +128,12 @@ export function AuthProvider({ children }) {
     setActiveAtelierId(isMaitre ? null : newAtelier.id)
   }, [])
 
+  // Entête API X-Atelier-Id cohérente avec l'atelier actif même au reload (null = maître) —
+  // évite que les requêtes serveur (abonnement, etc.) ciblent un ancien atelier.
+  useEffect(() => {
+    if (atelier?.id) setActiveAtelierId(atelier.is_maitre ? null : atelier.id)
+  }, [atelier])
+
   const can = useCallback((permission) => {
     if (!user) return false
     // Proprietaire : permissions statiques complètes
