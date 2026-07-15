@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
 import { cn } from '@/utils/cn'
+import { registerBackHandler } from '@/utils/backHandler'
 
 const sizeClass = {
   sm: 'max-w-sm',
@@ -24,6 +25,12 @@ export default function Modal({ isOpen, onClose, title, children, footer, size =
     const handler = (e) => { if (e.key === 'Escape') onClose() }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
+  }, [isOpen, onClose])
+
+  // P4 : le bouton retour physique ferme la modale (comme « Annuler »).
+  useEffect(() => {
+    if (!isOpen) return
+    return registerBackHandler(onClose)
   }, [isOpen, onClose])
 
   if (!isOpen) return null

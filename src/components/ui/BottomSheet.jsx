@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
 import { cn } from '@/utils/cn'
+import { registerBackHandler } from '@/utils/backHandler'
 
 export default function BottomSheet({ isOpen, onClose, title, children, className }) {
   useEffect(() => {
@@ -9,6 +10,12 @@ export default function BottomSheet({ isOpen, onClose, title, children, classNam
     document.body.style.overflow = 'hidden'
     return () => { document.body.style.overflow = '' }
   }, [isOpen])
+
+  // P4 : le bouton retour physique ferme la feuille (comme « Annuler »).
+  useEffect(() => {
+    if (!isOpen) return
+    return registerBackHandler(onClose)
+  }, [isOpen, onClose])
 
   useEffect(() => {
     if (!isOpen) return

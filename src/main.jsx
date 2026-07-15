@@ -10,9 +10,12 @@ import './index.css'
 import './lang/i18n.js'
 import App from './App.jsx'
 
-// #2 — Bouton Retour Android synchronisé avec React Router
+// #2 / P4 — Bouton Retour Android : ferme d'abord l'overlay ouvert (= « Annuler »),
+// sinon navigue en arrière (React Router), sinon quitte l'app.
 import { App as CapApp } from '@capacitor/app'
+import { runTopBackHandler } from '@/utils/backHandler'
 CapApp.addListener('backButton', ({ canGoBack }) => {
+  if (runTopBackHandler()) return   // une modale/feuille était ouverte → on la ferme
   if (canGoBack) {
     window.history.back()
   } else {
