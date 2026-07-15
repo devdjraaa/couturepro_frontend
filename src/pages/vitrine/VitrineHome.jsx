@@ -328,20 +328,30 @@ export default function VitrineHome() {
               ))}
             </div>
             {/* Flèche gauche */}
-            {carouselEdge.left && (
-              <button onClick={() => scrollCarousel(-1)} aria-label="Précédent"
-                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 w-9 h-9 rounded-full bg-card border border-edge shadow-md flex items-center justify-center text-ink hover:border-primary hover:text-primary transition">
-                <ChevronLeft size={18} />
-              </button>
-            )}
-            {/* Flèche droite + dégradé */}
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-elevated to-transparent" />
-            {carouselEdge.right && (
-              <button onClick={() => scrollCarousel(1)} aria-label="Suivant"
-                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 w-9 h-9 rounded-full bg-card border border-edge shadow-md flex items-center justify-center text-ink hover:border-primary hover:text-primary transition">
-                <ChevronRight size={18} />
-              </button>
-            )}
+            <button onClick={() => scrollCarousel(-1)} aria-label="Précédent"
+              className={[
+                'absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10',
+                'w-10 h-10 rounded-full flex items-center justify-center',
+                'bg-card/90 backdrop-blur-sm border border-edge shadow-lg',
+                'text-ink hover:bg-primary hover:border-primary hover:text-inverse hover:scale-110 active:scale-95',
+                'transition-all duration-300',
+                carouselEdge.left ? 'opacity-100 scale-100' : 'opacity-0 scale-75 pointer-events-none',
+              ].join(' ')}>
+              <ChevronLeft size={17} strokeWidth={2.5} />
+            </button>
+            {/* Dégradé droite + flèche droite */}
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-elevated to-transparent" />
+            <button onClick={() => scrollCarousel(1)} aria-label="Suivant"
+              className={[
+                'absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10',
+                'w-10 h-10 rounded-full flex items-center justify-center',
+                'bg-card/90 backdrop-blur-sm border border-edge shadow-lg',
+                'text-ink hover:bg-primary hover:border-primary hover:text-inverse hover:scale-110 active:scale-95',
+                'transition-all duration-300',
+                carouselEdge.right ? 'opacity-100 scale-100' : 'opacity-0 scale-75 pointer-events-none',
+              ].join(' ')}>
+              <ChevronRight size={17} strokeWidth={2.5} />
+            </button>
           </div>
           <div className="text-center mt-8">
             <Link to="/createurs" className={btnPrimary}>{t('vitrine.creators.see_all')}</Link>
