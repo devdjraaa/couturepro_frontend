@@ -57,6 +57,11 @@ export default function LoginPage() {
         navigate(ROUTES.DASHBOARD, { replace: true })
       }
     } catch (err) {
+      // P147 : téléphone non vérifié → au lieu de bloquer, on envoie vers l'OTP (renvoi + saisie).
+      if (err?.serverCode === 'telephone_non_verifie') {
+        navigate(ROUTES.OTP, { state: { telephone: propForm.telephone } })
+        return
+      }
       setPropError(formatLoginError(err))
     } finally {
       setLoading(false)

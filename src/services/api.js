@@ -59,7 +59,8 @@ function normalizeError(error) {
   const { status, data } = error.response
   const msg = typeof data?.message === 'string' ? data.message : null
   if (status === 401) return { code: 'session_expiree', message: msg || tErr('session_expiree') }
-  if (status === 403) return { code: 'non_autorise', message: msg || tErr('non_autorise') }
+  // serverCode : code sémantique optionnel fourni par le backend (ex. telephone_non_verifie) — sans écraser le code HTTP.
+  if (status === 403) return { code: 'non_autorise', serverCode: typeof data?.code === 'string' ? data.code : undefined, message: msg || tErr('non_autorise') }
   if (status === 404) return { code: 'non_trouve', message: msg || tErr('non_trouve') }
   if (status === 422) return { code: 'validation', errors: data?.errors, message: msg || tErr('format_invalide') }
   if (status === 429) return { code: 'quota_depasse', message: msg || tErr('quota_depasse') }
