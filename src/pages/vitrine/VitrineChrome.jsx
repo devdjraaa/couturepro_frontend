@@ -295,14 +295,22 @@ export function VitrineFooter() {
       { l: t('vitrine.menu2.artisans'), to: '/artisans' },
       { l: t('vitrine.footer.pricing'), to: '/premium' },
       { l: t('vitrine.sponsor.footer_link'), to: '/mise-en-avant' },
-    ] },
-    { h: t('vitrine.footer.col_support'), links: [
       { l: t('vitrine.menu2.support'), to: '/aide' },
     ] },
     { h: t('vitrine.footer.col_legal'), links: [
-      { l: t('vitrine.footer.legal_mentions'), to: '#' },
       { l: t('vitrine.footer.legal_privacy'), to: '#' },
+      { l: t('vitrine.footer.legal_mentions'), to: '#' },
       { l: t('vitrine.footer.legal_cookies'), to: '#' },
+      { l: t('vitrine.footer.legal_apdp'), to: '#' },
+      { l: t('vitrine.footer.legal_cgu'), to: '#' },
+    ] },
+    { h: t('vitrine.footer.col_rules'), links: [
+      { l: t('vitrine.footer.legal_creator_rights'), to: '#' },
+      { l: t('vitrine.footer.legal_sale'), to: '#' },
+      { l: t('vitrine.footer.legal_prohibited'), to: '#' },
+      { l: t('vitrine.footer.legal_delivery'), to: '#' },
+      { l: t('vitrine.footer.legal_community_rules'), to: '#' },
+      { l: t('vitrine.footer.legal_contact'), to: '#' },
     ] },
   ]
   return (
@@ -371,13 +379,13 @@ export function VitrineFooter() {
         <div className="vt-foot-shimmer" />
       </div>
       <div className="relative z-10 max-w-[1180px] mx-auto px-5">
-        <div className="vt-reveal grid grid-cols-1 md:grid-cols-[1.6fr_1fr_1fr_1fr_1fr] gap-8 pb-9 border-b border-edge">
-          <div>
+        <div className="vt-reveal grid grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr_1.1fr_1.1fr] gap-x-6 gap-y-8 pb-9 border-b border-edge">
+          <div className="col-span-2 md:col-span-1">
             <VitrineLogo onDark />
             <p className="text-[13px] mt-3.5 max-w-[280px] text-dim">{t('vitrine.footer.tagline')}</p>
           </div>
           {cols.map((c) => (
-            <div key={c.h}>
+            <div key={c.h} className="flex flex-col">
               <h5 className="text-[12px] font-bold uppercase tracking-[0.1em] mb-3.5">{c.h}</h5>
               {c.links.map((l) => <FooterLink key={l.l} to={l.to}>{l.l}</FooterLink>)}
             </div>
