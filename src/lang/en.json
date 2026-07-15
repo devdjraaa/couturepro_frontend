@@ -358,6 +358,13 @@
     "chargement": "Unable to load data. Check your connection."
   },
   "auth": {
+    "social": {
+      "ou": "or",
+      "continuer": "Continue with {{provider}}",
+      "connexion": "Signing in…",
+      "erreur": "Sign-in failed. Please try again.",
+      "retour_login": "Back to sign in"
+    },
     "connexion": {
       "titre": "Sign in",
       "sous_titre": "Access your Gextimo workspace",

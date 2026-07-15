@@ -104,6 +104,16 @@ export function AuthProvider({ children }) {
     return { user, atelier }
   }, [])
 
+  // P150 : connexion sociale — le token vient du callback OAuth (fragment #token).
+  const loginWithToken = useCallback(async (token) => {
+    const { user, atelier } = await authService.loginWithToken(token)
+    setUser(user)
+    setAtelier(atelier)
+    setDemoMode(!!atelier?.is_demo)
+    setCachedSession({ user, atelier })
+    return { user, atelier }
+  }, [])
+
   const equipeLogin = useCallback(async (payload) => {
     const { user } = await authService.equipeLogin(payload)
     setUser(user)
@@ -183,6 +193,7 @@ export function AuthProvider({ children }) {
       role: user?.role ?? null,
       // actions
       login,
+      loginWithToken,
       equipeLogin,
       logout,
       register,

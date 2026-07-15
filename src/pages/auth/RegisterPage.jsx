@@ -5,6 +5,7 @@ import { Eye, EyeOff, Check, X, ArrowRight, MessageSquare } from 'lucide-react'
 import { useAuth } from '@/contexts'
 import { AuthLayout } from '@/components/layout'
 import { Input, Button, Select, PhoneInput, LanguageSwitcher } from '@/components/ui'
+import SocialLoginButtons from '@/components/auth/SocialLoginButtons'
 import { SITE_BASE_URL } from '@/constants/config'
 import { cn } from '@/utils/cn'
 
@@ -287,6 +288,7 @@ export default function RegisterPage() {
             {t('auth.inscription.se_connecter')}
           </Link>
         </p>
+        <SocialLoginButtons />
       </form>
     </AuthLayout>
   )

@@ -358,6 +358,13 @@
     "chargement": "Impossible de charger les données. Vérifiez votre connexion."
   },
   "auth": {
+    "social": {
+      "ou": "ou",
+      "continuer": "Continuer avec {{provider}}",
+      "connexion": "Connexion en cours…",
+      "erreur": "La connexion a échoué. Réessayez.",
+      "retour_login": "Retour à la connexion"
+    },
     "connexion": {
       "titre": "Connexion",
       "sous_titre": "Accédez à votre espace Gextimo",
