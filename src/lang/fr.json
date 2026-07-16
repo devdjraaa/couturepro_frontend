@@ -692,6 +692,11 @@
       "col_tel": "Téléphone",
       "col_notes": "Notes",
       "col_maj": "Mis à jour le"
+    },
+    "partage": {
+      "label": "Partager entre mes ateliers",
+      "aide": "Cette cliente sera visible dans tous vos ateliers.",
+      "badge": "Partagée"
     }
   },
   "commandes": {
