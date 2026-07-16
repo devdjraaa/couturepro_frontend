@@ -2409,6 +2409,19 @@
                 "t": "Les modifications mineures (corrections de formulation, mise à jour de coordonnées) peuvent être effectuées sans préavis de 30 jours et sont signalées par la mise à jour de la date en haut de la politique."
               }
             ]
+          },
+          {
+            "title": "Assistant, échanges enregistrés et mesure d'audience",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Les échanges avec l'assistant (chatbot) du site sont enregistrés — question posée, réponse donnée et votre éventuel avis (utile / inutile) — dans le seul but d'améliorer la qualité des réponses et le service. Ils ne sont jamais vendus ni partagés avec des tiers."
+              },
+              {
+                "type": "p",
+                "t": "Avec votre consentement (bandeau dédié), des données de navigation (pages consultées, recherches, interactions) sont collectées de manière pseudonymisée pour améliorer votre expérience et nos recommandations. Vous pouvez modifier vos choix à tout moment depuis votre espace client."
+              }
+            ]
           }
         ],
         "meta_lines": [
