@@ -1354,7 +1354,11 @@
     "factures_wa_mois": "WhatsApp invoices / month",
     "sauvegarde_auto": "Auto backup",
     "module_caisse": "Cash register module",
-    "sous_ateliers": "sub-workshops"
+    "sous_ateliers": "sub-workshops",
+    "badge_recommande": "Recommended",
+    "badge_premium": "Premium",
+    "equiv_mensuel": "i.e. {{montant}}/mo",
+    "economie": "save {{montant}}"
   },
   "caisse": {
     "titre": "Cash Register",

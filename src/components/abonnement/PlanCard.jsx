@@ -47,11 +47,27 @@ export default function PlanCard({ plan, isCurrent, abonnementStatut, onUpgrade,
     ? illimite
     : cfg.max_sous_ateliers === 0 ? null : String(cfg.max_sous_ateliers)
 
+  // P46/SUG-23 : valoriser les cartes — plan mis en avant + équivalent mensuel & économie sur l'annuel.
+  const estAnnuel = plan.duree_jours >= 365
+  const equivMensuel = Number(plan.prix_mensuel_equivalent_xof) || 0
+  const economieAnnuelle = estAnnuel && equivMensuel > 0
+    ? Math.max(0, equivMensuel * 12 - Number(plan.prix_xof))
+    : 0
+  const desc = (plan.description_courte || '').toLowerCase()
+  const misEnAvant = !isFree && (desc.includes('recommand') || desc.includes('premium'))
+
   return (
     <div className={cn(
-      'bg-card border rounded-2xl p-4 flex flex-col gap-3',
-      isActive || isEssai ? 'border-primary ring-1 ring-primary/20' : 'border-edge',
+      'bg-card border rounded-2xl p-4 flex flex-col gap-3 relative',
+      isActive || isEssai ? 'border-primary ring-1 ring-primary/20'
+        : misEnAvant ? 'border-primary/40 ring-1 ring-primary/10' : 'border-edge',
     )}>
+      {/* Bandeau « mis en avant » */}
+      {misEnAvant && !isActive && !isEssai && (
+        <span className="absolute -top-2 left-4 text-2xs font-bold uppercase tracking-wide bg-primary text-inverse px-2 py-0.5 rounded-full">
+          {desc.includes('premium') ? t('plans.badge_premium') : t('plans.badge_recommande')}
+        </span>
+      )}
       {/* En-tête */}
       <div>
         <div className="flex items-start justify-between mb-1">
@@ -71,6 +87,17 @@ export default function PlanCard({ plan, isCurrent, abonnementStatut, onUpgrade,
           {formatCurrency(Number(plan.prix_xof))}
           <span className="text-xs font-normal text-dim ml-1">{dureeLabel}</span>
         </p>
+        {/* Équivalent mensuel + économie (annuel) */}
+        {estAnnuel && equivMensuel > 0 && (
+          <p className="text-xs text-dim mt-0.5">
+            {t('plans.equiv_mensuel', { montant: formatCurrency(equivMensuel) })}
+            {economieAnnuelle > 0 && (
+              <span className="text-success font-semibold ml-1">
+                · {t('plans.economie', { montant: formatCurrency(economieAnnuelle) })}
+              </span>
+            )}
+          </p>
+        )}
         {plan.description_courte && (
           <p className="text-xs text-dim mt-0.5">{plan.description_courte}</p>
         )}
