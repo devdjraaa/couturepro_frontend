@@ -1,11 +1,14 @@
 import { useState } from 'react'
-import { Download, TrendingUp, Clock, CheckCircle, Wallet } from 'lucide-react'
+import { Download, TrendingUp, Clock, CheckCircle, Wallet, FileText } from 'lucide-react'
+import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 import { AppLayout } from '@/components/layout'
 import { useCaisseStats, useCaisseClients } from '@/hooks/useCaisse'
 import { FeatureGate } from '@/components/abonnement'
 import { useAuth } from '@/contexts'
 import { exportRapportCaissePdf } from '@/utils/exportRapportCaissePdf'
+import { exportRapportMensuelPdf } from '@/utils/exportRapportMensuelPdf'
+import { caisseService } from '@/services/caisseService'
 
 const fmt = (v) =>
   new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 0 }).format(Number(v) || 0) + ' FCFA'
@@ -48,6 +51,7 @@ function CaisseContent() {
   const { t } = useTranslation()
   const [mois, setMois] = useState(MOIS_OPTIONS[0].value)
   const [exporting, setExporting] = useState(false)
+  const [rapportLoading, setRapportLoading] = useState(false)
 
   const { data: stats, isLoading: statsLoading } = useCaisseStats(mois)
   const { data: clients = [], isLoading: clientsLoading } = useCaisseClients()
@@ -65,6 +69,19 @@ function CaisseContent() {
       })
     } finally {
       setExporting(false)
+    }
+  }
+
+  // PL-3 : rapport mensuel par cliente (endpoint gaté `rapport_mensuel`).
+  const handleRapportMensuel = async () => {
+    setRapportLoading(true)
+    try {
+      const data = await caisseService.getRapportMensuel(mois)
+      await exportRapportMensuelPdf(data)
+    } catch (e) {
+      toast.error(e?.response?.data?.message || t('caisse.rapport_mensuel_erreur'))
+    } finally {
+      setRapportLoading(false)
     }
   }
 
@@ -94,6 +111,16 @@ function CaisseContent() {
           {exporting ? '…' : t('caisse.export_pdf')}
         </button>
       </div>
+
+      {/* PL-3 : rapport mensuel par cliente (plans payants) */}
+      <button
+        onClick={handleRapportMensuel}
+        disabled={rapportLoading || isLoading}
+        className="w-full flex items-center justify-center gap-2 bg-subtle text-ink text-sm font-medium px-4 py-2.5 rounded-xl disabled:opacity-50"
+      >
+        <FileText size={14} />
+        {rapportLoading ? t('caisse.rapport_mensuel_encours') : t('caisse.rapport_mensuel')}
+      </button>
 
       {isLoading ? (
         <div className="space-y-3">

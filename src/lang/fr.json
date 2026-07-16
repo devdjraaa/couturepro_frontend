@@ -1333,7 +1333,10 @@
       "especes": "Espèces",
       "mobile_money": "Mobile Money",
       "virement": "Virement"
-    }
+    },
+    "rapport_mensuel": "Rapport mensuel par cliente (PDF)",
+    "rapport_mensuel_encours": "Génération…",
+    "rapport_mensuel_erreur": "Impossible de générer le rapport mensuel."
   },
   "archives": {
     "titre": "Archives",
