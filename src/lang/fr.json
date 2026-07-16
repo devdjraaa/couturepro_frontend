@@ -1142,6 +1142,19 @@
         "essai": "Période d'essai",
         "expire": "Expiré",
         "gele": "Suspendu"
+      },
+      "recap": {
+        "titre": "Récapitulatif",
+        "plan_actuel": "Plan actuel",
+        "plan_nouveau": "Nouveau plan",
+        "prix": "Prix du nouveau plan",
+        "credit": "Crédit restant ({{jours}} j)",
+        "a_payer": "À payer aujourd’hui",
+        "echeance": "Nouvelle échéance",
+        "note_immediat": "Votre nouvel abonnement sera actif immédiatement après le paiement.",
+        "note_renouvellement": "Votre abonnement sera prolongé à partir de son échéance actuelle.",
+        "payer": "Payer {{montant}}",
+        "confirmer": "Confirmer"
       }
     },
     "ateliers_tab": {

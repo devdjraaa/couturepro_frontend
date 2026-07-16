@@ -17,8 +17,10 @@ import { useCountdown } from '@/hooks/useCountdown'
 import { useAccountType } from '@/hooks/useAccountType'
 import { AppLayout } from '@/components/layout'
 import { QuotaBar, PlanCard, FeatureGate } from '@/components/abonnement'
-import { TabBar, Input, Select, Button, Skeleton, LanguageSwitcher } from '@/components/ui'
+import { TabBar, Input, Select, Button, Skeleton, LanguageSwitcher, BottomSheet } from '@/components/ui'
 import { parametresService } from '@/services/parametresService'
+import { abonnementService } from '@/services/abonnementService'
+import { formatCurrency } from '@/utils/formatCurrency'
 import { cn } from '@/utils/cn'
 
 const DEVISES = [
@@ -443,8 +445,26 @@ function AbonnementTab() {
   const { data: abonnement } = useAbonnement()
   const { data: plans = [] } = usePlans()
   const initierPaiement = useInitierPaiementAbonnement()
+  const [recap, setRecap] = useState(null) // récap upgrade affiché avant paiement
+  const [recapLoading, setRecapLoading] = useState(false)
 
+  // Spec upgrade : afficher le récapitulatif (crédit prorata, montant réel,
+  // nouvelle échéance) AVANT d'envoyer l'utilisateur vers le paiement.
   const handleUpgrade = async (niveau_cle) => {
+    setRecapLoading(true)
+    try {
+      const preview = await abonnementService.upgradePreview(niveau_cle)
+      setRecap({ ...preview, niveau_cle })
+    } catch {
+      setRecap({ niveau_cle }) // récap indisponible → on laisse payer au prix affiché
+    } finally {
+      setRecapLoading(false)
+    }
+  }
+
+  const confirmerPaiement = async () => {
+    const { niveau_cle } = recap
+    setRecap(null)
     const result = await initierPaiement.mutateAsync({ niveau_cle })
     if (result?.checkout_url && result.checkout_url !== '#mock-payment') {
       // Sur Capacitor, on navigue dans la WebView elle-même : ainsi quand FedaPay
@@ -530,11 +550,70 @@ function AbonnementTab() {
                 isCurrent={abonnement?.niveau_cle === plan.cle}
                 abonnementStatut={abonnement?.statut}
                 onUpgrade={handleUpgrade}
-                isLoading={initierPaiement.isPending}
+                isLoading={initierPaiement.isPending || recapLoading}
               />
             ))}
         </div>
       </div>
+
+      {/* Récap upgrade (spec 16/07/2026) : crédit prorata + montant réel avant paiement */}
+      <BottomSheet isOpen={!!recap} onClose={() => setRecap(null)} title={t('parametres.abonnement.recap.titre')}>
+        {recap && (
+          <div className="space-y-3 pb-2">
+            {recap.plan_actuel && (
+              <RecapLigne label={t('parametres.abonnement.recap.plan_actuel')} value={recap.plan_actuel} />
+            )}
+            <RecapLigne
+              label={t('parametres.abonnement.recap.plan_nouveau')}
+              value={recap.plan_nouveau ?? t(`plans.${recap.niveau_cle}`, { defaultValue: recap.niveau_cle })}
+            />
+            {recap.prix_nouveau != null && (
+              <RecapLigne label={t('parametres.abonnement.recap.prix')} value={formatCurrency(recap.prix_nouveau)} />
+            )}
+            {recap.credit_prorata > 0 && (
+              <RecapLigne
+                label={t('parametres.abonnement.recap.credit', { jours: recap.jours_restants })}
+                value={`− ${formatCurrency(recap.credit_prorata)}`}
+                accent="text-success"
+              />
+            )}
+            {recap.montant_a_payer != null && (
+              <RecapLigne
+                label={t('parametres.abonnement.recap.a_payer')}
+                value={formatCurrency(recap.montant_a_payer)}
+                strong
+              />
+            )}
+            {recap.nouvelle_echeance && (
+              <RecapLigne
+                label={t('parametres.abonnement.recap.echeance')}
+                value={new Date(recap.nouvelle_echeance).toLocaleDateString()}
+              />
+            )}
+            <p className="text-xs text-dim">
+              {recap.renouvellement
+                ? t('parametres.abonnement.recap.note_renouvellement')
+                : t('parametres.abonnement.recap.note_immediat')}
+            </p>
+            <Button className="w-full" onClick={confirmerPaiement} disabled={initierPaiement.isPending}>
+              {recap.montant_a_payer > 0
+                ? t('parametres.abonnement.recap.payer', { montant: formatCurrency(recap.montant_a_payer) })
+                : t('parametres.abonnement.recap.confirmer')}
+            </Button>
+          </div>
+        )}
+      </BottomSheet>
+    </div>
+  )
+}
+
+function RecapLigne({ label, value, strong = false, accent = '' }) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <span className="text-sm text-dim">{label}</span>
+      <span className={cn('text-sm font-mono', strong ? 'font-bold text-ink text-base' : 'text-ink', accent)}>
+        {value}
+      </span>
     </div>
   )
 }

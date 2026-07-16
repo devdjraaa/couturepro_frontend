@@ -70,6 +70,17 @@ export const abonnementService = {
     return data
   },
 
+  // Récap AVANT paiement d'un changement de plan (spec upgrade) : crédit prorata
+  // du temps restant, montant réel à payer, nouvelle échéance de date à date.
+  async upgradePreview(niveau_cle) {
+    if (isMock()) {
+      await delay(300)
+      return { prix_nouveau: 30000, credit_prorata: 8129, montant_a_payer: 21871 }
+    }
+    const { data } = await api.get('/abonnement/upgrade-preview', { params: { niveau_cle } })
+    return data
+  },
+
   // Lance un paiement d'abonnement via FedaPay
   // payload: { niveau_cle: 'standard_mensuel', provider?: 'fedapay' }
   async initierPaiement(niveau_cle, provider = 'fedapay') {
