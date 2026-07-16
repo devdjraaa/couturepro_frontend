@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Camera, X } from 'lucide-react'
+import { Camera, X, Share2 } from 'lucide-react'
+import { useMesAteliers } from '@/hooks/useMesAteliers'
 import { Input, Select, Button } from '@/components/ui'
 import Avatar, { AVATAR_PALETTES } from '@/components/ui/Avatar'
 import { getClientPhoto, compressToBase64 } from '@/utils/clientPhotoStorage'
@@ -23,7 +24,12 @@ export default function ClientForm({ initialData, onSubmit, onCancel, isLoading 
     type_profil:  initialData?.type_profil  ?? 'mixte',
     notes:        initialData?.notes        ?? '',
     avatar_index: initialData?.avatar_index ?? null,
+    partage:      initialData?.partage      ?? false,
   })
+
+  // P77 : l'option « partagé entre ateliers » n'a de sens que pour un compte multi-ateliers.
+  const { data: ateliers = [] } = useMesAteliers()
+  const multiAteliers = ateliers.length > 1
 
   const [photoPreview, setPhotoPreview] = useState(() =>
     initialData?.id ? getClientPhoto(initialData.id) : null,
@@ -156,6 +162,25 @@ export default function ClientForm({ initialData, onSubmit, onCancel, isLoading 
         onChange={set('notes')}
         placeholder="Remarques optionnelles…"
       />
+
+      {/* P77 : partager la cliente entre tous les ateliers du propriétaire */}
+      {multiAteliers && (
+        <label className="flex items-start gap-3 cursor-pointer bg-subtle rounded-xl p-3">
+          <input
+            type="checkbox"
+            checked={form.partage}
+            onChange={(e) => setForm(f => ({ ...f, partage: e.target.checked }))}
+            className="mt-0.5 w-5 h-5 accent-primary shrink-0"
+          />
+          <span>
+            <span className="flex items-center gap-1.5 text-sm font-medium text-ink">
+              <Share2 size={14} /> {t('clients.partage.label')}
+            </span>
+            <span className="block text-xs text-dim mt-0.5">{t('clients.partage.aide')}</span>
+          </span>
+        </label>
+      )}
+
       <div className="flex gap-3 pt-2">
         <Button type="button" variant="ghost" onClick={onCancel} className="flex-1">
           Annuler

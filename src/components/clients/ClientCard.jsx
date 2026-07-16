@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+import { Share2 } from 'lucide-react'
 import { cn } from '@/utils/cn'
 import { Card } from '@/components/ui'
 import ClientAvatar from './ClientAvatar'
@@ -11,6 +13,7 @@ const TYPE_LABELS = {
 }
 
 export default function ClientCard({ client, onClick, badge }) {
+  const { t } = useTranslation()
   const fullName  = `${client.prenom ?? ''} ${client.nom}`.trim()
   const typeLabel = TYPE_LABELS[client.type_profil] ?? client.type_profil ?? ''
   const solde     = client.total_restant ?? 0
@@ -30,6 +33,12 @@ export default function ClientCard({ client, onClick, badge }) {
           {client.is_vip && (
             <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full border bg-gold-light text-gold-dark border-gold/20 shrink-0">
               VIP
+            </span>
+          )}
+          {/* P77 : cliente partagée entre ateliers */}
+          {client.partage && (
+            <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-primary/10 text-primary shrink-0 inline-flex items-center gap-0.5">
+              <Share2 size={9} /> {t('clients.partage.badge')}
             </span>
           )}
           {typeLabel && (

@@ -692,6 +692,11 @@
       "col_tel": "Phone",
       "col_notes": "Notes",
       "col_maj": "Updated on"
+    },
+    "partage": {
+      "label": "Share across my workshops",
+      "aide": "This client will be visible in all your workshops.",
+      "badge": "Shared"
     }
   },
   "commandes": {
