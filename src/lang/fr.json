@@ -1888,6 +1888,46 @@
       "devise": "Devise",
       "devise_hint": "Prix indicatifs — convertis au taux du jour.",
       "cta": "Commencer"
+    },
+    "partenaires": {
+      "footer_link": "Nos partenaires",
+      "eyebrow": "Écosystème",
+      "titre": "Nos partenaires",
+      "sous": "Les organisations qui font grandir Gextimo et l’écosystème de la mode africaine.",
+      "devenir": "Devenir partenaire",
+      "vide": "Nos partenaires seront bientôt présentés ici.",
+      "bandeau_titre": "Ils nous font confiance",
+      "suivant": "Suivant",
+      "precedent": "Précédent",
+      "categories": {
+        "institutionnel": "Institutionnel",
+        "financier": "Financier",
+        "logistique": "Logistique",
+        "culturel": "Culturel",
+        "createur": "Créateur",
+        "technologique": "Technologique",
+        "media": "Média",
+        "education": "Éducation",
+        "autre": "Autre"
+      },
+      "form": {
+        "titre": "Devenir partenaire",
+        "sous": "Parlez-nous de votre organisation. Notre équipe étudie chaque dossier.",
+        "organisation": "Nom de l’organisation",
+        "pays": "Pays / région",
+        "categorie": "Catégorie souhaitée",
+        "apport": "Type d’apport proposé",
+        "contact_nom": "Nom du contact",
+        "email": "E-mail",
+        "telephone": "Téléphone",
+        "message": "Message / motivation",
+        "soumettre": "Envoyer ma candidature",
+        "envoi": "Envoi…",
+        "err_requis": "Le nom de l’organisation et l’e-mail sont requis.",
+        "err_envoi": "Envoi impossible, réessayez.",
+        "merci_titre": "Candidature reçue !",
+        "merci_sous": "Un e-mail de confirmation vous a été envoyé. Aucun document à signer à ce stade — notre équipe reviendra vers vous."
+      }
     }
   },
   "atelier": {

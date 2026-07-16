@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { Heart, Search } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
+import PartenairesBanner from './PartenairesBanner'
 import { getCreators, demoModels, categories } from './vitrineApi'
 import GarmentVisual from './GarmentVisual'
 import { usePageMeta } from '@/hooks/usePageMeta'
@@ -170,6 +171,9 @@ export default function VitrineHome() {
           </div>
         </div>
       </section>
+
+      {/* P204 — Bandeau partenaires (défilement auto + accès /partenaires) */}
+      <PartenairesBanner />
 
       {/* CRÉATEURS */}
       <section id="creators" className="py-16 bg-elevated">

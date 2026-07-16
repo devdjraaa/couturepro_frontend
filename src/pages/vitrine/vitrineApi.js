@@ -98,6 +98,31 @@ export async function getSuivi(reference) {
   return safe(`/vitrine/suivi/${encodeURIComponent(reference)}`)
 }
 
+// P204 : partenaires (liste par catégorie + catégories du formulaire).
+export async function getPartenaires() {
+  return safe('/vitrine/partenaires')
+}
+
+// P204 : partenaires « clés » pour le bandeau d'accueil.
+export async function getPartenairesCles() {
+  return safe('/vitrine/partenaires/cles')
+}
+
+// P204 : dépôt d'une candidature de partenariat. Retourne { ok, message }.
+export async function candidaterPartenaire(payload) {
+  try {
+    const r = await fetch(`${API_BASE_URL}/vitrine/partenaires/candidature`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify(payload),
+    })
+    const data = await r.json().catch(() => ({}))
+    return { ok: r.ok, message: data?.message }
+  } catch {
+    return { ok: false }
+  }
+}
+
 export async function getBanniere() {
   return safe('/vitrine/banniere')
 }

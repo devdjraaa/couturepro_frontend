@@ -22,6 +22,7 @@ export const ROUTES = {
   VITRINE_ABOUT:     '/qui-sommes-nous',
   VITRINE_AIDE:      '/aide',
   VITRINE_ARTISANS:  '/artisans',
+  VITRINE_PARTENAIRES: '/partenaires',
   VITRINE_FAVORIS:   '/favoris',
   VITRINE_INSCRIPTION:      '/inscription',
   VITRINE_SPONSORISATION:   '/mise-en-avant',
