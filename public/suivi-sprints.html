@@ -169,6 +169,7 @@ const SLABEL = {done:'Fait',part:'Partiel',bug:'Bug à corriger',todo:'À faire'
 // id = clé serveur stable (s10 = points volet 1, s20 = suggestions). b = bloc. s = statut audité. t = libellé.
 const V = (n,b,s,t)=>({id:'s10t'+n,ref:'P'+n,b,s,t});
 const G = (n,b,s,t)=>({id:'s20t'+n,ref:'SUG-'+n,b,s,t});
+const P = (n,b,s,t)=>({id:'s30t'+n,ref:'PL-'+n,b,s,t}); // features de plan (« Bientôt »)
 const ITEMS = [
   // NB : les points VITRINE (header/footer/légal/textes web — P128…P194) sont confiés au
   // frontend et suivis dans docs/VITRINE_TODO_FRONTEND.md — retirés de ce tracker le 16/07/2026.
@@ -316,6 +317,16 @@ const ITEMS = [
   G(22,1,'done',"Abonnements en 2 onglets (Mensuel / Annuel)"),
   G(23,1,'part',"Mieux valoriser les cartes d'abonnement"),
   G(24,1,'part',"Revue UX générale (cohérence, sécu Android)"),
+  P(1,1,'todo',"Lookbook PDF (catalogue de collection) — Atelier+"),
+  P(2,1,'todo',"Export groupé collections/patrons/mesures — Atelier+ (l'individuel existe)"),
+  P(3,1,'todo',"Rapport PDF mensuel (global + par cliente) — Atelier/Studio"),
+  P(4,1,'todo',"Liste d'attente clients — Studio"),
+  P(5,1,'todo',"Simulateur de revenus — Studio"),
+  P(6,1,'todo',"Annonce de collection — Studio"),
+  P(7,1,'todo',"Vidéos de présentation (jusqu'à 50) — Studio"),
+  P(8,1,'todo',"Badge « Designer Pro » — Atelier"),
+  P(9,1,'todo',"Programme de fidélité avancé — Studio (basique existe)"),
+  P(10,1,'todo',"Sauvegarde cloud par atelier cadencée — Atelier/Studio"),
 ];
 
 let state = { checked:{}, code:null, editing:false, filter:'all', q:'' };
