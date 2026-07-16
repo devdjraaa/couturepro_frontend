@@ -1680,7 +1680,8 @@
       "avis_send": "Send",
       "avis_thanks": "Thank you! Your review will be published after validation.",
       "report": "Report",
-      "report_done": "Reported, thank you."
+      "report_done": "Reported, thank you.",
+      "videos": "Videos"
     },
     "patron": {
       "download_paid": "Download — {{prix}}",
@@ -2480,7 +2481,8 @@
     "tabs": {
       "attente": "Waitlist",
       "simulateur": "Simulator",
-      "annonce": "Announce"
+      "annonce": "Announce",
+      "videos": "Videos"
     },
     "attente": {
       "nom": "Client name",
@@ -2517,6 +2519,15 @@
       "aucune_collection": "No collection",
       "aucune_collection_sous": "Create a collection in your catalog to announce it.",
       "aide": "The announcement features your collection on your public storefront."
+    },
+    "videos": {
+      "titre": "Title (optional)",
+      "url": "Video link (YouTube, etc.)",
+      "ajouter": "Add video",
+      "vide": "No videos",
+      "vide_sous": "Add presentation video links to show on your storefront.",
+      "confirmer_retrait": "Remove this video?",
+      "aide": "{{n}}/50 videos"
     }
   }
 }

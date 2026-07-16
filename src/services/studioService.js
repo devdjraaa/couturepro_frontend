@@ -24,4 +24,17 @@ export const studioService = {
     const { data } = await api.post(`/collections/${collectionId}/annonce`, payload)
     return data
   },
+
+  // PL-7 — Vidéos de présentation
+  async videos() {
+    const { data } = await api.get('/atelier-videos')
+    return data
+  },
+  async ajouterVideo(payload) {
+    const { data } = await api.post('/atelier-videos', payload)
+    return data
+  },
+  async retirerVideo(id) {
+    await api.delete(`/atelier-videos/${id}`)
+  },
 }
