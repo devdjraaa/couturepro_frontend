@@ -351,7 +351,8 @@
     "nouveau": "New",
     "tout": "All",
     "aucun": "None",
-    "securite": "Security"
+    "securite": "Security",
+    "identite": "Identity"
   },
   "erreurs": {
     "reseau": "Connection error. Check your network.",

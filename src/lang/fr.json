@@ -351,7 +351,8 @@
     "nouveau": "Nouveau",
     "tout": "Tout",
     "aucun": "Aucun",
-    "securite": "Sécurité"
+    "securite": "Sécurité",
+    "identite": "Identité"
   },
   "erreurs": {
     "reseau": "Erreur de connexion. Vérifiez votre réseau.",
