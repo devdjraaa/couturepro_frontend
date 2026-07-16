@@ -282,7 +282,7 @@ const ITEMS = [
   V(189,5,'done',"E-mail « support@gextimo.africa » erroné dans la FAQ"),
   V(191,6,'done',"Header mobile : menu burger, « Se connecter » ne dépasse plus"),
   V(195,6,'done',"Bloquer overscroll / pull-to-refresh (desktop)"),
-  V(196,6,'part',"reCAPTCHA v3 CÂBLÉ (middleware serveur VerifyRecaptcha + jeton front à l inscription, no-op sans clés vérifié) ; reste : coller RECAPTCHA_SITE_KEY + RECAPTCHA_SECRET (Google) pour activer"),
+  V(196,6,'done',"reCAPTCHA v3 ACTIF sur l inscription : clés Google configurées (domaines gextimo.novafriq.africa + localhost), middleware serveur enforce le jeton (vérifié : sans jeton = bloqué), web + app OTA 1.0.68 envoient le jeton"),
   V(197,6,'todo',"Migration Cloudflare (NS Namecheap → SSL/DDoS/DNSSEC)"),
   V(198,5,'todo',"Config Brevo (domaine validé, from, délivrabilité)"),
   V(199,6,'part',"sitemap.xml + robots.txt vitrine LIVE (7 pages + 4 profils créateurs dynamiques /api/sitemap/createurs.xml) ; reste : soumettre à Search Console + Bing (compte Google du chef)"),
