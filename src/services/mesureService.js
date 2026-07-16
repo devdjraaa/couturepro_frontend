@@ -25,6 +25,12 @@ export const mesureService = {
   },
 
   // P74 : historique versionné des mesures (en ligne uniquement — lecture seule).
+  // PL-2 : export groupé des mesures (plans payants) — toutes les clientes en une fois.
+  async exportGroupe() {
+    const { data } = await api.get('/mesures/export-groupe')
+    return data
+  },
+
   async getHistorique(clientId) {
     if (isMock()) {
       await delay()

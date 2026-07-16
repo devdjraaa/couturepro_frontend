@@ -651,7 +651,18 @@
     "import_erreur": "Import failed.",
     "scope_atelier": "This workshop",
     "scope_tous": "All my workshops",
-    "autre_atelier": "Other workshop"
+    "autre_atelier": "Other workshop",
+    "export_groupe": {
+      "btn": "Export measurements",
+      "encours": "Exporting…",
+      "upgrade": "Bulk measurement export is available on paid plans. Upgrade to the Atelier plan to enable it.",
+      "aucune_mesure": "No measurements to export.",
+      "erreur": "Could not export measurements.",
+      "col_client": "Client",
+      "col_tel": "Phone",
+      "col_notes": "Notes",
+      "col_maj": "Updated on"
+    }
   },
   "commandes": {
     "titre": "Orders",
