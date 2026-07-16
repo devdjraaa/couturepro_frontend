@@ -1377,7 +1377,8 @@
     "profil": "Profile",
     "plus": "More",
     "menu": "Menu",
-    "outils_creatifs": "Creative tools"
+    "outils_creatifs": "Creative tools",
+    "studio": "Studio"
   },
   "pwa": {
     "installer_titre": "Install Gextimo",
@@ -2800,5 +2801,67 @@
   "reseau": {
     "connexion_requise": "Internet connection required for this action.",
     "parametres_offline": "Settings require an internet connection. Reconnect to change them."
+  },
+  "maj": {
+    "dispo": "A new version of the app is available.",
+    "requise_titre": "Update required",
+    "requise_desc": "A new version is required to continue. Please download it to proceed.",
+    "telecharger": "Download update",
+    "a_jour": "Your app is up to date.",
+    "verifier": "Check for updates",
+    "version": "Version",
+    "titre": "Updates",
+    "dispo_titre": "Update available",
+    "plus_tard": "Later",
+    "changelog": "What's new & fixes",
+    "maintenant": "Update now",
+    "telechargement": "Downloading",
+    "installation_auto": "Installation will start automatically when done.",
+    "notif_body": "New version v{{version}} available — tap to update."
+  },
+  "studio": {
+    "titre": "Studio",
+    "erreur": "An error occurred.",
+    "tabs": {
+      "attente": "Waitlist",
+      "simulateur": "Simulator",
+      "annonce": "Announce"
+    },
+    "attente": {
+      "nom": "Client name",
+      "telephone": "Phone (optional)",
+      "note": "Note (e.g. desired model)",
+      "ajouter": "Add to waitlist",
+      "vide": "Empty waitlist",
+      "vide_sous": "Add clients waiting for a slot or a spot.",
+      "confirmer_retrait": "Remove this client from the waitlist?",
+      "statuts": {
+        "en_attente": "Waiting",
+        "contacte": "Contacted",
+        "converti": "Converted",
+        "annule": "Cancelled"
+      }
+    },
+    "simulateur": {
+      "nb_commandes": "Orders per month",
+      "panier": "Average order",
+      "charges": "Fixed costs",
+      "hausse": "Estimated growth",
+      "ca_mensuel": "Monthly revenue",
+      "benefice": "Profit / month",
+      "ca_annuel": "Annual revenue",
+      "projete": "Annual projection",
+      "avertissement": "Indicative estimate based on your assumptions."
+    },
+    "annonce": {
+      "collection": "Collection to feature",
+      "choisir": "Choose a collection…",
+      "message": "Announcement message (optional)",
+      "publier": "Publish announcement",
+      "envoyee": "Announcement published on your storefront.",
+      "aucune_collection": "No collection",
+      "aucune_collection_sous": "Create a collection in your catalog to announce it.",
+      "aide": "The announcement features your collection on your public storefront."
+    }
   }
 }

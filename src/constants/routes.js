@@ -86,6 +86,7 @@ export const ROUTES = {
 
   // Outils créatifs
   OUTILS_CREATIFS: '/outils-creatifs',
+  STUDIO: '/studio',
 
   // Autres
   PHOTOS_VIP:  '/photos-vip',
