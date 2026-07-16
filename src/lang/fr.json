@@ -1333,7 +1333,11 @@
     "factures_wa_mois": "factures WhatsApp / mois",
     "sauvegarde_auto": "Sauvegarde auto",
     "module_caisse": "Module caisse",
-    "sous_ateliers": "sous-ateliers"
+    "sous_ateliers": "sous-ateliers",
+    "badge_recommande": "Recommandé",
+    "badge_premium": "Premium",
+    "equiv_mensuel": "soit {{montant}}/mois",
+    "economie": "économisez {{montant}}"
   },
   "caisse": {
     "titre": "Caisse",
