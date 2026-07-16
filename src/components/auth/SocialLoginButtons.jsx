@@ -1,26 +1,66 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { authService } from '@/services/authService'
+import { useAuth } from '@/contexts'
 import { API_BASE_URL } from '@/constants/config'
-import { IS_NATIVE } from '@/constants/routes'
+import { IS_NATIVE, ROUTES } from '@/constants/routes'
 
 // P150 : boutons de connexion sociale. N'apparaissent que pour les providers réellement
 // configurés côté serveur (clés .env) → tant qu'il n'y a pas de clés, rien ne s'affiche.
-// Web uniquement pour l'instant (le flux natif Capacitor viendra ensuite).
+// - Web : redirection OAuth classique (backend → provider → callback).
+// - Natif (cette branche android) : flux Google Credential Manager via le plugin
+//   (Google interdit l'OAuth dans les WebView), idToken vérifié par le backend.
 const LABELS = { google: 'Google', facebook: 'Facebook', apple: 'Apple' }
 
 export default function SocialLoginButtons() {
   const { t } = useTranslation()
-  const [providers, setProviders] = useState([])
+  const navigate = useNavigate()
+  const { loginWithToken } = useAuth()
+  const [cfg, setCfg] = useState({ providers: [], google_web_client_id: null })
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
 
   useEffect(() => {
-    if (IS_NATIVE) return
     let alive = true
-    authService.getSocialProviders().then((list) => { if (alive) setProviders(list) })
+    authService.getSocialConfig().then((c) => { if (alive) setCfg(c) })
     return () => { alive = false }
   }, [])
 
-  if (IS_NATIVE || providers.length === 0) return null
+  // En natif, seul Google est câblé pour l'instant (Credential Manager).
+  const providers = IS_NATIVE
+    ? cfg.providers.filter((p) => p === 'google' && cfg.google_web_client_id)
+    : cfg.providers
+
+  if (providers.length === 0) return null
+
+  const nativeGoogle = async () => {
+    if (busy) return
+    setBusy(true)
+    setError('')
+    try {
+      const { googleNativeLogin } = await import('@/utils/socialNative')
+      const idToken = await googleNativeLogin(cfg.google_web_client_id)
+      const res = await authService.socialTokenLogin('google', idToken)
+      if (res.status === 'ok') {
+        await loginWithToken(res.token)
+        navigate(ROUTES.DASHBOARD, { replace: true })
+      } else if (res.status === 'inscription') {
+        const q = new URLSearchParams({
+          social: 'google',
+          email: res.email ?? '', prenom: res.prenom ?? '', nom: res.nom ?? '',
+        })
+        navigate(`${ROUTES.REGISTER}?${q.toString()}`)
+      }
+    } catch {
+      // Annulation par l'utilisateur ou échec réseau — message discret, pas bloquant.
+      setError(t('auth.social.erreur'))
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const btnCls = 'flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-edge bg-card text-sm font-semibold text-ink hover:border-primary hover:text-primary transition disabled:opacity-60'
 
   return (
     <div className="mt-5">
@@ -31,15 +71,18 @@ export default function SocialLoginButtons() {
       </div>
       <div className="space-y-2">
         {providers.map((p) => (
-          <a
-            key={p}
-            href={`${API_BASE_URL}/auth/social/${p}/redirect`}
-            className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-edge bg-card text-sm font-semibold text-ink hover:border-primary hover:text-primary transition"
-          >
-            {t('auth.social.continuer', { provider: LABELS[p] ?? p })}
-          </a>
+          IS_NATIVE ? (
+            <button key={p} type="button" onClick={nativeGoogle} disabled={busy} className={btnCls}>
+              {busy ? t('auth.social.connexion') : t('auth.social.continuer', { provider: LABELS[p] ?? p })}
+            </button>
+          ) : (
+            <a key={p} href={`${API_BASE_URL}/auth/social/${p}/redirect`} className={btnCls}>
+              {t('auth.social.continuer', { provider: LABELS[p] ?? p })}
+            </a>
+          )
         ))}
       </div>
+      {error && <p className="text-xs text-error mt-2 text-center">{error}</p>}
     </div>
   )
 }
