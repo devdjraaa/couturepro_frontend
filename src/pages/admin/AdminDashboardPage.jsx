@@ -97,17 +97,31 @@ export default function AdminDashboardPage() {
   const { data: tickets   } = useAdminTickets({ statut: 'ouvert' })
   const { data: paiements } = useAdminPaiements({ statut: 'pending' })
 
-  // P92-95 : dashboard « temps réel » — les stats se rafraîchissent seules (30 s)
-  // + bouton rafraîchir manuel dans le header.
+  // P92-98 : dashboard « temps réel » — auto-refresh à fréquence CHOISIE (P95 :
+  // temps réel 10s / 30s / 1min / manuel, persistée) + bouton manuel + heure de
+  // dernière mise à jour (P98).
+  const [freq, setFreq] = useState(() => Number(localStorage.getItem('gx_admin_dash_freq') ?? 30000))
+  const [lastSync, setLastSync] = useState(null)
+
   const refresh = async () => {
     setRefreshing(true)
     await queryClient.invalidateQueries({ queryKey: ['admin'] })
+    setLastSync(new Date())
     setTimeout(() => setRefreshing(false), 600)
   }
+  const changeFreq = (e) => {
+    const v = Number(e.target.value)
+    setFreq(v)
+    localStorage.setItem('gx_admin_dash_freq', String(v))
+  }
   useEffect(() => {
-    const id = setInterval(() => queryClient.invalidateQueries({ queryKey: ['admin'] }), 30_000)
+    if (!freq) return undefined // 0 = manuel
+    const id = setInterval(() => {
+      queryClient.invalidateQueries({ queryKey: ['admin'] })
+      setLastSync(new Date())
+    }, freq)
     return () => clearInterval(id)
-  }, [queryClient])
+  }, [queryClient, freq])
 
   const totalAteliers    = ateliers?.total ?? 0
   const ticketsOuverts   = tickets?.total ?? 0
@@ -157,15 +171,35 @@ export default function AdminDashboardPage() {
     <AdminLayout
       title={t('admin.nav.dashboard')}
       action={
-        <button
-          type="button"
-          onClick={refresh}
-          className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl border border-edge text-dim hover:text-ink hover:border-primary transition-colors"
-          title={t('sync.refresh')}
-        >
-          <RotateCw size={13} className={refreshing ? 'animate-spin' : ''} />
-          {t('sync.refresh')}
-        </button>
+        <div className="flex items-center gap-2">
+          {/* P98 : heure de la dernière mise à jour */}
+          {lastSync && (
+            <span className="hidden sm:inline text-[11px] text-ghost tabular-nums">
+              {t('admin.dashboard.maj_a')} {lastSync.toLocaleTimeString()}
+            </span>
+          )}
+          {/* P95 : fréquence d'actualisation choisie */}
+          <select
+            value={freq}
+            onChange={changeFreq}
+            className="text-xs border border-edge rounded-xl px-2 py-2 bg-card text-dim focus:outline-none"
+            title={t('admin.dashboard.freq_titre')}
+          >
+            <option value={10000}>{t('admin.dashboard.freq_tr')}</option>
+            <option value={30000}>30 s</option>
+            <option value={60000}>1 min</option>
+            <option value={0}>{t('admin.dashboard.freq_manuel')}</option>
+          </select>
+          <button
+            type="button"
+            onClick={refresh}
+            className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl border border-edge text-dim hover:text-ink hover:border-primary transition-colors"
+            title={t('sync.refresh')}
+          >
+            <RotateCw size={13} className={refreshing ? 'animate-spin' : ''} />
+            {t('sync.refresh')}
+          </button>
+        </div>
       }
     >
       {/* Greeting */}
