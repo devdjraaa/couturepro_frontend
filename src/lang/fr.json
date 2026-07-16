@@ -1671,7 +1671,8 @@
       "avis_send": "Envoyer",
       "avis_thanks": "Merci ! Votre avis sera publié après validation.",
       "report": "Signaler",
-      "report_done": "Signalé, merci."
+      "report_done": "Signalé, merci.",
+      "videos": "Vidéos"
     },
     "patron": {
       "download_paid": "Télécharger — {{prix}}",
@@ -3988,7 +3989,8 @@
     "tabs": {
       "attente": "Liste d’attente",
       "simulateur": "Simulateur",
-      "annonce": "Annonce"
+      "annonce": "Annonce",
+      "videos": "Vidéos"
     },
     "attente": {
       "nom": "Nom du client",
@@ -4025,6 +4027,15 @@
       "aucune_collection": "Aucune collection",
       "aucune_collection_sous": "Créez une collection dans votre catalogue pour l’annoncer.",
       "aide": "L’annonce met votre collection en avant sur votre vitrine publique."
+    },
+    "videos": {
+      "titre": "Titre (optionnel)",
+      "url": "Lien de la vidéo (YouTube, etc.)",
+      "ajouter": "Ajouter la vidéo",
+      "vide": "Aucune vidéo",
+      "vide_sous": "Ajoutez des liens de vidéos de présentation à afficher sur votre vitrine.",
+      "confirmer_retrait": "Retirer cette vidéo ?",
+      "aide": "{{n}}/50 vidéos"
     }
   }
 }

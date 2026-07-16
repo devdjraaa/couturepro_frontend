@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import toast from 'react-hot-toast'
-import { Plus, Trash2, Phone, Clock, Check, X, Megaphone, Calculator } from 'lucide-react'
+import { Plus, Trash2, Phone, Clock, Check, X, Megaphone, Calculator, Video, ExternalLink } from 'lucide-react'
 import { AppLayout } from '@/components/layout'
 import { TabBar, Button, EmptyState, Skeleton, Input } from '@/components/ui'
 import { FeatureGate } from '@/components/abonnement'
@@ -193,10 +193,71 @@ function AnnonceTab({ t }) {
   )
 }
 
+// PL-7 — Vidéos de présentation
+function VideosTab({ t }) {
+  const [items, setItems] = useState(null)
+  const [form, setForm] = useState({ titre: '', url: '' })
+  const [saving, setSaving] = useState(false)
+
+  const load = async () => {
+    try { setItems(await studioService.videos()) } catch { setItems([]) }
+  }
+  useEffect(() => { load() }, [])
+
+  const ajouter = async (e) => {
+    e.preventDefault()
+    if (!form.url.trim()) return
+    setSaving(true)
+    try {
+      await studioService.ajouterVideo(form)
+      setForm({ titre: '', url: '' })
+      load()
+    } catch (err) {
+      toast.error(err?.response?.data?.message || t('studio.erreur'))
+    } finally { setSaving(false) }
+  }
+
+  const retirer = async (item) => {
+    if (!window.confirm(t('studio.videos.confirmer_retrait'))) return
+    try { await studioService.retirerVideo(item.id); load() } catch { /* silencieux */ }
+  }
+
+  if (items === null) return <Skeleton className="h-40 rounded-xl" />
+
+  return (
+    <div className="space-y-4">
+      <form onSubmit={ajouter} className="bg-card border border-edge rounded-xl p-4 space-y-3">
+        <Input value={form.titre} onChange={e => setForm(f => ({ ...f, titre: e.target.value }))} placeholder={t('studio.videos.titre')} />
+        <Input value={form.url} onChange={e => setForm(f => ({ ...f, url: e.target.value }))} placeholder={t('studio.videos.url')} inputMode="url" />
+        <Button type="submit" loading={saving} className="w-full"><Plus size={16} className="mr-1" /> {t('studio.videos.ajouter')}</Button>
+      </form>
+      <p className="text-2xs text-ghost text-center">{t('studio.videos.aide', { n: items.length })}</p>
+
+      {items.length === 0 ? (
+        <EmptyState icon={Video} title={t('studio.videos.vide')} description={t('studio.videos.vide_sous')} />
+      ) : (
+        <div className="space-y-2">
+          {items.map(item => (
+            <div key={item.id} className="bg-card border border-edge rounded-xl p-3 flex items-center justify-between gap-2">
+              <a href={item.url} target="_blank" rel="noopener noreferrer" className="min-w-0 flex items-center gap-2 text-sm text-primary">
+                <Video size={15} className="shrink-0" />
+                <span className="truncate">{item.titre || item.url}</span>
+                <ExternalLink size={12} className="shrink-0 opacity-60" />
+              </a>
+              <button onClick={() => retirer(item)} className="text-danger shrink-0"><Trash2 size={15} /></button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 const TABS = [
   { key: 'attente', feature: 'liste_attente', icon: Clock },
   { key: 'simulateur', feature: 'simulateur_revenus', icon: Calculator },
   { key: 'annonce', feature: 'annonce_collection', icon: Megaphone },
+  { key: 'videos', feature: 'videos_presentation', icon: Video },
 ]
 
 export default function StudioPage() {
@@ -218,7 +279,9 @@ export default function StudioPage() {
             ? <ListeAttenteTab t={t} />
             : tab === 'simulateur'
               ? <SimulateurTab t={t} />
-              : <AnnonceTab t={t} />}
+              : tab === 'annonce'
+                ? <AnnonceTab t={t} />
+                : <VideosTab t={t} />}
         </FeatureGate>
       </div>
     </AppLayout>

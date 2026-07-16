@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { X, Heart, MessageCircle, Send, ShoppingBag, Award, Download, Lock, ImagePlus, Megaphone } from 'lucide-react'
+import { X, Heart, MessageCircle, Send, ShoppingBag, Award, Download, Lock, ImagePlus, Megaphone, Video } from 'lucide-react'
 import VitrineShell from './VitrineChrome'
 import { getCreator, toggleLike, toggleAbonnement, acheterPatron } from './vitrineApi'
 import GarmentVisual from './GarmentVisual'
@@ -639,6 +639,22 @@ export default function CreateurProfilPage() {
               ))}
             </div>
           </div>
+        )}
+
+        {/* PL-7 : vidéos de présentation */}
+        {Array.isArray(c.videos) && c.videos.length > 0 && (
+          <>
+            <h2 className="font-display text-2xl mt-10 mb-5 text-ink">{t('vitrine.profil.videos')}</h2>
+            <div className="flex flex-col gap-2">
+              {c.videos.map((v, i) => (
+                <a key={i} href={v.url} target="_blank" rel="noopener noreferrer"
+                   className="flex items-center gap-2 bg-card border border-edge rounded-xl px-3 py-2.5 text-sm text-primary hover:border-primary transition">
+                  <Video size={16} className="shrink-0" />
+                  <span className="truncate">{v.titre || v.url}</span>
+                </a>
+              ))}
+            </div>
+          </>
         )}
 
         {/* Créations */}
