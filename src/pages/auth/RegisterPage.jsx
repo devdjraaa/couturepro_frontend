@@ -7,7 +7,7 @@ import { AuthLayout } from '@/components/layout'
 import { Input, Button, Select, PhoneInput, LanguageSwitcher } from '@/components/ui'
 import SocialLoginButtons from '@/components/auth/SocialLoginButtons'
 import { authService } from '@/services/authService'
-import { getRecaptchaToken } from '@/utils/recaptcha'
+import { getRecaptchaToken, preloadRecaptcha } from '@/utils/recaptcha'
 import { SITE_BASE_URL } from '@/constants/config'
 import { cn } from '@/utils/cn'
 
@@ -52,7 +52,12 @@ export default function RegisterPage() {
   const [recaptchaSiteKey, setRecaptchaSiteKey] = useState(null)
   useEffect(() => {
     let alive = true
-    authService.getSocialConfig().then((c) => { if (alive) setRecaptchaSiteKey(c?.recaptcha_site_key ?? null) })
+    authService.getSocialConfig().then((c) => {
+      if (!alive) return
+      const key = c?.recaptcha_site_key ?? null
+      setRecaptchaSiteKey(key)
+      preloadRecaptcha(key) // charge le script → badge « protégé par reCAPTCHA » visible dès l'ouverture
+    })
     return () => { alive = false }
   }, [])
 

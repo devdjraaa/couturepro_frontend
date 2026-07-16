@@ -17,6 +17,15 @@ function loadScript(siteKey) {
 }
 
 /**
+ * Précharge le script reCAPTCHA (à appeler à l'ouverture du formulaire) : cela
+ * affiche le badge « protégé par reCAPTCHA » pendant que l'utilisateur remplit,
+ * comme l'exigent les conditions Google. No-op sans site key.
+ */
+export function preloadRecaptcha(siteKey) {
+  if (siteKey) loadScript(siteKey).catch(() => {})
+}
+
+/**
  * Retourne un jeton reCAPTCHA v3 pour l'action donnée, ou null si non configuré
  * (pas de site key) ou en cas d'échec (on n'empêche jamais l'utilisateur : le
  * serveur laisse passer quand reCAPTCHA n'est pas configuré).
