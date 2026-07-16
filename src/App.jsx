@@ -67,6 +67,7 @@ import CodesPromoPage          from '@/pages/admin/CodesPromoPage'
 import ListeNoirePage          from '@/pages/admin/ListeNoirePage'
 import AuditPage               from '@/pages/admin/AuditPage'
 import AdminNotificationsPage  from '@/pages/admin/AdminNotificationsPage'
+import DiagnosticPage           from '@/pages/admin/DiagnosticPage'
 import AdminParametresPage    from '@/pages/admin/AdminParametresPage'
 import AdminsPage             from '@/pages/admin/AdminsPage'
 import SignalementsPage       from '@/pages/admin/SignalementsPage'
@@ -127,6 +128,7 @@ export default function App() {
             <Route path="/admin/liste-noire"      element={<ListeNoirePage />} />
             <Route path="/admin/audit"            element={<AuditPage />} />
             <Route path="/admin/notifications"    element={<AdminNotificationsPage />} />
+          <Route path="/admin/diagnostic"       element={<DiagnosticPage />} />{/* P110-111 */}
             <Route path="/admin/parametres"       element={<AdminParametresPage />} />
             <Route path="/admin/admins"           element={<AdminsPage />} />
           </Route>
@@ -157,6 +159,7 @@ export default function App() {
           <Route path="/admin/liste-noire"      element={<ListeNoirePage />} />
           <Route path="/admin/audit"            element={<AuditPage />} />
           <Route path="/admin/notifications"    element={<AdminNotificationsPage />} />
+          <Route path="/admin/diagnostic"       element={<DiagnosticPage />} />{/* P110-111 */}
           <Route path="/admin/parametres"       element={<AdminParametresPage />} />
           <Route path="/admin/admins"           element={<AdminsPage />} />
           <Route path="/admin/signalements"     element={<SignalementsPage />} />
