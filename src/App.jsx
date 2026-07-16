@@ -38,6 +38,7 @@ import { ROUTES, IS_NATIVE } from '@/constants/routes'
 
 // Vitrine publique (web)
 import VitrineHome        from '@/pages/vitrine/VitrineHome'
+import PartenairesPage    from '@/pages/vitrine/PartenairesPage'
 import CreateursPage      from '@/pages/vitrine/CreateursPage'
 import CreateurProfilPage from '@/pages/vitrine/CreateurProfilPage'
 import SuiviVitrinePage   from '@/pages/vitrine/SuiviPage'
@@ -149,6 +150,7 @@ export default function App() {
             <Route path={ROUTES.VITRINE_ABOUT}     element={<QuiSommesNousPage />} />
             <Route path={ROUTES.VITRINE_AIDE}      element={<AidePage />} />
             <Route path={ROUTES.VITRINE_ARTISANS}  element={<ArtisansPage />} />
+            <Route path={ROUTES.VITRINE_PARTENAIRES} element={<PartenairesPage />} />
             <Route path={ROUTES.VITRINE_FAVORIS}   element={<FavorisPage />} />
             <Route path={ROUTES.VITRINE_INSCRIPTION} element={<InscriptionPage />} />
             <Route path="/premium"               element={<PremiumPage />} />

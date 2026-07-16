@@ -293,6 +293,7 @@ export function VitrineFooter() {
     { h: t('vitrine.footer.col_company'), links: [
       { l: t('vitrine.menu2.about'), to: '/qui-sommes-nous' },
       { l: t('vitrine.menu2.artisans'), to: '/artisans' },
+      { l: t('vitrine.partenaires.footer_link'), to: '/partenaires' },
       { l: t('vitrine.footer.pricing'), to: '/premium' },
       { l: t('vitrine.sponsor.footer_link'), to: '/mise-en-avant' },
       { l: t('vitrine.menu2.support'), to: '/aide' },

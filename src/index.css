@@ -906,3 +906,18 @@ input::-ms-reveal,
 input::-ms-clear {
   display: none;
 }
+
+/* P204 — bandeau partenaires : défilement automatique continu (pause au survol). */
+.gx-marquee { width: 100%; overflow: hidden; }
+.gx-marquee__track {
+  display: flex; width: max-content;
+  animation: gx-marquee-scroll 30s linear infinite;
+}
+.gx-marquee:hover .gx-marquee__track { animation-play-state: paused; }
+@keyframes gx-marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gx-marquee__track { animation: none; }
+}
