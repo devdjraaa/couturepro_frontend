@@ -1206,7 +1206,15 @@
         "confirmer": "Confirm"
       },
       "sauvegarde_cloud": "Cloud backup",
-      "sauvegarde_a_venir": "Scheduled (soon)"
+      "sauvegarde_a_venir": "Scheduled (soon)",
+      "downgrade": {
+        "confirmer": "Switch to the {{plan}} plan at the end of your current period ({{date}})? You keep your current plan until then, no extra payment.",
+        "programme": "Change scheduled for the end of your period.",
+        "annule": "Plan change cancelled.",
+        "erreur": "Action not possible right now.",
+        "bandeau": "Switch to {{plan}} scheduled on {{date}}. You keep your current plan until then.",
+        "annuler": "Cancel this change"
+      }
     },
     "ateliers_tab": {
       "non_disponible": "Not available in your plan",
