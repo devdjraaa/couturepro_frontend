@@ -1493,7 +1493,8 @@
       "verified": "✓ Vérifié",
       "new": "Nouveau",
       "see_all": "Voir tous les créateurs →",
-      "creations_count": "{{n}} créations"
+      "creations_count": "{{n}} créations",
+      "pro": "Pro"
     },
     "gallery": {
       "eyebrow": "Galerie",
