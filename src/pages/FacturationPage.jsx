@@ -131,8 +131,11 @@ function FormulaireModal({ onClose, onCreated }) {
       })
       onCreated(created)
       onClose()
-    } catch {
-      setErr(t('facturation.modal.err_creation'))
+    } catch (e) {
+      // 403 = quota/plan (ex. clients facturés en offre gratuite) : le serveur explique quoi faire.
+      setErr(e?.response?.status === 403 && e.response.data?.message
+        ? e.response.data.message
+        : t('facturation.modal.err_creation'))
     } finally {
       setSaving(false)
     }
