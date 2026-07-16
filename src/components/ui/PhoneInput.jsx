@@ -31,7 +31,8 @@ export default function PhoneInput({
   }
 
   const handleNumberChange = e => {
-    const n = e.target.value
+    // P66 : n'accepter que des chiffres (l'indicatif « + » vient du sélecteur).
+    const n = e.target.value.replace(/[^\d\s]/g, '')
     setNumber(n)
     emit(prefix, n)
   }
