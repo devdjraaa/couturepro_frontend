@@ -1562,7 +1562,15 @@
       "reclamation_sujet": "Sujet (ex. : retard de livraison)",
       "reclamation_message": "Décrivez le problème rencontré…",
       "envoyer_reclamation": "Envoyer la réclamation",
-      "reclamation_envoyee": "Réclamation enregistrée. Le designer et l'équipe Gextimo ont été prévenus."
+      "reclamation_envoyee": "Réclamation enregistrée. Le designer et l'équipe Gextimo ont été prévenus.",
+      "profil_modifier": "Modifier mon profil",
+      "profil_titre": "Mon profil",
+      "profil_prenom": "Prénom",
+      "profil_nom": "Nom",
+      "profil_ville": "Ville",
+      "profil_naissance_hint": "Date de naissance (facultatif) — pour un petit mot le jour J.",
+      "profil_enregistrer": "Enregistrer",
+      "profil_enregistre": "Profil mis à jour."
     },
     "hero": {
       "eyebrow": "Plateforme des créateurs de mode",

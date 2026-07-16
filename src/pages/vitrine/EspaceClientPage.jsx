@@ -9,7 +9,7 @@ import { usePageMeta } from '@/hooks/usePageMeta'
 import {
   demanderOtp, verifierOtp, loginGoogle, getMe, envoyerConsentement, clientLogout,
   getMesCommandes, commander, laisserAvis, reclamer, getClientToken, setClientToken,
-  getConfigPublique,
+  getConfigPublique, majProfil,
 } from './espaceClientApi'
 import { track, initAnalyticsTiers } from '@/utils/gxtTracking'
 
@@ -160,6 +160,8 @@ function Espace({ me, config, onLogout, commanderAtelier, commanderNom }) {
                       onDone={(msg) => { setFlash(msg); recharger() }} />
       )}
 
+      <SectionProfil client={me.client} onDone={(msg) => setFlash(msg)} />
+
       <div>
         <h2 className="font-display text-lg text-ink flex items-center gap-2 mb-3"><Package size={17} />{t('vitrine.espace_client.mes_commandes')}</h2>
         {commandes === null && <p className="text-dim text-sm">{t('commun.chargement')}</p>}
@@ -179,6 +181,54 @@ function Espace({ me, config, onLogout, commanderAtelier, commanderNom }) {
         onDone={(msg) => { setModal(null); setFlash(msg); recharger() }} />}
       {modal?.type === 'reclamation' && <ModalReclamation commande={modal.commande} onClose={() => setModal(null)}
         onDone={(msg) => { setModal(null); setFlash(msg) }} />}
+    </div>
+  )
+}
+
+/* ── Mon profil (brief 16/07 pt 3 : personnalisation + anniversaire) ─────────── */
+function SectionProfil({ client, onDone }) {
+  const { t } = useTranslation()
+  const [ouvert, setOuvert] = useState(false)
+  const [form, setForm] = useState({
+    prenom: client?.prenom || '', nom: client?.nom || '',
+    ville: client?.ville || '', date_naissance: client?.date_naissance?.slice(0, 10) || '',
+  })
+  const [loading, setLoading] = useState(false)
+  const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }))
+
+  const enregistrer = async () => {
+    setLoading(true)
+    const { ok } = await majProfil({
+      prenom: form.prenom.trim() || null, nom: form.nom.trim() || null,
+      ville: form.ville.trim() || null, date_naissance: form.date_naissance || null,
+    })
+    setLoading(false)
+    if (ok) { setOuvert(false); onDone(t('vitrine.espace_client.profil_enregistre')) }
+  }
+
+  if (!ouvert) {
+    return (
+      <button onClick={() => setOuvert(true)} className="text-[13px] text-dim hover:text-primary transition">
+        {t('vitrine.espace_client.profil_modifier')}
+      </button>
+    )
+  }
+  return (
+    <div className="bg-card border border-edge rounded-2xl p-5">
+      <h3 className="font-display text-[16px] text-ink mb-3">{t('vitrine.espace_client.profil_titre')}</h3>
+      <div className="grid sm:grid-cols-2 gap-3">
+        <input value={form.prenom} onChange={set('prenom')} placeholder={t('vitrine.espace_client.profil_prenom')} className={input} />
+        <input value={form.nom} onChange={set('nom')} placeholder={t('vitrine.espace_client.profil_nom')} className={input} />
+        <input value={form.ville} onChange={set('ville')} placeholder={t('vitrine.espace_client.profil_ville')} className={input} />
+        <div>
+          <input type="date" value={form.date_naissance} onChange={set('date_naissance')} max={new Date().toISOString().slice(0, 10)} className={input} />
+          <p className="text-[11px] text-ghost mt-1">{t('vitrine.espace_client.profil_naissance_hint')}</p>
+        </div>
+      </div>
+      <div className="flex gap-2 mt-4">
+        <button onClick={enregistrer} disabled={loading} className={btn}>{t('vitrine.espace_client.profil_enregistrer')}</button>
+        <button onClick={() => setOuvert(false)} className={btnGhost}>{t('commun.annuler')}</button>
+      </div>
     </div>
   )
 }

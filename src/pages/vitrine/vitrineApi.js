@@ -142,7 +142,16 @@ export async function getCreators() {
 }
 
 export async function getCreations() {
-  const d = await safe('/vitrine/creations')
+  // Reco v1 (brief 16/07 pt 4) : si un client vitrine est connecté, on envoie son jeton →
+  // le serveur remonte ses designers favoris en tête de galerie. Anonyme = inchangé.
+  let d = null
+  try {
+    const token = localStorage.getItem('gx_client_token')
+    const r = await fetch(`${API_BASE_URL}/vitrine/creations`, {
+      headers: token ? { Authorization: `Bearer ${token}`, Accept: 'application/json' } : { Accept: 'application/json' },
+    })
+    d = r.ok ? await r.json() : null
+  } catch { d = null }
   if (!Array.isArray(d) || !d.length) return demoModels
   return d.map((m) => ({
     id:          m.id,

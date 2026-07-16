@@ -49,6 +49,7 @@ export const demanderOtp  = (email) => call('/vitrine/client/otp/demander', { me
 export const verifierOtp  = (email, code) => call('/vitrine/client/otp/verifier', { method: 'POST', body: { email, code, ...contexte() } })
 export const loginGoogle  = (idToken) => call('/vitrine/client/google', { method: 'POST', body: { id_token: idToken, ...contexte() } })
 export const getMe        = () => call('/vitrine/client/me', { auth: true })
+export const majProfil    = (profil) => call('/vitrine/client/me', { method: 'PATCH', body: profil, auth: true })
 export const envoyerConsentement = (consent) => call('/vitrine/client/consentement', { method: 'POST', body: consent, auth: true })
 export const clientLogout = async () => { await call('/vitrine/client/logout', { method: 'POST', auth: true }); setClientToken(null) }
 

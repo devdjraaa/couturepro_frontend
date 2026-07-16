@@ -1562,7 +1562,15 @@
       "reclamation_sujet": "Subject (e.g.: late delivery)",
       "reclamation_message": "Describe the issue you encountered…",
       "envoyer_reclamation": "Send the complaint",
-      "reclamation_envoyee": "Complaint recorded. The designer and the Gextimo team have been notified."
+      "reclamation_envoyee": "Complaint recorded. The designer and the Gextimo team have been notified.",
+      "profil_modifier": "Edit my profile",
+      "profil_titre": "My profile",
+      "profil_prenom": "First name",
+      "profil_nom": "Last name",
+      "profil_ville": "City",
+      "profil_naissance_hint": "Birth date (optional) — for a little note on your day.",
+      "profil_enregistrer": "Save",
+      "profil_enregistre": "Profile updated."
     },
     "hero": {
       "eyebrow": "The fashion designers platform",
