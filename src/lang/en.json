@@ -174,7 +174,13 @@
     "devis_traite": "Handled",
     "sponso_jour_restant": "{{n}} day left",
     "sponso_jours_restants": "{{n}} days left",
-    "sponso_fin_le": "Ends on {{date}}"
+    "sponso_fin_le": "Ends on {{date}}",
+    "lookbook": "Lookbook PDF",
+    "lookbook_encours": "Generating…",
+    "lookbook_titre": "Lookbook",
+    "lookbook_upgrade": "The PDF Lookbook is available on paid plans. Upgrade to the Atelier plan to enable it.",
+    "lookbook_vide": "Publish at least one creation to generate the lookbook.",
+    "lookbook_erreur": "Could not generate the lookbook."
   },
   "facturation": {
     "titre": "Invoicing",
