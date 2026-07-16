@@ -972,6 +972,8 @@
   },
   "points": {
     "titre": "Points de fidélité",
+    "gagnes": "+{{n}} points de fidélité !",
+    "gagnes_titre": "Points gagnés",
     "solde": "Solde actuel",
     "point_one": "{{count}} point",
     "point_other": "{{count}} points",

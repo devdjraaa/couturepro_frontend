@@ -972,6 +972,8 @@
   },
   "points": {
     "titre": "Loyalty points",
+    "gagnes": "+{{n}} loyalty points!",
+    "gagnes_titre": "Points earned",
     "solde": "Current balance",
     "point_one": "{{count}} point",
     "point_other": "{{count}} points",
