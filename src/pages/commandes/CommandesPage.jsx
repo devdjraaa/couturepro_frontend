@@ -27,7 +27,10 @@ function groupByDate(commandes) {
   const todayStr = now.toDateString()
   const tomorrowStr = new Date(now.getTime() + 86400000).toDateString()
 
-  commandes.forEach(c => {
+  // P27 : à l'intérieur de chaque groupe de date, les commandes urgentes passent en premier.
+  const ordonnees = [...commandes].sort((a, b) => (b.urgence ? 1 : 0) - (a.urgence ? 1 : 0))
+
+  ordonnees.forEach(c => {
     if (!c.date_livraison_prevue) { noDate.push(c); return }
     const d = parseISO(c.date_livraison_prevue)
     const ds = d.toDateString()
