@@ -31,10 +31,15 @@ function QuotaBadge({ quota }) {
   )
 }
 
+// P152 : catégories de la bibliothèque photos (référentiel simple, éditable ici).
+const CATEGORIES = ['modele', 'tissu', 'occasion', 'inspiration', 'client']
+
 export default function GaleriePage() {
   const { t } = useTranslation()
   const fileRef  = useRef(null)
   const [preview, setPreview] = useState(null)
+  const [categorieUpload, setCategorieUpload] = useState(CATEGORIES[0]) // P152 : catégorie appliquée aux ajouts
+  const [filtre, setFiltre] = useState(null) // P152 : filtre d'affichage
 
   const { data: photos = [], isLoading } = useGalerie()
   const { data: quota }   = useGalerieQuota()
@@ -62,10 +67,13 @@ export default function GaleriePage() {
     for (const file of aEnvoyer) {
       try {
         const compressed = await compressImage(file)
-        await upload.mutateAsync({ file: compressed })
+        await upload.mutateAsync({ file: compressed, categorie: categorieUpload })
       } catch { /* toast d'erreur déjà géré par le hook ; on continue */ }
     }
   }
+
+  // P152 : photos filtrées par catégorie sélectionnée.
+  const photosAffichees = filtre ? photos.filter(p => p.categorie === filtre) : photos
 
   return (
     <AppLayout title={t('galerie.titre')}>
@@ -104,6 +112,34 @@ export default function GaleriePage() {
             />
           </div>
 
+          {/* P152 : catégorie appliquée aux prochains ajouts */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-dim shrink-0">{t('galerie.categorie_ajout')}</span>
+            <select
+              value={categorieUpload}
+              onChange={e => setCategorieUpload(e.target.value)}
+              className="flex-1 rounded-xl border border-edge bg-card px-3 py-2 text-sm text-ink"
+            >
+              {CATEGORIES.map(c => <option key={c} value={c}>{t(`galerie.categories.${c}`)}</option>)}
+            </select>
+          </div>
+
+          {/* P152 : filtres de la bibliothèque */}
+          {photos.length > 0 && (
+            <div className="flex gap-2 overflow-x-auto scrollbar-none -mx-1 px-1">
+              <button onClick={() => setFiltre(null)}
+                className={cn('shrink-0 px-3 py-1.5 rounded-full text-xs font-medium', !filtre ? 'bg-primary text-inverse' : 'bg-subtle text-ghost')}>
+                {t('galerie.filtre_tous')}
+              </button>
+              {CATEGORIES.filter(c => photos.some(p => p.categorie === c)).map(c => (
+                <button key={c} onClick={() => setFiltre(c)}
+                  className={cn('shrink-0 px-3 py-1.5 rounded-full text-xs font-medium', filtre === c ? 'bg-primary text-inverse' : 'bg-subtle text-ghost')}>
+                  {t(`galerie.categories.${c}`)}
+                </button>
+              ))}
+            </div>
+          )}
+
           {/* Quota épuisé */}
           {quota && !quota.illimite && quota.restant <= 0 && (
             <div className="bg-warning/10 border border-warning/30 rounded-xl px-4 py-3 text-sm text-warning font-medium">
@@ -129,7 +165,7 @@ export default function GaleriePage() {
             />
           ) : (
             <div className="grid grid-cols-2 gap-3">
-              {photos.map(photo => (
+              {photosAffichees.map(photo => (
                 <div key={photo.id} className="relative rounded-2xl overflow-hidden border border-edge bg-subtle aspect-square">
                   <img
                     src={photo.file_url}
@@ -137,6 +173,12 @@ export default function GaleriePage() {
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
+                  {/* P152 : badge catégorie */}
+                  {photo.categorie && (
+                    <span className="absolute top-2 left-2 text-2xs font-medium px-2 py-0.5 rounded-full bg-black/55 text-white backdrop-blur-sm">
+                      {t(`galerie.categories.${photo.categorie}`, { defaultValue: photo.categorie })}
+                    </span>
+                  )}
                   {/* Bouton supprimer — TOUJOURS visible (tactile : pas de survol) + confirmation */}
                   <button
                     type="button"

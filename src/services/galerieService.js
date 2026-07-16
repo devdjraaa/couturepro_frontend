@@ -11,10 +11,11 @@ export const galerieService = {
     return data
   },
 
-  async upload(file, nom = '') {
+  async upload(file, nom = '', categorie = '') {
     const fd = new FormData()
     fd.append('photo', file)
     if (nom) fd.append('nom', nom)
+    if (categorie) fd.append('categorie', categorie) // P152
     const { data } = await api.post('/galerie', fd)
     return data
   },

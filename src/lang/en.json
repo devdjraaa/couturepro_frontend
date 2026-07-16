@@ -37,6 +37,15 @@
       "s2_texte": "Tap “Add”: your phone's photo picker opens. Select one or several creations, then confirm.",
       "s3_titre": "Photos that belong to you",
       "s3_texte": "Only publish YOUR own photos (taken by you), sharp and well-lit. Each photo becomes visible and findable on the showcase."
+    },
+    "categorie_ajout": "Category:",
+    "filtre_tous": "All",
+    "categories": {
+      "modele": "Model",
+      "tissu": "Fabric",
+      "occasion": "Occasion",
+      "inspiration": "Inspiration",
+      "client": "Client"
     }
   },
   "premium": {

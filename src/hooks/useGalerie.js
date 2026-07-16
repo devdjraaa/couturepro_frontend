@@ -20,7 +20,7 @@ export function useGalerieQuota() {
 export function useUploadPhoto() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: ({ file, nom }) => galerieService.upload(file, nom),
+    mutationFn: ({ file, nom, categorie }) => galerieService.upload(file, nom, categorie),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: QUERY_KEYS.galerie })
       qc.invalidateQueries({ queryKey: QUERY_KEYS.galerieQuota })
