@@ -1572,6 +1572,17 @@
       "profil_enregistrer": "Enregistrer",
       "profil_enregistre": "Profil mis à jour."
     },
+    "chatbot": {
+      "titre": "Assistant Gextimo",
+      "confidentialite": "Échanges enregistrés pour améliorer le service.",
+      "accueil": "Bonjour ! Une question sur une commande, le suivi, les tarifs ou comment rejoindre Gextimo ? Je vous réponds.",
+      "placeholder": "Écrivez votre question…",
+      "envoyer": "Envoyer",
+      "ouvrir": "Ouvrir l'assistant",
+      "utile": "Réponse utile",
+      "inutile": "Réponse inutile",
+      "erreur": "Petit souci de connexion — réessayez, ou écrivez-nous à support.gextimo@novafriq.africa."
+    },
     "hero": {
       "eyebrow": "Plateforme des créateurs de mode",
       "title_pre": "La vitrine des ",

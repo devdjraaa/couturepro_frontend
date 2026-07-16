@@ -8,6 +8,7 @@ import { useDevise, DEVISES } from './vitrineCurrency'
 import { getBanniere } from './vitrineApi'
 import { useFavoris } from './useFavoris'
 import { API_BASE_URL } from '@/constants/config'
+import ChatWidget from './ChatWidget'
 
 const FIRST_VISIT_KEY = 'gx_welcome_done'
 
@@ -543,6 +544,7 @@ export default function VitrineShell({ children }) {
       <VitrineFooter />
       <VitrineCookies />
       <WelcomePopup />
+      <ChatWidget />
     </div>
   )
 }

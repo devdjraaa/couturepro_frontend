@@ -1572,6 +1572,17 @@
       "profil_enregistrer": "Save",
       "profil_enregistre": "Profile updated."
     },
+    "chatbot": {
+      "titre": "Gextimo Assistant",
+      "confidentialite": "Conversations are recorded to improve the service.",
+      "accueil": "Hello! A question about an order, tracking, pricing or joining Gextimo? I'm here to help.",
+      "placeholder": "Type your question…",
+      "envoyer": "Send",
+      "ouvrir": "Open the assistant",
+      "utile": "Helpful answer",
+      "inutile": "Unhelpful answer",
+      "erreur": "Connection hiccup — try again, or write to support.gextimo@novafriq.africa."
+    },
     "hero": {
       "eyebrow": "The fashion designers platform",
       "title_pre": "The showcase of African ",
