@@ -485,6 +485,14 @@
   },
   "dashboard": {
     "titre": "Dashboard",
+    "multi": {
+      "titre": "All my workshops",
+      "clients": "Clients",
+      "en_cours": "In progress",
+      "revenu_mois": "Collected (month)",
+      "cmd": "{{n}} orders",
+      "retard": "{{n}} late"
+    },
     "abonnement": {
       "jours_restants_one": "{{count}} day left",
       "jours_restants_other": "{{count}} days left",
