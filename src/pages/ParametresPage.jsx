@@ -4,7 +4,6 @@ import { Building2, Plus, CheckCircle2, ImagePlus, Lock } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
-import { getNativeVersion, checkAppVersion, openApkDownload, forceCheckOta } from '@/utils/appUpdate'
 import { useAuth } from '@/contexts'
 import {
   useProfil, useUpdateProfil,
@@ -623,7 +622,7 @@ function AbonnementTab() {
                 isCurrent={abonnement?.niveau_cle === plan.cle}
                 abonnementStatut={abonnement?.statut}
                 onUpgrade={handleUpgrade}
-                isLoading={initierPaiement.isPending || recapLoading}
+                isLoading={initierPaiement.isPending || recapLoading || downgradeBusy}
               />
             ))}
         </div>
