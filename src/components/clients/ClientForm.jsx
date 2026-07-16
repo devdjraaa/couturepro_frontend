@@ -4,6 +4,7 @@ import { Camera, X } from 'lucide-react'
 import { Input, Select, Button } from '@/components/ui'
 import Avatar, { AVATAR_PALETTES } from '@/components/ui/Avatar'
 import { getClientPhoto, compressToBase64 } from '@/utils/clientPhotoStorage'
+import { sanitizePhoneInput } from '@/utils/phoneInput'
 import { cn } from '@/utils/cn'
 
 const PROFIL_OPTIONS = [
@@ -139,7 +140,7 @@ export default function ClientForm({ initialData, onSubmit, onCancel, isLoading 
         type="text"
         inputMode="tel"
         value={form.telephone}
-        onChange={set('telephone')}
+        onChange={(e) => setForm(f => ({ ...f, telephone: sanitizePhoneInput(e.target.value) }))}
         placeholder="ex : +229 97 00 00 00"
         required
       />
