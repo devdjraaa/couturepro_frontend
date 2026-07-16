@@ -6,6 +6,7 @@ import { useTicket, useRepondreTicket } from '@/hooks/useTicket'
 import { AppLayout } from '@/components/layout'
 import { Button, Skeleton } from '@/components/ui'
 import { formatDate } from '@/utils/formatDate'
+import { compressImage } from '@/utils/compressImage'
 
 const STATUT_COLORS = {
   ouvert:   'bg-warning/10 text-warning',
@@ -51,7 +52,8 @@ export default function SupportTicketDetailPage() {
     try {
       const payload = new FormData()
       payload.append('message', message)
-      if (photo) payload.append('photo', photo)
+      // P36 : photo compressée avant l'upload (moins de timeouts).
+      if (photo) payload.append('photo', await compressImage(photo))
       await repondre.mutateAsync(payload)
       setMessage('')
       removePhoto()

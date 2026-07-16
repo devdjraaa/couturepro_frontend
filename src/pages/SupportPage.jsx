@@ -9,6 +9,7 @@ import { toSupportTicket } from '@/constants/routes'
 import { AppLayout } from '@/components/layout'
 import { Button, Input, Select, Skeleton, EmptyState } from '@/components/ui'
 import { formatDate } from '@/utils/formatDate'
+import { compressImage } from '@/utils/compressImage'
 import { cn } from '@/utils/cn'
 
 const STATUT_COLORS = {
@@ -63,7 +64,8 @@ export default function SupportPage() {
       payload.append('sujet',     form.sujet)
       payload.append('message',   form.message)
       payload.append('categorie', form.categorie)
-      if (photo) payload.append('photo', photo)
+      // P36 : compresser la photo avant l'upload (~1600px, < 1 Mo) → upload rapide, moins de timeouts.
+      if (photo) payload.append('photo', await compressImage(photo))
 
       await creer.mutateAsync(payload)
       setShowForm(false)
