@@ -2407,7 +2407,37 @@
     "succes_modif": "Creation updated.",
     "succes_suppr": "Creation deleted.",
     "erreur": "An error occurred.",
-    "partager": "Share"
+    "partager": "Share",
+    "meta": {
+      "tissu": "Fabric / material",
+      "fournitures": "Supplies",
+      "cout_matiere": "Material cost (FCFA)",
+      "temps_confection": "Making time",
+      "taille_base": "Base size",
+      "instructions": "Assembly instructions",
+      "tailles": "Sizes",
+      "pieces": "pieces",
+      "palette": "Color palette",
+      "palette_aide": "Tip: paste color codes (#c2410c, #0e7490…) to display swatches.",
+      "inspiration": "Inspiration source"
+    },
+    "niveaux": {
+      "debutant": "Beginner",
+      "intermediaire": "Intermediate",
+      "avance": "Advanced"
+    },
+    "vide": {
+      "croquis": "No sketches",
+      "croquis_sous": "Draw your ideas and photograph them: your digital sketchbook starts here.",
+      "fiche_technique": "No tech sheets",
+      "fiche_technique_sous": "Create structured sheets: fabric, supplies, cost, making time and instructions — exportable as PDF.",
+      "patron": "No patterns",
+      "patron_sous": "Archive your patterns with sizes, level and piece count — then sell them from your catalog.",
+      "moodboard": "No moodboards",
+      "moodboard_sous": "Collage your inspirations and note your color palette."
+    },
+    "vendre": "Sell",
+    "vendre_aide": "Open a catalog creation, then the Pattern section, to put it on sale."
   },
   "sidebar": {
     "outils_creatifs": "Creative tools"
