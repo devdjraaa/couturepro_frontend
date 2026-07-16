@@ -17,6 +17,11 @@ export const authService = {
   async login({ telephone, password }) {
     const { data: loginData } = await api.post('/auth/login', { telephone, password })
     setToken(loginData.token)
+    // P201 : message « heureux de vous revoir » (one-shot, toast global persistant
+    // à travers la navigation post-login — react-hot-toast est monté au niveau racine).
+    if (loginData.welcome_back) {
+      import('react-hot-toast').then(({ default: toast }) => toast.success(loginData.welcome_back)).catch(() => {})
+    }
     const { data: meData } = await api.get('/auth/me')
     return normalizeMe(meData)
   },
