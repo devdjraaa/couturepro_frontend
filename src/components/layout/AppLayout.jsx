@@ -9,6 +9,7 @@ import BottomNavigation from './BottomNavigation'
 import { useSubscriptionGate } from '@/hooks/useSubscriptionGate'
 import { GlobalSearch } from '@/components/ui'
 import { usePullToRefresh } from '@/hooks/usePullToRefresh'
+import { usePointsToast } from '@/hooks/usePoints'
 import { useAuth } from '@/contexts'
 import { ROUTES } from '@/constants/routes'
 import { initPush } from '@/utils/push'
@@ -90,6 +91,7 @@ export default function AppLayout({
   const location = useLocation()
   const autoShowBack = showBack !== undefined ? showBack : location.pathname !== ROUTES.DASHBOARD
   const { containerRef, pullY, refreshing, threshold } = usePullToRefresh(onRefresh)
+  usePointsToast() // P39 : toast « +X pts » quand le solde de fidélité augmente
 
   // Enregistrement push FCM (zone authentifiée → le token est lié à l'utilisateur).
   useEffect(() => { initPush() }, [])

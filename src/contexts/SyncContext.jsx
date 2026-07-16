@@ -76,6 +76,9 @@ export function SyncProvider({ children }) {
       await syncWithServer()
       setLastSyncedAt(new Date().toISOString())
       queryClient.invalidateQueries({ queryKey: ['notifications'] })
+      // P39 : après sync, le serveur a pu créditer des points (client/commande) →
+      // on rafraîchit le solde pour que le watcher affiche « +X pts ».
+      queryClient.invalidateQueries({ queryKey: ['points'] })
     } catch (err) {
       // La synchro peut échouer sur sa phase PUSH ; le PULL a déjà mis à jour le DB
       // local. On n'empêche donc pas les notifications ci-dessous.
