@@ -1,5 +1,5 @@
 import api from './api'
-import { setToken, clearAll } from '@/utils/storage'
+import { setToken } from '@/utils/storage'
 
 function normalizeMe(data) {
   const { atelier_maitre, ...proprietaire } = data
@@ -17,6 +17,11 @@ export const authService = {
   async login({ telephone, password }) {
     const { data: loginData } = await api.post('/auth/login', { telephone, password })
     setToken(loginData.token)
+    // P201 : message « heureux de vous revoir » (one-shot, toast global persistant
+    // à travers la navigation post-login — react-hot-toast est monté au niveau racine).
+    if (loginData.welcome_back) {
+      import('react-hot-toast').then(({ default: toast }) => toast.success(loginData.welcome_back)).catch(() => {})
+    }
     const { data: meData } = await api.get('/auth/me')
     return normalizeMe(meData)
   },
@@ -31,6 +36,19 @@ export const authService = {
     }
   },
 
+  // P150 (natif) : config complète — providers + client ID web pour le plugin Google.
+  async getSocialConfig() {
+    try {
+      const { data } = await api.get('/auth/social/providers')
+      return {
+        providers: Array.isArray(data?.providers) ? data.providers : [],
+        google_web_client_id: data?.google_web_client_id ?? null,
+      }
+    } catch {
+      return { providers: [], google_web_client_id: null }
+    }
+  },
+
   // P150 : connexion à partir d'un token reçu du callback social.
   async loginWithToken(token) {
     setToken(token)
@@ -38,12 +56,18 @@ export const authService = {
     return normalizeMe(meData)
   },
 
+  // P150 (flux natif) : échange l'idToken Google contre un token Gextimo.
+  // Réponse : { status:'ok', token } ou { status:'inscription', email, prenom, nom }.
+  async socialTokenLogin(provider, idToken) {
+    const { data } = await api.post(`/auth/social/${provider}/token`, { id_token: idToken })
+    return data
+  },
+
   // Best-effort : tente d'invalider le token côté serveur.
   // Le clear local est géré par AuthContext.logout (qui appelle ce service
   // dans un try/catch pour ne jamais bloquer en cas d'offline).
   async logout() {
     await api.post('/auth/logout')
-    clearAll()
   },
 
   async register(payload) {
