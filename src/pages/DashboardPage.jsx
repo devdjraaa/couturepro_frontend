@@ -11,6 +11,7 @@ import { useCommandes, useCommandeStats } from '@/hooks/useCommandes'
 import { useClients } from '@/hooks/useClients'
 import { useAbonnement } from '@/hooks/useAbonnement'
 import { useAccountType } from '@/hooks/useAccountType'
+import MultiAteliersStats from '@/components/dashboard/MultiAteliersStats'
 import { ROUTES } from '@/constants/routes'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { cn } from '@/utils/cn'
@@ -463,6 +464,9 @@ export default function DashboardPage() {
 
         {/* Caisse du jour */}
         <CaisseCard stats={stats} isLoading={loadingStats} navigate={navigate} />
+
+        {/* P100-101 : vue consolidée multi-ateliers (proprios ≥ 2 ateliers, online) */}
+        <MultiAteliersStats />
 
         {/* À faire aujourd'hui */}
         <div className="bg-card border border-edge rounded-2xl p-4">

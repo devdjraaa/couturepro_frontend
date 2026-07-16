@@ -471,6 +471,14 @@
   },
   "dashboard": {
     "titre": "Tableau de bord",
+    "multi": {
+      "titre": "Tous mes ateliers",
+      "clients": "Clients",
+      "en_cours": "En cours",
+      "revenu_mois": "Encaissé (mois)",
+      "cmd": "{{n}} cmd",
+      "retard": "{{n}} en retard"
+    },
     "abonnement": {
       "jours_restants_one": "{{count}} jour restant",
       "jours_restants_other": "{{count}} jours restants",
