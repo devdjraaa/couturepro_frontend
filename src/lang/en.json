@@ -1511,7 +1511,8 @@
       "verified": "✓ Verified",
       "new": "New",
       "see_all": "See all designers →",
-      "creations_count": "{{n}} creations"
+      "creations_count": "{{n}} creations",
+      "pro": "Pro"
     },
     "gallery": {
       "eyebrow": "Gallery",

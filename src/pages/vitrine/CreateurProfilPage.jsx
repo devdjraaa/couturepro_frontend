@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { X, Heart, MessageCircle, Send, ShoppingBag, Award, Download, Lock, ImagePlus } from 'lucide-react'
+import { X, Heart, MessageCircle, Send, ShoppingBag, Award, Download, Lock, ImagePlus, Megaphone } from 'lucide-react'
 import VitrineShell from './VitrineChrome'
 import { getCreator, toggleLike, toggleAbonnement, acheterPatron } from './vitrineApi'
 import GarmentVisual from './GarmentVisual'
@@ -464,6 +464,10 @@ export default function CreateurProfilPage() {
   const goToAvis = () => document.getElementById('avis-section')?.scrollIntoView({ behavior: 'smooth' })
   const signaler = (type, id) => { setSignaled((s) => new Set(s).add(id)); signalementService.report(type, id) }
   const cols = c.collections || []
+  // PL-6 : annonce de collection la plus récente (mise en avant en bandeau).
+  const annonce = cols
+    .filter(col => col.annonce_at)
+    .sort((a, b) => new Date(b.annonce_at) - new Date(a.annonce_at))[0]
 
   const renderGrid = (items) => (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -547,12 +551,25 @@ export default function CreateurProfilPage() {
             <h1 className="font-display text-[26px] text-ink flex items-center gap-2.5 flex-wrap">
               {c.nom}
               {c.verifie && <span className="text-[12px] font-bold text-primary bg-primary-50 px-2.5 py-0.5 rounded-full">{t('vitrine.creators.verified')}</span>}
+              {/* PL-8 : badge Designer Pro (plan Atelier+) */}
+              {c.badge_pro && (
+                <span className="inline-flex items-center gap-1 text-[12px] font-bold text-amber-700 bg-amber-100 px-2.5 py-0.5 rounded-full">
+                  <Award size={12} /> {t('vitrine.creators.pro')}
+                </span>
+              )}
             </h1>
             <div className="text-dim text-[15px] mt-1">{c.specialite}</div>
             <div className="text-dim text-[13px] mt-1">📍 {c.ville}, Bénin</div>
             {c.inscrit_depuis && <div className="text-ghost text-[12.5px] mt-1">🕐 {c.inscrit_depuis}</div>}
             {c.note && <div className="text-sm mt-2"><span className="text-primary font-bold">★ {c.note}</span> <span className="text-dim">({avisCount})</span></div>}
             {c.bio && <p className="text-ink text-sm mt-3 leading-relaxed">{c.bio}</p>}
+            {/* PL-6 : annonce de collection mise en avant */}
+            {annonce && (
+              <div className="mt-3 flex items-start gap-2 bg-primary-50 text-primary rounded-xl px-3 py-2">
+                <Megaphone size={15} className="mt-0.5 shrink-0" />
+                <p className="text-[13px] font-medium">{annonce.annonce_message}</p>
+              </div>
+            )}
             {(igUrl || fbUrl || siteUrl || liUrl || ytUrl || ttUrl) && (
               <div className="flex gap-2 mt-3 flex-wrap">
                 {igUrl && <a href={igUrl} target="_blank" rel="noopener noreferrer" className={socialCls}>Instagram</a>}
