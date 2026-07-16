@@ -13,15 +13,15 @@ const CONTACTS = [
   {
     icon: Mail,
     label: 'Email',
-    value: 'support@gextimo.app',
-    href: 'mailto:support@gextimo.app',
+    value: 'support.gextimo@novafriq.africa',
+    href: 'mailto:support.gextimo@novafriq.africa',
     color: 'bg-primary/10 text-primary',
   },
   {
     icon: Globe,
     label: 'Site web',
-    value: 'gextimo.app',
-    href: 'https://gextimo.app',
+    value: 'gextimo.novafriq.africa',
+    href: 'https://gextimo.novafriq.africa',
     color: 'bg-accent/10 text-accent-600',
   },
 ]

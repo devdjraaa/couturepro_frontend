@@ -1840,7 +1840,7 @@
         }
       ],
       "contact_title": "Another question?",
-      "contact": "Write to us at support@gextimo.app — we reply within 48 h."
+      "contact": "Write to us at support.gextimo@novafriq.africa — we reply within 48 h."
     },
     "artisans": {
       "eyebrow": "Artisans",
@@ -1966,9 +1966,9 @@
     "developpe_par": "Developed by",
     "equipe": "Gextimo Team",
     "support_label": "Support",
-    "support_valeur": "support@gextimo.app",
+    "support_valeur": "support.gextimo@novafriq.africa",
     "politique_label": "Privacy policy",
-    "politique_valeur": "gextimo.app/privacy",
+    "politique_valeur": "gextimo.novafriq.africa/confidentialite",
     "features": {
       "commandes_titre": "Order management",
       "commandes_desc": "Track all your orders from measurements to delivery.",
