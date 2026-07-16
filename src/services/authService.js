@@ -43,9 +43,10 @@ export const authService = {
       return {
         providers: Array.isArray(data?.providers) ? data.providers : [],
         google_web_client_id: data?.google_web_client_id ?? null,
+        recaptcha_site_key: data?.recaptcha_site_key ?? null,
       }
     } catch {
-      return { providers: [], google_web_client_id: null }
+      return { providers: [], google_web_client_id: null, recaptcha_site_key: null }
     }
   },
 

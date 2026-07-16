@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Eye, EyeOff, Check, X, ArrowRight, MessageSquare } from 'lucide-react'
@@ -6,6 +6,8 @@ import { useAuth } from '@/contexts'
 import { AuthLayout } from '@/components/layout'
 import { Input, Button, Select, PhoneInput, LanguageSwitcher } from '@/components/ui'
 import SocialLoginButtons from '@/components/auth/SocialLoginButtons'
+import { authService } from '@/services/authService'
+import { getRecaptchaToken } from '@/utils/recaptcha'
 import { SITE_BASE_URL } from '@/constants/config'
 import { cn } from '@/utils/cn'
 
@@ -26,12 +28,18 @@ export default function RegisterPage() {
   ]
 
   const [step, setStep] = useState('form') // 'form' | 'otp'
-  const [form, setForm] = useState({
-    nom: '', prenom: '', telephone: '', email: '', nom_atelier: '',
-    type: 'artisan', // artisan (défaut) | designer
-    password: '', password_confirmation: '',
-    question_secrete: QUESTIONS_SECRETE[0].value,
-    question_secrete_custom: '', reponse_secrete: '',
+  const [form, setForm] = useState(() => {
+    // P150 : arrivée depuis la connexion sociale (web callback ou flux natif) →
+    // l'inscription est pré-remplie avec ce que le provider a fourni.
+    const q = new URLSearchParams(window.location.search)
+    return {
+      nom: q.get('nom') ?? '', prenom: q.get('prenom') ?? '', telephone: '',
+      email: q.get('email') ?? '', nom_atelier: '',
+      type: 'artisan', // artisan (défaut) | designer
+      password: '', password_confirmation: '',
+      question_secrete: QUESTIONS_SECRETE[0].value,
+      question_secrete_custom: '', reponse_secrete: '',
+    }
   })
   const [otp, setOtp]         = useState('')
   const [error, setError]     = useState('')
@@ -39,6 +47,14 @@ export default function RegisterPage() {
   const [showPwd, setShowPwd]             = useState(false)
   const [showPwdConfirm, setShowPwdConfirm] = useState(false)
   const [accepteCgu, setAccepteCgu]       = useState(false)
+
+  // P196 : site key reCAPTCHA (vide tant que non configurée côté serveur → no-op).
+  const [recaptchaSiteKey, setRecaptchaSiteKey] = useState(null)
+  useEffect(() => {
+    let alive = true
+    authService.getSocialConfig().then((c) => { if (alive) setRecaptchaSiteKey(c?.recaptcha_site_key ?? null) })
+    return () => { alive = false }
+  }, [])
 
   const set = key => e => setForm(f => ({ ...f, [key]: e.target.value }))
 
@@ -52,7 +68,9 @@ export default function RegisterPage() {
     setLoading(true)
     try {
       const { question_secrete_custom, ...rest } = form
-      await register({ ...rest, question_secrete: finalQuestion })
+      // P196 : jeton anti-robot reCAPTCHA v3 (null si non configuré → serveur laisse passer).
+      const recaptcha_token = await getRecaptchaToken(recaptchaSiteKey, 'inscription')
+      await register({ ...rest, question_secrete: finalQuestion, recaptcha_token })
       setStep('otp')
     } catch (err) {
       setError(err.message || t('erreurs.inconnu'))
