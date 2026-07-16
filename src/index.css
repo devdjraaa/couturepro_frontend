@@ -239,12 +239,13 @@
 
 html, body {
   margin: 0;
-  /* P109 : jamais de défilement horizontal parasite sur petit écran. */
-  overflow-x: hidden;
   max-width: 100%;
 }
 
 body {
+  /* P109 : pas de défilement horizontal parasite — UNIQUEMENT sur body.
+     (Le mettre sur <html> casse le scroll VERTICAL tactile sur WebView Android.) */
+  overflow-x: hidden;
   font-family: 'Plus Jakarta Sans', sans-serif;
   background-color: var(--color-bg-app);
   color: var(--color-text-primary);
