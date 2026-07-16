@@ -1160,6 +1160,19 @@
         "essai": "Trial period",
         "expire": "Expired",
         "gele": "Suspended"
+      },
+      "recap": {
+        "titre": "Summary",
+        "plan_actuel": "Current plan",
+        "plan_nouveau": "New plan",
+        "prix": "New plan price",
+        "credit": "Remaining credit ({{jours}} d)",
+        "a_payer": "Due today",
+        "echeance": "New expiry date",
+        "note_immediat": "Your new plan will be active immediately after payment.",
+        "note_renouvellement": "Your subscription will be extended from its current expiry date.",
+        "payer": "Pay {{montant}}",
+        "confirmer": "Confirm"
       }
     },
     "ateliers_tab": {
