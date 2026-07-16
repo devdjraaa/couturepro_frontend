@@ -37,6 +37,15 @@
       "s2_texte": "Tapez « Ajouter » : le sélecteur de photos de votre téléphone s'ouvre. Cochez une ou plusieurs réalisations, puis validez.",
       "s3_titre": "Des photos qui vous appartiennent",
       "s3_texte": "Publiez uniquement VOS propres photos (prises par vous), nettes et bien éclairées. Chaque photo devient visible et trouvable sur la vitrine."
+    },
+    "categorie_ajout": "Catégorie :",
+    "filtre_tous": "Toutes",
+    "categories": {
+      "modele": "Modèle",
+      "tissu": "Tissu",
+      "occasion": "Occasion",
+      "inspiration": "Inspiration",
+      "client": "Client"
     }
   },
   "premium": {
