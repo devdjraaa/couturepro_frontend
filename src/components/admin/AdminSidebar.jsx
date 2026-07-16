@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Home, Layers, CreditCard, MessageCircle,
   ShieldBan, ClipboardList, Bell, Star, LogOut,
-  Sun, Moon, Monitor, Users, Wallet, X, Flag, Megaphone, TicketPercent,
+  Sun, Moon, Monitor, Users, Wallet, X, Flag, Megaphone, TicketPercent, Activity,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useAdminAuth, useTheme } from '@/contexts'
@@ -27,6 +27,7 @@ const GESTION = [
   { to: '/admin/liste-noire',   icon: ShieldBan,     tKey: 'admin.nav.liste_noire'   },
   { to: '/admin/audit',         icon: ClipboardList, tKey: 'admin.nav.audit'         },
   { to: '/admin/notifications', icon: Bell,          tKey: 'admin.nav.notifications' },
+  { to: '/admin/diagnostic',    icon: Activity,      tKey: 'admin.nav.diagnostic'    },
 ]
 
 const SUPER_ADMIN = [

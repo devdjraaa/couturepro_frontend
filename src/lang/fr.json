@@ -3450,6 +3450,26 @@
       "tous_types": "Tous types",
       "tous_providers": "Tous providers"
     },
+    "diagnostic": {
+      "titre": "Diagnostic système",
+      "rafraichir": "Rafraîchir",
+      "app": "Application",
+      "queue": "File d'attente",
+      "base": "Base de données",
+      "stockage": "Stockage",
+      "modules": "Modules / activité",
+      "erreurs": "Dernières erreurs",
+      "aucune_erreur": "Aucune erreur récente.",
+      "f": {
+        "env": "Environnement", "version": "Version app", "php": "PHP", "laravel": "Laravel",
+        "debug": "Mode debug", "cache_config": "Config cache", "cache_routes": "Routes cache",
+        "connexion": "Connexion", "en_attente": "En attente", "echecs": "Échecs", "dernier_echec": "Dernier échec",
+        "driver": "Moteur", "taille": "Taille", "migrations": "Migrations",
+        "total": "Total", "libre": "Libre", "utilise": "Utilisé",
+        "ateliers_total": "Ateliers (total)", "ateliers_actifs": "Ateliers actifs", "ateliers_geles": "Ateliers gelés",
+        "abonnements_actifs": "Abonnements actifs"
+      }
+    },
     "nav": {
       "dashboard": "Dashboard",
       "ateliers": "Ateliers",
@@ -3464,6 +3484,7 @@
       "liste_noire": "Liste noire",
       "audit": "Audit",
       "notifications": "Notifications",
+      "diagnostic": "Diagnostic",
       "admins": "Admins",
       "parametres": "Paramètres",
       "section_principal": "Principal",
