@@ -3724,7 +3724,8 @@
       "mode_sombre": "Mode sombre",
       "passer_mode": "Passer en mode {{mode}}",
       "rechercher": "Rechercher…",
-      "veille": "Veille"
+      "veille": "Veille",
+      "pages": "Pages légales"
     },
     "dashboard": {
       "bonjour": "Bonjour,",
@@ -4073,6 +4074,28 @@
       "compteur": "{{sel}} sélection(s) IA / {{total}} résultats",
       "aucune_selection": "L'IA n'a rien retenu cette semaine (voir les résultats bruts ci-dessous).",
       "autres": "Voir les {{n}} autres résultats bruts"
+    },
+    "pages": {
+      "titre": "Pages légales",
+      "sous_titre": "Éditez les textes du footer (mentions légales, CGU, confidentialité, règles de la communauté…) comme dans Word — publiés sur le site dès l'enregistrement.",
+      "choisir": "Choisissez une page à gauche pour l'éditer.",
+      "personnalisee": "Personnalisée (texte en base)",
+      "importer": "Importer le texte actuel",
+      "enregistrer": "Enregistrer",
+      "enregistree": "Enregistré !",
+      "titre_page": "Titre de la page",
+      "note": "Tant que le contenu est vide, le site affiche le texte historique. « Importer le texte actuel » le copie ici comme point de départ.",
+      "lien_prompt": "Adresse du lien (https://…)",
+      "gras": "Gras",
+      "italique": "Italique",
+      "souligne": "Souligné",
+      "titre2": "Grand titre",
+      "titre3": "Sous-titre",
+      "paragraphe": "Paragraphe",
+      "liste": "Liste à puces",
+      "liste_num": "Liste numérotée",
+      "lien": "Lien",
+      "nettoyer": "Effacer la mise en forme"
     }
   },
   "bienvenue": {

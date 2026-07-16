@@ -78,6 +78,7 @@ import TicketsPage             from '@/pages/admin/TicketsPage'
 import TicketDetailPage        from '@/pages/admin/TicketDetailPage'
 import OffresPage              from '@/pages/admin/OffresPage'
 import VeillePage              from '@/pages/admin/VeillePage'
+import PagesLegalesPage        from '@/pages/admin/PagesLegalesPage'
 import CodesPromoPage          from '@/pages/admin/CodesPromoPage'
 import ListeNoirePage          from '@/pages/admin/ListeNoirePage'
 import AuditPage               from '@/pages/admin/AuditPage'
@@ -132,6 +133,7 @@ export default function App() {
           <Route path="/admin/tickets/:id"      element={<TicketDetailPage />} />
           <Route path="/admin/offres"           element={<OffresPage />} />
           <Route path="/admin/veille"           element={<VeillePage />} />
+          <Route path="/admin/pages"            element={<PagesLegalesPage />} />
           <Route path="/admin/codes-promo"      element={<CodesPromoPage />} />
           <Route path="/admin/liste-noire"      element={<ListeNoirePage />} />
           <Route path="/admin/audit"            element={<AuditPage />} />

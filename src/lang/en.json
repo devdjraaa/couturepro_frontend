@@ -2568,7 +2568,8 @@
       "mode_sombre": "Dark mode",
       "passer_mode": "Switch to {{mode}}",
       "rechercher": "Search…",
-      "veille": "Watch"
+      "veille": "Watch",
+      "pages": "Legal pages"
     },
     "dashboard": {
       "bonjour": "Hello,",
@@ -2917,6 +2918,28 @@
       "compteur": "{{sel}} AI pick(s) / {{total}} results",
       "aucune_selection": "The AI selected nothing this week (see raw results below).",
       "autres": "Show the {{n}} other raw results"
+    },
+    "pages": {
+      "titre": "Legal pages",
+      "sous_titre": "Edit the footer texts (legal notice, ToS, privacy, community rules…) like in Word — published on the site as soon as you save.",
+      "choisir": "Pick a page on the left to edit it.",
+      "personnalisee": "Customized (stored in database)",
+      "importer": "Import current text",
+      "enregistrer": "Save",
+      "enregistree": "Saved!",
+      "titre_page": "Page title",
+      "note": "While the content is empty, the site shows the historical text. “Import current text” copies it here as a starting point.",
+      "lien_prompt": "Link address (https://…)",
+      "gras": "Bold",
+      "italique": "Italic",
+      "souligne": "Underline",
+      "titre2": "Heading",
+      "titre3": "Subheading",
+      "paragraphe": "Paragraph",
+      "liste": "Bullet list",
+      "liste_num": "Numbered list",
+      "lien": "Link",
+      "nettoyer": "Clear formatting"
     }
   },
   "bienvenue": {

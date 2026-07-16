@@ -1,6 +1,58 @@
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { usePageMeta } from '@/hooks/usePageMeta'
+import { API_BASE_URL } from '@/constants/config'
+
+/* ── Contenu éditable depuis le back-office ───────────────────────────────
+   Chaque page interroge l'API : si l'admin a personnalisé le texte (éditeur
+   riche), on l'affiche ; sinon on garde le texte i18n historique (fallback). */
+
+function usePageLegaleDb(ns) {
+  const [page, setPage] = useState(null)
+  useEffect(() => {
+    let mort = false
+    fetch(`${API_BASE_URL}/vitrine/pages/${ns}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => { if (!mort && d?.personnalise) setPage(d) })
+      .catch(() => {})
+    return () => { mort = true }
+  }, [ns])
+  return page
+}
+
+// Typographie appliquée au HTML libre de l'éditeur (titres, listes, tableaux, liens).
+const PROSE =
+  'text-dim text-[14.5px] leading-relaxed ' +
+  '[&_h1]:font-display [&_h1]:font-bold [&_h1]:text-ink [&_h1]:text-[22px] [&_h1]:mt-6 [&_h1]:mb-2 ' +
+  '[&_h2]:font-display [&_h2]:font-semibold [&_h2]:text-ink [&_h2]:text-[17px] [&_h2]:mt-6 [&_h2]:mb-2 ' +
+  '[&_h3]:font-display [&_h3]:font-semibold [&_h3]:text-ink [&_h3]:text-[15px] [&_h3]:mt-4 [&_h3]:mb-1.5 ' +
+  '[&_p]:my-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:my-2 ' +
+  '[&_li]:my-1 [&_a]:text-primary [&_a]:underline [&_strong]:text-ink [&_b]:text-ink ' +
+  '[&_table]:w-full [&_table]:border-collapse [&_table]:my-3 [&_td]:border [&_td]:border-edge [&_td]:px-3 [&_td]:py-2 ' +
+  '[&_th]:border [&_th]:border-edge [&_th]:px-3 [&_th]:py-2 [&_th]:bg-subtle [&_th]:text-ink [&_th]:text-left ' +
+  '[&_blockquote]:border-l-2 [&_blockquote]:border-primary [&_blockquote]:pl-4 [&_blockquote]:my-3'
+
+function PageLegaleDb({ page, path }) {
+  const { i18n } = useTranslation()
+  const en = i18n.language?.startsWith('en')
+  const titre = (en ? page.titre_en : page.titre_fr) || page.titre_fr || page.titre_en || ''
+  const contenu = (en ? page.contenu_en : page.contenu_fr) || page.contenu_fr || page.contenu_en || ''
+  usePageMeta({ title: titre, path })
+  return (
+    <VitrineShell>
+      <section className="py-14 px-5">
+        <div className="max-w-[760px] mx-auto">
+          {titre && <h1 className="font-display font-extrabold text-[clamp(26px,3.8vw,40px)] text-ink leading-tight mb-8">{titre}</h1>}
+          <div className="bg-card border border-edge rounded-2xl p-6 md:p-8">
+            {/* HTML rédigé par l'admin (assaini côté serveur avant stockage) */}
+            <div className={PROSE} dangerouslySetInnerHTML={{ __html: contenu }} />
+          </div>
+        </div>
+      </section>
+    </VitrineShell>
+  )
+}
 
 /* ── Composant générique (pages simples : sections [{h,p}]) ───────────── */
 
@@ -26,8 +78,10 @@ function LegalSection({ h, p }) {
 
 function LegalPage({ ns, path }) {
   const { t } = useTranslation()
+  const db = usePageLegaleDb(ns)
   usePageMeta({ title: t(`vitrine.legal_pages.${ns}.title`), path })
   const sections = t(`vitrine.legal_pages.${ns}.sections`, { returnObjects: true })
+  if (db) return <PageLegaleDb page={db} path={path} />
   return (
     <VitrineShell>
       <section className="py-14 px-5">
@@ -136,8 +190,11 @@ function RichArticle({ title, blocks }) {
 
 function RichLegalPage({ ns, path }) {
   const { t } = useTranslation()
+  const db = usePageLegaleDb(ns)
   usePageMeta({ title: t(`vitrine.legal_pages.${ns}.title`), path })
   const articles = t(`vitrine.legal_pages.${ns}.articles`, { returnObjects: true })
+
+  if (db) return <PageLegaleDb page={db} path={path} />
 
   if (!Array.isArray(articles) || !articles.length) {
     return <LegalPage ns={ns} path={path} />
