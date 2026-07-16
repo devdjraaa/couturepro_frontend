@@ -7,10 +7,7 @@
     "allowNavigation": [
       "gextimoapi.novafriq.africa",
       "*.fedapay.com",
-      "fedapay.com",
-      "*.ngrok-free.app",
-      "*.ngrok.io",
-      "*.ngrok.app"
+      "fedapay.com"
     ]
   },
   "android": {

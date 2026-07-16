@@ -237,8 +237,14 @@
   box-sizing: border-box;
 }
 
-body {
+html, body {
   margin: 0;
+  /* P109 : jamais de défilement horizontal parasite sur petit écran. */
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+body {
   font-family: 'Plus Jakarta Sans', sans-serif;
   background-color: var(--color-bg-app);
   color: var(--color-text-primary);
@@ -246,6 +252,16 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overscroll-behavior: none;
+}
+
+/* P109 : médias jamais plus larges que leur conteneur (évite les débordements). */
+img, video, svg, canvas {
+  max-width: 100%;
+}
+
+/* P109 : réactivité tactile (supprime le délai de 300 ms, meilleur ressenti). */
+button, a, [role="button"], label, select, input[type="checkbox"], input[type="radio"] {
+  touch-action: manipulation;
 }
 
 #root {

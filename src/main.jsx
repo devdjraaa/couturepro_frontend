@@ -6,6 +6,7 @@ import { DatabaseProvider } from '@nozbe/watermelondb/react'
 import { Toaster } from 'react-hot-toast'
 import database from '@/db/database'
 import { ThemeProvider, AuthProvider, AtelierProvider, AdminAuthProvider, LangProvider, SyncProvider } from '@/contexts'
+import ErrorBoundary from '@/components/ErrorBoundary'
 import './index.css'
 import './lang/i18n.js'
 import App from './App.jsx'
@@ -48,6 +49,7 @@ const queryClient = new QueryClient({
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <ErrorBoundary>
     <DatabaseProvider database={database}>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
@@ -73,5 +75,6 @@ createRoot(document.getElementById('root')).render(
         </BrowserRouter>
       </QueryClientProvider>
     </DatabaseProvider>
+    </ErrorBoundary>
   </StrictMode>,
 )
