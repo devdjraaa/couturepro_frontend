@@ -123,6 +123,7 @@ function NavMenu() {
               { label: t('vitrine.menu2.artisans'),  to: '/artisans' },
               { label: t('vitrine.nav.collections'), to: '/#gallery' },
               { label: t('vitrine.nav.suivi'),       to: '/suivi' },
+              { label: t('vitrine.nav.espace_client'), to: '/espace-client' },
               { label: t('vitrine.menu2.support'),   to: '/aide' },
               { label: t('vitrine.menu2.about'),     to: '/qui-sommes-nous' },
             ].map(({ label, to }) => (
@@ -244,6 +245,7 @@ export function VitrineNavbar() {
             <Link to="/artisans" aria-current={loc.pathname === '/artisans' ? 'page' : undefined} className="text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.menu2.artisans')}</Link>
             <a href="/#gallery" className="text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.nav.collections')}</a>
             <Link to="/suivi" aria-current={loc.pathname === '/suivi' ? 'page' : undefined} className="text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.nav.suivi')}</Link>
+            <Link to="/espace-client" aria-current={loc.pathname === '/espace-client' ? 'page' : undefined} className="text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.nav.espace_client')}</Link>
             <Link to="/aide" aria-current={loc.pathname === '/aide' ? 'page' : undefined} className="text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.menu2.support')}</Link>
           </nav>
 

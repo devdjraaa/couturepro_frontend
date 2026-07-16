@@ -64,6 +64,7 @@ import {
 } from '@/pages/vitrine/VitrineLegalPages'
 import PatronRecuPage         from '@/pages/vitrine/PatronRecuPage'
 import PatronRecupererPage    from '@/pages/vitrine/PatronRecupererPage'
+import EspaceClientPage       from '@/pages/vitrine/EspaceClientPage'
 
 // Pages admin
 import AdminLoginPage          from '@/pages/admin/AdminLoginPage'
@@ -169,6 +170,8 @@ export default function App() {
             {/* P161-163 : patrons payants — reçu (après paiement) + menu récupération. */}
             <Route path="/patrons/recu/:code" element={<PatronRecuPage />} />
             <Route path="/patrons/recuperer"  element={<PatronRecupererPage />} />
+            {/* P202 : espace client (connexion sans mot de passe, commandes, avis, réclamations). */}
+            <Route path={ROUTES.VITRINE_ESPACE_CLIENT} element={<EspaceClientPage />} />
             <Route path="*" element={<Vitrine404Page />} />
           </Route>
         )}

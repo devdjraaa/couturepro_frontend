@@ -502,9 +502,9 @@ export default function CreateurProfilPage() {
               ? <a href={waHref('vitrine.profil.wa_message', { nom: c.nom })} onClick={trackContact} target="_blank" rel="noopener noreferrer" title={t('vitrine.profil.contact')} aria-label={t('vitrine.profil.contact')} className="p-1.5 rounded-lg text-dim hover:bg-app hover:text-primary transition"><Send size={16} /></a>
               : <button title={t('vitrine.profil.contact')} aria-label={t('vitrine.profil.contact')} className="p-1.5 rounded-lg text-ghost cursor-default"><Send size={16} /></button>}
             <div className="flex-1" />
-            {wa
-              ? <a href={waHref('vitrine.profil.wa_order', { nom: c.nom, modele: m.nom })} onClick={trackContact} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-semibold text-[12.5px] px-3 py-1.5 rounded-[10px] bg-primary text-inverse hover:bg-primary-600 transition"><ShoppingBag size={14} />{t('vitrine.profil.order')}</a>
-              : <button className="inline-flex items-center gap-1 font-semibold text-[12.5px] px-3 py-1.5 rounded-[10px] bg-primary text-inverse hover:bg-primary-600 transition"><ShoppingBag size={14} />{t('vitrine.profil.order')}</button>}
+            {/* P202 : Commander → espace client (commande suivie qui atterrit dans l'outil du designer). */}
+            <Link to={`/espace-client?commander=${encodeURIComponent(c.id)}&designer=${encodeURIComponent(c.nom)}`} onClick={trackContact}
+                  className="inline-flex items-center gap-1 font-semibold text-[12.5px] px-3 py-1.5 rounded-[10px] bg-primary text-inverse hover:bg-primary-600 transition"><ShoppingBag size={14} />{t('vitrine.profil.order')}</Link>
           </div>
           {/* P161 : bouton Télécharger (contenu payant) */}
           {m.patron && (

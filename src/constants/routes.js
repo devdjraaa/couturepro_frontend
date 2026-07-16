@@ -26,6 +26,7 @@ export const ROUTES = {
   VITRINE_FAVORIS:   '/favoris',
   VITRINE_INSCRIPTION:      '/inscription',
   VITRINE_SPONSORISATION:   '/mise-en-avant',
+  VITRINE_ESPACE_CLIENT:    '/espace-client',
 
   // Pages légales vitrine
   VITRINE_CONFIDENTIALITE:    '/confidentialite',
