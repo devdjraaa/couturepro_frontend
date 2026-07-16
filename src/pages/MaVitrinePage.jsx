@@ -4,8 +4,10 @@ import {
   Store, ExternalLink, Copy, Check, Eye, EyeOff, MessageCircle,
   Sparkles, ClipboardList, Wallet, Image as ImageIcon,
   ShieldCheck, ShieldAlert, Upload, Link as LinkIcon,
-  Star, Clock,
+  Star, Clock, BookOpen,
 } from 'lucide-react'
+import toast from 'react-hot-toast'
+import { exportLookbookPdf } from '@/utils/exportLookbookPdf'
 import { useTranslation } from 'react-i18next'
 import { AppLayout } from '@/components/layout'
 import { Skeleton } from '@/components/ui'
@@ -42,6 +44,8 @@ export default function MaVitrinePage() {
   const { t, i18n } = useTranslation()
   const { atelier, refreshAtelier } = useAuth()
   const { available: peutSponsoriser } = usePlanFeature('sponsorisation')
+  const { available: peutLookbook } = usePlanFeature('lookbook_pdf')
+  const [lookbookBusy, setLookbookBusy] = useState(false)
   const dash = useDashboard()
   const [creations, setCreations] = useState(null)
   const [copied, setCopied] = useState(false)
@@ -110,6 +114,31 @@ export default function MaVitrinePage() {
   const publicUrl = `${vitrineBase}${publicPath}`
   const nbCreations = creations?.length ?? null
   const nbPubliees = creations ? creations.filter(isPublie).length : null
+
+  // PL-1 : lookbook PDF des créations publiées (plans payants).
+  const handleLookbook = async () => {
+    if (!peutLookbook) {
+      toast(t('ma_vitrine.lookbook_upgrade'))
+      return
+    }
+    const items = (creations ?? []).filter(isPublie)
+    if (items.length === 0) {
+      toast(t('ma_vitrine.lookbook_vide'))
+      return
+    }
+    setLookbookBusy(true)
+    try {
+      await exportLookbookPdf({
+        atelierNom: atelier?.nom ?? 'Gextimo',
+        titre: t('ma_vitrine.lookbook_titre'),
+        creations: items,
+      })
+    } catch {
+      toast.error(t('ma_vitrine.lookbook_erreur'))
+    } finally {
+      setLookbookBusy(false)
+    }
+  }
 
   const copyLink = async () => {
     try {
@@ -611,7 +640,19 @@ export default function MaVitrinePage() {
         {/* Créations */}
         <div className="flex items-center justify-between mt-6 mb-3">
           <h2 className="text-lg font-bold font-display text-ink">{t('ma_vitrine.vos_creations')}</h2>
-          <Link to="/catalogue" className="text-sm font-semibold text-primary hover:underline">{t('ma_vitrine.gerer')}</Link>
+          <div className="flex items-center gap-3">
+            {/* PL-1 : lookbook PDF (plans payants) */}
+            {creations?.length > 0 && (
+              <button
+                onClick={handleLookbook}
+                disabled={lookbookBusy}
+                className="text-sm font-semibold text-primary hover:underline flex items-center gap-1 disabled:opacity-50"
+              >
+                <BookOpen size={14} /> {lookbookBusy ? t('ma_vitrine.lookbook_encours') : t('ma_vitrine.lookbook')}
+              </button>
+            )}
+            <Link to="/catalogue" className="text-sm font-semibold text-primary hover:underline">{t('ma_vitrine.gerer')}</Link>
+          </div>
         </div>
 
         {creations === null ? (

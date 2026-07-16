@@ -174,7 +174,13 @@
     "devis_traite": "Traité",
     "sponso_jour_restant": "{{n}} jour restant",
     "sponso_jours_restants": "{{n}} jours restants",
-    "sponso_fin_le": "Se termine le {{date}}"
+    "sponso_fin_le": "Se termine le {{date}}",
+    "lookbook": "Lookbook PDF",
+    "lookbook_encours": "Génération…",
+    "lookbook_titre": "Lookbook",
+    "lookbook_upgrade": "Le Lookbook PDF est réservé aux plans payants. Passez au plan Atelier pour l’activer.",
+    "lookbook_vide": "Publiez au moins une création pour générer le lookbook.",
+    "lookbook_erreur": "Impossible de générer le lookbook."
   },
   "facturation": {
     "titre": "Facturation",
