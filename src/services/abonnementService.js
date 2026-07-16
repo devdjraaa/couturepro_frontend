@@ -81,6 +81,18 @@ export const abonnementService = {
     return data
   },
 
+  // P53-55 (option A) : programme un downgrade différé à l'échéance (rien à payer).
+  async programmerDowngrade(niveau_cle) {
+    const { data } = await api.post('/abonnement/programmer-downgrade', { niveau_cle })
+    return data
+  },
+
+  // P53-55 : annule le downgrade programmé.
+  async annulerDowngrade() {
+    const { data } = await api.post('/abonnement/annuler-downgrade')
+    return data
+  },
+
   // Lance un paiement d'abonnement via FedaPay
   // payload: { niveau_cle: 'standard_mensuel', provider?: 'fedapay' }
   async initierPaiement(niveau_cle, provider = 'fedapay') {

@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Building2, Plus, CheckCircle2, ImagePlus, Lock } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
+import { getNativeVersion, checkAppVersion, openApkDownload, forceCheckOta } from '@/utils/appUpdate'
 import { useAuth } from '@/contexts'
 import {
   useProfil, useUpdateProfil,
@@ -442,15 +445,43 @@ function ActiverCodeSection() {
 
 function AbonnementTab() {
   const { t } = useTranslation()
+  const queryClient = useQueryClient()
   const { data: abonnement } = useAbonnement()
   const { data: plans = [] } = usePlans()
   const initierPaiement = useInitierPaiementAbonnement()
   const [recap, setRecap] = useState(null) // récap upgrade affiché avant paiement
   const [recapLoading, setRecapLoading] = useState(false)
+  const [downgradeBusy, setDowngradeBusy] = useState(false)
 
-  // Spec upgrade : afficher le récapitulatif (crédit prorata, montant réel,
-  // nouvelle échéance) AVANT d'envoyer l'utilisateur vers le paiement.
+  const prixActuel = Number(abonnement?.prix_xof ?? 0)
+  const estActifPayant = abonnement?.statut === 'actif' && prixActuel > 0
+
+  const rafraichir = () => queryClient.invalidateQueries({ queryKey: ['abonnement'] })
+
+  // Selon le prix du plan choisi vs le plan actuel : upgrade (paiement immédiat,
+  // avec crédit prorata) OU downgrade différé à l'échéance (option A, rien à payer).
   const handleUpgrade = async (niveau_cle) => {
+    const plan = plans.find(p => p.cle === niveau_cle)
+    const estDowngrade = estActifPayant && plan && Number(plan.prix_xof) < prixActuel
+
+    if (estDowngrade) {
+      if (!window.confirm(t('parametres.abonnement.downgrade.confirmer', {
+        plan: t(`plans.${niveau_cle}`, { defaultValue: plan.label }),
+        date: abonnement?.timestamp_expiration
+          ? new Date(abonnement.timestamp_expiration).toLocaleDateString() : '',
+      }))) return
+      setDowngradeBusy(true)
+      try {
+        await abonnementService.programmerDowngrade(niveau_cle)
+        toast.success(t('parametres.abonnement.downgrade.programme'))
+        rafraichir()
+      } catch (e) {
+        toast.error(e?.response?.data?.message || t('parametres.abonnement.downgrade.erreur'))
+      } finally { setDowngradeBusy(false) }
+      return
+    }
+
+    // Upgrade : récapitulatif (crédit prorata, montant réel, échéance) avant paiement.
     setRecapLoading(true)
     try {
       const preview = await abonnementService.upgradePreview(niveau_cle)
@@ -460,6 +491,16 @@ function AbonnementTab() {
     } finally {
       setRecapLoading(false)
     }
+  }
+
+  const annulerDowngrade = async () => {
+    setDowngradeBusy(true)
+    try {
+      await abonnementService.annulerDowngrade()
+      toast.success(t('parametres.abonnement.downgrade.annule'))
+      rafraichir()
+    } catch { toast.error(t('parametres.abonnement.downgrade.erreur')) }
+    finally { setDowngradeBusy(false) }
   }
 
   const confirmerPaiement = async () => {
@@ -546,6 +587,27 @@ function AbonnementTab() {
 
       <ActiverCodeSection />
       <CodePromoSection />
+
+      {/* P53-55 : bandeau downgrade programmé (option A) */}
+      {abonnement?.downgrade_vers_cle && (
+        <div className="bg-warning/10 border border-warning/30 rounded-2xl p-4 space-y-2">
+          <p className="text-sm text-ink">
+            {t('parametres.abonnement.downgrade.bandeau', {
+              plan: abonnement.downgrade_label
+                ?? t(`plans.${abonnement.downgrade_vers_cle}`, { defaultValue: abonnement.downgrade_vers_cle }),
+              date: abonnement.timestamp_expiration
+                ? new Date(abonnement.timestamp_expiration).toLocaleDateString() : '',
+            })}
+          </p>
+          <button
+            onClick={annulerDowngrade}
+            disabled={downgradeBusy}
+            className="text-sm font-semibold text-primary hover:underline disabled:opacity-50"
+          >
+            {t('parametres.abonnement.downgrade.annuler')}
+          </button>
+        </div>
+      )}
 
       <div>
         <p className="text-xs font-semibold text-dim uppercase tracking-wide mb-3">{t('parametres.abonnement.plans_disponibles')}</p>

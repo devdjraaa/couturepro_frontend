@@ -1188,7 +1188,15 @@
         "confirmer": "Confirmer"
       },
       "sauvegarde_cloud": "Sauvegarde cloud",
-      "sauvegarde_a_venir": "Programmée (à venir)"
+      "sauvegarde_a_venir": "Programmée (à venir)",
+      "downgrade": {
+        "confirmer": "Passer au plan {{plan}} à la fin de votre période actuelle (le {{date}}) ? Vous gardez votre plan actuel jusque-là, sans paiement supplémentaire.",
+        "programme": "Changement programmé pour la fin de votre période.",
+        "annule": "Changement de plan annulé.",
+        "erreur": "Action impossible pour le moment.",
+        "bandeau": "Passage au plan {{plan}} prévu le {{date}}. Vous gardez votre plan actuel jusque-là.",
+        "annuler": "Annuler ce changement"
+      }
     },
     "ateliers_tab": {
       "non_disponible": "Non disponible dans votre plan",
