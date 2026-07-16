@@ -144,7 +144,7 @@ export default function AdminsPage() {
           </div>
           <div>
             <label className={LABEL}>{t('admin.admins.email')}</label>
-            <input type="email" value={form.email} onChange={set('email')} required placeholder="admin@gextimo.app" className={INPUT} />
+            <input type="email" value={form.email} onChange={set('email')} required placeholder="admin.gextimo@novafriq.africa" className={INPUT} />
           </div>
           <div>
             <label className={LABEL}>{t('admin.admins.mdp')}</label>

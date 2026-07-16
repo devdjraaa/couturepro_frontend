@@ -44,7 +44,7 @@ export default function AdminLoginPage() {
               type="email"
               value={form.email}
               onChange={set('email')}
-              placeholder="admin@couturepro.com"
+              placeholder="admin.gextimo@novafriq.africa"
               required
               className="w-full bg-subtle border border-edge rounded-xl px-3 py-2.5 text-sm text-ink placeholder:text-ghost focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors"
             />

@@ -1852,7 +1852,7 @@
         }
       ],
       "contact_title": "Une autre question ?",
-      "contact": "Écrivez-nous à support@gextimo.app — nous répondons sous 48 h."
+      "contact": "Écrivez-nous à support.gextimo@novafriq.africa — nous répondons sous 48 h."
     },
     "artisans": {
       "eyebrow": "Artisans",
@@ -3496,9 +3496,9 @@
     "developpe_par": "Développé par",
     "equipe": "Équipe Gextimo",
     "support_label": "Support",
-    "support_valeur": "support@gextimo.app",
+    "support_valeur": "support.gextimo@novafriq.africa",
     "politique_label": "Politique de confidentialité",
-    "politique_valeur": "gextimo.app/privacy",
+    "politique_valeur": "gextimo.novafriq.africa/confidentialite",
     "features": {
       "commandes_titre": "Gestion des commandes",
       "commandes_desc": "Suivez toutes vos commandes de la prise de mesures à la livraison.",
