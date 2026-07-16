@@ -26,12 +26,18 @@ export default function RegisterPage() {
   ]
 
   const [step, setStep] = useState('form') // 'form' | 'otp'
-  const [form, setForm] = useState({
-    nom: '', prenom: '', telephone: '', email: '', nom_atelier: '',
-    type: 'artisan', // artisan (défaut) | designer
-    password: '', password_confirmation: '',
-    question_secrete: QUESTIONS_SECRETE[0].value,
-    question_secrete_custom: '', reponse_secrete: '',
+  const [form, setForm] = useState(() => {
+    // P150 : arrivée depuis la connexion sociale (web callback ou flux natif) →
+    // l'inscription est pré-remplie avec ce que le provider a fourni.
+    const q = new URLSearchParams(window.location.search)
+    return {
+      nom: q.get('nom') ?? '', prenom: q.get('prenom') ?? '', telephone: '',
+      email: q.get('email') ?? '', nom_atelier: '',
+      type: 'artisan', // artisan (défaut) | designer
+      password: '', password_confirmation: '',
+      question_secrete: QUESTIONS_SECRETE[0].value,
+      question_secrete_custom: '', reponse_secrete: '',
+    }
   })
   const [otp, setOtp]         = useState('')
   const [error, setError]     = useState('')

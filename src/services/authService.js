@@ -31,11 +31,31 @@ export const authService = {
     }
   },
 
+  // P150 (natif) : config complète — providers + client ID web pour le plugin Google.
+  async getSocialConfig() {
+    try {
+      const { data } = await api.get('/auth/social/providers')
+      return {
+        providers: Array.isArray(data?.providers) ? data.providers : [],
+        google_web_client_id: data?.google_web_client_id ?? null,
+      }
+    } catch {
+      return { providers: [], google_web_client_id: null }
+    }
+  },
+
   // P150 : connexion à partir d'un token reçu du callback social.
   async loginWithToken(token) {
     setToken(token)
     const { data: meData } = await api.get('/auth/me')
     return normalizeMe(meData)
+  },
+
+  // P150 (flux natif) : échange l'idToken Google contre un token Gextimo.
+  // Réponse : { status:'ok', token } ou { status:'inscription', email, prenom, nom }.
+  async socialTokenLogin(provider, idToken) {
+    const { data } = await api.post(`/auth/social/${provider}/token`, { id_token: idToken })
+    return data
   },
 
   // Best-effort : tente d'invalider le token côté serveur.
