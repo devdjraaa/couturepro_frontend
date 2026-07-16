@@ -2020,6 +2020,10 @@
           {
             "h": "8. Security",
             "p": "We implement appropriate technical and organisational measures: TLS encryption of communications, restricted data access, secure hosting."
+          },
+          {
+            "h": "Assistant, recorded conversations and audience measurement",
+            "p": "Conversations with the website assistant (chatbot) are recorded — the question asked, the answer given and your optional rating (helpful / unhelpful) — for the sole purpose of improving answer quality and the service. They are never sold or shared with third parties. With your consent (dedicated banner), browsing data (pages viewed, searches, interactions) is collected in a pseudonymised way to improve your experience and our recommendations. You can change your choices at any time from your account."
           }
         ]
       },
