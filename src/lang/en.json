@@ -1069,10 +1069,6 @@
       "alerte_archive": "Archive"
     },
     "tout_lire": "Mark all read",
-    "tout_effacer": "Clear all",
-    "ouvrir": "Open",
-    "confirm_tout_effacer": "Delete all notifications?",
-    "confirm_supprimer": "Delete this notification?",
     "vide_categorie": "No notifications in this category.",
     "cat": {
       "toutes": "All",
@@ -1085,7 +1081,11 @@
       "hier": "Yesterday",
       "semaine": "This week",
       "ancien": "Older"
-    }
+    },
+    "tout_effacer": "Clear all",
+    "ouvrir": "Open",
+    "confirm_tout_effacer": "Delete all notifications?",
+    "confirm_supprimer": "Delete this notification?"
   },
   "abonnement": {
     "titre": "Subscription",
@@ -1252,9 +1252,6 @@
       "theme": "Appearance & theme",
       "a_propos": "About"
     },
-    "section_compte": "Account",
-    "section_facturation": "Billing & subscription",
-    "section_app": "Application",
     "deconnexion": "Sign out",
     "type_compte": {
       "titre": "Account type",
@@ -1266,7 +1263,10 @@
       "confirmer": "Confirm change",
       "succes": "Account type updated.",
       "erreur": "Error changing account type."
-    }
+    },
+    "section_compte": "Account",
+    "section_facturation": "Billing & subscription",
+    "section_app": "Application"
   },
   "theme": {
     "titre": "Appearance",
@@ -1457,6 +1457,8 @@
   },
   "vitrine": {
     "promo": "✦ New — the Gextimo showcase connects African fashion designers across West Africa.",
+    "promo_a": "New — the",
+    "promo_b": "showcase connects African fashion designers across West Africa.",
     "online": "● Online",
     "loading": "Loading…",
     "indicatif": "* Indicative prices, converted for information only.",
@@ -1486,6 +1488,7 @@
       "have_account": "Already have an account?",
       "login": "Log in"
     },
+    "soon": "Soon",
     "cookies": {
       "text": "We use cookies to improve your experience and remember your preferences (language, currency, theme).",
       "accept": "Accept",
@@ -1623,6 +1626,15 @@
       "legal_mentions": "Legal notice",
       "legal_privacy": "Privacy",
       "legal_cookies": "Cookie settings",
+      "legal_apdp": "Data protection (APDP)",
+      "legal_cgu": "Terms of Use (ToU)",
+      "legal_creator_rights": "Creator rights & intellectual property",
+      "legal_sale": "Sales terms & commissions",
+      "legal_prohibited": "Prohibited & allowed items",
+      "legal_delivery": "Shipping, returns & refunds",
+      "legal_community_rules": "Community guidelines",
+      "legal_contact": "Contact & claims",
+      "col_rules": "Rules & Community",
       "platform": [
         "Designers",
         "Collections",
@@ -1888,6 +1900,368 @@
       "devise": "Currency",
       "devise_hint": "Indicative prices — converted at today's rate.",
       "cta": "Get started"
+    },
+    "legal_pages": {
+      "confidentialite": {
+        "title": "Privacy Policy",
+        "eyebrow": "Legal & Privacy",
+        "subtitle": "We are committed to protecting your personal data and respecting your privacy.",
+        "date": "Last updated: July 2026",
+        "sections": [
+          {
+            "h": "1. Data Controller",
+            "p": "Gextimo (a NovAfriq brand), a company operating in Benin, is the controller of your personal data collected through the gextimo.com platform."
+          },
+          {
+            "h": "2. Data Collected",
+            "p": "We collect data you provide when creating your account (name, email address, phone number), transaction information, and browsing data (IP address, browser type, pages visited) via technical cookies."
+          },
+          {
+            "h": "3. Purposes of Processing",
+            "p": "Your data is used to: manage your account, process orders, communicate about your project status, improve our services and, with your consent, send marketing communications."
+          },
+          {
+            "h": "4. Legal Basis",
+            "p": "Data processing is based on contract performance (orders, account), compliance with legal obligations, your consent (newsletters) and our legitimate interest in improving our services."
+          },
+          {
+            "h": "5. Data Sharing",
+            "p": "Your data may be shared with selected creators to fulfil your order, our secure payment providers (under confidentiality agreement), and competent authorities if required by law. We never sell your data to third parties."
+          },
+          {
+            "h": "6. Retention",
+            "p": "Your data is retained for the duration of your account and up to 5 years after your last activity, in accordance with applicable legal deadlines in Benin."
+          },
+          {
+            "h": "7. Your Rights (APDP)",
+            "p": "In accordance with Law No. 2009-09 on personal data protection in Benin, you have the right of access, rectification, erasure and objection. To exercise these rights, contact us at: privacy@gextimo.com."
+          },
+          {
+            "h": "8. Security",
+            "p": "We implement appropriate technical and organisational measures: TLS encryption of communications, restricted data access, secure hosting."
+          }
+        ]
+      },
+      "mentions": {
+        "title": "Legal Notice",
+        "eyebrow": "Legal",
+        "subtitle": "Legal information about the Gextimo platform.",
+        "date": "Last updated: July 2026",
+        "sections": [
+          {
+            "h": "Publisher",
+            "p": "Gextimo is a registered trademark of NovAfriq, a company registered in the Trade and Personal Property Credit Register (RCCM) of Benin. Registered office: Cotonou, Republic of Benin. Contact: contact@gextimo.com"
+          },
+          {
+            "h": "Publication Director",
+            "p": "The publication director is the legal representative of NovAfriq."
+          },
+          {
+            "h": "Hosting",
+            "p": "The platform is hosted on secure servers. For any questions relating to technical infrastructure, please contact our support team."
+          },
+          {
+            "h": "Intellectual Property",
+            "p": "All elements of the Gextimo site (texts, graphics, logo, images, interface) are protected by intellectual property law and are the exclusive property of NovAfriq, unless otherwise stated."
+          },
+          {
+            "h": "Liability",
+            "p": "NovAfriq strives to ensure the accuracy of information published on the platform but cannot be held responsible for errors or omissions. Creators are solely responsible for the creations they publish."
+          },
+          {
+            "h": "Applicable Law",
+            "p": "These legal notices are governed by Beninese law. Any dispute will be submitted to the competent court of Cotonou."
+          }
+        ]
+      },
+      "cookies": {
+        "title": "Cookie Policy",
+        "eyebrow": "Cookies & Trackers",
+        "subtitle": "Understanding how Gextimo uses cookies to improve your experience.",
+        "date": "Last updated: July 2026",
+        "sections": [
+          {
+            "h": "What is a cookie?",
+            "p": "A cookie is a small text file placed on your device (computer, smartphone) when you visit our site. It allows us to remember your preferences and improve your browsing experience."
+          },
+          {
+            "h": "Strictly Necessary Cookies",
+            "p": "These cookies are essential to the platform's operation: authentication, cart, language and currency preferences. They cannot be disabled."
+          },
+          {
+            "h": "Performance Cookies",
+            "p": "We use anonymised analytics tools to measure page traffic and identify the most-used journeys. This data helps us improve our services."
+          },
+          {
+            "h": "Personalisation Cookies",
+            "p": "These cookies remember your preferences (light/dark theme, currency, language) to offer you a personalised experience on each visit."
+          },
+          {
+            "h": "Managing Your Cookies",
+            "p": "You can accept or reject non-essential cookies via our consent banner. You can also configure your browser to block or delete cookies. Please note that disabling some cookies may affect your experience on the platform."
+          },
+          {
+            "h": "Retention Period",
+            "p": "Session cookies expire when you close your browser. Persistent cookies have a maximum duration of 13 months, in accordance with recommendations from data protection authorities."
+          }
+        ]
+      },
+      "protection_donnees": {
+        "title": "Data Protection (APDP)",
+        "eyebrow": "APDP · Benin",
+        "subtitle": "Compliance with Beninese Law No. 2009-09 on personal data protection.",
+        "date": "Last updated: July 2026",
+        "sections": [
+          {
+            "h": "Legal Framework",
+            "p": "The Gextimo platform complies with Law No. 2009-09 of 22 May 2009 on the protection of personal data in the Republic of Benin, as well as the recommendations of the Personal Data Protection Authority (APDP)."
+          },
+          {
+            "h": "APDP Declaration",
+            "p": "In accordance with Article 14 of Law No. 2009-09, personal data processing carried out by Gextimo has been declared to the Benin APDP."
+          },
+          {
+            "h": "Sensitive Data",
+            "p": "We do not collect sensitive data as defined by law (racial or ethnic origin, political opinions, religious beliefs, health data). Only data necessary to provide our services is collected."
+          },
+          {
+            "h": "Rights of Data Subjects",
+            "p": "In accordance with Articles 21 to 30 of Law No. 2009-09, you have the right of access, rectification, erasure, objection and portability of your personal data. These rights are exercised by email at: privacy@gextimo.com, accompanied by proof of identity."
+          },
+          {
+            "h": "Response Deadline",
+            "p": "Any request relating to your rights will be processed within a maximum of 30 days from receipt of your complete request."
+          },
+          {
+            "h": "Complaint to the APDP",
+            "p": "If you believe your rights are not being respected, you may submit a complaint to the Personal Data Protection Authority of Benin (APDP), whose contact details are available on the official Beninese government website."
+          }
+        ]
+      },
+      "cgu": {
+        "title": "Terms of Use",
+        "eyebrow": "ToU",
+        "subtitle": "The rules governing use of the Gextimo platform.",
+        "date": "Last updated: July 2026",
+        "sections": [
+          {
+            "h": "Article 1 — Purpose",
+            "p": "These Terms of Use (ToU) define the terms and conditions for using the Gextimo platform, accessible at gextimo.com, and the rights and obligations of users."
+          },
+          {
+            "h": "Article 2 — Platform Access",
+            "p": "Access to certain platform features requires creating an account. The user must be at least 18 years old and provide accurate information during registration."
+          },
+          {
+            "h": "Article 3 — User Obligations",
+            "p": "Users agree to use the platform lawfully, not to impersonate third parties, not to distribute unlawful content or content that infringes third-party rights, and to respect creators' intellectual property."
+          },
+          {
+            "h": "Article 4 — Gextimo's Liability",
+            "p": "Gextimo is a platform connecting creators and customers. We are not party to contracts concluded between users. Gextimo's liability is limited to best-efforts obligations regarding platform availability."
+          },
+          {
+            "h": "Article 5 — Intellectual Property",
+            "p": "The platform's content (excluding artisan creations) is the exclusive property of NovAfriq. Any reproduction, representation or distribution without prior authorisation is prohibited."
+          },
+          {
+            "h": "Article 6 — Suspension and Termination",
+            "p": "Gextimo reserves the right to suspend or delete any account in the event of a breach of these ToU, without notice or compensation. Users may close their account at any time from their settings."
+          },
+          {
+            "h": "Article 7 — Amendments",
+            "p": "Gextimo may amend these ToU at any time. Users will be notified of material changes by email or platform notification. Continued use constitutes acceptance of the new terms."
+          },
+          {
+            "h": "Article 8 — Applicable Law",
+            "p": "These ToU are governed by Beninese law. In the event of a dispute, the parties agree to seek an amicable resolution before any legal action."
+          }
+        ]
+      },
+      "droits_createurs": {
+        "title": "Creator Rights & Intellectual Property",
+        "eyebrow": "Creators & IP",
+        "subtitle": "Understanding the protection of your creations on the Gextimo platform.",
+        "date": "Last updated: July 2026",
+        "sections": [
+          {
+            "h": "Ownership of Your Creations",
+            "p": "You retain full intellectual property rights over your creations published on Gextimo: models, drawings, photos, descriptions. By publishing on the platform, you grant us only a non-exclusive licence limited to displaying your portfolio."
+          },
+          {
+            "h": "Licence Granted to Gextimo",
+            "p": "By uploading your creations, you grant Gextimo a worldwide, non-exclusive, royalty-free, sub-licensable licence solely for the purpose of promoting your studio on the platform and its official communication channels."
+          },
+          {
+            "h": "Protection Against Copying",
+            "p": "It is strictly prohibited for any platform user to reproduce, download without authorisation, distribute or commercialise another creator's creations. Any breach exposes the perpetrator to civil and criminal proceedings."
+          },
+          {
+            "h": "Reporting Counterfeiting",
+            "p": "If you believe that a creation published on Gextimo infringes your rights, you can submit a report via the Contact & Claims page. Our team will process your request within 72 hours."
+          },
+          {
+            "h": "Originality of Creations",
+            "p": "Each creator warrants that published creations are original and do not infringe the intellectual property rights of any third party. In the event of a dispute on this point, liability rests exclusively with the creator."
+          }
+        ]
+      },
+      "conditions_vente": {
+        "title": "Terms of Sale & Commissions",
+        "eyebrow": "Sales & Commissions",
+        "subtitle": "Pricing, commissions and payment processes on Gextimo.",
+        "date": "Last updated: July 2026",
+        "sections": [
+          {
+            "h": "Order Process",
+            "p": "Every order on Gextimo follows a multi-step process: selecting the creation and creator, sending a quote request, confirmation by the creator, secure payment, and production tracking. The order is definitively confirmed upon payment validation."
+          },
+          {
+            "h": "Pricing",
+            "p": "Prices displayed on creator profiles are indicative. The final price is set in the quote agreed between the customer and creator. Prices are exclusive of delivery costs, which are indicated separately during the order."
+          },
+          {
+            "h": "Gextimo Commission",
+            "p": "Gextimo charges a commission on each transaction completed via the platform. The commission rate is communicated to creators upon registration and may vary according to the subscription plan. The commission is automatically deducted at the time of settlement."
+          },
+          {
+            "h": "Secure Payments",
+            "p": "Payments are secured by our approved providers. Gextimo never stores your banking information. Accepted currencies are displayed at checkout."
+          },
+          {
+            "h": "Payment Disputes",
+            "p": "In the event of a payment dispute, contact our support within 30 days of the transaction. We will make our best effort to resolve the disagreement. If unsuccessful, the parties may resort to mediation."
+          },
+          {
+            "h": "Invoicing",
+            "p": "A summary of each transaction is available in your personal space. Creators receive a confirmation of each transfer with details of commissions deducted."
+          }
+        ]
+      },
+      "produits_interdits": {
+        "title": "Prohibited Products & Authorised Creations",
+        "eyebrow": "Creation Charter",
+        "subtitle": "What can and cannot be published on the Gextimo platform.",
+        "date": "Last updated: July 2026",
+        "sections": [
+          {
+            "h": "Authorised Creations",
+            "p": "Gextimo is dedicated to African fashion and textile craftsmanship. Permitted: all garments (dresses, suits, boubous, children's ensembles, fashion accessories), made-to-measure or ready-to-wear creations, and creations inspired by African textiles and traditions."
+          },
+          {
+            "h": "Quality and Authenticity",
+            "p": "Each published creation must accurately correspond to its photos and descriptions. Images must be of good quality and faithfully represent the creation. Stolen photos, deceptively retouched images, or photos that do not match reality are prohibited."
+          },
+          {
+            "h": "Prohibited Products and Practices",
+            "p": "Strictly prohibited on Gextimo: selling counterfeits or copies of protected brands, creations that violate human dignity, misleading or fraudulent listings, selling products outside the fashion/textile sector, and any activity unlawful under Beninese legislation."
+          },
+          {
+            "h": "Third-Party Intellectual Property",
+            "p": "It is prohibited to reproduce or draw too directly from other designers' original creations without their explicit authorisation. Gextimo respects and enforces intellectual property rights."
+          },
+          {
+            "h": "Sanctions",
+            "p": "Any breach of these rules will result in immediate removal of the creation, a warning, and in the event of a repeat offence, permanent account suspension without refund of subscription fees. Counterfeiting cases will be reported to the competent authorities."
+          }
+        ]
+      },
+      "livraison_retours": {
+        "title": "Delivery, Returns & Refunds",
+        "eyebrow": "Delivery & Returns",
+        "subtitle": "Delivery terms, return policy and refund conditions.",
+        "date": "Last updated: July 2026",
+        "sections": [
+          {
+            "h": "Delivery",
+            "p": "Delivery times and costs are defined by each creator and indicated on their profile and in the quote. Gextimo is not directly responsible for delivery but supports the parties in the event of a dispute. Local (Cotonou and major cities) and international delivery options are available depending on the creator."
+          },
+          {
+            "h": "Order Tracking",
+            "p": "You can track the status of your order from your client area or via the public tracking page (by entering your order reference). Creators are required to update the order status at each important stage."
+          },
+          {
+            "h": "Made-to-Measure Creations",
+            "p": "Made-to-measure creations are produced specifically for you according to your measurements and preferences. Due to their personalised nature, they are not eligible for return unless a proven non-conformity defect is established."
+          },
+          {
+            "h": "Return Policy",
+            "p": "For ready-to-wear items, a return is possible within 14 days of receipt, provided the item is in its original condition (unworn, tags attached). Return costs are the customer's responsibility unless the item is defective."
+          },
+          {
+            "h": "Refunds",
+            "p": "In the event of an accepted return or cancellation before production begins, the refund will be processed to the original payment method within 7 to 14 business days. The Gextimo commission is non-refundable except in the event of our fault."
+          },
+          {
+            "h": "Disputes",
+            "p": "In the event of a dispute with a creator regarding delivery or the conformity of an order, contact our support via the claims form. Our team arbitrates disputes based on evidence provided by both parties."
+          }
+        ]
+      },
+      "regles_communaute": {
+        "title": "Community Rules",
+        "eyebrow": "Gextimo Community",
+        "subtitle": "The values and behaviours expected of all platform members.",
+        "date": "Last updated: July 2026",
+        "sections": [
+          {
+            "h": "Our Values",
+            "p": "Gextimo is a community built on mutual respect, celebrating African talent and transparency. We believe African fashion deserves a worthy showcase — and that starts with respectful exchanges between all members."
+          },
+          {
+            "h": "Respect and Inclusion",
+            "p": "Any discriminatory, hateful or disrespectful language towards a creator, customer or Gextimo team member is strictly prohibited. The Gextimo community welcomes talent from across Africa without distinction."
+          },
+          {
+            "h": "Honesty and Transparency",
+            "p": "Creators commit to displaying photos and descriptions that faithfully represent their creations, communicating honestly about timelines and honouring commitments made to customers. Published reviews and testimonials must be authentic."
+          },
+          {
+            "h": "Prohibited Behaviours",
+            "p": "Prohibited on the platform: spam and unauthorised commercial solicitations, harassment or intimidation of other members, publishing fake reviews, manipulating ratings, attempting to bypass the platform to conduct transactions outside Gextimo, and any fraudulent activity."
+          },
+          {
+            "h": "Reporting",
+            "p": "Any community member can report inappropriate behaviour via the report button on profiles and creations. Reports are handled by our moderation team within 48 hours."
+          },
+          {
+            "h": "Progressive Sanctions",
+            "p": "Breaches of community rules result in progressive sanctions: warning, temporary restriction, account suspension. Serious violations (fraud, harassment, counterfeiting) may result in immediate and permanent suspension."
+          }
+        ]
+      },
+      "contact_reclamations": {
+        "title": "Contact & Claims",
+        "eyebrow": "Support",
+        "subtitle": "How to contact us and submit a claim on the Gextimo platform.",
+        "date": "Last updated: July 2026",
+        "sections": [
+          {
+            "h": "Contact Us",
+            "p": "For any questions or information requests, our team is reachable by email at: contact@gextimo.com. You can also use the contact form accessible from the Help section of the platform."
+          },
+          {
+            "h": "Technical Support",
+            "p": "For any technical issue (login, payment, display), contact our support at: support@gextimo.com. Please specify your user ID, the browser used and a detailed description of the problem. Our team commits to responding within 24 business hours."
+          },
+          {
+            "h": "Submit a Claim",
+            "p": "A claim may relate to: a non-conforming order, a dispute with a creator, a counterfeiting report or a billing issue. Send your detailed claim to reclamations@gextimo.com, attaching any useful documents (photos, exchanges, order references)."
+          },
+          {
+            "h": "Processing Deadline",
+            "p": "Every claim is acknowledged within 24 hours. Full processing takes place within 7 business days. In complex disputes, this deadline may be extended to 21 days, with regular updates on progress."
+          },
+          {
+            "h": "Mediation",
+            "p": "If you remain dissatisfied after our handling, you may resort to an independent mediator. Gextimo commits to participating in good faith in any mediation procedure aimed at resolving a dispute amicably."
+          },
+          {
+            "h": "Data Protection",
+            "p": "For any request relating to your personal data (access, rectification, deletion), contact our data protection officer: privacy@gextimo.com."
+          }
+        ]
+      }
     },
     "partenaires": {
       "footer_link": "Our partners",
