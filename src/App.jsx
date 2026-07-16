@@ -193,7 +193,13 @@ export default function App() {
         {/* ── Routes publiques proprietaire ───────────────────────────── */}
         <Route path={ROUTES.LOGIN}           element={<LoginPage />}      />
         <Route path="/artisan-app"           element={<ArtisanAppPage />} />
-        <Route path={ROUTES.REGISTER}        element={<RegisterPage />}   />
+        {/* Web : l'inscription se fait dans l'app mobile → /register renvoie vers la page
+            « Télécharger l'app ». Seule la connexion reste dispo sur le web. En natif,
+            le vrai formulaire d'inscription s'affiche. */}
+        <Route
+          path={ROUTES.REGISTER}
+          element={IS_NATIVE ? <RegisterPage /> : <Navigate to={ROUTES.VITRINE_INSCRIPTION} replace />}
+        />
         <Route path={ROUTES.ONBOARDING}      element={<OnboardingPage />} />
         <Route path={ROUTES.BIENVENUE}       element={<BienvenuePage />} />
         <Route path={ROUTES.OTP}             element={<OtpPage />}             />
