@@ -6,6 +6,7 @@ import { AppLayout } from '@/components/layout'
 import { PointsSummary } from '@/components/points'
 import { Button, Skeleton, EmptyState } from '@/components/ui'
 import { formatDate } from '@/utils/formatDate'
+import { cn } from '@/utils/cn'
 import { POINTS_VERS_JOURS } from '@/constants/config'
 
 const SEUIL_DEFAUT = 10000
@@ -38,6 +39,42 @@ export default function PointsPage() {
     <AppLayout title={t('points.titre')} onRefresh={() => queryClient.invalidateQueries()}>
       <div className="p-4 space-y-6">
         <PointsSummary />
+
+        {/* PL-9 : programme de fidélité avancé (Studio) — paliers cumulés */}
+        {data?.paliers && (
+          <div className="bg-card border border-edge rounded-2xl p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold text-ink">{t('points.paliers.titre')}</p>
+              <span className="text-xs font-bold text-primary bg-primary-50 px-2.5 py-0.5 rounded-full">
+                {data.paliers.palier_actuel.nom}
+              </span>
+            </div>
+            {data.paliers.palier_suivant ? (
+              <>
+                <div className="h-2 bg-subtle rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-primary rounded-full transition-all"
+                    style={{ width: `${Math.min(100, Math.round(100 * data.paliers.cumul_pts / data.paliers.palier_suivant.seuil))}%` }}
+                  />
+                </div>
+                <p className="text-xs text-dim">
+                  {t('points.paliers.restant', { pts: data.paliers.restant_pts.toLocaleString('fr-FR'), palier: data.paliers.palier_suivant.nom })}
+                </p>
+              </>
+            ) : (
+              <p className="text-xs text-success font-medium">{t('points.paliers.max')}</p>
+            )}
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              {data.paliers.echelle.map(p => (
+                <span key={p.cle}
+                  className={cn('text-2xs px-2 py-0.5 rounded-full',
+                    data.paliers.cumul_pts >= p.seuil ? 'bg-primary/10 text-primary font-semibold' : 'bg-subtle text-ghost')}>
+                  {p.nom}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
 
         {solde >= seuil && (
           <div className="bg-card border border-edge rounded-2xl p-4 space-y-3">

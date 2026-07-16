@@ -1022,7 +1022,12 @@
       "parrainage": "Parrainage d'un atelier = 50 points",
       "fidelite": "Chaque mois actif = 5 points"
     },
-    "erreur_chargement": "Impossible de charger vos points de fidélité."
+    "erreur_chargement": "Impossible de charger vos points de fidélité.",
+    "paliers": {
+      "titre": "Paliers de fidélité",
+      "restant": "Plus que {{pts}} pts pour atteindre {{palier}}",
+      "max": "Palier maximum atteint 🎉"
+    }
   },
   "notifications": {
     "titre": "Notifications",
@@ -1172,7 +1177,9 @@
         "note_renouvellement": "Votre abonnement sera prolongé à partir de son échéance actuelle.",
         "payer": "Payer {{montant}}",
         "confirmer": "Confirmer"
-      }
+      },
+      "sauvegarde_cloud": "Sauvegarde cloud",
+      "sauvegarde_a_venir": "Programmée (à venir)"
     },
     "ateliers_tab": {
       "non_disponible": "Non disponible dans votre plan",
