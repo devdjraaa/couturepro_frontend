@@ -1354,7 +1354,10 @@
       "especes": "Cash",
       "mobile_money": "Mobile Money",
       "virement": "Bank transfer"
-    }
+    },
+    "rapport_mensuel": "Monthly report by client (PDF)",
+    "rapport_mensuel_encours": "Generating…",
+    "rapport_mensuel_erreur": "Could not generate the monthly report."
   },
   "archives": {
     "titre": "Archives",

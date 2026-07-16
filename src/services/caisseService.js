@@ -11,4 +11,11 @@ export const caisseService = {
     const { data } = await api.get('/caisse/clients')
     return data
   },
+
+  // PL-3 : rapport mensuel (global + encaissements par cliente).
+  async getRapportMensuel(mois) {
+    const params = mois ? { mois } : {}
+    const { data } = await api.get('/caisse/rapport-mensuel', { params })
+    return data
+  },
 }
