@@ -29,6 +29,7 @@ import FAQPage                from '@/pages/FAQPage'
 import ContactPage            from '@/pages/ContactPage'
 import FacturationPage        from '@/pages/FacturationPage'
 import OutilsCreatifsPage     from '@/pages/OutilsCreatifsPage'
+import StudioPage             from '@/pages/StudioPage'
 import HistoriquePage         from '@/pages/HistoriquePage'
 import ArchivesPage           from '@/pages/ArchivesPage'
 import CaissePage             from '@/pages/CaissePage'
@@ -208,6 +209,7 @@ export default function App() {
           <Route element={<DesignerRoute />}>
             <Route path={ROUTES.MA_VITRINE}       element={<MaVitrinePage />}       />
             <Route path={ROUTES.OUTILS_CREATIFS}  element={<OutilsCreatifsPage />}  />
+            <Route path={ROUTES.STUDIO}           element={<StudioPage />}          />
           </Route>
 
           <Route path={ROUTES.CLIENTS}          element={<ClientsPage />}        />

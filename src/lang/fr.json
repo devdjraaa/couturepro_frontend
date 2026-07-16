@@ -1398,7 +1398,8 @@
     "profil": "Profil",
     "plus": "Plus",
     "menu": "Menu",
-    "outils_creatifs": "Outils créatifs"
+    "outils_creatifs": "Outils créatifs",
+    "studio": "Studio"
   },
   "pwa": {
     "installer_titre": "Installer Gextimo",
@@ -2465,5 +2466,50 @@
     "telechargement": "Téléchargement",
     "installation_auto": "L’installation se lancera automatiquement à la fin.",
     "notif_body": "Nouvelle version v{{version}} disponible — appuyez pour mettre à jour."
+  },
+  "studio": {
+    "titre": "Studio",
+    "erreur": "Une erreur est survenue.",
+    "tabs": {
+      "attente": "Liste d’attente",
+      "simulateur": "Simulateur",
+      "annonce": "Annonce"
+    },
+    "attente": {
+      "nom": "Nom du client",
+      "telephone": "Téléphone (optionnel)",
+      "note": "Note (ex. modèle souhaité)",
+      "ajouter": "Ajouter à la liste",
+      "vide": "Liste d’attente vide",
+      "vide_sous": "Ajoutez les clients en attente d’une place ou d’un créneau.",
+      "confirmer_retrait": "Retirer ce client de la liste d’attente ?",
+      "statuts": {
+        "en_attente": "En attente",
+        "contacte": "Contacté",
+        "converti": "Converti",
+        "annule": "Annulé"
+      }
+    },
+    "simulateur": {
+      "nb_commandes": "Commandes par mois",
+      "panier": "Panier moyen",
+      "charges": "Charges fixes",
+      "hausse": "Croissance estimée",
+      "ca_mensuel": "CA mensuel",
+      "benefice": "Bénéfice / mois",
+      "ca_annuel": "CA annuel",
+      "projete": "Projection annuelle",
+      "avertissement": "Estimation indicative basée sur vos hypothèses."
+    },
+    "annonce": {
+      "collection": "Collection à mettre en avant",
+      "choisir": "Choisir une collection…",
+      "message": "Message de l’annonce (optionnel)",
+      "publier": "Publier l’annonce",
+      "envoyee": "Annonce publiée sur votre vitrine.",
+      "aucune_collection": "Aucune collection",
+      "aucune_collection_sous": "Créez une collection dans votre catalogue pour l’annoncer.",
+      "aide": "L’annonce met votre collection en avant sur votre vitrine publique."
+    }
   }
 }
