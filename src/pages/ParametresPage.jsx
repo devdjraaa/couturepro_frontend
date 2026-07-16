@@ -597,6 +597,17 @@ function AbonnementTab() {
               </span>
             </div>
           )}
+          {/* PL-10 : dernière sauvegarde cloud (plans payants) */}
+          {abonnement.config?.backup_cloud && (
+            <div className="flex justify-between px-4 py-3 border-t border-edge">
+              <span className="text-sm text-dim">{t('parametres.abonnement.sauvegarde_cloud')}</span>
+              <span className="text-sm text-ink">
+                {abonnement.derniere_sauvegarde_cloud
+                  ? new Date(abonnement.derniere_sauvegarde_cloud).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })
+                  : t('parametres.abonnement.sauvegarde_a_venir')}
+              </span>
+            </div>
+          )}
         </div>
       )}
 

@@ -1036,7 +1036,12 @@
       "parrainage": "Referral = 50 points",
       "fidelite": "Each active month = 5 points"
     },
-    "erreur_chargement": "Unable to load your loyalty points."
+    "erreur_chargement": "Unable to load your loyalty points.",
+    "paliers": {
+      "titre": "Loyalty tiers",
+      "restant": "{{pts}} pts left to reach {{palier}}",
+      "max": "Highest tier reached 🎉"
+    }
   },
   "notifications": {
     "titre": "Notifications",
@@ -1190,7 +1195,9 @@
         "note_renouvellement": "Your subscription will be extended from its current expiry date.",
         "payer": "Pay {{montant}}",
         "confirmer": "Confirm"
-      }
+      },
+      "sauvegarde_cloud": "Cloud backup",
+      "sauvegarde_a_venir": "Scheduled (soon)"
     },
     "ateliers_tab": {
       "non_disponible": "Not available in your plan",
