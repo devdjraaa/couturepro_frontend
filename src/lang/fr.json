@@ -3723,7 +3723,8 @@
       "mode_clair": "Mode clair",
       "mode_sombre": "Mode sombre",
       "passer_mode": "Passer en mode {{mode}}",
-      "rechercher": "Rechercher…"
+      "rechercher": "Rechercher…",
+      "veille": "Veille"
     },
     "dashboard": {
       "bonjour": "Bonjour,",
@@ -4062,6 +4063,16 @@
       "pts_commande": "Pts / commande",
       "pts_activation": "Pts activation",
       "seuil_conversion": "Seuil conversion (pts → jours)"
+    },
+    "veille": {
+      "titre": "Veille opportunités",
+      "sous_titre": "Concours, appels à candidatures et prix détectés chaque lundi par la veille automatique (n8n + IA locale). L'e-mail ne contient plus qu'une notification.",
+      "vide": "Aucune veille reçue pour l'instant — la première arrivera lundi à 7h30.",
+      "semaine_du": "Semaine du {{date}}",
+      "derniere": "Dernière",
+      "compteur": "{{sel}} sélection(s) IA / {{total}} résultats",
+      "aucune_selection": "L'IA n'a rien retenu cette semaine (voir les résultats bruts ci-dessous).",
+      "autres": "Voir les {{n}} autres résultats bruts"
     }
   },
   "bienvenue": {

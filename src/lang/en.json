@@ -2567,7 +2567,8 @@
       "mode_clair": "Light mode",
       "mode_sombre": "Dark mode",
       "passer_mode": "Switch to {{mode}}",
-      "rechercher": "Search…"
+      "rechercher": "Search…",
+      "veille": "Watch"
     },
     "dashboard": {
       "bonjour": "Hello,",
@@ -2906,6 +2907,16 @@
       "pts_commande": "Pts / order",
       "pts_activation": "Pts activation",
       "seuil_conversion": "Conversion threshold (pts → days)"
+    },
+    "veille": {
+      "titre": "Opportunity watch",
+      "sous_titre": "Contests, calls for applications and awards detected every Monday by the automatic watch (n8n + local AI). The e-mail is now just a notification.",
+      "vide": "No watch received yet — the first one arrives Monday at 7:30 AM.",
+      "semaine_du": "Week of {{date}}",
+      "derniere": "Latest",
+      "compteur": "{{sel}} AI pick(s) / {{total}} results",
+      "aucune_selection": "The AI selected nothing this week (see raw results below).",
+      "autres": "Show the {{n}} other raw results"
     }
   },
   "bienvenue": {
