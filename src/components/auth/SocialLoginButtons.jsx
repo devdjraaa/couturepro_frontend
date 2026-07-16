@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { Capacitor } from '@capacitor/core'
 import { authService } from '@/services/authService'
 import { useAuth } from '@/contexts'
 import { API_BASE_URL } from '@/constants/config'
@@ -28,8 +29,11 @@ export default function SocialLoginButtons() {
   }, [])
 
   // En natif, seul Google est câblé pour l'instant (Credential Manager).
+  // Garde : le plugin n'existe que dans les APK ≥ 1.0.10 — sur un vieil APK
+  // (bundle OTA plus récent que le natif), on masque le bouton plutôt que d'échouer.
+  const pluginOk = !IS_NATIVE || Capacitor.isPluginAvailable('SocialLogin')
   const providers = IS_NATIVE
-    ? cfg.providers.filter((p) => p === 'google' && cfg.google_web_client_id)
+    ? (pluginOk ? cfg.providers.filter((p) => p === 'google' && cfg.google_web_client_id) : [])
     : cfg.providers
 
   if (providers.length === 0) return null
