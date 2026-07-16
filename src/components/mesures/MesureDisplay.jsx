@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Download, History } from 'lucide-react'
+import { Download, History, FileSpreadsheet } from 'lucide-react'
 import { useAuth } from '@/contexts'
 import { exportMesuresPdf } from '@/utils/exportMesuresPdf'
+import { shareOrSaveText } from '@/utils/shareNative'
 import { mesureService } from '@/services/mesureService'
 import { BottomSheet } from '@/components/ui'
 import { formatDate } from '@/utils/formatDate'
@@ -44,6 +45,18 @@ export default function MesureDisplay({ mesures, clientNom, atelierNom, clientId
     }
   }
 
+  // P12/P61 : export CSV des mesures (partage natif ou téléchargement web).
+  const handleExportCsv = async () => {
+    const slug = (clientNom ?? 'client').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+    const rows = [['Mesure', `Valeur (${uniteMesure})`]]
+    for (const [key, value] of entries) rows.push([toLabel(key), String(value)])
+    if (mesures.notes) rows.push(['Notes', String(mesures.notes)])
+    const csv = rows
+      .map(r => r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(';'))
+      .join('\r\n')
+    await shareOrSaveText(csv, `mesures-${slug || 'client'}.csv`, 'text/csv')
+  }
+
   return (
     <div>
       <div className="p-5">
@@ -74,6 +87,14 @@ export default function MesureDisplay({ mesures, clientNom, atelierNom, clientId
           >
             <Download size={15} />
             {exporting ? 'Génération…' : 'Exporter en PDF'}
+          </button>
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="flex items-center gap-2 text-sm text-dim font-medium"
+          >
+            <FileSpreadsheet size={15} />
+            CSV
           </button>
           {clientId && (
             <button
