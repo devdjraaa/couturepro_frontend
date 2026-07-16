@@ -1,0 +1,17 @@
+# Vitrine Gextimo — robots (P199)
+User-agent: *
+Allow: /
+# Zones privées (app connectée / admin) — inutiles à indexer
+Disallow: /login
+Disallow: /register
+Disallow: /admin
+Disallow: /parametres
+Disallow: /mes-reglages
+Disallow: /caisse
+Disallow: /commandes
+Disallow: /clients
+Disallow: /mesures
+Disallow: /facturation
+
+Sitemap: https://gextimo.novafriq.africa/sitemap.xml
+Sitemap: https://gextimoapi.novafriq.africa/api/sitemap/createurs.xml
