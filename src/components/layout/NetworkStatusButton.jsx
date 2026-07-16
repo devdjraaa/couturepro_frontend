@@ -21,7 +21,7 @@ export default function NetworkStatusButton({ variant = 'default' }) {
   if (!Capacitor.isNativePlatform()) return null
 
   const { t } = useTranslation()
-  const { isOnline, isSyncing, syncError, sync } = useSync()
+  const { isOnline, isSyncing, syncError, hasPending, sync } = useSync()
   const isHero = variant === 'hero'
 
   // Pastille claire (bg-subtle) dans les deux variantes → couleurs sémantiques.
@@ -35,7 +35,7 @@ export default function NetworkStatusButton({ variant = 'default' }) {
   } else if (!isOnline) {
     Icon  = WifiOff
     color = 'text-danger'
-    label = t('sync.hors_ligne')
+    label = hasPending ? t('sync.en_attente') : t('sync.hors_ligne')
   } else if (syncError) {
     Icon  = Wifi
     color = 'text-warning'
@@ -57,11 +57,15 @@ export default function NetworkStatusButton({ variant = 'default' }) {
       disabled={!isOnline || isSyncing}
       aria-label={label}
       title={label}
-      className={`flex items-center justify-center transition-colors disabled:opacity-60 disabled:cursor-default ${
+      className={`relative flex items-center justify-center transition-colors disabled:opacity-60 disabled:cursor-default ${
         isHero ? 'w-11 h-11 rounded-2xl bg-subtle hover:bg-edge shrink-0' : 'w-9 h-9 rounded-xl hover:bg-subtle'
       }`}
     >
       <Icon size={18} className={`${color} ${spin}`} />
+      {/* P115 : pastille « changements en attente de synchronisation » */}
+      {hasPending && !isSyncing && (
+        <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-warning ring-2 ring-card" />
+      )}
     </button>
   )
 }

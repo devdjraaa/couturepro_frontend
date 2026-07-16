@@ -7,7 +7,8 @@
     "en_cours": "Synchronisation…",
     "synchronise": "Synchronisé",
     "erreur": "Erreur de synchronisation",
-    "refresh": "Actualiser"
+    "refresh": "Actualiser",
+    "en_attente": "Modifications en attente de synchronisation"
   },
   "artisan_app": {
     "titre": "Votre espace est sur l'application mobile",

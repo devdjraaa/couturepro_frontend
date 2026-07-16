@@ -10,6 +10,7 @@ import { raiseSystemNotifications } from '@/utils/localNotif'
 import { goToDeepLink } from '@/utils/deepLink'
 import database from '@/db/database'
 import { Q } from '@nozbe/watermelondb'
+import { hasUnsyncedChanges } from '@nozbe/watermelondb/sync'
 
 const SyncContext = createContext(null)
 
@@ -54,6 +55,8 @@ export function SyncProvider({ children }) {
     return ts ? new Date(ts).toISOString() : null
   })
   const [syncError, setSyncError] = useState(null)
+  // P115 : y a-t-il des écritures locales pas encore remontées au serveur ?
+  const [hasPending, setHasPending] = useState(false)
 
   const prevOnline    = useRef(isOnline)
   // Miroirs synchrones pour les callbacks (observable / interval) : évitent
@@ -84,6 +87,9 @@ export function SyncProvider({ children }) {
       // local. On n'empêche donc pas les notifications ci-dessous.
       setSyncError(err?.message ?? 'Erreur de synchronisation.')
     }
+
+    // P115 : reste-t-il des changements locaux en attente (push échoué / hors-ligne) ?
+    try { setHasPending(await hasUnsyncedChanges(database)) } catch { /* indisponible */ }
 
     // Notifications locales — basées sur le DB local (déjà à jour par le pull),
     // exécutées même si le push a échoué. Chaque bloc est indépendant.
@@ -143,8 +149,10 @@ export function SyncProvider({ children }) {
       .withChangesForTables(SYNC_TABLES)
       .subscribe(changes => {
         if (!changes) return                 // notification initiale : on ignore
-        if (!onlineRef.current) return        // hors-ligne : le local prend le relais
         if (isSyncingRef.current) return      // écriture due au pull en cours : on ignore
+        // Hors-ligne : on marque « en attente » (le local prend le relais) ;
+        // en ligne : on planifie la remontée (qui recalculera hasPending).
+        if (!onlineRef.current) { setHasPending(true); return }
         scheduleSync()
       })
     return () => sub.unsubscribe()
@@ -170,7 +178,7 @@ export function SyncProvider({ children }) {
   }, [sync])
 
   return (
-    <SyncContext.Provider value={{ isOnline, isNative, isSyncing, lastSyncedAt, syncError, sync }}>
+    <SyncContext.Provider value={{ isOnline, isNative, isSyncing, lastSyncedAt, syncError, hasPending, sync }}>
       {children}
     </SyncContext.Provider>
   )

@@ -7,7 +7,8 @@
     "en_cours": "Syncing…",
     "synchronise": "Synced",
     "erreur": "Sync error",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "en_attente": "Changes waiting to sync"
   },
   "artisan_app": {
     "titre": "Your workspace is on the mobile app",
