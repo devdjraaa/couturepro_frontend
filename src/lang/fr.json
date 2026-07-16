@@ -3915,7 +3915,37 @@
     "succes_modif": "Création mise à jour.",
     "succes_suppr": "Création supprimée.",
     "erreur": "Une erreur est survenue.",
-    "partager": "Partager"
+    "partager": "Partager",
+    "meta": {
+      "tissu": "Tissu / matière",
+      "fournitures": "Fournitures",
+      "cout_matiere": "Coût matière (FCFA)",
+      "temps_confection": "Temps de confection",
+      "taille_base": "Taille de base",
+      "instructions": "Instructions de montage",
+      "tailles": "Tailles",
+      "pieces": "pièces",
+      "palette": "Palette de couleurs",
+      "palette_aide": "Astuce : collez des codes couleur (#c2410c, #0e7490…) pour afficher les pastilles.",
+      "inspiration": "Source d’inspiration"
+    },
+    "niveaux": {
+      "debutant": "Débutant",
+      "intermediaire": "Intermédiaire",
+      "avance": "Avancé"
+    },
+    "vide": {
+      "croquis": "Aucun croquis",
+      "croquis_sous": "Dessinez vos idées et photographiez-les : votre carnet de croquis numérique commence ici.",
+      "fiche_technique": "Aucune fiche technique",
+      "fiche_technique_sous": "Créez des fiches structurées : matière, fournitures, coût, temps de confection et instructions — exportables en PDF.",
+      "patron": "Aucun patron",
+      "patron_sous": "Archivez vos patrons avec tailles, niveau et nombre de pièces — puis vendez-les depuis votre catalogue.",
+      "moodboard": "Aucun moodboard",
+      "moodboard_sous": "Assemblez vos inspirations en collage et notez votre palette de couleurs."
+    },
+    "vendre": "Vendre",
+    "vendre_aide": "Ouvrez une création du catalogue puis la section Patron pour le mettre en vente."
   },
   "sidebar": {
     "outils_creatifs": "Outils créatifs"
