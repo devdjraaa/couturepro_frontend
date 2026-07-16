@@ -1,11 +1,14 @@
 import { useState, useMemo } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
-import { Plus, X, UserPlus, Users, AlignLeft, ArrowDownAZ, ClipboardList, BookUser, Check } from 'lucide-react'
+import { Plus, X, UserPlus, Users, AlignLeft, ArrowDownAZ, ClipboardList, BookUser, Check, FileSpreadsheet } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { useClients, useCreateClient } from '@/hooks/useClients'
+import { usePlanFeature } from '@/hooks/usePlanFeature'
+import { mesureService } from '@/services/mesureService'
+import { shareOrSaveText } from '@/utils/shareNative'
 import { useMesAteliers } from '@/hooks/useMesAteliers'
 import { useAuth } from '@/contexts'
 import { clientService } from '@/services/clientService'
@@ -196,6 +199,49 @@ export default function ClientsPage() {
     }
   }
 
+  // PL-2 : export groupé des mesures (plans payants) — un CSV pour toutes les clientes.
+  const exportGroupe = usePlanFeature('export_groupe')
+  const [exportingMesures, setExportingMesures] = useState(false)
+  const toLabel = (key) => key.replace(/_/g, ' ').replace(/\b\w/g, ch => ch.toUpperCase())
+
+  const handleExportMesures = async () => {
+    if (exportingMesures) return
+    if (!exportGroupe.available) {
+      toast(t('clients.export_groupe.upgrade'))
+      return
+    }
+    setExportingMesures(true)
+    try {
+      const rows = await mesureService.exportGroupe()
+      if (!rows.length) {
+        toast(t('clients.export_groupe.aucune_mesure'))
+        return
+      }
+      // Colonnes = union des mesures rencontrées (ordre de première apparition)
+      const keys = []
+      rows.forEach(r => Object.keys(r.champs ?? {}).forEach(k => {
+        if (k !== 'notes' && !keys.includes(k)) keys.push(k)
+      }))
+      const unite = atelier?.unite_mesure ?? 'cm'
+      const header = [t('clients.export_groupe.col_client'), t('clients.export_groupe.col_tel'),
+        ...keys.map(k => `${toLabel(k)} (${unite})`), t('clients.export_groupe.col_notes'), t('clients.export_groupe.col_maj')]
+      const lines = rows.map(r => [
+        r.client, r.telephone ?? '',
+        ...keys.map(k => r.champs?.[k] ?? ''),
+        r.champs?.notes ?? '', r.maj_le ?? '',
+      ])
+      const csv = [header, ...lines]
+        .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(';'))
+        .join('\r\n')
+      const slug = (atelier?.nom ?? 'atelier').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+      await shareOrSaveText(csv, `mesures-${slug || 'atelier'}.csv`, 'text/csv')
+    } catch (e) {
+      toast.error(e?.response?.data?.message || t('clients.export_groupe.erreur'))
+    } finally {
+      setExportingMesures(false)
+    }
+  }
+
   const groupedByLetter = useMemo(() => {
     if (sort !== 'alpha' || filtered.length <= 30) return null
     const groups = {}
@@ -234,7 +280,22 @@ export default function ClientsPage() {
         )}
 
         {!isLoading && clients.length > 0 && (
-          <SortChips active={sort} onChange={setSort} />
+          <div className="flex items-center justify-between gap-2">
+            <SortChips active={sort} onChange={setSort} />
+            {/* PL-2 : export groupé des mesures (plans payants) */}
+            <button
+              type="button"
+              onClick={handleExportMesures}
+              disabled={exportingMesures}
+              className={cn(
+                'shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors',
+                exportGroupe.available ? 'bg-subtle text-ink hover:text-primary' : 'bg-subtle text-ghost',
+              )}
+            >
+              <FileSpreadsheet size={13} />
+              {exportingMesures ? t('clients.export_groupe.encours') : t('clients.export_groupe.btn')}
+            </button>
+          </div>
         )}
 
         {isLoading ? (

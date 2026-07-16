@@ -665,7 +665,18 @@
     "import_erreur": "Erreur lors de l'import.",
     "scope_atelier": "Cet atelier",
     "scope_tous": "Tous mes ateliers",
-    "autre_atelier": "Autre atelier"
+    "autre_atelier": "Autre atelier",
+    "export_groupe": {
+      "btn": "Exporter mesures",
+      "encours": "Export…",
+      "upgrade": "L’export groupé des mesures est réservé aux plans payants. Passez au plan Atelier pour l’activer.",
+      "aucune_mesure": "Aucune mesure enregistrée à exporter.",
+      "erreur": "Impossible d’exporter les mesures.",
+      "col_client": "Client",
+      "col_tel": "Téléphone",
+      "col_notes": "Notes",
+      "col_maj": "Mis à jour le"
+    }
   },
   "commandes": {
     "titre": "Commandes",
