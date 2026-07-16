@@ -107,7 +107,11 @@ jobs:
 
       - name: Deploy dist to VPS
         run: |
+          # --exclude APK : les Gextimo*.apk sont déposés par release.sh (hors dist/) —
+          # sans cet exclude, --delete les efface à CHAQUE déploiement du site et le
+          # bouton « Télécharger » / la MAJ in-app servent du HTML (vu en prod le 16/07).
           rsync -az --delete \
+            --exclude='Gextimo*.apk' \
             --chmod=D755,F644 \
             -e "ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no -o BatchMode=yes" \
             ./dist/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/gextimo_frontend/
