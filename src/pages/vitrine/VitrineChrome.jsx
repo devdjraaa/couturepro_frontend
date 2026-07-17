@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Sun, Moon, Heart, Globe, X, Menu, LogIn, UserPlus } from 'lucide-react'
+import { Sun, Moon, Heart, Globe, X, Menu, LogIn, UserPlus, Lock, Settings2, Sparkles, BarChart3, Megaphone, Cookie as CookieIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useTheme, useLang } from '@/contexts'
 import { cn } from '@/utils/cn'
@@ -196,26 +196,125 @@ function ThemeToggle() {
 
 
 /* Bandeau cookies (consentement mémorisé). */
+/* Panneau cookies granulaire (maquette direction, adaptée à la charte du site —
+   habillage final à reprendre par Aquilas). 5 catégories, choix mémorisé, et les
+   scripts tiers (GA4/Meta/Clarity) ne se chargent que selon le consentement. */
+const CATS_COOKIES = ['preferences', 'personnalisation', 'statistiques', 'marketing']
+
+function lireConsentCookies() {
+  try {
+    const v = localStorage.getItem('gx_cookie_consent')
+    if (!v) return null
+    if (v === 'accepted') return { preferences: true, personnalisation: true, statistiques: true, marketing: true }
+    if (v === 'refused') return { preferences: false, personnalisation: false, statistiques: false, marketing: false }
+    return JSON.parse(v)
+  } catch { return null }
+}
+
+function appliquerConsentTiers(consent) {
+  if (!consent || (!consent.statistiques && !consent.marketing)) return
+  import('@/pages/vitrine/espaceClientApi').then(({ getConfigPublique }) =>
+    getConfigPublique().then(({ data }) =>
+      import('@/utils/gxtTracking').then(({ initAnalyticsTiers }) =>
+        initAnalyticsTiers(
+          { analytics_consent: !!consent.statistiques, marketing_consent: !!consent.marketing },
+          data?.analytics || {}
+        ))))
+    .catch(() => {})
+}
+
+function ToggleCookie({ checked, disabled, onChange }) {
+  return (
+    <label className={cn('relative inline-block w-[42px] h-6 flex-none', disabled ? 'cursor-not-allowed' : 'cursor-pointer')}>
+      <input type="checkbox" checked={checked} disabled={disabled} onChange={(e) => onChange?.(e.target.checked)} className="peer sr-only" />
+      <span className={cn('absolute inset-0 rounded-full transition',
+        disabled ? 'bg-primary/50' : 'bg-edge peer-checked:bg-primary')} />
+      <span className="absolute left-[3px] top-[3px] w-[18px] h-[18px] rounded-full bg-white shadow transition peer-checked:translate-x-[18px]" />
+    </label>
+  )
+}
+
 function VitrineCookies() {
   const { t } = useTranslation()
-  const [show, setShow] = useState(() => {
-    try { return !localStorage.getItem('gx_cookie_consent') } catch { return true }
-  })
+  const [show, setShow] = useState(() => !lireConsentCookies())
+  const [panel, setPanel] = useState(false)
+  const [choix, setChoix] = useState({ preferences: true, personnalisation: true, statistiques: true, marketing: true })
+
+  // Choix déjà mémorisé lors d'une visite précédente : activer les tiers consentis.
+  useEffect(() => { appliquerConsentTiers(lireConsentCookies()) }, [])
+
   if (!show) return null
-  const close = (v) => {
-    try { localStorage.setItem('gx_cookie_consent', v) } catch { /* indisponible */ }
+
+  const enregistrer = (v) => {
+    try { localStorage.setItem('gx_cookie_consent', JSON.stringify({ v: 2, ...v })) } catch { /* indisponible */ }
+    appliquerConsentTiers(v)
     setShow(false)
   }
+  const tous = (val) => Object.fromEntries(CATS_COOKIES.map((c) => [c, val]))
+
+  const CATS = [
+    { cle: 'essentiels', icone: Lock, fixe: true },
+    { cle: 'preferences', icone: Settings2 },
+    { cle: 'personnalisation', icone: Sparkles },
+    { cle: 'statistiques', icone: BarChart3 },
+    { cle: 'marketing', icone: Megaphone },
+  ]
+
   return (
-    <div className="fixed bottom-0 inset-x-0 z-50 p-3 sm:p-4">
-      <div className="max-w-[1180px] mx-auto bg-card border border-edge rounded-xl shadow-lg p-4 flex flex-col sm:flex-row items-center gap-3">
-        <p className="text-[13px] text-dim flex-1">{t('vitrine.cookies.text')}</p>
-        <div className="flex gap-2 shrink-0">
-          <button onClick={() => close('refused')} className="text-[13px] font-semibold px-3.5 py-2 rounded-[10px] border border-edge text-ink hover:border-primary hover:text-primary transition">{t('vitrine.cookies.refuse')}</button>
-          <button onClick={() => close('accepted')} className="text-[13px] font-semibold px-3.5 py-2 rounded-[10px] bg-primary text-inverse hover:bg-primary-600 transition">{t('vitrine.cookies.accept')}</button>
+    <>
+      {/* Bandeau compact */}
+      <div className="fixed bottom-0 inset-x-0 z-50 p-3 sm:p-4">
+        <div className="max-w-[1180px] mx-auto bg-card border border-edge rounded-xl shadow-lg p-4 flex flex-col sm:flex-row items-center gap-3">
+          <CookieIcon size={20} className="text-primary flex-none hidden sm:block" />
+          <p className="text-[13px] text-dim flex-1">{t('vitrine.cookies.text')}</p>
+          <div className="flex gap-2 shrink-0 flex-wrap justify-end">
+            <button onClick={() => enregistrer(tous(false))} className="text-[13px] font-semibold px-3.5 py-2 rounded-[10px] border border-edge text-dim hover:text-ink transition">{t('vitrine.cookies.refuse')}</button>
+            <button onClick={() => setPanel(true)} className="text-[13px] font-semibold px-3.5 py-2 rounded-[10px] border border-primary text-primary hover:bg-primary-50 transition">{t('vitrine.cookies.personnaliser')}</button>
+            <button onClick={() => enregistrer(tous(true))} className="text-[13px] font-semibold px-3.5 py-2 rounded-[10px] bg-primary text-inverse hover:bg-primary-600 transition">{t('vitrine.cookies.accept')}</button>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* Panneau complet « Personnaliser » */}
+      {panel && (
+        <div className="fixed inset-0 z-[60] bg-black/60 flex items-center justify-center p-4" onClick={() => setPanel(false)}>
+          <div className="bg-card border border-edge rounded-2xl w-full max-w-[640px] max-h-[88vh] flex flex-col overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            <div className="px-6 pt-5 pb-4 border-b border-edge relative">
+              <button onClick={() => setPanel(false)} aria-label="Fermer" className="absolute top-4 right-4 p-1.5 rounded-full border border-edge text-dim hover:text-ink"><X size={14} /></button>
+              <p className="text-[11px] font-bold tracking-[0.12em] uppercase text-primary mb-1">{t('vitrine.cookies.panel_eyebrow')}</p>
+              <h2 className="font-display font-bold text-lg text-ink">{t('vitrine.cookies.panel_titre')}</h2>
+              <p className="text-[13px] text-dim mt-1.5">{t('vitrine.cookies.panel_desc')}</p>
+            </div>
+
+            <div className="flex-1 overflow-y-auto px-6">
+              {CATS.map(({ cle, icone: Icone, fixe }) => (
+                <div key={cle} className="py-4 border-b border-edge last:border-b-0">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-center gap-2.5">
+                      <Icone size={16} className="text-primary flex-none" />
+                      <span className="font-semibold text-[14px] text-ink">{t(`vitrine.cookies.cat_${cle}`)}</span>
+                      {fixe && <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-subtle text-dim">{t('vitrine.cookies.toujours_actifs')}</span>}
+                    </div>
+                    <ToggleCookie checked={fixe ? true : choix[cle]} disabled={fixe}
+                                  onChange={(v) => setChoix((c) => ({ ...c, [cle]: v }))} />
+                  </div>
+                  <p className="text-[12.5px] text-dim leading-relaxed mt-2">{t(`vitrine.cookies.desc_${cle}`)}</p>
+                </div>
+              ))}
+              <p className="text-[11.5px] text-ghost leading-relaxed py-3 border-t border-dashed border-edge">
+                {t('vitrine.cookies.footnote')}
+              </p>
+            </div>
+
+            <div className="p-4 border-t border-edge flex gap-2 flex-wrap">
+              <button onClick={() => enregistrer(tous(false))} className="flex-1 min-w-[130px] text-[13px] font-semibold px-4 py-2.5 rounded-xl border border-edge text-dim hover:text-ink transition">{t('vitrine.cookies.refuse')}</button>
+              <button onClick={() => enregistrer(choix)} className="flex-1 min-w-[130px] text-[13px] font-semibold px-4 py-2.5 rounded-xl border border-primary text-primary hover:bg-primary-50 transition">{t('vitrine.cookies.enregistrer_choix')}</button>
+              <button onClick={() => enregistrer(tous(true))} className="flex-1 min-w-[130px] text-[13px] font-semibold px-4 py-2.5 rounded-xl bg-primary text-inverse hover:bg-primary-600 transition">{t('vitrine.cookies.accept')}</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }
 

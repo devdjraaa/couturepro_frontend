@@ -1498,7 +1498,24 @@
     "cookies": {
       "text": "We use cookies to improve your experience and remember your preferences (language, currency, theme).",
       "accept": "Accept",
-      "refuse": "Decline"
+      "refuse": "Decline",
+      "personnaliser": "Customise",
+      "panel_eyebrow": "Gextimo · Privacy",
+      "panel_titre": "Manage your cookie preferences",
+      "panel_desc": "Choose what Gextimo may use to run the platform, personalise your experience and measure how well it works. You can change these choices at any time.",
+      "toujours_actifs": "Always on",
+      "cat_essentiels": "Essential",
+      "desc_essentiels": "Required for the site to work: secure sign-in, cart, order tracking. Without them, Gextimo cannot function properly.",
+      "cat_preferences": "Preferences",
+      "desc_preferences": "Remember your settings so you don't have to set them again on each visit: language, currency, light or dark theme, last search.",
+      "cat_personnalisation": "Personalisation",
+      "desc_personnalisation": "Tailor the storefront to your taste: designers, artisans and collections highlighted based on what you browse.",
+      "cat_statistiques": "Statistics",
+      "desc_statistiques": "Help us understand how the platform is used, so we can improve it. Aggregated data, never sold.",
+      "cat_marketing": "Marketing",
+      "desc_marketing": "Enable sponsored highlighting of designers and campaigns, on Gextimo and on our networks.",
+      "footnote": "You can revisit these choices at any time from the footer (Cookie policy) or your account settings. Learn more in our Privacy policy.",
+      "enregistrer_choix": "Save my choices"
     },
     "nav": {
       "how": "How it works",

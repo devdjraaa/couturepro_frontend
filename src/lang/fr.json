@@ -1498,7 +1498,24 @@
     "cookies": {
       "text": "Nous utilisons des cookies pour améliorer votre expérience et mémoriser vos préférences (langue, devise, thème).",
       "accept": "Accepter",
-      "refuse": "Refuser"
+      "refuse": "Refuser",
+      "personnaliser": "Personnaliser",
+      "panel_eyebrow": "Gextimo · Confidentialité",
+      "panel_titre": "Gérez vos préférences de cookies",
+      "panel_desc": "Choisissez ce que Gextimo peut utiliser pour faire fonctionner la plateforme, personnaliser votre expérience et mesurer son bon fonctionnement. Vous pouvez modifier ces choix à tout moment.",
+      "toujours_actifs": "Toujours actifs",
+      "cat_essentiels": "Essentiels",
+      "desc_essentiels": "Indispensables au fonctionnement du site : connexion sécurisée, panier, suivi de commande. Sans eux, Gextimo ne peut pas fonctionner correctement.",
+      "cat_preferences": "Préférences",
+      "desc_preferences": "Mémorisent vos réglages pour vous éviter de les redéfinir à chaque visite : langue, devise, thème clair ou sombre, dernière recherche.",
+      "cat_personnalisation": "Personnalisation",
+      "desc_personnalisation": "Adaptent la vitrine à vos goûts : créateurs, artisans et collections mis en avant selon ce que vous consultez.",
+      "cat_statistiques": "Statistiques",
+      "desc_statistiques": "Nous aident à comprendre comment la plateforme est utilisée, pour l'améliorer. Données agrégées, non revendues.",
+      "cat_marketing": "Marketing",
+      "desc_marketing": "Permettent la mise en avant sponsorisée de créateurs et de campagnes, sur Gextimo et sur nos réseaux.",
+      "footnote": "Vous pouvez revenir sur ces choix à tout moment depuis le pied de page (Politique de cookies) ou les paramètres de votre compte. En savoir plus dans notre Politique de confidentialité.",
+      "enregistrer_choix": "Enregistrer mes choix"
     },
     "nav": {
       "how": "Comment ça marche",
