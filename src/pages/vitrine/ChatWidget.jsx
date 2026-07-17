@@ -1,8 +1,10 @@
-// Brief 16/07 (pt 1) : widget chatbot vitrine — bulle flottante, fil de discussion,
-// feedback pouce haut/bas, reprise de session, note de confidentialité (échanges enregistrés).
+// Makila AI (charte validée par la direction) : assistant conversationnel de la vitrine.
+// Header fixe (nom + signature) avec menu et fenêtre d'information, fil de discussion,
+// feedback pouce haut/bas, reprise de session, transparence sur l'enregistrement des échanges.
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { MessageCircle, X, Send, ThumbsUp, ThumbsDown } from 'lucide-react'
+import { MessageCircle, X, Send, ThumbsUp, ThumbsDown, Menu, Info } from 'lucide-react'
 import { API_BASE_URL } from '@/constants/config'
 import { getClientToken } from './espaceClientApi'
 
@@ -32,16 +34,37 @@ async function api(path, body) {
   return r.json()
 }
 
+/* Fenêtre légère à l'intérieur du chatbot (menu : à propos, confidentialité, aide, avis). */
+function ModaleLegere({ titre, texte, lien, lienLabel, onClose }) {
+  return (
+    <div className="absolute inset-0 z-10 bg-black/40 flex items-end" onClick={onClose}>
+      <div className="w-full bg-card rounded-t-2xl p-4 max-h-[70%] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="font-display font-bold text-[14px] text-ink">{titre}</h4>
+          <button onClick={onClose} aria-label="Fermer" className="p-1 rounded-lg text-ghost hover:text-ink"><X size={15} /></button>
+        </div>
+        <p className="text-[13px] text-dim leading-relaxed whitespace-pre-line">{texte}</p>
+        {lien && (
+          <Link to={lien} onClick={onClose} className="inline-block mt-3 text-[12.5px] font-semibold text-primary hover:underline">
+            {lienLabel}
+          </Link>
+        )}
+      </div>
+    </div>
+  )
+}
+
 export default function ChatWidget() {
   const { t, i18n } = useTranslation()
   const [open, setOpen] = useState(false)
-  const [messages, setMessages] = useState([]) // {id, question, reponse, utile}
+  const [menuOuvert, setMenuOuvert] = useState(false)
+  const [modale, setModale] = useState(null) // apropos | confidentialite | aide | avis | infos
+  const [messages, setMessages] = useState([])
   const [saisie, setSaisie] = useState('')
   const [loading, setLoading] = useState(false)
   const [conversationId, setConversationId] = useState(null)
   const bas = useRef(null)
 
-  // Reprise du fil de la session à la première ouverture.
   useEffect(() => {
     if (!open || messages.length) return
     api(`/vitrine/chatbot/historique?session_id=${encodeURIComponent(sessionId())}`)
@@ -76,24 +99,52 @@ export default function ChatWidget() {
     try { await api('/vitrine/chatbot/feedback', { message_id: id, session_id: sessionId(), utile }) } catch { /* silencieux */ }
   }
 
+  const MENU = [
+    { cle: 'apropos', lien: '/qui-sommes-nous' },
+    { cle: 'confidentialite', lien: '/confidentialite' },
+    { cle: 'aide', lien: '/aide' },
+    { cle: 'avis', lien: null },
+  ]
+
   return (
     <>
-      {/* Bulle flottante */}
       <button onClick={() => setOpen((v) => !v)} aria-label={t('vitrine.chatbot.ouvrir')}
               className="fixed bottom-5 right-5 z-[90] w-13 h-13 p-3.5 rounded-full bg-primary text-inverse shadow-lg hover:bg-primary-600 transition">
         {open ? <X size={22} /> : <MessageCircle size={22} />}
       </button>
 
       {open && (
-        <div className="fixed bottom-21 right-5 z-[90] w-[min(92vw,360px)] h-[min(70vh,480px)] bg-card border border-edge rounded-2xl shadow-2xl flex flex-col overflow-hidden">
-          <div className="px-4 py-3 bg-inset text-ink" data-theme="dark">
-            <p className="font-display font-bold text-[15px]">{t('vitrine.chatbot.titre')}</p>
-            <p className="text-[11px] text-dim">{t('vitrine.chatbot.confidentialite')}</p>
+        <div className="fixed bottom-21 right-5 z-[90] w-[min(92vw,360px)] h-[min(70vh,500px)] bg-card border border-edge rounded-2xl shadow-2xl flex flex-col overflow-hidden relative">
+          {/* Header fixe : nom + signature + menu + information */}
+          <div className="px-4 py-3 bg-inset text-ink flex items-start justify-between gap-2" data-theme="dark">
+            <div className="min-w-0">
+              <p className="font-display font-bold text-[15px]">{t('vitrine.chatbot.titre')}</p>
+              <p className="text-[11px] text-dim">{t('vitrine.chatbot.signature')}</p>
+            </div>
+            <div className="flex items-center gap-0.5 flex-none">
+              <button onClick={() => setModale('infos')} aria-label={t('vitrine.chatbot.infos_titre')}
+                      className="p-1.5 rounded-lg text-dim hover:text-ink transition"><Info size={16} /></button>
+              <button onClick={() => setMenuOuvert((v) => !v)} aria-label="Menu"
+                      className="p-1.5 rounded-lg text-dim hover:text-ink transition"><Menu size={16} /></button>
+            </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-3 space-y-3">
+          {/* Menu déroulant */}
+          {menuOuvert && (
+            <div className="absolute right-2 top-12 z-20 bg-card border border-edge rounded-xl shadow-xl py-1.5 w-56">
+              {MENU.map(({ cle }) => (
+                <button key={cle} onClick={() => { setMenuOuvert(false); setModale(cle) }}
+                        className="w-full text-left px-3.5 py-2 text-[13px] text-dim hover:bg-subtle hover:text-ink transition">
+                  {t(`vitrine.chatbot.menu_${cle}`)}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Fil de discussion */}
+          <div className="flex-1 overflow-y-auto p-3 space-y-3" onClick={() => setMenuOuvert(false)}>
             {messages.length === 0 && (
-              <div className="bg-subtle rounded-xl rounded-tl-sm px-3 py-2.5 text-[13px] text-ink max-w-[85%]">
+              <div className="bg-subtle rounded-xl rounded-tl-sm px-3 py-2.5 text-[13px] text-ink max-w-[90%] whitespace-pre-line">
                 {t('vitrine.chatbot.accueil')}
               </div>
             )}
@@ -126,6 +177,7 @@ export default function ChatWidget() {
             <div ref={bas} />
           </div>
 
+          {/* Saisie */}
           <div className="p-2.5 border-t border-edge flex gap-2">
             <input value={saisie} onChange={(e) => setSaisie(e.target.value)}
                    onKeyDown={(e) => { if (e.key === 'Enter') envoyer() }}
@@ -136,6 +188,16 @@ export default function ChatWidget() {
               <Send size={16} />
             </button>
           </div>
+
+          {/* Fenêtres légères */}
+          {modale === 'infos' && (
+            <ModaleLegere titre={t('vitrine.chatbot.infos_titre')} texte={t('vitrine.chatbot.infos_texte')}
+                          lien="/confidentialite" lienLabel={t('vitrine.chatbot.lire_suite')} onClose={() => setModale(null)} />
+          )}
+          {MENU.map(({ cle, lien }) => modale === cle && (
+            <ModaleLegere key={cle} titre={t(`vitrine.chatbot.menu_${cle}`)} texte={t(`vitrine.chatbot.modal_${cle}`)}
+                          lien={lien} lienLabel={lien ? t('vitrine.chatbot.lire_suite') : null} onClose={() => setModale(null)} />
+          ))}
         </div>
       )}
     </>

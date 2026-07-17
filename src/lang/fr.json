@@ -1573,15 +1573,27 @@
       "profil_enregistre": "Profil mis à jour."
     },
     "chatbot": {
-      "titre": "Assistant Gextimo",
+      "titre": "Makila AI",
+      "signature": "L'intelligence au service de la mode africaine.",
       "confidentialite": "Échanges enregistrés pour améliorer le service.",
-      "accueil": "Bonjour ! Une question sur une commande, le suivi, les tarifs ou comment rejoindre Gextimo ? Je vous réponds.",
+      "accueil": "Bienvenue sur Gextimo ! Je suis Makila AI, votre assistant intelligent dédié à l'univers de la mode, de la couture et de la création textile.\n\nJe peux vous aider à découvrir des créateurs, trouver des tenues, personnaliser vos commandes, suivre vos achats et répondre à toutes vos questions.\n\nComment puis-je vous accompagner aujourd'hui ?",
       "placeholder": "Écrivez votre question…",
       "envoyer": "Envoyer",
-      "ouvrir": "Ouvrir l'assistant",
+      "ouvrir": "Ouvrir Makila AI",
       "utile": "Réponse utile",
       "inutile": "Réponse inutile",
-      "erreur": "Petit souci de connexion — réessayez, ou écrivez-nous à support.gextimo@novafriq.africa."
+      "erreur": "Petit souci de connexion. Réessayez, ou écrivez-nous à support.gextimo@novafriq.africa.",
+      "lire_suite": "Lire la suite",
+      "infos_titre": "Informations",
+      "infos_texte": "Makila AI est l'assistant intelligent de Gextimo. Vos échanges peuvent être enregistrés afin d'améliorer la qualité du service. Aucune donnée n'est revendue ni partagée avec des tiers à des fins commerciales.",
+      "menu_apropos": "À propos de Makila AI",
+      "modal_apropos": "Makila AI est l'assistant intelligent de Gextimo. Il vous accompagne dans la découverte des créateurs, la recherche de tenues et le suivi de vos commandes, avec une attention particulière portée à la mode et à l'artisanat africains.",
+      "menu_confidentialite": "Politique de confidentialité",
+      "modal_confidentialite": "Vos échanges avec Makila AI peuvent être enregistrés afin d'améliorer la qualité du service. Aucune donnée n'est partagée sans votre consentement.",
+      "menu_aide": "Centre d'aide",
+      "modal_aide": "Besoin d'aide ? Retrouvez les réponses aux questions les plus fréquentes sur les commandes, les créateurs et l'utilisation de Gextimo.",
+      "menu_avis": "Donner un avis",
+      "modal_avis": "Votre avis compte. Utilisez les pouces sous chaque réponse de Makila AI pour nous dire si elle vous a aidé : cela nous permet de l'améliorer en continu."
     },
     "hero": {
       "eyebrow": "Plateforme des créateurs de mode",

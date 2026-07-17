@@ -1573,15 +1573,27 @@
       "profil_enregistre": "Profile updated."
     },
     "chatbot": {
-      "titre": "Gextimo Assistant",
+      "titre": "Makila AI",
+      "signature": "Intelligence in the service of African fashion.",
       "confidentialite": "Conversations are recorded to improve the service.",
-      "accueil": "Hello! A question about an order, tracking, pricing or joining Gextimo? I'm here to help.",
+      "accueil": "Welcome to Gextimo! I am Makila AI, your smart assistant for the world of fashion, tailoring and textile creation.\n\nI can help you discover designers, find outfits, personalise your orders, track your purchases and answer all your questions.\n\nHow can I help you today?",
       "placeholder": "Type your question…",
       "envoyer": "Send",
-      "ouvrir": "Open the assistant",
+      "ouvrir": "Open Makila AI",
       "utile": "Helpful answer",
       "inutile": "Unhelpful answer",
-      "erreur": "Connection hiccup — try again, or write to support.gextimo@novafriq.africa."
+      "erreur": "Connection hiccup. Try again, or write to support.gextimo@novafriq.africa.",
+      "lire_suite": "Read more",
+      "infos_titre": "Information",
+      "infos_texte": "Makila AI is Gextimo's smart assistant. Your conversations may be recorded to improve the quality of the service. No data is sold or shared with third parties for commercial purposes.",
+      "menu_apropos": "About Makila AI",
+      "modal_apropos": "Makila AI is Gextimo's smart assistant. It helps you discover designers, find outfits and track your orders, with a particular focus on African fashion and craftsmanship.",
+      "menu_confidentialite": "Privacy policy",
+      "modal_confidentialite": "Your conversations with Makila AI may be recorded to improve the quality of the service. No data is shared without your consent.",
+      "menu_aide": "Help centre",
+      "modal_aide": "Need help? Find answers to the most frequent questions about orders, designers and using Gextimo.",
+      "menu_avis": "Give feedback",
+      "modal_avis": "Your opinion matters. Use the thumbs under each Makila AI answer to tell us whether it helped: this lets us improve continuously."
     },
     "hero": {
       "eyebrow": "The fashion designers platform",
