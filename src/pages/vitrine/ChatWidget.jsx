@@ -114,7 +114,7 @@ export default function ChatWidget() {
       </button>
 
       {open && (
-        <div className="fixed bottom-21 right-5 z-[90] w-[min(92vw,360px)] h-[min(70vh,500px)] bg-card border border-edge rounded-2xl shadow-2xl flex flex-col overflow-hidden relative">
+        <div className="fixed bottom-21 right-5 z-[90] w-[min(92vw,360px)] h-[min(70vh,500px)] bg-card border border-edge rounded-2xl shadow-2xl flex flex-col overflow-hidden">
           {/* Header fixe : nom + signature + menu + information */}
           <div className="px-4 py-3 bg-inset text-ink flex items-start justify-between gap-2" data-theme="dark">
             <div className="min-w-0">
