@@ -3594,7 +3594,25 @@
     "confirmer_nouveau_mdp": "Confirm new password",
     "mdp_non_concordants": "Passwords do not match",
     "mdp_actuel_incorrect": "Current password is incorrect",
-    "mdp_succes": "Password changed!"
+    "mdp_succes": "Password changed!",
+    "anniversaire": "Birth date",
+    "jour": "Day",
+    "mois": "Month",
+    "anniversaire_hint": "Optional — day and month are enough, for a little note on your day.",
+    "mois_liste": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ]
   },
   "a_propos": {
     "titre": "About",
