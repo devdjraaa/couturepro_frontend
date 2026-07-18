@@ -32,12 +32,36 @@ api.interceptors.request.use(config => {
   return config
 })
 
+// Anti-éjection intempestive (signalé par la direction, web) : un 401 ne déconnecte
+// QUE s'il correspond à une session RÉELLEMENT expirée. On le confirme par un appel
+// léger authentifié : s'il passe, le 401 initial était transitoire (fenêtre de
+// redéploiement, hoquet réseau, endpoint particulier) et on NE déconnecte PAS.
+let verificationSessionEnCours = false
+
+async function sessionReellementExpiree() {
+  try {
+    // `_verifSession` empêche la récursion de l'interceptor sur cette requête.
+    await api.get('/abonnement/current', { _verifSession: true, timeout: 8000 })
+    return false // token accepté → le 401 initial n'était pas un vrai problème d'auth
+  } catch (e) {
+    return e?.response?.status === 401 // vraie expiration seulement si la vérif 401 aussi
+  }
+}
+
 api.interceptors.response.use(
   response => response,
-  error => {
-    if (error.response?.status === 401 && getToken()) {
-      clearAll()
-      window.location.href = '/login'
+  async error => {
+    const cfg = error.config || {}
+    if (error.response?.status === 401 && getToken() && !cfg._verifSession && !verificationSessionEnCours) {
+      verificationSessionEnCours = true
+      try {
+        if (await sessionReellementExpiree()) {
+          clearAll()
+          window.location.href = '/login'
+        }
+      } finally {
+        verificationSessionEnCours = false
+      }
     }
     return Promise.reject(normalizeError(error))
   }
