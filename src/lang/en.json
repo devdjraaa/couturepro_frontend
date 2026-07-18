@@ -795,7 +795,9 @@
       "motif_surplus": "Surplus reason",
       "motif_surplus_ph": "E.g. Advance for a future order, fabric refund…",
       "creer": "Create order",
-      "commande_de": "Order for:"
+      "commande_de": "Order for:",
+      "type_vetement": "Garment type",
+      "choisir_type": "Choose a garment type…"
     },
     "nouvelle": "New order",
     "recherche_placeholder": "Search an order…",

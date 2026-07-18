@@ -795,7 +795,9 @@
       "motif_surplus": "Motif du surplus",
       "motif_surplus_ph": "Ex : Avance pour commande future, remboursement tissu…",
       "creer": "Créer la commande",
-      "commande_de": "Commande de :"
+      "commande_de": "Commande de :",
+      "type_vetement": "Type de vêtement",
+      "choisir_type": "Choisir un type de vêtement…"
     },
     "nouvelle": "Nouvelle commande",
     "recherche_placeholder": "Rechercher une commande…",

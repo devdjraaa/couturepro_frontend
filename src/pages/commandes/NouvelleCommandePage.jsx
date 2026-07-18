@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { ChevronLeft, Search, ImagePlus, X, AlertTriangle, Check, Plus, Trash2, Info } from 'lucide-react'
+import { ChevronLeft, Search, ImagePlus, X, AlertTriangle, Check, Plus, Trash2, Info, ChevronDown } from 'lucide-react'
+import GarmentIcon from '@/utils/garmentIcon'
 import { useTranslation } from 'react-i18next'
 import { useClients } from '@/hooks/useClients'
 import { useMesAteliers } from '@/hooks/useMesAteliers'
@@ -231,24 +232,30 @@ function StepModele({ data, setData, onNext }) {
           <div className="space-y-3">
             {data.items.map((item, idx) => (
               <div key={idx} className="bg-card border border-edge rounded-xl p-3 space-y-2">
-                {/* Sélection vêtement */}
-                <div className="grid grid-cols-2 gap-1.5">
-                  {vetements.map(vet => (
-                    <button
-                      key={vet.id}
-                      type="button"
-                      onClick={() => updateItem(idx, 'vetement_id', vet.id)}
+                {/* Pt 68 : menu déroulant « Choisir un type de vêtement » (ergonomique
+                    quand le catalogue s'agrandit) au lieu de la grille de tous les modèles. */}
+                <div>
+                  <label className="block text-xs text-ghost mb-1">{t('commandes.creation.type_vetement')}</label>
+                  <div className="relative">
+                    {item.vetement_id && (
+                      <GarmentIcon nom={item.vetement_nom} size={16}
+                                   className="absolute left-2.5 top-1/2 -translate-y-1/2 text-primary pointer-events-none" />
+                    )}
+                    <select
+                      value={item.vetement_id}
+                      onChange={e => updateItem(idx, 'vetement_id', e.target.value)}
                       className={cn(
-                        'flex items-center gap-1.5 px-2.5 py-2 rounded-lg border text-left text-xs transition-colors',
-                        item.vetement_id === vet.id
-                          ? 'border-primary bg-primary-50 text-primary-700'
-                          : 'border-edge bg-subtle text-ghost hover:border-primary/20',
+                        'w-full appearance-none bg-subtle border rounded-lg py-2 pr-8 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30',
+                        item.vetement_id ? 'pl-8 border-primary/40' : 'pl-2.5 border-edge text-ghost',
                       )}
                     >
-                      {item.vetement_id === vet.id && <Check size={11} className="shrink-0" />}
-                      <span className="truncate font-medium">{vet.nom}</span>
-                    </button>
-                  ))}
+                      <option value="">{t('commandes.creation.choisir_type')}</option>
+                      {vetements.map(vet => (
+                        <option key={vet.id} value={vet.id}>{vet.nom}</option>
+                      ))}
+                    </select>
+                    <ChevronDown size={15} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-ghost pointer-events-none" />
+                  </div>
                 </div>
 
                 {/* Quantité + prix unitaire */}
