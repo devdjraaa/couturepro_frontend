@@ -15,7 +15,7 @@ import { useAbonnement } from '@/hooks/useAbonnement'
 import { useAccountType } from '@/hooks/useAccountType'
 import MultiAteliersStats from '@/components/dashboard/MultiAteliersStats'
 import { ROUTES } from '@/constants/routes'
-import { formatCurrency } from '@/utils/formatCurrency'
+import { useFormatCurrency } from '@/utils/formatCurrency'
 import { cn } from '@/utils/cn'
 
 // ── En-tête accueil : contrôles à gauche · cloche de notifs à droite ─────────
@@ -163,6 +163,7 @@ function TodoItem({ label, client, dueDate, type, to, navigate, timeStr }) {
 }
 
 function TodoList({ commandes, isLoading, navigate }) {
+  const fmt = useFormatCurrency()
   const { t } = useTranslation()
 
   if (isLoading) {
@@ -194,7 +195,7 @@ function TodoList({ commandes, isLoading, navigate }) {
       items.push({ type: 'essai', timeStr: 'Auj.', label: t('dashboard.todo.essayage', { vetement }), client: cmd.client_nom, dueDate: cmd.date_essayage, to, priority: 1 })
     } else if (restant > 0 && dateLiv && differenceInCalendarDays(dateLiv, today) <= 3) {
       const dLeft = differenceInCalendarDays(dateLiv, today)
-      items.push({ type: 'solde', timeStr: dLeft === 0 ? 'Auj.' : `J-${dLeft}`, label: t('dashboard.todo.solde', { montant: formatCurrency(restant) }), client: cmd.client_nom, dueDate: cmd.date_livraison_prevue, to, priority: 2 })
+      items.push({ type: 'solde', timeStr: dLeft === 0 ? 'Auj.' : `J-${dLeft}`, label: t('dashboard.todo.solde', { montant: fmt(restant) }), client: cmd.client_nom, dueDate: cmd.date_livraison_prevue, to, priority: 2 })
     }
   })
 
@@ -413,6 +414,7 @@ function AbonnementCard({ navigate }) {
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function DashboardPage() {
   const navigate = useNavigate()
+  const fmt = useFormatCurrency()
   const { t } = useTranslation()
   const queryClient = useQueryClient()
   const { user, atelier }  = useAuth()
@@ -477,7 +479,7 @@ export default function DashboardPage() {
               [...Array(4)].map((_, i) => <Skeleton key={i} className="shrink-0 w-24 h-[72px] rounded-xl m-3" />)
             ) : (
               <>
-                <KpiChip label={t('dashboard.kpi.en_attente')}        value={formatCurrency(totalRestant)} color="gold" />
+                <KpiChip label={t('dashboard.kpi.en_attente')}        value={fmt(totalRestant)} color="gold" />
                 <KpiChip label={t('dashboard.kpi.commandes_actives')} value={activeCount}                  color="primary" />
                 <KpiChip label={t('dashboard.kpi.nvx_clients')}       value={nouveauxClients}              color={nouveauxClients > 0 ? 'success' : 'default'} trend={tendanceClients !== 0 ? tendanceClients : null} />
                 <KpiChip label={t('dashboard.kpi.livrees_mois')}      value={livreCeMois}                  color="success" />
@@ -619,8 +621,8 @@ export default function DashboardPage() {
                           : '—'}
                       </span>
                       <div className="text-right font-mono text-xs">
-                        <span className="font-semibold text-ink">{formatCurrency(cmd.prix ?? 0)}</span>
-                        {restant > 0 && <span className="ml-1 text-gold-dark">−{formatCurrency(restant)}</span>}
+                        <span className="font-semibold text-ink">{fmt(cmd.prix ?? 0)}</span>
+                        {restant > 0 && <span className="ml-1 text-gold-dark">−{fmt(restant)}</span>}
                       </div>
                     </div>
                   </button>

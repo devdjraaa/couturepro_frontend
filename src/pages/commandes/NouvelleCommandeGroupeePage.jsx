@@ -375,7 +375,7 @@ function StepSousCommandes({ data, setData, onSubmit, isLoading }) {
   const acompteTotal  = data.sous_commandes.reduce((s, sc) => s + Number(sc.acompte || 0), 0)
 
   const handleSubmit = () => {
-    const valides = data.sous_commandes.filter(sc => sc.vetement_id && Number(sc.prix) > 0)
+    const valides = data.sous_commandes.filter(sc => Number(sc.prix) > 0)
     if (valides.length < 2) {
       setError(t('commandes.groupe_form.err_min'))
       return
@@ -492,9 +492,9 @@ export default function NouvelleCommandeGroupeePage() {
 
   const handleSubmit = async () => {
     const sousCommandes = data.sous_commandes
-      .filter(sc => sc.vetement_id && Number(sc.prix) > 0)
+      .filter(sc => Number(sc.prix) > 0)
       .map(sc => ({
-        vetement_id:           sc.vetement_id,
+        vetement_id:           sc.vetement_id || null,
         quantite:              Number(sc.quantite) || 1,
         prix:                  Number(sc.prix),
         acompte:               Number(sc.acompte) || 0,

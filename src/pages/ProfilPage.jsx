@@ -30,6 +30,8 @@ function ProfilSection() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Pt 71 : le prénom manquait dans Réglages > Profil. */}
+      <Input label={t('commun.prenom')} value={current?.prenom ?? ''} onChange={set('prenom')} />
       <Input label={t('commun.nom')} value={current?.nom ?? ''} onChange={set('nom')} required />
       <Input label={t('commun.telephone')} type="text" inputMode="tel" value={current?.telephone ?? ''} onChange={set('telephone')} placeholder="ex : +229 97 00 00 00" required />
       <Input label={t('commun.email')} type="email" value={current?.email ?? ''} onChange={set('email')} />

@@ -7,7 +7,7 @@ import { TabBar, Button, EmptyState, Skeleton, Input } from '@/components/ui'
 import { FeatureGate } from '@/components/abonnement'
 import { studioService } from '@/services/studioService'
 import { collectionService } from '@/services/collectionService'
-import { formatCurrency } from '@/utils/formatCurrency'
+import { useFormatCurrency } from '@/utils/formatCurrency'
 import { cn } from '@/utils/cn'
 
 const STATUTS = ['en_attente', 'contacte', 'converti', 'annule']
@@ -94,6 +94,7 @@ function ListeAttenteTab({ t }) {
 
 // PL-5 — Simulateur de revenus (calcul local, sans backend)
 function SimulateurTab({ t }) {
+  const fmt = useFormatCurrency()
   const [nbCmd, setNbCmd] = useState(20)
   const [panier, setPanier] = useState(15000)
   const [charges, setCharges] = useState(50000)
@@ -126,19 +127,19 @@ function SimulateurTab({ t }) {
       <div className="grid grid-cols-2 gap-3">
         <div className="bg-subtle rounded-xl p-3">
           <p className="text-xs text-dim">{t('studio.simulateur.ca_mensuel')}</p>
-          <p className="text-base font-bold text-ink">{formatCurrency(caMensuel)}</p>
+          <p className="text-base font-bold text-ink">{fmt(caMensuel)}</p>
         </div>
         <div className="bg-subtle rounded-xl p-3">
           <p className="text-xs text-dim">{t('studio.simulateur.benefice')}</p>
-          <p className={cn('text-base font-bold', beneficeMensuel >= 0 ? 'text-success' : 'text-danger')}>{formatCurrency(beneficeMensuel)}</p>
+          <p className={cn('text-base font-bold', beneficeMensuel >= 0 ? 'text-success' : 'text-danger')}>{fmt(beneficeMensuel)}</p>
         </div>
         <div className="bg-subtle rounded-xl p-3">
           <p className="text-xs text-dim">{t('studio.simulateur.ca_annuel')}</p>
-          <p className="text-base font-bold text-ink">{formatCurrency(caAnnuel)}</p>
+          <p className="text-base font-bold text-ink">{fmt(caAnnuel)}</p>
         </div>
         <div className="bg-primary/10 rounded-xl p-3">
           <p className="text-xs text-primary">{t('studio.simulateur.projete')}</p>
-          <p className="text-base font-bold text-primary">{formatCurrency(projeteAnnuel)}</p>
+          <p className="text-base font-bold text-primary">{fmt(projeteAnnuel)}</p>
         </div>
       </div>
       <p className="text-2xs text-ghost text-center">{t('studio.simulateur.avertissement')}</p>
