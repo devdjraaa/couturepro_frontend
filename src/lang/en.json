@@ -601,9 +601,10 @@
     "importer_contacts": "Import contacts",
     "recherche_placeholder": "Search a client…",
     "vide": {
-      "titre": "Your list is empty",
-      "description": "Add your first client to get started",
-      "action": "Add a client"
+      "titre": "Your address book is empty",
+      "description": "Add your first client or import your contacts to get started.",
+      "action": "Add a client",
+      "importer": "Import my contacts"
     },
     "onglets": {
       "tous": "All",

@@ -309,8 +309,15 @@ export default function ClientsPage() {
             description={search ? '' : t('clients.vide.description')}
             primaryAction={!search ? (
               <Button onClick={() => setShowSheet(true)}>
-                Ajouter un client
+                {t('clients.vide.action')}
               </Button>
+            ) : undefined}
+            secondaryAction={!search ? (
+              /* Pt 61 : inciter à l'import de contacts pour gagner du temps. */
+              <button type="button" onClick={handleOpenContacts}
+                      className="text-[13px] font-semibold text-primary hover:underline inline-flex items-center gap-1.5">
+                <BookUser size={14} />{t('clients.vide.importer')}
+              </button>
             ) : undefined}
           />
         ) : groupedByLetter ? (
@@ -473,7 +480,8 @@ export default function ClientsPage() {
             )
           })}
         </div>
-        <div className="flex gap-3 px-4 pb-6">
+        {/* Pt 62 : boutons remontés au-dessus de la barre de navigation Android (safe-area). */}
+        <div className="flex gap-3 px-4 pt-2 pb-[max(1.25rem,calc(env(safe-area-inset-bottom)+0.75rem))]">
           <Button
             variant="ghost"
             className="flex-1"

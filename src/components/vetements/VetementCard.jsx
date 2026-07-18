@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
-import { Scissors, MoreHorizontal, ChevronLeft, ChevronRight } from 'lucide-react'
+import { MoreHorizontal, ChevronLeft, ChevronRight } from 'lucide-react'
+import GarmentIcon from '@/utils/garmentIcon'
 
 export default function VetementCard({ vetement, onEdit, onDelete }) {
   const [open, setOpen] = useState(false)
@@ -60,7 +61,8 @@ export default function VetementCard({ vetement, onEdit, onDelete }) {
           </>
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <Scissors size={20} className="text-primary" />
+            {/* Pt 65 : icône déduite du type de vêtement (au lieu des ciseaux génériques). */}
+            <GarmentIcon nom={vetement.nom} size={22} className="text-primary" />
           </div>
         )}
       </div>
