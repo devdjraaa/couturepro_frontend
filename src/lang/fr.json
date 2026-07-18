@@ -793,7 +793,8 @@
       "reste": "Reste à payer",
       "motif_surplus": "Motif du surplus",
       "motif_surplus_ph": "Ex : Avance pour commande future, remboursement tissu…",
-      "creer": "Créer la commande"
+      "creer": "Créer la commande",
+      "commande_de": "Commande de :"
     },
     "nouvelle": "Nouvelle commande",
     "recherche_placeholder": "Rechercher une commande…",

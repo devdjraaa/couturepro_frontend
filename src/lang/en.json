@@ -793,7 +793,8 @@
       "reste": "Balance due",
       "motif_surplus": "Surplus reason",
       "motif_surplus_ph": "E.g. Advance for a future order, fabric refund…",
-      "creer": "Create order"
+      "creer": "Create order",
+      "commande_de": "Order for:"
     },
     "nouvelle": "New order",
     "recherche_placeholder": "Search an order…",

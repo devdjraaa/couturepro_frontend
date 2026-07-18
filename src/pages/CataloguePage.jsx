@@ -13,7 +13,9 @@ export default function CataloguePage() {
   const { t } = useTranslation()
   const { isDesigner } = useAccountType()
   const [editing, setEditing] = useState(null) // null | 'new' | vetement object
-  const { data: vetements = [], isLoading } = useVetements()
+  const { data: vetementsBruts = [], isLoading } = useVetements()
+  // Pt 66 : catalogue classé alphabétiquement (aussi hors ligne, où l'ordre serveur ne s'applique pas).
+  const vetements = [...vetementsBruts].sort((a, b) => (a.nom || '').localeCompare(b.nom || '', 'fr', { sensitivity: 'base' }))
   const createVetement = useCreateVetement()
   const updateVetement = useUpdateVetement()
   const deleteVetement = useDeleteVetement()

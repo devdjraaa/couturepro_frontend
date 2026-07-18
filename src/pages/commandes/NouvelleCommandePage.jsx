@@ -556,6 +556,7 @@ const INITIAL_DATA = {
 export default function NouvelleCommandePage() {
   const navigate      = useNavigate()
   const location      = useLocation()
+  const { t }         = useTranslation()
   const createCmd     = useCreateCommande()
   const { data: commsConfig } = useCommunications()
 
@@ -623,6 +624,13 @@ export default function NouvelleCommandePage() {
 
         {/* Header étape */}
         <StepHeader step={step} onBack={handleBack} />
+
+        {/* Pt 63 : le client sélectionné reste visible pendant toute la création. */}
+        {step > 0 && data._clientNom && (
+          <p className="mx-4 mt-1 text-[12.5px] text-dim">
+            {t('commandes.creation.commande_de')} <span className="font-semibold text-primary">{data._clientNom}</span>
+          </p>
+        )}
 
         {/* Contenu étape */}
         <div className="flex-1 flex flex-col min-h-0 overflow-hidden mt-2">
