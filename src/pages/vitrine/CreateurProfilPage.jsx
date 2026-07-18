@@ -555,7 +555,7 @@ export default function CreateurProfilPage() {
               {c.verifie && <span className="text-[12px] font-bold text-primary bg-primary-50 px-2.5 py-0.5 rounded-full">{t('vitrine.creators.verified')}</span>}
               {/* PL-8 : badge Designer Pro (plan Atelier+) */}
               {c.badge_pro && (
-                <span className="inline-flex items-center gap-1 text-[12px] font-bold text-amber-700 bg-amber-100 px-2.5 py-0.5 rounded-full">
+                <span className="inline-flex items-center gap-1 text-[12px] font-bold text-gold-dark bg-gold-light px-2.5 py-0.5 rounded-full">
                   <Award size={12} /> {t('vitrine.creators.pro')}
                 </span>
               )}
