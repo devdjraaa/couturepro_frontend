@@ -41,7 +41,7 @@ function ModaleLegere({ titre, texte, lien, lienLabel, onClose }) {
       <div className="w-full bg-card rounded-t-2xl p-4 max-h-[70%] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-2">
           <h4 className="font-display font-bold text-[14px] text-ink">{titre}</h4>
-          <button onClick={onClose} aria-label="Fermer" className="p-1 rounded-lg text-ghost hover:text-ink"><X size={15} /></button>
+          <button onClick={onClose} aria-label={t('commun.fermer')} className="p-1 rounded-lg text-ghost hover:text-ink"><X size={15} /></button>
         </div>
         <p className="text-[13px] text-dim leading-relaxed whitespace-pre-line">{texte}</p>
         {lien && (

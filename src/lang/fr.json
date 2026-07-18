@@ -352,7 +352,8 @@
     "tout": "Tout",
     "aucun": "Aucun",
     "securite": "Sécurité",
-    "identite": "Identité"
+    "identite": "Identité",
+    "retirer": "Retirer"
   },
   "erreurs": {
     "reseau": "Erreur de connexion. Vérifiez votre réseau.",
@@ -1768,7 +1769,8 @@
         "Paramètres cookies"
       ],
       "rights": "© 2026 Gextimo. Tous droits réservés.",
-      "pricing": "Tarifs"
+      "pricing": "Tarifs",
+      "solution_novafriq": "Une solution Novafriq"
     },
     "createurs_page": {
       "tri": {
@@ -1836,7 +1838,8 @@
       "avis_thanks": "Merci ! Votre avis sera publié après validation.",
       "report": "Signaler",
       "report_done": "Signalé, merci.",
-      "videos": "Vidéos"
+      "videos": "Vidéos",
+      "site_web": "Site web"
     },
     "patron": {
       "download_paid": "Télécharger — {{prix}}",
@@ -3585,6 +3588,11 @@
         "merci_titre": "Candidature reçue !",
         "merci_sous": "Un e-mail de confirmation vous a été envoyé. Aucun document à signer à ce stade — notre équipe reviendra vers vous."
       }
+    },
+    "a11y": {
+      "favori": "Favori",
+      "sponsorise": "Sponsorisé",
+      "langue_devise": "Langue et devise"
     }
   },
   "atelier": {

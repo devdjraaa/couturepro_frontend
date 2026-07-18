@@ -309,7 +309,7 @@ export default function VitrineHome() {
               {(creators || []).map((c) => (
                 <Link key={c.id} to={`/createurs/${c.id}`}
                       className="vt-item vt-card relative min-w-[268px] max-w-[268px] bg-card border border-edge rounded-lg p-5">
-                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(c.id) }} className="absolute top-3 right-3 z-10" aria-label="Favori" aria-pressed={has(c.id)}>
+                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(c.id) }} className="absolute top-3 right-3 z-10" aria-label={t('vitrine.a11y.favori')} aria-pressed={has(c.id)}>
                     <Heart size={16} className={has(c.id) ? 'text-primary' : 'text-ghost'} fill={has(c.id) ? 'currentColor' : 'none'} />
                   </button>
                   <div className="flex items-center gap-3 mb-3">
@@ -318,7 +318,7 @@ export default function VitrineHome() {
                       <h4 className="font-bold text-[15.5px] text-ink flex items-center gap-1.5">
                         {c.nom}
                         {c.verifie && <span className="text-[10.5px] font-bold text-primary bg-primary-50 px-1.5 py-0.5 rounded-full">{t('vitrine.creators.verified')}</span>}
-                        {c.sponsorise && <span title="Sponsorisé" className="text-[10.5px] font-bold text-inverse bg-primary px-1.5 py-0.5 rounded-full">★</span>}
+                        {c.sponsorise && <span title={t('vitrine.a11y.sponsorise')} className="text-[10.5px] font-bold text-inverse bg-primary px-1.5 py-0.5 rounded-full">★</span>}
                       </h4>
                       <div className="text-[12.5px] text-dim">{c.specialite}</div>
                     </div>
@@ -335,7 +335,7 @@ export default function VitrineHome() {
               ))}
             </div>
             {/* Flèche gauche */}
-            <button onClick={() => scrollCarousel(-1)} aria-label="Précédent"
+            <button onClick={() => scrollCarousel(-1)} aria-label={t('commun.precedent')}
               className={[
                 'absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10',
                 'w-10 h-10 rounded-full flex items-center justify-center',
@@ -348,7 +348,7 @@ export default function VitrineHome() {
             </button>
             {/* Dégradé droite + flèche droite */}
             <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-elevated to-transparent" />
-            <button onClick={() => scrollCarousel(1)} aria-label="Suivant"
+            <button onClick={() => scrollCarousel(1)} aria-label={t('commun.suivant')}
               className={[
                 'absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10',
                 'w-10 h-10 rounded-full flex items-center justify-center',

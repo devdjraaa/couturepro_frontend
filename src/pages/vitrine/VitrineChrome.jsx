@@ -53,7 +53,7 @@ function LocaleMenu() {
   }, [open])
   return (
     <div ref={ref} className="relative hidden lg:block">
-      <button type="button" onClick={() => setOpen(v => !v)} aria-label="Langue et devise"
+      <button type="button" onClick={() => setOpen(v => !v)} aria-label={t('vitrine.a11y.langue_devise')}
               className={cn('w-8 h-8 flex items-center justify-center rounded-[10px] border transition',
                 open ? 'border-primary text-primary' : 'border-edge text-dim hover:text-ink hover:border-primary/40')}>
         <Globe size={15} />
@@ -283,7 +283,7 @@ function VitrineCookies() {
         <div className="fixed inset-0 z-[60] bg-black/60 flex items-center justify-center p-4" onClick={() => setPanel(false)}>
           <div className="bg-card border border-edge rounded-2xl w-full max-w-[640px] max-h-[88vh] flex flex-col overflow-hidden" onClick={(e) => e.stopPropagation()}>
             <div className="px-6 pt-5 pb-4 border-b border-edge relative">
-              <button onClick={() => setPanel(false)} aria-label="Fermer" className="absolute top-4 right-4 p-1.5 rounded-full border border-edge text-dim hover:text-ink"><X size={14} /></button>
+              <button onClick={() => setPanel(false)} aria-label={t('commun.fermer')} className="absolute top-4 right-4 p-1.5 rounded-full border border-edge text-dim hover:text-ink"><X size={14} /></button>
               <p className="text-[11px] font-bold tracking-[0.12em] uppercase text-primary mb-1">{t('vitrine.cookies.panel_eyebrow')}</p>
               <h2 className="font-display font-bold text-lg text-ink">{t('vitrine.cookies.panel_titre')}</h2>
               <p className="text-[13px] text-dim mt-1.5">{t('vitrine.cookies.panel_desc')}</p>
@@ -500,7 +500,7 @@ export function VitrineFooter() {
           ))}
         </div>
         <div className="vt-reveal text-center pt-5 text-[12.5px] text-dim">
-          <span className="font-display font-bold text-ink">Une solution Novafriq<span className="text-primary"> ·</span></span>{' '}
+          <span className="font-display font-bold text-ink">{t('vitrine.footer.solution_novafriq')}<span className="text-primary"> ·</span></span>{' '}
           {t('vitrine.footer.rights')}
         </div>
       </div>
@@ -533,7 +533,7 @@ function WelcomePopup() {
   return (
     <div data-theme="dark" className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-app/80 backdrop-blur-sm">
       <div className="bg-card border border-edge rounded-2xl shadow-xl w-full max-w-sm p-6 relative">
-        <button onClick={close} aria-label="Fermer" className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full text-ghost hover:text-ink transition">
+        <button onClick={close} aria-label={t('commun.fermer')} className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full text-ghost hover:text-ink transition">
           <X size={16} />
         </button>
 

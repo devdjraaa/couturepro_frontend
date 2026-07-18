@@ -83,7 +83,7 @@ function DevisModal({ atelierId, createur, wa, onClose, onTrack }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
       <div className="bg-card border border-edge rounded-2xl shadow-xl w-full max-w-md p-6 relative max-h-[90dvh] overflow-y-auto">
-        <button onClick={onClose} aria-label="Fermer" className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full text-ghost hover:text-ink transition">
+        <button onClick={onClose} aria-label={t('commun.fermer')} className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full text-ghost hover:text-ink transition">
           <X size={16} />
         </button>
 
@@ -249,7 +249,7 @@ function PatronModal({ patron, format, onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
       <div className="bg-card border border-edge rounded-2xl shadow-xl w-full max-w-md p-6 relative">
-        <button onClick={onClose} aria-label="Fermer" className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full text-ghost hover:text-ink transition">
+        <button onClick={onClose} aria-label={t('commun.fermer')} className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full text-ghost hover:text-ink transition">
           <X size={16} />
         </button>
         <h2 className="font-display font-bold text-xl text-ink mb-1">{t('vitrine.patron.buy_title', { titre: patron.titre })}</h2>
@@ -340,7 +340,7 @@ function AvisForm({ atelierId }) {
         {previews.map((src, i) => (
           <div key={i} className="relative w-14 h-14 rounded-lg overflow-hidden border border-edge">
             <img src={src} alt={`photo ${i + 1}`} className="w-full h-full object-cover" />
-            <button type="button" onClick={() => removePhoto(i)} aria-label="Retirer"
+            <button type="button" onClick={() => removePhoto(i)} aria-label={t('commun.retirer')}
                     className="absolute top-0.5 right-0.5 w-5 h-5 bg-black/60 rounded-full flex items-center justify-center text-white"><X size={11} /></button>
           </div>
         ))}
@@ -579,7 +579,7 @@ export default function CreateurProfilPage() {
                 {ttUrl && <a href={ttUrl} target="_blank" rel="noopener noreferrer" className={socialCls}>TikTok</a>}
                 {ytUrl && <a href={ytUrl} target="_blank" rel="noopener noreferrer" className={socialCls}>YouTube</a>}
                 {liUrl && <a href={liUrl} target="_blank" rel="noopener noreferrer" className={socialCls}>LinkedIn</a>}
-                {siteUrl && <a href={siteUrl} target="_blank" rel="noopener noreferrer" className={socialCls}>Site web</a>}
+                {siteUrl && <a href={siteUrl} target="_blank" rel="noopener noreferrer" className={socialCls}>{t('vitrine.profil.site_web')}</a>}
               </div>
             )}
           </div>

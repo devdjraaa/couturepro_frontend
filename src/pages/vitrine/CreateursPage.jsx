@@ -251,7 +251,7 @@ export default function CreateursPage() {
             {sorted.map((c) => (
               <Link key={c.id} to={`/createurs/${c.id}`}
                     className="relative bg-card border border-edge rounded-lg p-5 transition hover:-translate-y-0.5 hover:shadow-lg hover:border-primary">
-                <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(c.id) }} className="absolute top-3 right-3 z-10" aria-label="Favori" aria-pressed={has(c.id)}>
+                <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(c.id) }} className="absolute top-3 right-3 z-10" aria-label={t('vitrine.a11y.favori')} aria-pressed={has(c.id)}>
                   <Heart size={16} className={has(c.id) ? 'text-primary' : 'text-ghost'} fill={has(c.id) ? 'currentColor' : 'none'} />
                 </button>
                 <div className="flex items-center gap-3 mb-3">
@@ -262,7 +262,7 @@ export default function CreateursPage() {
                     <h3 className="font-bold text-base text-ink flex items-center gap-1.5 flex-wrap">
                       {c.nom}
                       {c.verifie && <span className="text-[10.5px] font-bold text-primary bg-primary-50 px-1.5 py-0.5 rounded-full">{t('vitrine.creators.verified')}</span>}
-                      {c.sponsorise && <span title="Sponsorisé" className="text-[10.5px] font-bold text-inverse bg-primary px-1.5 py-0.5 rounded-full">★</span>}
+                      {c.sponsorise && <span title={t('vitrine.a11y.sponsorise')} className="text-[10.5px] font-bold text-inverse bg-primary px-1.5 py-0.5 rounded-full">★</span>}
                     </h3>
                     <div className="text-[12.5px] text-dim">{c.specialite} · {c.ville}</div>
                   </div>
