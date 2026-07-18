@@ -500,7 +500,7 @@ export function VitrineFooter() {
           ))}
         </div>
         <div className="vt-reveal text-center pt-5 text-[12.5px] text-dim">
-          <span className="font-display font-bold text-ink">Une solution NovAfriq<span className="text-primary"> ·</span></span>{' '}
+          <span className="font-display font-bold text-ink">Une solution Novafriq<span className="text-primary"> ·</span></span>{' '}
           {t('vitrine.footer.rights')}
         </div>
       </div>
