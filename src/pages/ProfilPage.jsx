@@ -35,6 +35,23 @@ function ProfilSection() {
       <Input label={t('commun.nom')} value={current?.nom ?? ''} onChange={set('nom')} required />
       <Input label={t('commun.telephone')} type="text" inputMode="tel" value={current?.telephone ?? ''} onChange={set('telephone')} placeholder="ex : +229 97 00 00 00" required />
       <Input label={t('commun.email')} type="email" value={current?.email ?? ''} onChange={set('email')} />
+      {/* Pt 58 : anniversaire (jour + mois, année facultative) — pour la petite surprise du jour J. */}
+      <div>
+        <label className="block text-xs text-ghost mb-1">{t('profil.anniversaire')}</label>
+        <div className="flex gap-2">
+          <select value={current?.naissance_jour ?? ''} onChange={set('naissance_jour')}
+                  className="flex-1 bg-subtle border border-edge rounded-xl px-3 py-2.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30">
+            <option value="">{t('profil.jour')}</option>
+            {Array.from({ length: 31 }, (_, i) => i + 1).map(j => <option key={j} value={j}>{j}</option>)}
+          </select>
+          <select value={current?.naissance_mois ?? ''} onChange={set('naissance_mois')}
+                  className="flex-[2] bg-subtle border border-edge rounded-xl px-3 py-2.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30">
+            <option value="">{t('profil.mois')}</option>
+            {t('profil.mois_liste', { returnObjects: true }).map((m, i) => <option key={i} value={i + 1}>{m}</option>)}
+          </select>
+        </div>
+        <p className="text-[11px] text-ghost mt-1">{t('profil.anniversaire_hint')}</p>
+      </div>
       {update.error && (
         <p className="text-sm text-danger">{update.error?.message || t('profil.erreur_update')}</p>
       )}

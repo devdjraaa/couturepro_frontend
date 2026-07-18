@@ -1960,7 +1960,25 @@
     "confirmer_nouveau_mdp": "Confirmer le nouveau mot de passe",
     "mdp_non_concordants": "Les mots de passe ne correspondent pas",
     "mdp_actuel_incorrect": "Mot de passe actuel incorrect",
-    "mdp_succes": "Mot de passe modifié !"
+    "mdp_succes": "Mot de passe modifié !",
+    "anniversaire": "Date de naissance",
+    "jour": "Jour",
+    "mois": "Mois",
+    "anniversaire_hint": "Facultatif — jour et mois suffisent, pour un petit mot le jour J.",
+    "mois_liste": [
+      "Janvier",
+      "Février",
+      "Mars",
+      "Avril",
+      "Mai",
+      "Juin",
+      "Juillet",
+      "Août",
+      "Septembre",
+      "Octobre",
+      "Novembre",
+      "Décembre"
+    ]
   },
   "a_propos": {
     "titre": "À propos",
