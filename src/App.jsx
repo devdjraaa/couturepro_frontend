@@ -32,6 +32,7 @@ import HistoriquePage         from '@/pages/HistoriquePage'
 import ArchivesPage           from '@/pages/ArchivesPage'
 import CaissePage             from '@/pages/CaissePage'
 import GaleriePage            from '@/pages/GaleriePage'
+import MesRealisationsPage     from '@/pages/MesRealisationsPage'
 import { FeatureGate } from '@/components/abonnement'
 import { AppLayout } from '@/components/layout'
 import { ROUTES, IS_NATIVE } from '@/constants/routes'
@@ -87,6 +88,7 @@ import DiagnosticPage           from '@/pages/admin/DiagnosticPage'
 import AdminParametresPage    from '@/pages/admin/AdminParametresPage'
 import AdminsPage             from '@/pages/admin/AdminsPage'
 import SignalementsPage       from '@/pages/admin/SignalementsPage'
+import AdminRealisationsPage   from '@/pages/admin/AdminRealisationsPage'
 import BannierePage           from '@/pages/admin/BannierePage'
 
 const PlaceholderPage = ({ title }) => (
@@ -142,6 +144,7 @@ export default function App() {
           <Route path="/admin/parametres"       element={<AdminParametresPage />} />
           <Route path="/admin/admins"           element={<AdminsPage />} />
           <Route path="/admin/signalements"     element={<SignalementsPage />} />
+          <Route path="/admin/realisations"     element={<AdminRealisationsPage />} />
           <Route path="/admin/banniere"         element={<BannierePage />} />
         </Route>
 
@@ -232,6 +235,7 @@ export default function App() {
           <Route path={ROUTES.APROPOS}          element={<AProposPage />}         />
           <Route path={ROUTES.PHOTOS_VIP}       element={<GaleriePage />} />
           <Route path="/galerie"               element={<GaleriePage />} />
+          <Route path={ROUTES.REALISATIONS}     element={<MesRealisationsPage />} />
           <Route path={ROUTES.FACTURATION}      element={<FacturationPage />}     />
           <Route path={ROUTES.HISTORIQUE}       element={<HistoriquePage />}      />
           <Route path="/archives"               element={<ArchivesPage />}        />

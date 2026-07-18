@@ -92,6 +92,7 @@ export const ROUTES = {
 
   // Autres
   PHOTOS_VIP:  '/photos-vip',
+  REALISATIONS: '/realisations',
   HISTORIQUE:  '/historique',
   FAQ:         '/faq',
   CONTACT:     '/contact',

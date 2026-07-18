@@ -686,6 +686,27 @@ export default function CreateurProfilPage() {
           renderGrid(creations)
         )}
 
+        {/* Point 101 : réalisations publiées (photos filigranées, modérées) */}
+        {Array.isArray(c.realisations) && c.realisations.length > 0 && (
+          <>
+            <h2 className="font-display text-2xl mt-12 mb-5 text-ink">{t('realisations.profil_titre')}</h2>
+            <div className="space-y-8">
+              {c.realisations.map((r) => (
+                <div key={r.id}>
+                  <h3 className="font-display text-lg text-ink mb-1">{r.titre}</h3>
+                  {r.description && <p className="text-sm text-dim mb-3 max-w-2xl">{r.description}</p>}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {(r.images || []).map((src, i) => (
+                      <img key={i} src={src} alt={r.titre} loading="lazy"
+                           className="w-full aspect-square object-cover rounded-xl border border-edge" />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
         {/* Avis */}
         <h2 id="avis-section" className="font-display text-2xl mt-12 mb-5 text-ink">{t('vitrine.profil.reviews')}</h2>
         {(c.avis && c.avis.length > 0) ? (

@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Home, Layers, CreditCard, MessageCircle,
   ShieldBan, ClipboardList, Bell, Star, LogOut,
-  Sun, Moon, Monitor, Users, Wallet, X, Flag, Megaphone, TicketPercent, Activity, Radar, FileText,
+  Sun, Moon, Monitor, Users, Wallet, X, Flag, Megaphone, TicketPercent, Activity, Radar, FileText, Images,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useAdminAuth, useTheme } from '@/contexts'
@@ -23,6 +23,7 @@ const GESTION = [
   { to: '/admin/offres',        icon: Star,          tKey: 'admin.nav.offres'        },
   { to: '/admin/codes-promo',   icon: TicketPercent, tKey: 'admin.nav.codes_promo'   },
   { to: '/admin/signalements',  icon: Flag,          tKey: 'admin.nav.signalements'  },
+  { to: '/admin/realisations',  icon: Images,        tKey: 'admin.nav.realisations'  },
   { to: '/admin/banniere',      icon: Megaphone,     tKey: 'admin.nav.banniere'      },
   { to: '/admin/veille',        icon: Radar,         tKey: 'admin.nav.veille'        },
   { to: '/admin/pages',         icon: FileText,      tKey: 'admin.nav.pages'         },
