@@ -63,7 +63,7 @@ export default function ChatWidget() {
   const [saisie, setSaisie] = useState('')
   const [loading, setLoading] = useState(false)
   const [conversationId, setConversationId] = useState(null)
-  const bas = useRef(null)
+  const fil = useRef(null)
 
   useEffect(() => {
     if (!open || messages.length) return
@@ -72,7 +72,11 @@ export default function ChatWidget() {
       .catch(() => {})
   }, [open]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => { bas.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages, open])
+  // Défilement du SEUL conteneur du fil (jamais scrollIntoView : il faisait défiler
+  // toute la page et « déplaçait » le widget — bug signalé par la direction).
+  useEffect(() => {
+    if (fil.current) fil.current.scrollTop = fil.current.scrollHeight
+  }, [messages, open])
 
   const envoyer = async () => {
     const q = saisie.trim()
@@ -142,7 +146,7 @@ export default function ChatWidget() {
           )}
 
           {/* Fil de discussion */}
-          <div className="flex-1 overflow-y-auto p-3 space-y-3" onClick={() => setMenuOuvert(false)}>
+          <div ref={fil} className="flex-1 overflow-y-auto p-3 space-y-3" onClick={() => setMenuOuvert(false)}>
             {messages.length === 0 && (
               <div className="bg-subtle rounded-xl rounded-tl-sm px-3 py-2.5 text-[13px] text-ink max-w-[90%] whitespace-pre-line">
                 {t('vitrine.chatbot.accueil')}
@@ -174,7 +178,6 @@ export default function ChatWidget() {
                 )}
               </div>
             ))}
-            <div ref={bas} />
           </div>
 
           {/* Saisie */}

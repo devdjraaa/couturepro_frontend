@@ -238,7 +238,10 @@ function VitrineCookies() {
   const { t } = useTranslation()
   const [show, setShow] = useState(() => !lireConsentCookies())
   const [panel, setPanel] = useState(false)
-  const [choix, setChoix] = useState({ preferences: true, personnalisation: true, statistiques: true, marketing: true })
+  // Point 126 (conformité APDP) : consentement ACTIF (opt-in) — tout est décoché par
+  // défaut sauf Essentiels ; l'utilisateur active explicitement ce qu'il autorise.
+  // Le bandeau reste affiché tant qu'aucun choix n'a été enregistré.
+  const [choix, setChoix] = useState({ preferences: false, personnalisation: false, statistiques: false, marketing: false })
 
   // Choix déjà mémorisé lors d'une visite précédente : activer les tiers consentis.
   useEffect(() => { appliquerConsentTiers(lireConsentCookies()) }, [])
