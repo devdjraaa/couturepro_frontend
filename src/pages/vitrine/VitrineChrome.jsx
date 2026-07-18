@@ -7,8 +7,8 @@ import { cn } from '@/utils/cn'
 import { useDevise, DEVISES } from './vitrineCurrency'
 import { getBanniere } from './vitrineApi'
 import { useFavoris } from './useFavoris'
-import { API_BASE_URL } from '@/constants/config'
 import ChatWidget from './ChatWidget'
+import EvenementCelebration from './EvenementCelebration'
 
 const FIRST_VISIT_KEY = 'gx_welcome_done'
 
@@ -592,40 +592,6 @@ function WelcomePopup() {
   )
 }
 
-/* Brief 16/07 (pt 6) : habillage saisonnier local — overlay de ~2,5 s à l'ouverture,
-   configuré par l'admin (périodes datées, visuels béninois). Affiché 1×/jour max. */
-function SplashSaisonnier() {
-  const [theme, setTheme] = useState(null)
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
-    let mort = false
-    ;(async () => {
-      try {
-        const r = await fetch(`${API_BASE_URL}/vitrine/splash-theme`)
-        const t = await r.json()
-        if (mort || !t || t.actif === false || !t.nom) return
-        const cle = `gx_splash_${t.nom}_${new Date().toDateString()}`
-        if (localStorage.getItem(cle)) return
-        localStorage.setItem(cle, '1')
-        setTheme(t)
-        setVisible(true)
-        setTimeout(() => setVisible(false), 2600)
-      } catch { /* pas d'overlay si l'API est injoignable */ }
-    })()
-    return () => { mort = true }
-  }, [])
-
-  if (!theme) return null
-  return (
-    <div aria-hidden="true"
-         className={'fixed inset-0 z-[100] flex flex-col items-center justify-center gap-4 bg-app transition-opacity duration-500 ' + (visible ? 'opacity-100' : 'opacity-0 pointer-events-none')}>
-      {theme.image_url && <img src={theme.image_url} alt="" className="max-w-[70vw] max-h-[50vh] object-contain rounded-2xl" />}
-      {theme.texte && <p className="font-display text-[clamp(18px,3vw,28px)] text-ink text-center px-6">{theme.texte}</p>}
-    </div>
-  )
-}
-
 export default function VitrineShell({ children }) {
   useEffect(() => {
     const io = new IntersectionObserver(
@@ -640,7 +606,7 @@ export default function VitrineShell({ children }) {
   }, [])
   return (
     <div className="min-h-dvh bg-app text-ink font-sans">
-      <SplashSaisonnier />
+      <EvenementCelebration />
       <VitrineNavbar />
       <main>{children}</main>
       <VitrineFooter />
