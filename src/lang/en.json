@@ -2565,6 +2565,28 @@
                 "t": "See Document 1 — Privacy Policy and Document 4 — Cookie Policy in this file. Supervisory authority: APDP — www.apdp.bj"
               }
             ]
+          },
+          {
+            "title": "PUBLICATION DIRECTOR",
+            "ajout": true,
+            "blocks": [
+              {
+                "type": "p",
+                "ajout": true,
+                "t": "The publication director of the Gextimo service is the legal representative of Novafriq Groupe. For any question regarding the site's editorial content, write to direction@novafriq.africa."
+              }
+            ]
+          },
+          {
+            "title": "GOVERNING LAW AND JURISDICTION",
+            "ajout": true,
+            "blocks": [
+              {
+                "type": "p",
+                "ajout": true,
+                "t": "These legal notices are governed by Beninese law. Any dispute relating to their interpretation or performance falls under the competent courts of Cotonou, subject to mandatory consumer-protection rules."
+              }
+            ]
           }
         ]
       },
@@ -3532,6 +3554,22 @@
                 ]
               }
             ]
+          },
+          {
+            "title": "ARTICLE 4 — HANDLING TIMES AND MEDIATION",
+            "ajout": true,
+            "blocks": [
+              {
+                "type": "p",
+                "ajout": true,
+                "t": "We acknowledge receipt of any complaint within 48 working hours and aim to provide a reasoned response within 15 days."
+              },
+              {
+                "type": "p",
+                "ajout": true,
+                "t": "If the disagreement persists, you may turn to a consumer mediator. For any matter concerning your personal data, you may refer to Benin's Personal Data Protection Authority (APDP)."
+              }
+            ]
           }
         ]
       }
@@ -3580,6 +3618,10 @@
       "favori": "Favourite",
       "sponsorise": "Sponsored",
       "langue_devise": "Language & currency"
+    },
+    "legal_hub": {
+      "titre": "Legal information",
+      "legende_ajout": "Section completed by AI — to be reviewed by the team."
     }
   },
   "atelier": {

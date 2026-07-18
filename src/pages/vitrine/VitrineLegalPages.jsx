@@ -1,8 +1,70 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { API_BASE_URL } from '@/constants/config'
+import { ROUTES } from '@/constants/routes'
+import { cn } from '@/utils/cn'
+
+/* ── Pt 121 : module unique « pages légales » avec navigation sidebar ──────────
+   Toutes les pages légales du footer partagent le même gabarit : une sidebar à
+   gauche (titres) + le contenu à droite. La navigation est SPA (React Router →
+   aucun rechargement de page). Ordre pensé pour l'utilisateur (données d'abord). */
+const LEGAL_PAGES = [
+  { ns: 'confidentialite',     route: ROUTES.VITRINE_CONFIDENTIALITE },
+  { ns: 'protection_donnees',  route: ROUTES.VITRINE_PROTECTION_DONNEES },
+  { ns: 'cookies',             route: ROUTES.VITRINE_COOKIES },
+  { ns: 'cgu',                 route: ROUTES.VITRINE_CGU },
+  { ns: 'conditions_vente',    route: ROUTES.VITRINE_CONDITIONS_VENTE },
+  { ns: 'droits_createurs',    route: ROUTES.VITRINE_DROITS_CREATEURS },
+  { ns: 'produits_interdits',  route: ROUTES.VITRINE_PRODUITS_INTERDITS },
+  { ns: 'livraison_retours',   route: ROUTES.VITRINE_LIVRAISON_RETOURS },
+  { ns: 'regles_communaute',   route: ROUTES.VITRINE_REGLES_COMMUNAUTE },
+  { ns: 'contact_reclamations', route: ROUTES.VITRINE_CONTACT_RECLAMATIONS },
+  { ns: 'mentions',            route: ROUTES.VITRINE_MENTIONS },
+]
+
+function LegalShell({ active, children }) {
+  const { t } = useTranslation()
+  return (
+    <VitrineShell>
+      <section className="py-10 px-5">
+        <div className="max-w-[1120px] mx-auto grid lg:grid-cols-[250px_1fr] gap-8 items-start">
+          <aside className="lg:sticky lg:top-24 min-w-0">
+            <p className="text-[11px] font-bold uppercase tracking-widest text-primary mb-3 px-1">{t('vitrine.legal_hub.titre')}</p>
+            <nav className="flex lg:flex-col gap-1 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0 -mx-1 px-1">
+              {LEGAL_PAGES.map(({ ns, route }) => (
+                <Link key={ns} to={route}
+                  aria-current={active === ns ? 'page' : undefined}
+                  className={cn(
+                    'whitespace-nowrap lg:whitespace-normal px-3 py-2 rounded-lg text-[13.5px] leading-snug transition flex-none lg:flex-auto',
+                    active === ns ? 'bg-primary/10 text-primary font-semibold' : 'text-dim hover:bg-subtle hover:text-ink',
+                  )}>
+                  {t(`vitrine.legal_pages.${ns}.title`)}
+                </Link>
+              ))}
+            </nav>
+          </aside>
+          <div className="min-w-0">{children}</div>
+        </div>
+      </section>
+    </VitrineShell>
+  )
+}
+
+// Pt 122 : style des compléments ajoutés par l'IA (surlignés en vert, « à valider »).
+const AJOUT = 'border-l-4 border-emerald-500 bg-emerald-500/10 rounded-r-lg pl-4 pr-3 py-3 my-3 [&_*]:!text-emerald-800 dark:[&_*]:!text-emerald-200'
+
+function LegendeAjout() {
+  const { t } = useTranslation()
+  return (
+    <div className="mb-6 flex items-center gap-2 text-[12px] text-emerald-700 dark:text-emerald-300">
+      <span className="w-3 h-3 rounded-sm bg-emerald-500/40 border-l-4 border-emerald-500 flex-none" />
+      {t('vitrine.legal_hub.legende_ajout')}
+    </div>
+  )
+}
 
 /* ── Contenu éditable depuis le back-office ───────────────────────────────
    Chaque page interroge l'API : si l'admin a personnalisé le texte (éditeur
@@ -33,24 +95,20 @@ const PROSE =
   '[&_th]:border [&_th]:border-edge [&_th]:px-3 [&_th]:py-2 [&_th]:bg-subtle [&_th]:text-ink [&_th]:text-left ' +
   '[&_blockquote]:border-l-2 [&_blockquote]:border-primary [&_blockquote]:pl-4 [&_blockquote]:my-3'
 
-function PageLegaleDb({ page, path }) {
+function PageLegaleDb({ page, path, ns }) {
   const { i18n } = useTranslation()
   const en = i18n.language?.startsWith('en')
   const titre = (en ? page.titre_en : page.titre_fr) || page.titre_fr || page.titre_en || ''
   const contenu = (en ? page.contenu_en : page.contenu_fr) || page.contenu_fr || page.contenu_en || ''
   usePageMeta({ title: titre, path })
   return (
-    <VitrineShell>
-      <section className="py-14 px-5">
-        <div className="max-w-[760px] mx-auto">
-          {titre && <h1 className="font-display font-extrabold text-[clamp(26px,3.8vw,40px)] text-ink leading-tight mb-8">{titre}</h1>}
-          <div className="bg-card border border-edge rounded-2xl p-6 md:p-8">
-            {/* HTML rédigé par l'admin (assaini côté serveur avant stockage) */}
-            <div className={PROSE} dangerouslySetInnerHTML={{ __html: contenu }} />
-          </div>
-        </div>
-      </section>
-    </VitrineShell>
+    <LegalShell active={ns}>
+      {titre && <h1 className="font-display font-extrabold text-[clamp(24px,3.4vw,34px)] text-ink leading-tight mb-6">{titre}</h1>}
+      <div className="bg-card border border-edge rounded-2xl p-6 md:p-8">
+        {/* HTML rédigé par l'admin (assaini côté serveur avant stockage) */}
+        <div className={PROSE} dangerouslySetInnerHTML={{ __html: contenu }} />
+      </div>
+    </LegalShell>
   )
 }
 
@@ -81,25 +139,21 @@ function LegalPage({ ns, path }) {
   const db = usePageLegaleDb(ns)
   usePageMeta({ title: t(`vitrine.legal_pages.${ns}.title`), path })
   const sections = t(`vitrine.legal_pages.${ns}.sections`, { returnObjects: true })
-  if (db) return <PageLegaleDb page={db} path={path} />
+  if (db) return <PageLegaleDb page={db} path={path} ns={ns} />
   return (
-    <VitrineShell>
-      <section className="py-14 px-5">
-        <div className="max-w-[760px] mx-auto">
-          <LegalHead
-            eyebrow={t(`vitrine.legal_pages.${ns}.eyebrow`)}
-            title={t(`vitrine.legal_pages.${ns}.title`)}
-            subtitle={t(`vitrine.legal_pages.${ns}.subtitle`)}
-            date={t(`vitrine.legal_pages.${ns}.date`)}
-          />
-          <div className="bg-card border border-edge rounded-2xl p-6 md:p-8 space-y-1">
-            {(Array.isArray(sections) ? sections : []).map((s) => (
-              <LegalSection key={s.h} h={s.h} p={s.p} />
-            ))}
-          </div>
-        </div>
-      </section>
-    </VitrineShell>
+    <LegalShell active={ns}>
+      <LegalHead
+        eyebrow={t(`vitrine.legal_pages.${ns}.eyebrow`)}
+        title={t(`vitrine.legal_pages.${ns}.title`)}
+        subtitle={t(`vitrine.legal_pages.${ns}.subtitle`)}
+        date={t(`vitrine.legal_pages.${ns}.date`)}
+      />
+      <div className="bg-card border border-edge rounded-2xl p-6 md:p-8 space-y-1">
+        {(Array.isArray(sections) ? sections : []).map((s) => (
+          <LegalSection key={s.h} h={s.h} p={s.p} />
+        ))}
+      </div>
+    </LegalShell>
   )
 }
 
@@ -161,7 +215,7 @@ function BlockPermission({ name, t: text }) {
   )
 }
 
-function Block({ block }) {
+function BlockInner({ block }) {
   if (block.type === 'p')
     return <p className="text-dim text-[14px] leading-relaxed my-2">{block.t}</p>
   if (block.type === 'subtitle')
@@ -175,6 +229,17 @@ function Block({ block }) {
   if (block.type === 'permission')
     return <BlockPermission name={block.name} t={block.t} />
   return null
+}
+
+// Pt 122 : un bloc marqué `ajout: true` (complété par l'IA) est surligné en vert.
+function Block({ block }) {
+  if (block.ajout) return <div className={AJOUT}><BlockInner block={block} /></div>
+  return <BlockInner block={block} />
+}
+
+// Un article contient-il du contenu ajouté par l'IA ? (pour afficher la légende verte)
+function contientAjout(articles) {
+  return Array.isArray(articles) && articles.some((a) => a.ajout || (Array.isArray(a.blocks) && a.blocks.some((b) => b.ajout)))
 }
 
 function RichArticle({ title, blocks }) {
@@ -194,7 +259,7 @@ function RichLegalPage({ ns, path }) {
   usePageMeta({ title: t(`vitrine.legal_pages.${ns}.title`), path })
   const articles = t(`vitrine.legal_pages.${ns}.articles`, { returnObjects: true })
 
-  if (db) return <PageLegaleDb page={db} path={path} />
+  if (db) return <PageLegaleDb page={db} path={path} ns={ns} />
 
   if (!Array.isArray(articles) || !articles.length) {
     return <LegalPage ns={ns} path={path} />
@@ -205,35 +270,32 @@ function RichLegalPage({ ns, path }) {
   const note      = t(`vitrine.legal_pages.${ns}.note`,       { defaultValue: '' })
 
   return (
-    <VitrineShell>
-      <section className="py-14 px-5">
-        <div className="max-w-[820px] mx-auto">
-          {note && (
-            <div className="mb-8 bg-primary/8 border border-primary/30 rounded-xl px-5 py-4 text-[13px] text-ink leading-relaxed">
-              {note}
-            </div>
-          )}
-          <LegalHead
-            eyebrow={t(`vitrine.legal_pages.${ns}.eyebrow`)}
-            title={t(`vitrine.legal_pages.${ns}.title`)}
-            subtitle={t(`vitrine.legal_pages.${ns}.subtitle`)}
-          />
-          {Array.isArray(metaLines) && metaLines.some(Boolean) && (
-            <div className="bg-card border border-edge rounded-2xl p-5 md:p-8 mb-4 text-[12px] text-ghost space-y-0.5">
-              {metaLines.filter(Boolean).map((l) => <p key={l}>{l}</p>)}
-            </div>
-          )}
-          <div className="bg-card border border-edge rounded-2xl p-5 md:p-8">
-            {articles.map((article) => (
-              <RichArticle key={article.title} title={article.title} blocks={article.blocks} />
-            ))}
-          </div>
-          {version && (
-            <p className="text-center text-ghost text-[11.5px] mt-6">{version}</p>
-          )}
+    <LegalShell active={ns}>
+      {note && (
+        <div className="mb-6 bg-primary/8 border border-primary/30 rounded-xl px-5 py-4 text-[13px] text-ink leading-relaxed">
+          {note}
         </div>
-      </section>
-    </VitrineShell>
+      )}
+      <LegalHead
+        eyebrow={t(`vitrine.legal_pages.${ns}.eyebrow`)}
+        title={t(`vitrine.legal_pages.${ns}.title`)}
+        subtitle={t(`vitrine.legal_pages.${ns}.subtitle`)}
+      />
+      {contientAjout(articles) && <LegendeAjout />}
+      {Array.isArray(metaLines) && metaLines.some(Boolean) && (
+        <div className="bg-card border border-edge rounded-2xl p-5 md:p-8 mb-4 text-[12px] text-ghost space-y-0.5">
+          {metaLines.filter(Boolean).map((l) => <p key={l}>{l}</p>)}
+        </div>
+      )}
+      <div className="bg-card border border-edge rounded-2xl p-5 md:p-8">
+        {articles.map((article, i) => (
+          <RichArticle key={article.title || i} title={article.title} blocks={article.blocks} />
+        ))}
+      </div>
+      {version && (
+        <p className="text-center text-ghost text-[11.5px] mt-6">{version}</p>
+      )}
+    </LegalShell>
   )
 }
 

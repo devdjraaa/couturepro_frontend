@@ -2578,6 +2578,28 @@
                 "t": "Voir Document 1 — Politique de confidentialité et Document 4 — Politique des cookies du présent dossier. Autorité de contrôle : APDP — www.apdp.bj"
               }
             ]
+          },
+          {
+            "title": "DIRECTEUR DE LA PUBLICATION",
+            "ajout": true,
+            "blocks": [
+              {
+                "type": "p",
+                "ajout": true,
+                "t": "Le directeur de la publication du service Gextimo est le représentant légal de Novafriq Groupe. Pour toute question relative au contenu éditorial du site, vous pouvez écrire à direction@novafriq.africa."
+              }
+            ]
+          },
+          {
+            "title": "LOI APPLICABLE ET JURIDICTION COMPÉTENTE",
+            "ajout": true,
+            "blocks": [
+              {
+                "type": "p",
+                "ajout": true,
+                "t": "Les présentes mentions légales sont régies par le droit béninois. Tout litige relatif à leur interprétation ou à leur exécution relève des juridictions compétentes de Cotonou, sous réserve des règles impératives protégeant le consommateur."
+              }
+            ]
           }
         ]
       },
@@ -3545,6 +3567,22 @@
                 ]
               }
             ]
+          },
+          {
+            "title": "ARTICLE 4 — DÉLAIS DE TRAITEMENT ET MÉDIATION",
+            "ajout": true,
+            "blocks": [
+              {
+                "type": "p",
+                "ajout": true,
+                "t": "Nous accusons réception de toute réclamation sous 48 heures ouvrées et nous nous efforçons d'apporter une réponse motivée dans un délai de 15 jours."
+              },
+              {
+                "type": "p",
+                "ajout": true,
+                "t": "En cas de désaccord persistant, vous pouvez recourir à un médiateur de la consommation. Pour toute question relative à vos données personnelles, vous pouvez saisir l'Autorité de Protection des Données Personnelles (APDP) du Bénin."
+              }
+            ]
           }
         ]
       }
@@ -3593,6 +3631,10 @@
       "favori": "Favori",
       "sponsorise": "Sponsorisé",
       "langue_devise": "Langue et devise"
+    },
+    "legal_hub": {
+      "titre": "Informations légales",
+      "legende_ajout": "Passage complété par l'IA — à valider par l'équipe."
     }
   },
   "atelier": {
