@@ -1,4 +1,5 @@
 import { cn } from '@/utils/cn'
+import { useAuth } from '@/contexts'
 
 const frFmt = new Intl.NumberFormat('fr-FR', {
   minimumFractionDigits: 0,
@@ -7,11 +8,13 @@ const frFmt = new Intl.NumberFormat('fr-FR', {
 
 export default function MoneyAmount({
   value,
-  currency = 'XOF',
+  currency,
   size = 'md',
   color = 'default',
   className,
 }) {
+  const { atelier } = useAuth()
+  const unite = currency || atelier?.devise || 'XOF' // pt 74 : suit la préférence
   const isNil = value === null || value === undefined || isNaN(value)
   const formatted = isNil ? '—' : frFmt.format(value)
 
@@ -36,7 +39,7 @@ export default function MoneyAmount({
       {formatted}
       {!isNil && (
         <span className="text-[0.65em] font-sans font-medium tracking-wide ml-1 opacity-70 uppercase">
-          {currency}
+          {unite}
         </span>
       )}
     </span>

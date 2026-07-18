@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { parametresService } from '@/services/parametresService'
+import { useAuth } from '@/contexts'
 import { QUERY_STALE_TIME } from '@/constants/config'
 
 const KEYS = {
@@ -71,9 +72,18 @@ export function usePreferences() {
 
 export function useUpdatePreferences() {
   const queryClient = useQueryClient()
+  const { updateAtelierLocal } = useAuth()
   return useMutation({
     mutationFn: (payload) => parametresService.updatePreferences(payload),
-    onSuccess: (data) => queryClient.setQueryData(['parametres', 'preferences'], data),
+    onSuccess: (data) => {
+      queryClient.setQueryData(['parametres', 'preferences'], data)
+      // Pt 74 : la devise et l'unité s'appliquent IMMÉDIATEMENT partout (le contexte
+      // atelier alimente tous les affichages) — plus besoin de se reconnecter.
+      const maj = {}
+      if (data?.devise) maj.devise = data.devise
+      if (data?.unite_mesure) maj.unite_mesure = data.unite_mesure
+      if (Object.keys(maj).length) updateAtelierLocal(maj)
+    },
   })
 }
 

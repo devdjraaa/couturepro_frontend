@@ -33,7 +33,12 @@ export default function LoginPage() {
   const [showEqPwd,   setShowEqPwd]   = useState(false)
   const [rememberMe,  setRememberMe]  = useState(true)
 
-  const [propForm, setPropForm]   = useState({ telephone: '', password: '' })
+  // Pt 73 : « Se souvenir de moi » = pré-remplir le DERNIER numéro utilisé
+  // (jamais le mot de passe, par sécurité).
+  const [propForm, setPropForm]   = useState(() => {
+    try { return { telephone: localStorage.getItem('gx_last_phone') || '', password: '' } }
+    catch { return { telephone: '', password: '' } }
+  })
   const setProp = key => e => setPropForm(f => ({ ...f, [key]: e.target.value }))
 
   const [equipeForm, setEquipeForm] = useState({ code_acces: '', password: '' })
@@ -57,6 +62,11 @@ export default function LoginPage() {
     setLoading(true)
     try {
       const { atelier } = await login(propForm)
+      // Pt 73 : mémoriser (ou oublier) le numéro selon la case « Se souvenir de moi ».
+      try {
+        if (rememberMe) localStorage.setItem('gx_last_phone', propForm.telephone)
+        else localStorage.removeItem('gx_last_phone')
+      } catch { /* stockage indisponible */ }
       if (!IS_NATIVE && atelier?.type === 'artisan') {
         navigate('/artisan-app', { replace: true })
       } else {
