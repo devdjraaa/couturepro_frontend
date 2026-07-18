@@ -5,7 +5,7 @@ import { useVetements, useCreateVetement, useUpdateVetement, useDeleteVetement }
 import { AppLayout } from '@/components/layout'
 import { VetementCard, VetementForm } from '@/components/vetements'
 import PatronManager from '@/components/vetements/PatronManager'
-import { EmptyState, Skeleton, BottomSheet, FloatingActionButton } from '@/components/ui'
+import { EmptyState, Skeleton, BottomSheet, FloatingActionButton, Button } from '@/components/ui'
 import { isMock } from '@/services/mockFlag'
 import { useAccountType } from '@/hooks/useAccountType'
 
@@ -57,6 +57,10 @@ export default function CataloguePage() {
                   icon={Scissors}
                   title={t('catalogue.vide.titre')}
                   description={t('catalogue.vide.description')}
+                  primaryAction={
+                    /* Pt 64 : inciter à créer le premier modèle (ex. depuis une commande). */
+                    <Button onClick={() => setEditing('new')}>{t('catalogue.nouveau')}</Button>
+                  }
                 />
               ) : (
                 <div className="space-y-2">
