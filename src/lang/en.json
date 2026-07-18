@@ -2016,268 +2016,1333 @@
       "confidentialite": {
         "title": "Privacy Policy",
         "eyebrow": "Legal & Privacy",
-        "subtitle": "We are committed to protecting your personal data and respecting your privacy.",
-        "date": "Last updated: July 2026",
-        "sections": [
+        "subtitle": "Application: GEXTIMO | Publisher: NOVAFRIQ, SASU",
+        "meta_lines": [
+          "Data Controller: ADJAHO Patrick Dona",
+          "Effective date: [DATE — to be completed]"
+        ],
+        "version": "Version 4.0 — Established under Article 415 of the Digital Code (Law No. 2017-20 of 20 April 2018).",
+        "articles": [
           {
-            "h": "1. Data Controller",
-            "p": "Gextimo (a NovAfriq brand), a company operating in Benin, is the controller of your personal data collected through the gextimo.com platform."
+            "title": "ARTICLE 1 — IDENTITY OF THE DATA CONTROLLER",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "The controller of your data is ADJAHO Patrick Dona, President and founder of NOVAFRIQ. He is the sole controller."
+              },
+              {
+                "type": "p",
+                "t": "Address: Quartier Agblangandan, Sèmè-Podji, Republic of Benin."
+              },
+              {
+                "type": "p",
+                "t": "Contact: dpo@novafriq.africa | +229 01 66 55 29 92"
+              },
+              {
+                "type": "p",
+                "t": "NOVAFRIQ is not required to appoint a DPO. For anything relating to your data, write directly to the controller: dpo@novafriq.africa."
+              }
+            ]
           },
           {
-            "h": "2. Data Collected",
-            "p": "We collect data you provide when creating your account (name, email address, phone number), transaction information, and browsing data (IP address, browser type, pages visited) via technical cookies."
+            "title": "ARTICLE 2 — PRIOR FORMALITIES WITH THE APDP",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "This processing is declared to the APDP under deliberation No. [APDP DELIBERATION NUMBER — to be completed after filing]."
+              },
+              {
+                "type": "p",
+                "t": "You can contact the APDP: Rue 6.076, Aïdjèdo, Cotonou · +229 21 32 57 88 / 69 55 00 00 · contact@apdp.bj · www.apdp.bj"
+              }
+            ]
           },
           {
-            "h": "3. Purposes of Processing",
-            "p": "Your data is used to: manage your account, process orders, communicate about your project status, improve our services and, with your consent, send marketing communications."
+            "title": "ARTICLE 3 — DATA COLLECTED AND PROCESSED",
+            "blocks": [
+              {
+                "type": "table",
+                "headers": [
+                  "Category",
+                  "Data collected",
+                  "Legal basis",
+                  "Retention period"
+                ],
+                "rows": [
+                  [
+                    "Identification data",
+                    "Name, first name, email, phone",
+                    "Contract performance (Art. 415)",
+                    "Account duration + 3 years"
+                  ],
+                  [
+                    "Connection data",
+                    "IP, session, timestamps",
+                    "Legitimate interest (Art. 415)",
+                    "12 months"
+                  ],
+                  [
+                    "Usage data",
+                    "App navigation, features, session duration",
+                    "Legitimate interest (Art. 415)",
+                    "25 months"
+                  ],
+                  [
+                    "GEXTIMO business data",
+                    "Boutiques, creations, orders, transactions, measurements",
+                    "Contract performance (Art. 415)",
+                    "Account duration + 3 years"
+                  ],
+                  [
+                    "Technical data",
+                    "Device, OS, app version, crashes",
+                    "Legitimate interest (Art. 415)",
+                    "12 months"
+                  ],
+                  [
+                    "Payment data",
+                    "Mobile Money and cards (via FedaPay) — collected from payment activation",
+                    "Contract performance (Art. 415)",
+                    "10 years (OHADA accounting obligation)"
+                  ]
+                ]
+              },
+              {
+                "type": "p",
+                "t": "Two profiles coexist on GEXTIMO. The Designer profile is public: creations are displayed on the platform's storefront and can generate sales (from payment activation). The Artisan profile is reserved for the mobile app: it is not published on the platform's storefront and does not give rise to any transaction via GEXTIMO. The data collected is identical for both; only the exposure and purpose differ."
+              },
+              {
+                "type": "box",
+                "title": "Sign-in via a third-party identity provider (if enabled)",
+                "t": "If you choose to sign in to GEXTIMO via a third-party service (e.g. Google), we receive from that provider: your email address, your name and, where applicable, your profile picture. We do not access your password. This data is used solely to create and manage your GEXTIMO account."
+              }
+            ]
           },
           {
-            "h": "4. Legal Basis",
-            "p": "Data processing is based on contract performance (orders, account), compliance with legal obligations, your consent (newsletters) and our legitimate interest in improving our services."
+            "title": "ARTICLE 4 — PURPOSES OF PROCESSING",
+            "blocks": [
+              {
+                "type": "list",
+                "items": [
+                  "Create and manage your professional account",
+                  "Operate GEXTIMO: creators, collections, orders and storefront",
+                  "Process your payments and commissions",
+                  "Improve the app and your experience",
+                  "Secure the platform and prevent fraud",
+                  "Keep you informed: notifications, updates, support",
+                  "Comply with our legal obligations"
+                ]
+              }
+            ]
           },
           {
-            "h": "5. Data Sharing",
-            "p": "Your data may be shared with selected creators to fulfil your order, our secure payment providers (under confidentiality agreement), and competent authorities if required by law. We never sell your data to third parties."
+            "title": "ARTICLE 5 — OPERATIONS PERFORMED ON DATA",
+            "blocks": [
+              {
+                "type": "list",
+                "items": [
+                  "We collect it at registration and while you use GEXTIMO",
+                  "We store it securely (see Article 8)",
+                  "We process it only for the reasons in Article 4",
+                  "We delete it once the periods in Article 3 are reached"
+                ]
+              }
+            ]
           },
           {
-            "h": "6. Retention",
-            "p": "Your data is retained for the duration of your account and up to 5 years after your last activity, in accordance with applicable legal deadlines in Benin."
+            "title": "ARTICLE 6 — RECIPIENTS OF DATA",
+            "blocks": [
+              {
+                "type": "subtitle",
+                "t": "6.1 — Internal access"
+              },
+              {
+                "type": "p",
+                "t": "Within NOVAFRIQ, the sole controller of your data is ADJAHO Patrick Dona. Internal access is limited to what is strictly necessary. No associate, contractor or investor is responsible for your data."
+              },
+              {
+                "type": "subtitle",
+                "t": "6.2 — Technical service providers"
+              },
+              {
+                "type": "table",
+                "headers": [
+                  "Provider",
+                  "Role in processing",
+                  "Location",
+                  "Data transmitted"
+                ],
+                "rows": [
+                  [
+                    "Hostinger International Ltd",
+                    "VPS hosting — main server and encrypted backups",
+                    "France (Paris, EU)",
+                    "All stored data"
+                  ],
+                  [
+                    "FedaPay",
+                    "Mobile Money payment processing (MTN / Moov / Orange)",
+                    "Benin / West Africa",
+                    "Transaction reference, amount, operator"
+                  ],
+                  [
+                    "[Analytics tool — if selected]",
+                    "Audience measurement, usage statistics",
+                    "[To be specified]",
+                    "Aggregated usage data, IP"
+                  ],
+                  [
+                    "[WhatsApp Business / Email — to be specified]",
+                    "Sending notifications and transactional communications",
+                    "[To be specified]",
+                    "Email, phone number"
+                  ]
+                ]
+              },
+              {
+                "type": "p",
+                "t": "These providers act as processors. They process data solely on NOVAFRIQ's instruction under contractual confidentiality commitments (see Document 10)."
+              },
+              {
+                "type": "subtitle",
+                "t": "6.3 — Legal recipients"
+              },
+              {
+                "type": "p",
+                "t": "We share your data with Beninese authorities (justice, tax, administration) only upon official request. We never sell, rent or transfer your data to third parties for commercial purposes."
+              }
+            ]
           },
           {
-            "h": "7. Your Rights (APDP)",
-            "p": "In accordance with Law No. 2009-09 on personal data protection in Benin, you have the right of access, rectification, erasure and objection. To exercise these rights, contact us at: privacy@gextimo.com."
+            "title": "ARTICLE 7 — PROMINENT DISCLOSURE OF IN-APP PERMISSIONS",
+            "blocks": [
+              {
+                "type": "table",
+                "headers": [
+                  "Permission",
+                  "Why",
+                  "Consequence of refusal"
+                ],
+                "rows": [
+                  [
+                    "Notifications",
+                    "Order alerts, deadlines and customer messages",
+                    "No push notifications"
+                  ],
+                  [
+                    "Camera",
+                    "Profile photo, fabric or creation photo",
+                    "Camera disabled"
+                  ],
+                  [
+                    "Storage / Gallery",
+                    "Import images from gallery",
+                    "Image import unavailable"
+                  ]
+                ]
+              },
+              {
+                "type": "subtitle",
+                "t": "Text displayed to the user at each permission request:"
+              },
+              {
+                "type": "permission",
+                "name": "Permission: Camera",
+                "t": "GEXTIMO would like to access your Camera. Why: to allow you to photograph your creations, fabrics or professional profile directly from the app. By tapping 'Allow', you accept this access. You may refuse and continue using GEXTIMO without this feature."
+              },
+              {
+                "type": "permission",
+                "name": "Permission: Storage / Gallery",
+                "t": "GEXTIMO would like to access your Gallery. Why: to allow you to import images from your gallery. GEXTIMO does not access your entire gallery; only the chosen image is imported. If refused, image import is disabled; all other features remain available."
+              },
+              {
+                "type": "permission",
+                "name": "Permission: Notifications",
+                "t": "GEXTIMO would like to send you Notifications. Why: to inform you of new orders, deadlines, customer messages and important updates. If refused, no push notifications will reach you; you will need to check the app manually."
+              }
+            ]
           },
           {
-            "h": "8. Security",
-            "p": "We implement appropriate technical and organisational measures: TLS encryption of communications, restricted data access, secure hosting."
+            "title": "ARTICLE 8 — STORAGE AND HOSTING",
+            "blocks": [
+              {
+                "type": "table",
+                "headers": [
+                  "Provider",
+                  "Country",
+                  "Datacenter location",
+                  "Website"
+                ],
+                "rows": [
+                  [
+                    "Hostinger International Ltd",
+                    "France (EU)",
+                    "Paris, France",
+                    "hostinger.com"
+                  ]
+                ]
+              },
+              {
+                "type": "p",
+                "t": "Data is hosted in the Paris datacenter (France, European Union). This transfer outside Benin is subject to the cross-border data flow authorisation formality with the APDP."
+              }
+            ]
           },
           {
-            "h": "Assistant, recorded conversations and audience measurement",
-            "p": "Conversations with the website assistant (chatbot) are recorded — the question asked, the answer given and your optional rating (helpful / unhelpful) — for the sole purpose of improving answer quality and the service. They are never sold or shared with third parties. With your consent (dedicated banner), browsing data (pages viewed, searches, interactions) is collected in a pseudonymised way to improve your experience and our recommendations. You can change your choices at any time from your account."
+            "title": "ARTICLE 9 — DATA SECURITY",
+            "blocks": [
+              {
+                "type": "list",
+                "items": [
+                  "Encrypted exchanges (HTTPS/TLS)",
+                  "Access limited to what is strictly necessary",
+                  "Connection protected by authentication tokens",
+                  "Encrypted backups every week",
+                  "Regular security updates to the server (Debian)",
+                  "Each user's space is isolated from others"
+                ]
+              },
+              {
+                "type": "p",
+                "t": "In the event of an incident, we notify the APDP as soon as possible. If the risk is high, we also notify you (see Document 6)."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 10 — RIGHTS OF DATA SUBJECTS",
+            "blocks": [
+              {
+                "type": "table",
+                "headers": [
+                  "Right",
+                  "Description"
+                ],
+                "rows": [
+                  [
+                    "Right to prior information",
+                    "Be informed before any collection"
+                  ],
+                  [
+                    "Right of access",
+                    "Obtain a copy of data concerning you"
+                  ],
+                  [
+                    "Right of inquiry",
+                    "Ask NOVAFRIQ about processing carried out"
+                  ],
+                  [
+                    "Right of rectification",
+                    "Correct inaccurate or incomplete data"
+                  ],
+                  [
+                    "Right of objection",
+                    "Object to any processing of your data"
+                  ],
+                  [
+                    "Right to portability",
+                    "Receive your data in a structured format"
+                  ],
+                  [
+                    "Right to deletion",
+                    "Request erasure of your data"
+                  ],
+                  [
+                    "Right to be forgotten",
+                    "Have your data no longer used"
+                  ],
+                  [
+                    "Right to redress",
+                    "Obtain redress for damage caused by unlawful processing"
+                  ]
+                ]
+              },
+              {
+                "type": "subtitle",
+                "t": "Withdrawal of consent — Practical mechanisms"
+              },
+              {
+                "type": "p",
+                "t": "You may withdraw your consent at any time without affecting processing carried out before withdrawal."
+              },
+              {
+                "type": "list",
+                "items": [
+                  "Device permissions: Phone settings > Apps > GEXTIMO > Permissions > disable the permission. Immediate effect.",
+                  "Analytics preferences: GEXTIMO > Settings > Privacy > Data preferences. Applied within 48 hours.",
+                  "Account deletion: dpo@novafriq.africa stating 'Delete my account'. Erasure within 30 days (except legal obligations)."
+                ]
+              },
+              {
+                "type": "p",
+                "t": "To exercise these rights: dpo@novafriq.africa — We respond within 60 days (Digital Code)."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 11 — PROTECTION OF MINORS",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "GEXTIMO is not intended for minors under 18. It is a professional tool reserved for adult artisans and entrepreneurs: you must be 18 to create an account."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 12 — RIGHT TO COMPLAIN TO THE APDP",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "You may lodge a complaint with the APDP: Rue 6.076, Aïdjèdo, Cotonou · contact@apdp.bj · www.apdp.bj"
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 13 — COOKIES AND TRACKERS",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "See Document 4 — Cookie and Tracker Management Policy in this file."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 14 — LINKS TO THIRD-PARTY SERVICES",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "GEXTIMO may contain links or redirections to services we do not operate: Mobile Money payment pages (MTN, Moov, Orange), WhatsApp for support, or any other external service."
+              },
+              {
+                "type": "p",
+                "t": "Once you leave GEXTIMO to access one of these services, their own terms of use and privacy policies apply. NOVAFRIQ is not responsible for the content, practices or data collected by these services."
+              },
+              {
+                "type": "p",
+                "t": "Links to the GEXTIMO storefront (gextimo.novafriq.africa) remain subject to this policy and NOVAFRIQ's ToU."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 15 — AMENDMENTS",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "In the event of a material change to this policy:"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "We notify you at least 30 days before the change takes effect, by email or via an in-app notification.",
+                  "The new version is presented clearly to you, with a summary of the changes made.",
+                  "If you continue to use GEXTIMO after the effective date, you are deemed to have accepted the revised version.",
+                  "If you do not accept the changes, you may stop using GEXTIMO before the effective date, or contact us at dpo@novafriq.africa to exercise your right to account deletion."
+                ]
+              },
+              {
+                "type": "p",
+                "t": "Minor changes (wording corrections, contact detail updates) may be made without 30 days' notice and are indicated by updating the date at the top of the policy."
+              }
+            ]
           }
         ]
       },
       "mentions": {
         "title": "Legal Notice",
         "eyebrow": "Legal",
-        "subtitle": "Legal information about the Gextimo platform.",
-        "date": "Last updated: July 2026",
-        "sections": [
+        "subtitle": "Application and website: GEXTIMO | URL: gextimo.novafriq.africa",
+        "meta_lines": [
+          "Last updated: [DATE — to be completed]"
+        ],
+        "articles": [
           {
-            "h": "Publisher",
-            "p": "Gextimo is a registered trademark of NovAfriq, a company registered in the Trade and Personal Property Credit Register (RCCM) of Benin. Registered office: Cotonou, Republic of Benin. Contact: contact@gextimo.com"
+            "title": "PUBLISHER",
+            "blocks": [
+              {
+                "type": "table",
+                "headers": [
+                  "Field",
+                  "Information"
+                ],
+                "rows": [
+                  [
+                    "Company name",
+                    "NOVAFRIQ"
+                  ],
+                  [
+                    "Legal form",
+                    "Société par Actions Simplifiée Unipersonnelle (SASU)"
+                  ],
+                  [
+                    "Share capital",
+                    "1,000,000 FCFA"
+                  ],
+                  [
+                    "Registered office",
+                    "Quartier Agblangandan, Commune de Sèmè-Podji, Arrondissement d'Agblangandan, C/160 Adjaho, Republic of Benin"
+                  ],
+                  [
+                    "RCCM number",
+                    "[RCCM NUMBER — to be completed after registration on monentreprise.bj]"
+                  ],
+                  [
+                    "IFU number",
+                    "[IFU NUMBER — to be completed after registration]"
+                  ],
+                  [
+                    "Publication director",
+                    "ADJAHO Patrick Dona — President"
+                  ],
+                  [
+                    "Phone",
+                    "+229 01 66 55 29 92"
+                  ],
+                  [
+                    "Email",
+                    "contact@novafriq.africa"
+                  ]
+                ]
+              }
+            ]
           },
           {
-            "h": "Publication Director",
-            "p": "The publication director is the legal representative of NovAfriq."
+            "title": "HOSTING PROVIDER",
+            "blocks": [
+              {
+                "type": "table",
+                "headers": [
+                  "Field",
+                  "Information"
+                ],
+                "rows": [
+                  [
+                    "Company name",
+                    "Hostinger International Ltd"
+                  ],
+                  [
+                    "Hosting country",
+                    "France (European Union)"
+                  ],
+                  [
+                    "Datacenter location",
+                    "Paris, France"
+                  ],
+                  [
+                    "Provider's registered office",
+                    "61 Lordou Vyronos Street, Lumiel Building, 4th floor, 6023 Larnaca, Cyprus"
+                  ],
+                  [
+                    "Website",
+                    "hostinger.com"
+                  ]
+                ]
+              }
+            ]
           },
           {
-            "h": "Hosting",
-            "p": "The platform is hosted on secure servers. For any questions relating to technical infrastructure, please contact our support team."
+            "title": "INTELLECTUAL PROPERTY",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "All content on GEXTIMO (code, design, logo, text, structure) is the exclusive property of NOVAFRIQ, protected by Beninese law and international intellectual property conventions."
+              },
+              {
+                "type": "p",
+                "t": "Creations displayed by designers and stylists on the platform (photos, models, collections) remain the exclusive property of their authors. NOVAFRIQ acts as a host of these contents and cannot be held liable for content published by users."
+              }
+            ]
           },
           {
-            "h": "Intellectual Property",
-            "p": "All elements of the Gextimo site (texts, graphics, logo, images, interface) are protected by intellectual property law and are the exclusive property of NovAfriq, unless otherwise stated."
-          },
-          {
-            "h": "Liability",
-            "p": "NovAfriq strives to ensure the accuracy of information published on the platform but cannot be held responsible for errors or omissions. Creators are solely responsible for the creations they publish."
-          },
-          {
-            "h": "Applicable Law",
-            "p": "These legal notices are governed by Beninese law. Any dispute will be submitted to the competent court of Cotonou."
+            "title": "PERSONAL DATA",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "See Document 1 — Privacy Policy and Document 4 — Cookie Policy in this file. Supervisory authority: APDP — www.apdp.bj"
+              }
+            ]
           }
         ]
       },
       "cookies": {
-        "title": "Cookie Policy",
+        "title": "Cookie Management Policy",
         "eyebrow": "Cookies & Trackers",
-        "subtitle": "Understanding how Gextimo uses cookies to improve your experience.",
-        "date": "Last updated: July 2026",
-        "sections": [
+        "subtitle": "Application: GEXTIMO | Publisher: NOVAFRIQ, SASU",
+        "meta_lines": [
+          "Last updated: [DATE — to be completed]"
+        ],
+        "version": "Version 4.0 — Established under Law No. 2017-20 — Digital Code of the Republic of Benin.",
+        "articles": [
           {
-            "h": "What is a cookie?",
-            "p": "A cookie is a small text file placed on your device (computer, smartphone) when you visit our site. It allows us to remember your preferences and improve your browsing experience."
+            "title": "ARTICLE 1 — WHAT IS A COOKIE?",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "A cookie is a small text file placed on your device (phone, computer, tablet) when you use GEXTIMO. It allows the app to recognise you, remember your preferences and measure use of the service."
+              },
+              {
+                "type": "p",
+                "t": "Trackers refer to all technologies similar to cookies: tracking pixels, device identifiers, local storage."
+              }
+            ]
           },
           {
-            "h": "Strictly Necessary Cookies",
-            "p": "These cookies are essential to the platform's operation: authentication, cart, language and currency preferences. They cannot be disabled."
+            "title": "ARTICLE 2 — WHY DOES GEXTIMO USE COOKIES?",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "GEXTIMO uses cookies for three essential reasons:"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "To run the service: without these cookies, you cannot sign in, access your collections or carry out transactions. They are essential.",
+                  "To improve your experience: these cookies remember your preferences (language, display) to offer you personalised navigation.",
+                  "To measure and improve the platform: these cookies help us understand how you use GEXTIMO in order to identify issues and improve our features."
+                ]
+              }
+            ]
           },
           {
-            "h": "Performance Cookies",
-            "p": "We use anonymised analytics tools to measure page traffic and identify the most-used journeys. This data helps us improve our services."
+            "title": "ARTICLE 3 — TYPES OF COOKIES USED",
+            "blocks": [
+              {
+                "type": "table",
+                "headers": [
+                  "Type",
+                  "Purpose",
+                  "Duration",
+                  "Consent required"
+                ],
+                "rows": [
+                  [
+                    "Essential cookies",
+                    "Sign-in, session, security, cart",
+                    "Session / 12 months",
+                    "No — essential"
+                  ],
+                  [
+                    "Preference cookies",
+                    "Language, display, user settings",
+                    "12 months",
+                    "Yes"
+                  ],
+                  [
+                    "Analytics cookies",
+                    "Audience measurement, usage statistics, improvement",
+                    "25 months",
+                    "Yes"
+                  ],
+                  [
+                    "Communication cookies",
+                    "Notifications, transactional messaging",
+                    "Session",
+                    "Yes"
+                  ]
+                ]
+              }
+            ]
           },
           {
-            "h": "Personalisation Cookies",
-            "p": "These cookies remember your preferences (light/dark theme, currency, language) to offer you a personalised experience on each visit."
+            "title": "ARTICLE 4 — THIRD-PARTY COOKIES",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "GEXTIMO may integrate third-party services that place their own cookies:"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "[Analytics tool — to be specified]: anonymised audience measurement",
+                  "FedaPay: securing payment transactions",
+                  "[WhatsApp Business — if integrated]: communication with support"
+                ]
+              },
+              {
+                "type": "p",
+                "t": "These providers are subject to their own privacy policies. NOVAFRIQ does not control cookies placed by these third-party services."
+              }
+            ]
           },
           {
-            "h": "Managing Your Cookies",
-            "p": "You can accept or reject non-essential cookies via our consent banner. You can also configure your browser to block or delete cookies. Please note that disabling some cookies may affect your experience on the platform."
+            "title": "ARTICLE 5 — HOW TO MANAGE YOUR COOKIES?",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "You have several ways to control cookies:"
+              },
+              {
+                "type": "subtitle",
+                "t": "5.1 — Via GEXTIMO"
+              },
+              {
+                "type": "p",
+                "t": "Go to GEXTIMO > Settings > Privacy > Cookie settings to enable or disable non-essential cookies. Essential cookies cannot be disabled as they are indispensable to the service."
+              },
+              {
+                "type": "subtitle",
+                "t": "5.2 — Via your device"
+              },
+              {
+                "type": "p",
+                "t": "Android: Settings > Apps > GEXTIMO > Permissions | iOS: Settings > GEXTIMO > Privacy"
+              },
+              {
+                "type": "subtitle",
+                "t": "5.3 — Via your browser (website)"
+              },
+              {
+                "type": "p",
+                "t": "If you access the GEXTIMO storefront via a browser, you can manage cookies in your browser settings (Chrome, Firefox, Safari, Edge)."
+              }
+            ]
           },
           {
-            "h": "Retention Period",
-            "p": "Session cookies expire when you close your browser. Persistent cookies have a maximum duration of 13 months, in accordance with recommendations from data protection authorities."
+            "title": "ARTICLE 6 — RETENTION PERIOD",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Cookies are retained for the duration shown in the table in Article 3. Upon expiry, they are automatically deleted. You may delete them at any time via your device or app settings."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 7 — CONTACT",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "For any question about our use of cookies: dpo@novafriq.africa"
+              }
+            ]
           }
         ]
       },
       "protection_donnees": {
         "title": "Data Protection (APDP)",
         "eyebrow": "APDP · Benin",
-        "subtitle": "Compliance with Beninese Law No. 2009-09 on personal data protection.",
-        "date": "Last updated: July 2026",
-        "sections": [
+        "subtitle": "Application: GEXTIMO — African Fashion Marketplace | Publisher: NOVAFRIQ, SASU",
+        "meta_lines": [
+          "Public compliance page. For full details, see Document 1 (Privacy) and Document 4 (Cookies)."
+        ],
+        "version": "Version 7.0 — Public APDP compliance summary. See Documents 1, 4, 5, 6, 7 for full details.",
+        "articles": [
           {
-            "h": "Legal Framework",
-            "p": "The Gextimo platform complies with Law No. 2009-09 of 22 May 2009 on the protection of personal data in the Republic of Benin, as well as the recommendations of the Personal Data Protection Authority (APDP)."
+            "title": "ARTICLE 1 — OUR COMMITMENT",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "NOVAFRIQ protects your personal data in accordance with Law No. 2017-20 — Digital Code of the Republic of Benin and the requirements of the APDP (Personal Data Protection Authority)."
+              }
+            ]
           },
           {
-            "h": "APDP Declaration",
-            "p": "In accordance with Article 14 of Law No. 2009-09, personal data processing carried out by Gextimo has been declared to the Benin APDP."
+            "title": "ARTICLE 2 — APDP DECLARATION",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "The processing of your data is declared to the APDP under deliberation No. [APDP DELIBERATION NUMBER — to be completed after filing]."
+              },
+              {
+                "type": "p",
+                "t": "Data Controller: ADJAHO Patrick Dona — NOVAFRIQ. Contact: dpo@novafriq.africa."
+              }
+            ]
           },
           {
-            "h": "Sensitive Data",
-            "p": "We do not collect sensitive data as defined by law (racial or ethnic origin, political opinions, religious beliefs, health data). Only data necessary to provide our services is collected."
+            "title": "ARTICLE 3 — YOUR RIGHTS",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "You have the rights of access, rectification, deletion, objection, portability and to be forgotten regarding your data."
+              },
+              {
+                "type": "p",
+                "t": "To exercise them: dpo@novafriq.africa. We respond within 60 days."
+              }
+            ]
           },
           {
-            "h": "Rights of Data Subjects",
-            "p": "In accordance with Articles 21 to 30 of Law No. 2009-09, you have the right of access, rectification, erasure, objection and portability of your personal data. These rights are exercised by email at: privacy@gextimo.com, accompanied by proof of identity."
+            "title": "ARTICLE 4 — WHERE IS YOUR DATA",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Your data is hosted in a datacenter located in Paris (France, European Union), at Hostinger International Ltd. This transfer outside Benin is subject to the cross-border data flow authorisation formality with the APDP."
+              }
+            ]
           },
           {
-            "h": "Response Deadline",
-            "p": "Any request relating to your rights will be processed within a maximum of 30 days from receipt of your complete request."
-          },
-          {
-            "h": "Complaint to the APDP",
-            "p": "If you believe your rights are not being respected, you may submit a complaint to the Personal Data Protection Authority of Benin (APDP), whose contact details are available on the official Beninese government website."
+            "title": "ARTICLE 5 — CONTACT THE APDP",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "You may contact the APDP at any time: Rue 6.076, Aïdjèdo, Cotonou · contact@apdp.bj · www.apdp.bj · +229 21 32 57 88."
+              }
+            ]
           }
         ]
       },
       "cgu": {
         "title": "Terms of Use",
         "eyebrow": "ToU",
-        "subtitle": "The rules governing use of the Gextimo platform.",
-        "date": "Last updated: July 2026",
-        "sections": [
+        "subtitle": "Application: GEXTIMO | Publisher: NOVAFRIQ, SASU",
+        "meta_lines": [
+          "Effective date: [DATE — to be completed]"
+        ],
+        "version": "Version 4.0 — Established under Beninese law and OHADA law.",
+        "articles": [
           {
-            "h": "Article 1 — Purpose",
-            "p": "These Terms of Use (ToU) define the terms and conditions for using the Gextimo platform, accessible at gextimo.com, and the rights and obligations of users."
+            "title": "ARTICLE 1 — PURPOSE AND PRESENTATION OF THE SERVICE",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "These terms (ToU) set the rules for using GEXTIMO, the African fashion marketplace published by NOVAFRIQ. GEXTIMO connects creators, artisans and stylists with their customers through an online storefront (gextimo.novafriq.africa) and a mobile app."
+              },
+              {
+                "type": "p",
+                "t": "On GEXTIMO, designers and stylists display their collections. Payments go through FedaPay, an approved payment aggregator: NOVAFRIQ never holds customer funds. FedaPay collects on behalf of the creator, NOVAFRIQ deducts its commission, then FedaPay remits the balance to the creator. Basic access is free; advanced features are by subscription."
+              },
+              {
+                "type": "box",
+                "title": "Note — Launch mode",
+                "t": "At launch, GEXTIMO operates in referral mode. Online payment, commission and FedaPay remittance are not yet active: payments are settled directly between the customer and the creator, outside the platform. These features will be activated later, with 30 days' notice. Once activated, the Terms of Sale & Commissions (Document 9) and the Delivery, Returns & Refunds policy (Document 16) apply automatically. While payment is not active, we do not collect your payment data or remittance details."
+              }
+            ]
           },
           {
-            "h": "Article 2 — Platform Access",
-            "p": "Access to certain platform features requires creating an account. The user must be at least 18 years old and provide accurate information during registration."
+            "title": "ARTICLE 2 — ACCEPTANCE OF ToU",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "By creating an account or using the app, you accept these ToU. If we make material changes, we notify you 30 days in advance."
+              }
+            ]
           },
           {
-            "h": "Article 3 — User Obligations",
-            "p": "Users agree to use the platform lawfully, not to impersonate third parties, not to distribute unlawful content or content that infringes third-party rights, and to respect creators' intellectual property."
+            "title": "ARTICLE 3 — ACCESS AND USER ACCOUNT",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "To access GEXTIMO, you create an account with accurate information. You keep your credentials secret and are responsible for everything that happens on your account."
+              },
+              {
+                "type": "p",
+                "t": "We guarantee 99% availability per calendar month, excluding planned maintenance announced 48 hours in advance."
+              }
+            ]
           },
           {
-            "h": "Article 4 — Gextimo's Liability",
-            "p": "Gextimo is a platform connecting creators and customers. We are not party to contracts concluded between users. Gextimo's liability is limited to best-efforts obligations regarding platform availability."
+            "title": "ARTICLE 4 — OFFERS AND PRICING",
+            "blocks": [
+              {
+                "type": "table",
+                "headers": [
+                  "Plan",
+                  "Commission on sales",
+                  "Monthly subscription"
+                ],
+                "rows": [
+                  [
+                    "Free (Discovery)",
+                    "15% on each sale made via GEXTIMO (applicable from online payment activation)",
+                    "0 FCFA"
+                  ],
+                  [
+                    "Standard",
+                    "0% — no commission on sales",
+                    "Price shown in the app"
+                  ],
+                  [
+                    "Premium",
+                    "0% — no commission on sales",
+                    "Price shown in the app"
+                  ]
+                ]
+              },
+              {
+                "type": "p",
+                "t": "The commission applied to sales on the Free plan is 15% of the sale price. No commission is charged on sales by creators with an active subscription (Standard or Premium). This commission applies from online payment activation."
+              },
+              {
+                "type": "p",
+                "t": "Subscription prices in force are shown in the GEXTIMO app at sign-up and constitute the binding contractual reference. Any price change is communicated to the user with 30 days' notice."
+              },
+              {
+                "type": "p",
+                "t": "Prices may vary by country of residence. The applicable price is the one shown in the app at sign-up, in local currency or FCFA depending on the region."
+              },
+              {
+                "type": "p",
+                "t": "Accepted payment methods: Mobile Money (MTN, Moov, Celtiis) and bank cards, via FedaPay."
+              }
+            ]
           },
           {
-            "h": "Article 5 — Intellectual Property",
-            "p": "The platform's content (excluding artisan creations) is the exclusive property of NovAfriq. Any reproduction, representation or distribution without prior authorisation is prohibited."
+            "title": "ARTICLE 5 — PROFESSIONAL USER DATA",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Data you enter in GEXTIMO — inventories, customers, orders, stock, creations — belongs to you. NOVAFRIQ never becomes its owner and uses it only to operate the service."
+              },
+              {
+                "type": "p",
+                "t": "You may export your data at any time: in CSV format (account and order data) and PDF (contractual documents), from your personal space or by request to dpo@novafriq.africa. If you cancel, we keep it for 90 days, then permanently delete it."
+              }
+            ]
           },
           {
-            "h": "Article 6 — Suspension and Termination",
-            "p": "Gextimo reserves the right to suspend or delete any account in the event of a breach of these ToU, without notice or compensation. Users may close their account at any time from their settings."
+            "title": "ARTICLE 6 — USER OBLIGATIONS",
+            "blocks": [
+              {
+                "type": "list",
+                "items": [
+                  "Provide accurate and up-to-date information",
+                  "Use GEXTIMO normally and in accordance with these ToU",
+                  "Not circumvent security",
+                  "Not use the app for illegal activities",
+                  "Immediately report any security issue",
+                  "Not reproduce, copy or use other users' creations without authorisation"
+                ]
+              }
+            ]
           },
           {
-            "h": "Article 7 — Amendments",
-            "p": "Gextimo may amend these ToU at any time. Users will be notified of material changes by email or platform notification. Continued use constitutes acceptance of the new terms."
+            "title": "ARTICLE 7 — INTELLECTUAL PROPERTY",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "GEXTIMO — its code, algorithms and design — belongs to NOVAFRIQ. Any copying or exploitation without written consent is prohibited. For creator content (photos, collections, models), see Document 8 — Creator Rights & Intellectual Property."
+              }
+            ]
           },
           {
-            "h": "Article 8 — Applicable Law",
-            "p": "These ToU are governed by Beninese law. In the event of a dispute, the parties agree to seek an amicable resolution before any legal action."
+            "title": "ARTICLE 8 — LIABILITY AND WARRANTY LIMITATION",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "We provide the service diligently. Our total liability cannot exceed what you have paid during the 12 months preceding the issue."
+              },
+              {
+                "type": "p",
+                "t": "We are not responsible for indirect damages, loss of business, or decisions you make based on information in the app."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 9 — TERMINATION",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "You may cancel your account at any time from settings. We may suspend or close an account in the event of ToU violation, fraud, infringement of creators' rights, or repeated non-payment."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 10 — APPLICABLE LAW AND DISPUTE RESOLUTION",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "These ToU are governed by Beninese law, OHADA law and Law No. 2017-20 — Digital Code. In the event of a dispute, we first seek an amicable resolution within 30 days. Otherwise, the Commercial Court of Cotonou has sole jurisdiction."
+              },
+              {
+                "type": "p",
+                "t": "Contact: support@novafriq.africa | gextimo.novafriq.africa | Quartier Agblangandan, Sèmè-Podji, Benin"
+              }
+            ]
           }
         ]
       },
       "droits_createurs": {
         "title": "Creator Rights & Intellectual Property",
         "eyebrow": "Creators & IP",
-        "subtitle": "Understanding the protection of your creations on the Gextimo platform.",
-        "date": "Last updated: July 2026",
-        "sections": [
+        "subtitle": "Application: GEXTIMO — African Fashion Marketplace | Publisher: NOVAFRIQ, SASU",
+        "meta_lines": [
+          "Effective date: [DATE — to be completed]"
+        ],
+        "articles": [
           {
-            "h": "Ownership of Your Creations",
-            "p": "You retain full intellectual property rights over your creations published on Gextimo: models, drawings, photos, descriptions. By publishing on the platform, you grant us only a non-exclusive licence limited to displaying your portfolio."
+            "title": "ARTICLE 1 — PURPOSE",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "This document defines the rights of creators (designers, stylists, artisans) who display their creations on GEXTIMO, and the rules protecting their intellectual property on the platform."
+              }
+            ]
           },
           {
-            "h": "Licence Granted to Gextimo",
-            "p": "By uploading your creations, you grant Gextimo a worldwide, non-exclusive, royalty-free, sub-licensable licence solely for the purpose of promoting your studio on the platform and its official communication channels."
+            "title": "ARTICLE 2 — OWNERSHIP OF CREATIONS",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Each creator remains the sole owner of their creations published on GEXTIMO: photos, models, designs, collections, descriptions, videos. NOVAFRIQ acquires no ownership rights over this content."
+              },
+              {
+                "type": "p",
+                "t": "By publishing on GEXTIMO, the creator grants NOVAFRIQ a limited, non-exclusive and revocable licence permitting solely the display, promotion and distribution of their creations within the normal operation of the platform."
+              },
+              {
+                "type": "p",
+                "t": "This licence ends automatically upon the creator's account cancellation."
+              }
+            ]
           },
           {
-            "h": "Protection Against Copying",
-            "p": "It is strictly prohibited for any platform user to reproduce, download without authorisation, distribute or commercialise another creator's creations. Any breach exposes the perpetrator to civil and criminal proceedings."
+            "title": "ARTICLE 3 — WHAT NOVAFRIQ CAN DO WITH CREATIONS",
+            "blocks": [
+              {
+                "type": "list",
+                "items": [
+                  "Display creations on the GEXTIMO storefront (gextimo.novafriq.africa)",
+                  "Use images to promote GEXTIMO on social media and marketing materials, with mention of the creator",
+                  "Index creations in search engines for their visibility"
+                ]
+              },
+              {
+                "type": "box",
+                "title": "NOVAFRIQ CANNOT:",
+                "t": "Sell creations to third parties, modify them without agreement, use them outside the GEXTIMO context, or transfer them to other platforms."
+              }
+            ]
           },
           {
-            "h": "Reporting Counterfeiting",
-            "p": "If you believe that a creation published on Gextimo infringes your rights, you can submit a report via the Contact & Claims page. Our team will process your request within 72 hours."
+            "title": "ARTICLE 4 — PROTECTION AGAINST COPYING AND PLAGIARISM",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Copying, reproducing or unauthorised use of creations published on GEXTIMO is strictly prohibited, in accordance with intellectual property laws in force in Benin and international conventions."
+              },
+              {
+                "type": "p",
+                "t": "Any user (customer, visitor or other creator) who copies, reproduces or appropriates a creation without the creator's explicit consent is exposed to civil and criminal proceedings."
+              }
+            ]
           },
           {
-            "h": "Originality of Creations",
-            "p": "Each creator warrants that published creations are original and do not infringe the intellectual property rights of any third party. In the event of a dispute on this point, liability rests exclusively with the creator."
+            "title": "ARTICLE 5 — REPORTING PROCEDURE",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "If you identify a violation of your rights on GEXTIMO (photo copying, design plagiarism, unauthorised use), you may report it to:"
+              },
+              {
+                "type": "box",
+                "title": "Report contact",
+                "t": "Email: contact@novafriq.africa | Subject: 'Report: creator rights violation'"
+              },
+              {
+                "type": "p",
+                "t": "NOVAFRIQ commits to handling each report within 72 business hours and removing any disputed content as quickly as possible after verification."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 6 — CREATOR WARRANTIES",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "By publishing on GEXTIMO, the creator warrants that:"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "They are the author or rights holder of the published creations",
+                  "The creations do not infringe third-party rights",
+                  "The creations do not contain unlawful, offensive or content contrary to Beninese law"
+                ]
+              },
+              {
+                "type": "p",
+                "t": "In the event of misrepresentation, the creator bears sole responsibility for the legal consequences."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 7 — GEXTIMO LOGO AND BRAND",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "The logo, brand and name 'GEXTIMO' are the exclusive property of NOVAFRIQ. Any use without prior written consent is prohibited."
+              }
+            ]
           }
         ]
       },
       "conditions_vente": {
         "title": "Terms of Sale & Commissions",
         "eyebrow": "Sales & Commissions",
-        "subtitle": "Pricing, commissions and payment processes on Gextimo.",
-        "date": "Last updated: July 2026",
-        "sections": [
+        "subtitle": "Application: GEXTIMO — African Fashion Marketplace | Publisher: NOVAFRIQ, SASU",
+        "meta_lines": [
+          "Effective date: [DATE — to be completed]"
+        ],
+        "note": "Note — Provisions applicable from the activation of online payment on GEXTIMO (see ToU — Launch phase). At launch, the service operates in referral mode: these rules are not yet active.",
+        "version": "Version 4.0 — NOVAFRIQ / GEXTIMO.",
+        "articles": [
           {
-            "h": "Order Process",
-            "p": "Every order on Gextimo follows a multi-step process: selecting the creation and creator, sending a quote request, confirmation by the creator, secure payment, and production tracking. The order is definitively confirmed upon payment validation."
+            "title": "ARTICLE 1 — HOW THE MARKETPLACE WORKS",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "GEXTIMO is a marketplace: creators (designers, stylists, artisans) display their collections and NOVAFRIQ manages the entire sales process on their behalf."
+              },
+              {
+                "type": "p",
+                "t": "The sales flow works as follows:"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "The customer chooses a creation and places an order on GEXTIMO",
+                  "Payment is made in full on the GEXTIMO platform (via FedaPay — Mobile Money or bank card)",
+                  "Funds are collected by FedaPay (approved aggregator) on behalf of the creator — NOVAFRIQ never holds customer funds",
+                  "NOVAFRIQ deducts its commission from the total amount",
+                  "FedaPay remits the net balance to the creator, on NOVAFRIQ's instruction, within the agreed timeframes"
+                ]
+              },
+              {
+                "type": "p",
+                "t": "No direct sale between creator and customer outside GEXTIMO is permitted for orders placed on the platform."
+              }
+            ]
           },
           {
-            "h": "Pricing",
-            "p": "Prices displayed on creator profiles are indicative. The final price is set in the quote agreed between the customer and creator. Prices are exclusive of delivery costs, which are indicated separately during the order."
+            "title": "ARTICLE 2 — NOVAFRIQ COMMISSIONS",
+            "blocks": [
+              {
+                "type": "table",
+                "headers": [
+                  "Transaction type",
+                  "NOVAFRIQ commission",
+                  "Amount remitted to creator"
+                ],
+                "rows": [
+                  [
+                    "Sale — Free plan",
+                    "15%",
+                    "85% of sale price"
+                  ],
+                  [
+                    "Sale — Standard plan",
+                    "0%",
+                    "100% of sale price"
+                  ],
+                  [
+                    "Sale — Premium plan",
+                    "0%",
+                    "100% of sale price"
+                  ],
+                  [
+                    "Made-to-measure order",
+                    "According to creator's plan",
+                    "Balance after any commission"
+                  ]
+                ]
+              },
+              {
+                "type": "p",
+                "t": "Commission rates are communicated to the creator at registration and may be revised with 30 days' notice."
+              }
+            ]
           },
           {
-            "h": "Gextimo Commission",
-            "p": "Gextimo charges a commission on each transaction completed via the platform. The commission rate is communicated to creators upon registration and may vary according to the subscription plan. The commission is automatically deducted at the time of settlement."
+            "title": "ARTICLE 3 — REMITTANCE TIMELINES",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "The net balance is remitted to the creator, via FedaPay, within 7 business days of the customer's confirmation of receipt of the order."
+              },
+              {
+                "type": "p",
+                "t": "In the absence of confirmation from the customer, remittance is released automatically after 14 days, in the absence of a dispute."
+              },
+              {
+                "type": "p",
+                "t": "Remittance is made via FedaPay (Mobile Money or bank transfer)."
+              },
+              {
+                "type": "p",
+                "t": "Where a dispute is open on an order, the corresponding remittance is suspended until the dispute is resolved."
+              }
+            ]
           },
           {
-            "h": "Secure Payments",
-            "p": "Payments are secured by our approved providers. Gextimo never stores your banking information. Accepted currencies are displayed at checkout."
+            "title": "ARTICLE 4 — PRICING AND DISPLAY",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Each creator sets their creation prices freely. NOVAFRIQ displays the public price (including commission) on the storefront. The creator is informed of the net price they will receive before publication."
+              },
+              {
+                "type": "p",
+                "t": "Prices are displayed in FCFA. NOVAFRIQ reserves the right to display equivalents in other currencies for guidance."
+              }
+            ]
           },
           {
-            "h": "Payment Disputes",
-            "p": "In the event of a payment dispute, contact our support within 30 days of the transaction. We will make our best effort to resolve the disagreement. If unsuccessful, the parties may resort to mediation."
+            "title": "ARTICLE 5 — REFUNDS AND DISPUTES",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "In the event of a refund request by a customer:"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "If the request is justified (non-conforming or undelivered item): full refund to the customer. The creator is notified and the amount is deducted from the next remittance.",
+                  "If the request is unjustified: NOVAFRIQ decides after examining evidence provided by both parties."
+                ]
+              },
+              {
+                "type": "p",
+                "t": "Any dispute between creator and customer must be reported to: support@novafriq.africa"
+              }
+            ]
           },
           {
-            "h": "Invoicing",
-            "p": "A summary of each transaction is available in your personal space. Creators receive a confirmation of each transfer with details of commissions deducted."
+            "title": "ARTICLE 6 — CREATOR SELLER OBLIGATIONS",
+            "blocks": [
+              {
+                "type": "list",
+                "items": [
+                  "Describe creations honestly and precisely (materials, dimensions, production lead times)",
+                  "Meet announced delivery timelines",
+                  "Notify NOVAFRIQ immediately if an item becomes unavailable",
+                  "Not offer off-platform items available on GEXTIMO",
+                  "Respect the intellectual property rights of other creators"
+                ]
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 7 — NOVAFRIQ OBLIGATIONS",
+            "blocks": [
+              {
+                "type": "list",
+                "items": [
+                  "Display the creator's creations faithfully",
+                  "Collect payments securely",
+                  "Remit the net balance within the agreed timelines",
+                  "Inform the creator of each order and each remittance",
+                  "Protect the creator's creations from unauthorised copying (see Document 8)"
+                ]
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 8 — SELLER CHARTER (SERVICE STANDARDS)",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "By selling on GEXTIMO, the creator commits to these standards:"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "Respond to customer messages within 48 hours.",
+                  "Accept or decline an order within 48 hours. Without a response, the order is cancelled and the customer automatically refunded.",
+                  "Prepare and ship the order within the lead time announced on the product listing.",
+                  "Update the customer at least once a week if production exceeds 15 days.",
+                  "Describe creations accurately (materials, dimensions, lead times); photos must match the actual product.",
+                  "Not sell off-platform an item available on GEXTIMO."
+                ]
+              },
+              {
+                "type": "subtitle",
+                "t": "Progressive sanctions for non-compliance:"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "1st level — reminder: message reminding of the rule not followed.",
+                  "2nd level — warning: formal warning and suspension of promotional placement.",
+                  "3rd level — suspension: 3 cancellations in 5 days = shop taken offline; 10 cancellations or refunds in 30 days = shop suspended and reviewed for closure.",
+                  "Serious repeat offence — creator account closure, after notification and right of appeal."
+                ]
+              },
+              {
+                "type": "p",
+                "t": "The creator may appeal any sanction at support@novafriq.africa (right of appeal)."
+              }
+            ]
+          },
+          {
+            "title": "ARTICLE 9 — APPLICABLE LAW",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "These terms are governed by Beninese law, OHADA law and Law No. 2017-20 — Digital Code. In the event of a dispute, the Commercial Court of Cotonou has sole jurisdiction."
+              }
+            ]
           }
         ]
       },
       "produits_interdits": {
         "title": "Prohibited Products & Authorised Creations",
         "eyebrow": "Creation Charter",
-        "subtitle": "What can and cannot be published on the Gextimo platform.",
-        "date": "Last updated: July 2026",
-        "sections": [
+        "subtitle": "Application: GEXTIMO — African Fashion Marketplace | Publisher: NOVAFRIQ, SASU",
+        "meta_lines": [
+          "Effective date: [DATE — to be completed]"
+        ],
+        "version": "Version 7.0 — Established for GEXTIMO, fashion marketplace.",
+        "articles": [
           {
-            "h": "Authorised Creations",
-            "p": "Gextimo is dedicated to African fashion and textile craftsmanship. Permitted: all garments (dresses, suits, boubous, children's ensembles, fashion accessories), made-to-measure or ready-to-wear creations, and creations inspired by African textiles and traditions."
+            "title": "ARTICLE 1 — AUTHORISED CREATIONS",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "GEXTIMO is dedicated to fashion and craftsmanship. You may publish and sell:"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "Clothing, traditional garments and made-to-measure (couture, ready-to-wear).",
+                  "Fashion accessories: bags, shoes, jewellery, hats, scarves.",
+                  "Textiles, fabrics and materials.",
+                  "Original creations designed or made by yourself."
+                ]
+              }
+            ]
           },
           {
-            "h": "Quality and Authenticity",
-            "p": "Each published creation must accurately correspond to its photos and descriptions. Images must be of good quality and faithfully represent the creation. Stolen photos, deceptively retouched images, or photos that do not match reality are prohibited."
+            "title": "ARTICLE 2 — PROHIBITED PRODUCTS AND CONTENT",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Strictly prohibited on GEXTIMO:"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "Counterfeits and copies of brands, models or others' creations.",
+                  "Illegal, stolen products or those infringing third-party rights.",
+                  "Weapons, ammunition, explosives, dangerous or flammable products.",
+                  "Drugs, tobacco, medicines and regulated substances.",
+                  "Products from protected species (ivory, skins, etc.).",
+                  "Hateful, violent, discriminatory or sexual content.",
+                  "Any content endangering or sexualising a minor — zero tolerance.",
+                  "Items unrelated to a tangible fashion creation."
+                ]
+              }
+            ]
           },
           {
-            "h": "Prohibited Products and Practices",
-            "p": "Strictly prohibited on Gextimo: selling counterfeits or copies of protected brands, creations that violate human dignity, misleading or fraudulent listings, selling products outside the fashion/textile sector, and any activity unlawful under Beninese legislation."
+            "title": "ARTICLE 3 — CONSEQUENCES",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Any prohibited product or content is removed. Depending on severity: reminder, warning, suspension, then account closure for repeat offences (see Seller Charter, Document 9)."
+              }
+            ]
           },
           {
-            "h": "Third-Party Intellectual Property",
-            "p": "It is prohibited to reproduce or draw too directly from other designers' original creations without their explicit authorisation. Gextimo respects and enforces intellectual property rights."
-          },
-          {
-            "h": "Sanctions",
-            "p": "Any breach of these rules will result in immediate removal of the creation, a warning, and in the event of a repeat offence, permanent account suspension without refund of subscription fees. Counterfeiting cases will be reported to the competent authorities."
+            "title": "ARTICLE 4 — REPORT A PROHIBITED PRODUCT",
+            "blocks": [
+              {
+                "type": "box",
+                "title": "Report",
+                "t": "contact@novafriq.africa — Subject: 'Report: prohibited product'"
+              },
+              {
+                "type": "p",
+                "t": "We examine every report and act quickly."
+              }
+            ]
           }
         ]
       },
@@ -2316,64 +3381,151 @@
       "regles_communaute": {
         "title": "Community Rules",
         "eyebrow": "Gextimo Community",
-        "subtitle": "The values and behaviours expected of all platform members.",
-        "date": "Last updated: July 2026",
-        "sections": [
+        "subtitle": "Application: GEXTIMO — African Fashion Marketplace | Publisher: NOVAFRIQ, SASU",
+        "meta_lines": [
+          "Effective date: [DATE — to be completed]"
+        ],
+        "version": "Version 7.0 — GEXTIMO Community Rules.",
+        "articles": [
           {
-            "h": "Our Values",
-            "p": "Gextimo is a community built on mutual respect, celebrating African talent and transparency. We believe African fashion deserves a worthy showcase — and that starts with respectful exchanges between all members."
+            "title": "ARTICLE 1 — THE GEXTIMO SPIRIT",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "GEXTIMO is a benevolent and professional fashion space. By using it, you agree to respect other members and these rules. They apply to all content: photos, descriptions, comments and messages."
+              }
+            ]
           },
           {
-            "h": "Respect and Inclusion",
-            "p": "Any discriminatory, hateful or disrespectful language towards a creator, customer or Gextimo team member is strictly prohibited. The Gextimo community welcomes talent from across Africa without distinction."
+            "title": "ARTICLE 2 — PROHIBITED CONTENT AND BEHAVIOUR",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Not permitted on GEXTIMO:"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "Hatred, discrimination, insults and harassment.",
+                  "Violence, threats and incitement to violence.",
+                  "Nudity and sexual content.",
+                  "Any content endangering or sexualising a minor — zero tolerance.",
+                  "Misinformation and identity theft.",
+                  "Spam, unsolicited advertising and fake reviews.",
+                  "Disclosing others' private information without consent.",
+                  "Counterfeiting and copying other creators' creations."
+                ]
+              }
+            ]
           },
           {
-            "h": "Honesty and Transparency",
-            "p": "Creators commit to displaying photos and descriptions that faithfully represent their creations, communicating honestly about timelines and honouring commitments made to customers. Published reviews and testimonials must be authentic."
+            "title": "ARTICLE 3 — MESSAGING BETWEEN MEMBERS",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Messaging is for exchanging about creations and orders. It is prohibited to harass a member, share prohibited content, or arrange an off-platform sale to bypass GEXTIMO."
+              }
+            ]
           },
           {
-            "h": "Prohibited Behaviours",
-            "p": "Prohibited on the platform: spam and unauthorised commercial solicitations, harassment or intimidation of other members, publishing fake reviews, manipulating ratings, attempting to bypass the platform to conduct transactions outside Gextimo, and any fraudulent activity."
+            "title": "ARTICLE 4 — MODERATION AND SANCTIONS",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "We may remove content, restrict its distribution or suspend an account that breaches these rules. Sanctions are graduated: reminder, warning, suspension, closure."
+              },
+              {
+                "type": "box",
+                "title": "Right of appeal",
+                "t": "You may contest any sanction at: contact@novafriq.africa"
+              }
+            ]
           },
           {
-            "h": "Reporting",
-            "p": "Any community member can report inappropriate behaviour via the report button on profiles and creations. Reports are handled by our moderation team within 48 hours."
-          },
-          {
-            "h": "Progressive Sanctions",
-            "p": "Breaches of community rules result in progressive sanctions: warning, temporary restriction, account suspension. Serious violations (fraud, harassment, counterfeiting) may result in immediate and permanent suspension."
+            "title": "ARTICLE 5 — REPORT",
+            "blocks": [
+              {
+                "type": "box",
+                "title": "Report",
+                "t": "contact@novafriq.africa — We examine every report and act quickly."
+              }
+            ]
           }
         ]
       },
       "contact_reclamations": {
         "title": "Contact & Claims",
         "eyebrow": "Support",
-        "subtitle": "How to contact us and submit a claim on the Gextimo platform.",
-        "date": "Last updated: July 2026",
-        "sections": [
+        "subtitle": "Application: GEXTIMO — African Fashion Marketplace | Publisher: NOVAFRIQ, SASU",
+        "meta_lines": [
+          "Publisher: NOVAFRIQ, SASU — Quartier Agblangandan, Sèmè-Podji, Republic of Benin."
+        ],
+        "version": "Version 7.0 — Contact & Claims GEXTIMO.",
+        "articles": [
           {
-            "h": "Contact Us",
-            "p": "For any questions or information requests, our team is reachable by email at: contact@gextimo.com. You can also use the contact form accessible from the Help section of the platform."
+            "title": "ARTICLE 1 — OUR CHANNELS",
+            "blocks": [
+              {
+                "type": "p",
+                "t": "Depending on your need, write to the right address:"
+              },
+              {
+                "type": "table",
+                "headers": [
+                  "Need",
+                  "Address"
+                ],
+                "rows": [
+                  [
+                    "Order support and disputes",
+                    "support@novafriq.africa"
+                  ],
+                  [
+                    "Personal data and exercising your rights",
+                    "dpo@novafriq.africa"
+                  ],
+                  [
+                    "General enquiry, press, partnership",
+                    "contact@novafriq.africa"
+                  ],
+                  [
+                    "Payments and invoices",
+                    "facturation@novafriq.africa"
+                  ]
+                ]
+              },
+              {
+                "type": "p",
+                "t": "Phone: +229 01 66 55 29 92 · Website: gextimo.novafriq.africa"
+              }
+            ]
           },
           {
-            "h": "Technical Support",
-            "p": "For any technical issue (login, payment, display), contact our support at: support@gextimo.com. Please specify your user ID, the browser used and a detailed description of the problem. Our team commits to responding within 24 business hours."
+            "title": "ARTICLE 2 — SUBMIT A CLAIM",
+            "blocks": [
+              {
+                "type": "box",
+                "title": "Claim",
+                "t": "support@novafriq.africa — Describe your request and, where possible, your order number."
+              },
+              {
+                "type": "p",
+                "t": "We acknowledge receipt and respond as quickly as possible."
+              }
+            ]
           },
           {
-            "h": "Submit a Claim",
-            "p": "A claim may relate to: a non-conforming order, a dispute with a creator, a counterfeiting report or a billing issue. Send your detailed claim to reclamations@gextimo.com, attaching any useful documents (photos, exchanges, order references)."
-          },
-          {
-            "h": "Processing Deadline",
-            "p": "Every claim is acknowledged within 24 hours. Full processing takes place within 7 business days. In complex disputes, this deadline may be extended to 21 days, with regular updates on progress."
-          },
-          {
-            "h": "Mediation",
-            "p": "If you remain dissatisfied after our handling, you may resort to an independent mediator. Gextimo commits to participating in good faith in any mediation procedure aimed at resolving a dispute amicably."
-          },
-          {
-            "h": "Data Protection",
-            "p": "For any request relating to your personal data (access, rectification, deletion), contact our data protection officer: privacy@gextimo.com."
+            "title": "ARTICLE 3 — RECOURSE",
+            "blocks": [
+              {
+                "type": "list",
+                "items": [
+                  "Data protection: you may contact the APDP (contact@apdp.bj · www.apdp.bj).",
+                  "Commercial dispute: failing an amicable settlement, the Commercial Court of Cotonou has jurisdiction.",
+                  "Buyer outside Benin: you may also use consumer mediation mechanisms in your country."
+                ]
+              }
+            ]
           }
         ]
       }
