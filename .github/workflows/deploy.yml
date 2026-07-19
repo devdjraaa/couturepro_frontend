@@ -61,9 +61,27 @@ jobs:
               index index.html;
               client_max_body_size 20M;
               location / { try_files $uri $uri/ /index.html; }
-              location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|webp)$ {
+              # Assets hashés par Vite (/assets/) : réellement immuables → cache très long.
+              location ^~ /assets/ {
                   expires 1y;
                   add_header Cache-Control "public, immutable";
+                  access_log off;
+              }
+              # Service worker : jamais figé (doit pouvoir se mettre à jour).
+              location = /sw.js { add_header Cache-Control "no-cache"; }
+              # Statiques à URL STABLE dont le contenu change (favicon, icônes, manifest) :
+              # cache court + revalidation. En « immutable » 1 an, un changement de logo
+              # n'atteignait jamais les navigateurs (constaté le 19/07 : Edge et Chrome
+              # affichaient deux anciens favicons différents, insensibles au rafraîchissement).
+              location ~* \.(ico|png|jpg|jpeg|gif|svg|webp|webmanifest)$ {
+                  expires 1h;
+                  add_header Cache-Control "public, max-age=3600, must-revalidate";
+                  access_log off;
+              }
+              # Polices : longue durée acceptable.
+              location ~* \.(woff|woff2|ttf|eot)$ {
+                  expires 30d;
+                  add_header Cache-Control "public";
                   access_log off;
               }
               location ~ /\.(?!well-known).* { deny all; }
