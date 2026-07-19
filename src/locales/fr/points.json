@@ -19,8 +19,8 @@
   },
   "comment_gagner": {
     "titre": "Comment gagner des points ?",
-    "paiement": "1 000 XOF payé = 1 point",
-    "parrainage": "Parrainage d'un atelier = 50 points",
-    "fidelite": "Chaque mois actif = 5 points"
+    "abonnement": "Activation ou renouvellement de votre abonnement",
+    "client": "Chaque nouveau client enregistré",
+    "commande": "Chaque nouvelle commande enregistrée"
   }
 }
