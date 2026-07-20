@@ -120,7 +120,10 @@ export default function ProfilPage() {
                 </div>
                 <div>
                   <p className="font-semibold text-ink text-sm">{user.prenom} {user.nom}</p>
-                  <p className="text-xs text-dim capitalize">{user.role}</p>
+                  {/* Les traductions de rôle existaient (`roles.*`) mais n'étaient pas
+                      employées : c'est la valeur technique de la base qui
+                      s'affichait, d'où « Proprietaire » sans accent. */}
+                  <p className="text-xs text-dim">{t(`roles.${user.role}`, user.role)}</p>
                 </div>
               </div>
             )}
