@@ -42,9 +42,39 @@ for (const f of rapport) {
   }
 }
 
-if (fautes.length) {
-  console.error('\n✖ Identifiants utilisés sans être définis :\n')
-  for (const x of fautes) console.error('   ' + x)
+// Deuxième classe, qu'ESLint ne signale pas ici : un identifiant importé DEUX
+// fois. Le build s'arrête dessus, mais autant l'annoncer au même endroit et
+// dans les mêmes termes que les identifiants manquants.
+import fs from 'fs'
+import path from 'path'
+
+const doublons = []
+;(function parcourir(d) {
+  for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+    const p = path.join(d, e.name)
+    if (e.isDirectory()) { parcourir(p); continue }
+    if (!/\.jsx?$/.test(e.name)) continue
+    const src = fs.readFileSync(p, 'utf8')
+    const vus = new Map()
+    for (const r of src.matchAll(/^import\s+(?:\{([^}]*)\}|([A-Za-z_$][\w$]*))\s+from/gm)) {
+      const noms = r[1] ? r[1].split(',').map((x) => x.trim().split(/\s+as\s+/).pop()) : [r[2]]
+      for (const n of noms.filter(Boolean)) vus.set(n, (vus.get(n) || 0) + 1)
+    }
+    for (const [n, c] of vus) if (c > 1) doublons.push(`${p}  '${n}' importé ${c} fois`)
+  }
+})('src')
+
+if (doublons.length) {
+  console.error('\n✖ Identifiants importés plusieurs fois :\n')
+  for (const x of doublons) console.error('   ' + x)
+  console.error('')
+}
+
+if (fautes.length || doublons.length) {
+  if (fautes.length) {
+    console.error('\n✖ Identifiants utilisés sans être définis :\n')
+    for (const x of fautes) console.error('   ' + x)
+  }
   console.error("\nL'application compilerait, puis planterait à l'exécution.\n")
   process.exit(1)
 }

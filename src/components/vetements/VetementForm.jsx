@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ImagePlus, X, Shirt, Ruler, Plus } from 'lucide-react'
 import { Input, Button } from '@/components/ui'
 import { cn } from '@/utils/cn'
