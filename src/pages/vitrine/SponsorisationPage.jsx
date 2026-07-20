@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Star, Zap, Crown } from 'lucide-react'
+import { Star, Zap, Crown, Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { getSponsorisation } from './vitrineApi'
@@ -95,7 +95,7 @@ export default function SponsorisationPage() {
                   <ul className="space-y-2.5 flex-1">
                     {(Array.isArray(features) ? features : []).map((f) => (
                       <li key={f} className="flex items-start gap-2 text-sm text-dim">
-                        <span className="text-primary shrink-0 mt-0.5 font-semibold">✓</span>
+                        <Check size={14} className="text-primary shrink-0 mt-1" aria-hidden="true" />
                         {f}
                       </li>
                     ))}

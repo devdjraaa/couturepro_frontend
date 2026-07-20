@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Plus, Edit2 } from 'lucide-react'
+import { Plus, Edit2, X } from 'lucide-react'
 import { AdminLayout, AdminTable, AdminBadge } from '@/components/admin'
 import { useAdminPlans, useCreatePlan, useUpdatePlan, useTogglePlan } from '@/hooks/admin/usePlans'
 import { cn } from '@/utils/cn'
@@ -224,7 +224,7 @@ function PlanModal({ initial, onClose, onSubmit, isLoading }) {
                 <div key={k} className="flex items-center gap-2 mb-2">
                   <span className="text-xs text-dim flex-1 truncate" title={k}>{k}</span>
                   <input value={String(form.config[k] ?? '')} onChange={e => setCfg(k, parseConfigVal(e.target.value))} className={INPUT + ' max-w-[160px]'} />
-                  <button type="button" onClick={() => removeCfg(k)} className="text-ghost hover:text-danger text-sm px-1" title="Retirer">✕</button>
+                  <button type="button" onClick={() => removeCfg(k)} className="text-ghost hover:text-danger text-sm px-1" title={t('commun.retirer')}><X size={13} aria-hidden="true" /></button>
                 </div>
               ))}
               <div className="flex gap-2 mt-2">

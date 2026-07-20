@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { AdminLayout } from '@/components/admin'
 import { useAdminBanniere, useUpdateBanniere } from '@/hooks/admin/useBanniere'
@@ -75,7 +76,7 @@ export default function BannierePage() {
               <button type="submit" disabled={update.isPending} className="bg-primary text-inverse text-sm font-medium px-4 py-2 rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors">
                 {update.isPending ? '…' : 'Enregistrer'}
               </button>
-              {saved && <span className="text-xs text-success font-medium">✓ Enregistré</span>}
+              {saved && <span className="text-xs text-success font-medium inline-flex items-center gap-1"><Check size={12} aria-hidden="true" />{t('commun.enregistre')}</span>}
             </div>
             {form.actif && form.texte && (
               <div className="text-center text-[13px] py-2 px-4 rounded-lg bg-[#0D0D0D] text-[#F8F5F0]">{form.texte}</div>
@@ -109,7 +110,7 @@ export default function BannierePage() {
               <button type="submit" disabled={updateSponso.isPending} className="bg-primary text-inverse text-sm font-medium px-4 py-2 rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors">
                 {updateSponso.isPending ? '…' : 'Enregistrer'}
               </button>
-              {sSaved && <span className="text-xs text-success font-medium">✓ Enregistré</span>}
+              {sSaved && <span className="text-xs text-success font-medium inline-flex items-center gap-1"><Check size={12} aria-hidden="true" />{t('commun.enregistre')}</span>}
             </div>
           </form>
         )}

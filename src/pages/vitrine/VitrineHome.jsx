@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Heart, Search } from 'lucide-react'
+import { Heart, Search, Star, MapPin, Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import PartenairesBanner from './PartenairesBanner'
@@ -192,15 +192,15 @@ export default function VitrineHome() {
                   <div>
                     <h4 className="font-bold text-[15.5px] text-ink flex items-center gap-1.5">
                       {c.nom}
-                      {c.verifie && <span className="text-[10.5px] font-bold text-primary bg-primary-50 px-1.5 py-0.5 rounded-full">{t('vitrine.creators.verified')}</span>}
-                      {c.sponsorise && <span title="Sponsorisé" className="text-[10.5px] font-bold text-inverse bg-primary px-1.5 py-0.5 rounded-full">★</span>}
+                      {c.verifie && <span className="text-[10.5px] font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded-full">{t('vitrine.creators.verified')}</span>}
+                      {c.sponsorise && <span title={t('vitrine.a11y.sponsorise')} className="inline-flex items-center text-inverse bg-primary px-1.5 py-0.5 rounded-full"><Star size={10} className="fill-current" aria-hidden="true" /></span>}
                     </h4>
                     <div className="text-[12.5px] text-dim">{c.specialite}</div>
                   </div>
                 </div>
                 <div className="text-[13px] text-dim mb-3.5">
-                  {c.note ? <span className="text-primary font-bold">★ {c.note}</span> : <span className="text-ghost">{t('vitrine.creators.new')}</span>}
-                  {' · '}📍 {c.ville}
+                  {c.note ? <span className="text-primary font-bold inline-flex items-center gap-1"><Star size={12} className="fill-current" aria-hidden="true" />{c.note}</span> : <span className="text-ghost">{t('vitrine.creators.new')}</span>}
+                  {' · '}<MapPin size={12} className="inline-block align-[-0.1em] mr-1" aria-hidden="true" />{c.ville}
                 </div>
                 <span className={btnOutline + ' w-full justify-center !py-2 text-[13px]'}>{t('vitrine.creators.visit')}</span>
               </Link>
@@ -253,7 +253,11 @@ export default function VitrineHome() {
           <div className="vt-stagger grid grid-cols-1 md:grid-cols-3 gap-5">
             {(t('vitrine.testimonials.list', { returnObjects: true }) || []).map((item, i) => (
               <figure key={i} className="vt-item vt-card bg-card border border-edge rounded-lg p-6">
-                <div className="text-primary text-[13px] mb-3">★★★★★</div>
+                <div className="text-primary mb-3 inline-flex items-center gap-0.5" aria-label="5/5">
+                  {Array.from({ length: 5 }, (_, n) => (
+                    <Star key={n} size={13} className="fill-current" aria-hidden="true" />
+                  ))}
+                </div>
                 <blockquote className="text-[14.5px] text-ink leading-relaxed mb-5">"{item.texte}"</blockquote>
                 <figcaption className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-[11px] text-inverse shrink-0" style={{ background: item.gradient }}>{item.initiales}</div>
@@ -279,7 +283,7 @@ export default function VitrineHome() {
               <ul className="space-y-3 mb-8">
                 {(t('vitrine.join.benefits', { returnObjects: true }) || []).map((b, i) => (
                   <li key={i} className="flex items-center gap-3 text-[14px] text-ink">
-                    <span className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[10px] font-bold shrink-0">✓</span>
+                    <span className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0"><Check size={11} strokeWidth={3} aria-hidden="true" /></span>
                     {b}
                   </li>
                 ))}

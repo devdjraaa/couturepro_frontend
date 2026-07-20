@@ -358,7 +358,9 @@
     "securite": "Security",
     "identite": "Identity",
     "retirer": "Remove",
-    "contacter_support": "Contact support"
+    "contacter_support": "Contact support",
+    "enregistre": "Saved",
+    "verifier": "Verify"
   },
   "erreurs": {
     "reseau": "Connection error. Check your network.",
@@ -4280,7 +4282,9 @@
       "liste_num": "Numbered list",
       "lien": "Link",
       "nettoyer": "Clear formatting"
-    }
+    },
+    "verifie": "Verified",
+    "sponsorise": "Sponsored"
   },
   "bienvenue": {
     "titre": "Welcome to Gextimo!",

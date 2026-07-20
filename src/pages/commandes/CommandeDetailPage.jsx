@@ -773,7 +773,7 @@ function EtapeSuivi({ commande }) {
         <select value={etape} onChange={onChange} className="rounded-lg border border-edge bg-card px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30">
           {ETAPES.map((s) => <option key={s.v} value={s.v}>{s.l}</option>)}
         </select>
-        {saved && <span className="text-xs text-success font-medium">✓ Enregistré</span>}
+        {saved && <span className="text-xs text-success font-medium inline-flex items-center gap-1"><Check size={12} aria-hidden="true" />{t('commun.enregistre')}</span>}
       </div>
     </div>
   )

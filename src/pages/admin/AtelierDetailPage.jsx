@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Building2, ExternalLink } from 'lucide-react'
+import { Building2, ExternalLink, Check, Star } from 'lucide-react'
 import { AdminLayout, AdminBadge } from '@/components/admin'
 import {
   useAdminAtelier, useGelerAtelier, useDegelerAtelier, useVerifierAtelier, useSponsoriserAtelier,
@@ -184,10 +184,12 @@ export default function AtelierDetailPage() {
                   </button>
                 )}
                 <button onClick={() => verifier.mutate(id)} className={atelier.verifie ? 'text-xs text-primary hover:text-primary-600 transition-colors' : 'text-xs text-ghost hover:text-primary transition-colors'}>
-                  {atelier.verifie ? '✓ Vérifié' : 'Vérifier'}
+                  {atelier.verifie
+                    ? <span className="inline-flex items-center gap-1"><Check size={12} aria-hidden="true" />{t('admin.verifie')}</span>
+                    : t('commun.verifier')}
                 </button>
                 {atelier.sponsorise
-                  ? <button onClick={() => sponsoriser.mutate({ id, jours: 0 })} className="text-xs text-primary hover:text-primary-600 transition-colors">★ Sponsorisé</button>
+                  ? <button onClick={() => sponsoriser.mutate({ id, jours: 0 })} className="text-xs text-primary hover:text-primary-600 transition-colors"><span className="inline-flex items-center gap-1"><Star size={11} className="fill-current" aria-hidden="true" />{t('admin.sponsorise')}</span></button>
                   : <button onClick={() => sponsoriser.mutate({ id, jours: 7 })} className="text-xs text-ghost hover:text-primary transition-colors">Sponsoriser 7j</button>}
               </div>
             </div>

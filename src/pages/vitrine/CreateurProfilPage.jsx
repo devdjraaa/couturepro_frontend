@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { X, Heart, MessageCircle, Send, ShoppingBag, Award, Download, Lock, ImagePlus, Megaphone, Video } from 'lucide-react'
+import { X, Heart, MessageCircle, Send, ShoppingBag, Award, Download, Lock, ImagePlus, Megaphone, Video, CheckCircle2, MapPin, Clock, Star, Flag } from 'lucide-react'
 import VitrineShell from './VitrineChrome'
 import { getCreator, toggleLike, toggleAbonnement, acheterPatron } from './vitrineApi'
 import GarmentVisual from './GarmentVisual'
@@ -91,7 +91,7 @@ function DevisModal({ atelierId, createur, wa, onClose, onTrack }) {
 
         {sent ? (
           <div className="py-6 text-center">
-            <p className="text-2xl mb-2">✓</p>
+            <CheckCircle2 size={30} className="mx-auto mb-2 text-success" aria-hidden="true" />
             <p className="text-sm text-success font-medium mb-1">{t('vitrine.devis_modal.success_title')}</p>
             <p className="text-xs text-dim">{wa ? t('vitrine.devis_modal.success_wa') : t('vitrine.devis_modal.success_no_wa')}</p>
             <button onClick={onClose} className="mt-4 text-sm font-semibold text-primary hover:underline">{t('vitrine.devis_modal.close')}</button>
@@ -328,7 +328,10 @@ function AvisForm({ atelierId }) {
              className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink mb-2 focus:outline-none focus:ring-2 focus:ring-primary/30" />
       <div className="flex gap-1 mb-2">
         {[1, 2, 3, 4, 5].map((n) => (
-          <button type="button" key={n} onClick={() => setNote(n)} className={`text-xl ${n <= note ? 'text-primary' : 'text-ghost'}`} aria-label={`${n}/5`}>★</button>
+          <button type="button" key={n} onClick={() => setNote(n)}
+                  className={n <= note ? 'text-primary' : 'text-ghost'} aria-label={`${n}/5`}>
+            <Star size={22} className={n <= note ? 'fill-current' : ''} aria-hidden="true" />
+          </button>
         ))}
       </div>
       <textarea value={texte} onChange={(e) => setTexte(e.target.value)} rows={3} maxLength={600} placeholder={t('vitrine.profil.avis_text')}
@@ -515,8 +518,8 @@ export default function CreateurProfilPage() {
           )}
           <div className="px-3.5 pb-2.5">
             {signaled.has(m.id)
-              ? <span className="text-[10px] text-ghost">⚑ {t('vitrine.profil.report_done')}</span>
-              : <button onClick={() => signaler('creation', m.id)} className="text-[10px] text-ghost hover:text-danger">⚑ {t('vitrine.profil.report')}</button>}
+              ? <span className="text-[10px] text-ghost inline-flex items-center gap-1"><Flag size={10} aria-hidden="true" />{t('vitrine.profil.report_done')}</span>
+              : <button onClick={() => signaler('creation', m.id)} className="text-[10px] text-ghost hover:text-danger"><Flag size={11} className="inline-block align-[-0.1em]" aria-hidden="true" /> {t('vitrine.profil.report')}</button>}
           </div>
         </div>
       ))}
@@ -559,9 +562,15 @@ export default function CreateurProfilPage() {
               )}
             </h1>
             <div className="text-dim text-[15px] mt-1">{c.specialite}</div>
-            <div className="text-dim text-[13px] mt-1">📍 {c.ville}, Bénin</div>
-            {c.inscrit_depuis && <div className="text-ghost text-[12.5px] mt-1">🕐 {c.inscrit_depuis}</div>}
-            {c.note && <div className="text-sm mt-2"><span className="text-primary font-bold">★ {c.note}</span> <span className="text-dim">({avisCount})</span></div>}
+            <div className="text-dim text-[13px] mt-1 flex items-center justify-center gap-1.5">
+              <MapPin size={13} aria-hidden="true" />{c.ville}, Bénin
+            </div>
+            {c.inscrit_depuis && <div className="text-ghost text-[12.5px] mt-1 flex items-center justify-center gap-1.5">
+              <Clock size={12} aria-hidden="true" />{c.inscrit_depuis}
+            </div>}
+            {c.note && <div className="text-sm mt-2"><span className="text-primary font-bold inline-flex items-center gap-1">
+                <Star size={13} className="fill-current" aria-hidden="true" />{c.note}
+              </span> <span className="text-dim">({avisCount})</span></div>}
             {c.bio && <p className="text-ink text-sm mt-3 leading-relaxed">{c.bio}</p>}
             {/* PL-6 : annonce de collection mise en avant */}
             {annonce && (
@@ -694,7 +703,11 @@ export default function CreateurProfilPage() {
                   <b className="text-[14px] text-ink">{r.auteur_nom}</b>
                   <span className="text-[12px] text-dim">{r.created_at ? new Date(r.created_at).toLocaleDateString() : ''}</span>
                 </div>
-                <div className="text-primary text-[13px] mb-2">{'★'.repeat(r.note)}{'☆'.repeat(5 - r.note)}</div>
+                <div className="text-primary mb-2 inline-flex items-center gap-0.5" aria-label={`${r.note}/5`}>
+                  {Array.from({ length: 5 }, (_, i) => (
+                    <Star key={i} size={12} className={i < r.note ? 'fill-current' : 'opacity-30'} aria-hidden="true" />
+                  ))}
+                </div>
                 {r.texte && <p className="text-[13.5px] leading-relaxed text-ink">{r.texte}</p>}
                 {Array.isArray(r.photos_urls) && r.photos_urls.length > 0 && (
                   <div className="flex gap-2 mt-2 flex-wrap">
@@ -719,8 +732,8 @@ export default function CreateurProfilPage() {
         <div className="pb-16 flex items-center gap-4 flex-wrap">
           <Link to="/createurs" className={btnOutline}>{t('vitrine.profil.all_creators')}</Link>
           {signaled.has(c.id)
-            ? <span className="text-xs text-ghost">⚑ {t('vitrine.profil.report_done')}</span>
-            : <button onClick={() => signaler('profil', c.id)} className="text-xs text-ghost hover:text-danger">⚑ {t('vitrine.profil.report')} ce profil</button>}
+            ? <span className="text-xs text-ghost inline-flex items-center gap-1"><Flag size={11} aria-hidden="true" />{t('vitrine.profil.report_done')}</span>
+            : <button onClick={() => signaler('profil', c.id)} className="text-xs text-ghost hover:text-danger"><Flag size={11} className="inline-block align-[-0.1em]" aria-hidden="true" /> {t('vitrine.profil.report')} ce profil</button>}
         </div>
       </div>
 
