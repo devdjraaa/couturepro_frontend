@@ -20,5 +20,6 @@ export const ADMIN_KEYS = {
   splashThemes:     ['admin', 'splash-themes'],
   identiteLegale:   ['admin', 'identite-legale'],
   moderationAvis:   ['admin', 'moderation-avis'],
+  compteRebours:    ['admin', 'compte-a-rebours'],
   analytique:       ['admin', 'analytique'],
 }

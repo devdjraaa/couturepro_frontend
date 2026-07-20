@@ -3761,11 +3761,30 @@
       "consentement_ok": "People consent confirmed",
       "filtre_statut": "Status",
       "approuvee": "Piece published.",
-      "refusee_ok": "Piece rejected."
+      "refusee_ok": "Piece rejected.",
+      "reste": "{{heures}}h {{minutes}}m left to respond",
+      "en_retard": "{{heures}}h {{minutes}}m overdue",
+      "original": "Original",
+      "voir_original": "View the original photo (before retouching)"
     },
     "quota_cycle": "{{n}}/{{max}} posts this cycle (resets on {{reset}})",
     "quota_alerte": "Only {{n}} post(s) left in this cycle. A higher plan includes more.",
-    "quota_bloque": "Post quota reached for this cycle. It resets on {{reset}}, or upgrade your plan."
+    "quota_bloque": "Post quota reached for this cycle. It resets on {{reset}}, or upgrade your plan.",
+    "retouche": {
+      "titre": "Light retouch",
+      "aide": "Straighten, crop and brighten before publishing. The original is always kept: a retouch never replaces it.",
+      "pivoter": "Rotate",
+      "format_libre": "Free",
+      "format_carre": "Square",
+      "format_portrait": "Portrait",
+      "format_paysage": "Landscape",
+      "lumiere": "Brightness",
+      "contraste": "Contrast",
+      "reinitialiser": "Reset all",
+      "appliquer": "Apply retouch",
+      "echec": "The retouch could not be saved. Nothing was changed.",
+      "echec_chargement": "Photo could not be loaded."
+    }
   },
   "atelier": {
     "titre": "Workshop",
@@ -4419,6 +4438,20 @@
       "heure": "{{h}}:00",
       "fois_one": "{{count}} time",
       "fois_other": "{{count}} times"
+    },
+    "compte_rebours": {
+      "titre": "Launch countdown",
+      "aide": "A discreet banner appears as the date approaches, then a full-screen countdown on the day. Everything hides itself once the date has passed.",
+      "actif": "Show the countdown",
+      "date_cible": "Date and time (Cotonou time)",
+      "jours_avant": "Banner appears (days before)",
+      "entete": "Title",
+      "texte_bande": "Banner text",
+      "texte_jour_j": "Day-of text",
+      "couleur": "Colour",
+      "lien": "Optional \"Learn more\" link",
+      "chrono": "Full-screen countdown on the day",
+      "marqueurs": "Placeholders available in texts: {{jours}}, {{heures}}, {{minutes}}, {{secondes}}."
     }
   },
   "bienvenue": {
@@ -4620,5 +4653,11 @@
     "boost_indispo": "Boost is not available at the moment.",
     "apercu": "Preview",
     "supprimer_confirmer": "Delete this announcement?"
+  },
+  "compte_rebours": {
+    "heures": "hours",
+    "minutes": "minutes",
+    "secondes": "seconds",
+    "en_savoir_plus": "Learn more"
   }
 }

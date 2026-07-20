@@ -6,6 +6,7 @@ import {
   useSplashThemes, useSetSplashThemes,
   useIdentiteLegale, useSetIdentiteLegale,
   useModerationAvis, useSetModerationAvis,
+  useCompteRebours, useSetCompteRebours,
 } from '@/hooks/admin/useReglagesVitrine'
 
 /**
@@ -57,9 +58,25 @@ export default function ReglagesVitrinePage() {
   })
   const [modSaved, setModSaved] = useState(false)
 
+  // CLI-3 — compte à rebours de lancement, réutilisable pour toute annonce
+  // datée : la direction change la date et les textes sans redéploiement.
+  const reboursQ = useCompteRebours()
+  const setRebours = useSetCompteRebours()
+  const [rebours, setLocalRebours] = useState({
+    actif: false, date_cible: '', jours_avant: 30, titre: '',
+    texte_bande: '', texte_jour_j: '', couleur: '#D00B0B',
+    lien: '', chrono_jour_j: true,
+  })
+  const [reboursSaved, setReboursSaved] = useState(false)
+
   useEffect(() => { if (themesQ.data) setLocalThemes(themesQ.data) }, [themesQ.data])
   useEffect(() => { if (legalQ.data) setLocalLegal((v) => ({ ...v, ...legalQ.data })) }, [legalQ.data])
   useEffect(() => { if (modQ.data) setLocalMod((v) => ({ ...v, ...modQ.data })) }, [modQ.data])
+  useEffect(() => {
+    // `lien` revient à null quand il n'est pas renseigné ; un `null` dans un
+    // input le rendrait non contrôlé et React s'en plaindrait à la frappe.
+    if (reboursQ.data) setLocalRebours((v) => ({ ...v, ...reboursQ.data, lien: reboursQ.data.lien ?? '' }))
+  }, [reboursQ.data])
 
   const majTheme = (i, cle, val) =>
     setLocalThemes((l) => l.map((th, idx) => (idx === i ? { ...th, [cle]: val } : th)))
@@ -99,6 +116,19 @@ export default function ReglagesVitrinePage() {
     })
     setModSaved(true)
     setTimeout(() => setModSaved(false), 1600)
+  }
+
+  const enregistrerRebours = async (e) => {
+    e.preventDefault()
+    await setRebours.mutateAsync({
+      ...rebours,
+      jours_avant: Number(rebours.jours_avant) || 30,
+      // Le serveur valide `present, nullable` : une chaîne vide doit repartir
+      // en null, sinon on enregistre un lien « rien » que le front affichera.
+      lien: rebours.lien?.trim() ? rebours.lien.trim() : null,
+    })
+    setReboursSaved(true)
+    setTimeout(() => setReboursSaved(false), 1600)
   }
 
   const lignesVersTableau = (v) =>
@@ -225,6 +255,83 @@ export default function ReglagesVitrinePage() {
             {t('commun.enregistrer')}
           </button>
         </form>
+        {/* ── CLI-3 : compte à rebours de lancement ─────────────────────── */}
+        <form onSubmit={enregistrerRebours} className="bg-card border border-edge rounded-2xl p-5">
+          <div className="flex items-center justify-between gap-3 mb-1">
+            <h2 className="text-sm font-semibold text-ink">{t('admin.compte_rebours.titre')}</h2>
+            {reboursSaved && (
+              <span className="text-xs text-success font-medium inline-flex items-center gap-1">
+                <Check size={12} aria-hidden="true" />{t('commun.enregistre')}
+              </span>
+            )}
+          </div>
+          <p className="text-xs text-dim leading-relaxed mb-4">{t('admin.compte_rebours.aide')}</p>
+
+          <label className="flex items-center gap-2 text-sm text-ink">
+            <input type="checkbox" checked={!!rebours.actif}
+                   onChange={(e) => setLocalRebours((v) => ({ ...v, actif: e.target.checked }))} />
+            {t('admin.compte_rebours.actif')}
+          </label>
+
+          <div className="grid sm:grid-cols-2 gap-3 mt-4">
+            <div>
+              <span className={LABEL}>{t('admin.compte_rebours.date_cible')}</span>
+              <input type="datetime-local" className={INPUT}
+                     value={(rebours.date_cible ?? '').replace(' ', 'T')}
+                     onChange={(e) => setLocalRebours((v) => ({ ...v, date_cible: e.target.value.replace('T', ' ').slice(0, 16) }))} />
+            </div>
+            <div>
+              <span className={LABEL}>{t('admin.compte_rebours.jours_avant')}</span>
+              <input type="number" min={1} max={365} className={INPUT} value={rebours.jours_avant ?? 30}
+                     onChange={(e) => setLocalRebours((v) => ({ ...v, jours_avant: e.target.value }))} />
+            </div>
+          </div>
+
+          <div className="mt-3">
+            <span className={LABEL}>{t('admin.compte_rebours.entete')}</span>
+            <input className={INPUT} maxLength={80} value={rebours.titre ?? ''}
+                   onChange={(e) => setLocalRebours((v) => ({ ...v, titre: e.target.value }))} />
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-3 mt-3">
+            <div>
+              <span className={LABEL}>{t('admin.compte_rebours.texte_bande')}</span>
+              <input className={INPUT} maxLength={160} value={rebours.texte_bande ?? ''}
+                     onChange={(e) => setLocalRebours((v) => ({ ...v, texte_bande: e.target.value }))} />
+            </div>
+            <div>
+              <span className={LABEL}>{t('admin.compte_rebours.texte_jour_j')}</span>
+              <input className={INPUT} maxLength={160} value={rebours.texte_jour_j ?? ''}
+                     onChange={(e) => setLocalRebours((v) => ({ ...v, texte_jour_j: e.target.value }))} />
+            </div>
+          </div>
+          <p className="text-[11px] text-ghost mt-1">{t('admin.compte_rebours.marqueurs')}</p>
+
+          <div className="grid sm:grid-cols-2 gap-3 mt-3">
+            <div>
+              <span className={LABEL}>{t('admin.compte_rebours.couleur')}</span>
+              <input type="color" className={INPUT + ' h-10 p-1'} value={rebours.couleur || '#D00B0B'}
+                     onChange={(e) => setLocalRebours((v) => ({ ...v, couleur: e.target.value }))} />
+            </div>
+            <div>
+              <span className={LABEL}>{t('admin.compte_rebours.lien')}</span>
+              <input className={INPUT} maxLength={300} value={rebours.lien ?? ''}
+                     onChange={(e) => setLocalRebours((v) => ({ ...v, lien: e.target.value }))} />
+            </div>
+          </div>
+
+          <label className="flex items-center gap-2 text-sm text-ink mt-4">
+            <input type="checkbox" checked={!!rebours.chrono_jour_j}
+                   onChange={(e) => setLocalRebours((v) => ({ ...v, chrono_jour_j: e.target.checked }))} />
+            {t('admin.compte_rebours.chrono')}
+          </label>
+
+          <button type="submit" disabled={setRebours.isPending}
+                  className="mt-4 rounded-xl bg-primary text-inverse text-sm font-semibold px-5 py-2 disabled:opacity-50">
+            {t('commun.enregistrer')}
+          </button>
+        </form>
+
         {/* ── AV2-F4 : modération des avis ──────────────────────────────── */}
         <form onSubmit={enregistrerMod} className="bg-card border border-edge rounded-2xl p-5">
           <div className="flex items-center justify-between gap-3 mb-1">
