@@ -56,7 +56,7 @@ function ProfilTab() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <Input label={t('commun.nom')} value={current?.nom ?? ''} onChange={set('nom')} required />
-      <Input label={t('commun.telephone')} type="text" inputMode="tel" value={current?.telephone ?? ''} onChange={set('telephone')} placeholder="ex : +229 97 00 00 00" required />
+      <Input label={t('commun.telephone')} type="text" inputMode="tel" value={current?.telephone ?? ''} onChange={(e) => set('telephone')({ target: { value: sanitizePhoneInput(e.target.value) } })} placeholder="ex : +229 97 00 00 00" required />
       <Input label={t('commun.email')} type="email" value={current?.email ?? ''} onChange={set('email')} />
       <Button type="submit" loading={update.isPending} className="w-full">
         {t('commun.enregistrer')}

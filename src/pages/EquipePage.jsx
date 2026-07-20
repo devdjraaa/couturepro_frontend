@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { sanitizePhoneInput } from '@/utils/phoneInput'
 import { UserPlus, Users, Copy, CheckCheck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useEquipe, useInviterMembre, useRemoveMembre } from '@/hooks/useEquipe'
@@ -173,7 +174,7 @@ export default function EquipePage() {
             type="text"
             inputMode="tel"
             value={form.telephone}
-            onChange={set('telephone')}
+            onChange={(e) => set('telephone')({ target: { value: sanitizePhoneInput(e.target.value) } })}
             placeholder="ex : +229 97 00 00 00"
           />
           <Select label={t('equipe.formulaire.role')} value={form.role} onChange={set('role')} options={ROLE_OPTIONS} />

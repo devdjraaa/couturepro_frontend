@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { sanitizePhoneInput } from '@/utils/phoneInput'
 import { useTranslation } from 'react-i18next'
 import toast from 'react-hot-toast'
 import { Plus, Trash2, Phone, Clock, Check, X, Megaphone, Calculator, Video, ExternalLink } from 'lucide-react'
@@ -57,7 +58,7 @@ function ListeAttenteTab({ t }) {
     <div className="space-y-4">
       <form onSubmit={ajouter} className="bg-card border border-edge rounded-xl p-4 space-y-3">
         <Input value={form.nom} onChange={e => setForm(f => ({ ...f, nom: e.target.value }))} placeholder={t('studio.attente.nom')} />
-        <Input value={form.telephone} onChange={e => setForm(f => ({ ...f, telephone: e.target.value }))} placeholder={t('studio.attente.telephone')} inputMode="tel" />
+        <Input value={form.telephone} onChange={e => setForm(f => ({ ...f, telephone: sanitizePhoneInput(e.target.value) }))} placeholder={t('studio.attente.telephone')} inputMode="tel" />
         <Input value={form.note} onChange={e => setForm(f => ({ ...f, note: e.target.value }))} placeholder={t('studio.attente.note')} />
         <Button type="submit" loading={saving} className="w-full"><Plus size={16} className="mr-1" /> {t('studio.attente.ajouter')}</Button>
       </form>
