@@ -90,7 +90,8 @@ export function AuthProvider({ children }) {
     setUser(user)
     setAtelier(atelier)
     setDemoMode(!!atelier?.is_demo)
-    setCachedSession({ user, atelier })
+    // (Pas de cache de session ici : le hors-ligne n'existe que dans
+    //  l'application native, où `setCachedSession` est défini.)
     return { user, atelier }
   }, [])
 

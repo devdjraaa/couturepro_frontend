@@ -54,6 +54,8 @@ function InternalTabs({ active, onChange }) {
 
 // ── Onglet Aperçu ─────────────────────────────────────────────────────────────
 function TabApercu({ commande, onEdit, onStatut, onDelete, navigate }) {
+  const { t } = useTranslation()
+
   const whatsappRappel = useWhatsappRappel()
   const whatsappPrete  = useWhatsappCommandePrete()
   const { data: commsConfig }         = useCommunications()
@@ -748,6 +750,8 @@ const ETAPES = [
 ]
 
 function EtapeSuivi({ commande }) {
+  const { t } = useTranslation()
+
   const [etape, setEtape] = useState(commande.etape || 'commande')
   const [saved, setSaved] = useState(false)
   const onChange = async (e) => {

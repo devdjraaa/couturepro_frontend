@@ -478,6 +478,8 @@ const INITIAL_DATA = {
 }
 
 export default function NouvelleCommandeGroupeePage() {
+  const { t } = useTranslation()
+
   const navigate  = useNavigate()
   const createGroupe = useCreateCommandeGroupe()
 
