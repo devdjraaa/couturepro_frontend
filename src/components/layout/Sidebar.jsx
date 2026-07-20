@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
   Home, Users, ClipboardList, Layers, Settings, Scissors,
@@ -86,12 +87,38 @@ function NavItem({ to, icon: Icon, navKey, end, notifCount, t }) {
   )
 }
 
+/**
+ * Position de défilement du menu, conservée d'une page à l'autre.
+ *
+ * Chaque page rend son propre `AppLayout` : la sidebar est donc DÉTRUITE puis
+ * recréée à chaque navigation, et son défilement repartait de zéro — le menu
+ * remontait tout seul dès qu'on cliquait sur une entrée du bas (constaté par la
+ * direction, reproduit en QA le 20/07).
+ *
+ * La correction de fond serait de sortir la sidebar des pages, via une route de
+ * mise en page qui ne se remonte pas. C'est une refonte qui touche les quarante
+ * écrans : on mémorise ici la position, ce qui règle le symptôme sans risquer
+ * une régression généralisée.
+ *
+ * En mémoire (pas en `sessionStorage`) : c'est un état d'affichage, il n'a
+ * aucune raison de survivre à la fermeture de l'onglet.
+ */
+let defilementMenu = 0
+
 export default function Sidebar() {
+  const navRef = useRef(null)
   const { user, logout } = useAuth()
   const { isDesigner } = useAccountType()
   const navigate = useNavigate()
   const { data: notifCount = 0 } = useNotificationsCount()
   const { t } = useTranslation()
+
+  // Restauration synchrone après montage : `useLayoutEffect` provoquerait un
+  // avertissement au rendu serveur, et le décalage d'un `useEffect` est
+  // imperceptible ici (le menu est déjà peint à sa position).
+  useEffect(() => {
+    if (navRef.current) navRef.current.scrollTop = defilementMenu
+  }, [])
 
   return (
     <aside className="hidden lg:flex flex-col w-64 bg-card border-r border-edge shrink-0 sticky top-0 h-screen">
@@ -110,7 +137,8 @@ export default function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto py-3 px-3 space-y-4 scrollbar-thin">
+      <nav ref={navRef} onScroll={(e) => { defilementMenu = e.currentTarget.scrollTop }}
+           className="flex-1 overflow-y-auto py-3 px-3 space-y-4 scrollbar-thin">
         {NAV_GROUPS.map(({ key, label, items }) => {
           const visible = items.filter(item =>
             (!item.proprietaire || user?.role === 'proprietaire') &&
