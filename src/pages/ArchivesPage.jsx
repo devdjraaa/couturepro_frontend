@@ -13,9 +13,11 @@ export default function ArchivesPage() {
   const [confirming, setConfirming] = useState(null)
 
   const ENTITY_CONFIG = {
-    client:   { icon: User,        label: t('archives.types.client'),   color: 'text-blue-500',   bg: 'bg-blue-50'   },
-    commande: { icon: ShoppingBag, label: t('archives.types.commande'), color: 'text-amber-500',  bg: 'bg-amber-50'  },
-    mesure:   { icon: Ruler,       label: t('archives.types.mesure'),   color: 'text-purple-500', bg: 'bg-purple-50' },
+    // Jetons du thème : les fonds `-50` de la palette Tailwind n'existent qu'en
+    // mode clair et restaient des taches blanches en thème sombre.
+    client:   { icon: User,        label: t('archives.types.client'),   color: 'text-info',    bg: 'bg-info/10'    },
+    commande: { icon: ShoppingBag, label: t('archives.types.commande'), color: 'text-warning', bg: 'bg-warning/10' },
+    mesure:   { icon: Ruler,       label: t('archives.types.mesure'),   color: 'text-accent',  bg: 'bg-accent/10'  },
   }
 
   const handleDesarchiver = async (item) => {
