@@ -50,7 +50,7 @@ export default function MultiAteliersStats() {
       </div>
 
       {/* Totaux consolidés */}
-      <div className="grid grid-cols-3 gap-2 mt-3">
+      <div className="grid grid-cols-2 gap-2 mt-3">
         <div className="bg-subtle rounded-xl px-2 py-2 text-center">
           <p className="text-lg font-bold font-mono text-ink">{totaux.clients ?? 0}</p>
           <p className="text-[10px] text-ghost">{t('dashboard.multi.clients')}</p>
@@ -59,8 +59,13 @@ export default function MultiAteliersStats() {
           <p className="text-lg font-bold font-mono text-ink">{totaux.commandes_en_cours ?? 0}</p>
           <p className="text-[10px] text-ghost">{t('dashboard.multi.en_cours')}</p>
         </div>
-        <div className="bg-subtle rounded-xl px-2 py-2 text-center">
-          <p className="text-lg font-bold font-mono text-gold-dark">{formatCurrency(totaux.revenu_mois ?? 0)}</p>
+        {/* Le montant ne tient pas sur une ligne dans un tiers de 360 px : il se
+            coupait en « 20 000 » / « XOF » et débordait de sa tuile. Il occupe
+            désormais toute la largeur, sous les deux compteurs. */}
+        <div className="col-span-2 bg-subtle rounded-xl px-3 py-2 text-center">
+          <p className="text-lg font-bold font-mono text-gold-dark whitespace-nowrap overflow-hidden text-ellipsis">
+            {formatCurrency(totaux.revenu_mois ?? 0)}
+          </p>
           <p className="text-[10px] text-ghost">{t('dashboard.multi.revenu_mois')}</p>
         </div>
       </div>
