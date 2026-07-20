@@ -269,7 +269,7 @@ export default function CreateursPage() {
                 </div>
                 <div className="flex gap-3.5 text-[13px] text-dim flex-wrap">
                   {c.note ? <span className="text-primary font-bold">★ {c.note}</span> : <span className="text-ghost">{t('vitrine.creators.new')}</span>}
-                  {c.nb_creations > 0 ? <span>· {t('vitrine.creators.creations_count', { n: c.nb_creations })}</span> : null}
+                  {c.nb_creations > 0 ? <span>· {t('vitrine.creators.creations_count', { n: c.nb_creations, count: c.nb_creations })}</span> : null}
                   {c.experience ? <span>· {c.experience}</span> : null}
                   {c._dist != null ? <span>· {c._dist} km</span> : null}
                 </div>
