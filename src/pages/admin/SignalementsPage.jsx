@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { AdminLayout, AdminTable, AdminBadge } from '@/components/admin'
 import { useAdminSignalements, useTraiterSignalement } from '@/hooks/admin/useSignalements'
@@ -23,7 +24,7 @@ export default function SignalementsPage() {
       key: 'actions', label: '',
       render: r => r.statut === 'en_attente'
         ? <button onClick={() => traiter.mutate(r.id)} className="text-xs font-medium text-primary hover:underline">Traiter</button>
-        : <span className="text-xs text-ghost">✓</span>,
+        : <Check size={13} className="text-ghost" aria-hidden="true" />,
     },
   ]
 

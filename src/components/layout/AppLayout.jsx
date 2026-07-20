@@ -67,7 +67,7 @@ function AccountStatusBanner() {
         onClick={() => navigate('/support')}
       >
         <Ban size={14} className="shrink-0" />
-        <span>Votre compte est temporairement suspendu. <span className="underline font-medium">Contacter le support</span></span>
+        <span>Votre compte est temporairement suspendu. <span className="underline font-medium">{t('commun.contacter_support')}</span></span>
       </div>
     )
   }

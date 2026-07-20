@@ -1,7 +1,9 @@
 import { ProgressBar } from '@/components/ui'
+import { useTranslation } from 'react-i18next'
 import { useAtelier } from '@/contexts'
 
 export default function QuotaBar() {
+  const { t } = useTranslation()
   const { limits, clientsUtilises, commandesCeMois } = useAtelier()
 
   const isUnlimited = !limits?.clients || limits.clients === Infinity
@@ -26,7 +28,7 @@ export default function QuotaBar() {
       </div>
       <div>
         <div className="flex justify-between text-xs text-dim mb-1.5">
-          <span>Commandes ce mois</span>
+          <span>{t('abonnement.commandes_ce_mois')}</span>
           <span className="font-medium text-ink">{commandesCeMois} / {limits.commandes}</span>
         </div>
         <ProgressBar value={cmdPct} />

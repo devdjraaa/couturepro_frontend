@@ -3,8 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import {
   Edit2, Trash2, CreditCard, MessageCircle, Ruler,
   AlertTriangle, Download, Send, Phone, Check, Share2,
-  Plus, CalendarDays, Trash, CheckCircle2, Clock,
-} from 'lucide-react'
+  Plus, CalendarDays, Trash, CheckCircle2, Clock, ClipboardList, Wallet } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import toast from 'react-hot-toast'
 import { useCommande, useUpdateCommande, useUpdateStatutCommande, useDeleteCommande } from '@/hooks/useCommandes'
@@ -86,7 +85,7 @@ function TabApercu({ commande, onEdit, onStatut, onDelete, navigate }) {
       {commande.urgence && (
         <div className="flex items-center gap-2 bg-warning/10 border border-warning/30 rounded-xl px-4 py-2.5">
           <AlertTriangle size={14} className="text-warning shrink-0" />
-          <span className="text-sm font-semibold text-warning">Commande urgente</span>
+          <span className="text-sm font-semibold text-warning">{t('commandes.creation.urgente')}</span>
         </div>
       )}
 
@@ -102,7 +101,7 @@ function TabApercu({ commande, onEdit, onStatut, onDelete, navigate }) {
         </div>
         {commande.date_livraison_prevue && (
           <div className="flex items-center justify-between pt-3 border-t border-edge">
-            <span className="text-xs text-ghost">Livraison prévue</span>
+            <span className="text-xs text-ghost">{t('commandes.groupe_form.livraison')}</span>
             <div className="flex items-center gap-2">
               <span className="text-xs text-ink">{formatDate(commande.date_livraison_prevue)}</span>
               <CountdownBadge dueDate={commande.date_livraison_prevue} />
@@ -157,7 +156,7 @@ function TabApercu({ commande, onEdit, onStatut, onDelete, navigate }) {
       {/* Note interne */}
       {commande.note_interne && (
         <div className="bg-subtle rounded-xl px-4 py-3">
-          <p className="text-xs text-ghost mb-1">Note interne</p>
+          <p className="text-xs text-ghost mb-1">{t('commandes.creation.note_interne')}</p>
           <p className="text-sm text-ink">{commande.note_interne}</p>
         </div>
       )}
@@ -395,15 +394,15 @@ function TabPaiements({ commande, commandeId }) {
       <div className="bg-card border border-edge rounded-2xl overflow-hidden">
         <div className="divide-y divide-edge">
           <div className="flex justify-between px-4 py-3">
-            <span className="text-sm text-ghost">Prix total</span>
+            <span className="text-sm text-ghost">{t('commandes.prix_total')}</span>
             <span className="text-sm font-semibold text-ink font-mono">{formatCurrency(prix)}</span>
           </div>
           <div className="flex justify-between px-4 py-3">
-            <span className="text-sm text-ghost">Déjà encaissé</span>
+            <span className="text-sm text-ghost">{t('commandes.deja_encaisse')}</span>
             <span className="text-sm font-semibold text-success font-mono">{formatCurrency(acompte)}</span>
           </div>
           <div className="flex justify-between px-4 py-3">
-            <span className="text-sm font-medium text-ink">Reste à payer</span>
+            <span className="text-sm font-medium text-ink">{t('commandes.groupe.reste')}</span>
             <span className={cn('text-lg font-bold font-mono', solde ? 'text-success' : 'text-gold-dark')}>
               {formatCurrency(restant)}
             </span>
@@ -456,7 +455,7 @@ function TabPaiements({ commande, commandeId }) {
       {whatsappUrl && (
         <div className="bg-[#25d366]/10 border border-[#25d366]/30 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
           <div>
-            <p className="text-sm font-semibold text-ink">Relevé prêt</p>
+            <p className="text-sm font-semibold text-ink">{t('commandes.detail.releve_pret')}</p>
             <p className="text-xs text-ghost">Envoyer le récap WhatsApp ?</p>
           </div>
           <div className="flex gap-2 shrink-0">
@@ -632,17 +631,21 @@ function TabMesures({ commande }) {
 
 // ── Onglet Historique ─────────────────────────────────────────────────────────
 function TabHistorique({ commande, paiements }) {
+  const { t } = useTranslation()
+
+  // Icônes lucide et libellés traduits : la frise portait trois emoji et trois
+  // phrases françaises en clair, invisibles pour la version anglaise.
   const events = [
-    { date: commande.created_at, label: 'Commande créée', icon: '📋' },
+    { date: commande.created_at, label: t('commandes.frise.creee'), Icone: ClipboardList },
     ...paiements.map(p => ({
       date: p.created_at,
-      label: `Paiement reçu : ${formatCurrency(p.montant)} (${p.mode_paiement})`,
-      icon: '💰',
+      label: t('commandes.frise.payee', { montant: formatCurrency(p.montant), mode: p.mode_paiement }),
+      Icone: Wallet,
     })),
     commande.date_livraison_effective && {
       date: commande.date_livraison_effective,
-      label: 'Commande livrée',
-      icon: '✅',
+      label: t('commandes.frise.livree'),
+      Icone: CheckCircle2,
     },
   ].filter(Boolean).sort((a, b) => new Date(b.date) - new Date(a.date))
 
@@ -652,8 +655,8 @@ function TabHistorique({ commande, paiements }) {
         <div className="absolute left-2.5 top-0 bottom-0 w-px bg-edge" />
         {events.map((ev, i) => (
           <div key={i} className="relative">
-            <div className="absolute -left-[18px] w-4 h-4 rounded-full bg-card border border-edge flex items-center justify-center text-[9px]">
-              {ev.icon}
+            <div className="absolute -left-[18px] w-4 h-4 rounded-full bg-card border border-edge flex items-center justify-center">
+              <ev.Icone size={9} className="text-dim" aria-hidden="true" />
             </div>
             <p className="text-sm text-ink">{ev.label}</p>
             <p className="text-xs text-ghost mt-0.5">{formatDate(ev.date)}</p>

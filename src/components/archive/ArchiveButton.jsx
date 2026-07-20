@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Archive } from 'lucide-react'
 import { useArchiver } from '@/hooks/useArchives'
 import { usePermission } from '@/hooks/usePermission'
@@ -9,6 +10,7 @@ import { usePermission } from '@/hooks/usePermission'
  * Propose une note optionnelle avant de confirmer.
  */
 export default function ArchiveButton({ entityType, entityId, onSuccess }) {
+  const { t } = useTranslation()
   const permKey   = `${entityType}s.archive`
   const canArchive = usePermission(permKey)
   const archiver   = useArchiver(entityType, entityId)
@@ -40,7 +42,7 @@ export default function ArchiveButton({ entityType, entityId, onSuccess }) {
 
   return (
     <form onSubmit={handleSubmit} className="bg-warning/10 border border-warning/25 rounded-2xl p-4 space-y-3">
-      <p className="text-sm font-medium text-amber-800">Archiver cet élément</p>
+      <p className="text-sm font-medium text-amber-800">{t('archives.archiver_element')}</p>
       <p className="text-xs text-amber-700">
         Le patron sera notifié. Ajoutez une note pour expliquer la raison (optionnel).
       </p>

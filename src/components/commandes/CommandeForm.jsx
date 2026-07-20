@@ -101,7 +101,7 @@ export default function CommandeForm({ initialData, lockedClientId = false, onSu
 
       {/* Photo du tissu */}
       <div>
-        <p className="text-sm font-medium text-ink mb-2">Photo du tissu</p>
+        <p className="text-sm font-medium text-ink mb-2">{t('commandes.creation.photo_titre')}</p>
         {photoPreview ? (
           <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-edge">
             <img src={photoPreview} alt="tissu" className="w-full h-full object-cover" />
@@ -112,7 +112,7 @@ export default function CommandeForm({ initialData, lockedClientId = false, onSu
         ) : (
           <button type="button" onClick={() => fileRef.current?.click()} className="w-full py-6 rounded-xl border-2 border-dashed border-edge flex flex-col items-center justify-center gap-2 text-ghost hover:border-primary hover:text-primary transition-colors">
             <ImagePlus size={24} />
-            <span className="text-xs">Photo du tissu ou modèle</span>
+            <span className="text-xs">{t('commandes.photo_tissu_placeholder')}</span>
           </button>
         )}
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />

@@ -265,7 +265,7 @@ function FactureTab() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="bg-card border border-edge rounded-2xl p-4 space-y-3">
-        <p className="text-sm font-semibold text-ink">Format de facture</p>
+        <p className="text-sm font-semibold text-ink">{t('parametres.format_facture')}</p>
 
         <label className="flex items-start gap-3 p-3 rounded-xl border border-edge cursor-pointer hover:bg-subtle transition-colors">
           <input
@@ -316,7 +316,7 @@ function FactureTab() {
       {form.format_facture === 'personnalise' && dispo && (
         <div className="bg-card border border-edge rounded-2xl p-4 space-y-4">
           <div>
-            <p className="text-sm font-medium text-ink mb-2">Logo de l'atelier</p>
+            <p className="text-sm font-medium text-ink mb-2">{t('parametres.logo_atelier')}</p>
             <div className="flex items-center gap-3">
               {settings?.facture_logo_url ? (
                 <img src={settings.facture_logo_url} alt="Logo" className="w-14 h-14 rounded-xl object-contain border border-edge bg-subtle" />
@@ -356,7 +356,7 @@ function FactureTab() {
             placeholder="Numéro RCCM"
           />
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-ink">Pied de page</label>
+            <label className="text-sm font-medium text-ink">{t('parametres.pied_page')}</label>
             <textarea
               value={form.facture_pied_page}
               onChange={e => setForm(f => ({ ...f, facture_pied_page: e.target.value }))}
@@ -376,7 +376,7 @@ function FactureTab() {
           <p className="text-xs text-ghost">Pour les ateliers assujettis à la TVA : connectez votre compte e-MECeF pour émettre des factures normalisées (Code DGI + QR). Pensez à renseigner votre IFU.</p>
         </div>
         <label className="flex items-center justify-between cursor-pointer">
-          <span className="text-sm text-ink">Assujetti à la TVA</span>
+          <span className="text-sm text-ink">{t('parametres.assujetti_tva')}</span>
           <input type="checkbox" checked={form.assujetti_tva} onChange={e => setForm(f => ({ ...f, assujetti_tva: e.target.checked }))} />
         </label>
         {form.assujetti_tva && (
