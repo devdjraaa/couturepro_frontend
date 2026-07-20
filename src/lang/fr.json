@@ -134,8 +134,8 @@
     "site_ph": "Site web",
     "utiliser_position": "Utiliser ma position",
     "enregistrement": "Enregistrement…",
-    "enregistre": "✓ Enregistré",
-    "geo_enregistre": "✓ Position enregistrée",
+    "enregistre": "Enregistré",
+    "geo_enregistre": "Position enregistrée",
     "geo_echec": "Échec",
     "geo_refuse": "Position refusée",
     "limite_atteinte": "Limite atteinte.",
@@ -143,7 +143,7 @@
     "verifie_desc": "Le badge « Vérifié » est affiché sur votre vitrine publique.",
     "demander_verif": "Demander la vérification",
     "verif_desc": "Joignez un document officiel (CNI, diplôme, certificat de créateur…) ou un lien vers votre portfolio / profil professionnel pour obtenir le badge « Vérifié ».",
-    "verif_envoyee": "✓ Demande envoyée — nous vous répondons sous 48 h.",
+    "verif_envoyee": "Demande envoyée — nous vous répondons sous 48 h.",
     "joindre_doc": "Joindre un document (PDF, JPG, PNG)",
     "portfolio_ph": "Lien vers votre portfolio (https://…)",
     "envoyer_demande": "Envoyer la demande",
@@ -160,7 +160,7 @@
     "aucune_collection": "Aucune collection pour le moment.",
     "nouvelle_collection_ph": "Nouvelle collection…",
     "avis_titre": "Avis à valider",
-    "signale": "⚑ signalé",
+    "signale": "signalé",
     "valider": "Valider",
     "rejeter": "Rejeter",
     "devis_titre": "Demandes de devis",
@@ -274,10 +274,10 @@
       "montant_acompte": "Montant acompte :",
       "maj": "Mettre à jour",
       "dgi_titre": "Facture normalisée DGI",
-      "dgi_normalisee": "✓ Normalisée e-MECeF",
+      "dgi_normalisee": "Normalisée e-MECeF",
       "dgi_qr": "QR DGI",
       "dgi_code": "Code MECeF/DGI :",
-      "dgi_pdf_joint": "✓ PDF DGI joint",
+      "dgi_pdf_joint": "PDF DGI joint",
       "telecharger": "Télécharger",
       "imprimer_habillage": "Imprimer / Partager (habillage GEXTIMO)",
       "habillage_generation": "Génération…",
@@ -571,7 +571,7 @@
       "encaisse_auj": "Encaissé aujourd'hui"
     },
     "todo": {
-      "libre": "Journée libre 🎉",
+      "libre": "Journée libre",
       "libre_desc": "Pas d'urgence aujourd'hui. Prenez de l'avance sur vos commandes.",
       "voir_commandes": "Voir toutes les commandes",
       "livraison": "Livraison — {{vetement}}",
@@ -579,7 +579,7 @@
       "solde": "Solde restant — {{montant}}"
     },
     "onboarding": {
-      "titre": "Bienvenue dans votre atelier 🎉",
+      "titre": "Bienvenue dans votre atelier",
       "etapes": "{{fait}} / {{total}} étapes complétées",
       "step_client": "Ajouter votre premier client",
       "step_client_sub": "Créez une fiche avec ses mesures",
@@ -1099,7 +1099,7 @@
     "paliers": {
       "titre": "Paliers de fidélité",
       "restant": "Plus que {{pts}} pts pour atteindre {{palier}}",
-      "max": "Palier maximum atteint 🎉"
+      "max": "Palier maximum atteint"
     }
   },
   "notifications": {
@@ -1515,7 +1515,7 @@
     "err_generic": "La mise en vente a échoué. Réessayez."
   },
   "vitrine": {
-    "promo": "✦ Nouveau — la vitrine Gextimo connecte les créateurs de mode africaine à toute l'Afrique de l'Ouest.",
+    "promo": "Nouveau — la vitrine Gextimo connecte les créateurs de mode africaine à toute l'Afrique de l'Ouest.",
     "online": "● En ligne",
     "loading": "Chargement…",
     "indicatif": "* Prix indicatifs, convertis à titre informatif.",
@@ -1579,9 +1579,9 @@
     },
     "hero": {
       "eyebrow": "Plateforme des créateurs de mode",
-      "title_pre": "La vitrine des ",
+      "title_pre": "La vitrine des",
       "title_hl": "créateurs de mode",
-      "title_post": " africaine.",
+      "title_post": "africaine.",
       "cta_discover": "Découvrir les créateurs",
       "cta_how": "Comment ça marche",
       "stat_creators": "créateurs",
@@ -1621,7 +1621,7 @@
       "title": "Trouvez votre créateur",
       "subtitle": "Des talents vérifiés, près de chez vous ou partout en Afrique.",
       "visit": "Visiter le profil",
-      "verified": "✓ Vérifié",
+      "verified": "Vérifié",
       "new": "Nouveau",
       "see_all": "Voir tous les créateurs →",
       "creations_count": "{{n}} création",
@@ -1663,7 +1663,7 @@
       "stat_2_l": "pour créer son compte",
       "stat_3_v": "0 %",
       "stat_3_l": "de commission sur vos ventes",
-      "stat_4_v": "✓ Badge",
+      "stat_4_v": "Badge",
       "stat_4_l": "de vérification disponible"
     },
     "testimonials": {
@@ -1762,8 +1762,8 @@
     },
     "profil": {
       "quote": "Demander un devis",
-      "contact": "📱 Contacter",
-      "save": "♡ Enregistrer",
+      "contact": "Contacter",
+      "save": "Enregistrer",
       "catalogue": "Catalogue",
       "no_creations": "Aucune création publiée pour le moment.",
       "order": "Commander",
