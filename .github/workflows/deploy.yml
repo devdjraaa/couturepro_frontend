@@ -45,8 +45,8 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_ed25519 \
               -o StrictHostKeyChecking=no \
-              -o ConnectionAttempts=3 \
-              -o ConnectTimeout=30 \
+              -o ConnectionAttempts=5 \
+              -o ConnectTimeout=45 \
               -o ServerAliveInterval=15 \
               -o ServerAliveCountMax=4 \
               -o BatchMode=yes \
@@ -139,7 +139,7 @@ jobs:
             rsync -az --delete \
               --exclude='Gextimo*.apk' \
               --chmod=D755,F644 \
-              -e "ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no -o BatchMode=yes -o ConnectionAttempts=3 -o ConnectTimeout=30 -o ServerAliveInterval=15 -o ServerAliveCountMax=4" \
+              -e "ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no -o BatchMode=yes -o ConnectionAttempts=5 -o ConnectTimeout=45 -o ServerAliveInterval=15 -o ServerAliveCountMax=4" \
               ./dist/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/gextimo_frontend/ && break
             echo "::warning::rsync a échoué (tentative $essai/3) — nouvelle tentative dans 15 s"
             [ "$essai" = 3 ] && exit 1
@@ -150,8 +150,8 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_ed25519 \
               -o StrictHostKeyChecking=no \
-              -o ConnectionAttempts=3 \
-              -o ConnectTimeout=30 \
+              -o ConnectionAttempts=5 \
+              -o ConnectTimeout=45 \
               -o ServerAliveInterval=15 \
               -o ServerAliveCountMax=4 \
               -o BatchMode=yes \
