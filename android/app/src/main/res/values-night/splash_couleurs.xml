@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Même principe en thème sombre : sans cette variante, un utilisateur en
+     mode sombre verrait un éclair crème avant que l'application ne s'affiche. -->
+<resources>
+    <color name="gx_splash_fond">#100B0A</color>
+</resources>

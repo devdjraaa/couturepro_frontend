@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Fond de l'écran de démarrage NATIF.
+
+  Il portait l'image `@drawable/splash` : Android l'affichait le temps que la
+  WebView démarre, puis l'animation web arrivait par-dessus — deux ouvertures à
+  la suite, ce que la direction a constaté le 20/07.
+
+  Le fond natif reprend donc exactement la couleur de fond de l'application
+  (couleur bg-app) : la phase native devient invisible, et l'utilisateur ne
+  perçoit plus qu'UNE seule ouverture, celle qui est animée.
+-->
+<resources>
+    <color name="gx_splash_fond">#FAF8F5</color>
+</resources>

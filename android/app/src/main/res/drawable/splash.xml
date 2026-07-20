@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Aplat uni, sans logo : l'ouverture visible est celle qui est animée côté
+     web. Voir values/splash_couleurs.xml. -->
+<color xmlns:android="http://schemas.android.com/apk/res/android"
+       android:color="@color/gx_splash_fond" />
