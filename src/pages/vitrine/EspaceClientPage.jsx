@@ -12,6 +12,7 @@ import {
   getConfigPublique, majProfil,
 } from './espaceClientApi'
 import { track, initAnalyticsTiers } from '@/utils/gxtTracking'
+import toast from 'react-hot-toast'
 import { consommerAction, lireAction } from './actionEnAttente'
 import { toggleAbonnement } from './vitrineApi'
 
@@ -40,10 +41,16 @@ export default function EspaceClientPage() {
     if (!a) return false
 
     if (a.type === 'suivre_createur' && a.payload?.atelierId) {
-      const { ok } = await toggleAbonnement(a.payload.atelierId)
-      // Un échec ici n'est pas bloquant : on ramène quand même l'utilisateur sur
-      // le profil, où l'état réel de l'abonnement sera rechargé depuis le serveur.
-      if (ok) track('abonnement_createur', { atelier_id: a.payload.atelierId, via: 'reprise_connexion' })
+      const { ok, data } = await toggleAbonnement(a.payload.atelierId)
+      if (ok) {
+        track('abonnement_createur', { atelier_id: a.payload.atelierId, via: 'reprise_connexion' })
+        toast.success(t('vitrine.espace_client.reprise_ok', { createur: a.payload.nom || '' }))
+      } else {
+        // EC-4 : ne JAMAIS échouer en silence. L'utilisateur croirait être abonné
+        // alors que rien n'a été enregistré — on le ramène au profil en le disant,
+        // pour qu'il puisse recliquer en connaissance de cause.
+        toast.error(data?.message || t('vitrine.espace_client.reprise_echec'))
+      }
     }
 
     if (a.retour) { navigate(a.retour, { replace: true }); return true }
