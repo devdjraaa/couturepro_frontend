@@ -2112,7 +2112,9 @@
       "notifs_echec": "We couldn't save your notification setting.",
       "reprise_avis": "Sign in to publish your review, it is saved and will be posted right after you sign in, then you will be taken back to the profile.",
       "avis_rejoue": "Your review has been published.",
-      "avis_rejoue_photos": "Your review has been published. The attached photos could not be kept through sign-in."
+      "avis_rejoue_photos": "Your review has been published. The attached photos could not be kept through sign-in.",
+      "notifications": "Your notifications",
+      "tout_lire": "Mark all as read"
     },
     "chatbot": {
       "titre": "Makila AI",

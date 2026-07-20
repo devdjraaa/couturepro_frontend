@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import i18n from '@/lang/i18n'
 import { useSearchParams, useNavigate, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Mail, LogOut, Package, Star, AlertTriangle, Send, ShieldCheck, CheckCircle2, Heart, BellRing, BellOff } from 'lucide-react'
+import { Mail, LogOut, Package, Star, AlertTriangle, Send, ShieldCheck, CheckCircle2, Heart, BellRing, BellOff, Bell } from 'lucide-react'
 import VitrineShell from './VitrineChrome'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import {
@@ -15,6 +15,7 @@ import {
 import { track, initAnalyticsTiers } from '@/utils/gxtTracking'
 import toast from 'react-hot-toast'
 import { consommerAction, lireAction } from './actionEnAttente'
+import { getMesNotifications, marquerNotificationLue, marquerToutesNotificationsLues } from './espaceClientApi'
 import { toggleAbonnement, deposerAvis } from './vitrineApi'
 
 const ETAPES = ['commande', 'coupe', 'confection', 'essayage', 'livraison']
@@ -284,6 +285,77 @@ function SectionAbonnements() {
 }
 
 /* ── Espace connecté ─────────────────────────────────────────────────────────── */
+/**
+ * Pt 24 — Ce qui a bougé depuis la dernière visite.
+ *
+ * Le client n'était prévenu que par e-mail à chaque avancée de sa commande.
+ * Un e-mail se perd, part en indésirable ou n'est simplement pas relevé — et
+ * le client revenait alors sur son espace sans rien y trouver sur sa commande.
+ * C'est précisément le moment où il écrit au créateur pour demander.
+ *
+ * Placée AVANT les commandes : c'est ce qui a changé qu'on vient voir, pas la
+ * liste complète.
+ */
+function SectionNotifications() {
+  const { t } = useTranslation()
+  const [items, setItems] = useState(null)
+
+  const charger = () => getMesNotifications().then(({ ok, data }) => setItems(ok ? (data?.data ?? []) : []))
+  useEffect(() => { charger() }, [])
+
+  const ouvrir = async (n) => {
+    if (n.lu_at) return
+    await marquerNotificationLue(n.id)
+    // Mise à jour locale plutôt qu'un rechargement : recharger réordonnerait la
+    // liste sous le doigt du client au moment même où il lit.
+    setItems((l) => l.map((x) => (x.id === n.id ? { ...x, lu_at: new Date().toISOString() } : x)))
+  }
+
+  const toutLire = async () => {
+    await marquerToutesNotificationsLues()
+    setItems((l) => l.map((x) => ({ ...x, lu_at: x.lu_at ?? new Date().toISOString() })))
+  }
+
+  // Rien à afficher tant qu'il n'y a rien : une section vide sur un espace
+  // encore neuf donne l'impression d'un compte inutilisable.
+  if (!items || items.length === 0) return null
+
+  const nonLues = items.filter((n) => !n.lu_at).length
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="font-display text-lg text-ink flex items-center gap-2">
+          <Bell size={17} />{t('vitrine.espace_client.notifications')}
+          {nonLues > 0 && (
+            <span className="text-[11px] font-semibold bg-primary text-white rounded-full px-2 py-0.5">{nonLues}</span>
+          )}
+        </h2>
+        {nonLues > 0 && (
+          <button onClick={toutLire} className="text-[13px] text-dim hover:text-primary transition">
+            {t('vitrine.espace_client.tout_lire')}
+          </button>
+        )}
+      </div>
+
+      <div className="bg-card border border-edge rounded-2xl divide-y divide-edge overflow-hidden">
+        {items.map((n) => (
+          <button key={n.id} onClick={() => ouvrir(n)} type="button"
+                  className={`w-full text-left px-4 py-3 transition hover:bg-subtle/60 ${n.lu_at ? '' : 'bg-primary-50/40'}`}>
+            <div className="flex items-start gap-2.5">
+              {!n.lu_at && <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0" aria-hidden="true" />}
+              <div className="min-w-0 flex-1">
+                <p className={`text-[14px] text-ink ${n.lu_at ? '' : 'font-semibold'}`}>{n.titre}</p>
+                {n.contenu && <p className="text-[13px] text-dim mt-0.5 leading-relaxed">{n.contenu}</p>}
+              </div>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function Espace({ me, config, onLogout, commanderAtelier, commanderNom }) {
   const { t } = useTranslation()
   const [consent, setConsent] = useState(me.consentement)
@@ -312,6 +384,8 @@ function Espace({ me, config, onLogout, commanderAtelier, commanderNom }) {
       )}
 
       <SectionProfil client={me.client} onDone={(msg) => setFlash(msg)} />
+
+      <SectionNotifications />
 
       <SectionAbonnements />
 
