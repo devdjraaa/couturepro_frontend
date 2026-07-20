@@ -41,6 +41,18 @@
   .cadre { overflow: hidden; }
   footer { max-width: 700px; margin: 40px auto 0; font-size: 13px; color: #5B534E; }
   code { background: #FBF9F6; padding: 1px 5px; border-radius: 3px; font-size: 12.5px; }
+  .choix { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0 0 8px; }
+  .choix-l {
+    font: 700 10px/1 'Plus Jakarta Sans', sans-serif; letter-spacing: .14em;
+    text-transform: uppercase; color: #8A817B; margin-right: 4px;
+  }
+  .choix button {
+    font: 600 13px/1 'Plus Jakarta Sans', sans-serif; padding: 8px 14px;
+    border: 1px solid #D9D2C9; background: #fff; color: #5B534E;
+    border-radius: 999px; cursor: pointer;
+  }
+  .choix button.actif { border-color: #1A1614; background: #1A1614; color: #fff; }
+  .choix-aide { margin: 0 0 30px; font-size: 13px; color: #5B534E; }
 </style>
 </head>
 <body>
@@ -61,6 +73,13 @@
     filet or, rouge réservé aux totaux.
   </div>
 
+  <div class="choix">
+    <span class="choix-l">Accent des documents</span>
+    <button type="button" data-accent="or" class="actif">Or</button>
+    <button type="button" data-accent="rouge">Rouge Gextimo</button>
+  </div>
+  <p class="choix-aide" id="aide-accent"></p>
+
   <div id="docs"></div>
 </div>
 
@@ -74,7 +93,7 @@
 </footer>
 
 <script type="module">
-import { T, enTete, section, paires, tableau, encart, pastille, esc } from './pdfTheme.js'
+import { T, setAccent, enTete, section, paires, tableau, encart, pastille, esc } from './pdfTheme.js'
 
 const fcfa = (n) => new Intl.NumberFormat('fr-FR').format(n) + ' F'
 
@@ -285,7 +304,9 @@ const documents = [
    tenir sur l'écran sans déformer les proportions du document imprimé. */
 const conteneur = document.getElementById('docs')
 
-documents.forEach((doc, i) => {
+function rendre() {
+  conteneur.innerHTML = ''
+  documents.forEach((doc, i) => {
   const bloc = document.createElement('section')
   bloc.className = 'doc'
   bloc.innerHTML = `
@@ -302,8 +323,29 @@ documents.forEach((doc, i) => {
         <span>1/1</span>
       </div>
     </div></div>`
-  conteneur.appendChild(bloc)
+    conteneur.appendChild(bloc)
+  })
+  ajuster()
+}
+
+const AIDE = {
+  or: "L'or porte la structure (filets, intitulés), le rouge de marque reste réservé aux totaux. C'est le réglage actuel : sur huit documents, un rouge omniprésent finit par crier, et un aplat rouge coûte de l'encre à l'impression.",
+  rouge: "La marque domine : filets, intitulés d'atelier et encarts passent au rouge Gextimo. Plus affirmé, plus reconnaissable au premier coup d'œil — et plus chargé en encre.",
+}
+
+const aide = document.getElementById('aide-accent')
+
+document.querySelectorAll('.choix button').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.choix button').forEach(x => x.classList.toggle('actif', x === b))
+    setAccent(b.dataset.accent)
+    aide.textContent = AIDE[b.dataset.accent]
+    rendre()
+  })
 })
+
+aide.textContent = AIDE.or
+rendre()
 
 /* Mise à l'échelle sur petit écran : la feuille fait 595 px de large (A4 à 72 dpi).
    On la réduit proportionnellement et on ajuste la hauteur du cadre, sinon la

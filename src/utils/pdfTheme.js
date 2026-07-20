@@ -34,12 +34,34 @@ export const T = {
   vert:       '#1F7A5A',   // encaissé / payé
   ambre:      '#B4791A',   // en attente
 
+  /* Accent STRUCTUREL (filets, intitulés d'atelier, encarts). Par défaut l'or :
+     employer le rouge de marque sur chaque filet des 8 documents finit par
+     crier, et un aplat rouge coûte de l'encre à l'impression. Le rouge reste
+     réservé à ce qui doit frapper — les totaux et les mentions fortes.
+     `setAccent('rouge')` bascule l'ensemble si la direction préfère la marque
+     dominante. */
+  accent:       '#CDA662',
+  accentSombre: '#A87F3E',
+  accentPale:   '#F5EDDD',
+
   serif:      "'Bodoni Moda', Georgia, serif",
   sans:       "'Plus Jakarta Sans', -apple-system, 'Segoe UI', sans-serif",
 
   // A4 à 72 dpi (unité de jsPDF) : 595 × 842 pt.
   largeur:    595,
   marge:      44,
+}
+
+/**
+ * Bascule l'accent structurel de tous les documents.
+ * @param {'or'|'rouge'} nom
+ */
+export function setAccent(nom) {
+  const jeux = {
+    or:    { accent: '#CDA662', accentSombre: '#A87F3E', accentPale: '#F5EDDD' },
+    rouge: { accent: '#D00B0B', accentSombre: '#8E0707', accentPale: '#FBE9E9' },
+  }
+  Object.assign(T, jeux[nom] ?? jeux.or)
 }
 
 /* ── Briques ──────────────────────────────────────────────────────────────── */
@@ -56,7 +78,7 @@ export function enTete({ atelierNom, titre, sousTitre = '', reference = '', date
                  padding-bottom:14px;border-bottom:1px solid ${T.filet};margin-bottom:6px;">
     <div style="min-width:0;">
       <p style="margin:0 0 10px;font:600 9px/1 ${T.sans};letter-spacing:.18em;
-                text-transform:uppercase;color:${T.orSombre};">${esc(atelierNom)}</p>
+                text-transform:uppercase;color:${T.accentSombre};">${esc(atelierNom)}</p>
       <h1 style="margin:0;font:400 27px/1.1 ${T.serif};color:${T.encre};">${esc(titre)}</h1>
       ${sousTitre ? `<p style="margin:7px 0 0;font:500 13px/1.3 ${T.sans};color:${T.encreDoux};">${esc(sousTitre)}</p>` : ''}
     </div>
@@ -65,7 +87,7 @@ export function enTete({ atelierNom, titre, sousTitre = '', reference = '', date
       <p style="margin:0;font:400 10px/1 ${T.sans};color:${T.gris};">${d}</p>
     </div>
   </header>
-  <div style="height:2px;background:linear-gradient(90deg,${T.or} 0%,${T.orPale} 62%,transparent 100%);
+  <div style="height:2px;background:linear-gradient(90deg,${T.accent} 0%,${T.accentPale} 62%,transparent 100%);
               margin-bottom:26px;"></div>`
 }
 
@@ -130,10 +152,10 @@ export function tableau({ colonnes, lignes, total = null }) {
 /** Encart de note ou de mention (fond crème, filet or à gauche). */
 export function encart(titre, texte) {
   return `
-  <div style="margin-top:22px;background:${T.fondDoux};border-left:2px solid ${T.or};
+  <div style="margin-top:22px;background:${T.fondDoux};border-left:2px solid ${T.accent};
               padding:13px 16px;">
     ${titre ? `<p style="margin:0 0 5px;font:700 9px/1 ${T.sans};letter-spacing:.14em;
-                          text-transform:uppercase;color:${T.orSombre};">${esc(titre)}</p>` : ''}
+                          text-transform:uppercase;color:${T.accentSombre};">${esc(titre)}</p>` : ''}
     <p style="margin:0;font:400 11.5px/1.55 ${T.sans};color:${T.encreDoux};">${esc(texte)}</p>
   </div>`
 }
