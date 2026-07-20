@@ -61,3 +61,56 @@ export function useSetJournalMaj() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ADMIN_KEYS.journalMaj }),
   })
 }
+
+/**
+ * Quatre réglages qui n'avaient qu'une route d'écriture, donc aucun écran
+ * possible. Les paliers de fidélité en particulier : la direction devait
+ * recalibrer un programme inatteignable sans aucun moyen de le faire.
+ */
+export function usePaliersFidelite() {
+  return useQuery({ queryKey: ADMIN_KEYS.paliersFidelite, queryFn: () => reglagesVitrineAdminService.getPaliersFidelite() })
+}
+
+export function useSetPaliersFidelite() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (p) => reglagesVitrineAdminService.setPaliersFidelite(p),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ADMIN_KEYS.paliersFidelite }),
+  })
+}
+
+export function useCoordonnees() {
+  return useQuery({ queryKey: ADMIN_KEYS.coordonnees, queryFn: () => reglagesVitrineAdminService.getCoordonnees() })
+}
+
+export function useSetCoordonnees() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (p) => reglagesVitrineAdminService.setCoordonnees(p),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ADMIN_KEYS.coordonnees }),
+  })
+}
+
+export function useMoyensPaiement() {
+  return useQuery({ queryKey: ADMIN_KEYS.moyensPaiement, queryFn: () => reglagesVitrineAdminService.getMoyensPaiement() })
+}
+
+export function useSetMoyensPaiement() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (p) => reglagesVitrineAdminService.setMoyensPaiement(p),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ADMIN_KEYS.moyensPaiement }),
+  })
+}
+
+export function useVasat() {
+  return useQuery({ queryKey: ADMIN_KEYS.vasat, queryFn: () => reglagesVitrineAdminService.getVasat() })
+}
+
+export function useSetVasat() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (p) => reglagesVitrineAdminService.setVasat(p),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ADMIN_KEYS.vasat }),
+  })
+}

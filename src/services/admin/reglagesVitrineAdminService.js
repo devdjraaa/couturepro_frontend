@@ -49,6 +49,49 @@ export const reglagesVitrineAdminService = {
     return data?.entrees ?? entrees
   },
 
+  // Ces quatre réglages avaient une route d'ÉCRITURE sans écran : on pouvait
+  // les écraser à l'aveugle, jamais les relire. Les lectures ont été ajoutées
+  // en même temps que les sections correspondantes.
+  async getPaliersFidelite() {
+    const { data } = await adminApi.get('/vitrine/paliers-fidelite')
+    return data?.paliers ?? []
+  },
+
+  async setPaliersFidelite(paliers) {
+    const { data } = await adminApi.put('/vitrine/paliers-fidelite', { paliers })
+    return data?.paliers ?? paliers
+  },
+
+  async getCoordonnees() {
+    const { data } = await adminApi.get('/vitrine/coordonnees')
+    return data ?? {}
+  },
+
+  async setCoordonnees(payload) {
+    const { data } = await adminApi.put('/vitrine/coordonnees', payload)
+    return data
+  },
+
+  async getMoyensPaiement() {
+    const { data } = await adminApi.get('/vitrine/moyens-paiement')
+    return data?.moyens ?? []
+  },
+
+  async setMoyensPaiement(moyens) {
+    const { data } = await adminApi.put('/vitrine/moyens-paiement', { moyens })
+    return data?.moyens ?? moyens
+  },
+
+  async getVasat() {
+    const { data } = await adminApi.get('/vitrine/vasat')
+    return data ?? { actif: false, defini: false }
+  },
+
+  async setVasat(payload) {
+    const { data } = await adminApi.put('/vitrine/vasat', payload)
+    return data
+  },
+
   async getModerationAvis() {
     const { data } = await adminApi.get('/vitrine/moderation-avis')
     return data?.reglages ?? {}

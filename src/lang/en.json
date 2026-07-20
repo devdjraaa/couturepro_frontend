@@ -4423,6 +4423,34 @@
       "champ_titre": "Title",
       "lignes": "Details",
       "lignes_aide": "One bullet per line. Write for a user, not a developer."
+    },
+    "fidelite": {
+      "titre": "Loyalty programme — tiers",
+      "aide": "Point thresholds for each tier. Adjust against what workshops actually generate: an unreachable threshold makes the programme invisible and nobody converts.",
+      "nom": "Tier name",
+      "seuil": "Threshold (points)",
+      "ajouter": "Add a tier"
+    },
+    "coordonnees": {
+      "titre": "Official contact details",
+      "aide": "Used in PDF documents and WhatsApp shares. A phone number change happens here, with no technical work.",
+      "marque": "Brand",
+      "site": "Website",
+      "telephone": "Phone"
+    },
+    "moyens_paiement": {
+      "titre": "Payment methods (invoicing)",
+      "aide": "What professionals can offer on quotes and invoices. Does NOT affect the till or orders, which record how the customer actually paid on site (cash included).",
+      "actif": "Active",
+      "ajouter": "Add a method"
+    },
+    "vasat": {
+      "titre": "VASAT access",
+      "aide": "Hidden product, password protected. The password is never shown again: leave the field empty to keep the current one.",
+      "actif": "Enable access",
+      "mdp": "New password (8 characters minimum)",
+      "deja_defini": "A password is already set.",
+      "non_defini": "No password set: access is closed."
     }
   },
   "bienvenue": {
