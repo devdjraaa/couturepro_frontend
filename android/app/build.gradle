@@ -49,7 +49,13 @@ android {
         }
         admin {
             dimension "cible"
-            applicationId "com.couturepro.app"
+            // DOIT rester distinct de la saveur « gextimo » : c'est la raison
+            // d'être des deux saveurs. Avec le même identifiant, installer la
+            // console interne REMPLACE l'app des professionnels sur l'appareil
+            // au lieu de cohabiter avec elle.
+            // Régression de 2d81e27, un commit d'icône qui l'avait supprimé au
+            // passage ; valeur d'origine rétablie (cf. 5753299).
+            applicationId "com.couturepro.admin"
         }
     }
 }
