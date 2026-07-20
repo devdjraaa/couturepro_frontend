@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Images, Plus, Trash2, Send, ImagePlus, X, Pencil, AlertTriangle, Info } from 'lucide-react'
+import { Images, Plus, Trash2, Send, ImagePlus, X, Pencil, AlertTriangle, Info, WifiOff } from 'lucide-react'
 import { AppLayout } from '@/components/layout'
 import { Button, Badge, Modal, Input, EmptyState, Skeleton } from '@/components/ui'
 import { realisationService } from '@/services/realisationService'
+import { listerAvecCache } from '@/services/realisationsCache'
 import { compressImage } from '@/utils/compressImage'
 import { cn } from '@/utils/cn'
 import { formatDateShort } from '@/utils/formatDate'
@@ -32,12 +33,18 @@ export default function MesRealisationsPage() {
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState(null) // réalisation en cours d'édition (ou null)
   const [erreur, setErreur]   = useState('')
+  // REL-3 — lecture servie par le cache local : l'écran doit le DIRE, sinon on
+  // croit consulter l'état réel du serveur et on s'étonne de ne pas voir une
+  // réalisation validée entre-temps.
+  const [horsLigne, setHorsLigne] = useState(false)
 
   const charger = async () => {
+    setErreur('')
     try {
-      const d = await realisationService.list()
-      setItems(d.realisations || [])
+      const d = await listerAvecCache()
+      setItems(d.items || [])
       setQuota(d.quota || null)
+      setHorsLigne(d.horsLigne)
     } catch { setErreur(t('realisations.erreur_chargement')) }
     finally { setLoading(false) }
   }
@@ -53,6 +60,13 @@ export default function MesRealisationsPage() {
   return (
     <AppLayout title={t('realisations.titre')} showBack>
       <div className="max-w-3xl mx-auto p-4 space-y-4">
+
+        {horsLigne && (
+          <p className="flex items-start gap-2 rounded-xl bg-warning/10 text-warning text-xs px-3 py-2.5">
+            <WifiOff size={14} className="shrink-0 mt-0.5" aria-hidden="true" />
+            {t('realisations.hors_ligne')}
+          </p>
+        )}
 
         {/* Bandeau explicatif + quota */}
         <div className="rounded-2xl border border-edge bg-subtle p-4">

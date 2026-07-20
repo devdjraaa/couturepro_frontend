@@ -1,7 +1,7 @@
 import { appSchema, tableSchema } from '@nozbe/watermelondb'
 
 export default appSchema({
-  version: 5,
+  version: 6,
   tables: [
     tableSchema({
       name: 'clients',
@@ -80,6 +80,25 @@ export default appSchema({
         { name: 'nom',        type: 'string' },
         { name: 'atelier_id', type: 'string' },
         { name: 'synced_at',  type: 'number', isOptional: true },
+      ],
+    }),
+    // REL-3 — cache hors ligne de « Mes Réalisations ». Lecture seule : envoyer
+    // des photos hors ligne est un autre chantier (fichiers à mettre en file).
+    // Ce cache sert à CONSULTER ses brouillons et ses dossiers en attente sans
+    // réseau, ce qui est le cas d'usage réel en atelier.
+    tableSchema({
+      name: 'realisations',
+      columns: [
+        { name: 'titre',        type: 'string' },
+        { name: 'description',  type: 'string',  isOptional: true },
+        { name: 'statut',       type: 'string' },
+        { name: 'images_json',  type: 'string',  isOptional: true },
+        { name: 'motif_refus',  type: 'string',  isOptional: true },
+        { name: 'soumis_at',    type: 'string',  isOptional: true },
+        { name: 'publie_at',    type: 'string',  isOptional: true },
+        { name: 'date_creation', type: 'string', isOptional: true },
+        { name: 'atelier_id',   type: 'string',  isOptional: true },
+        { name: 'synced_at',    type: 'number',  isOptional: true },
       ],
     }),
     tableSchema({

@@ -4658,7 +4658,8 @@
       "appliquer": "Appliquer la retouche",
       "echec": "La retouche n'a pas pu être enregistrée. Rien n'a été modifié.",
       "echec_chargement": "Photo impossible à charger."
-    }
+    },
+    "hors_ligne": "Vous êtes hors ligne : cette liste vient de votre appareil. Les validations et refus reçus entre-temps n'y figurent pas encore."
   },
   "vetements": {
     "modele_systeme": "Modèle système"

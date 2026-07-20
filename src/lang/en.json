@@ -4645,7 +4645,8 @@
       "appliquer": "Apply retouch",
       "echec": "The retouch could not be saved. Nothing was changed.",
       "echec_chargement": "Photo could not be loaded."
-    }
+    },
+    "hors_ligne": "You are offline: this list comes from your device. Approvals and rejections received since are not shown yet."
   },
   "vetements": {
     "modele_systeme": "System model"

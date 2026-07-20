@@ -91,5 +91,26 @@ export default schemaMigrations({
         }),
       ],
     },
+    // v5 → v6 : REL-3, cache hors ligne de « Mes Réalisations ».
+    {
+      toVersion: 6,
+      steps: [
+        createTable({
+          name: 'realisations',
+          columns: [
+            { name: 'titre',        type: 'string' },
+            { name: 'description',  type: 'string',  isOptional: true },
+            { name: 'statut',       type: 'string' },
+            { name: 'images_json',  type: 'string',  isOptional: true },
+            { name: 'motif_refus',  type: 'string',  isOptional: true },
+            { name: 'soumis_at',    type: 'string',  isOptional: true },
+            { name: 'publie_at',    type: 'string',  isOptional: true },
+            { name: 'date_creation', type: 'string', isOptional: true },
+            { name: 'atelier_id',   type: 'string',  isOptional: true },
+            { name: 'synced_at',    type: 'number',  isOptional: true },
+          ],
+        }),
+      ],
+    },
   ],
 })

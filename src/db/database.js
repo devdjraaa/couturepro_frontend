@@ -3,7 +3,7 @@ import * as LokiAdapterMod from '@nozbe/watermelondb/adapters/lokijs'
 import { setGenerator }  from '@nozbe/watermelondb/utils/common/randomId'
 import schema           from './schema'
 import migrations       from './migrations'
-import { Client, Commande, Mesure, Vetement, Collection, Notification, Paiement, CommandeItem, CommandeEcheance } from './models'
+import { Client, Commande, Mesure, Vetement, Collection, Notification, Paiement, CommandeItem, CommandeEcheance, Realisation } from './models'
 
 // Les enregistrements créés hors-ligne sont poussés au serveur AVEC leur id local.
 // Le backend stocke les id en colonnes `uuid` : un id WatermelonDB par défaut
@@ -49,7 +49,7 @@ const adapter = new LokiJSAdapter({
 
 const database = new Database({
   adapter,
-  modelClasses: [Client, Commande, Mesure, Vetement, Collection, Notification, Paiement, CommandeItem, CommandeEcheance],
+  modelClasses: [Client, Commande, Mesure, Vetement, Collection, Notification, Paiement, CommandeItem, CommandeEcheance, Realisation],
 })
 
 export default database
