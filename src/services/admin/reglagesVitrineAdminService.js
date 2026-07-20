@@ -28,4 +28,14 @@ export const reglagesVitrineAdminService = {
     const { data } = await adminApi.put('/vitrine/identite-legale', payload)
     return data
   },
+
+  async getModerationAvis() {
+    const { data } = await adminApi.get('/vitrine/moderation-avis')
+    return data?.reglages ?? {}
+  },
+
+  async setModerationAvis(payload) {
+    const { data } = await adminApi.put('/vitrine/moderation-avis', payload)
+    return data?.reglages ?? {}
+  },
 }

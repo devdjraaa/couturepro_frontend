@@ -5,16 +5,18 @@ import { AdminLayout } from '@/components/admin'
 import {
   useSplashThemes, useSetSplashThemes,
   useIdentiteLegale, useSetIdentiteLegale,
+  useModerationAvis, useSetModerationAvis,
 } from '@/hooks/admin/useReglagesVitrine'
 
 /**
  * Réglages vitrine pilotés par la direction.
  *
- * Ces deux jeux de valeurs existaient côté serveur SANS aucun écran : les
- * périodes saisonnières et l'identité légale n'avaient qu'une route d'écriture,
- * inatteignable depuis le back-office. La direction devait donc passer par un
- * développeur pour changer une date d'entrée en vigueur ou activer un habillage
- * de Noël — exactement ce que la configuration éditable cherche à éviter.
+ * TROIS jeux de valeurs existaient côté serveur SANS aucun écran pour les
+ * atteindre : les périodes saisonnières et l'identité légale n'avaient qu'une
+ * route d'écriture, la modération des avis n'était reliée à rien. La direction
+ * devait passer par un développeur pour changer une date d'entrée en vigueur,
+ * activer un habillage de Noël ou bannir un mot — exactement ce que la
+ * configuration éditable cherche à éviter.
  */
 
 const INPUT = 'w-full border border-edge rounded-xl px-3 py-2 text-sm text-ink bg-card mt-1 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary'
@@ -45,8 +47,19 @@ export default function ReglagesVitrinePage() {
   })
   const [legalSaved, setLegalSaved] = useState(false)
 
+  // AV2-F4 — réglages de modération des avis. Le backend existait depuis le
+  // 20/07 ; sans cet écran la direction ne pouvait ni relire ni ajuster les
+  // seuils, et devait passer par un développeur pour bannir un mot.
+  const modQ = useModerationAvis()
+  const setMod = useSetModerationAvis()
+  const [mod, setLocalMod] = useState({
+    max_avis_par_jour: 5, seuil_signalements: 3, motifs_graves: [], mots_bannis: [],
+  })
+  const [modSaved, setModSaved] = useState(false)
+
   useEffect(() => { if (themesQ.data) setLocalThemes(themesQ.data) }, [themesQ.data])
   useEffect(() => { if (legalQ.data) setLocalLegal((v) => ({ ...v, ...legalQ.data })) }, [legalQ.data])
+  useEffect(() => { if (modQ.data) setLocalMod((v) => ({ ...v, ...modQ.data })) }, [modQ.data])
 
   const majTheme = (i, cle, val) =>
     setLocalThemes((l) => l.map((th, idx) => (idx === i ? { ...th, [cle]: val } : th)))
@@ -72,6 +85,24 @@ export default function ReglagesVitrinePage() {
     setLegalSaved(true)
     setTimeout(() => setLegalSaved(false), 1600)
   }
+
+  const enregistrerMod = async (e) => {
+    e.preventDefault()
+    // Le serveur attend des tableaux ; la saisie se fait en texte libre (une
+    // entrée par ligne), plus commode qu'une liste de champs à cliquer.
+    await setMod.mutateAsync({
+      ...mod,
+      max_avis_par_jour: Number(mod.max_avis_par_jour) || 1,
+      seuil_signalements: Number(mod.seuil_signalements) || 1,
+      motifs_graves: (mod.motifs_graves ?? []).filter(Boolean),
+      mots_bannis: (mod.mots_bannis ?? []).filter(Boolean),
+    })
+    setModSaved(true)
+    setTimeout(() => setModSaved(false), 1600)
+  }
+
+  const lignesVersTableau = (v) =>
+    v.split('\n').map((x) => x.trim()).filter(Boolean)
 
   return (
     <AdminLayout title={T('titre')}>
@@ -190,6 +221,61 @@ export default function ReglagesVitrinePage() {
           </div>
 
           <button type="submit" disabled={setLegal.isPending}
+                  className="mt-4 rounded-xl bg-primary text-inverse text-sm font-semibold px-5 py-2 disabled:opacity-50">
+            {t('commun.enregistrer')}
+          </button>
+        </form>
+        {/* ── AV2-F4 : modération des avis ──────────────────────────────── */}
+        <form onSubmit={enregistrerMod} className="bg-card border border-edge rounded-2xl p-5">
+          <div className="flex items-center justify-between gap-3 mb-1">
+            <h2 className="text-sm font-semibold text-ink">{t('admin.moderation_avis.titre')}</h2>
+            {modSaved && (
+              <span className="text-xs text-success font-medium inline-flex items-center gap-1">
+                <Check size={12} aria-hidden="true" />{t('commun.enregistre')}
+              </span>
+            )}
+          </div>
+          <p className="text-xs text-dim leading-relaxed mb-4">{t('admin.moderation_avis.aide')}</p>
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div>
+              <span className={LABEL}>{t('admin.moderation_avis.max_jour')}</span>
+              <input type="number" min={1} max={100} className={INPUT}
+                     value={mod.max_avis_par_jour ?? 5}
+                     onChange={(e) => setLocalMod((v) => ({ ...v, max_avis_par_jour: e.target.value }))} />
+              <p className="text-[11px] text-ghost mt-1">{t('admin.moderation_avis.max_jour_aide')}</p>
+            </div>
+            <div>
+              <span className={LABEL}>{t('admin.moderation_avis.seuil')}</span>
+              <input type="number" min={1} max={100} className={INPUT}
+                     value={mod.seuil_signalements ?? 3}
+                     onChange={(e) => setLocalMod((v) => ({ ...v, seuil_signalements: e.target.value }))} />
+              <p className="text-[11px] text-ghost mt-1">{t('admin.moderation_avis.seuil_aide')}</p>
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <span className={LABEL}>{t('admin.moderation_avis.motifs')}</span>
+            <textarea className={INPUT + ' resize-none font-mono text-[13px]'} rows={3}
+                      value={(mod.motifs_graves ?? []).join('\n')}
+                      onChange={(e) => setLocalMod((v) => ({ ...v, motifs_graves: lignesVersTableau(e.target.value) }))} />
+            <p className="text-[11px] text-ghost mt-1">{t('admin.moderation_avis.motifs_aide')}</p>
+          </div>
+
+          <div className="mt-4">
+            <div className="flex items-baseline justify-between">
+              <span className={LABEL}>{t('admin.moderation_avis.mots')}</span>
+              <span className="text-[11px] text-ghost">
+                {t('admin.moderation_avis.mots_compte', { count: (mod.mots_bannis ?? []).length })}
+              </span>
+            </div>
+            <textarea className={INPUT + ' resize-none font-mono text-[13px]'} rows={6}
+                      value={(mod.mots_bannis ?? []).join('\n')}
+                      onChange={(e) => setLocalMod((v) => ({ ...v, mots_bannis: lignesVersTableau(e.target.value) }))} />
+            <p className="text-[11px] text-ghost mt-1">{t('admin.moderation_avis.mots_aide')}</p>
+          </div>
+
+          <button type="submit" disabled={setMod.isPending}
                   className="mt-4 rounded-xl bg-primary text-inverse text-sm font-semibold px-5 py-2 disabled:opacity-50">
             {t('commun.enregistrer')}
           </button>

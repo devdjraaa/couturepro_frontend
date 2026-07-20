@@ -4365,6 +4365,21 @@
       "legal_vigueur": "Effective date",
       "legal_maj": "Last updated",
       "chevauchement": "This period overlaps another one: the first match will win."
+    },
+    "moderation_avis": {
+      "titre": "Review moderation",
+      "aide": "These settings apply immediately, with no redeploy. The word list grows with real usage.",
+      "max_jour": "Maximum reviews per account per day",
+      "max_jour_aide": "Beyond this, submission is refused. Anti-spam guard.",
+      "seuil": "Reports before queueing",
+      "seuil_aide": "Number of reports after which a review is sent to moderation.",
+      "motifs": "Serious grounds",
+      "motifs_aide": "A report using one of these grounds is queued immediately, without waiting for the threshold.",
+      "mots": "Banned words",
+      "mots_aide": "A review containing one of these words is held for moderation. One word per line. Matching respects word boundaries.",
+      "mots_compte_one": "{{count}} word",
+      "mots_compte_other": "{{count}} words",
+      "ajouter_motif": "Add a ground"
     }
   },
   "bienvenue": {
