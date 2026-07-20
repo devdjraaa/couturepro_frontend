@@ -4387,7 +4387,9 @@
       "moodboard_sous": "Assemblez vos inspirations en collage et notez votre palette de couleurs."
     },
     "vendre": "Vendre",
-    "vendre_aide": "Ouvrez une création du catalogue puis la section Patron pour le mettre en vente."
+    "vendre_aide": "Ouvrez une création du catalogue puis la section Patron pour le mettre en vente.",
+    "partage_indisponible": "Le partage direct n'est pas possible depuis ce navigateur. Téléchargez l'image, ou utilisez l'application mobile.",
+    "partage_profil": "Instagram s'ouvre sur votre profil : publiez l'image depuis l'application."
   },
   "sidebar": {
     "outils_creatifs": "Outils créatifs"

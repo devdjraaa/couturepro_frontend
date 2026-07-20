@@ -373,7 +373,7 @@ function TabPaiements({ commande, commandeId }) {
       const { pdf, filename } = await exportFacturePdf({ commande, items, client: commande.client, atelier, factureSettings, contact: { telephone: user?.telephone, email: user?.email } })
       toast.dismiss(progressToast)
       const result = await shareOrDownloadPdf(pdf, filename, {
-        title: `Facture — ${commande.client_nom}`,
+        title: `Facture : ${commande.client_nom}`,
         text: `Facture pour ${commande.client_nom}`,
       })
       if (result === 'downloaded') toast.success('Facture téléchargée.')

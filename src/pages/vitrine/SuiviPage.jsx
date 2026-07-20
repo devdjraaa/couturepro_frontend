@@ -55,7 +55,7 @@ export default function SuiviPage() {
 
             {result && (
               <div className="max-w-[560px] mx-auto mt-5 bg-card text-ink rounded-lg p-5 text-left">
-                <strong>{result.modele || '—'}</strong>{result.atelier ? ` — ${result.atelier}` : ''} ·{' '}
+                <strong>{result.modele || '—'}</strong>{result.atelier ? `, ${result.atelier}` : ''} ·{' '}
                 <span className={annule ? 'text-danger font-bold' : 'text-primary font-bold'}>
                   {annule ? t('vitrine.suivi.cancelled') : t('vitrine.suivi.in_progress')}
                 </span>

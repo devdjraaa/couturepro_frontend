@@ -93,7 +93,7 @@ function i18nVersHtml(cle, lang) {
           html += (b.rows || []).map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')
           html += '</table>'
         } else if (b.type === 'box') html += `${b.title ? `<h3>${esc(b.title)}</h3>` : ''}<blockquote>${esc(b.t)}</blockquote>`
-        else if (b.type === 'permission') html += `<p><b>${esc(b.name)}</b> — ${esc(b.t)}</p>`
+        else if (b.type === 'permission') html += `<p><b>${esc(b.name)}</b> : ${esc(b.t)}</p>`
       }
     }
   } else if (Array.isArray(sections) && sections.length) {
