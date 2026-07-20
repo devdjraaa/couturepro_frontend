@@ -3681,7 +3681,10 @@
       "filtre_statut": "Status",
       "approuvee": "Piece published.",
       "refusee_ok": "Piece rejected."
-    }
+    },
+    "quota_cycle": "{{n}}/{{max}} posts this cycle (resets on {{reset}})",
+    "quota_alerte": "Only {{n}} post(s) left in this cycle. A higher plan includes more.",
+    "quota_bloque": "Post quota reached for this cycle. It resets on {{reset}} — or upgrade your plan."
   },
   "atelier": {
     "titre": "Workshop",

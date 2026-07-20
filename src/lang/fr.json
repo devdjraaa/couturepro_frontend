@@ -3694,7 +3694,10 @@
       "filtre_statut": "Statut",
       "approuvee": "Réalisation publiée.",
       "refusee_ok": "Réalisation refusée."
-    }
+    },
+    "quota_cycle": "{{n}}/{{max}} publications ce cycle (remise à zéro le {{reset}})",
+    "quota_alerte": "Plus que {{n}} publication(s) sur votre quota du cycle. Un plan supérieur en offre davantage.",
+    "quota_bloque": "Quota de publications atteint pour ce cycle. Il repart le {{reset}} — ou passez à un plan supérieur."
   },
   "atelier": {
     "titre": "Atelier",

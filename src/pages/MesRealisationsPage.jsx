@@ -6,6 +6,7 @@ import { Button, Badge, Modal, Input, EmptyState, Skeleton } from '@/components/
 import { realisationService } from '@/services/realisationService'
 import { compressImage } from '@/utils/compressImage'
 import { cn } from '@/utils/cn'
+import { formatDateShort } from '@/utils/formatDate'
 
 const MAX_PHOTOS = 6
 
@@ -59,6 +60,19 @@ export default function MesRealisationsPage() {
               <p className="text-sm text-ink leading-relaxed">{t('realisations.intro')}</p>
               {quota && (
                 <p className="text-xs text-ghost mt-2">
+                  {/* PHOTO-4 : le quota du PLAN manquait — l'utilisateur ne voyait que
+                      la limite anti-abus hebdomadaire et découvrait le vrai plafond
+                      au moment d'être bloqué. Le cycle repart le 22 de chaque mois. */}
+                  {quota.cycle && !quota.cycle.illimite && (
+                    <>
+                      {t('realisations.quota_cycle', {
+                        n: quota.cycle.utilise,
+                        max: quota.cycle.max,
+                        reset: formatDateShort(quota.cycle.prochain_reset),
+                      })}
+                      {' · '}
+                    </>
+                  )}
                   {t('realisations.quota_semaine', { n: quota.envois_restants, max: quota.max_envois_semaine })}
                   {' · '}
                   {t('realisations.quota_cache', { n: quota.cache_local_utilise, max: quota.cache_local_max })}
@@ -68,8 +82,27 @@ export default function MesRealisationsPage() {
           </div>
         </div>
 
+        {/* PHOTO-4 : prévenir AVANT le blocage. `alerte` (>= 80 %) et `bloque`
+            viennent du serveur : le front ne recalcule aucun seuil. */}
+        {quota?.cycle?.alerte && (
+          <div className={cn(
+            'rounded-2xl border p-3 flex items-start gap-2.5 text-xs',
+            quota.cycle.bloque
+              ? 'border-danger/30 bg-danger/5 text-danger'
+              : 'border-warning/30 bg-warning/5 text-warning',
+          )}>
+            <AlertTriangle size={15} className="shrink-0 mt-px" />
+            <p className="leading-relaxed">
+              {quota.cycle.bloque
+                ? t('realisations.quota_bloque', { reset: formatDateShort(quota.cycle.prochain_reset) })
+                : t('realisations.quota_alerte', { n: quota.cycle.restant })}
+            </p>
+          </div>
+        )}
+
         <div className="flex justify-end">
-          <Button onClick={() => setEditing({ nouveau: true, titre: '', description: '', images: [], statut: 'brouillon' })}>
+          <Button disabled={quota?.cycle?.bloque}
+                  onClick={() => setEditing({ nouveau: true, titre: '', description: '', images: [], statut: 'brouillon' })}>
             <Plus size={16} /> {t('realisations.nouvelle')}
           </Button>
         </div>
