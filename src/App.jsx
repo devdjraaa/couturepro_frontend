@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import VasatPage from '@/pages/vitrine/VasatPage'
 import AnalytiquePage from '@/pages/admin/AnalytiquePage'
 import AnnoncesPage from '@/pages/AnnoncesPage'
 import ReglagesVitrinePage from '@/pages/admin/ReglagesVitrinePage'
