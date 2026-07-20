@@ -431,7 +431,8 @@
       "mdp_non_concordants": "Les mots de passe ne correspondent pas",
       "accepter_cgu_debut": "J'accepte les",
       "accepter_cgu_lien": "conditions d'utilisation",
-      "cgu_requis": "Vous devez accepter les conditions d'utilisation pour continuer"
+      "cgu_requis": "Vous devez accepter les Conditions Générales d'Utilisation et la Politique de confidentialité pour continuer.",
+      "accepter_legal": "J'accepte les <cgu>Conditions Générales d'Utilisation</cgu> et la <conf>Politique de confidentialité</conf>."
     },
     "otp": {
       "titre": "Vérification",
@@ -754,7 +755,8 @@
       "total": "Total commande groupée",
       "acomptes": "Acomptes reçus",
       "err_min": "Sélectionnez au moins 2 articles avec un vêtement et un prix renseignés.",
-      "creer": "Créer la commande groupée"
+      "creer": "Créer la commande groupée",
+      "err_envoi": "La commande groupée n'a pas pu être créée. Vérifiez les articles et réessayez."
     },
     "creation": {
       "step_client": "Client",

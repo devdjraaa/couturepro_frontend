@@ -431,7 +431,8 @@
       "mdp_non_concordants": "Passwords do not match",
       "accepter_cgu_debut": "I agree to the",
       "accepter_cgu_lien": "terms of use",
-      "cgu_requis": "You must accept the terms of use to continue"
+      "cgu_requis": "You must accept the Terms of Service and the Privacy Policy to continue.",
+      "accepter_legal": "I accept the <cgu>Terms of Service</cgu> and the <conf>Privacy Policy</conf>."
     },
     "otp": {
       "titre": "Verification",
@@ -754,7 +755,8 @@
       "total": "Grouped order total",
       "acomptes": "Deposits received",
       "err_min": "Select at least 2 items with a garment and a price.",
-      "creer": "Create grouped order"
+      "creer": "Create grouped order",
+      "err_envoi": "The group order could not be created. Check the items and try again."
     },
     "creation": {
       "step_client": "Client",
