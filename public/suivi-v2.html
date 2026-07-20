@@ -164,6 +164,11 @@ const SLABEL = {done:'Fait',part:'Partiel',bug:'Bug',todo:'À faire',spec:'Spec'
 // B = backend (série s60) · F = frontend (série s70)
 const B = (n,ref,g,s,t)=>({id:'s60t'+n, ref, g, o:'back',  s, t});
 const F = (n,ref,g,s,t)=>({id:'s70t'+n, ref, g, o:'front', s, t});
+// Item vivant côté écran mais qui applique une RÈGLE SERVEUR (quota, tarif,
+// durée, statut, paiement) : c'est de la logique métier, donc pour nous, pas
+// pour Aquilas. L'identifiant garde le préfixe s70t d'origine — le changer
+// réinitialiserait l'état déjà enregistré côté serveur.
+const L = (n,ref,g,s,t)=>({id:'s70t'+n, ref, g, o:'back',  s, t});
 
 const ITEMS = [
   // ---------- Sprint 02A ----------
@@ -194,40 +199,40 @@ const ITEMS = [
   F(8,'PHOTO-1',3,'todo','Retour qualité instantané et purement visuel (icône/couleur/animation, aucun texte)'),
   B(14,'PHOTO-2',3,'done','Workflow artisan : publication immédiate + modération a posteriori'),
   B(15,'PHOTO-3',3,'done','Workflow designer : fenêtre de confirmation admin de 24 h'),
-  F(9,'PHOTO-3',3,'part','Écran de modération : compte à rebours 24 h + retouche légère avant validation'),
+  L(9,'PHOTO-3',3,'part','Écran de modération : compte à rebours 24 h + retouche légère avant validation'),
   B(16,'PHOTO-4',3,'done','Quota designer : compteur de solde, décrément à l\'envoi, réattribution si refus/suppression'),
   F(10,'PHOTO-4',3,'done','Affichage du solde, alerte à 80 %, blocage à 0 avec message et bouton d\'upgrade'),
   B(17,'PHOTO-5',3,'done','Cycle de renouvellement : le 22 du mois à 00h00 (heure de Cotonou)'),
   B(18,'PHOTO-6',3,'done','Statuts de suivi complets (contrôle auto, validée auto, refusée auto)'),
   B(19,'PHOTO-7',3,'done','API de modération : compte à rebours, retouche, archivage de l\'original'),
-  F(11,'PHOTO-7',3,'todo','Accès à la photo originale après retouche (traçabilité / droits d\'auteur)'),
+  L(11,'PHOTO-7',3,'todo','Accès à la photo originale après retouche (traçabilité / droits d\'auteur)'),
 
   // ---------- Annonces ----------
   B(20,'ANN-1',4,'done','Table « annonces » dédiée (titre, message, image, début, durée, statut)'),
-  F(12,'ANN-1',4,'todo','Formulaire complet : titre, message, image, date de début, durée'),
+  L(12,'ANN-1',4,'todo','SOCLE SERVEUR COMPLET (quota, création, image, boost, modération, diffusion) — il ne manque que l écran. Formulaire complet : titre, message, image, date de début, durée'),
   B(21,'ANN-2',4,'done','Durée 1→10 jours, date de fin calculée côté serveur, publication gratuite'),
-  F(13,'ANN-2',4,'todo','Sélecteur de durée par incrémentation (1 à 10 jours)'),
+  L(13,'ANN-2',4,'todo','Sélecteur de durée par incrémentation (1 à 10 jours)'),
   B(22,'ANN-3',4,'done','Limite d\'une annonce par jour et par designer'),
-  F(14,'ANN-3',4,'todo','Blocage jusqu\'au lendemain + message d\'information sur le Boost'),
+  L(14,'ANN-3',4,'todo','Blocage jusqu\'au lendemain + message d\'information sur le Boost'),
   B(23,'ANN-4',4,'done','Historique des annonces + statuts (en cours / terminée / expirée / boostée)'),
-  F(15,'ANN-4',4,'todo','Section « Historique » sous le formulaire avec les statuts'),
+  L(15,'ANN-4',4,'todo','Section « Historique » sous le formulaire avec les statuts'),
   B(24,'ANN-5',4,'done','Boost : modèle de données + planification de la date de début'),
-  F(16,'ANN-5',4,'todo','Bouton Boost discret + fenêtre modale (date + durée 1/3/7 jours)'),
+  L(16,'ANN-5',4,'todo','Bouton Boost discret + fenêtre modale (date + durée 1/3/7 jours)'),
   B(25,'ANN-6',4,'done','Boost : tarification et encaissement (100 / 200 / 300 F)'),
-  F(17,'ANN-6',4,'todo','Prix affiché automatiquement selon la durée, champ non modifiable'),
+  L(17,'ANN-6',4,'todo','Prix affiché automatiquement selon la durée, champ non modifiable'),
   B(26,'ANN-7',4,'done','Diffusion trois fois par jour pendant le boost'),
   F(18,'ANN-7',4,'todo','Information « diffusée trois fois par jour » dans la modale'),
   B(27,'ANN-8',4,'done','Flux public listant les annonces actives de tous les ateliers'),
   F(19,'ANN-8',4,'todo','Bande d\'annonces défilante en haut de l\'application (CSS déjà disponible)'),
   B(28,'ANN-9',4,'done','Upload et exposition de l\'image de bannière'),
-  F(20,'ANN-9',4,'todo','Rendu avec/sans bannière + bouton « Aperçu » avant publication'),
+  L(20,'ANN-9',4,'todo','Rendu avec/sans bannière + bouton « Aperçu » avant publication'),
   B(29,'ANN-10',4,'done','Modération des annonces — à arbitrer'),
 
   // ---------- Abonnement créateurs ----------
   B(30,'ABO-1',5,'done','Exiger un compte pour s\'abonner (rattacher l\'abonnement au client)'),
   F(21,'ABO-1',5,'done','Vérification de session au clic sur « S\'abonner »'),
   B(31,'ABO-2',5,'done','Socle d\'inscription à la volée (code e-mail + Google) déjà en place'),
-  F(22,'ABO-2',5,'todo','Ouverture automatique du module d\'inscription, e-mail seul, aucun compte incomplet'),
+  L(22,'ABO-2',5,'todo','Ouverture automatique du module d\'inscription, e-mail seul, aucun compte incomplet'),
   B(32,'ABO-3',5,'done','Session maintenue après création du compte'),
   F(23,'ABO-4',5,'done','Reprise automatique de l\'abonnement après connexion (sans recliquer)'),
   B(33,'ABO-5',5,'done','Consentement notifications distinct de l\'abonnement (APDP)'),
@@ -253,21 +258,21 @@ const ITEMS = [
   B(40,'VID-2',7,'done','Nombre maximum de vidéos par plan (1 / 3 / 5) — aujourd\'hui 50 en dur'),
   F(33,'VID-2',7,'done','Compteur servi par /atelier-videos/quota (plafond du plan, corrections restantes) + statut de modération par vidéo'),
   B(41,'VID-3',7,'done','Route de modification d\'une vidéo + compteur de corrections mensuelles'),
-  F(34,'VID-3',7,'todo','Règles de modification selon le plan (remplacement auto, 1/mois, 2/mois)'),
+  L(34,'VID-3',7,'todo','Règles de modification selon le plan (remplacement auto, 1/mois, 2/mois)'),
   B(42,'VID-4',7,'done','Import direct de fichier vidéo (stockage + traitement)'),
-  F(35,'VID-4',7,'todo','Double entrée : lien YouTube ou import de fichier'),
+  L(35,'VID-4',7,'todo','Double entrée : lien YouTube ou import de fichier'),
   B(43,'VID-5',7,'done','Validation obligatoire avant publication (24 h, refus → quota restitué)'),
-  F(36,'VID-5',7,'part','Statut « en attente » affiché côté créateur (fait) ; écran de validation admin restant'),
+  L(36,'VID-5',7,'part','Statut « en attente » affiché côté créateur (fait) ; écran de validation admin restant'),
   F(37,'SUP-1',7,'todo','Encart d\'information permanent dans Support > Tickets'),
 
   // ---------- Reliquat ----------
   B(44,'REL-1',8,'done','Correctif cache nginx — bloqué : le jeton du dépôt n\'a pas la portée « workflow »'),
   B(45,'REL-2',8,'done','Pré-rendu SEO LIVRÉ et vérifié en prod (20/07) : nginx route les robots vers /api/vitrine/seo/render — titre PAR PAGE, description, canonique, OG, contenu réel (créateurs, profils). Humains inchangés. Titres éditables en admin (seo_pages)'),
   F(38,'REL-V1',8,'todo','Points vitrine encore ouverts (à basculer depuis l\'ancien fichier vitrine)'),
-  F(39,'REL-V2',8,'todo','Pré-rendu SEO côté vitrine (métadonnées par page)'),
+  L(39,'REL-V2',8,'done','DÉJÀ FAIT — statut périmé corrigé le 20/07 : le pré-rendu SEO est en production, nginx route les robots vers /api/vitrine/seo/render et un Googlebot reçoit bien le contenu (titre par page, description, canonique, OG, liste des créateurs). Ne pas redévelopper'),
   B(46,'REL-3',8,'todo','« Mes Réalisations » : cache hors ligne côté application mobile'),
-  F(40,'REL-V3',8,'todo','« Mes Réalisations » mobile : intégration de la couche hors ligne'),
-  F(41,'REL-V4',8,'bug','Branche android désalignée de master : 247 commits de retard côté web, 288 en propre. L\'app mobile n\'a pas les correctifs récents. Chantier à part (fusion + build APK + test appareil), pas un simple portage'),
+  L(40,'REL-V3',8,'todo','« Mes Réalisations » mobile : intégration de la couche hors ligne'),
+  L(41,'REL-V4',8,'bug','Branche android désalignée de master : 247 commits de retard côté web, 288 en propre. L\'app mobile n\'a pas les correctifs récents. Chantier à part (fusion + build APK + test appareil), pas un simple portage'),
   F(42,'REL-V5',8,'done','Composant Toaster jamais monté : 41 appels toast.success/error sans aucun effet dans toute l\'application (aucune confirmation ni erreur visible)'),
 
   // ---------- Avis v2 (décisions direction 20/07) ----------
@@ -284,7 +289,7 @@ const ITEMS = [
   F(43,'AV2-F1',9,'done','Formulaire : choix du modèle obligatoire + validation des 3 champs + erreurs affichées'),
   F(44,'AV2-F2',9,'done','Sans compte : avis mémorisé (texte compris), connexion expliquée, REJOUÉ automatiquement après connexion, retour au profil'),
   F(45,'AV2-F3',9,'done','Signalement en un clic avec motif (4 choix) ; panneau créateur : un avis signalé reste publié en attendant l\'admin'),
-  F(46,'AV2-F4',9,'todo','UI admin des réglages de modération (seuils, motifs, mots bannis) et de la file photos — parti pris visuel : Aquilas'),
+  L(46,'AV2-F4',9,'todo','UI admin des réglages de modération (seuils, motifs, mots bannis) et de la file photos — parti pris visuel : Aquilas'),
 
   // ---------- REL-4 débloqué ----------
   B(47,'REL-4',8,'done','Éditer les mesures : CLOS le 20/07, testé de bout en bout sur appareil avec APK à jour (suggestions rapides, ajout de champ, saisie, enregistrement, réédition pré-remplie). Donnée de test nettoyée. Défaut trouvé pendant le test et corrigé : un enregistrement VIDÉ restait truthy -> écran dégradé + export CSV et partage WhatsApp de mesures inexistantes'),
