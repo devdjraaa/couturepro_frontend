@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { ImagePlus, X, Shirt } from 'lucide-react'
+import { ImagePlus, X, Shirt, Ruler, Plus } from 'lucide-react'
 import { Input, Button } from '@/components/ui'
 import { cn } from '@/utils/cn'
 import { usePlanLimit } from '@/hooks/usePlanFeature'
