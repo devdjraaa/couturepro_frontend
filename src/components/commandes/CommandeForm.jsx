@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ImagePlus, X, AlertTriangle } from 'lucide-react'
 import { Input, Select, Button } from '@/components/ui'
 import { useClients } from '@/hooks/useClients'
@@ -12,6 +13,7 @@ const MODE_PAIEMENT_OPTIONS = [
 ]
 
 export default function CommandeForm({ initialData, lockedClientId = false, onSubmit, onCancel, isLoading }) {
+  const { t } = useTranslation()
   const { data: clients = [] } = useClients()
   const { data: vetements = [] } = useVetements()
   const fileRef = useRef(null)
@@ -143,10 +145,10 @@ export default function CommandeForm({ initialData, lockedClientId = false, onSu
         <span className="text-sm font-medium">{form.urgence ? 'Commande urgente' : 'Marquer comme urgente'}</span>
       </button>
 
-      <div className="flex gap-3 pt-2">
-        <Button type="button" variant="ghost" onClick={onCancel} className="flex-1">Annuler</Button>
+      <div className="sticky bottom-0 -mx-5 mt-2 flex gap-3 border-t border-edge bg-card px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+        <Button type="button" variant="ghost" onClick={onCancel} className="flex-1">{t('commun.annuler')}</Button>
         <Button type="submit" loading={isLoading} className="flex-1">
-          {initialData ? 'Enregistrer' : 'Créer la commande'}
+          {initialData ? t('commun.enregistrer') : t('commandes.creation.creer')}
         </Button>
       </div>
     </form>
