@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import AnalytiquePage from '@/pages/admin/AnalytiquePage'
 import AnnoncesPage from '@/pages/AnnoncesPage'
 import ReglagesVitrinePage from '@/pages/admin/ReglagesVitrinePage'
 import SplashDemarrage from '@/components/layout/SplashDemarrage'
@@ -158,6 +159,7 @@ export default function App() {
           <Route path="/admin/realisations"     element={<AdminRealisationsPage />} />
           <Route path="/admin/banniere"         element={<BannierePage />} />
           <Route path="/admin/reglages-vitrine" element={<ReglagesVitrinePage />} />
+          <Route path="/admin/analytique"       element={<AnalytiquePage />} />
         </Route>
 
         {/* ── Vitrine publique (web uniquement) ───────────────────────── */}

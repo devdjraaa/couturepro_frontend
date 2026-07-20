@@ -3983,7 +3983,8 @@
       "rechercher": "Rechercher…",
       "veille": "Veille",
       "pages": "Pages légales",
-      "reglages_vitrine": "Réglages vitrine"
+      "reglages_vitrine": "Réglages vitrine",
+      "analytique": "Analytique"
     },
     "dashboard": {
       "bonjour": "Bonjour,",
@@ -4393,6 +4394,43 @@
       "mots_compte_one": "{{count}} mot",
       "mots_compte_other": "{{count}} mots",
       "ajouter_motif": "Ajouter un motif"
+    },
+    "analytique": {
+      "titre": "Analytique",
+      "sous_titre": "Vos données, collectées par Gextimo — sans Google ni Meta.",
+      "onglet_globale": "Vue d'ensemble",
+      "onglet_clients": "Clients",
+      "onglet_designers": "Créateurs",
+      "onglet_tendances": "Tendances",
+      "visiteurs": "Visiteurs",
+      "aujourdhui": "Aujourd'hui",
+      "semaine": "Cette semaine",
+      "mois": "Ce mois",
+      "inscriptions_mois": "Inscriptions ce mois",
+      "clients_total": "Clients au total",
+      "commandes_mois": "Commandes ce mois",
+      "valeur_mois": "Valeur ce mois",
+      "commandes_total": "Commandes au total",
+      "conversion": "Taux de conversion",
+      "segments": "Répartition des clients",
+      "vip": "Clients les plus engagés",
+      "churn": "Risque de départ élevé",
+      "paniers": "Paniers abandonnés (7 jours)",
+      "recherches_vides": "Recherches sans résultat",
+      "recherches_vides_aide": "Ce que vos visiteurs cherchent et ne trouvent pas — la liste la plus utile pour décider quoi ajouter.",
+      "classement_revenus": "Revenus du mois",
+      "scores": "Scores de confiance",
+      "alertes": "Scores préoccupants",
+      "sans_commande": "Sans commande depuis 15 jours",
+      "categories_top": "Catégories les plus vues",
+      "heures_pointe": "Heures de pointe",
+      "canaux": "Origine des inscriptions",
+      "revenus_6_mois": "Revenus sur 6 mois",
+      "vide": "Pas encore de données",
+      "vide_aide": "La collecte a démarré le 16 juillet. Cet écran se remplira à mesure que les visiteurs arrivent.",
+      "heure": "{{h}} h",
+      "fois_one": "{{count}} fois",
+      "fois_other": "{{count}} fois"
     }
   },
   "bienvenue": {

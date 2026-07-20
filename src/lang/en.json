@@ -3970,7 +3970,8 @@
       "rechercher": "Search…",
       "veille": "Watch",
       "pages": "Legal pages",
-      "reglages_vitrine": "Storefront settings"
+      "reglages_vitrine": "Storefront settings",
+      "analytique": "Analytics"
     },
     "dashboard": {
       "bonjour": "Hello,",
@@ -4380,6 +4381,43 @@
       "mots_compte_one": "{{count}} word",
       "mots_compte_other": "{{count}} words",
       "ajouter_motif": "Add a ground"
+    },
+    "analytique": {
+      "titre": "Analytics",
+      "sous_titre": "Your data, collected by Gextimo — without Google or Meta.",
+      "onglet_globale": "Overview",
+      "onglet_clients": "Clients",
+      "onglet_designers": "Creators",
+      "onglet_tendances": "Trends",
+      "visiteurs": "Visitors",
+      "aujourdhui": "Today",
+      "semaine": "This week",
+      "mois": "This month",
+      "inscriptions_mois": "Sign-ups this month",
+      "clients_total": "Total clients",
+      "commandes_mois": "Orders this month",
+      "valeur_mois": "Value this month",
+      "commandes_total": "Total orders",
+      "conversion": "Conversion rate",
+      "segments": "Client breakdown",
+      "vip": "Most engaged clients",
+      "churn": "High churn risk",
+      "paniers": "Abandoned carts (7 days)",
+      "recherches_vides": "Searches with no results",
+      "recherches_vides_aide": "What your visitors look for and do not find — the most useful list to decide what to add.",
+      "classement_revenus": "Revenue this month",
+      "scores": "Trust scores",
+      "alertes": "Concerning scores",
+      "sans_commande": "No order for 15 days",
+      "categories_top": "Most viewed categories",
+      "heures_pointe": "Peak hours",
+      "canaux": "Sign-up sources",
+      "revenus_6_mois": "Revenue over 6 months",
+      "vide": "No data yet",
+      "vide_aide": "Collection started on 16 July. This screen fills up as visitors arrive.",
+      "heure": "{{h}}:00",
+      "fois_one": "{{count}} time",
+      "fois_other": "{{count}} times"
     }
   },
   "bienvenue": {
