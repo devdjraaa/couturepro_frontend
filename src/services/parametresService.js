@@ -21,10 +21,18 @@ export const parametresService = {
       Object.assign(mockUser, payload)
       return mockUser
     }
+    // ⚠️ Cette liste ÉCARTAIT le prénom et la date de naissance : les champs
+    // étaient affichés et modifiables, le serveur répondait 200, et rien n'était
+    // enregistré. Une liste blanche figée diverge dès qu'un champ est ajouté au
+    // formulaire — on envoie donc ce que le formulaire porte, le serveur validant
+    // déjà chaque champ (constaté en QA le 20/07).
     const { data } = await api.put('/parametres/profil', {
-      nom:       payload.nom,
-      telephone: payload.telephone,
-      email:     payload.email,
+      nom:            payload.nom,
+      prenom:         payload.prenom,
+      telephone:      payload.telephone,
+      email:          payload.email,
+      naissance_jour: payload.naissance_jour || null,
+      naissance_mois: payload.naissance_mois || null,
     })
     return data
   },
