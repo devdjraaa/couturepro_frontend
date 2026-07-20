@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useFormatCurrency } from '@/utils/formatCurrency'
 import { Download, TrendingUp, Clock, CheckCircle, Wallet, FileText } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
@@ -10,8 +11,9 @@ import { exportRapportCaissePdf } from '@/utils/exportRapportCaissePdf'
 import { exportRapportMensuelPdf } from '@/utils/exportRapportMensuelPdf'
 import { caisseService } from '@/services/caisseService'
 
-const fmt = (v) =>
-  new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 0 }).format(Number(v) || 0) + ' FCFA'
+// ⚠️ Un formateur local codé « FCFA » vivait ici : il ignorait la devise choisie
+// par l'atelier, et le même montant s'affichait « 20 000 XOF » sur le tableau de
+// bord mais « 20 000 FCFA » à la caisse. On emploie le hook commun.
 
 const MOIS_OPTIONS = (() => {
   const opts = []
@@ -33,7 +35,10 @@ function StatCard({ icon: Icon, label, value, sub, bg, textColor, iconBg }) {
       </div>
       <div className="min-w-0">
         <p className={`text-xs font-semibold ${textColor} mb-0.5`}>{label}</p>
-        <p className={`text-lg font-bold ${textColor} leading-tight`}>{value}</p>
+        {/* Le montant se coupait en « 20 000 » / « FCFA » sur deux lignes dans une
+            demi-largeur de 360 px. La taille s'adapte à la place disponible
+            plutôt que de laisser le texte se briser. */}
+        <p className={`text-[clamp(0.95rem,4.4vw,1.125rem)] font-bold ${textColor} leading-tight whitespace-nowrap overflow-hidden text-ellipsis`}>{value}</p>
         {sub && <p className="text-xs text-dim mt-0.5">{sub}</p>}
       </div>
     </div>
@@ -47,6 +52,7 @@ const MODE_LABELS = {
 }
 
 function CaisseContent() {
+  const fmt = useFormatCurrency()
   const { user } = useAuth()
   const { t } = useTranslation()
   const [mois, setMois] = useState(MOIS_OPTIONS[0].value)
