@@ -1,8 +1,15 @@
 import { T, enTete, section, tableau, pastille, encart, esc } from './pdfTheme'
 import { composerPdf, partagerOuTelecharger } from './pdfRendu'
+import { formatCurrency, deviseDe, chargerDevises } from './formatCurrency'
 
-const formatCFA = (v) =>
-  new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 0 }).format(Number(v) || 0) + ' FCFA'
+/**
+ * CLI-1 — les montants suivent la devise de l'atelier, plus « FCFA » en dur.
+ *
+ * Une facture est un document qui porte de l'argent : afficher le franc CFA à
+ * un atelier ghanéen était faux, et le nombre de décimales figé à zéro
+ * arrondissait ses montants à l'unité.
+ */
+const formatMontant = (v, devise) => formatCurrency(Number(v) || 0, devise)
 
 const formatDate = (d) =>
   new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })
@@ -65,7 +72,7 @@ function buildClientHtml(client) {
 }
 
 /** Lignes de facture. */
-function buildLignesHtml(lignes) {
+function buildLignesHtml(lignes, devise) {
   return section('Détail') + tableau({
     colonnes: [
       { titre: 'Désignation' },
@@ -77,18 +84,18 @@ function buildLignesHtml(lignes) {
     lignes: lignes.map(l => [
       l.designation ?? '',
       String(l.qte ?? 1),
-      formatCFA(l.pu),
-      formatCFA(l.total),
+      formatMontant(l.pu, devise),
+      formatMontant(l.total, devise),
     ]),
   })
 }
 
 /** Totaux : c'est le seul endroit où le rouge de la charte est employé. */
-function buildTotauxHtml({ total, acompte, reste }) {
-  const entrees = [['Total', formatCFA(total)]]
+function buildTotauxHtml({ total, acompte, reste, devise }) {
+  const entrees = [['Total', formatMontant(total, devise)]]
   if (Number(acompte) > 0) {
-    entrees.push(['Acompte versé', formatCFA(acompte)])
-    entrees.push(['Reste à payer', formatCFA(reste)])
+    entrees.push(['Acompte versé', formatMontant(acompte, devise)])
+    entrees.push(['Reste à payer', formatMontant(reste, devise)])
   }
 
   const solde = Number(reste) === 0
@@ -109,7 +116,7 @@ function buildTotauxHtml({ total, acompte, reste }) {
               ${solde ? 'Montant réglé' : 'Net à payer'}
             </span>
             <span style="font:700 19px/1 ${T.sans};color:${T.rouge};font-variant-numeric:tabular-nums;">
-              ${esc(formatCFA(montantDu))}
+              ${esc(formatMontant(montantDu, devise))}
             </span>
           </div>
         </div>
@@ -149,11 +156,13 @@ function buildFooterHtml(factureSettings, { atelier, contact } = {}) {
  * de manque — seul `no-undef` le voyait, et il n'était pas contrôlé.
  */
 function buildFactureHtml({ atelier, factureSettings, ref, contact, date, client, lignes, total, acompte, reste, note, titre = 'Facture' }) {
+  const devise = deviseDe(atelier)
+
   return [
     buildHeaderHtml({ atelier, factureSettings, ref, date, titre }),
     buildClientHtml(client),
-    buildLignesHtml(lignes),
-    buildTotauxHtml({ total, acompte, reste }),
+    buildLignesHtml(lignes, devise),
+    buildTotauxHtml({ total, acompte, reste, devise }),
     note ? encart('Note', note) : '',
     buildFooterHtml(factureSettings, { atelier, contact }),
   ].join('')
@@ -163,10 +172,21 @@ async function renderPdf(html) {
   return composerPdf(html)
 }
 
+/**
+ * Le référentiel des devises doit être en mémoire AVANT de composer le
+ * document : le formatage est synchrone, et sans cette attente la première
+ * facture d'une session sortirait avec le symbole de repli — c'est-à-dire en
+ * francs CFA pour un atelier qui n'y est pas.
+ */
+async function pret() {
+  await chargerDevises()
+}
+
 const slug = (s) => String(s ?? 'client').trim().replace(/\s+/g, '-').toLowerCase() || 'client'
 
 // Facture pour une seule commande (un type de vêtement)
 export async function exportFacturePdf({ commande, items = [], client, atelier, factureSettings, contact }) {
+  await pret()
   const ref = `F-${String(commande.id).slice(0, 8).toUpperCase()}`
   const c = client ?? commande.client
 
@@ -201,6 +221,7 @@ export async function exportFacturePdf({ commande, items = [], client, atelier, 
 
 // Facture consolidée pour une commande groupée (plusieurs types de vêtements)
 export async function exportFactureGroupePdf({ groupe, atelier, factureSettings, contact }) {
+  await pret()
   const ref = `G-${String(groupe.id).slice(0, 8).toUpperCase()}`
   const client = groupe.client
 
@@ -230,6 +251,7 @@ export async function exportFactureGroupePdf({ groupe, atelier, factureSettings,
 const TITRES_DOC = { devis: 'DEVIS', facture: 'FACTURE', recu: 'REÇU' }
 
 export async function exportFactureDocPdf({ facture, atelier, factureSettings, contact }) {
+  await pret()
   const titre = TITRES_DOC[facture?.type] ?? 'FACTURE'
   const lignes = (facture?.lignes ?? []).map(l => ({
     designation: l.description ?? 'Article',
