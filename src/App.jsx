@@ -34,6 +34,7 @@ import FacturationPage        from '@/pages/FacturationPage'
 import OutilsCreatifsPage     from '@/pages/OutilsCreatifsPage'
 import StudioPage             from '@/pages/StudioPage'
 import HistoriquePage         from '@/pages/HistoriquePage'
+import QuoiDeNeufPage        from '@/pages/QuoiDeNeufPage'
 import ArchivesPage           from '@/pages/ArchivesPage'
 import CaissePage             from '@/pages/CaissePage'
 import GaleriePage            from '@/pages/GaleriePage'
@@ -265,6 +266,7 @@ export default function App() {
           <Route path={ROUTES.REALISATIONS}     element={<MesRealisationsPage />} />
           <Route path={ROUTES.FACTURATION}      element={<FacturationPage />}     />
           <Route path={ROUTES.HISTORIQUE}       element={<HistoriquePage />}      />
+          <Route path={ROUTES.QUOI_DE_NEUF}     element={<QuoiDeNeufPage />}      />
           <Route path="/archives"               element={<ArchivesPage />}        />
           <Route path="/caisse"                 element={<CaissePage />}          />
           <Route path={ROUTES.FAQ}              element={<FAQPage />}             />

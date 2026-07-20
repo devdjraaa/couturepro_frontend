@@ -1,8 +1,8 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
   Home, Users, ClipboardList, Layers, Settings, Scissors,
-  Bell, Star, Users2, LogOut, HelpCircle, Archive, Wallet, Store, FileText, Palette, Images, History, Sparkles, Megaphone } from 'lucide-react'
+  Bell, Star, Users2, LogOut, HelpCircle, Archive, Wallet, Store, FileText, Palette, Images, History, Sparkles, Megaphone, Rocket } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
 import { useAuth } from '@/contexts'
@@ -11,6 +11,7 @@ import { ROUTES } from '@/constants/routes'
 import { Avatar } from '@/components/ui'
 import { useNotificationsCount } from '@/hooks/useNotifications'
 import { useInfosCount } from '@/hooks/useInfos'
+import { journalMajService } from '@/services/journalMajService'
 
 export const NAV_GROUPS = [
   {
@@ -45,6 +46,7 @@ export const NAV_GROUPS = [
       { to: '/notifications', icon: Bell,       key: 'notifications'              },
       { to: ROUTES.INFOS,     icon: Megaphone,  key: 'infos'                      },
       { to: ROUTES.HISTORIQUE, icon: History,   key: 'historique'                 },
+      { to: ROUTES.QUOI_DE_NEUF, icon: Rocket,  key: 'quoi_de_neuf'               },
       { to: '/archives',      icon: Archive,    key: 'archives', proprietaire: true },
       { to: '/parametres',    icon: Settings,   key: 'parametres'                 },
       { to: '/support',       icon: HelpCircle, key: 'support'                    },
@@ -120,8 +122,18 @@ export default function Sidebar() {
   const { data: notifCount = 0 } = useNotificationsCount()
   const { data: infosCount = 0 } = useInfosCount()
 
+  // CLI-1 — une seule pastille pour « Quoi de neuf » : on signale QU'IL y a du
+  // nouveau, pas combien. Un décompte n'aurait pas de sens pour un journal de
+  // versions, et le service compare la dernière version publiée à celle déjà
+  // consultée sur cet appareil.
+  const [majNonVue, setMajNonVue] = useState(false)
+
+  useEffect(() => {
+    journalMajService.getAll().then((l) => setMajNonVue(journalMajService.aDuNouveau(l)))
+  }, [])
+
   // Une entrée sans compteur n'affiche pas de pastille : la table dit qui en a un.
-  const badges = { '/notifications': notifCount, [ROUTES.INFOS]: infosCount }
+  const badges = { '/notifications': notifCount, [ROUTES.INFOS]: infosCount, [ROUTES.QUOI_DE_NEUF]: majNonVue ? 1 : 0 }
   const { t } = useTranslation()
 
   // Restauration synchrone après montage : `useLayoutEffect` provoquerait un

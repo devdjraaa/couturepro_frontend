@@ -49,3 +49,15 @@ export function useSetCompteRebours() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ADMIN_KEYS.compteRebours }),
   })
 }
+
+export function useJournalMaj() {
+  return useQuery({ queryKey: ADMIN_KEYS.journalMaj, queryFn: () => reglagesVitrineAdminService.getJournalMaj() })
+}
+
+export function useSetJournalMaj() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (entrees) => reglagesVitrineAdminService.setJournalMaj(entrees),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ADMIN_KEYS.journalMaj }),
+  })
+}

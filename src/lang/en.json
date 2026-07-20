@@ -1494,7 +1494,8 @@
     "studio": "Studio",
     "gestion_atelier": "Workshop management",
     "annonces": "Announcements",
-    "infos": "Gextimo News"
+    "infos": "Gextimo News",
+    "quoi_de_neuf": "What's new"
   },
   "pwa": {
     "installer_titre": "Install Gextimo",
@@ -4481,6 +4482,22 @@
       "confirmer_suppression": "Remove this item?",
       "aucune": "Nothing broadcast yet.",
       "aide": "News is an editorial message to professionals (announcement, new feature, tip). Distinct from notifications, which report an event on the workshop and call for action."
+    },
+    "journal_maj": {
+      "titre": "Update log",
+      "aide": "What professionals read under the \"What’s new\" screen. Releases are automatic, so this is where changes get described — otherwise the app evolves and nobody knows what changed.",
+      "vide": "No entries yet.",
+      "ajouter": "Add an entry",
+      "entree": "Entry {{n}}",
+      "version": "Version",
+      "date": "Date",
+      "type": "Type",
+      "type_nouveaute": "New",
+      "type_amelioration": "Improvement",
+      "type_correction": "Fix",
+      "champ_titre": "Title",
+      "lignes": "Details",
+      "lignes_aide": "One bullet per line. Write for a user, not a developer."
     }
   },
   "bienvenue": {
@@ -4699,5 +4716,11 @@
     "vide_titre": "Nothing yet",
     "vide_desc": "Announcements, new features and tips from the Gextimo team will appear here.",
     "vide_categorie": "No news in this category."
+  },
+  "quoi_de_neuf": {
+    "titre": "What's new",
+    "version": "Version {{v}}",
+    "vide_titre": "Nothing to report yet",
+    "vide_desc": "New features and fixes will appear here."
   }
 }
