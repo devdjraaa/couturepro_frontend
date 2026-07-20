@@ -400,6 +400,8 @@ export function VitrineFooter() {
       { l: t('vitrine.menu2.about'), to: '/qui-sommes-nous' },
       { l: t('vitrine.menu2.artisans'), to: '/artisans' },
       { l: t('vitrine.partenaires.footer_link'), to: '/partenaires' },
+      // VASAT : second produit du groupe — entrée visible, contenu sous mot de passe (20/07).
+      { l: 'VASAT', to: '/vasat' },
       { l: t('vitrine.footer.pricing'), to: '/premium' },
       { l: t('vitrine.sponsor.footer_link'), to: '/mise-en-avant' },
       { l: t('vitrine.menu2.support'), to: '/aide' },

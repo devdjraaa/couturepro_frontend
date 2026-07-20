@@ -18,9 +18,11 @@ function setMeta(property, content) {
   el.setAttribute('content', content)
 }
 
-export function usePageMeta({ title, description, image, path, type = 'website' } = {}) {
+export function usePageMeta({ title, description, image, path, type = 'website', noindex = false } = {}) {
   useEffect(() => {
     const fullTitle = title ? `${title} · Gextimo` : DEFAULT_TITLE
+    // Pages privées (VASAT, outils internes) : interdites d'indexation.
+    setMeta('robots', noindex ? 'noindex, nofollow' : 'index, follow')
     const desc      = description ?? DEFAULT_DESC
     const img       = image ?? DEFAULT_IMAGE
     const url       = path ? `${BASE_URL}${path}` : BASE_URL

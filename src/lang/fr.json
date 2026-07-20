@@ -3671,6 +3671,11 @@
     "legal_hub": {
       "titre": "Informations légales",
       "legende_ajout": "Passage complété par l'IA — à valider par l'équipe."
+    },
+    "vasat": {
+      "mdp": "Mot de passe",
+      "entrer": "Entrer",
+      "erreur": "Accès refusé."
     }
   },
   "realisations": {

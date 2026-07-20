@@ -39,6 +39,7 @@ import { ROUTES, IS_NATIVE } from '@/constants/routes'
 
 // Vitrine publique (web)
 import VitrineHome        from '@/pages/vitrine/VitrineHome'
+import VasatPage          from '@/pages/vitrine/VasatPage'
 import PartenairesPage    from '@/pages/vitrine/PartenairesPage'
 import CreateursPage      from '@/pages/vitrine/CreateursPage'
 import CreateurProfilPage from '@/pages/vitrine/CreateurProfilPage'
@@ -152,6 +153,8 @@ export default function App() {
         {!IS_NATIVE && (
           <Route element={<VitrineLayout />}>
             <Route path={ROUTES.VITRINE}           element={<VitrineHome />} />
+            {/* VASAT : second produit du groupe, masqué par mot de passe (20/07). */}
+            <Route path="/vasat"                   element={<VasatPage />} />
             <Route path={ROUTES.VITRINE_CREATEURS} element={<CreateursPage />} />
             <Route path={ROUTES.VITRINE_CREATEUR}  element={<CreateurProfilPage />} />
             <Route path={ROUTES.VITRINE_SUIVI}     element={<SuiviVitrinePage />} />

@@ -3658,6 +3658,11 @@
     "legal_hub": {
       "titre": "Legal information",
       "legende_ajout": "Section completed by AI — to be reviewed by the team."
+    },
+    "vasat": {
+      "mdp": "Password",
+      "entrer": "Enter",
+      "erreur": "Access denied."
     }
   },
   "realisations": {
