@@ -1418,7 +1418,9 @@
       "mesure": "Mesures"
     },
     "note_label": "Note",
-    "archive_le": "Archivé le"
+    "archive_le": "Archivé le",
+    "vide_titre": "Aucun élément archivé",
+    "vide_description": "Les clients, commandes et mesures que vous archivez seront rangés ici"
   },
   "langue": {
     "titre": "Langue",
