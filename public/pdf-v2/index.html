@@ -46,12 +46,12 @@
 <body>
 <div class="enveloppe">
   <h1>Documents PDF — version 2</h1>
-  <p class="intro">Refonte des 7 sorties PDF sur la charte Gextimo. À valider document par document.</p>
+  <p class="intro">Refonte des 8 sorties PDF sur la charte Gextimo. À valider document par document.</p>
 
   <div class="note">
     <strong>Ce que tu vois est ce qui sort.</strong> Cette page utilise le
     <em>même</em> module de composition que les exports réels
-    (<code>src/utils/pdfTheme.js</code>) — pas une imitation. Les 7 exports sont
+    (<code>src/utils/pdfTheme.js</code>) — pas une imitation. Les 8 exports sont
     désormais câblés dessus : ces maquettes montrent les documents produits par
     l'application.
     <br><br>
@@ -65,7 +65,7 @@
 </div>
 
 <footer>
-  Les 7 documents sont en production. Les proportions sont celles d'une vraie
+  Les 8 documents sont en production. Les proportions sont celles d'une vraie
   page A4 ; le filigrane et le pied de page (marque, site, téléphone) sont
   ajoutés au moment de la génération, sur chaque page.
   <br><br>
@@ -210,6 +210,53 @@ const documents = [
       encart('Consigne atelier', 'Broderie posée avant montage de la doublure. Repassage à basse température uniquement.'),
   },
   {
+    nom: 'Facture normalisée habillée',
+    ou: 'Facturation → Facture normalisée → Partager',
+    // Ce document n'est PAS composé en HTML dans l'application : il embarque le
+    // PDF certifié par la DGI intact (pdf-lib). La maquette ci-dessous reproduit
+    // fidèlement ce que le code dessine autour du document officiel.
+    html: () => `
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;">
+        <div>
+          <p style="margin:0 0 10px;font:700 8px/1 ${T.sans};letter-spacing:.14em;
+                    text-transform:uppercase;color:${T.orSombre};">MAISON ZINSOU</p>
+          <p style="margin:0;font:400 18px/1.1 Times,${T.serif};color:${T.encre};">Facture normalisée</p>
+        </div>
+        <div style="text-align:right;">
+          <p style="margin:0 0 6px;font:400 8px/1 ${T.sans};color:${T.gris};">Cotonou · +229 01 91 47 96 28</p>
+          <p style="margin:0;font:700 10px/1 ${T.sans};color:${T.encre};">FAC-2026-0087</p>
+        </div>
+      </div>
+      <div style="height:1.5px;background:${T.or};margin:14px 0 20px;"></div>
+
+      <!-- Le document officiel, reproduit INTACT et encadré -->
+      <div style="border:.75px solid ${T.filet};padding:6px;">
+        <div style="border:1px dashed ${T.filet};background:${T.fondDoux};padding:26px 20px;text-align:center;">
+          <p style="margin:0 0 6px;font:700 10px/1.3 ${T.sans};color:${T.encreDoux};">
+            FACTURE NORMALISÉE e-MECeF
+          </p>
+          <p style="margin:0 0 16px;font:400 9px/1.5 ${T.sans};color:${T.gris};">
+            Document officiel certifié par la DGI, embarqué tel quel<br>
+            (texte sélectionnable, QR et éléments de sécurité intacts)
+          </p>
+          <div style="width:64px;height:64px;margin:0 auto;background:
+                      repeating-conic-gradient(${T.encre} 0 25%, transparent 0 50%) 0 0/16px 16px;"></div>
+          <p style="margin:10px 0 0;font:400 8px/1 ${T.sans};color:${T.gris};">CODE MECeF/DGI · NIM</p>
+        </div>
+      </div>
+
+      <div style="height:1px;background:${T.filet};margin:22px 0 14px;"></div>
+      <p style="margin:0 0 5px;font:700 8.5px/1.3 ${T.sans};color:${T.encre};">
+        Facture normalisée certifiée e-MECeF · DGI Bénin
+      </p>
+      <p style="margin:0 0 4px;font:400 7.5px/1.4 ${T.sans};color:${T.gris};">
+        Vérification : sygmef.impots.bj/verification (saisir le code MECeF/DGI et le NIM figurant ci-dessus)
+      </p>
+      <p style="margin:0;font:400 6.8px/1.4 ${T.sans};color:${T.gris};">
+        Mise en page GEXTIMO. Les éléments de sécurité sont ceux de la facture e-MECeF reproduite ci-dessus, sans modification.
+      </p>`,
+  },
+  {
     nom: 'Lookbook',
     ou: 'Ma vitrine → Exporter le lookbook',
     html: () =>
@@ -243,7 +290,7 @@ documents.forEach((doc, i) => {
   bloc.className = 'doc'
   bloc.innerHTML = `
     <div class="doc-tete">
-      <span class="doc-num">Document ${i + 1}/7</span>
+      <span class="doc-num">Document ${i + 1}/8</span>
       <p class="doc-nom">${doc.nom}</p>
       <span class="doc-ou">${doc.ou}</span>
     </div>
