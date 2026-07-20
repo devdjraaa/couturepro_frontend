@@ -179,7 +179,7 @@ export default function EquipePage() {
           />
           <Select label={t('equipe.formulaire.role')} value={form.role} onChange={set('role')} options={ROLE_OPTIONS} />
           {apiError && <p className="text-sm text-danger">{apiError}</p>}
-          <div className="flex gap-3 pt-2">
+          <div className="sticky bottom-0 -mx-5 mt-2 flex gap-3 border-t border-edge bg-card px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
             <Button type="button" variant="ghost" onClick={() => setShowInvite(false)} className="flex-1">
               {t('commun.annuler')}
             </Button>
