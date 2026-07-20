@@ -1592,7 +1592,8 @@
       "profil_ville": "Ville",
       "profil_naissance_hint": "Date de naissance (facultatif) — pour un petit mot le jour J.",
       "profil_enregistrer": "Enregistrer",
-      "profil_enregistre": "Profil mis à jour."
+      "profil_enregistre": "Profil mis à jour.",
+      "reprise_suivre": "Connectez-vous pour suivre {{createur}} — votre abonnement sera enregistré aussitôt et vous reviendrez sur son profil."
     },
     "chatbot": {
       "titre": "Makila AI",
@@ -1839,7 +1840,8 @@
       "report": "Signaler",
       "report_done": "Signalé, merci.",
       "videos": "Vidéos",
-      "site_web": "Site web"
+      "site_web": "Site web",
+      "subscribe_error": "L'abonnement n'a pas pu être enregistré. Réessayez."
     },
     "patron": {
       "download_paid": "Télécharger — {{prix}}",

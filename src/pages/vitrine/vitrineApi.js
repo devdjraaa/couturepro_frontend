@@ -1,6 +1,7 @@
 // Données + client de l'API publique vitrine (avec repli démo si l'API n'est
 // pas joignable / pas encore déployée).
 import { API_BASE_URL } from '@/constants/config'
+import { getClientToken } from './espaceClientApi'
 
 export const demoCreators = [
   { id: 'maison-zinsou', nom: 'Maison Zinsou', initiales: 'MZ', specialite: 'Haute couture', ville: 'Cotonou', note: '4.9', avis: 27, verifie: true, experience: '8 ans', gradient: 'linear-gradient(135deg,#D00B0B,#7a0606)' },
@@ -37,7 +38,13 @@ export const demoReviews = [
 
 async function safe(path) {
   try {
-    const r = await fetch(`${API_BASE_URL}${path}`)
+    // Le jeton client est joint s'il existe : certaines réponses publiques en
+    // dépendent (ABO-1 — savoir si CE client suit déjà le créateur). Sans lui, le
+    // profil afficherait « Suivre » à quelqu'un déjà abonné.
+    const headers = {}
+    const token = getClientToken()
+    if (token) headers.Authorization = `Bearer ${token}`
+    const r = await fetch(`${API_BASE_URL}${path}`, { headers })
     if (!r.ok) return null
     return await r.json()
   } catch {
@@ -61,16 +68,29 @@ export function getVisitorKey() {
 }
 
 async function postJson(path, body) {
+  const { ok, data } = await postDetaille(path, body)
+  return ok ? data : null
+}
+
+/**
+ * Variante de `postJson` qui rend le statut HTTP au lieu de tout aplatir sur
+ * `null`, et qui joint le jeton client s'il existe. Nécessaire depuis qu'une
+ * partie des actions vitrine exige un compte : le front doit pouvoir réagir à un
+ * 401 (proposer la connexion) autrement qu'à une coupure réseau (réessayer).
+ */
+export async function postDetaille(path, body) {
+  const headers = { 'Content-Type': 'application/json', Accept: 'application/json' }
+  const token = getClientToken()
+  if (token) headers.Authorization = `Bearer ${token}`
   try {
     const r = await fetch(`${API_BASE_URL}${path}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify(body),
+      method: 'POST', headers, body: JSON.stringify(body),
     })
-    if (!r.ok) return null
-    return await r.json()
+    const data = await r.json().catch(() => null)
+    return { ok: r.ok, status: r.status, data }
   } catch {
-    return null
+    // Pas de réponse du tout : réseau. `status: 0` le distingue d'un refus serveur.
+    return { ok: false, status: 0, data: null }
   }
 }
 
@@ -79,9 +99,16 @@ export function toggleLike(vetementId) {
   return postJson(`/vitrine/creations/${vetementId}/like`, { visitor_key: getVisitorKey() })
 }
 
-// P173 : s'abonner / se désabonner d'un créateur → { abonne, abonnes }.
-export function toggleAbonnement(atelierId) {
-  return postJson(`/vitrine/createurs/${atelierId}/abonnement`, { visitor_key: getVisitorKey() })
+/**
+ * P173 / ABO-1 : suivre ou ne plus suivre un créateur → { abonne, abonnes }.
+ *
+ * L'abonnement était anonyme (clé visiteur en localStorage) : vider son cache
+ * effaçait ses abonnements, et le compteur n'engageait personne. Le serveur exige
+ * désormais un compte et répond 401 `auth_requise` sinon — d'où le retour détaillé,
+ * que l'appelant utilise pour proposer la connexion puis rejouer l'action.
+ */
+export function toggleAbonnement(atelierId, { notifications_optin } = {}) {
+  return postDetaille(`/vitrine/createurs/${atelierId}/abonnement`, { notifications_optin })
 }
 
 // P161-162 : achat d'un patron → { code_transaction, checkout_url } (redirection paiement).

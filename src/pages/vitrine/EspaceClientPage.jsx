@@ -1,7 +1,7 @@
 // P202 : Espace client vitrine — connexion sans mot de passe (Google / OTP e-mail),
 // consentement APDP, mes commandes (suivi par étapes), avis (si livrée) et réclamations.
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useSearchParams, Link } from 'react-router-dom'
+import { useSearchParams, useNavigate, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Mail, LogOut, Package, Star, AlertTriangle, Send, ShieldCheck, CheckCircle2 } from 'lucide-react'
 import VitrineShell from './VitrineChrome'
@@ -12,6 +12,8 @@ import {
   getConfigPublique, majProfil,
 } from './espaceClientApi'
 import { track, initAnalyticsTiers } from '@/utils/gxtTracking'
+import { consommerAction, lireAction } from './actionEnAttente'
+import { toggleAbonnement } from './vitrineApi'
 
 const ETAPES = ['commande', 'coupe', 'confection', 'essayage', 'livraison']
 const input = 'w-full rounded-xl px-4 py-3 text-[15px] outline-none text-ink bg-subtle border border-edge placeholder:text-ghost focus:border-primary transition'
@@ -22,8 +24,31 @@ export default function EspaceClientPage() {
   const { t } = useTranslation()
   usePageMeta({ title: t('vitrine.espace_client.title'), description: t('vitrine.espace_client.subtitle'), path: '/espace-client' })
   const [params] = useSearchParams()
+  const navigate = useNavigate()
   const [config, setConfig] = useState({})
   const [me, setMe] = useState(undefined) // undefined = chargement, null = non connecté
+  // EC-3 : intention mise de côté avant la connexion, à rejouer une fois connecté.
+  const [attente] = useState(() => lireAction())
+
+  /**
+   * Rejoue l'action qui avait envoyé l'utilisateur se connecter, puis le ramène
+   * d'où il venait. Sans cela il se connecte et retombe sur une page qui ne dit
+   * rien de ce qu'il essayait de faire.
+   */
+  const reprendreAction = async () => {
+    const a = consommerAction()
+    if (!a) return false
+
+    if (a.type === 'suivre_createur' && a.payload?.atelierId) {
+      const { ok } = await toggleAbonnement(a.payload.atelierId)
+      // Un échec ici n'est pas bloquant : on ramène quand même l'utilisateur sur
+      // le profil, où l'état réel de l'abonnement sera rechargé depuis le serveur.
+      if (ok) track('abonnement_createur', { atelier_id: a.payload.atelierId, via: 'reprise_connexion' })
+    }
+
+    if (a.retour) { navigate(a.retour, { replace: true }); return true }
+    return false
+  }
 
   useEffect(() => {
     getConfigPublique().then(({ data }) => setConfig(data || {}))
@@ -45,7 +70,21 @@ export default function EspaceClientPage() {
           <p className="text-dim mt-1 mb-8">{t('vitrine.espace_client.subtitle')}</p>
 
           {me === undefined && <p className="text-dim">{t('commun.chargement')}</p>}
-          {me === null && <Login config={config} onDone={(data) => setMe(data)} />}
+          {me === null && (
+            <>
+              {/* EC-3 : dire POURQUOI on demande de se connecter — sinon l'écran
+                  paraît sans rapport avec le bouton qui vient d'être cliqué. */}
+              {attente?.type === 'suivre_createur' && (
+                <p className="mb-5 rounded-lg border border-edge bg-subtle px-4 py-3 text-[13px] text-dim">
+                  {t('vitrine.espace_client.reprise_suivre', { createur: attente.payload?.nom || '' })}
+                </p>
+              )}
+              <Login config={config} onDone={async (data) => {
+                if (await reprendreAction()) return   // redirigé : inutile de rendre l'espace
+                setMe(data)
+              }} />
+            </>
+          )}
           {me && <Espace me={me} config={config} onLogout={() => { clientLogout(); setMe(null) }}
                          commanderAtelier={params.get('commander')} commanderNom={params.get('designer')} />}
         </div>

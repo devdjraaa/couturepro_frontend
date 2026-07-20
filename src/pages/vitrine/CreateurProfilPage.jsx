@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { X, Heart, MessageCircle, Send, ShoppingBag, Award, Download, Lock, ImagePlus, Megaphone, Video } from 'lucide-react'
 import VitrineShell from './VitrineChrome'
 import { getCreator, toggleLike, toggleAbonnement, acheterPatron } from './vitrineApi'
+import { memoriserAction } from './actionEnAttente'
+import toast from 'react-hot-toast'
 import GarmentVisual from './GarmentVisual'
 import { useDevise } from './vitrineCurrency'
 import { useFavoris } from './useFavoris'
@@ -364,6 +366,7 @@ export default function CreateurProfilPage() {
   const { format } = useDevise()
   const { toggle } = useFavoris()
   const { slug } = useParams()
+  const navigate = useNavigate()
   const [c, setC] = useState(undefined) // undefined = loading, null = introuvable
   const [reported, setReported] = useState(() => new Set())
   const [signaled, setSignaled] = useState(() => new Set())
@@ -396,12 +399,33 @@ export default function CreateurProfilPage() {
     if (res) setLikeState((s) => ({ ...s, [vetementId]: { likes: res.likes, liked: res.liked } }))
   }
 
-  // P173 : s'abonner / se désabonner (optimiste). On garde aussi le favori local (FavorisPage).
+  // P173 / ABO-1 : suivre ou ne plus suivre. L'affichage est optimiste, mais on
+  // le REMET dans son état d'origine si le serveur refuse — sinon le bouton dit
+  // « Abonné » alors que rien n'a été enregistré.
   const onSubscribe = async () => {
-    toggle(c.id)
+    const avant = abo
     setAbo((a) => ({ abonne: !a.abonne, abonnes: Math.max(0, a.abonnes + (a.abonne ? -1 : 1)) }))
-    const res = await toggleAbonnement(c.id)
-    if (res) setAbo({ abonne: res.abonne, abonnes: res.abonnes })
+
+    const { ok, status, data } = await toggleAbonnement(c.id)
+
+    if (ok) {
+      toggle(c.id)   // favori local (FavorisPage), seulement si le serveur a suivi
+      setAbo({ abonne: data.abonne, abonnes: data.abonnes })
+      return
+    }
+
+    setAbo(avant)
+
+    // EC-3 : suivre exige un compte. Plutôt que d'afficher une erreur et de perdre
+    // le geste, on mémorise l'intention, on envoie se connecter, et l'abonnement
+    // se fait tout seul au retour.
+    if (status === 401) {
+      memoriserAction('suivre_createur', { atelierId: c.id, nom: c.nom }, `/createurs/${slug}`)
+      navigate('/espace-client?action=suivre_createur')
+      return
+    }
+
+    toast.error(data?.message || t('vitrine.profil.subscribe_error'))
   }
 
   useEffect(() => {
