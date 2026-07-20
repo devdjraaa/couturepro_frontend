@@ -111,6 +111,45 @@ export function toggleAbonnement(atelierId, { notifications_optin } = {}) {
   return postDetaille(`/vitrine/createurs/${atelierId}/abonnement`, { notifications_optin })
 }
 
+/**
+ * Avis v2 (décisions 20/07) — dépôt d'un avis sur un MODÈLE, compte obligatoire.
+ * Multipart quand des photos sont jointes ; le statut HTTP est rendu pour que
+ * l'appelant distingue « connectez-vous » (401) d'un refus (422/429) et du réseau.
+ */
+export async function deposerAvis(vetementId, { auteur_nom, note, texte, photos = [] }) {
+  const headers = { Accept: 'application/json' }
+  const token = getClientToken()
+  if (token) headers.Authorization = `Bearer ${token}`
+
+  let body
+  if (photos.length > 0) {
+    body = new FormData()
+    body.append('auteur_nom', auteur_nom)
+    body.append('note', String(note))
+    body.append('texte', texte)
+    photos.forEach((f) => body.append('photos[]', f))
+  } else {
+    headers['Content-Type'] = 'application/json'
+    body = JSON.stringify({ auteur_nom, note, texte })
+  }
+
+  try {
+    const r = await fetch(`${API_BASE_URL}/vitrine/creations/${vetementId}/avis`, { method: 'POST', headers, body })
+    const data = await r.json().catch(() => null)
+    return { ok: r.ok, status: r.status, data }
+  } catch {
+    return { ok: false, status: 0, data: null }
+  }
+}
+
+/**
+ * Décision 7 — signalement motivé d'un avis. Un motif grave (contenu illégal,
+ * insulte, discrimination) déclenche une revue prioritaire immédiate côté admin.
+ */
+export function signalerAvis(avisId, motif) {
+  return postDetaille(`/vitrine/avis/${avisId}/signaler`, { motif, visitor_key: getVisitorKey() })
+}
+
 // P161-162 : achat d'un patron → { code_transaction, checkout_url } (redirection paiement).
 export function acheterPatron(patronId, buyer) {
   return postJson(`/vitrine/patrons/${patronId}/acheter`, buyer)

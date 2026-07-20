@@ -95,7 +95,9 @@ export default function MaVitrinePage() {
   useEffect(() => { collectionService.getAll().then((d) => setCollections(d || [])).catch(() => {}) }, [])
   // S08C-29 : les avis sont publiés directement ; seuls les avis SIGNALÉS
   // remontent ici, et en lecture seule — l'arbitrage appartient à l'admin.
-  useEffect(() => { avisService.getMine().then((d) => setPendingAvis((d || []).filter((a) => a.statut === 'signale'))).catch(() => {}) }, [])
+  // Avis v2 : un avis signalé RESTE publié (statut `valide`) en attendant
+  // l'arbitrage admin — le signalement se lit sur le compteur, plus sur le statut.
+  useEffect(() => { avisService.getMine().then((d) => setPendingAvis((d || []).filter((a) => (a.signalements_count ?? 0) > 0 || a.revue_prioritaire))).catch(() => {}) }, [])
   useEffect(() => { devisService.getMine().then((d) => setDevis(d || [])).catch(() => {}) }, [])
   useEffect(() => {
     abonnementService.getSponsoOffres().then((d) => {

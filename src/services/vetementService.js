@@ -12,6 +12,12 @@ const toFormData = (payload) => {
   } else if (payload.image instanceof File) {
     fd.append('image', payload.image)
   }
+  // Pts 68-69 : liste des mesures attendues. Une liste VIDE doit aussi partir
+  // (libelles_mesures[] absent = « ne pas toucher », clé vide = « tout retirer »).
+  if (Array.isArray(payload.libelles_mesures)) {
+    if (payload.libelles_mesures.length === 0) fd.append('libelles_mesures', '')
+    payload.libelles_mesures.forEach((l) => fd.append('libelles_mesures[]', l))
+  }
   return fd
 }
 

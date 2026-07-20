@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ImagePlus, X, Shirt } from 'lucide-react'
+import { ImagePlus, X, Shirt, Ruler, Plus } from 'lucide-react'
 import { Input, Button } from '@/components/ui'
 import { cn } from '@/utils/cn'
 import { usePlanLimit } from '@/hooks/usePlanFeature'
@@ -15,6 +15,10 @@ export default function VetementForm({ initialData, onSubmit, onCancel, isLoadin
   const { max: maxPlan } = usePlanLimit('max_photos_vetement')
   const MAX_IMAGES = maxPlan ?? MAX_IMAGES_DEFAUT
   const [nom, setNom] = useState(initialData?.nom ?? '')
+  // Pts 68-69 : mesures attendues pour ce type de vêtement. C'est cette liste
+  // que la création de commande propose à la saisie quand le modèle est choisi.
+  const [libelles, setLibelles] = useState(initialData?.libelles_mesures ?? [])
+  const [nouveauLibelle, setNouveauLibelle] = useState('')
   const [previews, setPreviews] = useState(initialData?.images_urls ?? (initialData?.image_url ? [initialData.image_url] : []))
   const [files, setFiles] = useState([])
   const fileRef = useRef(null)
@@ -40,9 +44,16 @@ export default function VetementForm({ initialData, onSubmit, onCancel, isLoadin
     })
   }
 
+  const ajouterLibelle = () => {
+    const l = nouveauLibelle.trim()
+    if (!l || libelles.includes(l)) return
+    setLibelles((prev) => [...prev, l])
+    setNouveauLibelle('')
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
-    onSubmit({ nom: nom.trim(), images: files.length > 0 ? files : undefined })
+    onSubmit({ nom: nom.trim(), libelles_mesures: libelles, images: files.length > 0 ? files : undefined })
   }
 
   const canAddMore = previews.length < MAX_IMAGES
@@ -119,6 +130,38 @@ export default function VetementForm({ initialData, onSubmit, onCancel, isLoadin
         {previews.length === 0 && (
           <p className="text-xs text-ghost mt-1.5">{t('catalogue.formulaire.photos_aide', { n: MAX_IMAGES })}</p>
         )}
+      </div>
+
+      {/* Pts 68-69 : mesures attendues pour ce type de vêtement. Libellés libres,
+          proposés automatiquement à la saisie des mesures pendant une commande. */}
+      <div>
+        <div className="flex items-center gap-2 mb-2">
+          <Ruler size={14} className="text-primary" />
+          <p className="text-sm font-medium text-ink">{t('catalogue.formulaire.mesures_titre')}</p>
+        </div>
+        {libelles.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mb-2">
+            {libelles.map((l) => (
+              <span key={l} className="inline-flex items-center gap-1 rounded-full bg-subtle border border-edge px-2.5 py-1 text-xs text-ink">
+                {l}
+                <button type="button" onClick={() => setLibelles((prev) => prev.filter((x) => x !== l))}
+                        className="text-ghost hover:text-danger" aria-label={t('commun.retirer')}>
+                  <X size={11} />
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+        <div className="flex gap-2">
+          <input value={nouveauLibelle} onChange={(e) => setNouveauLibelle(e.target.value)}
+                 onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); ajouterLibelle() } }}
+                 placeholder={t('catalogue.formulaire.mesures_placeholder')} maxLength={60}
+                 className="flex-1 rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
+          <Button type="button" variant="ghost" onClick={ajouterLibelle} disabled={!nouveauLibelle.trim()}>
+            <Plus size={15} />
+          </Button>
+        </div>
+        <p className="text-xs text-ghost mt-1.5">{t('catalogue.formulaire.mesures_aide')}</p>
       </div>
 
       {/* S02A-25/26 : un SEUL bouton d'action, en pied de panneau collant — il

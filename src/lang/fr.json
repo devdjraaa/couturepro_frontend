@@ -956,7 +956,10 @@
       "ajouter": "Créer le vêtement",
       "photos": "Photos du modèle",
       "ajouter_photos": "Ajouter des photos",
-      "photos_aide": "JPG, PNG, WebP — 4 Mo maximum par photo — {{n}} photos au total"
+      "photos_aide": "JPG, PNG, WebP — 4 Mo maximum par photo — {{n}} photos au total",
+      "mesures_titre": "Mesures à prendre pour ce modèle",
+      "mesures_placeholder": "ex. Tour de poitrine",
+      "mesures_aide": "Ces mesures seront proposées automatiquement à la saisie quand ce modèle est choisi dans une commande."
     },
     "supprimer_confirm": {
       "titre": "Supprimer ce vêtement ?",
@@ -1610,7 +1613,10 @@
       "desabo_echec": "Le désabonnement n'a pas pu être enregistré.",
       "notifs_actives": "Notifications activées pour ce créateur",
       "notifs_inactives": "Notifications désactivées pour ce créateur",
-      "notifs_echec": "Le réglage des notifications n'a pas pu être enregistré."
+      "notifs_echec": "Le réglage des notifications n'a pas pu être enregistré.",
+      "reprise_avis": "Connectez-vous pour publier votre avis — il est conservé et partira dès votre connexion, puis vous reviendrez sur le profil.",
+      "avis_rejoue": "Votre avis a été publié.",
+      "avis_rejoue_photos": "Votre avis a été publié. Les photos jointes n'ont pas pu être conservées pendant la connexion."
     },
     "chatbot": {
       "titre": "Makila AI",
@@ -1862,7 +1868,14 @@
       "avis_err_nom": "Indiquez votre nom ou un pseudonyme.",
       "avis_err_note": "Choisissez une note.",
       "avis_err_texte": "Écrivez votre avis (10 caractères minimum).",
-      "avis_err_envoi": "Votre avis n'a pas pu être envoyé. Réessayez."
+      "avis_err_envoi": "Votre avis n'a pas pu être envoyé. Réessayez.",
+      "avis_choisir_modele": "Sur quel modèle porte votre avis ?",
+      "avis_err_modele": "Choisissez le modèle concerné par votre avis.",
+      "motif_contenu_illegal": "Contenu illégal",
+      "motif_insulte": "Insulte",
+      "motif_discrimination": "Discrimination",
+      "motif_autre": "Autre",
+      "report_merci": "Signalement transmis. Notre équipe va vérifier."
     },
     "patron": {
       "download_paid": "Télécharger — {{prix}}",

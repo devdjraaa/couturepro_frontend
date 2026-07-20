@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { X, Heart, MessageCircle, Send, ShoppingBag, Award, Download, Lock, ImagePlus, Megaphone, Video } from 'lucide-react'
 import VitrineShell from './VitrineChrome'
-import { getCreator, toggleLike, toggleAbonnement, acheterPatron } from './vitrineApi'
+import { getCreator, toggleLike, toggleAbonnement, acheterPatron, deposerAvis, signalerAvis } from './vitrineApi'
 import { memoriserAction } from './actionEnAttente'
 import toast from 'react-hot-toast'
 import GarmentVisual from './GarmentVisual'
@@ -288,8 +288,15 @@ function PatronModal({ patron, format, onClose }) {
 
 const MAX_AVIS_PHOTOS = 3
 
-function AvisForm({ atelierId }) {
+/**
+ * Avis v2 (décisions 20/07) : l'avis vise un MODÈLE précis et exige un compte
+ * client. Sans session, l'avis saisi est mémorisé (texte compris) puis REJOUÉ
+ * après connexion — l'utilisateur ne retape rien.
+ */
+function AvisForm({ atelierId, slug, creations = [] }) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+  const [vetementId, setVetementId] = useState('')
   const [nom, setNom] = useState('')
   const [note, setNote] = useState(5)
   const [texte, setTexte] = useState('')
@@ -323,17 +330,31 @@ function AvisForm({ atelierId }) {
     if (!note)                  { setErreur(t('vitrine.profil.avis_err_note')); return }
     if (texte.trim().length < 10) { setErreur(t('vitrine.profil.avis_err_texte')); return }
 
+    if (!vetementId) { setErreur(t('vitrine.profil.avis_err_modele')); return }
+
     setErreur('')
     setSending(true)
-    try {
-      await avisService.submit(atelierId, { auteur_nom: nom.trim(), note, texte: texte.trim(), photos })
-      setSent(true)
-    } catch (err) {
-      const rep = err?.response?.data
-      setErreur(rep?.message || Object.values(rep?.errors || {})[0]?.[0] || t('vitrine.profil.avis_err_envoi'))
-    } finally {
-      setSending(false)
+    const { ok, status, data } = await deposerAvis(vetementId, {
+      auteur_nom: nom.trim(), note, texte: texte.trim(), photos,
+    })
+    setSending(false)
+
+    if (ok) { setSent(true); return }
+
+    // EC-3 : compte requis. L'avis saisi part avec l'intention et sera rejoué
+    // après connexion. Les photos (fichiers) ne survivent pas au stockage de
+    // session : on prévient qu'elles seront à rejoindre.
+    if (status === 401) {
+      memoriserAction('laisser_avis', {
+        atelierId, vetementId, nom: nom.trim(), note, texte: texte.trim(),
+        avaitPhotos: photos.length > 0,
+        createur: creations.find((m) => m.id === vetementId)?.nom || '',
+      }, `/createurs/${slug}`)
+      navigate('/espace-client?action=laisser_avis')
+      return
     }
+
+    setErreur(data?.message || Object.values(data?.errors || {})[0]?.[0] || t('vitrine.profil.avis_err_envoi'))
   }
 
   if (sent) return <p className="text-sm text-success font-medium">{t('vitrine.profil.avis_thanks')}</p>
@@ -341,6 +362,12 @@ function AvisForm({ atelierId }) {
   return (
     <form onSubmit={submit} className="bg-card border border-edge rounded-lg p-5 max-w-[520px]">
       <h3 className="font-display text-lg text-ink mb-3">{t('vitrine.profil.avis_leave')}</h3>
+      {/* Décision 1 : l'avis porte sur un modèle précis, pas sur le créateur. */}
+      <select value={vetementId} onChange={(e) => setVetementId(e.target.value)}
+              className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink mb-2 focus:outline-none focus:ring-2 focus:ring-primary/30">
+        <option value="">{t('vitrine.profil.avis_choisir_modele')}</option>
+        {creations.map((m) => <option key={m.id} value={m.id}>{m.nom}</option>)}
+      </select>
       <input value={nom} onChange={(e) => setNom(e.target.value)} maxLength={80} placeholder={t('vitrine.profil.avis_name')}
              className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink mb-2 focus:outline-none focus:ring-2 focus:ring-primary/30" />
       <div className="flex gap-1 mb-2">
@@ -496,9 +523,15 @@ export default function CreateurProfilPage() {
   const socialCls = 'text-xs font-semibold px-3 py-1.5 rounded-full border border-edge text-dim hover:text-primary hover:border-primary transition'
   const merites = Array.isArray(c.merites) ? c.merites : []
 
-  const reportAvis = async (id) => {
+  // Décision 7 : le signalement porte un motif — un motif grave (contenu
+  // illégal, insulte, discrimination) déclenche une revue prioritaire immédiate.
+  const [motifPourAvis, setMotifPourAvis] = useState(null) // id de l'avis dont on choisit le motif
+
+  const reportAvis = async (id, motif) => {
+    setMotifPourAvis(null)
     setReported((s) => new Set(s).add(id))
-    try { await avisService.report(id) } catch { /* erreur silencieuse */ }
+    const { ok } = await signalerAvis(id, motif)
+    if (ok) toast.success(t('vitrine.profil.report_merci'))
   }
 
   const trackContact = () => vitrineStatsService.track(c?.id, 'contact')
@@ -774,14 +807,23 @@ export default function CreateurProfilPage() {
                 )}
                 {r.id && (reported.has(r.id)
                   ? <span className="text-[11px] text-ghost mt-2 inline-block">{t('vitrine.profil.report_done')}</span>
-                  : <button onClick={() => reportAvis(r.id)} className="text-[11px] text-ghost hover:text-danger mt-2">{t('vitrine.profil.report')}</button>)}
+                  : motifPourAvis === r.id
+                    ? <div className="flex flex-wrap gap-1.5 mt-2">
+                        {['contenu_illegal', 'insulte', 'discrimination', 'autre'].map((m) => (
+                          <button key={m} onClick={() => reportAvis(r.id, m)}
+                                  className="text-[10.5px] px-2 py-1 rounded-full border border-edge text-dim hover:border-danger hover:text-danger transition">
+                            {t(`vitrine.profil.motif_${m}`)}
+                          </button>
+                        ))}
+                      </div>
+                    : <button onClick={() => setMotifPourAvis(r.id)} className="text-[11px] text-ghost hover:text-danger mt-2">{t('vitrine.profil.report')}</button>)}
               </figure>
             ))}
           </div>
         ) : (
           <p className="text-dim mb-6">{t('vitrine.profil.avis_no')}</p>
         )}
-        <div className="mb-12"><AvisForm atelierId={c.id} /></div>
+        <div className="mb-12"><AvisForm atelierId={c.id} slug={slug} creations={c.creations || []} /></div>
 
         <div className="pb-16 flex items-center gap-4 flex-wrap">
           <Link to="/createurs" className={btnOutline}>{t('vitrine.profil.all_creators')}</Link>

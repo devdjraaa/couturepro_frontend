@@ -956,7 +956,10 @@
       "ajouter": "Create garment",
       "photos": "Model photos",
       "ajouter_photos": "Add photos",
-      "photos_aide": "JPG, PNG, WebP — 4 MB max per photo — {{n}} photos in total"
+      "photos_aide": "JPG, PNG, WebP — 4 MB max per photo — {{n}} photos in total",
+      "mesures_titre": "Measurements needed for this model",
+      "mesures_placeholder": "e.g. Chest",
+      "mesures_aide": "These measurements will be suggested automatically when this model is picked in an order."
     },
     "supprimer_confirm": {
       "titre": "Delete this garment?",
@@ -1610,7 +1613,10 @@
       "desabo_echec": "We couldn't save the change.",
       "notifs_actives": "Notifications on for this creator",
       "notifs_inactives": "Notifications off for this creator",
-      "notifs_echec": "We couldn't save your notification setting."
+      "notifs_echec": "We couldn't save your notification setting.",
+      "reprise_avis": "Sign in to publish your review — it is saved and will be posted right after you sign in, then you will be taken back to the profile.",
+      "avis_rejoue": "Your review has been published.",
+      "avis_rejoue_photos": "Your review has been published. The attached photos could not be kept through sign-in."
     },
     "chatbot": {
       "titre": "Makila AI",
@@ -1862,7 +1868,14 @@
       "avis_err_nom": "Enter your name or a nickname.",
       "avis_err_note": "Pick a rating.",
       "avis_err_texte": "Write your review (10 characters minimum).",
-      "avis_err_envoi": "Your review couldn't be sent. Please try again."
+      "avis_err_envoi": "Your review couldn't be sent. Please try again.",
+      "avis_choisir_modele": "Which model is your review about?",
+      "avis_err_modele": "Pick the model your review is about.",
+      "motif_contenu_illegal": "Illegal content",
+      "motif_insulte": "Insult",
+      "motif_discrimination": "Discrimination",
+      "motif_autre": "Other",
+      "report_merci": "Report sent. Our team will review it."
     },
     "patron": {
       "download_paid": "Download — {{prix}}",

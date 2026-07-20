@@ -14,7 +14,7 @@ import {
 import { track, initAnalyticsTiers } from '@/utils/gxtTracking'
 import toast from 'react-hot-toast'
 import { consommerAction, lireAction } from './actionEnAttente'
-import { toggleAbonnement } from './vitrineApi'
+import { toggleAbonnement, deposerAvis } from './vitrineApi'
 
 const ETAPES = ['commande', 'coupe', 'confection', 'essayage', 'livraison']
 const input = 'w-full rounded-xl px-4 py-3 text-[15px] outline-none text-ink bg-subtle border border-edge placeholder:text-ghost focus:border-primary transition'
@@ -47,6 +47,18 @@ export default function EspaceClientPage() {
     if (a.type === 'commander' && a.payload?.atelierId) {
       setCommandeVisee(a.payload)
       return false
+    }
+
+    if (a.type === 'laisser_avis' && a.payload?.vetementId) {
+      const p = a.payload
+      const { ok, data } = await deposerAvis(p.vetementId, { auteur_nom: p.nom, note: p.note, texte: p.texte })
+      if (ok) {
+        toast.success(p.avaitPhotos
+          ? t('vitrine.espace_client.avis_rejoue_photos')
+          : t('vitrine.espace_client.avis_rejoue'))
+      } else {
+        toast.error(data?.message || t('vitrine.espace_client.reprise_echec'))
+      }
     }
 
     if (a.type === 'suivre_createur' && a.payload?.atelierId) {
@@ -99,6 +111,11 @@ export default function EspaceClientPage() {
               {attente?.type === 'suivre_createur' && (
                 <p className="mb-5 rounded-lg border border-edge bg-subtle px-4 py-3 text-[13px] text-dim">
                   {t('vitrine.espace_client.reprise_suivre', { createur: attente.payload?.nom || '' })}
+                </p>
+              )}
+              {attente?.type === 'laisser_avis' && (
+                <p className="mb-5 rounded-lg border border-edge bg-subtle px-4 py-3 text-[13px] text-dim">
+                  {t('vitrine.espace_client.reprise_avis')}
                 </p>
               )}
               <Login config={config} onDone={async (data) => {
