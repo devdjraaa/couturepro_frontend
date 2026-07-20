@@ -798,7 +798,11 @@
       "creer": "Create order",
       "commande_de": "Order for:",
       "type_vetement": "Garment type",
-      "choisir_type": "Choose a garment type…"
+      "choisir_type": "Choose a garment type…",
+      "mesures_titre": "Client measurements",
+      "mesures_aide": "Measurements required for \"{{vetement}}\". They are saved on the client’s record.",
+      "mesures_enregistrer": "Save measurements",
+      "mesures_enregistrees": "Saved"
     },
     "nouvelle": "New order",
     "recherche_placeholder": "Search an order…",
@@ -1854,7 +1858,11 @@
       "report_done": "Reported, thank you.",
       "videos": "Videos",
       "site_web": "Website",
-      "subscribe_error": "Could not save your subscription. Please try again."
+      "subscribe_error": "Could not save your subscription. Please try again.",
+      "avis_err_nom": "Enter your name or a nickname.",
+      "avis_err_note": "Pick a rating.",
+      "avis_err_texte": "Write your review (10 characters minimum).",
+      "avis_err_envoi": "Your review couldn't be sent. Please try again."
     },
     "patron": {
       "download_paid": "Download — {{prix}}",

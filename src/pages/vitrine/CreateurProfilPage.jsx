@@ -297,6 +297,7 @@ function AvisForm({ atelierId }) {
   const [previews, setPreviews] = useState([])
   const [sent, setSent] = useState(false)
   const [sending, setSending] = useState(false)
+  const [erreur, setErreur] = useState('')
 
   const addPhotos = (e) => {
     const files = Array.from(e.target.files ?? []).slice(0, MAX_AVIS_PHOTOS - photos.length)
@@ -312,12 +313,25 @@ function AvisForm({ atelierId }) {
 
   const submit = async (e) => {
     e.preventDefault()
-    if (!nom.trim() || sending) return
+    if (sending) return
+
+    // Correctif prioritaire (direction, 20/07) : seul le nom était vérifié. Un
+    // avis SANS TEXTE partait donc sans le moindre message — et l'erreur
+    // serveur était avalée par un catch muet. Les trois champs sont exigés, et
+    // ce qui échoue est désormais dit.
+    if (!nom.trim())            { setErreur(t('vitrine.profil.avis_err_nom')); return }
+    if (!note)                  { setErreur(t('vitrine.profil.avis_err_note')); return }
+    if (texte.trim().length < 10) { setErreur(t('vitrine.profil.avis_err_texte')); return }
+
+    setErreur('')
     setSending(true)
     try {
-      await avisService.submit(atelierId, { auteur_nom: nom.trim(), note, texte: texte.trim() || null, photos })
+      await avisService.submit(atelierId, { auteur_nom: nom.trim(), note, texte: texte.trim(), photos })
       setSent(true)
-    } catch { /* erreur silencieuse */ } finally {
+    } catch (err) {
+      const rep = err?.response?.data
+      setErreur(rep?.message || Object.values(rep?.errors || {})[0]?.[0] || t('vitrine.profil.avis_err_envoi'))
+    } finally {
       setSending(false)
     }
   }
@@ -354,6 +368,7 @@ function AvisForm({ atelierId }) {
         )}
       </div>
 
+      {erreur && <p className="text-xs text-danger mb-2" role="alert">{erreur}</p>}
       <button type="submit" disabled={sending} className="text-sm font-semibold px-4 py-2 rounded-lg bg-primary text-inverse hover:bg-primary-600 transition disabled:opacity-60">
         {t('vitrine.profil.avis_send')}
       </button>

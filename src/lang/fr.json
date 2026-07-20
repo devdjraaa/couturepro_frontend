@@ -798,7 +798,11 @@
       "creer": "Créer la commande",
       "commande_de": "Commande de :",
       "type_vetement": "Type de vêtement",
-      "choisir_type": "Choisir un type de vêtement…"
+      "choisir_type": "Choisir un type de vêtement…",
+      "mesures_titre": "Mesures du client",
+      "mesures_aide": "Mesures attendues pour « {{vetement}} ». Elles sont enregistrées sur la fiche du client.",
+      "mesures_enregistrer": "Enregistrer les mesures",
+      "mesures_enregistrees": "Enregistrées"
     },
     "nouvelle": "Nouvelle commande",
     "recherche_placeholder": "Rechercher une commande…",
@@ -1854,7 +1858,11 @@
       "report_done": "Signalé, merci.",
       "videos": "Vidéos",
       "site_web": "Site web",
-      "subscribe_error": "L'abonnement n'a pas pu être enregistré. Réessayez."
+      "subscribe_error": "L'abonnement n'a pas pu être enregistré. Réessayez.",
+      "avis_err_nom": "Indiquez votre nom ou un pseudonyme.",
+      "avis_err_note": "Choisissez une note.",
+      "avis_err_texte": "Écrivez votre avis (10 caractères minimum).",
+      "avis_err_envoi": "Votre avis n'a pas pu être envoyé. Réessayez."
     },
     "patron": {
       "download_paid": "Télécharger — {{prix}}",
