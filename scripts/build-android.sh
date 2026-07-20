@@ -22,8 +22,12 @@ cd "$ROOT"
 
 echo "🔧 Build $TARGET (appId=$APP_ID)"
 
-# 1) Backup capacitor.config.json
+# 1) Backup des fichiers que ce script mute le temps du build.
+# build.gradle en fait partie : sans cette sauvegarde, chaque build laissait le
+# dépôt marqué par la dernière saveur construite, et le commit suivant figeait
+# ces valeurs pour tout le monde.
 cp capacitor.config.json capacitor.config.json.bak
+cp android/app/build.gradle android/app/build.gradle.bak
 
 # 2) Patcher capacitor.config.json
 node -e "
@@ -40,8 +44,12 @@ VITE_APP_TARGET="$TARGET" npm run build
 # 4) Sync Capacitor
 npx cap sync android
 
-# 4b) Patcher applicationId dans build.gradle (le namespace Java reste fixe)
-sed -i "s/applicationId \"[^\"]*\"/applicationId \"$APP_ID\"/" android/app/build.gradle
+# 4b) Patcher applicationId dans build.gradle (le namespace Java reste fixe).
+# ANCRÉ SUR LA PREMIÈRE OCCURRENCE (celle de defaultConfig) : sans le `0,/…/`,
+# sed remplaçait aussi les identifiants des deux product flavors, leur donnant
+# le même — installer la console admin remplaçait alors l'app des pros au lieu
+# de cohabiter avec elle. Les saveurs restent maîtresses de leur identifiant.
+sed -i "0,/applicationId \"[^\"]*\"/s//applicationId \"$APP_ID\"/" android/app/build.gradle
 
 # 4c) Patcher le label affiché sur l'écran d'accueil
 sed -i "s|<string name=\"app_name\">[^<]*</string>|<string name=\"app_name\">$APP_NAME</string>|" android/app/src/main/res/values/strings.xml
@@ -89,8 +97,10 @@ APK_SRC="android/app/build/outputs/apk/${FLAVOR_LC}/${BUILD_KIND}/app-${FLAVOR_L
 APK_OUT="apk/gextimo-${TARGET}-${BUILD_KIND}.apk"
 cp "$APK_SRC" "$APK_OUT" && echo "📦 APK : $APK_OUT ($BUILD_KIND)"
 
-# 7) Restaurer capacitor.config.json
+# 7) Restaurer les fichiers mutés : le dépôt doit ressortir du build tel qu'il
+# y est entré, quelle que soit la saveur construite.
 mv capacitor.config.json.bak capacitor.config.json
+mv android/app/build.gradle.bak android/app/build.gradle
 
 echo "✅ APK généré : $APK_OUT"
 echo "   Pour installer : adb install -r $APK_OUT"
