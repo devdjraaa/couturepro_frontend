@@ -3666,7 +3666,8 @@
     "vasat": {
       "mdp": "Password",
       "entrer": "Enter",
-      "erreur": "Access denied."
+      "erreur": "Access denied.",
+      "indisponible": "This space is not open yet."
     }
   },
   "realisations": {

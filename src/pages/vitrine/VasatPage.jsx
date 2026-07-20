@@ -37,7 +37,9 @@ export default function VasatPage() {
         sessionStorage.setItem('vasat_ok', '1')
         setOk(true)
       } else {
-        setErr(data?.message || t('vitrine.vasat.erreur'))
+        setErr(data?.code === 'non_configure'
+          ? t('vitrine.vasat.indisponible')
+          : (data?.message || t('vitrine.vasat.erreur')))
       }
     } catch {
       setErr(t('vitrine.vasat.erreur'))

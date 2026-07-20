@@ -3679,7 +3679,8 @@
     "vasat": {
       "mdp": "Mot de passe",
       "entrer": "Entrer",
-      "erreur": "Accès refusé."
+      "erreur": "Accès refusé.",
+      "indisponible": "Cet espace n'est pas encore ouvert."
     }
   },
   "realisations": {
