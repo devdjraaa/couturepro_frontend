@@ -29,6 +29,16 @@ export const reglagesVitrineAdminService = {
     return data
   },
 
+  async getCompteRebours() {
+    const { data } = await adminApi.get('/vitrine/compte-a-rebours')
+    return data
+  },
+
+  async setCompteRebours(payload) {
+    const { data } = await adminApi.put('/vitrine/compte-a-rebours', payload)
+    return data?.compte_a_rebours ?? payload
+  },
+
   async getModerationAvis() {
     const { data } = await adminApi.get('/vitrine/moderation-avis')
     return data?.reglages ?? {}

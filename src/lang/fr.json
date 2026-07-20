@@ -4374,6 +4374,20 @@
       "heure": "{{h}} h",
       "fois_one": "{{count}} fois",
       "fois_other": "{{count}} fois"
+    },
+    "compte_rebours": {
+      "titre": "Compte à rebours de lancement",
+      "aide": "Une bande discrète apparaît à l'approche de l'échéance, puis un chrono plein écran le jour J. Tout se masque de soi-même une fois la date passée.",
+      "actif": "Afficher le compte à rebours",
+      "date_cible": "Date et heure (heure de Cotonou)",
+      "jours_avant": "Apparition de la bande (jours avant)",
+      "entete": "Titre",
+      "texte_bande": "Texte de la bande",
+      "texte_jour_j": "Texte du jour J",
+      "couleur": "Couleur",
+      "lien": "Lien « En savoir plus » (facultatif)",
+      "chrono": "Chrono plein écran le jour J",
+      "marqueurs": "Marqueurs disponibles dans les textes : {{jours}}, {{heures}}, {{minutes}}, {{secondes}}."
     }
   },
   "bienvenue": {
@@ -4592,11 +4606,30 @@
       "consentement_ok": "Consentement des personnes confirmé",
       "filtre_statut": "Statut",
       "approuvee": "Réalisation publiée.",
-      "refusee_ok": "Réalisation refusée."
+      "refusee_ok": "Réalisation refusée.",
+      "reste": "Reste {{heures}} h {{minutes}} min pour répondre",
+      "en_retard": "En retard de {{heures}} h {{minutes}} min",
+      "original": "Original",
+      "voir_original": "Voir la photo d'origine (avant retouche)"
     },
     "quota_cycle": "{{n}}/{{max}} publications ce cycle (remise à zéro le {{reset}})",
     "quota_alerte": "Plus que {{n}} publication(s) sur votre quota du cycle. Un plan supérieur en offre davantage.",
-    "quota_bloque": "Quota de publications atteint pour ce cycle. Il repart le {{reset}}, ou passez à un plan supérieur."
+    "quota_bloque": "Quota de publications atteint pour ce cycle. Il repart le {{reset}}, ou passez à un plan supérieur.",
+    "retouche": {
+      "titre": "Retouche légère",
+      "aide": "Redressez, recadrez et éclaircissez avant publication. L'original est toujours conservé : la retouche ne le remplace jamais.",
+      "pivoter": "Pivoter",
+      "format_libre": "Libre",
+      "format_carre": "Carré",
+      "format_portrait": "Portrait",
+      "format_paysage": "Paysage",
+      "lumiere": "Luminosité",
+      "contraste": "Contraste",
+      "reinitialiser": "Tout réinitialiser",
+      "appliquer": "Appliquer la retouche",
+      "echec": "La retouche n'a pas pu être enregistrée. Rien n'a été modifié.",
+      "echec_chargement": "Photo impossible à charger."
+    }
   },
   "vetements": {
     "modele_systeme": "Modèle système"
@@ -4635,5 +4668,11 @@
     "boost_indispo": "Le Boost n'est pas disponible pour le moment.",
     "apercu": "Aperçu",
     "supprimer_confirmer": "Supprimer cette annonce ?"
+  },
+  "compte_rebours": {
+    "heures": "heures",
+    "minutes": "minutes",
+    "secondes": "secondes",
+    "en_savoir_plus": "En savoir plus"
   }
 }

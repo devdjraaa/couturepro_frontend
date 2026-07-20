@@ -37,3 +37,15 @@ export function useSetModerationAvis() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ADMIN_KEYS.moderationAvis }),
   })
 }
+
+export function useCompteRebours() {
+  return useQuery({ queryKey: ADMIN_KEYS.compteRebours, queryFn: () => reglagesVitrineAdminService.getCompteRebours() })
+}
+
+export function useSetCompteRebours() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (p) => reglagesVitrineAdminService.setCompteRebours(p),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ADMIN_KEYS.compteRebours }),
+  })
+}

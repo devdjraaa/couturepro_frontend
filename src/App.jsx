@@ -4,6 +4,7 @@ import AnalytiquePage from '@/pages/admin/AnalytiquePage'
 import AnnoncesPage from '@/pages/AnnoncesPage'
 import ReglagesVitrinePage from '@/pages/admin/ReglagesVitrinePage'
 import SplashDemarrage from '@/components/layout/SplashDemarrage'
+import CompteReboursLancement from '@/components/vitrine/CompteReboursLancement'
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { setDeepLinkNavigator } from '@/utils/deepLink'
 import AppUpdateGate from '@/components/AppUpdateGate'
@@ -157,6 +158,12 @@ export default function App() {
           d'animations. Porte aussi l'habillage saisonnier (brief 16/07 pt 6),
           dont le socle serveur n'était appelé par aucun écran. */}
       {!window.location.pathname.startsWith('/admin') && <SplashDemarrage />}
+
+      {/* CLI-3 — compte à rebours de lancement. Monté ici pour la même raison
+          que l'ouverture : la bande doit coiffer toutes les pages publiques, et
+          le rejet ne doit pas être perdu à chaque navigation. Hors admin : la
+          direction n'a pas à recevoir sa propre annonce. */}
+      {!window.location.pathname.startsWith('/admin') && <CompteReboursLancement />}
 
       <Routes>
 
