@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { lienSocial } from '@/utils/liensSociaux'
 import { analyserLienVideo, estFichierVideo } from '@/utils/videoEmbed'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -517,13 +518,18 @@ export default function CreateurProfilPage() {
   const wa = c.whatsapp ? `https://wa.me/${c.whatsapp}` : null
   const waHref = (key, params) => `${wa}?text=${encodeURIComponent(t(key, params))}`
   const r = c.reseaux || {}
-  const igUrl = r.instagram ? (r.instagram.startsWith('http') ? r.instagram : `https://instagram.com/${r.instagram.replace(/^@/, '')}`) : null
-  const fbUrl = r.facebook ? (r.facebook.startsWith('http') ? r.facebook : `https://facebook.com/${r.facebook}`) : null
-  const siteUrl = r.site_web ? (r.site_web.startsWith('http') ? r.site_web : `https://${r.site_web}`) : null
+  // QA-1 — la construction du lien vivait recopiée SIX fois ici, avec le même
+  // défaut partout : seul `startsWith('http')` était testé, donc une saisie du
+  // type « instagram.com/monatelier » devenait
+  // « https://instagram.com/instagram.com/monatelier » — un lien mort, sans que
+  // le créateur puisse comprendre pourquoi. Une seule fonction désormais.
+  const igUrl = lienSocial(r.instagram, 'instagram')
+  const fbUrl = lienSocial(r.facebook, 'facebook')
+  const siteUrl = lienSocial(r.site_web, 'site')
   // P177 : réseaux supplémentaires.
-  const liUrl = r.linkedin ? (r.linkedin.startsWith('http') ? r.linkedin : `https://linkedin.com/in/${r.linkedin.replace(/^@/, '')}`) : null
-  const ytUrl = r.youtube ? (r.youtube.startsWith('http') ? r.youtube : `https://youtube.com/@${r.youtube.replace(/^@/, '')}`) : null
-  const ttUrl = r.tiktok ? (r.tiktok.startsWith('http') ? r.tiktok : `https://tiktok.com/@${r.tiktok.replace(/^@/, '')}`) : null
+  const liUrl = lienSocial(r.linkedin, 'linkedin')
+  const ytUrl = lienSocial(r.youtube, 'youtube')
+  const ttUrl = lienSocial(r.tiktok, 'tiktok')
   const socialCls = 'text-xs font-semibold px-3 py-1.5 rounded-full border border-edge text-dim hover:text-primary hover:border-primary transition'
   const merites = Array.isArray(c.merites) ? c.merites : []
 
