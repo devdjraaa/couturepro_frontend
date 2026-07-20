@@ -1079,30 +1079,3 @@ input::-ms-clear {
   .gx-cel-layer { display: none; }
 }
 
-/* ── SUG-1 : ouverture de l'application ────────────────────────────────────
-   Le splash natif est une image figée qu'Android pose en fond de fenêtre. Ces
-   animations prennent le relais dès que la WebView est prête et font le pont
-   jusqu'à l'application, pour que l'ouverture s'enchaîne au lieu de sauter.
-   Tout est neutralisé si l'utilisateur a demandé moins d'animations. */
-@keyframes gx-splash-trace {
-  from { stroke-dasharray: 0 170; opacity: 0 }
-  to   { stroke-dasharray: 150 170; opacity: 1 }
-}
-@keyframes gx-splash-pop {
-  0%   { transform: scale(0);   opacity: 0 }
-  70%  { transform: scale(1.18); opacity: 1 }
-  100% { transform: scale(1);   opacity: 1 }
-}
-@keyframes gx-splash-monte {
-  from { transform: translateY(9px); opacity: 0 }
-  to   { transform: translateY(0);   opacity: 1 }
-}
-
-.gx-splash-anneau { animation: gx-splash-trace .62s cubic-bezier(.4,0,.2,1) both }
-.gx-splash-point  { transform-origin: 32px 32px; animation: gx-splash-pop .42s cubic-bezier(.34,1.56,.64,1) .46s both }
-.gx-splash-mot    { animation: gx-splash-monte .5s cubic-bezier(.4,0,.2,1) .58s both }
-.gx-splash-entree { animation: gx-splash-monte .55s cubic-bezier(.4,0,.2,1) both }
-
-@media (prefers-reduced-motion: reduce) {
-  .gx-splash-anneau, .gx-splash-point, .gx-splash-mot, .gx-splash-entree { animation: none }
-}
