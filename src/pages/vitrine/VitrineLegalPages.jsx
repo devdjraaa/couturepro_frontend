@@ -6,6 +6,7 @@ import { usePageMeta } from '@/hooks/usePageMeta'
 import { API_BASE_URL } from '@/constants/config'
 import { ROUTES } from '@/constants/routes'
 import { cn } from '@/utils/cn'
+import { useIdentiteLegale, resoudreArbre, resoudreListe } from './identiteLegale'
 
 /* ── Pt 121 : module unique « pages légales » avec navigation sidebar ──────────
    Toutes les pages légales du footer partagent le même gabarit : une sidebar à
@@ -256,8 +257,16 @@ function RichArticle({ title, blocks }) {
 function RichLegalPage({ ns, path }) {
   const { t } = useTranslation()
   const db = usePageLegaleDb(ns)
+  const identite = useIdentiteLegale()
   usePageMeta({ title: t(`vitrine.legal_pages.${ns}.title`), path })
-  const articles = t(`vitrine.legal_pages.${ns}.articles`, { returnObjects: true })
+
+  // RCCM, IFU, délibération APDP et dates viennent du serveur : tant qu'une
+  // valeur n'est pas saisie en admin, la ligne qui la cite disparaît au lieu
+  // d'afficher un gabarit « à compléter » sur une page juridique publique.
+  const articles = resoudreArbre(
+    t(`vitrine.legal_pages.${ns}.articles`, { returnObjects: true }),
+    identite,
+  )
 
   if (db) return <PageLegaleDb page={db} path={path} ns={ns} />
 
@@ -265,7 +274,10 @@ function RichLegalPage({ ns, path }) {
     return <LegalPage ns={ns} path={path} />
   }
 
-  const metaLines = t(`vitrine.legal_pages.${ns}.meta_lines`, { returnObjects: true, defaultValue: [] })
+  const metaLines = resoudreListe(
+    t(`vitrine.legal_pages.${ns}.meta_lines`, { returnObjects: true, defaultValue: [] }),
+    identite,
+  )
   const version   = t(`vitrine.legal_pages.${ns}.version`,    { defaultValue: '' })
   const note      = t(`vitrine.legal_pages.${ns}.note`,       { defaultValue: '' })
 

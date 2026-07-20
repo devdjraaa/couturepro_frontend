@@ -2099,7 +2099,7 @@
             "blocks": [
               {
                 "type": "p",
-                "t": "Ce traitement est déclaré à l'APDP sous la délibération n° [NUMÉRO DE DÉLIBÉRATION APDP, à compléter après dépôt]"
+                "t": "Ce traitement est déclaré à l'APDP sous la délibération n° {{apdp_deliberation}}"
               },
               {
                 "type": "p",
@@ -2510,7 +2510,7 @@
         ],
         "meta_lines": [
           "Responsable du traitement : ADJAHO Patrick Dona",
-          "Date d'entrée en vigueur : [DATE, à compléter]"
+          "Date d'entrée en vigueur : {{date_entree_vigueur}}"
         ]
       },
       "mentions": {
@@ -2518,7 +2518,7 @@
         "eyebrow": "Légal",
         "subtitle": "Application et site web : GEXTIMO | URL : gextimo.novafriq.africa",
         "meta_lines": [
-          "Date de mise à jour : [DATE : à compléter]"
+          "Date de mise à jour : {{date_maj}}"
         ],
         "articles": [
           {
@@ -2549,11 +2549,11 @@
                   ],
                   [
                     "Numéro RCCM",
-                    "[NUMÉRO RCCM : à compléter après immatriculation sur monentreprise.bj]"
+                    "{{rccm}}"
                   ],
                   [
                     "Numéro IFU",
-                    "[NUMÉRO IFU : à compléter après immatriculation]"
+                    "{{ifu}}"
                   ],
                   [
                     "Directeur de la publication",
@@ -2656,7 +2656,7 @@
         "eyebrow": "Cookies & Traceurs",
         "subtitle": "Application : GEXTIMO | Éditeur : NOVAFRIQ, SASU",
         "meta_lines": [
-          "Date de mise à jour : [DATE : à compléter]"
+          "Date de mise à jour : {{date_maj}}"
         ],
         "version": "Version 4.0 : Établie selon la Loi n° 2017-20 portant Code du Numérique en République du Bénin.",
         "articles": [
@@ -2827,7 +2827,7 @@
             "blocks": [
               {
                 "type": "p",
-                "t": "Le traitement de vos données est déclaré à l'APDP sous la délibération n° [NUMÉRO DE DÉLIBÉRATION APDP, à compléter après dépôt]."
+                "t": "Le traitement de vos données est déclaré à l'APDP sous la délibération n° {{apdp_deliberation}}."
               },
               {
                 "type": "p",
@@ -2873,7 +2873,7 @@
         "eyebrow": "CGU",
         "subtitle": "Application : GEXTIMO | Éditeur : NOVAFRIQ, SASU",
         "meta_lines": [
-          "Date d'entrée en vigueur : [DATE, à compléter]"
+          "Date d'entrée en vigueur : {{date_entree_vigueur}}"
         ],
         "version": "Version 4.0 : Établies selon le droit béninois et le droit OHADA.",
         "articles": [
@@ -3043,7 +3043,7 @@
         "eyebrow": "Créateurs & PI",
         "subtitle": "Application : GEXTIMO : Marketplace de mode africaine | Éditeur : NOVAFRIQ, SASU",
         "meta_lines": [
-          "Date d'entrée en vigueur : [DATE, à compléter]"
+          "Date d'entrée en vigueur : {{date_entree_vigueur}}"
         ],
         "articles": [
           {
@@ -3158,7 +3158,7 @@
         "eyebrow": "Vente & Commissions",
         "subtitle": "Application : GEXTIMO : Marketplace de mode africaine | Éditeur : NOVAFRIQ, SASU",
         "meta_lines": [
-          "Date d'entrée en vigueur : [DATE, à compléter]"
+          "Date d'entrée en vigueur : {{date_entree_vigueur}}"
         ],
         "note": "À noter : Dispositions applicables à compter de l'activation du paiement en ligne sur GEXTIMO (voir CGU. Phase de lancement). Au lancement, le service fonctionne en mise en relation : ces règles ne sont pas encore actives.",
         "version": "Version 4.0 : NOVAFRIQ / GEXTIMO.",
@@ -3366,7 +3366,7 @@
         "eyebrow": "Charte des créations",
         "subtitle": "Application : GEXTIMO : Marketplace de mode africaine | Éditeur : NOVAFRIQ, SASU",
         "meta_lines": [
-          "Date d'entrée en vigueur : [DATE, à compléter]"
+          "Date d'entrée en vigueur : {{date_entree_vigueur}}"
         ],
         "version": "Version 7.0 : Établie pour GEXTIMO, marketplace de mode.",
         "articles": [
@@ -3472,7 +3472,7 @@
         "eyebrow": "Communauté Gextimo",
         "subtitle": "Application : GEXTIMO : Marketplace de mode africaine | Éditeur : NOVAFRIQ, SASU",
         "meta_lines": [
-          "Date d'entrée en vigueur : [DATE, à compléter]"
+          "Date d'entrée en vigueur : {{date_entree_vigueur}}"
         ],
         "version": "Version 7.0 : Règles de la communauté GEXTIMO.",
         "articles": [
