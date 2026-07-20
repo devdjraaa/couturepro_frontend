@@ -142,17 +142,17 @@ function CaisseContent() {
               icon={TrendingUp}
               label={t('caisse.total_encaisse')}
               value={fmt(stats.total_encaisse)}
-              bg="bg-green-50"
-              textColor="text-green-700"
-              iconBg="bg-green-100"
+              bg="bg-success/10"
+              textColor="text-success"
+              iconBg="bg-success/15"
             />
             <StatCard
               icon={Clock}
               label={t('caisse.en_attente')}
               value={fmt(stats.total_en_attente)}
-              bg="bg-amber-50"
-              textColor="text-amber-700"
-              iconBg="bg-amber-100"
+              bg="bg-warning/10"
+              textColor="text-warning"
+              iconBg="bg-warning/15"
             />
             <StatCard
               icon={CheckCircle}
@@ -166,9 +166,9 @@ function CaisseContent() {
               icon={Wallet}
               label={t('caisse.commandes_en_cours')}
               value={String(stats.nb_commandes_en_cours)}
-              bg="bg-sky-50"
-              textColor="text-sky-700"
-              iconBg="bg-sky-100"
+              bg="bg-info/10"
+              textColor="text-info"
+              iconBg="bg-info/15"
             />
           </div>
 

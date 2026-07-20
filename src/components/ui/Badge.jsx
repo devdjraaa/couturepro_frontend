@@ -1,12 +1,16 @@
 import { cn } from '@/utils/cn'
 
+// Jetons SÉMANTIQUES et non palette Tailwind brute : `emerald-50` n'existe
+// qu'en clair, si bien qu'en thème sombre ces pastilles restaient des taches
+// claires sur fond noir. `--color-success` & co. sont redéfinis par thème
+// (src/index.css), donc ces variantes suivent le mode d'affichage.
 const variants = {
   default: 'bg-subtle text-dim border-edge',
-  primary: 'bg-primary-50 text-primary-700 border-primary-200',
-  success: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-  warning: 'bg-amber-50 text-amber-700 border-amber-200',
-  danger:  'bg-red-50 text-red-700 border-red-200',
-  terra:   'bg-orange-50 text-terra border-orange-200',
+  primary: 'bg-primary/10 text-primary border-primary/20',
+  success: 'bg-success/10 text-success border-success/20',
+  warning: 'bg-warning/10 text-warning border-warning/20',
+  danger:  'bg-danger/10 text-danger border-danger/20',
+  terra:   'bg-terra/10 text-terra border-terra/20',
 }
 
 const sizes = {

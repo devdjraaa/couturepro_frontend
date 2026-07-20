@@ -12,12 +12,17 @@ import { Skeleton } from '@/components/ui'
  * L'échelle vient désormais du serveur (`paliers.echelle`). Sans elle, on
  * n'affiche pas de palier plutôt que d'en inventer un.
  */
+// Chaque palier garde sa teinte propre — bronze, argent, or… : un jeton
+// sémantique commun leur ferait perdre ce qu'ils signifient. En revanche les
+// fonds `-50/-100` n'existent qu'en mode clair et restaient des pastilles
+// blanches en thème sombre : on ajoute la variante correspondante plutôt que
+// d'uniformiser les couleurs.
 const TONS = [
-  { color: 'text-amber-700',  bg: 'bg-amber-100'  },
-  { color: 'text-slate-600',  bg: 'bg-slate-100'  },
-  { color: 'text-yellow-700', bg: 'bg-yellow-50'  },
-  { color: 'text-blue-600',   bg: 'bg-blue-50'    },
-  { color: 'text-purple-600', bg: 'bg-purple-50'  },
+  { color: 'text-amber-700 dark:text-amber-300',   bg: 'bg-amber-100 dark:bg-amber-400/15'   },
+  { color: 'text-slate-600 dark:text-slate-300',   bg: 'bg-slate-100 dark:bg-slate-400/15'   },
+  { color: 'text-yellow-700 dark:text-yellow-300', bg: 'bg-yellow-50 dark:bg-yellow-400/15'  },
+  { color: 'text-blue-600 dark:text-blue-300',     bg: 'bg-blue-50 dark:bg-blue-400/15'      },
+  { color: 'text-purple-600 dark:text-purple-300', bg: 'bg-purple-50 dark:bg-purple-400/15'  },
 ]
 
 export default function PointsSummary() {
