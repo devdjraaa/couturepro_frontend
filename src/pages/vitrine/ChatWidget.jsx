@@ -103,6 +103,16 @@ export default function ChatWidget() {
     try { await api('/vitrine/chatbot/feedback', { message_id: id, session_id: sessionId(), utile }) } catch { /* silencieux */ }
   }
 
+  // 20/07 : présence de l'ÉQUIPE HUMAINE (Makila, lui, répond 24h/24).
+  // Chargée une fois à l'affichage ; si l'appel échoue, pas de badge — ne
+  // jamais annoncer « hors ligne » sur une simple erreur réseau.
+  const [equipe, setEquipe] = useState(null)
+  useEffect(() => {
+    api('/vitrine/chatbot/statut')
+      .then((d) => setEquipe(d))
+      .catch(() => setEquipe(null))
+  }, [])
+
   const MENU = [
     { cle: 'apropos', lien: '/qui-sommes-nous' },
     { cle: 'confidentialite', lien: '/confidentialite' },
@@ -112,6 +122,20 @@ export default function ChatWidget() {
 
   return (
     <>
+      {/* Badge « équipe hors ligne » (20/07) : informatif seulement — le chat
+          reste ouvert et Makila répond normalement. */}
+      {!open && equipe && equipe.equipe_en_ligne === false && (
+        <div className="fixed bottom-21 right-5 z-[89] max-w-[240px] rounded-2xl rounded-br-sm bg-card border border-edge shadow-lg px-3.5 py-2.5">
+          <p className="text-xs font-semibold text-ink flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-warning inline-block" />
+            {t('vitrine.chatbot.equipe_hors_ligne')}
+          </p>
+          <p className="text-2xs text-dim mt-0.5">
+            {t('vitrine.chatbot.equipe_reprise', { heure: equipe.reprise_heure })}
+          </p>
+        </div>
+      )}
+
       <button onClick={() => setOpen((v) => !v)} aria-label={t('vitrine.chatbot.ouvrir')}
               className="fixed bottom-5 right-5 z-[90] w-13 h-13 p-3.5 rounded-full bg-primary text-inverse shadow-lg hover:bg-primary-600 transition">
         {open ? <X size={22} /> : <MessageCircle size={22} />}

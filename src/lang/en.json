@@ -1639,7 +1639,9 @@
       "menu_aide": "Help centre",
       "modal_aide": "Need help? Find answers to the most frequent questions about orders, designers and using Gextimo.",
       "menu_avis": "Give feedback",
-      "modal_avis": "Your opinion matters. Use the thumbs under each Makila AI answer to tell us whether it helped: this lets us improve continuously."
+      "modal_avis": "Your opinion matters. Use the thumbs under each Makila AI answer to tell us whether it helped: this lets us improve continuously.",
+      "equipe_hors_ligne": "Our team is offline",
+      "equipe_reprise": "Makila answers you right away, 24/7 — a team member takes over from {{heure}}:00."
     },
     "hero": {
       "eyebrow": "The fashion designers platform",
