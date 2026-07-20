@@ -95,11 +95,37 @@ jobs:
           }
           NGINXCONF
 
-          if ! diff -q "$CONF_SRC_TMP" "$CONF_DEST" > /dev/null 2>&1; then
-            sudo cp "$CONF_SRC_TMP" "$CONF_DEST"
-            echo "→ nginx frontend.conf mis à jour"
+          # Le fichier en place est ENRICHI par certbot (bloc 443, chemins des
+          # certificats). Le comparer au gabarit brut le déclare donc toujours
+          # différent, et il était réécrit à CHAQUE déploiement — perdant le
+          # HTTPS à chaque fois. D'où un marqueur de version : on ne réécrit que
+          # lorsque le gabarit lui-même a changé, et on laisse tranquille une
+          # configuration déjà correcte.
+          GABARIT_VERSION=$(sha256sum "$CONF_SRC_TMP" | cut -c1-12)
+
+          if sudo grep -q "gabarit:$GABARIT_VERSION" "$CONF_DEST" 2>/dev/null; then
+            echo "→ configuration nginx déjà à jour (gabarit $GABARIT_VERSION)"
+
+          elif sudo grep -q "listen 443" "$CONF_DEST" 2>/dev/null; then
+            # Configuration antérieure au marqueur, mais qui SERT DÉJÀ le site en
+            # HTTPS. On l'adopte telle quelle au lieu de la réécrire : réécrire
+            # une configuration qui fonctionne pour la rendre identique à un
+            # gabarit sans SSL, c'est exactement ce qui a mis le site à terre.
+            echo "# gabarit:$GABARIT_VERSION" | sudo tee -a "$CONF_DEST" > /dev/null
+            echo "→ configuration existante adoptée (HTTPS déjà en place)"
+
+          else
+            # Sauvegarde AVANT d'écrire : un déploiement raté ne doit jamais
+            # laisser le site dans un état pire qu'avant.
+            SAUVEGARDE=/etc/nginx/sites-available/gextimo_frontend.conf.avant-deploiement
+            sudo cp "$CONF_DEST" "$SAUVEGARDE" 2>/dev/null || true
+
+            echo "# gabarit:$GABARIT_VERSION" | cat - "$CONF_SRC_TMP" > "$CONF_SRC_TMP.v"
+            sudo cp "$CONF_SRC_TMP.v" "$CONF_DEST"
+            echo "→ nginx frontend.conf réécrit (gabarit $GABARIT_VERSION)"
+            REECRIT=1
           fi
-          rm -f "$CONF_SRC_TMP"
+          rm -f "$CONF_SRC_TMP" "$CONF_SRC_TMP.v"
 
           if [ ! -L "$CONF_LINK" ]; then
             sudo ln -sf "$CONF_DEST" "$CONF_LINK"
@@ -140,10 +166,30 @@ jobs:
           # de déclarer le déploiement réussi. Sans ce contrôle, la panne du
           # 20/07 est passée inaperçue jusqu'à ce qu'un humain ouvre le site.
           if ! sudo grep -q "listen 443" "$CONF_DEST"; then
-            echo "❌ Aucune écoute HTTPS pour $DOMAIN — le site serait inaccessible."
+            echo "❌ Aucune écoute HTTPS pour $DOMAIN."
+
+            # On REMET la configuration précédente, qui elle fonctionnait. Le
+            # premier garde-fou se contentait d'échouer : il rendait la panne
+            # visible, mais laissait le site inaccessible — c'est-à-dire le pire
+            # des deux mondes.
+            if [ "${REECRIT:-0}" = "1" ] && [ -f "$SAUVEGARDE" ]; then
+              sudo cp "$SAUVEGARDE" "$CONF_DEST"
+              sudo nginx -t && sudo systemctl reload nginx
+              echo "↩️  Configuration précédente restaurée — le site reste en ligne."
+            fi
+
             exit 1
           fi
-          echo "✅ HTTPS en place"
+
+          # Contrôle final : le domaine doit RÉPONDRE, pas seulement être
+          # configuré. C'est ce qui manquait le 20/07 — tout paraissait vert et
+          # le site était injoignable.
+          CODE=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "https://$DOMAIN/" || echo 000)
+          if [ "$CODE" = "000" ]; then
+            echo "❌ https://$DOMAIN ne répond pas (code $CODE)."
+            exit 1
+          fi
+          echo "✅ HTTPS en place — https://$DOMAIN répond ($CODE)"
           ENGNX
 
       - name: Deploy dist to VPS
