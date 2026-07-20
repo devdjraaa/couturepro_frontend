@@ -19,4 +19,5 @@ export const ADMIN_KEYS = {
   sousAteliers:     (id) => ['admin', 'ateliers', id, 'sous-ateliers'],
   splashThemes:     ['admin', 'splash-themes'],
   identiteLegale:   ['admin', 'identite-legale'],
+  moderationAvis:   ['admin', 'moderation-avis'],
 }

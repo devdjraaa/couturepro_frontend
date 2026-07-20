@@ -25,3 +25,15 @@ export function useSetIdentiteLegale() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ADMIN_KEYS.identiteLegale }),
   })
 }
+
+export function useModerationAvis() {
+  return useQuery({ queryKey: ADMIN_KEYS.moderationAvis, queryFn: () => reglagesVitrineAdminService.getModerationAvis() })
+}
+
+export function useSetModerationAvis() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (p) => reglagesVitrineAdminService.setModerationAvis(p),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ADMIN_KEYS.moderationAvis }),
+  })
+}

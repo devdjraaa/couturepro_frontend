@@ -4320,6 +4320,21 @@
       "legal_vigueur": "Date d'entrée en vigueur",
       "legal_maj": "Date de mise à jour",
       "chevauchement": "Cette période en chevauche une autre : la première trouvée l'emportera."
+    },
+    "moderation_avis": {
+      "titre": "Modération des avis",
+      "aide": "Ces réglages s'appliquent immédiatement, sans redéploiement. La liste de mots s'enrichit avec l'usage réel.",
+      "max_jour": "Avis maximum par compte et par jour",
+      "max_jour_aide": "Au-delà, le dépôt est refusé. Garde-fou anti-spam.",
+      "seuil": "Signalements avant mise en file",
+      "seuil_aide": "Nombre de signalements à partir duquel un avis remonte en modération.",
+      "motifs": "Motifs graves",
+      "motifs_aide": "Un signalement portant l'un de ces motifs remonte immédiatement, sans attendre le seuil.",
+      "mots": "Mots bannis",
+      "mots_aide": "Un avis contenant l'un de ces mots est retenu en modération. Un mot par ligne. La recherche respecte les frontières de mots : « con » ne déclenche pas sur « concevoir ».",
+      "mots_compte_one": "{{count}} mot",
+      "mots_compte_other": "{{count}} mots",
+      "ajouter_motif": "Ajouter un motif"
     }
   },
   "bienvenue": {
