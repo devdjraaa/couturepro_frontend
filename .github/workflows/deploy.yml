@@ -42,7 +42,7 @@ jobs:
           ssh-keyscan -T 10 -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
 
       - name: Deploy Nginx
-        timeout-minutes: 4
+        timeout-minutes: 5
         run: |
           ssh -i ~/.ssh/id_ed25519 \
               -o StrictHostKeyChecking=no \
@@ -52,34 +52,51 @@ jobs:
               -o ServerAliveCountMax=4 \
               -o BatchMode=yes \
               ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} bash << 'ENGNX'
+          set -uo pipefail
 
-          # ⚠️ L'utilisateur de déploiement n'a `sudo` que pour une liste précise :
-          # nginx, certbot, cp, ln, chown, systemctl reload. Ni `grep` ni `tee`
-          # n'en font partie — les employer fait échouer l'étape (et, sans
-          # BatchMode, la fait ATTENDRE un mot de passe qui ne viendra jamais).
-          # On lit donc la configuration en la recopiant avec `cp`, autorisé lui.
-          lire_conf() {
-            local tmp; tmp=$(mktemp)
-            sudo cp "$CONF_DEST" "$tmp" 2>/dev/null || { rm -f "$tmp"; return 1; }
-            sudo chown "$(id -u):$(id -g)" "$tmp" 2>/dev/null || true
-            cat "$tmp"
-            rm -f "$tmp"
-          }
-
-          CONF_SRC_TMP=$(mktemp)
+          DOMAIN=gextimo.novafriq.africa
+          RACINE=/var/www/gextimo_frontend
           CONF_DEST=/etc/nginx/sites-available/gextimo_frontend.conf
           CONF_LINK=/etc/nginx/sites-enabled/gextimo_frontend.conf
-          DOMAIN=gextimo.novafriq.africa
+          LE=/etc/letsencrypt/live/$DOMAIN
 
-          cat > "$CONF_SRC_TMP" << 'NGINXCONF'
-          server {
-              listen 80;
-              server_name gextimo.novafriq.africa;
+          # ── Contrainte à connaître avant de toucher à ce fichier ───────────
+          # L'utilisateur de déploiement n'a `sudo` que pour : nginx, certbot,
+          # cp, ln, chown, systemctl reload. Ni grep, ni tee, ni test, ni
+          # timeout. Employer autre chose fait réclamer un mot de passe qui ne
+          # viendra jamais — l'étape échoue ou reste suspendue.
+          # C'est ce qui a coupé le site en production le 20/07.
+
+          # Lire un fichier root : on le recopie avec `cp`, seule voie permise.
+          lire_root() {
+            local tmp; tmp=$(mktemp)
+            sudo cp "$1" "$tmp" 2>/dev/null || { rm -f "$tmp"; return 1; }
+            sudo chown "$(id -u):$(id -g)" "$tmp" 2>/dev/null || true
+            cat "$tmp"; rm -f "$tmp"
+          }
+          existe_root() { sudo cp "$1" /dev/null 2>/dev/null; }
+
+          mkdir -p "$RACINE"
+
+          # ── Le certificat est-il déjà émis ? ───────────────────────────────
+          # Cette réponse décide de la forme du gabarit. On NE dépend plus de
+          # certbot pour injecter le bloc 443 : le gabarit le contient lui-même,
+          # et pointe vers les fichiers que certbot maintient. Renouvellement
+          # compris — les chemins ne changent pas.
+          if existe_root "$LE/fullchain.pem"; then
+            AVEC_SSL=1
+          else
+            AVEC_SSL=0
+            echo "→ Aucun certificat pour $DOMAIN : configuration HTTP le temps de l'émission."
+          fi
+
+          # ── Corps commun aux deux formes ───────────────────────────────────
+          CORPS=$(cat << 'CORPSCONF'
               root /var/www/gextimo_frontend;
               index index.html;
               client_max_body_size 20M;
               location / { try_files $uri $uri/ /index.html; }
-              # Assets hashés par Vite (/assets/) : réellement immuables → cache très long.
+              # Fichiers hachés par Vite : réellement immuables → cache très long.
               location ^~ /assets/ {
                   expires 1y;
                   add_header Cache-Control "public, immutable";
@@ -87,27 +104,22 @@ jobs:
               }
               # Service worker : jamais figé (doit pouvoir se mettre à jour).
               location = /sw.js { add_header Cache-Control "no-cache"; }
-              # Pages HTML : JAMAIS mises en cache. Deux raisons.
-              # 1. index.html référence des fichiers au nom haché ; servi depuis
-              #    le cache après un déploiement, il pointe vers des fichiers
-              #    supprimés — écran blanc, sans message.
-              # 2. Le suivi (suivi-v2.html) change plusieurs fois par jour et
-              #    est consulté par la direction : une version périmée lui fait
-              #    lire un état faux du projet.
+              # Pages HTML : JAMAIS en cache. index.html référence des fichiers
+              # au nom haché ; servi depuis le cache après un déploiement, il
+              # pointe vers des fichiers supprimés — écran blanc sans message.
+              # Et le suivi, consulté par la direction, doit refléter l'état réel.
               location ~* \.html$ {
                   add_header Cache-Control "no-cache, must-revalidate";
                   expires -1;
               }
-              # Statiques à URL STABLE dont le contenu change (favicon, icônes, manifest) :
-              # cache court + revalidation. En « immutable » 1 an, un changement de logo
-              # n'atteignait jamais les navigateurs (constaté le 19/07 : Edge et Chrome
-              # affichaient deux anciens favicons différents, insensibles au rafraîchissement).
+              # Statiques à URL STABLE dont le contenu change (favicon, icônes) :
+              # cache court + revalidation. En « immutable » 1 an, un changement
+              # de logo n'atteignait jamais les navigateurs (constaté le 19/07).
               location ~* \.(ico|png|jpg|jpeg|gif|svg|webp|webmanifest)$ {
                   expires 1h;
                   add_header Cache-Control "public, max-age=3600, must-revalidate";
                   access_log off;
               }
-              # Polices : longue durée acceptable.
               location ~* \.(woff|woff2|ttf|eot)$ {
                   expires 30d;
                   add_header Cache-Control "public";
@@ -116,117 +128,100 @@ jobs:
               location ~ /\.(?!well-known).* { deny all; }
               error_log  /var/log/nginx/gextimo_frontend_error.log;
               access_log /var/log/nginx/gextimo_frontend_access.log;
-          }
-          NGINXCONF
+          CORPSCONF
+          )
 
-          # Le fichier en place est ENRICHI par certbot (bloc 443, chemins des
-          # certificats). Le comparer au gabarit brut le déclare donc toujours
-          # différent, et il était réécrit à CHAQUE déploiement — perdant le
-          # HTTPS à chaque fois. D'où un marqueur de version : on ne réécrit que
-          # lorsque le gabarit lui-même a changé, et on laisse tranquille une
-          # configuration déjà correcte.
-          GABARIT_VERSION=$(sha256sum "$CONF_SRC_TMP" | cut -c1-12)
-
-          if lire_conf | grep -q "gabarit:$GABARIT_VERSION"; then
-            echo "→ configuration nginx déjà à jour (gabarit $GABARIT_VERSION)"
-
-          elif lire_conf | grep -q "listen 443" && ! lire_conf | grep -q "gabarit:"; then
-            # Migration UNIQUE : configuration antérieure au marqueur, mais qui
-            # sert déjà le site en HTTPS. On l'adopte telle quelle plutôt que de
-            # la réécrire.
-            #
-            # La condition « aucun marqueur » est essentielle. Sans elle, cette
-            # branche capturait TOUTE configuration ayant du 443 — donc aussi
-            # les changements RÉELS de gabarit, qui n'étaient alors jamais
-            # appliqués (et empilaient un marqueur de plus à chaque fois).
-            # Marqueur ajouté via une copie complète : `tee` n'est pas autorisé.
-            ADOPT=$(mktemp)
-            { lire_conf; echo "# gabarit:$GABARIT_VERSION"; } > "$ADOPT"
-            sudo cp "$ADOPT" "$CONF_DEST"
-            rm -f "$ADOPT"
-            echo "→ configuration existante adoptée (HTTPS déjà en place)"
-
+          CONF_TMP=$(mktemp)
+          if [ "$AVEC_SSL" = "1" ]; then
+            {
+              echo "server {"
+              echo "    server_name $DOMAIN;"
+              echo "$CORPS"
+              echo "    listen 443 ssl;"
+              echo "    ssl_certificate $LE/fullchain.pem;"
+              echo "    ssl_certificate_key $LE/privkey.pem;"
+              echo "    include /etc/letsencrypt/options-ssl-nginx.conf;"
+              echo "    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;"
+              echo "}"
+              echo "server {"
+              echo "    listen 80;"
+              echo "    server_name $DOMAIN;"
+              echo "    return 301 https://\$host\$request_uri;"
+              echo "}"
+            } > "$CONF_TMP"
           else
-            # Sauvegarde AVANT d'écrire : un déploiement raté ne doit jamais
-            # laisser le site dans un état pire qu'avant.
-            SAUVEGARDE=/etc/nginx/sites-available/gextimo_frontend.conf.avant-deploiement
+            {
+              echo "server {"
+              echo "    listen 80;"
+              echo "    server_name $DOMAIN;"
+              echo "$CORPS"
+              echo "}"
+            } > "$CONF_TMP"
+          fi
+
+          # Le marqueur rend la comparaison fiable : le fichier en place peut
+          # avoir été retouché par certbot, seul le gabarit compte.
+          GABARIT=$(sha256sum "$CONF_TMP" | cut -c1-12)
+          echo "# gabarit:$GABARIT" >> "$CONF_TMP"
+
+          # ── Écriture, seulement si le gabarit a changé ─────────────────────
+          REECRIT=0
+          SAUVEGARDE="$CONF_DEST.avant-deploiement"
+
+          if lire_root "$CONF_DEST" 2>/dev/null | grep -q "gabarit:$GABARIT"; then
+            echo "→ Configuration déjà à jour (gabarit $GABARIT)."
+          else
             sudo cp "$CONF_DEST" "$SAUVEGARDE" 2>/dev/null || true
-
-            echo "# gabarit:$GABARIT_VERSION" | cat - "$CONF_SRC_TMP" > "$CONF_SRC_TMP.v"
-            sudo cp "$CONF_SRC_TMP.v" "$CONF_DEST"
-            echo "→ nginx frontend.conf réécrit (gabarit $GABARIT_VERSION)"
+            sudo cp "$CONF_TMP" "$CONF_DEST"
             REECRIT=1
+            echo "→ Configuration réécrite (gabarit $GABARIT, ssl=$AVEC_SSL)."
           fi
-          rm -f "$CONF_SRC_TMP" "$CONF_SRC_TMP.v"
+          rm -f "$CONF_TMP"
 
-          if [ ! -L "$CONF_LINK" ]; then
-            sudo ln -sf "$CONF_DEST" "$CONF_LINK"
-            echo "→ site activé"
+          [ -L "$CONF_LINK" ] || sudo ln -sf "$CONF_DEST" "$CONF_LINK"
+
+          # ── Validation, avec retour arrière ────────────────────────────────
+          if ! sudo nginx -t 2>/dev/null; then
+            echo "❌ Configuration nginx invalide :"
+            sudo nginx -t
+            if [ "$REECRIT" = "1" ]; then
+              sudo cp "$SAUVEGARDE" "$CONF_DEST" && sudo systemctl reload nginx
+              echo "↩️  Configuration précédente restaurée."
+            fi
+            exit 1
           fi
+          sudo systemctl reload nginx
 
-          mkdir -p /var/www/gextimo_frontend
-
-          if sudo nginx -t 2>/dev/null; then
-            sudo systemctl reload nginx
-            echo "✓ nginx rechargé"
-          else
-            sudo nginx -t; exit 1
-          fi
-
-          # ⚠️ La configuration écrite plus haut n'écoute QU'EN HTTP. Le bloc 443
-          # est ajouté par certbot, et il est donc EFFACÉ à chaque réécriture.
-          #
-          # La condition d'origine — « ne rien faire si le certificat existe » —
-          # partait du principe que certbot ne sert qu'à l'émission. C'est faux :
-          # il sert aussi à INSTALLER le certificat dans nginx. Résultat, le
-          # 20/07 : configuration réécrite, bloc 443 perdu, certbot sauté, plus
-          # rien n'écoutait en HTTPS pour le domaine — nginx retombait sur le
-          # site par défaut (l'API) et servait SON certificat. Site inaccessible.
-          #
-          # On appelle donc certbot À CHAQUE déploiement. L'opération est
-          # idempotente et ne consomme aucun quota Let's Encrypt quand le
-          # certificat est encore valide : il est simplement redéployé.
-          if command -v certbot > /dev/null; then
-            # `timeout` AVANT `sudo`, pas après : sudoers autorise /usr/bin/certbot
-            # mais pas /usr/bin/timeout. Écrit « sudo timeout … certbot », sudo
-            # réclame un mot de passe et l'étape échoue — c'est ce qui a empêché
-            # certbot de tourner, donc le HTTPS d'être réinstallé.
-            echo "→ Installation du certificat dans nginx…"
-            timeout 180 sudo certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos -m dev.djraaa@gmail.com --redirect \
-              || echo "⚠️  certbot n'a pas abouti — le site reste servi en HTTP, à reprendre"
-          else
-            echo "⏭️  certbot absent — le site ne sera servi qu'en HTTP"
+          # ── Émission du certificat si nécessaire ──────────────────────────
+          # Uniquement à la première mise en place. Passé ce cap, le gabarit
+          # porte lui-même le bloc 443 : plus rien à réinjecter, y compris
+          # après renouvellement.
+          if [ "$AVEC_SSL" = "0" ]; then
+            if command -v certbot > /dev/null; then
+              echo "→ Émission du certificat…"
+              sudo certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos \
+                   -m dev.djraaa@gmail.com --redirect \
+                || echo "⚠️  Émission non aboutie — le site reste servi en HTTP."
+            else
+              echo "⏭️  certbot absent — le site restera en HTTP."
+            fi
           fi
 
-          # Garde-fou : on vérifie que le domaine écoute RÉELLEMENT en 443 avant
-          # de déclarer le déploiement réussi. Sans ce contrôle, la panne du
-          # 20/07 est passée inaperçue jusqu'à ce qu'un humain ouvre le site.
-          if ! lire_conf | grep -q "listen 443"; then
-            echo "❌ Aucune écoute HTTPS pour $DOMAIN."
-
-            # On REMET la configuration précédente, qui elle fonctionnait. Le
-            # premier garde-fou se contentait d'échouer : il rendait la panne
-            # visible, mais laissait le site inaccessible — c'est-à-dire le pire
-            # des deux mondes.
-            if [ "${REECRIT:-0}" = "1" ] && [ -f "$SAUVEGARDE" ]; then
-              sudo cp "$SAUVEGARDE" "$CONF_DEST"
-              sudo nginx -t && sudo systemctl reload nginx
+          # ── Contrôle final : le site doit RÉPONDRE ────────────────────────
+          # Pas « être configuré » : répondre. C'est ce qui manquait le 20/07,
+          # où tout paraissait vert pendant que le site était injoignable.
+          CODE=$(curl -s -o /dev/null -w '%{http_code}' --max-time 25 "https://$DOMAIN/" || echo 000)
+          if [ "$CODE" = "000" ]; then
+            echo "❌ https://$DOMAIN ne répond pas."
+            if [ "$REECRIT" = "1" ] && [ -f "$SAUVEGARDE" ]; then
+              sudo cp "$SAUVEGARDE" "$CONF_DEST" && sudo nginx -t && sudo systemctl reload nginx
               echo "↩️  Configuration précédente restaurée — le site reste en ligne."
             fi
-
             exit 1
           fi
-
-          # Contrôle final : le domaine doit RÉPONDRE, pas seulement être
-          # configuré. C'est ce qui manquait le 20/07 — tout paraissait vert et
-          # le site était injoignable.
-          CODE=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "https://$DOMAIN/" || echo 000)
-          if [ "$CODE" = "000" ]; then
-            echo "❌ https://$DOMAIN ne répond pas (code $CODE)."
-            exit 1
-          fi
-          echo "✅ HTTPS en place — https://$DOMAIN répond ($CODE)"
+          echo "✅ https://$DOMAIN répond ($CODE)."
           ENGNX
+
 
       - name: Deploy dist to VPS
         timeout-minutes: 6
