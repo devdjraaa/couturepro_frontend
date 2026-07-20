@@ -4246,7 +4246,8 @@
       "pts_client": "Pts / client",
       "pts_commande": "Pts / commande",
       "pts_activation": "Pts activation",
-      "seuil_conversion": "Seuil conversion (pts → jours)"
+      "seuil_conversion": "Seuil conversion (pts → jours)",
+      "section_avancee": "Réglages avancés"
     },
     "veille": {
       "titre": "Veille opportunités",

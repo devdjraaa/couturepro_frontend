@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Plus, Edit2 } from 'lucide-react'
 import { AdminLayout, AdminTable, AdminBadge } from '@/components/admin'
-import { useAdminPlans, useCreatePlan, useUpdatePlan, useTogglePlan } from '@/hooks/admin/usePlans'
+import { useAdminPlans, useCreatePlan, useUpdatePlan, useTogglePlan, useFonctionnalites } from '@/hooks/admin/usePlans'
 import { cn } from '@/utils/cn'
 
 const DEFAULT_CONFIG = {
@@ -119,6 +119,8 @@ function Toggle({ label, name, value, onChange }) {
 
 function PlanModal({ initial, onClose, onSubmit, isLoading }) {
   const { t } = useTranslation()
+  // S02A-28b : libellés et types des clés configurables, servis par le serveur.
+  const { data: referentiel = [] } = useFonctionnalites()
   const [form, setForm] = useState(() => {
     if (!initial) return { ...EMPTY_FORM, config: { ...DEFAULT_CONFIG } }
     const cfg = typeof initial.config === 'string' ? JSON.parse(initial.config) : (initial.config ?? {})
@@ -218,13 +220,45 @@ function PlanModal({ initial, onClose, onSubmit, isLoading }) {
               <Toggle label="Export PDF"       name="export_pdf"       value={form.config.export_pdf}       onChange={setCfg} />
             </div>
 
+            {/* S02A-28b : les clés qui n'ont pas de champ dédié étaient affichées
+                en BRUT (« max_photos_vetement »), sans libellé ni type, et la
+                liste dérivait à chaque migration. Elles sont maintenant rendues
+                depuis le référentiel serveur, avec leur vrai libellé et le bon
+                type de champ. Toute clé ajoutée par une future migration
+                apparaît ici sans retoucher cet écran. */}
             <div className={SECTION}>
-              <p className={SECT_HEAD}>Autres clés (avancé)</p>
-              {Object.keys(form.config).filter(k => !KNOWN_KEYS.includes(k)).map(k => (
+              <p className={SECT_HEAD}>{t('admin.plans.section_avancee')}</p>
+              {referentiel
+                .filter(f => !KNOWN_KEYS.includes(f.cle))
+                .map(f => (
+                  f.type === 'booleen'
+                    ? <Toggle key={f.cle} label={f.label} name={f.cle}
+                              value={form.config[f.cle] ?? false} onChange={setCfg} />
+                    : f.type === 'numerique'
+                      ? <div key={f.cle} className="mb-2">
+                          <NumField label={f.unite ? `${f.label} (${f.unite})` : f.label}
+                                    name={f.cle} value={form.config[f.cle] ?? 0}
+                                    onChange={setCfg} unlimited />
+                          {f.description && <p className="text-2xs text-ghost mt-0.5">{f.description}</p>}
+                        </div>
+                      : <div key={f.cle} className="mb-2">
+                          <label className={LABEL}>{f.label}</label>
+                          <input value={String(form.config[f.cle] ?? '')}
+                                 onChange={e => setCfg(f.cle, parseConfigVal(e.target.value))}
+                                 className={INPUT} />
+                        </div>
+                ))}
+
+              {/* Clés présentes dans la configuration mais absentes du référentiel :
+                  vestiges d'anciennes livraisons. On les garde éditables et
+                  supprimables plutôt que de les masquer silencieusement. */}
+              {Object.keys(form.config)
+                .filter(k => !KNOWN_KEYS.includes(k) && !referentiel.some(f => f.cle === k))
+                .map(k => (
                 <div key={k} className="flex items-center gap-2 mb-2">
                   <span className="text-xs text-dim flex-1 truncate" title={k}>{k}</span>
                   <input value={String(form.config[k] ?? '')} onChange={e => setCfg(k, parseConfigVal(e.target.value))} className={INPUT + ' max-w-[160px]'} />
-                  <button type="button" onClick={() => removeCfg(k)} className="text-ghost hover:text-danger text-sm px-1" title="Retirer">✕</button>
+                  <button type="button" onClick={() => removeCfg(k)} className="text-ghost hover:text-danger text-sm px-1" title={t('commun.retirer')}>✕</button>
                 </div>
               ))}
               <div className="flex gap-2 mt-2">

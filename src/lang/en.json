@@ -4233,7 +4233,8 @@
       "pts_client": "Pts / client",
       "pts_commande": "Pts / order",
       "pts_activation": "Pts activation",
-      "seuil_conversion": "Conversion threshold (pts → days)"
+      "seuil_conversion": "Conversion threshold (pts → days)",
+      "section_avancee": "Advanced settings"
     },
     "veille": {
       "titre": "Opportunity watch",

@@ -2,6 +2,15 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { plansAdminService } from '@/services/admin/plansAdminService'
 import { ADMIN_KEYS } from './adminQueryKeys'
 
+/** S02A-28b : référentiel des clés configurables, servi par le serveur. */
+export function useFonctionnalites() {
+  return useQuery({
+    queryKey: [...ADMIN_KEYS.plans, 'fonctionnalites'],
+    queryFn: () => plansAdminService.getFonctionnalites(),
+    staleTime: 30 * 60 * 1000,   // référentiel : ne bouge qu'à une migration
+  })
+}
+
 export function useAdminPlans(params = {}) {
   return useQuery({
     queryKey: [...ADMIN_KEYS.plans, params],
