@@ -978,11 +978,14 @@ input::-ms-clear {
   100% { transform: scale(1);    opacity: 1 }
 }
 
-/* 2. L'anneau noir : il se referme autour du point.
-      `stroke-dasharray` vaut la circonférence (2πr, r = 21 → ~132). */
+/* 2. L'anneau noir : il APPARAÎT, il ne se dessine pas.
+      Première version essayée : un tracé au pointillé — mais à mi-parcours on
+      ne voyait qu'un fragment d'arc noir posé à côté du point, illisible. Dans
+      le logo l'anneau est une forme pleine, pas un geste : il se pose. */
 @keyframes gx-splash-anneau {
-  from { stroke-dasharray: 0 132; opacity: 0 }
-  to   { stroke-dasharray: 132 132; opacity: 1 }
+  0%   { transform: scale(.55); opacity: 0 }
+  70%  { transform: scale(1.06); opacity: 1 }
+  100% { transform: scale(1);   opacity: 1 }
 }
 
 /* 3. L'arc rouge : dévoilé d'un bout à l'autre par un masque circulaire.
@@ -995,9 +998,10 @@ input::-ms-clear {
 
 .gx-splash-point  { transform-origin: 50px 50px;
                     animation: gx-splash-point .42s cubic-bezier(.34,1.56,.64,1) both }
-.gx-splash-anneau { animation: gx-splash-anneau .45s cubic-bezier(.4,0,.2,1) .34s both }
+.gx-splash-anneau { transform-origin: 50px 50px;
+                    animation: gx-splash-anneau .44s cubic-bezier(.34,1.4,.64,1) .3s both }
 .gx-splash-arc-reveal { stroke-dasharray: 220 264;
-                        animation: gx-splash-arc .68s cubic-bezier(.4,0,.2,1) .74s both }
+                        animation: gx-splash-arc .72s cubic-bezier(.33,0,.15,1) .66s both }
 
 /* Habillage saisonnier : entrée simple, le visuel se suffit. */
 @keyframes gx-splash-monte {
