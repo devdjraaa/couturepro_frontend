@@ -130,11 +130,15 @@ jobs:
           if lire_conf | grep -q "gabarit:$GABARIT_VERSION"; then
             echo "→ configuration nginx déjà à jour (gabarit $GABARIT_VERSION)"
 
-          elif lire_conf | grep -q "listen 443"; then
-            # Configuration antérieure au marqueur, mais qui SERT DÉJÀ le site en
-            # HTTPS. On l'adopte telle quelle au lieu de la réécrire : réécrire
-            # une configuration qui fonctionne pour la rendre identique à un
-            # gabarit sans SSL, c'est exactement ce qui a mis le site à terre.
+          elif lire_conf | grep -q "listen 443" && ! lire_conf | grep -q "gabarit:"; then
+            # Migration UNIQUE : configuration antérieure au marqueur, mais qui
+            # sert déjà le site en HTTPS. On l'adopte telle quelle plutôt que de
+            # la réécrire.
+            #
+            # La condition « aucun marqueur » est essentielle. Sans elle, cette
+            # branche capturait TOUTE configuration ayant du 443 — donc aussi
+            # les changements RÉELS de gabarit, qui n'étaient alors jamais
+            # appliqués (et empilaient un marqueur de plus à chaque fois).
             # Marqueur ajouté via une copie complète : `tee` n'est pas autorisé.
             ADOPT=$(mktemp)
             { lire_conf; echo "# gabarit:$GABARIT_VERSION"; } > "$ADOPT"
