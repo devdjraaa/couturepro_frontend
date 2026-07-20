@@ -1656,7 +1656,9 @@
       "notifs_echec": "Le réglage des notifications n'a pas pu être enregistré.",
       "reprise_avis": "Connectez-vous pour publier votre avis, il est conservé et partira dès votre connexion, puis vous reviendrez sur le profil.",
       "avis_rejoue": "Votre avis a été publié.",
-      "avis_rejoue_photos": "Votre avis a été publié. Les photos jointes n'ont pas pu être conservées pendant la connexion."
+      "avis_rejoue_photos": "Votre avis a été publié. Les photos jointes n'ont pas pu être conservées pendant la connexion.",
+      "notifications": "Vos notifications",
+      "tout_lire": "Tout marquer comme lu"
     },
     "chatbot": {
       "titre": "Makila AI",

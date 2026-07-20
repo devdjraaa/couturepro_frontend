@@ -67,3 +67,16 @@ export const reclamer        = (commandeId, sujet, message) => call(`/vitrine/cl
 
 // Config publique (client ID Google + IDs analytics) — servie par l'API, rien de figé.
 export const getConfigPublique = () => call('/auth/social/providers')
+
+// ── Pt 24 : notifications du client final ──────────────────────────────────
+//
+// Le client n'était prévenu que par e-mail à chaque avancée de sa commande.
+// Un e-mail se perd, part en indésirable ou n'est pas relevé — et le client
+// revenait alors sur son espace sans rien y trouver sur sa commande. C'est
+// précisément le moment où il écrit au créateur pour demander.
+export const getMesNotifications = () => call('/vitrine/client/notifications', { auth: true })
+export const getCompteurNotifications = () => call('/vitrine/client/notifications/compteur', { auth: true })
+export const marquerNotificationLue = (id) =>
+  call(`/vitrine/client/notifications/${id}/lue`, { method: 'POST', auth: true })
+export const marquerToutesNotificationsLues = () =>
+  call('/vitrine/client/notifications/tout-lu', { method: 'POST', auth: true })
