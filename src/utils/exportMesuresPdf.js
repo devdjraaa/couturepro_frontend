@@ -1,4 +1,6 @@
 import jsPDF from 'jspdf'
+import { getCoordonnees } from './partageMesures'
+import { appliquerFiligrane, appliquerPiedDePage } from './pdfBranding'
 import html2canvas from 'html2canvas'
 
 export async function exportMesuresPdf(clientNom, mesures, atelierNom = 'Gextimo') {
@@ -56,6 +58,17 @@ export async function exportMesuresPdf(clientNom, mesures, atelierNom = 'Gextimo
     const pageW = pdf.internal.pageSize.getWidth()
     const ratio = pageW / canvas.width
     pdf.addImage(imgData, 'PNG', 0, 0, pageW, canvas.height * ratio)
+
+    // Pts 4-5 (lot 2, 20/07) : branding sur CHAQUE page — filigrane répété en
+    // diagonale + pied de page. Appliqué après le contenu pour ne rien masquer
+    // d'illisible, et en semi-transparence.
+    const coordonnees = await getCoordonnees()
+    for (let page = 1; page <= pdf.getNumberOfPages(); page++) {
+      pdf.setPage(page)
+      appliquerFiligrane(pdf, coordonnees)
+      appliquerPiedDePage(pdf, coordonnees, page, pdf.getNumberOfPages())
+    }
+
     pdf.save(`mesures-${clientNom.replace(/\s+/g, '-').toLowerCase()}.pdf`)
   } finally {
     document.body.removeChild(container)

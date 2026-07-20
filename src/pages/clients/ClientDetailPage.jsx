@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { partagerMesuresWhatsApp } from '@/utils/partageMesures'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { Edit2, Trash2, ClipboardList, MessageCircle, ArrowLeft, Download, Share2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -226,29 +227,17 @@ export default function ClientDetailPage() {
                   <button
                     type="button"
                     onClick={async () => {
-                      // SUG-16 : message construit LOCALEMENT (offline-first) — le serveur peut ne pas
-                      // encore avoir les mesures (sync différée) → mesures manquantes dans WhatsApp.
-                      const phone = (client?.telephone || '').replace(/\D/g, '')
-                      if (!phone) { toast.error(t('erreurs.champ_requis')); return }
-                      const champs = mesure?.champs ?? {}
-                      const entries = Object.entries(champs).filter(([, v]) => v !== null && v !== '' && v !== undefined)
-                      if (entries.length > 0) {
-                        const nom = [client?.prenom, client?.nom].filter(Boolean).join(' ')
-                        const lignes = [
-                          `📏 *Mesures de ${nom}* — ${atelier?.nom ?? ''}`.trim(), '',
-                          ...entries.map(([k, v]) => `${k.charAt(0).toUpperCase()}${k.slice(1).replace(/_/g, ' ')} : ${v} cm`),
-                          '', `_Exporté le ${new Date().toLocaleDateString('fr-FR')}_`,
-                        ]
-                        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(lignes.join('\n'))}`, '_blank', 'noopener,noreferrer')
-                        return
-                      }
-                      // Repli : lien généré côté serveur
-                      try {
-                        const { lien } = await mesureService.getWhatsAppLink(clientId)
-                        window.open(lien, '_blank', 'noopener,noreferrer')
-                      } catch {
-                        toast.error('Numéro de téléphone manquant.')
-                      }
+                      // SUG-16 + pt 6 (20/07) : UN SEUL constructeur de message
+                      // (utils/partageMesures). Deux constructions concurrentes
+                      // coexistaient et ne produisaient pas le même contenu selon
+                      // le chemin — d'où des partages sans les mesures.
+                      const ok = await partagerMesuresWhatsApp({
+                        client,
+                        champs: mesure?.champs ?? {},
+                        atelierNom: atelier?.nom ?? '',
+                        unite: atelier?.unite_mesure ?? 'cm',
+                      })
+                      if (!ok) toast.error(t('erreurs.champ_requis'))
                     }}
                     className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-[#25d366]/40 bg-[#25d366]/8 text-sm font-medium text-[#1a9e4e] hover:bg-[#25d366]/15 transition-colors"
                   >
