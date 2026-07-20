@@ -298,6 +298,11 @@ const ITEMS = [
   F(49,'VIT-2',10,'todo','Textes et retouches vitrine (Aquilas) : message de confiance, police, header auth, footer (tarif, liens, APDP), phrases d\'accroche, ordre Paramètres, « Bientôt » sur le non-prêt'),
   B(62,'CLI-1',10,'todo','Modules côté client à cadrer puis développer : notifications, code promo, newsletter, historique des MAJ, messages officiels, bibliothèque photos catégorisée, détection pays/devise, vérification Designer (type de document)'),
   B(63,'INF-1',10,'todo','Infra : Cloudflare phase 2 (proxy) + soumission Search Console dès réception des accès direction'),
+  B(64,'QA-2',10,'done','Bug « Se déconnecter ne fait rien » : le jeton n\'était jamais retiré du stockage ET une erreur serveur bloquait la déconnexion locale. Corrigé (20/07) + sélecteur pays drapeau+nom+indicatif trié, commission 0%→15%, casse Novafriq'),
+  F(50,'VIT-3',10,'todo','Bannière Ma vitrine : recadrage interactif avant enregistrement (aperçu temps réel, déplacement dans le cadre, proportions conservées — façon LinkedIn/WhatsApp). Parti pris visuel : Aquilas, le back stocke le cadrage'),
+  B(65,'EVT-2',10,'todo','Événements dynamiques v2 (spec direction 20/07) : aligner le module existant — champ date de naissance (jour/mois) sur MASTER (n\'existe que sur android), overlay coin d\'écran avec variantes d\'animation, mémorisation locale 1x/jour, priorité personnelle > gextimo > national > marketing. Test grandeur nature 3-4 jours demandé'),
+  B(66,'CLI-2',10,'todo','« Gextimo Infos » : onglet séparé des notifications, messages typés (annonce, nouveauté, astuce, promo, alerte, événement, formation, sécurité), diffusion admin par cible. Architecture NotificationSysteme existante à étendre'),
+  B(67,'CLI-3',10,'todo','Compte à rebours de lancement (22 août, deux composants : bande J-30 quotidienne auto-masquée + chrono Jour J plein écran), entièrement configurable en admin (date, heure, couleurs, textes) et réutilisable pour d\'autres annonces'),
   B(48,'REL-5',8,'info','Relecture juridique des pages légales — tâche équipe'),
   B(49,'REL-6',8,'info','Clés externes (analytics, Search Console) — dépend de la direction')
 ];

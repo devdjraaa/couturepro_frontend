@@ -7,7 +7,9 @@ const KEYS = {
 
 // ── Token d'authentification ──
 export function getToken()        { return localStorage.getItem(KEYS.TOKEN) }
-export function setToken(token)   { localStorage.setItem(KEYS.TOKEN, token) }
+// null/undefined = déconnexion : RETIRER la clé. `setItem(k, null)` stockerait la
+// chaîne « null », un jeton fantôme qui maintiendrait l'utilisateur « connecté ».
+export function setToken(token)   { token ? localStorage.setItem(KEYS.TOKEN, token) : localStorage.removeItem(KEYS.TOKEN) }
 export function clearToken()      { localStorage.removeItem(KEYS.TOKEN) }
 
 // ── Thème ──
