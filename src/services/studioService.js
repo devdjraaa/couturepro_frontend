@@ -30,8 +30,20 @@ export const studioService = {
     const { data } = await api.get('/atelier-videos')
     return data
   },
-  async ajouterVideo(payload) {
-    const { data } = await api.post('/atelier-videos', payload)
+  // VID-4 : deux entrées possibles — lien OU fichier. Le serveur accepte les
+  // deux depuis le 19/07 (`required_without`), seul le champ manquait à l'écran.
+  // Un fichier impose multipart ; un lien reste du JSON.
+  async ajouterVideo({ titre, url, fichier }) {
+    if (fichier) {
+      const form = new FormData()
+      if (titre) form.append('titre', titre)
+      form.append('fichier', fichier)
+      const { data } = await api.post('/atelier-videos', form, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      return data
+    }
+    const { data } = await api.post('/atelier-videos', { titre, url })
     return data
   },
   async retirerVideo(id) {

@@ -4547,7 +4547,14 @@
       "statut": {
         "en_attente": "en validation",
         "refusee": "refusée"
-      }
+      },
+      "remplacement": "Votre offre autorise une seule vidéo : celle que vous ajoutez REMPLACERA la précédente.",
+      "delai": "Une vidéo ajoutée est visible après validation, sous {{h}} h au plus.",
+      "lien_ou_fichier": "Collez un lien ou importez un fichier",
+      "importer": "Importer une vidéo",
+      "fichier_choisi": "Fichier choisi : {{nom}}",
+      "lien_non_reconnu": "Ce lien n'est pas reconnu comme une vidéo. Il restera un lien à ouvrir, sans lecture intégrée.",
+      "formats": "MP4, MOV ou WebM · 100 Mo maximum"
     }
   },
   "vetements": {
