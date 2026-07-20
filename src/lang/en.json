@@ -1491,7 +1491,8 @@
     "menu": "Menu",
     "outils_creatifs": "Creative tools",
     "studio": "Studio",
-    "gestion_atelier": "Workshop management"
+    "gestion_atelier": "Workshop management",
+    "annonces": "Announcements"
   },
   "pwa": {
     "installer_titre": "Install Gextimo",
@@ -4523,5 +4524,40 @@
   },
   "vetements": {
     "modele_systeme": "System model"
+  },
+  "annonces": {
+    "titre": "Announcements",
+    "sous_titre": "Let your clients know what is happening in your workshop.",
+    "form_titre": "Announcement title",
+    "form_message": "Message",
+    "form_debut": "Starting on",
+    "form_duree": "For",
+    "form_jours_one": "{{count}} day",
+    "form_jours_other": "{{count}} days",
+    "form_image": "Banner (optional)",
+    "form_image_retirer": "Remove banner",
+    "publier": "Publish announcement",
+    "quota_bloque": "You have already published an announcement today.",
+    "quota_demain": "You can publish a new one on {{date}}.",
+    "quota_boost": "To give your running announcement more visibility, use Boost.",
+    "historique": "Your announcements",
+    "vide_titre": "No announcements",
+    "vide_desc": "Your first announcement will appear here.",
+    "statut_programmee": "Scheduled",
+    "statut_en_cours": "Running",
+    "statut_boostee": "Boosted",
+    "statut_terminee": "Ended",
+    "statut_masquee": "Hidden",
+    "du_au": "From {{debut}} to {{fin}}",
+    "boost": "Boost",
+    "boost_titre": "Boost this announcement",
+    "boost_aide": "For the whole Boost duration, your announcement is shown several times a day at the top of the announcement bar.",
+    "boost_debut": "Start on",
+    "boost_duree": "Duration",
+    "boost_total": "Amount",
+    "boost_payer": "Pay and boost",
+    "boost_indispo": "Boost is not available at the moment.",
+    "apercu": "Preview",
+    "supprimer_confirmer": "Delete this announcement?"
   }
 }
