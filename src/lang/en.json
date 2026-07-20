@@ -70,15 +70,17 @@
     "faq_titre": "Frequently asked questions",
     "feat": {
       "illimite": "unlimited",
-      "creations": "{{n}} showcase creations",
+      "creations": "{{n}} showcase creation",
       "galerie_oui": "Visible in the public gallery",
       "galerie_non": "Profile accessible by direct link",
-      "clients": "{{n}} clients / month",
+      "clients": "{{n}} client / month",
       "equipe": "Team up to {{n}} member(s)",
       "pdf": "PDF invoices & quotes",
       "photos_vip": "VIP photos",
       "caisse": "Cash Register module",
-      "multi": "Multi-workshops"
+      "multi": "Multi-workshops",
+      "creations_plural": "{{n}} showcase creations",
+      "clients_plural": "{{n}} clients / month"
     },
     "faq": [
       {
@@ -153,7 +155,7 @@
     "jours": "{{n}} d",
     "fcfa": "FCFA",
     "redirection": "Redirecting…",
-    "sponsoriser_n": "Sponsor for {{n}} days",
+    "sponsoriser_n": "Sponsor for {{n}} day",
     "mes_collections": "My collections",
     "aucune_collection": "No collections yet.",
     "nouvelle_collection_ph": "New collection…",
@@ -190,7 +192,8 @@
     "lookbook_titre": "Lookbook",
     "lookbook_upgrade": "The PDF Lookbook is available on paid plans. Upgrade to the Atelier plan to enable it.",
     "lookbook_vide": "Publish at least one creation to generate the lookbook.",
-    "lookbook_erreur": "Could not generate the lookbook."
+    "lookbook_erreur": "Could not generate the lookbook.",
+    "sponsoriser_n_plural": "Sponsor for {{n}} days"
   },
   "facturation": {
     "titre": "Invoicing",
@@ -1555,8 +1558,9 @@
       "verified": "✓ Verified",
       "new": "New",
       "see_all": "See all designers →",
-      "creations_count": "{{n}} creations",
-      "pro": "Pro"
+      "creations_count": "{{n}} creation",
+      "pro": "Pro",
+      "creations_count_plural": "{{n}} creations"
     },
     "gallery": {
       "eyebrow": "Gallery",

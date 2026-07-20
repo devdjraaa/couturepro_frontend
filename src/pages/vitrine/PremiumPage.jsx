@@ -24,9 +24,9 @@ function featuresFromConfig(config, t) {
   const c = parseConfig(config)
   const nb = (v) => (v === null || v === undefined ? t('premium.feat.illimite') : v)
   const f = []
-  if (c.max_creations_vitrine !== undefined) f.push(t('premium.feat.creations', { n: nb(c.max_creations_vitrine) }))
+  if (c.max_creations_vitrine !== undefined) f.push(t('premium.feat.creations', { n: nb(c.max_creations_vitrine), count: Number(c.max_creations_vitrine) }))
   f.push(c.visible_galerie ? t('premium.feat.galerie_oui') : t('premium.feat.galerie_non'))
-  if (c.max_clients_par_mois !== undefined) f.push(t('premium.feat.clients', { n: nb(c.max_clients_par_mois) }))
+  if (c.max_clients_par_mois !== undefined) f.push(t('premium.feat.clients', { n: nb(c.max_clients_par_mois), count: Number(c.max_clients_par_mois) }))
   if (c.max_membres) f.push(t('premium.feat.equipe', { n: c.max_membres }))
   if (c.export_pdf) f.push(t('premium.feat.pdf'))
   if (c.photos_vip) f.push(t('premium.feat.photos_vip'))

@@ -70,15 +70,17 @@
     "faq_titre": "Questions fréquentes",
     "feat": {
       "illimite": "illimité",
-      "creations": "{{n}} créations en vitrine",
+      "creations": "{{n}} création en vitrine",
       "galerie_oui": "Visible dans la galerie publique",
       "galerie_non": "Profil accessible par lien direct",
-      "clients": "{{n}} clients / mois",
+      "clients": "{{n}} client / mois",
       "equipe": "Équipe jusqu'à {{n}} membre(s)",
       "pdf": "Factures & devis PDF",
       "photos_vip": "Photos VIP",
       "caisse": "Module Caisse",
-      "multi": "Multi-ateliers"
+      "multi": "Multi-ateliers",
+      "creations_plural": "{{n}} créations en vitrine",
+      "clients_plural": "{{n}} clients / mois"
     },
     "faq": [
       {
@@ -153,7 +155,7 @@
     "jours": "{{n}} j",
     "fcfa": "FCFA",
     "redirection": "Redirection…",
-    "sponsoriser_n": "Sponsoriser {{n}} jours",
+    "sponsoriser_n": "Sponsoriser {{n}} jour",
     "mes_collections": "Mes collections",
     "aucune_collection": "Aucune collection pour le moment.",
     "nouvelle_collection_ph": "Nouvelle collection…",
@@ -190,7 +192,8 @@
     "lookbook_titre": "Lookbook",
     "lookbook_upgrade": "Le Lookbook PDF est réservé aux plans payants. Passez au plan Atelier pour l’activer.",
     "lookbook_vide": "Publiez au moins une création pour générer le lookbook.",
-    "lookbook_erreur": "Impossible de générer le lookbook."
+    "lookbook_erreur": "Impossible de générer le lookbook.",
+    "sponsoriser_n_plural": "Sponsoriser {{n}} jours"
   },
   "facturation": {
     "titre": "Facturation",
@@ -1555,8 +1558,9 @@
       "verified": "✓ Vérifié",
       "new": "Nouveau",
       "see_all": "Voir tous les créateurs →",
-      "creations_count": "{{n}} créations",
-      "pro": "Pro"
+      "creations_count": "{{n}} création",
+      "pro": "Pro",
+      "creations_count_plural": "{{n}} créations"
     },
     "gallery": {
       "eyebrow": "Galerie",

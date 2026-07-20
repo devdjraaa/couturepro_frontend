@@ -558,7 +558,7 @@ export default function MaVitrinePage() {
                 className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl bg-primary text-white hover:bg-primary-600 transition disabled:opacity-60"
               >
                 <Star size={15} />
-                {sponsoBusy ? t('ma_vitrine.redirection') : t('ma_vitrine.sponsoriser_n', { n: sponsoJours })}
+                {sponsoBusy ? t('ma_vitrine.redirection') : t('ma_vitrine.sponsoriser_n', { n: sponsoJours, count: sponsoJours })}
               </button>
             </>
           )}
