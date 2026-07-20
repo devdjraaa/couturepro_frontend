@@ -1726,7 +1726,7 @@
       "stat_1_l": "gratuit pour commencer",
       "stat_2_v": "< 5 min",
       "stat_2_l": "pour créer son compte",
-      "stat_3_v": "0 %",
+      "stat_3_v": "15 %",
       "stat_3_l": "de commission sur vos ventes",
       "stat_4_v": "✓ Badge",
       "stat_4_l": "de vérification disponible"
@@ -2925,12 +2925,12 @@
                   ],
                   [
                     "Standard",
-                    "0 % — aucune commission sur les ventes",
+                    "15 % de commission sur vos ventes",
                     "Tarif affiché dans l'application"
                   ],
                   [
                     "Premium",
-                    "0 % — aucune commission sur les ventes",
+                    "15 % de commission sur vos ventes",
                     "Tarif affiché dans l'application"
                   ]
                 ]

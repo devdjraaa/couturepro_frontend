@@ -68,11 +68,11 @@ export default function PhoneInput({
           value={prefix}
           onChange={handlePrefixChange}
           aria-label="Indicatif pays"
-          className="bg-subtle border-r border-edge text-ink text-sm pl-2 pr-1 focus:outline-none cursor-pointer shrink-0 font-medium"
+          className="bg-subtle border-r border-edge text-ink text-sm pl-2 pr-1 focus:outline-none cursor-pointer shrink-0 font-medium max-w-[132px]"
         >
-          {PHONE_PREFIXES.map(p => (
+          {[...PHONE_PREFIXES].sort((a, b) => a.country.localeCompare(b.country, 'fr')).map(p => (
             <option key={p.code} value={p.code}>
-              {p.flag} {p.code}
+              {p.flag} {p.country} ({p.code})
             </option>
           ))}
         </select>

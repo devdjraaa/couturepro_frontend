@@ -1726,7 +1726,7 @@
       "stat_1_l": "free to start",
       "stat_2_v": "< 5 min",
       "stat_2_l": "to create an account",
-      "stat_3_v": "0%",
+      "stat_3_v": "15%",
       "stat_3_l": "commission on your sales",
       "stat_4_v": "✓ Badge",
       "stat_4_l": "verification available"
@@ -2912,12 +2912,12 @@
                   ],
                   [
                     "Standard",
-                    "0% — no commission on sales",
+                    "15% commission on your sales",
                     "Price shown in the app"
                   ],
                   [
                     "Premium",
-                    "0% — no commission on sales",
+                    "15% commission on your sales",
                     "Price shown in the app"
                   ]
                 ]
