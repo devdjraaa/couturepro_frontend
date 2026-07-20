@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { useFormatCurrency } from '@/utils/formatCurrency'
 import {
   FileText, Plus, X, ChevronDown, ChevronUp, Upload, Send,
   QrCode, Trash2, Check, AlertCircle, Clock, Ban,
@@ -29,7 +30,9 @@ const STATUTS = {
 }
 
 const calcTotal = (lignes) => lignes.reduce((sum, l) => sum + (Number(l.quantite) || 0) * (Number(l.prix_unitaire) || 0), 0)
-const fmt = (v) => new Intl.NumberFormat('fr-FR').format(Number(v) || 0)
+// ⚠️ Le montant était formaté ici sans devise, puis suivi d'un « FCFA » figé en
+// i18n : la préférence de devise de l'atelier était ignorée, et le tableau de
+// bord affichait « XOF » pour la même somme. Le hook commun lit la préférence.
 
 function StatutBadge({ statut }) {
   const { t } = useTranslation()
@@ -87,6 +90,7 @@ const EMPTY_FORM = {
 }
 
 function FormulaireModal({ onClose, onCreated }) {
+  const fmt = useFormatCurrency()
   const { t } = useTranslation()
   const { moyens, defaut } = useMoyensPaiement()
   const [form, setForm] = useState(EMPTY_FORM)
@@ -234,7 +238,7 @@ function FormulaireModal({ onClose, onCreated }) {
           <div className="bg-subtle border border-edge rounded-xl p-3 space-y-1.5">
             <div className="flex justify-between text-sm">
               <span className="text-dim">{t('facturation.modal.sous_total')}</span>
-              <span className="font-semibold text-ink">{fmt(total)} {t('facturation.fcfa')}</span>
+              <span className="font-semibold text-ink">{fmt(total)}</span>
             </div>
             <div className="flex items-center justify-between">
               <label className="text-sm text-dim">{t('facturation.modal.acompte')}</label>
@@ -248,7 +252,7 @@ function FormulaireModal({ onClose, onCreated }) {
             </div>
             <div className="flex justify-between text-sm border-t border-edge pt-1.5 mt-1">
               <span className="font-semibold text-ink">{t('facturation.modal.restant')}</span>
-              <span className="font-bold font-display text-ink">{fmt(restant < 0 ? 0 : restant)} {t('facturation.fcfa')}</span>
+              <span className="font-bold font-display text-ink">{fmt(restant < 0 ? 0 : restant)}</span>
             </div>
           </div>
 
@@ -288,6 +292,7 @@ function FormulaireModal({ onClose, onCreated }) {
 }
 
 function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
+  const fmt = useFormatCurrency()
   const { t } = useTranslation()
   const { atelier, user } = useAuth()
   const [open, setOpen] = useState(false)
@@ -390,14 +395,17 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-sm text-ink">{doc.numero}</span>
-            <span className="text-[11px] text-ghost">· {t(`facturation.types.${doc.type}`)}</span>
+            <span className="font-semibold text-sm text-ink whitespace-nowrap">{doc.numero}</span>
+            <span className="text-[11px] text-ghost truncate">· {t(`facturation.types.${doc.type}`)}</span>
           </div>
           <p className="text-xs text-dim truncate">{doc.client_nom}</p>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
+        {/* `shrink-0` sur tout le bloc écrasait la colonne du milieu à 360 px :
+            la référence « FAC-2026-004 » se coupait sur trois lignes. Seuls la
+            pastille et le chevron gardent leur taille. */}
+        <div className="flex items-center gap-2 min-w-0">
           <StatutBadge statut={doc.statut} />
-          <span className="text-sm font-semibold text-ink">{fmt(total)} {t('facturation.fcfa')}</span>
+          <span className="text-sm font-semibold text-ink whitespace-nowrap">{fmt(total)}</span>
           {open ? <ChevronUp size={15} className="text-ghost" /> : <ChevronDown size={15} className="text-ghost" />}
         </div>
       </div>
@@ -412,13 +420,13 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
               {(doc.lignes || []).map((l, i) => (
                 <div key={i} className="flex justify-between text-sm">
                   <span className="text-dim">{l.description} <span className="text-ghost">× {l.quantite}</span></span>
-                  <span className="font-medium text-ink">{fmt(l.quantite * l.prix_unitaire)} {t('facturation.fcfa')}</span>
+                  <span className="font-medium text-ink">{fmt(l.quantite * l.prix_unitaire)}</span>
                 </div>
               ))}
             </div>
             <div className="border-t border-edge mt-2 pt-2 flex justify-between font-bold text-sm">
               <span className="text-ink">{t('facturation.doc.total')}</span>
-              <span className="text-ink">{fmt(total)} {t('facturation.fcfa')}</span>
+              <span className="text-ink">{fmt(total)}</span>
             </div>
             {Number(doc.acompte) > 0 && (
               <div className="flex justify-between text-xs text-dim mt-1">
@@ -569,6 +577,7 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
 }
 
 export default function FacturationPage() {
+  const fmt = useFormatCurrency()
   const { t } = useTranslation()
   const { atelier } = useAuth()
   const [docs, setDocs] = useState(null)
