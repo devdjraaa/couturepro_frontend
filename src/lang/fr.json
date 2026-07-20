@@ -1325,7 +1325,8 @@
       "description": "Injecte 15 clients et 25 commandes d'exemple pour explorer l'application sans saisir de données réelles. Remplace les données actuelles.",
       "success": "Données injectées — explorez l'application !",
       "btn": "Réinitialiser les données démo"
-    }
+    },
+    "encart": "Pour vos réclamations, suggestions d'amélioration, remarques, demandes d'assistance ou toute autre requête, créez un ticket afin de nous en informer. Notre équipe vous répondra dans les meilleurs délais."
   },
   "communications": {
     "titre": "Communications",

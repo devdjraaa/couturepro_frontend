@@ -1325,7 +1325,8 @@
       "description": "Injects 15 clients and 25 sample orders to explore the app without entering real data. Replaces current data.",
       "success": "Data injected — explore the app!",
       "btn": "Reset demo data"
-    }
+    },
+    "encart": "For complaints, improvement suggestions, remarks, assistance requests or any other query, create a ticket to let us know. Our team will get back to you as soon as possible."
   },
   "communications": {
     "titre": "Communications",
