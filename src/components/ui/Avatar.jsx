@@ -1,3 +1,4 @@
+import { Scissors, Spool, Shirt, Crown, Ruler, Palette, UserRound } from 'lucide-react'
 import { cn } from '@/utils/cn'
 
 const sizes = {
@@ -10,15 +11,24 @@ const sizes = {
 
 // Palettes couleurs — utilisées dans ClientForm pour la sélection d'avatar
 // Utilise les tokens sémantiques, pas de couleurs Tailwind brutes
+/**
+ * Palettes d'avatar. Les pictogrammes étaient des EMOJI : leur dessin change
+ * d'un téléphone à l'autre (Android, iOS, navigateur), et la charte proscrit
+ * l'emoji dans l'interface. Ce sont désormais des icônes de la bibliothèque,
+ * qui suivent la couleur du texte et restent identiques partout.
+ */
 export const AVATAR_PALETTES = [
-  { bg: 'bg-primary/10',  text: 'text-primary',    emoji: '✂️' },
-  { bg: 'bg-gold-light',  text: 'text-gold-dark',  emoji: '🧵' },
-  { bg: 'bg-success/10',  text: 'text-success',    emoji: '👗' },
-  { bg: 'bg-danger/10',   text: 'text-danger',     emoji: '👒' },
-  { bg: 'bg-accent/10',   text: 'text-accent-600', emoji: '🪡' },
-  { bg: 'bg-terra-50',    text: 'text-terra',      emoji: '🧶' },
-  { bg: 'bg-info/10',     text: 'text-info',       emoji: '👔' },
+  { bg: 'bg-primary/10',  text: 'text-primary',    Icone: Scissors },
+  { bg: 'bg-gold-light',  text: 'text-gold-dark',  Icone: Spool    },
+  { bg: 'bg-success/10',  text: 'text-success',    Icone: Shirt    },
+  { bg: 'bg-danger/10',   text: 'text-danger',     Icone: Crown    },
+  { bg: 'bg-accent/10',   text: 'text-accent-600', Icone: Ruler    },
+  { bg: 'bg-terra-50',    text: 'text-terra',      Icone: Palette  },
+  { bg: 'bg-info/10',     text: 'text-info',       Icone: UserRound},
 ]
+
+/** Taille du pictogramme selon la taille de l'avatar. */
+const TAILLES_ICONE = { xs: 12, sm: 15, md: 18, lg: 22, xl: 28 }
 
 function hashName(name = '') {
   return [...name].reduce((acc, c) => acc + c.charCodeAt(0), 0) % AVATAR_PALETTES.length
@@ -59,7 +69,7 @@ export default function Avatar({ nom, name, photo_url, src, avatar_index, size =
           className,
         )}
       >
-        {palette.emoji}
+        <palette.Icone size={TAILLES_ICONE[size] ?? 18} />
       </div>
     )
   }
