@@ -117,23 +117,36 @@ export default function SplashDemarrage() {
         </>
       ) : (
         <>
-          {/* Le signe de la marque : l'anneau se trace, le point apparaît.
-              Dessiné en SVG plutôt qu'en image — net à toute taille, et animable. */}
-          <svg viewBox="0 0 64 64" className="w-[92px] h-[92px]" aria-hidden="true">
+          {/* Le « o » du logotype, reconstruit dans l'ordre voulu par la
+              direction : le POINT ROUGE d'abord, puis l'ANNEAU NOIR de la
+              lettre, puis l'ARC ROUGE qui se trace autour.
+
+              Dessiné en SVG et non en image : net à toute taille, et surtout
+              chaque élément est animable séparément, ce qu'une image ne permet
+              pas. Les proportions sont relevées sur le logo officiel coloré
+              (public/logo-officiel.png) : point central, anneau noir épais,
+              arc rouge de rayon 42 ouvert sur la gauche, balayé sur 300°. */}
+          <svg viewBox="0 0 100 100" className="w-[132px] h-[132px]" aria-hidden="true">
+            {/* 3. L'arc rouge — tracé en dernier, ouvert vers la gauche. */}
             <path
-              d="M32 6a26 26 0 1 0 26 26"
+              d="M 8.9 41.3 A 42 42 0 1 1 37 10.1"
               fill="none"
               stroke="var(--color-primary)"
-              strokeWidth="7"
+              strokeWidth="6"
               strokeLinecap="round"
+              className="gx-splash-arc"
+            />
+            {/* 2. L'anneau noir : la lettre elle-même. */}
+            <circle
+              cx="50" cy="50" r="21"
+              fill="none"
+              stroke="var(--color-ink)"
+              strokeWidth="12"
               className="gx-splash-anneau"
             />
-            <circle cx="32" cy="32" r="9" fill="var(--color-primary)" className="gx-splash-point" />
+            {/* 1. Le point rouge, au centre — il apparaît en premier. */}
+            <circle cx="50" cy="50" r="7" fill="var(--color-primary)" className="gx-splash-point" />
           </svg>
-
-          <p className="font-display font-extrabold text-[clamp(24px,6vw,38px)] tracking-[0.14em] text-ink gx-splash-mot">
-            GEXTIMO
-          </p>
         </>
       )}
     </div>

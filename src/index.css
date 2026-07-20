@@ -965,29 +965,47 @@ input::-ms-clear {
 }
 
 /* ── SUG-1 : ouverture de l'application ────────────────────────────────────
-   Le splash natif est une image figée qu'Android pose en fond de fenêtre. Ces
-   animations prennent le relais dès que la WebView est prête et font le pont
-   jusqu'à l'application, pour que l'ouverture s'enchaîne au lieu de sauter.
+   On reconstruit le « o » du logotype dans l'ordre voulu par la direction :
+   le point rouge, puis l'anneau noir de la lettre, puis l'arc rouge qui se
+   trace autour. Chaque élément attend le précédent — c'est la succession qui
+   fait lire le geste, pas les formes prises isolément.
    Tout est neutralisé si l'utilisateur a demandé moins d'animations. */
-@keyframes gx-splash-trace {
-  from { stroke-dasharray: 0 170; opacity: 0 }
-  to   { stroke-dasharray: 150 170; opacity: 1 }
+
+/* 1. Le point rouge : il arrive en premier, avec un léger rebond. */
+@keyframes gx-splash-point {
+  0%   { transform: scale(0);    opacity: 0 }
+  60%  { transform: scale(1.25); opacity: 1 }
+  100% { transform: scale(1);    opacity: 1 }
 }
-@keyframes gx-splash-pop {
-  0%   { transform: scale(0);   opacity: 0 }
-  70%  { transform: scale(1.18); opacity: 1 }
-  100% { transform: scale(1);   opacity: 1 }
+
+/* 2. L'anneau noir : il se referme autour du point.
+      `stroke-dasharray` vaut la circonférence (2πr, r = 21 → ~132). */
+@keyframes gx-splash-anneau {
+  from { stroke-dasharray: 0 132; opacity: 0 }
+  to   { stroke-dasharray: 132 132; opacity: 1 }
 }
+
+/* 3. L'arc rouge : il se TRACE autour de la lettre, d'un bout à l'autre.
+      Longueur du chemin : r = 42 sur 300° → ~220. */
+@keyframes gx-splash-arc {
+  from { stroke-dashoffset: 220; opacity: 1 }
+  to   { stroke-dashoffset: 0;   opacity: 1 }
+}
+
+.gx-splash-point  { transform-origin: 50px 50px;
+                    animation: gx-splash-point .42s cubic-bezier(.34,1.56,.64,1) both }
+.gx-splash-anneau { animation: gx-splash-anneau .45s cubic-bezier(.4,0,.2,1) .34s both }
+.gx-splash-arc    { stroke-dasharray: 220 220;
+                    animation: gx-splash-arc .62s cubic-bezier(.4,0,.2,1) .74s both }
+
+/* Habillage saisonnier : entrée simple, le visuel se suffit. */
 @keyframes gx-splash-monte {
   from { transform: translateY(9px); opacity: 0 }
   to   { transform: translateY(0);   opacity: 1 }
 }
-
-.gx-splash-anneau { animation: gx-splash-trace .62s cubic-bezier(.4,0,.2,1) both }
-.gx-splash-point  { transform-origin: 32px 32px; animation: gx-splash-pop .42s cubic-bezier(.34,1.56,.64,1) .46s both }
-.gx-splash-mot    { animation: gx-splash-monte .5s cubic-bezier(.4,0,.2,1) .58s both }
 .gx-splash-entree { animation: gx-splash-monte .55s cubic-bezier(.4,0,.2,1) both }
 
 @media (prefers-reduced-motion: reduce) {
-  .gx-splash-anneau, .gx-splash-point, .gx-splash-mot, .gx-splash-entree { animation: none }
+  .gx-splash-point, .gx-splash-anneau, .gx-splash-arc, .gx-splash-entree { animation: none }
+  .gx-splash-arc { stroke-dashoffset: 0 }
 }
