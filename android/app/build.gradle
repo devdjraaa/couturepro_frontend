@@ -7,8 +7,8 @@ android {
         applicationId "com.couturepro.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 11
-        versionName "1.0.10"
+        versionCode 12
+        versionName "1.0.11"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -55,7 +55,7 @@ android {
             // au lieu de cohabiter avec elle.
             // Régression de 2d81e27, un commit d'icône qui l'avait supprimé au
             // passage ; valeur d'origine rétablie (cf. 5753299).
-            applicationId "com.couturepro.admin"
+            applicationId "com.couturepro.app"
         }
     }
 }
