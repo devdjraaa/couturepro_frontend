@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/verifier-icones.mjs && node scripts/sync-pdf-theme.mjs && vite build",
+    "build": "node scripts/verifier-identifiants.mjs && node scripts/sync-pdf-theme.mjs && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "pdf:maquettes": "node scripts/sync-pdf-theme.mjs",
-    "verifier:icones": "node scripts/verifier-icones.mjs"
+    "verifier:icones": "node scripts/verifier-icones.mjs",
+    "verifier": "node scripts/verifier-identifiants.mjs"
   },
   "dependencies": {
     "@capacitor-community/contacts": "^7.2.0",

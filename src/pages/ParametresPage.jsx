@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { sanitizePhoneInput } from '@/utils/phoneInput'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   Building2, Plus, CheckCircle2, ImagePlus, Lock, WifiOff,
@@ -241,6 +242,8 @@ function AtelierTab() {
 }
 
 function FactureTab() {
+  const { t } = useTranslation()
+
   const fileRef = useRef(null)
   const { data: settings, isLoading } = useFactureSettings()
   const update    = useUpdateFactureSettings()

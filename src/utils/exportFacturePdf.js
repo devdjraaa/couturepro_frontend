@@ -1,4 +1,4 @@
-import { T, enTete, section, tableau, pastille, esc } from './pdfTheme'
+import { T, enTete, section, tableau, pastille, encart, esc } from './pdfTheme'
 import { composerPdf, partagerOuTelecharger } from './pdfRendu'
 
 const formatCFA = (v) =>
@@ -140,6 +140,25 @@ function buildFooterHtml(factureSettings, { atelier, contact } = {}) {
  * de page). L'ancienne implémentation locale tronquait tout document dépassant
  * une page — une facture de plus de ~15 lignes perdait silencieusement sa fin.
  */
+/**
+ * Assemble le document à partir des briques ci-dessus.
+ *
+ * Cette fonction avait DISPARU lors de la refonte de charte (95ddc42) alors que
+ * ses trois appels subsistaient : générer une facture, un devis ou un reçu
+ * levait « buildFactureHtml is not defined ». Le build ne dit rien de ce genre
+ * de manque — seul `no-undef` le voyait, et il n'était pas contrôlé.
+ */
+function buildFactureHtml({ atelier, factureSettings, ref, contact, date, client, lignes, total, acompte, reste, note, titre = 'Facture' }) {
+  return [
+    buildHeaderHtml({ atelier, factureSettings, ref, date, titre }),
+    buildClientHtml(client),
+    buildLignesHtml(lignes),
+    buildTotauxHtml({ total, acompte, reste }),
+    note ? encart('Note', note) : '',
+    buildFooterHtml(factureSettings, { atelier, contact }),
+  ].join('')
+}
+
 async function renderPdf(html) {
   return composerPdf(html)
 }

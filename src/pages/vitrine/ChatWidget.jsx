@@ -19,23 +19,47 @@ function sessionId() {
   } catch { return 'anon' }
 }
 
+/**
+ * Délai maximal d'attente. SANS LUI, une requête qui n'aboutit jamais — réseau
+ * instable, connexion qui tombe en cours de route, cas courant en mobile —
+ * laissait `fetch` attendre indéfiniment : les trois points de saisie
+ * tournaient sans fin et l'utilisateur n'apprenait jamais que ça avait échoué.
+ * Passé ce délai on abandonne, et l'appelant affiche son message d'erreur.
+ */
+const DELAI_MAX_MS = 20000
+
 async function api(path, body) {
   const token = getClientToken()
-  const r = await fetch(`${API_BASE_URL}${path}`, {
-    method: body ? 'POST' : 'GET',
-    headers: {
-      Accept: 'application/json',
-      ...(body ? { 'Content-Type': 'application/json' } : {}),
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  })
-  if (!r.ok) throw new Error('chatbot_api')
-  return r.json()
+  const stop = new AbortController()
+  const minuteur = setTimeout(() => stop.abort(), DELAI_MAX_MS)
+
+  try {
+    const r = await fetch(`${API_BASE_URL}${path}`, {
+      method: body ? 'POST' : 'GET',
+      headers: {
+        Accept: 'application/json',
+        ...(body ? { 'Content-Type': 'application/json' } : {}),
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: body ? JSON.stringify(body) : undefined,
+      signal: stop.signal,
+    })
+    if (!r.ok) throw new Error('chatbot_api')
+
+    return await r.json()
+  } finally {
+    clearTimeout(minuteur)
+  }
 }
 
 /* Fenêtre légère à l'intérieur du chatbot (menu : à propos, confidentialité, aide, avis). */
 function ModaleLegere({ titre, texte, lien, lienLabel, onClose }) {
+  // `useTranslation` est INDISPENSABLE ici : ce composant vit au niveau du
+  // module, il n'hérite donc pas du `t` du widget. Sans lui, l'appel à
+  // `t('commun.fermer')` plus bas levait « t is not defined » et l'écran de
+  // secours prenait la place du chat dès qu'on ouvrait une entrée du menu.
+  const { t } = useTranslation()
+
   return (
     <div className="absolute inset-0 z-10 bg-black/40 flex items-end" onClick={onClose}>
       <div className="w-full bg-card rounded-t-2xl p-4 max-h-[70%] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
