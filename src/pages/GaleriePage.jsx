@@ -1,6 +1,7 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ImagePlus, Trash2, X, Images, HelpCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { API_BASE_URL } from '@/constants/config'
 import { AppLayout } from '@/components/layout'
 import { Button, Skeleton, EmptyState } from '@/components/ui'
 import FeatureGate from '@/components/abonnement/FeatureGate'
@@ -32,13 +33,43 @@ function QuotaBadge({ quota }) {
 }
 
 // P152 : catégories de la bibliothèque photos (référentiel simple, éditable ici).
-const CATEGORIES = ['modele', 'tissu', 'occasion', 'inspiration', 'client']
+/**
+ * Catégories de la bibliothèque. Servies par le serveur (`GET
+ * /vitrine/categories-galerie`, éditable en admin) : la liste était figée ici,
+ * si bien qu'ajouter « Broderie » ou « Défilé » demandait un déploiement.
+ *
+ * Le repli couvre le cas hors ligne et la première ouverture avant réponse ;
+ * il reprend les cinq catégories d'origine, dont les traductions existent.
+ */
+const CATEGORIES_REPLI = ['modele', 'tissu', 'occasion', 'inspiration', 'client']
+
+/** Libellé : la traduction si elle existe, sinon celui fourni par le serveur. */
+const libelleCategorie = (t, cle, labelServeur) => {
+  const cle18n = `galerie.categories.${cle}`
+  const traduit = t(cle18n)
+
+  return traduit === cle18n ? (labelServeur || cle) : traduit
+}
 
 export default function GaleriePage() {
   const { t } = useTranslation()
   const fileRef  = useRef(null)
   const [preview, setPreview] = useState(null)
-  const [categorieUpload, setCategorieUpload] = useState(CATEGORIES[0]) // P152 : catégorie appliquée aux ajouts
+  const [categories, setCategories] = useState(() => CATEGORIES_REPLI.map((c) => ({ cle: c })))
+  const [categorieUpload, setCategorieUpload] = useState(CATEGORIES_REPLI[0]) // P152 : catégorie appliquée aux ajouts
+
+  useEffect(() => {
+    let vivant = true
+    fetch(`${API_BASE_URL}/vitrine/categories-galerie`, { headers: { Accept: 'application/json' } })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        // Une liste vide viderait le sélecteur : on garde le repli dans ce cas.
+        if (vivant && d?.categories?.length) setCategories(d.categories)
+      })
+      .catch(() => { /* hors ligne : le repli suffit */ })
+
+    return () => { vivant = false }
+  }, [])
   const [filtre, setFiltre] = useState(null) // P152 : filtre d'affichage
 
   const { data: photos = [], isLoading } = useGalerie()
@@ -120,7 +151,9 @@ export default function GaleriePage() {
               onChange={e => setCategorieUpload(e.target.value)}
               className="flex-1 rounded-xl border border-edge bg-card px-3 py-2 text-sm text-ink"
             >
-              {CATEGORIES.map(c => <option key={c} value={c}>{t(`galerie.categories.${c}`)}</option>)}
+              {categories.map(c => (
+                <option key={c.cle} value={c.cle}>{libelleCategorie(t, c.cle, c.label)}</option>
+              ))}
             </select>
           </div>
 
@@ -131,10 +164,10 @@ export default function GaleriePage() {
                 className={cn('shrink-0 px-3 py-1.5 rounded-full text-xs font-medium', !filtre ? 'bg-primary text-inverse' : 'bg-subtle text-ghost')}>
                 {t('galerie.filtre_tous')}
               </button>
-              {CATEGORIES.filter(c => photos.some(p => p.categorie === c)).map(c => (
-                <button key={c} onClick={() => setFiltre(c)}
-                  className={cn('shrink-0 px-3 py-1.5 rounded-full text-xs font-medium', filtre === c ? 'bg-primary text-inverse' : 'bg-subtle text-ghost')}>
-                  {t(`galerie.categories.${c}`)}
+              {categories.filter(c => photos.some(p => p.categorie === c.cle)).map(c => (
+                <button key={c.cle} onClick={() => setFiltre(c.cle)}
+                  className={cn('shrink-0 px-3 py-1.5 rounded-full text-xs font-medium', filtre === c.cle ? 'bg-primary text-inverse' : 'bg-subtle text-ghost')}>
+                  {libelleCategorie(t, c.cle, c.label)}
                 </button>
               ))}
             </div>
