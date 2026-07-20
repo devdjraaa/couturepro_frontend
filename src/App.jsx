@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import AnnoncesPage from '@/pages/AnnoncesPage'
 import ReglagesVitrinePage from '@/pages/admin/ReglagesVitrinePage'
 import SplashDemarrage from '@/components/layout/SplashDemarrage'
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
@@ -254,6 +255,7 @@ export default function App() {
           <Route path={ROUTES.APROPOS}          element={<AProposPage />}         />
           <Route path={ROUTES.PHOTOS_VIP}       element={<GaleriePage />} />
           <Route path="/galerie"               element={<GaleriePage />} />
+          <Route path="/annonces"               element={<AnnoncesPage />}       />
           <Route path={ROUTES.FACTURATION}      element={<FacturationPage />}     />
           <Route path={ROUTES.HISTORIQUE}       element={<HistoriquePage />}      />
           <Route path="/archives"               element={<ArchivesPage />}        />

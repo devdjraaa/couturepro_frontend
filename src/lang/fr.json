@@ -1493,7 +1493,8 @@
     "menu": "Menu",
     "outils_creatifs": "Outils créatifs",
     "studio": "Studio",
-    "gestion_atelier": "Gestion d'atelier"
+    "gestion_atelier": "Gestion d'atelier",
+    "annonces": "Annonces"
   },
   "pwa": {
     "installer_titre": "Installer Gextimo",
@@ -4538,5 +4539,40 @@
   },
   "vetements": {
     "modele_systeme": "Modèle système"
+  },
+  "annonces": {
+    "titre": "Annonces",
+    "sous_titre": "Faites savoir à vos clients ce qui se passe dans votre atelier.",
+    "form_titre": "Titre de l'annonce",
+    "form_message": "Message",
+    "form_debut": "À partir du",
+    "form_duree": "Pendant",
+    "form_jours_one": "{{count}} jour",
+    "form_jours_other": "{{count}} jours",
+    "form_image": "Bannière (facultatif)",
+    "form_image_retirer": "Retirer la bannière",
+    "publier": "Publier l'annonce",
+    "quota_bloque": "Vous avez déjà publié une annonce aujourd'hui.",
+    "quota_demain": "Vous pourrez en publier une nouvelle le {{date}}.",
+    "quota_boost": "Pour donner plus de visibilité à votre annonce en cours, utilisez le Boost.",
+    "historique": "Vos annonces",
+    "vide_titre": "Aucune annonce",
+    "vide_desc": "Votre première annonce apparaîtra ici.",
+    "statut_programmee": "Programmée",
+    "statut_en_cours": "En cours",
+    "statut_boostee": "Boostée",
+    "statut_terminee": "Terminée",
+    "statut_masquee": "Masquée",
+    "du_au": "Du {{debut}} au {{fin}}",
+    "boost": "Booster",
+    "boost_titre": "Booster cette annonce",
+    "boost_aide": "Pendant toute la durée du Boost, votre annonce est diffusée plusieurs fois par jour en tête de la bande d'annonces.",
+    "boost_debut": "Démarrer le",
+    "boost_duree": "Durée",
+    "boost_total": "Montant",
+    "boost_payer": "Payer et booster",
+    "boost_indispo": "Le Boost n'est pas disponible pour le moment.",
+    "apercu": "Aperçu",
+    "supprimer_confirmer": "Supprimer cette annonce ?"
   }
 }
