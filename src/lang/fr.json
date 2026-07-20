@@ -3923,7 +3923,8 @@
       "rechercher": "Rechercher…",
       "realisations": "Réalisations",
       "veille": "Veille",
-      "pages": "Pages légales"
+      "pages": "Pages légales",
+      "reglages_vitrine": "Réglages vitrine"
     },
     "dashboard": {
       "bonjour": "Bonjour,",
@@ -4297,7 +4298,28 @@
       "nettoyer": "Effacer la mise en forme"
     },
     "verifie": "Vérifié",
-    "sponsorise": "Sponsorisé"
+    "sponsorise": "Sponsorisé",
+    "reglages_vitrine": {
+      "titre": "Réglages vitrine",
+      "splash_titre": "Habillage saisonnier de l'ouverture",
+      "splash_aide": "Pendant une période active, l'écran d'ouverture prend ce visuel au lieu de la marque. Aucune période active : l'ouverture reste celle de Gextimo.",
+      "splash_nom": "Nom de la période",
+      "splash_texte": "Texte affiché (facultatif)",
+      "splash_image": "URL de l'image (facultatif)",
+      "splash_debut": "Du",
+      "splash_fin": "Au",
+      "splash_actif": "Active",
+      "splash_ajouter": "Ajouter une période",
+      "splash_vide": "Aucune période configurée.",
+      "legal_titre": "Identité légale",
+      "legal_aide": "Ces valeurs alimentent les 11 pages juridiques. Tant qu'un champ est vide, la ligne qui le cite DISPARAÎT de la page au lieu d'afficher un gabarit.",
+      "legal_rccm": "Numéro RCCM",
+      "legal_ifu": "Numéro IFU",
+      "legal_apdp": "Numéro de délibération APDP",
+      "legal_vigueur": "Date d'entrée en vigueur",
+      "legal_maj": "Date de mise à jour",
+      "chevauchement": "Cette période en chevauche une autre : la première trouvée l'emportera."
+    }
   },
   "bienvenue": {
     "titre": "Bienvenue sur Gextimo !",

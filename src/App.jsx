@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import ReglagesVitrinePage from '@/pages/admin/ReglagesVitrinePage'
 import SplashDemarrage from '@/components/layout/SplashDemarrage'
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { setDeepLinkNavigator } from '@/utils/deepLink'
@@ -175,6 +176,7 @@ export default function App() {
           <Route path="/admin/admins"           element={<AdminsPage />} />
           <Route path="/admin/signalements"     element={<SignalementsPage />} />
           <Route path="/admin/banniere"         element={<BannierePage />} />
+          <Route path="/admin/reglages-vitrine" element={<ReglagesVitrinePage />} />
         </Route>
 
         {/* ── Vitrine publique (web uniquement) ───────────────────────── */}

@@ -3910,7 +3910,8 @@
       "rechercher": "Search…",
       "realisations": "Pieces",
       "veille": "Watch",
-      "pages": "Legal pages"
+      "pages": "Legal pages",
+      "reglages_vitrine": "Storefront settings"
     },
     "dashboard": {
       "bonjour": "Hello,",
@@ -4284,7 +4285,28 @@
       "nettoyer": "Clear formatting"
     },
     "verifie": "Verified",
-    "sponsorise": "Sponsored"
+    "sponsorise": "Sponsored",
+    "reglages_vitrine": {
+      "titre": "Storefront settings",
+      "splash_titre": "Seasonal launch screen",
+      "splash_aide": "While a period is active, the launch screen uses this artwork instead of the brand. No active period: the standard Gextimo launch is used.",
+      "splash_nom": "Period name",
+      "splash_texte": "Displayed text (optional)",
+      "splash_image": "Image URL (optional)",
+      "splash_debut": "From",
+      "splash_fin": "To",
+      "splash_actif": "Active",
+      "splash_ajouter": "Add a period",
+      "splash_vide": "No period configured.",
+      "legal_titre": "Legal identity",
+      "legal_aide": "These values feed the 11 legal pages. While a field is empty, the line quoting it DISAPPEARS from the page instead of showing a placeholder.",
+      "legal_rccm": "RCCM number",
+      "legal_ifu": "IFU number",
+      "legal_apdp": "APDP deliberation number",
+      "legal_vigueur": "Effective date",
+      "legal_maj": "Last updated",
+      "chevauchement": "This period overlaps another one: the first match will win."
+    }
   },
   "bienvenue": {
     "titre": "Welcome to Gextimo!",
