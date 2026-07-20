@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { getSuivi } from './vitrineApi'
@@ -78,7 +79,7 @@ export default function SuiviPage() {
                                  borderColor: ok || cur ? 'var(--color-primary)' : 'var(--color-border)',
                                  color: ok ? 'var(--color-text-inverse)' : cur ? 'var(--color-primary)' : 'var(--color-text-tertiary)',
                                }}>
-                            {ok ? '✓' : i + 1}
+                            {ok ? <Check size={13} strokeWidth={3} aria-hidden="true" /> : i + 1}
                           </div>
                           {s}
                         </li>

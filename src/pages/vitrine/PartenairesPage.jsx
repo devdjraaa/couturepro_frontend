@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Handshake, X, Send, ExternalLink } from 'lucide-react'
+import { Handshake, X, Send, ExternalLink, CheckCircle2 } from 'lucide-react'
 import VitrineShell from './VitrineChrome'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { getPartenaires, candidaterPartenaire } from './vitrineApi'
@@ -40,7 +40,7 @@ function CandidatureModal({ categories, onClose, t }) {
 
         {done ? (
           <div className="py-6 text-center">
-            <p className="text-2xl mb-2">✓</p>
+            <CheckCircle2 size={30} className="mx-auto mb-2 text-success" aria-hidden="true" />
             <p className="text-sm text-success font-medium mb-1">{t('vitrine.partenaires.form.merci_titre')}</p>
             <p className="text-xs text-dim">{t('vitrine.partenaires.form.merci_sous')}</p>
             <button onClick={onClose} className="mt-4 text-sm font-semibold text-primary hover:underline">{t('commun.fermer')}</button>

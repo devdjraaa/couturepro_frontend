@@ -335,7 +335,7 @@ export function VitrineNavbar() {
           ? (promo.lien
               ? <a href={promo.lien} target="_blank" rel="noopener noreferrer" className="hover:underline">{promo.texte}</a>
               : promo.texte)
-          : <><span className="text-primary">✦</span>{' '}{t('vitrine.promo_a')}{' '}<span className="font-bold text-primary">Gextimo</span>{' '}{t('vitrine.promo_b')}</>}
+          : <><Sparkles size={12} className="inline-block text-primary align-[-0.1em]" aria-hidden="true" />{' '}{t('vitrine.promo_a')}{' '}<span className="font-bold text-primary">Gextimo</span>{' '}{t('vitrine.promo_b')}</>}
       </div>
       <header className="sticky top-0 z-40 bg-app border-b border-edge">
         <div className="max-w-[1180px] mx-auto pl-4 pr-2 sm:px-5 h-[68px] grid grid-cols-[auto_1fr_auto] items-center gap-4 lg:gap-6">

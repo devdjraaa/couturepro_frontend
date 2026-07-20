@@ -356,7 +356,9 @@
     "securite": "Sécurité",
     "identite": "Identité",
     "retirer": "Retirer",
-    "contacter_support": "Contacter le support"
+    "contacter_support": "Contacter le support",
+    "enregistre": "Enregistré",
+    "verifier": "Vérifier"
   },
   "erreurs": {
     "reseau": "Erreur de connexion. Vérifiez votre réseau.",
@@ -4351,7 +4353,9 @@
       "liste_num": "Liste numérotée",
       "lien": "Lien",
       "nettoyer": "Effacer la mise en forme"
-    }
+    },
+    "verifie": "Vérifié",
+    "sponsorise": "Sponsorisé"
   },
   "bienvenue": {
     "titre": "Bienvenue sur Gextimo !",
