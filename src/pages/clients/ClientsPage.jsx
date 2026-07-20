@@ -1,11 +1,13 @@
 import { useState, useMemo } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
-import { Plus, X, UserPlus, Users, AlignLeft, ArrowDownAZ, ClipboardList, BookUser, Check, FileSpreadsheet } from 'lucide-react'
+import { Plus, X, UserPlus, Users, AlignLeft, ArrowDownAZ, ClipboardList, BookUser, Check, FileSpreadsheet, Smartphone } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import i18n from '@/lang/i18n'
 import { useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { useClients, useCreateClient } from '@/hooks/useClients'
+import { IS_NATIVE } from '@/constants/routes'
 import { usePlanFeature } from '@/hooks/usePlanFeature'
 import { mesureService } from '@/services/mesureService'
 import { shareOrSaveText } from '@/utils/shareNative'
@@ -44,7 +46,10 @@ async function pickContacts() {
       return { nom, prenom, telephone: tel }
     }).filter(c => c.nom && c.telephone)
   } catch {
-    toast.error("Import contacts non disponible sur cette plateforme.")
+    // Le module de contacts est NATIF : sur navigateur il n'existe pas. Plutôt
+    // qu'un message d'échec sec (le bouton semblait cassé), on explique la
+    // limite et on montre où la lever.
+    toast.error(i18n.t('clients.contacts_mobile_seul'), { duration: 5000 })
     return []
   }
 }
@@ -313,11 +318,21 @@ export default function ClientsPage() {
               </Button>
             ) : undefined}
             secondaryAction={!search ? (
-              /* Pt 61 : inciter à l'import de contacts pour gagner du temps. */
-              <button type="button" onClick={handleOpenContacts}
-                      className="text-[13px] font-semibold text-primary hover:underline inline-flex items-center gap-1.5">
-                <BookUser size={14} />{t('clients.vide.importer')}
-              </button>
+              /* Pt 61 : inciter à l'import de contacts pour gagner du temps.
+                 Sur NAVIGATEUR, l'accès au carnet d'adresses n'existe pas : on
+                 l'annonce et on oriente vers l'application, au lieu d'un bouton
+                 qui ne produit rien quand on le presse. */
+              IS_NATIVE ? (
+                <button type="button" onClick={handleOpenContacts}
+                        className="text-[13px] font-semibold text-primary hover:underline inline-flex items-center gap-1.5">
+                  <BookUser size={14} />{t('clients.vide.importer')}
+                </button>
+              ) : (
+                <a href="/Gextimo.apk" download
+                   className="text-[13px] font-medium text-dim hover:text-primary inline-flex items-center gap-1.5">
+                  <Smartphone size={14} />{t('clients.vide.importer_mobile')}
+                </a>
+              )
             ) : undefined}
           />
         ) : groupedByLetter ? (

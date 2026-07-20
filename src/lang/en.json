@@ -606,7 +606,8 @@
       "titre": "Your address book is empty",
       "description": "Add your first client or import your contacts to get started.",
       "action": "Add a client",
-      "importer": "Import my contacts"
+      "importer": "Import my contacts",
+      "importer_mobile": "Import your contacts: in the mobile app"
     },
     "onglets": {
       "tous": "All",
@@ -701,7 +702,8 @@
       "label": "Share across my workshops",
       "aide": "This client will be visible in all your workshops.",
       "badge": "Shared"
-    }
+    },
+    "contacts_mobile_seul": "Access to your address book only exists in the mobile app. In a browser, add clients manually or install the app."
   },
   "commandes": {
     "titre": "Orders",

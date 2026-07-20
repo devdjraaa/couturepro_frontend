@@ -606,7 +606,8 @@
       "titre": "Votre carnet est vide",
       "description": "Ajoutez votre premier client ou importez vos contacts pour commencer.",
       "action": "Ajouter un client",
-      "importer": "Importer mes contacts"
+      "importer": "Importer mes contacts",
+      "importer_mobile": "Importer vos contacts : sur l'application mobile"
     },
     "onglets": {
       "tous": "Tous",
@@ -701,7 +702,8 @@
       "label": "Partager entre mes ateliers",
       "aide": "Cette cliente sera visible dans tous vos ateliers.",
       "badge": "Partagée"
-    }
+    },
+    "contacts_mobile_seul": "L'accès au carnet d'adresses n'existe que dans l'application mobile. Sur navigateur, ajoutez vos clients à la main ou installez l'application."
   },
   "commandes": {
     "titre": "Commandes",
