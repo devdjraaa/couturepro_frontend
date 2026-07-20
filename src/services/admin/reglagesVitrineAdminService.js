@@ -49,3 +49,36 @@ export const reglagesVitrineAdminService = {
     return data?.reglages ?? {}
   },
 }
+
+/**
+ * CLI-2 — diffusion des « Gextimo Infos ».
+ *
+ * `portee()` est appelée AVANT l'envoi : la direction doit voir combien
+ * d'ateliers recevront le message, pas le découvrir après. Un ciblage mal saisi
+ * qui n'atteint personne se voit alors tout de suite.
+ */
+export const infosAdminService = {
+  async getAll() {
+    const { data } = await adminApi.get('/infos')
+    return { infos: data?.infos?.data ?? [], categories: data?.categories ?? [] }
+  },
+
+  async portee(cible) {
+    const { data } = await adminApi.post('/infos/portee', cible)
+    return data?.portee ?? 0
+  },
+
+  async creer(payload) {
+    const { data } = await adminApi.post('/infos', payload)
+    return data?.info
+  },
+
+  async modifier(id, payload) {
+    const { data } = await adminApi.put(`/infos/${id}`, payload)
+    return data?.info
+  },
+
+  async supprimer(id) {
+    await adminApi.delete(`/infos/${id}`)
+  },
+}

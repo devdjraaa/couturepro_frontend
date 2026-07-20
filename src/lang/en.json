@@ -1493,7 +1493,8 @@
     "outils_creatifs": "Creative tools",
     "studio": "Studio",
     "gestion_atelier": "Workshop management",
-    "annonces": "Announcements"
+    "annonces": "Announcements",
+    "infos": "Gextimo News"
   },
   "pwa": {
     "installer_titre": "Install Gextimo",
@@ -3991,7 +3992,8 @@
       "veille": "Watch",
       "pages": "Legal pages",
       "reglages_vitrine": "Storefront settings",
-      "analytique": "Analytics"
+      "analytique": "Analytics",
+      "infos": "Gextimo News"
     },
     "dashboard": {
       "bonjour": "Hello,",
@@ -4452,6 +4454,33 @@
       "lien": "Optional \"Learn more\" link",
       "chrono": "Full-screen countdown on the day",
       "marqueurs": "Placeholders available in texts: {{jours}}, {{heures}}, {{minutes}}, {{secondes}}."
+    },
+    "infos": {
+      "titre": "Gextimo News",
+      "sous_titre": "Broadcast messages to professionals",
+      "nouvelle": "New item",
+      "modifier": "Edit item",
+      "champ_titre": "Title",
+      "contenu": "Message",
+      "categorie": "Category",
+      "lien": "Link (optional)",
+      "epingle": "Pin to top",
+      "publie_at": "Publish on (empty = now)",
+      "expire_at": "Remove on (empty = never)",
+      "cible": "Recipients",
+      "cible_tous": "All workshops",
+      "cible_types_compte": "By account type",
+      "cible_plans": "By plan",
+      "cible_villes": "By city",
+      "cible_ateliers": "Specific workshops",
+      "valeurs": "Values (one per line)",
+      "portee": "{{n}} workshop(s) will receive this",
+      "portee_zero": "This targeting reaches no workshop — check the values.",
+      "lectures": "{{n}} read(s)",
+      "diffuser": "Broadcast",
+      "confirmer_suppression": "Remove this item?",
+      "aucune": "Nothing broadcast yet.",
+      "aide": "News is an editorial message to professionals (announcement, new feature, tip). Distinct from notifications, which report an event on the workshop and call for action."
     }
   },
   "bienvenue": {
@@ -4659,5 +4688,16 @@
     "minutes": "minutes",
     "secondes": "seconds",
     "en_savoir_plus": "Learn more"
+  },
+  "infos": {
+    "titre": "Gextimo News",
+    "tout_lire": "Mark all as read",
+    "cat_toutes": "All",
+    "epinglee": "Pinned",
+    "non_lue": "Unread",
+    "en_savoir_plus": "Learn more",
+    "vide_titre": "Nothing yet",
+    "vide_desc": "Announcements, new features and tips from the Gextimo team will appear here.",
+    "vide_categorie": "No news in this category."
   }
 }

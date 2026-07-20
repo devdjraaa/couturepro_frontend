@@ -31,6 +31,7 @@ const GESTION = [
   { to: '/admin/liste-noire',   icon: ShieldBan,     tKey: 'admin.nav.liste_noire'   },
   { to: '/admin/audit',         icon: ClipboardList, tKey: 'admin.nav.audit'         },
   { to: '/admin/notifications', icon: Bell,          tKey: 'admin.nav.notifications' },
+  { to: '/admin/infos',         icon: Megaphone,      tKey: 'admin.nav.infos' },
   { to: '/admin/diagnostic',    icon: Activity,      tKey: 'admin.nav.diagnostic'    },
 ]
 

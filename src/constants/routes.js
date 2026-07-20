@@ -75,6 +75,7 @@ export const ROUTES = {
 
   // Notifications
   NOTIFICATIONS:    '/notifications',
+  INFOS:         '/infos',   // CLI-2 — « Gextimo Infos », distinct des notifications
 
   // Paramètres
   PARAMETRES:       '/parametres',

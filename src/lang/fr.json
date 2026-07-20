@@ -1493,7 +1493,8 @@
     "outils_creatifs": "Outils créatifs",
     "studio": "Studio",
     "gestion_atelier": "Gestion d'atelier",
-    "annonces": "Annonces"
+    "annonces": "Annonces",
+    "infos": "Gextimo Infos"
   },
   "pwa": {
     "installer_titre": "Installer Gextimo",
@@ -4004,7 +4005,8 @@
       "veille": "Veille",
       "pages": "Pages légales",
       "reglages_vitrine": "Réglages vitrine",
-      "analytique": "Analytique"
+      "analytique": "Analytique",
+      "infos": "Gextimo Infos"
     },
     "dashboard": {
       "bonjour": "Bonjour,",
@@ -4465,6 +4467,33 @@
       "lien": "Lien « En savoir plus » (facultatif)",
       "chrono": "Chrono plein écran le jour J",
       "marqueurs": "Marqueurs disponibles dans les textes : {{jours}}, {{heures}}, {{minutes}}, {{secondes}}."
+    },
+    "infos": {
+      "titre": "Gextimo Infos",
+      "sous_titre": "Diffusion de messages aux professionnels",
+      "nouvelle": "Nouvelle info",
+      "modifier": "Modifier l'info",
+      "champ_titre": "Titre",
+      "contenu": "Message",
+      "categorie": "Catégorie",
+      "lien": "Lien (facultatif)",
+      "epingle": "Épingler en haut de liste",
+      "publie_at": "Publier le (vide = tout de suite)",
+      "expire_at": "Retirer le (vide = jamais)",
+      "cible": "Destinataires",
+      "cible_tous": "Tous les ateliers",
+      "cible_types_compte": "Par type de compte",
+      "cible_plans": "Par formule",
+      "cible_villes": "Par ville",
+      "cible_ateliers": "Ateliers précis",
+      "valeurs": "Valeurs (une par ligne)",
+      "portee": "{{n}} atelier(s) recevront ce message",
+      "portee_zero": "Ce ciblage n'atteint aucun atelier — vérifiez les valeurs saisies.",
+      "lectures": "{{n}} lecture(s)",
+      "diffuser": "Diffuser",
+      "confirmer_suppression": "Retirer cette info ?",
+      "aucune": "Aucune info diffusée.",
+      "aide": "Une info est un message éditorial vers les professionnels (annonce, nouveauté, astuce). À distinguer des notifications, qui signalent un événement sur l'atelier et appellent une action."
     }
   },
   "bienvenue": {
@@ -4672,5 +4701,16 @@
     "minutes": "minutes",
     "secondes": "secondes",
     "en_savoir_plus": "En savoir plus"
+  },
+  "infos": {
+    "titre": "Gextimo Infos",
+    "tout_lire": "Tout marquer comme lu",
+    "cat_toutes": "Toutes",
+    "epinglee": "Épinglée",
+    "non_lue": "Non lue",
+    "en_savoir_plus": "En savoir plus",
+    "vide_titre": "Aucune info pour le moment",
+    "vide_desc": "Les annonces, nouveautés et astuces de l'équipe Gextimo apparaîtront ici.",
+    "vide_categorie": "Aucune info dans cette catégorie."
   }
 }

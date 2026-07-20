@@ -10,6 +10,7 @@ import { useAccountType } from '@/hooks/useAccountType'
 import { ROUTES } from '@/constants/routes'
 import { Avatar } from '@/components/ui'
 import { useNotificationsCount } from '@/hooks/useNotifications'
+import { useInfosCount } from '@/hooks/useInfos'
 
 export const NAV_GROUPS = [
   {
@@ -42,6 +43,7 @@ export const NAV_GROUPS = [
     label: 'Système',
     items: [
       { to: '/notifications', icon: Bell,       key: 'notifications'              },
+      { to: ROUTES.INFOS,     icon: Megaphone,  key: 'infos'                      },
       { to: ROUTES.HISTORIQUE, icon: History,   key: 'historique'                 },
       { to: '/archives',      icon: Archive,    key: 'archives', proprietaire: true },
       { to: '/parametres',    icon: Settings,   key: 'parametres'                 },
@@ -50,7 +52,12 @@ export const NAV_GROUPS = [
   },
 ]
 
-function NavItem({ to, icon: Icon, navKey, end, notifCount, t }) {
+/**
+ * `badge` remplace l'ancien test `to === '/notifications'` : la pastille était
+ * réservée à une entrée précise, et toute nouvelle entrée à compteur — comme
+ * « Gextimo Infos » — aurait demandé un second cas particulier ici.
+ */
+function NavItem({ to, icon: Icon, navKey, end, badge = 0, t }) {
   return (
     <NavLink
       to={to}
@@ -76,9 +83,9 @@ function NavItem({ to, icon: Icon, navKey, end, notifCount, t }) {
           />
           <span className="flex-1 truncate">{t(`nav.${navKey}`)}</span>
 
-          {to === '/notifications' && notifCount > 0 && (
+          {badge > 0 && (
             <span className="text-2xs bg-danger text-inverse px-1.5 py-0.5 rounded-full font-semibold leading-none">
-              {notifCount > 9 ? '9+' : notifCount}
+              {badge > 9 ? '9+' : badge}
             </span>
           )}
         </>
@@ -111,6 +118,10 @@ export default function Sidebar() {
   const { isDesigner } = useAccountType()
   const navigate = useNavigate()
   const { data: notifCount = 0 } = useNotificationsCount()
+  const { data: infosCount = 0 } = useInfosCount()
+
+  // Une entrée sans compteur n'affiche pas de pastille : la table dit qui en a un.
+  const badges = { '/notifications': notifCount, [ROUTES.INFOS]: infosCount }
   const { t } = useTranslation()
 
   // Restauration synchrone après montage : `useLayoutEffect` provoquerait un
@@ -161,7 +172,7 @@ export default function Sidebar() {
                     icon={icon}
                     navKey={navKey}
                     end={end}
-                    notifCount={notifCount}
+                    badge={badges[to] ?? 0}
                     t={t}
                   />
                 ))}
