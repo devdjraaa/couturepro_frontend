@@ -155,7 +155,8 @@ const GROUPS = {
   5:'Abonnement aux créateurs',
   6:'Parcours Espace Client',
   7:'Studio Vidéos & Support',
-  8:'Reliquat ouvert'
+  8:'Reliquat ouvert',
+  9:'Avis v2 — décisions du 20/07 (avis par modèle)'
 };
 const SLABEL = {done:'Fait',part:'Partiel',bug:'Bug',todo:'À faire',spec:'Spec',info:'Info'};
 
@@ -267,6 +268,26 @@ const ITEMS = [
   F(40,'REL-V3',8,'todo','« Mes Réalisations » mobile : intégration de la couche hors ligne'),
   F(41,'REL-V4',8,'bug','Branche android désalignée de master : 247 commits de retard côté web, 288 en propre. L\'app mobile n\'a pas les correctifs récents. Chantier à part (fusion + build APK + test appareil), pas un simple portage'),
   F(42,'REL-V5',8,'done','Composant Toaster jamais monté : 41 appels toast.success/error sans aucun effet dans toute l\'application (aucune confirmation ni erreur visible)'),
+
+  // ---------- Avis v2 (décisions direction 20/07) ----------
+  B(50,'AV2-BUG',9,'done','CORRECTIF PRIORITAIRE : un avis pouvait partir sans texte, sans message d\'erreur (texte facultatif côté serveur, erreurs avalées côté front). Trois champs obligatoires des deux côtés'),
+  B(51,'AV2-1',9,'done','Avis rattaché au MODÈLE (vetement_id) — piste « collection » abandonnée, 5 avis historiques conservés tels quels'),
+  B(52,'AV2-2',9,'done','Un seul avis par compte et par modèle (index unique en base + message clair)'),
+  B(53,'AV2-3',9,'done','Compte client obligatoire pour déposer un avis (401 auth_requise)'),
+  B(54,'AV2-7',9,'done','Signalement motivé : table dédiée, une empreinte = une voix, seuil configurable, motif grave = revue prioritaire immédiate. Jamais de dépublication automatique'),
+  B(55,'AV2-8',9,'done','Anti-spam : plafond d\'avis/jour par compte + refus du même texte re-publié (30 j)'),
+  B(56,'AV2-9',9,'done','Champ « achat vérifié » prêt en base — logique différée (décision direction)'),
+  B(57,'AV2-11',9,'done','Photos jointes validées par l\'admin AVANT publication (le texte publie immédiatement) ; photos existantes réputées validées'),
+  B(58,'AV2-12',9,'done','Mots bannis : liste éditable en admin (démarre vide), frontières de mots, avis publié mais marqué prioritaire — pas bloqué (faux positifs)'),
+  B(59,'AV2-ADM',9,'done','Admin : file priorisée (graves en tête), filtre photos en attente, réglages GET/PUT moderation-avis, rétablir purge les signalements'),
+  F(43,'AV2-F1',9,'done','Formulaire : choix du modèle obligatoire + validation des 3 champs + erreurs affichées'),
+  F(44,'AV2-F2',9,'done','Sans compte : avis mémorisé (texte compris), connexion expliquée, REJOUÉ automatiquement après connexion, retour au profil'),
+  F(45,'AV2-F3',9,'done','Signalement en un clic avec motif (4 choix) ; panneau créateur : un avis signalé reste publié en attendant l\'admin'),
+  F(46,'AV2-F4',9,'todo','UI admin des réglages de modération (seuils, motifs, mots bannis) et de la file photos — parti pris visuel : Aquilas'),
+
+  // ---------- REL-4 débloqué ----------
+  B(60,'REL-4',8,'done','Colonne libelles_mesures RÉTABLIE (supprimée en avril alors que le modèle Eloquent la référençait) + acceptée à la création/édition d\'un modèle. Au passage : le garde-fou max:5 figé des Requests aurait plafonné un plan Studio à 5 photos'),
+  F(47,'REL-4',8,'part','Éditeur des mesures attendues par modèle (VetementForm) + panneau MesuresInline dans la commande (fusion, jamais d\'écrasement) — reste le test sur appareil'),
   B(47,'REL-4',8,'todo','Flux « Éditer les mesures » (points 68-69) — test sur appareil requis'),
   B(48,'REL-5',8,'info','Relecture juridique des pages légales — tâche équipe'),
   B(49,'REL-6',8,'info','Clés externes (analytics, Search Console) — dépend de la direction')
