@@ -60,7 +60,7 @@ const AJOUT = 'border-l-4 border-emerald-500 bg-emerald-500/10 rounded-r-lg pl-4
 function LegendeAjout() {
   const { t } = useTranslation()
   return (
-    <div className="mb-6 flex items-center gap-2 text-[12px] text-emerald-700 dark:text-emerald-300">
+    <div className="mb-6 flex items-center gap-2 text-[12px] text-success dark:text-emerald-300">
       <span className="w-3 h-3 rounded-sm bg-emerald-500/40 border-l-4 border-emerald-500 flex-none" />
       {t('vitrine.legal_hub.legende_ajout')}
     </div>

@@ -95,10 +95,10 @@ export default function AdminRealisationsPage() {
 
               {/* Déclarations du professionnel */}
               <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px]">
-                <span className={cn('flex items-center gap-1', r.certifie_auteur ? 'text-emerald-600' : 'text-ghost')}>
+                <span className={cn('flex items-center gap-1', r.certifie_auteur ? 'text-success' : 'text-ghost')}>
                   <ShieldCheck size={13} /> {t('realisations.admin.certifie')}
                 </span>
-                <span className={cn('flex items-center gap-1', r.consentement_personnes ? 'text-emerald-600' : 'text-ghost')}>
+                <span className={cn('flex items-center gap-1', r.consentement_personnes ? 'text-success' : 'text-ghost')}>
                   <Users size={13} /> {t('realisations.admin.consentement_ok')}
                 </span>
               </div>
