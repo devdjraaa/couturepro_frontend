@@ -316,12 +316,14 @@ export default function MaVitrinePage() {
               {t('ma_vitrine.en_ligne')}
             </span>
           </div>
-          <div className="flex gap-2 mt-4">
+          {/* Empilés sous 400 px : côte à côte, les libellés se brisaient en
+              « Voir ma / page » et « Copier le / lien ». */}
+          <div className="flex flex-col min-[400px]:flex-row gap-2 mt-4">
             {IS_NATIVE ? (
               <button
                 type="button"
                 onClick={async () => {
-                  // Ouvre la vitrine dans un navigateur in-app (Custom Tab), comme FedaPay —
+                  // Ouvre la vitrine dans un navigateur in-app (Custom Tab), comme FedaPay :
                   // pas de sortie vers le navigateur externe. Import dynamique (plugin natif).
                   try {
                     const { Browser } = await import('@capacitor/browser')
@@ -330,17 +332,17 @@ export default function MaVitrinePage() {
                     window.open(publicUrl, '_blank')
                   }
                 }}
-                className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl bg-primary text-white hover:bg-primary-600 transition">
-                <ExternalLink size={16} /> {t('ma_vitrine.voir_page')}
+                className="inline-flex items-center justify-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl bg-primary text-white hover:bg-primary-600 transition whitespace-nowrap">
+                <ExternalLink size={16} className="shrink-0" /> {t('ma_vitrine.voir_page')}
               </button>
             ) : (
               <Link to={publicPath}
-                    className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl bg-primary text-white hover:bg-primary-600 transition">
-                <ExternalLink size={16} /> {t('ma_vitrine.voir_page')}
+                    className="inline-flex items-center justify-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl bg-primary text-white hover:bg-primary-600 transition whitespace-nowrap">
+                <ExternalLink size={16} className="shrink-0" /> {t('ma_vitrine.voir_page')}
               </Link>
             )}
             <button onClick={copyLink}
-                    className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl border border-white/20 text-white hover:bg-white/10 transition">
+                    className="inline-flex items-center justify-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl border border-white/20 text-white hover:bg-white/10 transition whitespace-nowrap">
               {copied ? <><Check size={16} /> {t('ma_vitrine.copie')}</> : <><Copy size={16} /> {t('ma_vitrine.copier_lien')}</>}
             </button>
           </div>

@@ -347,8 +347,8 @@ export default function OutilsCreatifsPage() {
 
       <div className="p-4 space-y-4">
         {!showForm && !editing && (
-          <Button onClick={() => { setEditing(null); setShowForm(true) }} className="w-full">
-            <Plus size={16} className="mr-2" /> {t('outils_creatifs.ajouter')}
+          <Button onClick={() => { setEditing(null); setShowForm(true) }} icon={Plus} className="w-full">
+            {t('outils_creatifs.ajouter')}
           </Button>
         )}
 
