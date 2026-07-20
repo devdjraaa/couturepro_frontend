@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { sanitizePhoneInput } from '@/utils/phoneInput'
-import { UserPlus, Users, Copy, CheckCheck } from 'lucide-react'
+import { UserPlus, Users, Copy, CheckCheck, CheckCircle2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useEquipe, useInviterMembre, useRemoveMembre } from '@/hooks/useEquipe'
 import { usePlanLimit } from '@/hooks/usePlanFeature'

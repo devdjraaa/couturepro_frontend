@@ -59,9 +59,33 @@ for (const f of fichiers) {
   }
 }
 
-if (manques.length) {
-  console.error('\n✖ Icônes utilisées mais jamais importées :\n')
-  for (const x of manques) console.error('   ' + x)
+// Deuxième classe d'erreur, rencontrée le 20/07 en fusionnant : un identifiant
+// importé DEUX fois. Le build s'arrête dessus, mais autant le dire clairement
+// et au même endroit que les imports manquants.
+const doublons = []
+for (const f of fichiers) {
+  const s = fs.readFileSync(f, 'utf8')
+  const vus = new Map()
+  for (const r of s.matchAll(/^import\s+(?:\{([^}]*)\}|([A-Za-z_$][\w$]*))\s+from/gm)) {
+    const noms = r[1] ? r[1].split(',').map((x) => x.trim().split(/\s+as\s+/).pop()) : [r[2]]
+    for (const n of noms.filter(Boolean)) {
+      vus.set(n, (vus.get(n) || 0) + 1)
+    }
+  }
+  for (const [n, c] of vus) if (c > 1) doublons.push(`${f} → ${n} (${c} fois)`)
+}
+
+if (doublons.length) {
+  console.error('\n✖ Identifiants importés plusieurs fois :\n')
+  for (const x of doublons) console.error('   ' + x)
+  console.error('')
+}
+
+if (manques.length || doublons.length) {
+  if (manques.length) {
+    console.error('\n✖ Icônes utilisées mais jamais importées :\n')
+    for (const x of manques) console.error('   ' + x)
+  }
   console.error('\nL\'application compilerait, puis planterait à l\'écran blanc.\n')
   process.exit(1)
 }
