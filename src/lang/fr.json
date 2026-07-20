@@ -937,7 +937,9 @@
     "alertes": {
       "retard": "Commandes en retard",
       "bientot": "Livraisons dans 48h"
-    }
+    },
+    "solde": "Soldé",
+    "prix_a_definir": "Prix à définir"
   },
   "catalogue": {
     "titre": "Modèles Courants",

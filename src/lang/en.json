@@ -937,7 +937,9 @@
     "alertes": {
       "retard": "Late orders",
       "bientot": "Deliveries within 48h"
-    }
+    },
+    "solde": "Paid",
+    "prix_a_definir": "Price to be set"
   },
   "catalogue": {
     "titre": "Common Models",
