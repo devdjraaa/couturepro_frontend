@@ -87,6 +87,17 @@ jobs:
               }
               # Service worker : jamais figé (doit pouvoir se mettre à jour).
               location = /sw.js { add_header Cache-Control "no-cache"; }
+              # Pages HTML : JAMAIS mises en cache. Deux raisons.
+              # 1. index.html référence des fichiers au nom haché ; servi depuis
+              #    le cache après un déploiement, il pointe vers des fichiers
+              #    supprimés — écran blanc, sans message.
+              # 2. Le suivi (suivi-v2.html) change plusieurs fois par jour et
+              #    est consulté par la direction : une version périmée lui fait
+              #    lire un état faux du projet.
+              location ~* \.html$ {
+                  add_header Cache-Control "no-cache, must-revalidate";
+                  expires -1;
+              }
               # Statiques à URL STABLE dont le contenu change (favicon, icônes, manifest) :
               # cache court + revalidation. En « immutable » 1 an, un changement de logo
               # n'atteignait jamais les navigateurs (constaté le 19/07 : Edge et Chrome
