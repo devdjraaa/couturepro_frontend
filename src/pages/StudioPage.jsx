@@ -197,11 +197,13 @@ function AnnonceTab({ t }) {
 // PL-7 — Vidéos de présentation
 function VideosTab({ t }) {
   const [items, setItems] = useState(null)
+  const [quota, setQuota] = useState(null)
   const [form, setForm] = useState({ titre: '', url: '' })
   const [saving, setSaving] = useState(false)
 
   const load = async () => {
     try { setItems(await studioService.videos()) } catch { setItems([]) }
+    try { setQuota(await studioService.quotaVideos()) } catch { setQuota(null) }
   }
   useEffect(() => { load() }, [])
 
@@ -232,7 +234,18 @@ function VideosTab({ t }) {
         <Input value={form.url} onChange={e => setForm(f => ({ ...f, url: e.target.value }))} placeholder={t('studio.videos.url')} inputMode="url" />
         <Button type="submit" loading={saving} className="w-full"><Plus size={16} className="mr-1" /> {t('studio.videos.ajouter')}</Button>
       </form>
-      <p className="text-2xs text-ghost text-center">{t('studio.videos.aide', { n: items.length })}</p>
+      {/* VID-2 : plafond réel du plan (le libellé annonçait « /50 » à tout le
+          monde) et corrections restantes du mois, servis par /atelier-videos/quota. */}
+      <p className="text-2xs text-ghost text-center">
+        {quota
+          ? (quota.illimite
+              ? t('studio.videos.aide_illimite', { n: quota.utilise })
+              : t('studio.videos.aide', { n: quota.utilise, max: quota.max }))
+          : t('studio.videos.aide_chargement')}
+        {quota?.corrections?.max > 0 && (
+          <> · {t('studio.videos.corrections', { n: quota.corrections.restantes })}</>
+        )}
+      </p>
 
       {items.length === 0 ? (
         <EmptyState icon={Video} title={t('studio.videos.vide')} description={t('studio.videos.vide_sous')} />
@@ -245,6 +258,14 @@ function VideosTab({ t }) {
                 <span className="truncate">{item.titre || item.url}</span>
                 <ExternalLink size={12} className="shrink-0 opacity-60" />
               </a>
+              {item.statut && item.statut !== 'publiee' && (
+                <span className={cn(
+                  'shrink-0 text-2xs font-semibold px-2 py-0.5 rounded-full',
+                  item.statut === 'refusee' ? 'bg-danger/10 text-danger' : 'bg-warning/10 text-warning',
+                )} title={item.motif_refus || undefined}>
+                  {t(`studio.videos.statut.${item.statut}`)}
+                </span>
+              )}
               <button onClick={() => retirer(item)} className="text-danger shrink-0"><Trash2 size={15} /></button>
             </div>
           ))}

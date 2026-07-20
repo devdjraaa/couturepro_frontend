@@ -212,6 +212,7 @@
       "recu": "Receipt"
     },
     "modes": {
+      "fedapay": "FedaPay",
       "wave": "Wave",
       "om": "Orange Money",
       "especes": "Cash",
@@ -4399,7 +4400,14 @@
       "vide": "No videos",
       "vide_sous": "Add presentation video links to show on your storefront.",
       "confirmer_retrait": "Remove this video?",
-      "aide": "{{n}}/50 videos"
+      "aide": "{{n}}/{{max}} videos",
+      "aide_illimite": "{{n}} videos — unlimited",
+      "aide_chargement": "Loading quota…",
+      "corrections": "{{n}} edit(s) left this month",
+      "statut": {
+        "en_attente": "under review",
+        "refusee": "rejected"
+      }
     }
   }
 }

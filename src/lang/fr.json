@@ -212,6 +212,7 @@
       "recu": "Reçu"
     },
     "modes": {
+      "fedapay": "FedaPay",
       "wave": "Wave",
       "om": "Orange Money",
       "especes": "Espèces",
@@ -4412,7 +4413,14 @@
       "vide": "Aucune vidéo",
       "vide_sous": "Ajoutez des liens de vidéos de présentation à afficher sur votre vitrine.",
       "confirmer_retrait": "Retirer cette vidéo ?",
-      "aide": "{{n}}/50 vidéos"
+      "aide": "{{n}}/{{max}} vidéos",
+      "aide_illimite": "{{n}} vidéos — illimité",
+      "aide_chargement": "Chargement du quota…",
+      "corrections": "{{n}} correction(s) restante(s) ce mois",
+      "statut": {
+        "en_attente": "en validation",
+        "refusee": "refusée"
+      }
     }
   }
 }
