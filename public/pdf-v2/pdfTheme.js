@@ -13,10 +13,10 @@
  * composent avec ces briques ; ils ne redéfinissent plus ni couleur ni marge.
  * Un futur document hérite de l'identité sans une ligne de style.
  *
- * Choix de fond : le papier n'est pas l'écran. Fond blanc franc, or réservé aux
- * filets et aux accents, rouge réservé aux totaux et aux mentions fortes —
- * l'encre coûte cher et un aplat de couleur pleine page se voit sur une
- * impression bon marché.
+ * Choix de fond : le papier n'est pas l'écran. Fond blanc franc, rouge de marque
+ * sur les filets et les intitulés, rouge appuyé sur les totaux. Pas d'aplat
+ * pleine page : l'encre coûte cher et cela se voit sur une impression bon
+ * marché — la couleur passe par des filets fins, pas par des blocs.
  */
 
 /* ── Jetons (miroir de la charte applicative) ─────────────────────────────── */
@@ -37,15 +37,14 @@ export const T = {
   vert:       '#1F7A5A',   // encaissé / payé
   ambre:      '#B4791A',   // en attente
 
-  /* Accent STRUCTUREL (filets, intitulés d'atelier, encarts). Par défaut l'or :
-     employer le rouge de marque sur chaque filet des 8 documents finit par
-     crier, et un aplat rouge coûte de l'encre à l'impression. Le rouge reste
-     réservé à ce qui doit frapper — les totaux et les mentions fortes.
-     `setAccent('rouge')` bascule l'ensemble si la direction préfère la marque
-     dominante. */
-  accent:       '#CDA662',
-  accentSombre: '#A87F3E',
-  accentPale:   '#F5EDDD',
+  /* Accent STRUCTUREL (filets, intitulés d'atelier, encarts).
+     ROUGE de marque — arbitrage direction du 20/07, après comparaison des deux
+     jeux sur les 8 documents : un document reconnaissable au premier coup d'œil
+     vaut mieux qu'un document plus discret, surtout au lancement.
+     `setAccent('or')` reste disponible pour comparer. */
+  accent:       '#D00B0B',
+  accentSombre: '#8E0707',
+  accentPale:   '#FBE9E9',
 
   serif:      "'Bodoni Moda', Georgia, serif",
   sans:       "'Plus Jakarta Sans', -apple-system, 'Segoe UI', sans-serif",
@@ -71,7 +70,7 @@ export function setAccent(nom) {
 
 /**
  * En-tête de document : nom de l'atelier en capitales espacées, titre en
- * Bodoni, filet or. C'est la signature visuelle commune aux 7 documents.
+ * Bodoni, filet d'accent. C'est la signature visuelle commune aux 8 documents.
  */
 export function enTete({ atelierNom, titre, sousTitre = '', reference = '', date = null }) {
   const d = (date ?? new Date()).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })
@@ -152,7 +151,7 @@ export function tableau({ colonnes, lignes, total = null }) {
     <thead><tr>${th}</tr></thead><tbody>${tr}${pied}</tbody></table>`
 }
 
-/** Encart de note ou de mention (fond crème, filet or à gauche). */
+/** Encart de note ou de mention (fond crème, filet d'accent à gauche). */
 export function encart(titre, texte) {
   return `
   <div style="margin-top:22px;background:${T.fondDoux};border-left:2px solid ${T.accent};

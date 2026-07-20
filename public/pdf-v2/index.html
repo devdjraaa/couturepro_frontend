@@ -69,14 +69,14 @@
     <br><br>
     En V1, chaque document avait sa propre palette (violet pour la caisse, vert
     pour les relevés, gris ailleurs) et aucun ne portait la charte. La V2 leur
-    donne une identité commune : <strong>Bodoni Moda</strong> en titrage,
-    filet or, rouge réservé aux totaux.
+    donne une identité commune : <strong>Bodoni Moda</strong> en titrage et le
+    <strong>rouge Gextimo</strong> sur la structure, comme validé.
   </div>
 
   <div class="choix">
     <span class="choix-l">Accent des documents</span>
-    <button type="button" data-accent="or" class="actif">Or</button>
-    <button type="button" data-accent="rouge">Rouge Gextimo</button>
+    <button type="button" data-accent="rouge" class="actif">Rouge Gextimo</button>
+    <button type="button" data-accent="or">Or</button>
   </div>
   <p class="choix-aide" id="aide-accent"></p>
 
@@ -329,8 +329,8 @@ function rendre() {
 }
 
 const AIDE = {
-  or: "L'or porte la structure (filets, intitulés), le rouge de marque reste réservé aux totaux. C'est le réglage actuel : sur huit documents, un rouge omniprésent finit par crier, et un aplat rouge coûte de l'encre à l'impression.",
-  rouge: "La marque domine : filets, intitulés d'atelier et encarts passent au rouge Gextimo. Plus affirmé, plus reconnaissable au premier coup d'œil — et plus chargé en encre.",
+  rouge: "Réglage retenu : la marque porte la structure — filets, intitulés d'atelier et encarts en rouge Gextimo. Les documents se reconnaissent au premier coup d'œil, ce qui compte au lancement. Les totaux restent en rouge appuyé.",
+  or: "Variante conservée pour comparaison : l'or porte la structure, le rouge reste réservé aux totaux. Plus discret à l'impression.",
 }
 
 const aide = document.getElementById('aide-accent')
@@ -344,7 +344,7 @@ document.querySelectorAll('.choix button').forEach(b => {
   })
 })
 
-aide.textContent = AIDE.or
+aide.textContent = AIDE.rouge
 rendre()
 
 /* Mise à l'échelle sur petit écran : la feuille fait 595 px de large (A4 à 72 dpi).

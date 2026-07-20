@@ -8,6 +8,9 @@
 // GEXTIMO habille, il ne certifie pas. La mention le dit explicitement en pied
 // de page : c'est une obligation, pas une politesse.
 //
+// Les couleurs sont DÉRIVÉES de pdfTheme : ce document suit automatiquement
+// toute bascule d'accent décidée pour les sept autres.
+//
 // Contrainte technique assumée : pdf-lib ne dispose que des polices standard du
 // format PDF (Helvetica, Times, Courier). La charte utilise Bodoni Moda, qu'il
 // faudrait embarquer via fontkit — plusieurs centaines de kilo-octets à charger
@@ -16,15 +19,27 @@
 // Bodoni, et il ne coûte pas un octet de téléchargement.
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib'
 import api from '@/services/api'
+import { T } from './pdfTheme'
 
 const A4 = [595.28, 841.89]
 
-// Charte (miroir de pdfTheme, en composantes 0-1 attendues par pdf-lib).
-const OR      = rgb(0.804, 0.651, 0.384)  // #CDA662
-const OR_FONCE= rgb(0.659, 0.498, 0.243)  // #A87F3E
-const ENCRE   = rgb(0.102, 0.086, 0.078)  // #1A1614
-const GRIS    = rgb(0.541, 0.506, 0.482)  // #8A817B
-const FILET   = rgb(0.894, 0.867, 0.835)  // #E4DDD5
+/**
+ * Couleurs DÉRIVÉES du thème commun : pdf-lib attend des composantes 0-1, pas
+ * des codes hexadécimaux. Les recopier à la main créerait une seconde source de
+ * vérité qui dériverait au premier changement de charte — ce document resterait
+ * seul dans l'ancienne couleur sans que personne ne le remarque.
+ */
+const couleur = (hex) => {
+  const n = parseInt(hex.slice(1), 16)
+
+  return rgb(((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255)
+}
+
+const ACCENT       = couleur(T.accent)
+const ACCENT_FONCE = couleur(T.accentSombre)
+const ENCRE        = couleur(T.encre)
+const GRIS         = couleur(T.gris)
+const FILET        = couleur(T.filet)
 
 const MARGE = 40
 const HAUT_ENTETE = 74   // zone réservée à l'en-tête
@@ -94,7 +109,7 @@ export async function genererFactureHabillee(doc, atelier) {
     // `characterSpacing` n'existe pas dans cette version de pdf-lib : l'option
     // serait ignorée sans erreur. On espace donc lettre par lettre.
     dessinerEspace(page, nomAtelier.toUpperCase(), {
-      x: MARGE, y: H - 34, font: sansB, size: 8, color: OR_FONCE, espacement: 1.4,
+      x: MARGE, y: H - 34, font: sansB, size: 8, color: ACCENT_FONCE, espacement: 1.4,
     })
     page.drawText('Facture normalisee', {
       x: MARGE, y: H - 56, font: serif, size: 18, color: ENCRE,
@@ -113,7 +128,7 @@ export async function genererFactureHabillee(doc, atelier) {
     }
 
     // Filet or : la signature visuelle commune aux documents Gextimo.
-    page.drawRectangle({ x: MARGE, y: H - HAUT_ENTETE + 8, width: L - MARGE * 2, height: 1.5, color: OR })
+    page.drawRectangle({ x: MARGE, y: H - HAUT_ENTETE + 8, width: L - MARGE * 2, height: 1.5, color: ACCENT })
 
     /* ── Le document officiel, INTACT ──────────────────────────────────────
        Mis à l'échelle pour tenir entre l'en-tête et le pied, centré, sans
