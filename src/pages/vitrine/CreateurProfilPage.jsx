@@ -527,7 +527,12 @@ export default function CreateurProfilPage() {
               : <button title={t('vitrine.profil.contact')} aria-label={t('vitrine.profil.contact')} className="p-1.5 rounded-lg text-ghost cursor-default"><Send size={16} /></button>}
             <div className="flex-1" />
             {/* P202 : Commander → espace client (commande suivie qui atterrit dans l'outil du designer). */}
-            <Link to={`/espace-client?commander=${encodeURIComponent(c.id)}&designer=${encodeURIComponent(c.nom)}`} onClick={trackContact}
+            {/* EC-5 : l'intention est mémorisée EN PLUS du paramètre d'URL. Le
+                paramètre seul ne survit pas à un aller-retour hors du site (lien
+                reçu par e-mail, connexion via un autre onglet) — l'utilisateur
+                revenait alors sur un espace client sans rapport avec son clic. */}
+            <Link to={`/espace-client?commander=${encodeURIComponent(c.id)}&designer=${encodeURIComponent(c.nom)}`}
+                  onClick={() => { trackContact(); memoriserAction('commander', { atelierId: c.id, nom: c.nom }, null) }}
                   className="inline-flex items-center gap-1 font-semibold text-[12.5px] px-3 py-1.5 rounded-[10px] bg-primary text-inverse hover:bg-primary-600 transition"><ShoppingBag size={14} />{t('vitrine.profil.order')}</Link>
           </div>
           {/* P161 : bouton Télécharger (contenu payant) */}

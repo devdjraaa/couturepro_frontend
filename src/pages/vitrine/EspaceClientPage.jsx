@@ -30,6 +30,8 @@ export default function EspaceClientPage() {
   const [me, setMe] = useState(undefined) // undefined = chargement, null = non connecté
   // EC-3 : intention mise de côté avant la connexion, à rejouer une fois connecté.
   const [attente] = useState(() => lireAction())
+  // EC-5 : créateur visé par une commande, quand le paramètre d'URL a été perdu.
+  const [commandeVisee, setCommandeVisee] = useState(null)
 
   /**
    * Rejoue l'action qui avait envoyé l'utilisateur se connecter, puis le ramène
@@ -39,6 +41,13 @@ export default function EspaceClientPage() {
   const reprendreAction = async () => {
     const a = consommerAction()
     if (!a) return false
+
+    // « Commander » n'est pas une action à rejouer : c'est une navigation vers un
+    // formulaire, qui vit précisément sur cette page. On retient juste la cible.
+    if (a.type === 'commander' && a.payload?.atelierId) {
+      setCommandeVisee(a.payload)
+      return false
+    }
 
     if (a.type === 'suivre_createur' && a.payload?.atelierId) {
       const { ok, data } = await toggleAbonnement(a.payload.atelierId)
@@ -69,6 +78,12 @@ export default function EspaceClientPage() {
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // EC-5 : si l'utilisateur était DÉJÀ connecté, il n'y a pas d'écran de connexion
+  // pour déclencher la reprise — l'intention resterait en attente indéfiniment.
+  useEffect(() => {
+    if (me) reprendreAction()
+  }, [me]) // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <VitrineShell>
       <section className="py-14">
@@ -93,7 +108,8 @@ export default function EspaceClientPage() {
             </>
           )}
           {me && <Espace me={me} config={config} onLogout={() => { clientLogout(); setMe(null) }}
-                         commanderAtelier={params.get('commander')} commanderNom={params.get('designer')} />}
+                         commanderAtelier={params.get('commander') || commandeVisee?.atelierId}
+                         commanderNom={params.get('designer') || commandeVisee?.nom} />}
         </div>
       </section>
     </VitrineShell>
