@@ -8,6 +8,10 @@ import {
   useModerationAvis, useSetModerationAvis,
   useCompteRebours, useSetCompteRebours,
   useJournalMaj, useSetJournalMaj,
+  usePaliersFidelite, useSetPaliersFidelite,
+  useCoordonnees, useSetCoordonnees,
+  useMoyensPaiement, useSetMoyensPaiement,
+  useVasat, useSetVasat,
 } from '@/hooks/admin/useReglagesVitrine'
 
 /**
@@ -79,6 +83,39 @@ export default function ReglagesVitrinePage() {
   const [majSaved, setMajSaved] = useState(false)
 
   useEffect(() => { if (majQ.data) setLocalMaj(majQ.data) }, [majQ.data])
+
+  // Quatre réglages qui n'avaient qu'une route d'ÉCRITURE, donc aucun écran
+  // possible. Les PALIERS DE FIDÉLITÉ en particulier : la direction devait
+  // recalibrer un programme mathématiquement inatteignable, sans aucun moyen
+  // de le faire autrement qu'en passant par un développeur.
+  const paliersQ = usePaliersFidelite()
+  const setPaliers = useSetPaliersFidelite()
+  const [paliers, setLocalPaliers] = useState([])
+  const [paliersSaved, setPaliersSaved] = useState(false)
+
+  const coordQ = useCoordonnees()
+  const setCoord = useSetCoordonnees()
+  const [coord, setLocalCoord] = useState({ marque: '', site: '', telephone: '' })
+  const [coordSaved, setCoordSaved] = useState(false)
+
+  const moyensQ = useMoyensPaiement()
+  const setMoyens = useSetMoyensPaiement()
+  const [moyens, setLocalMoyens] = useState([])
+  const [moyensSaved, setMoyensSaved] = useState(false)
+
+  const vasatQ = useVasat()
+  const setVasat = useSetVasat()
+  const [vasat, setLocalVasat] = useState({ mdp: '', actif: true })
+  const [vasatSaved, setVasatSaved] = useState(false)
+
+  useEffect(() => { if (paliersQ.data) setLocalPaliers(paliersQ.data) }, [paliersQ.data])
+  useEffect(() => { if (coordQ.data) setLocalCoord((v) => ({ ...v, ...coordQ.data })) }, [coordQ.data])
+  useEffect(() => { if (moyensQ.data) setLocalMoyens(moyensQ.data) }, [moyensQ.data])
+  useEffect(() => {
+    // Le mot de passe n'est jamais renvoyé par le serveur : le champ reste
+    // vide, et ne l'envoyer que s'il est rempli évite de l'écraser par erreur.
+    if (vasatQ.data) setLocalVasat((v) => ({ ...v, actif: !!vasatQ.data.actif }))
+  }, [vasatQ.data])
 
   useEffect(() => { if (themesQ.data) setLocalThemes(themesQ.data) }, [themesQ.data])
   useEffect(() => { if (legalQ.data) setLocalLegal((v) => ({ ...v, ...legalQ.data })) }, [legalQ.data])
@@ -155,6 +192,35 @@ export default function ReglagesVitrinePage() {
     await setMaj.mutateAsync(maj.map((x) => ({ ...x, lignes: (x.lignes ?? []).filter(Boolean) })))
     setMajSaved(true)
     setTimeout(() => setMajSaved(false), 1600)
+  }
+
+  const enregistrerPaliers = async (e) => {
+    e.preventDefault()
+    await setPaliers.mutateAsync(paliers.map((p) => ({ ...p, seuil: Number(p.seuil) || 0 })))
+    setPaliersSaved(true)
+    setTimeout(() => setPaliersSaved(false), 1600)
+  }
+
+  const enregistrerCoord = async (e) => {
+    e.preventDefault()
+    await setCoord.mutateAsync(coord)
+    setCoordSaved(true)
+    setTimeout(() => setCoordSaved(false), 1600)
+  }
+
+  const enregistrerMoyens = async (e) => {
+    e.preventDefault()
+    await setMoyens.mutateAsync(moyens)
+    setMoyensSaved(true)
+    setTimeout(() => setMoyensSaved(false), 1600)
+  }
+
+  const enregistrerVasat = async (e) => {
+    e.preventDefault()
+    await setVasat.mutateAsync({ mdp: vasat.mdp, actif: vasat.actif })
+    setLocalVasat((v) => ({ ...v, mdp: '' }))   // on ne garde pas le mot de passe à l'écran
+    setVasatSaved(true)
+    setTimeout(() => setVasatSaved(false), 1600)
   }
 
   const lignesVersTableau = (v) =>
@@ -281,6 +347,157 @@ export default function ReglagesVitrinePage() {
             {t('commun.enregistrer')}
           </button>
         </form>
+        {/* ── Paliers de fidélité ───────────────────────────────────────── */}
+        <form onSubmit={enregistrerPaliers} className="bg-card border border-edge rounded-2xl p-5">
+          <div className="flex items-center justify-between gap-3 mb-1">
+            <h2 className="text-sm font-semibold text-ink">{t('admin.fidelite.titre')}</h2>
+            {paliersSaved && (
+              <span className="text-xs text-success font-medium inline-flex items-center gap-1">
+                <Check size={12} aria-hidden="true" />{t('commun.enregistre')}
+              </span>
+            )}
+          </div>
+          <p className="text-xs text-dim leading-relaxed mb-4">{t('admin.fidelite.aide')}</p>
+
+          <div className="space-y-3">
+            {paliers.map((p, i) => (
+              <div key={i} className="grid grid-cols-[1fr_1fr_auto] gap-3 items-end">
+                <div>
+                  <span className={LABEL}>{t('admin.fidelite.nom')}</span>
+                  <input className={INPUT} maxLength={40} value={p.nom ?? ''}
+                         onChange={(e) => setLocalPaliers((l) => l.map((x, idx) => (idx === i ? { ...x, nom: e.target.value } : x)))} />
+                </div>
+                <div>
+                  <span className={LABEL}>{t('admin.fidelite.seuil')}</span>
+                  <input type="number" min={0} className={INPUT} value={p.seuil ?? 0}
+                         onChange={(e) => setLocalPaliers((l) => l.map((x, idx) => (idx === i ? { ...x, seuil: e.target.value } : x)))} />
+                </div>
+                <button type="button" onClick={() => setLocalPaliers((l) => l.filter((_, idx) => idx !== i))}
+                        className="text-ghost hover:text-danger pb-2.5" aria-label={t('commun.retirer')}>
+                  <X size={15} aria-hidden="true" />
+                </button>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-3 mt-4">
+            <button type="button"
+                    onClick={() => setLocalPaliers((l) => [...l, { cle: `palier_${l.length + 1}`, nom: '', seuil: 0 }])}
+                    className="inline-flex items-center gap-1.5 text-sm text-primary font-medium">
+              <Plus size={14} aria-hidden="true" />{t('admin.fidelite.ajouter')}
+            </button>
+            <button type="submit" disabled={setPaliers.isPending}
+                    className="ml-auto rounded-xl bg-primary text-inverse text-sm font-semibold px-5 py-2 disabled:opacity-50">
+              {t('commun.enregistrer')}
+            </button>
+          </div>
+        </form>
+
+        {/* ── Coordonnées officielles ───────────────────────────────────── */}
+        <form onSubmit={enregistrerCoord} className="bg-card border border-edge rounded-2xl p-5">
+          <div className="flex items-center justify-between gap-3 mb-1">
+            <h2 className="text-sm font-semibold text-ink">{t('admin.coordonnees.titre')}</h2>
+            {coordSaved && (
+              <span className="text-xs text-success font-medium inline-flex items-center gap-1">
+                <Check size={12} aria-hidden="true" />{t('commun.enregistre')}
+              </span>
+            )}
+          </div>
+          <p className="text-xs text-dim leading-relaxed mb-4">{t('admin.coordonnees.aide')}</p>
+
+          <div className="grid sm:grid-cols-3 gap-3">
+            {[['marque', 60], ['site', 120], ['telephone', 30]].map(([cle, max]) => (
+              <div key={cle}>
+                <span className={LABEL}>{t(`admin.coordonnees.${cle}`)}</span>
+                <input className={INPUT} maxLength={max} value={coord[cle] ?? ''}
+                       onChange={(e) => setLocalCoord((v) => ({ ...v, [cle]: e.target.value }))} />
+              </div>
+            ))}
+          </div>
+
+          <button type="submit" disabled={setCoord.isPending}
+                  className="mt-4 rounded-xl bg-primary text-inverse text-sm font-semibold px-5 py-2 disabled:opacity-50">
+            {t('commun.enregistrer')}
+          </button>
+        </form>
+
+        {/* ── Moyens de paiement (facturation) ──────────────────────────── */}
+        <form onSubmit={enregistrerMoyens} className="bg-card border border-edge rounded-2xl p-5">
+          <div className="flex items-center justify-between gap-3 mb-1">
+            <h2 className="text-sm font-semibold text-ink">{t('admin.moyens_paiement.titre')}</h2>
+            {moyensSaved && (
+              <span className="text-xs text-success font-medium inline-flex items-center gap-1">
+                <Check size={12} aria-hidden="true" />{t('commun.enregistre')}
+              </span>
+            )}
+          </div>
+          <p className="text-xs text-dim leading-relaxed mb-4">{t('admin.moyens_paiement.aide')}</p>
+
+          <div className="space-y-3">
+            {moyens.map((m, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <input className={INPUT + ' flex-1'} maxLength={60} value={m.label ?? ''}
+                       onChange={(e) => setLocalMoyens((l) => l.map((x, idx) => (idx === i ? { ...x, label: e.target.value } : x)))} />
+                <label className="flex items-center gap-1.5 text-xs text-dim shrink-0">
+                  <input type="checkbox" checked={!!m.actif}
+                         onChange={(e) => setLocalMoyens((l) => l.map((x, idx) => (idx === i ? { ...x, actif: e.target.checked } : x)))} />
+                  {t('admin.moyens_paiement.actif')}
+                </label>
+                <button type="button" onClick={() => setLocalMoyens((l) => l.filter((_, idx) => idx !== i))}
+                        className="text-ghost hover:text-danger shrink-0" aria-label={t('commun.retirer')}>
+                  <X size={15} aria-hidden="true" />
+                </button>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-3 mt-4">
+            <button type="button"
+                    onClick={() => setLocalMoyens((l) => [...l, { cle: `moyen_${l.length + 1}`, label: '', actif: true, defaut: false }])}
+                    className="inline-flex items-center gap-1.5 text-sm text-primary font-medium">
+              <Plus size={14} aria-hidden="true" />{t('admin.moyens_paiement.ajouter')}
+            </button>
+            <button type="submit" disabled={setMoyens.isPending}
+                    className="ml-auto rounded-xl bg-primary text-inverse text-sm font-semibold px-5 py-2 disabled:opacity-50">
+              {t('commun.enregistrer')}
+            </button>
+          </div>
+        </form>
+
+        {/* ── Accès VASAT ───────────────────────────────────────────────── */}
+        <form onSubmit={enregistrerVasat} className="bg-card border border-edge rounded-2xl p-5">
+          <div className="flex items-center justify-between gap-3 mb-1">
+            <h2 className="text-sm font-semibold text-ink">{t('admin.vasat.titre')}</h2>
+            {vasatSaved && (
+              <span className="text-xs text-success font-medium inline-flex items-center gap-1">
+                <Check size={12} aria-hidden="true" />{t('commun.enregistre')}
+              </span>
+            )}
+          </div>
+          <p className="text-xs text-dim leading-relaxed mb-4">{t('admin.vasat.aide')}</p>
+
+          <label className="flex items-center gap-2 text-sm text-ink">
+            <input type="checkbox" checked={!!vasat.actif}
+                   onChange={(e) => setLocalVasat((v) => ({ ...v, actif: e.target.checked }))} />
+            {t('admin.vasat.actif')}
+          </label>
+
+          <div className="mt-3">
+            <span className={LABEL}>{t('admin.vasat.mdp')}</span>
+            <input type="password" className={INPUT} minLength={8} maxLength={100}
+                   autoComplete="new-password" value={vasat.mdp}
+                   onChange={(e) => setLocalVasat((v) => ({ ...v, mdp: e.target.value }))} />
+            <p className="text-[11px] text-ghost mt-1">
+              {vasatQ.data?.defini ? t('admin.vasat.deja_defini') : t('admin.vasat.non_defini')}
+            </p>
+          </div>
+
+          <button type="submit" disabled={setVasat.isPending || vasat.mdp.length < 8}
+                  className="mt-4 rounded-xl bg-primary text-inverse text-sm font-semibold px-5 py-2 disabled:opacity-50">
+            {t('commun.enregistrer')}
+          </button>
+        </form>
+
         {/* ── CLI-1 : journal des mises à jour ──────────────────────────── */}
         <form onSubmit={enregistrerMaj} className="bg-card border border-edge rounded-2xl p-5">
           <div className="flex items-center justify-between gap-3 mb-1">

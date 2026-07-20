@@ -4513,6 +4513,34 @@
       "champ_titre": "Titre",
       "lignes": "Détails",
       "lignes_aide": "Un point par ligne. Écrivez pour un utilisateur, pas pour un développeur."
+    },
+    "fidelite": {
+      "titre": "Programme de fidélité — paliers",
+      "aide": "Seuils en points pour atteindre chaque palier. À ajuster en regardant ce que les ateliers génèrent réellement : un seuil hors de portée rend le programme invisible, et personne ne convertit.",
+      "nom": "Nom du palier",
+      "seuil": "Seuil (points)",
+      "ajouter": "Ajouter un palier"
+    },
+    "coordonnees": {
+      "titre": "Coordonnées officielles",
+      "aide": "Utilisées dans les documents PDF et les partages WhatsApp. Un changement de numéro se fait ici, sans intervention technique.",
+      "marque": "Marque",
+      "site": "Site web",
+      "telephone": "Téléphone"
+    },
+    "moyens_paiement": {
+      "titre": "Moyens de paiement (facturation)",
+      "aide": "Ce que les professionnels peuvent proposer sur leurs devis et factures. Ne concerne PAS la caisse ni les commandes, qui enregistrent comment le client a réellement payé sur place (espèces comprises).",
+      "actif": "Actif",
+      "ajouter": "Ajouter un moyen"
+    },
+    "vasat": {
+      "titre": "Accès VASAT",
+      "aide": "Produit masqué, protégé par un mot de passe. Le mot de passe n'est jamais réaffiché : laissez le champ vide pour conserver l'actuel.",
+      "actif": "Activer l'accès",
+      "mdp": "Nouveau mot de passe (8 caractères minimum)",
+      "deja_defini": "Un mot de passe est déjà défini.",
+      "non_defini": "Aucun mot de passe défini : l'accès est fermé."
     }
   },
   "bienvenue": {

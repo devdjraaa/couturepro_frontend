@@ -22,5 +22,9 @@ export const ADMIN_KEYS = {
   moderationAvis:   ['admin', 'moderation-avis'],
   compteRebours:    ['admin', 'compte-a-rebours'],
   journalMaj:       ['admin', 'journal-maj'],
+  paliersFidelite:  ['admin', 'paliers-fidelite'],
+  coordonnees:      ['admin', 'coordonnees'],
+  moyensPaiement:   ['admin', 'moyens-paiement'],
+  vasat:            ['admin', 'vasat'],
   analytique:       ['admin', 'analytique'],
 }
