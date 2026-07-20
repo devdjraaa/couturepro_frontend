@@ -60,7 +60,7 @@ function ListeAttenteTab({ t }) {
         <Input value={form.nom} onChange={e => setForm(f => ({ ...f, nom: e.target.value }))} placeholder={t('studio.attente.nom')} />
         <Input value={form.telephone} onChange={e => setForm(f => ({ ...f, telephone: sanitizePhoneInput(e.target.value) }))} placeholder={t('studio.attente.telephone')} inputMode="tel" />
         <Input value={form.note} onChange={e => setForm(f => ({ ...f, note: e.target.value }))} placeholder={t('studio.attente.note')} />
-        <Button type="submit" loading={saving} className="w-full"><Plus size={16} className="mr-1" /> {t('studio.attente.ajouter')}</Button>
+        <Button type="submit" loading={saving} icon={Plus} className="w-full">{t('studio.attente.ajouter')}</Button>
       </form>
 
       {items.length === 0 ? (
@@ -188,7 +188,7 @@ function AnnonceTab({ t }) {
         <textarea value={message} onChange={e => setMessage(e.target.value)} rows={4}
           placeholder={t('studio.annonce.message')}
           className="w-full rounded-xl border border-edge bg-card px-3 py-2 text-sm text-ink resize-none" />
-        <Button onClick={annoncer} loading={sending} className="w-full"><Megaphone size={16} className="mr-1" /> {t('studio.annonce.publier')}</Button>
+        <Button onClick={annoncer} loading={sending} icon={Megaphone} className="w-full">{t('studio.annonce.publier')}</Button>
       </div>
       <p className="text-2xs text-ghost text-center">{t('studio.annonce.aide')}</p>
     </div>
@@ -233,7 +233,7 @@ function VideosTab({ t }) {
       <form onSubmit={ajouter} className="bg-card border border-edge rounded-xl p-4 space-y-3">
         <Input value={form.titre} onChange={e => setForm(f => ({ ...f, titre: e.target.value }))} placeholder={t('studio.videos.titre')} />
         <Input value={form.url} onChange={e => setForm(f => ({ ...f, url: e.target.value }))} placeholder={t('studio.videos.url')} inputMode="url" />
-        <Button type="submit" loading={saving} className="w-full"><Plus size={16} className="mr-1" /> {t('studio.videos.ajouter')}</Button>
+        <Button type="submit" loading={saving} icon={Plus} className="w-full">{t('studio.videos.ajouter')}</Button>
       </form>
       {/* VID-2 : plafond réel du plan (le libellé annonçait « /50 » à tout le
           monde) et corrections restantes du mois, servis par /atelier-videos/quota. */}

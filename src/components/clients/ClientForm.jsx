@@ -130,7 +130,7 @@ export default function ClientForm({ initialData, onSubmit, onCancel, isLoading 
                   form.avatar_index === i ? 'ring-2 ring-primary ring-offset-1 scale-110' : 'opacity-70',
                 )}
               >
-                {p.emoji}
+                <p.Icone size={18} />
               </button>
             ))}
           </div>
