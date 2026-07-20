@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Download, History } from 'lucide-react'
 import { useAuth } from '@/contexts'
 import { exportMesuresPdf } from '@/utils/exportMesuresPdf'
@@ -10,6 +11,7 @@ const toLabel = (key) =>
   key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
 
 export default function MesureDisplay({ mesures, clientNom, atelierNom, clientId }) {
+  const { t } = useTranslation()
   const [exporting, setExporting] = useState(false)
   const [histoOpen, setHistoOpen] = useState(false)
   const [histo, setHisto] = useState(null) // null = pas chargé, [] = chargé vide
@@ -48,7 +50,7 @@ export default function MesureDisplay({ mesures, clientNom, atelierNom, clientId
     <div>
       <div className="p-5">
         {entries.length === 0 ? (
-          <p className="text-sm text-ghost text-center py-4">Aucune mesure enregistrée</p>
+          <p className="text-sm text-ghost text-center py-4">{t('mesures.aucune_enregistree')}</p>
         ) : (
           <div className="grid grid-cols-2 gap-x-6 gap-y-3">
             {entries.map(([key, value]) => (
