@@ -272,7 +272,7 @@ const ITEMS = [
   L(39,'REL-V2',8,'done','DÉJÀ FAIT — statut périmé corrigé le 20/07 : le pré-rendu SEO est en production, nginx route les robots vers /api/vitrine/seo/render et un Googlebot reçoit bien le contenu (titre par page, description, canonique, OG, liste des créateurs). Ne pas redévelopper'),
   B(46,'REL-3',8,'todo','« Mes Réalisations » : cache hors ligne côté application mobile'),
   L(40,'REL-V3',8,'todo','« Mes Réalisations » mobile : intégration de la couche hors ligne'),
-  L(41,'REL-V4',8,'bug','Branche android désalignée de master : 247 commits de retard côté web, 288 en propre. L\'app mobile n\'a pas les correctifs récents. Chantier à part (fusion + build APK + test appareil), pas un simple portage'),
+  L(41,'REL-V4',8,'part','FUSION FAITE le 20/07, reste le test sur appareil. 319 vs 320 commits divergents, 294 fichiers différents, 43 en conflit (143 blocs). Règle : android d abord, master seulement si réellement meilleur — un détecteur a comparé chaque apport au contenu déjà présent. Android garde tout son natif et son écran Paramètres en sections ; master apporte la charte PDF (8 documents jamais reçus ici, partage natif préservé par un point de délégation unique), la déconnexion indépendante du serveur, la vérification de session avant éjection sur 401. 29 fichiers gagnés, AUCUN perdu, build vert. Poussé avec [skip-release] : aucune OTA envoyée aux utilisateurs'),
   F(42,'REL-V5',8,'done','Composant Toaster jamais monté : 41 appels toast.success/error sans aucun effet dans toute l\'application (aucune confirmation ni erreur visible)'),
 
   // ---------- Avis v2 (décisions direction 20/07) ----------
