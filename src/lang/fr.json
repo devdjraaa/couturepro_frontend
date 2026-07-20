@@ -991,7 +991,8 @@
     "unite": "cm",
     "date": "Prises le",
     "exporter": "Exporter PDF",
-    "historique": "Historique des mesures"
+    "historique": "Historique des mesures",
+    "aucune_enregistree": "Aucune mesure enregistrée"
   },
   "equipe": {
     "titre": "Équipe",

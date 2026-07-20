@@ -991,7 +991,8 @@
     "unite": "cm",
     "date": "Taken on",
     "exporter": "Export PDF",
-    "historique": "Measurement history"
+    "historique": "Measurement history",
+    "aucune_enregistree": "No measurements recorded"
   },
   "equipe": {
     "titre": "Team",

@@ -39,7 +39,16 @@ export default function ClientDetailPage() {
 
   const { data: client, isLoading } = useClient(clientId)
   const { data: mesure } = useMesures(clientId)
+  // Un enregistrement de mesures VIDÉ (tous les champs retirés) reste un objet
+  // truthy : tester `mesure` seul faisait afficher la fiche de consultation avec
+  // un « Aucune mesure enregistrée » nu, sans invitation à en saisir, et avec un
+  // export CSV et un partage WhatsApp portant sur… rien. Un client dont on a
+  // effacé les mesures doit revenir à l'état de départ.
+  const aDesMesures = Object.entries(mesure?.champs ?? {})
+    .some(([cle, valeur]) => cle !== 'notes' && valeur != null && valeur !== '')
+
   // P72-73 : commandes du client par client_id (cross-atelier compris), pas filtrées par atelier actif.
+  // NATIF : la requête locale WatermelonDB attend `clientId`, pas `client_id` (web).
   const { data: clientCommandes = [] } = useCommandes({ clientId })
   const updateClient = useUpdateClient()
   const deleteClient = useDeleteClient()
@@ -202,7 +211,7 @@ export default function ClientDetailPage() {
                   {t('commun.annuler')}
                 </button>
               </div>
-            ) : mesure ? (
+            ) : aDesMesures ? (
               <div>
                 <MesureDisplay
                   mesures={mesure.champs}
