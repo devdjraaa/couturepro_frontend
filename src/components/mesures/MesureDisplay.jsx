@@ -38,7 +38,7 @@ export default function MesureDisplay({ mesures, clientNom, atelierNom, clientId
   const handleExport = async () => {
     setExporting(true)
     try {
-      await exportMesuresPdf(clientNom ?? 'client', mesures, atelierNom)
+      await exportMesuresPdf(clientNom ?? 'client', mesures, atelierNom, uniteMesure)
     } finally {
       setExporting(false)
     }

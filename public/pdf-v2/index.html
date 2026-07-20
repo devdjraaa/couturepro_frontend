@@ -49,10 +49,11 @@
   <p class="intro">Refonte des 7 sorties PDF sur la charte Gextimo. À valider document par document.</p>
 
   <div class="note">
-    <strong>Ce que tu vois est ce qui sortira.</strong> Cette page utilise le
+    <strong>Ce que tu vois est ce qui sort.</strong> Cette page utilise le
     <em>même</em> module de composition que les exports réels
-    (<code>src/utils/pdfTheme.js</code>) — pas une imitation. Valider une maquette
-    ici, c'est valider le PDF produit par l'application.
+    (<code>src/utils/pdfTheme.js</code>) — pas une imitation. Les 7 exports sont
+    désormais câblés dessus : ces maquettes montrent les documents produits par
+    l'application.
     <br><br>
     En V1, chaque document avait sa propre palette (violet pour la caisse, vert
     pour les relevés, gris ailleurs) et aucun ne portait la charte. La V2 leur
@@ -64,8 +65,12 @@
 </div>
 
 <footer>
-  Dis-moi pour chaque document : <strong>validé</strong>, ou ce qu'il faut changer.
-  Les proportions sont celles d'une vraie page A4.
+  Les 7 documents sont en production. Les proportions sont celles d'une vraie
+  page A4 ; le filigrane et le pied de page (marque, site, téléphone) sont
+  ajoutés au moment de la génération, sur chaque page.
+  <br><br>
+  Si un document doit changer, dis lequel et quoi — le style est centralisé,
+  une retouche s'applique partout d'un coup.
 </footer>
 
 <script type="module">
