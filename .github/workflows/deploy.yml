@@ -45,6 +45,10 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_ed25519 \
               -o StrictHostKeyChecking=no \
+              -o ConnectionAttempts=3 \
+              -o ConnectTimeout=30 \
+              -o ServerAliveInterval=15 \
+              -o ServerAliveCountMax=4 \
               -o BatchMode=yes \
               ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} bash << 'ENGNX'
 
@@ -128,16 +132,28 @@ jobs:
           # --exclude APK : les Gextimo*.apk sont déposés par release.sh (hors dist/) —
           # sans cet exclude, --delete les efface à CHAQUE déploiement du site et le
           # bouton « Télécharger » / la MAJ in-app servent du HTML (vu en prod le 16/07).
-          rsync -az --delete \
-            --exclude='Gextimo*.apk' \
-            --chmod=D755,F644 \
-            -e "ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no -o BatchMode=yes" \
-            ./dist/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/gextimo_frontend/
+          # Réessai : la connexion SSH depuis les runners GitHub tombe par
+          # intermittence (2 déploiements perdus sur 8 le 20/07). Sans cela un
+          # push part vert côté git alors que le code n'est jamais mis en ligne.
+          for essai in 1 2 3; do
+            rsync -az --delete \
+              --exclude='Gextimo*.apk' \
+              --chmod=D755,F644 \
+              -e "ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no -o BatchMode=yes -o ConnectionAttempts=3 -o ConnectTimeout=30 -o ServerAliveInterval=15 -o ServerAliveCountMax=4" \
+              ./dist/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/gextimo_frontend/ && break
+            echo "::warning::rsync a échoué (tentative $essai/3) — nouvelle tentative dans 15 s"
+            [ "$essai" = 3 ] && exit 1
+            sleep 15
+          done
 
       - name: Reload Nginx
         run: |
           ssh -i ~/.ssh/id_ed25519 \
               -o StrictHostKeyChecking=no \
+              -o ConnectionAttempts=3 \
+              -o ConnectTimeout=30 \
+              -o ServerAliveInterval=15 \
+              -o ServerAliveCountMax=4 \
               -o BatchMode=yes \
               ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
               "sudo systemctl reload nginx && echo '✅ Frontend déployé'"
