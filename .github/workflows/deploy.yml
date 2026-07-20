@@ -53,6 +53,19 @@ jobs:
               -o BatchMode=yes \
               ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} bash << 'ENGNX'
 
+          # ⚠️ L'utilisateur de déploiement n'a `sudo` que pour une liste précise :
+          # nginx, certbot, cp, ln, chown, systemctl reload. Ni `grep` ni `tee`
+          # n'en font partie — les employer fait échouer l'étape (et, sans
+          # BatchMode, la fait ATTENDRE un mot de passe qui ne viendra jamais).
+          # On lit donc la configuration en la recopiant avec `cp`, autorisé lui.
+          lire_conf() {
+            local tmp; tmp=$(mktemp)
+            sudo cp "$CONF_DEST" "$tmp" 2>/dev/null || { rm -f "$tmp"; return 1; }
+            sudo chown "$(id -u):$(id -g)" "$tmp" 2>/dev/null || true
+            cat "$tmp"
+            rm -f "$tmp"
+          }
+
           CONF_SRC_TMP=$(mktemp)
           CONF_DEST=/etc/nginx/sites-available/gextimo_frontend.conf
           CONF_LINK=/etc/nginx/sites-enabled/gextimo_frontend.conf
@@ -103,15 +116,19 @@ jobs:
           # configuration déjà correcte.
           GABARIT_VERSION=$(sha256sum "$CONF_SRC_TMP" | cut -c1-12)
 
-          if sudo grep -q "gabarit:$GABARIT_VERSION" "$CONF_DEST" 2>/dev/null; then
+          if lire_conf | grep -q "gabarit:$GABARIT_VERSION"; then
             echo "→ configuration nginx déjà à jour (gabarit $GABARIT_VERSION)"
 
-          elif sudo grep -q "listen 443" "$CONF_DEST" 2>/dev/null; then
+          elif lire_conf | grep -q "listen 443"; then
             # Configuration antérieure au marqueur, mais qui SERT DÉJÀ le site en
             # HTTPS. On l'adopte telle quelle au lieu de la réécrire : réécrire
             # une configuration qui fonctionne pour la rendre identique à un
             # gabarit sans SSL, c'est exactement ce qui a mis le site à terre.
-            echo "# gabarit:$GABARIT_VERSION" | sudo tee -a "$CONF_DEST" > /dev/null
+            # Marqueur ajouté via une copie complète : `tee` n'est pas autorisé.
+            ADOPT=$(mktemp)
+            { lire_conf; echo "# gabarit:$GABARIT_VERSION"; } > "$ADOPT"
+            sudo cp "$ADOPT" "$CONF_DEST"
+            rm -f "$ADOPT"
             echo "→ configuration existante adoptée (HTTPS déjà en place)"
 
           else
@@ -155,8 +172,12 @@ jobs:
           # idempotente et ne consomme aucun quota Let's Encrypt quand le
           # certificat est encore valide : il est simplement redéployé.
           if command -v certbot > /dev/null; then
+            # `timeout` AVANT `sudo`, pas après : sudoers autorise /usr/bin/certbot
+            # mais pas /usr/bin/timeout. Écrit « sudo timeout … certbot », sudo
+            # réclame un mot de passe et l'étape échoue — c'est ce qui a empêché
+            # certbot de tourner, donc le HTTPS d'être réinstallé.
             echo "→ Installation du certificat dans nginx…"
-            sudo timeout 180 certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos -m dev.djraaa@gmail.com --redirect \
+            timeout 180 sudo certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos -m dev.djraaa@gmail.com --redirect \
               || echo "⚠️  certbot n'a pas abouti — le site reste servi en HTTP, à reprendre"
           else
             echo "⏭️  certbot absent — le site ne sera servi qu'en HTTP"
@@ -165,7 +186,7 @@ jobs:
           # Garde-fou : on vérifie que le domaine écoute RÉELLEMENT en 443 avant
           # de déclarer le déploiement réussi. Sans ce contrôle, la panne du
           # 20/07 est passée inaperçue jusqu'à ce qu'un humain ouvre le site.
-          if ! sudo grep -q "listen 443" "$CONF_DEST"; then
+          if ! lire_conf | grep -q "listen 443"; then
             echo "❌ Aucune écoute HTTPS pour $DOMAIN."
 
             # On REMET la configuration précédente, qui elle fonctionnait. Le
