@@ -1599,7 +1599,14 @@
       "profil_enregistre": "Profil mis à jour.",
       "reprise_suivre": "Connectez-vous pour suivre {{createur}} — votre abonnement sera enregistré aussitôt et vous reviendrez sur son profil.",
       "reprise_ok": "Vous suivez maintenant {{createur}}.",
-      "reprise_echec": "Votre abonnement n'a pas pu être enregistré. Réessayez depuis le profil du créateur."
+      "reprise_echec": "Votre abonnement n'a pas pu être enregistré. Réessayez depuis le profil du créateur.",
+      "mes_createurs": "Mes créateurs suivis",
+      "se_desabonner": "Se désabonner",
+      "desabo_ok": "Vous ne suivez plus {{createur}}.",
+      "desabo_echec": "Le désabonnement n'a pas pu être enregistré.",
+      "notifs_actives": "Notifications activées pour ce créateur",
+      "notifs_inactives": "Notifications désactivées pour ce créateur",
+      "notifs_echec": "Le réglage des notifications n'a pas pu être enregistré."
     },
     "chatbot": {
       "titre": "Makila AI",

@@ -1599,7 +1599,14 @@
       "profil_enregistre": "Profile updated.",
       "reprise_suivre": "Sign in to follow {{createur}} — we'll save your subscription right away and take you back to their profile.",
       "reprise_ok": "You are now following {{createur}}.",
-      "reprise_echec": "We couldn't save your subscription. Please try again from the creator's profile."
+      "reprise_echec": "We couldn't save your subscription. Please try again from the creator's profile.",
+      "mes_createurs": "Creators I follow",
+      "se_desabonner": "Unfollow",
+      "desabo_ok": "You no longer follow {{createur}}.",
+      "desabo_echec": "We couldn't save the change.",
+      "notifs_actives": "Notifications on for this creator",
+      "notifs_inactives": "Notifications off for this creator",
+      "notifs_echec": "We couldn't save your notification setting."
     },
     "chatbot": {
       "titre": "Makila AI",

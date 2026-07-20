@@ -173,7 +173,7 @@ const ITEMS = [
   B(3,'S02A-28',1,'done','Configuration centralisée des abonnements (source unique de vérité, ~37 clés)'),
   B(4,'S02A-28b',1,'done','Mapping « fonctionnalité → plan requis » en dur, sans lien avec la configuration'),
   F(4,'S02A-28',1,'done','Limites de photos issues du plan (max_photos_vetement / max_photos_realisation). Au passage : le serveur n\'imposait AUCUNE limite sur les photos de modele — corrige'),
-  F(5,'S02A-28b',1,'part','Écran admin des plans désynchronisé : 15 clés récentes non gérées'),
+  F(5,'S02A-28b',1,'done','Ecran admin des plans pilote par le referentiel serveur (libelle, type, unite) : plus de liste en dur qui derive a chaque migration'),
 
   // ---------- Sprint 08vC ----------
   B(5,'S08C-29a',2,'done','Publication automatique des avis (plus d\'attente de validation)'),
@@ -229,11 +229,11 @@ const ITEMS = [
   B(32,'ABO-3',5,'done','Session maintenue après création du compte'),
   F(23,'ABO-4',5,'done','Reprise automatique de l\'abonnement après connexion (sans recliquer)'),
   B(33,'ABO-5',5,'done','Consentement notifications distinct de l\'abonnement (APDP)'),
-  F(24,'ABO-5',5,'todo','Case à cocher dédiée aux notifications, indépendante de l\'abonnement'),
+  F(24,'ABO-5',5,'done','Case à cocher dédiée aux notifications, indépendante de l\'abonnement'),
   B(34,'ABO-6',5,'done','Anti-abus : pas d\'auto-abonnement, comptage après validation e-mail, limitation de débit'),
-  F(25,'ABO-6',5,'todo','Messages : « Vous êtes déjà abonné à ce créateur »'),
+  F(25,'ABO-6',5,'done','Le message du serveur est desormais affiche (auto-abonnement, deja abonne)'),
   B(35,'ABO-7',5,'done','API : liste des abonnements d\'un client + désabonnement'),
-  F(26,'ABO-7',5,'todo','Espace client : mes créateurs suivis + désabonnement'),
+  F(26,'ABO-7',5,'done','Espace client : section « Mes createurs suivis » avec desabonnement et bascule des notifications'),
   B(36,'ABO-8',5,'done','Traçabilité : lien compte, statut actif/inactif, exploitation statistique'),
   B(37,'ABO-9',5,'done','DÉCISION : que fait-on des abonnements anonymes existants ?'),
 

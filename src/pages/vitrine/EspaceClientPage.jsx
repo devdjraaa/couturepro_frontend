@@ -3,12 +3,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams, useNavigate, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Mail, LogOut, Package, Star, AlertTriangle, Send, ShieldCheck, CheckCircle2 } from 'lucide-react'
+import { Mail, LogOut, Package, Star, AlertTriangle, Send, ShieldCheck, CheckCircle2, Heart, BellRing, BellOff } from 'lucide-react'
 import VitrineShell from './VitrineChrome'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import {
   demanderOtp, verifierOtp, loginGoogle, getMe, envoyerConsentement, clientLogout,
-  getMesCommandes, commander, laisserAvis, reclamer, getClientToken, setClientToken,
+  getMesCommandes, getMesAbonnements, majNotifsAbonnement, commander, laisserAvis, reclamer, getClientToken, setClientToken,
   getConfigPublique, majProfil,
 } from './espaceClientApi'
 import { track, initAnalyticsTiers } from '@/utils/gxtTracking'
@@ -178,6 +178,72 @@ function Login({ config, onDone }) {
   )
 }
 
+/* ── ABO-7 : mes créateurs suivis ────────────────────────────────────────────── */
+/**
+ * Les abonnements n'étaient visibles NULLE PART : on suivait un créateur sans
+ * jamais pouvoir consulter la liste ni se désabonner autrement qu'en retournant
+ * sur son profil. ABO-5 : le rappel de notifications est distinct de
+ * l'abonnement — suivre quelqu'un ne vaut pas consentement à être notifié.
+ */
+function SectionAbonnements() {
+  const { t } = useTranslation()
+  const [liste, setListe] = useState(null)
+
+  const charger = () => getMesAbonnements().then(({ ok, data }) => setListe(ok ? (data.abonnements || []) : []))
+  useEffect(() => { charger() }, [])
+
+  const basculerNotifs = async (abo) => {
+    const vise = !abo.notifications_optin
+    setListe((l) => l.map((a) => (a.id === abo.id ? { ...a, notifications_optin: vise } : a)))
+    const { ok } = await majNotifsAbonnement(abo.id, vise)
+    if (!ok) {
+      setListe((l) => l.map((a) => (a.id === abo.id ? { ...a, notifications_optin: !vise } : a)))
+      toast.error(t('vitrine.espace_client.notifs_echec'))
+    }
+  }
+
+  const desabonner = async (abo) => {
+    // Retrait optimiste, puis rechargement : la source de vérité reste le serveur.
+    setListe((l) => l.filter((a) => a.id !== abo.id))
+    const { ok } = await toggleAbonnement(abo.createur.id)
+    if (!ok) { toast.error(t('vitrine.espace_client.desabo_echec')); charger(); return }
+    toast.success(t('vitrine.espace_client.desabo_ok', { createur: abo.createur.nom }))
+  }
+
+  if (liste === null) return null
+  if (liste.length === 0) return null   // rien à montrer tant qu'on ne suit personne
+
+  return (
+    <div>
+      <h2 className="font-display text-lg text-ink flex items-center gap-2 mb-3">
+        <Heart size={17} />{t('vitrine.espace_client.mes_createurs')}
+      </h2>
+      <div className="space-y-2">
+        {liste.map((a) => (
+          <div key={a.id} className="bg-card border border-edge rounded-2xl p-3 flex items-center gap-3">
+            {a.createur.logo_url
+              ? <img src={a.createur.logo_url} alt="" className="w-9 h-9 rounded-xl object-cover shrink-0" />
+              : <span className="w-9 h-9 rounded-xl bg-subtle shrink-0" />}
+            <Link to={`/createurs/${a.createur.id}`} className="min-w-0 flex-1 text-sm text-ink hover:text-primary truncate">
+              {a.createur.nom}
+            </Link>
+            <button onClick={() => basculerNotifs(a)}
+                    className={a.notifications_optin ? 'shrink-0 text-primary' : 'shrink-0 text-ghost hover:text-dim'}
+                    title={a.notifications_optin
+                      ? t('vitrine.espace_client.notifs_actives')
+                      : t('vitrine.espace_client.notifs_inactives')}>
+              {a.notifications_optin ? <BellRing size={15} /> : <BellOff size={15} />}
+            </button>
+            <button onClick={() => desabonner(a)} className="shrink-0 text-xs font-semibold text-dim hover:text-danger transition">
+              {t('vitrine.espace_client.se_desabonner')}
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 /* ── Espace connecté ─────────────────────────────────────────────────────────── */
 function Espace({ me, config, onLogout, commanderAtelier, commanderNom }) {
   const { t } = useTranslation()
@@ -207,6 +273,8 @@ function Espace({ me, config, onLogout, commanderAtelier, commanderNom }) {
       )}
 
       <SectionProfil client={me.client} onDone={(msg) => setFlash(msg)} />
+
+      <SectionAbonnements />
 
       <div>
         <h2 className="font-display text-lg text-ink flex items-center gap-2 mb-3"><Package size={17} />{t('vitrine.espace_client.mes_commandes')}</h2>

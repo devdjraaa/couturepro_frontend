@@ -53,6 +53,13 @@ export const majProfil    = (profil) => call('/vitrine/client/me', { method: 'PA
 export const envoyerConsentement = (consent) => call('/vitrine/client/consentement', { method: 'POST', body: consent, auth: true })
 export const clientLogout = async () => { await call('/vitrine/client/logout', { method: 'POST', auth: true }); setClientToken(null) }
 
+// ABO-7 : mes créateurs suivis (consultation + désabonnement).
+export const getMesAbonnements = () => call('/vitrine/client/abonnements', { auth: true })
+
+// ABO-5 : le consentement aux notifications se règle indépendamment de l'abonnement.
+export const majNotifsAbonnement = (id, optin) =>
+  call(`/vitrine/client/abonnements/${id}`, { method: 'PATCH', body: { notifications_optin: optin }, auth: true })
+
 export const getMesCommandes = () => call('/vitrine/client/commandes', { auth: true })
 export const commander       = (atelierId, instructions) => call('/vitrine/client/commandes', { method: 'POST', body: { atelier_id: atelierId, instructions }, auth: true })
 export const laisserAvis     = (commandeId, note, texte) => call(`/vitrine/client/commandes/${commandeId}/avis`, { method: 'POST', body: { note, texte }, auth: true })
