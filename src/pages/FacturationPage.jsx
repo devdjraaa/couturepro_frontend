@@ -408,13 +408,13 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
             {Number(doc.acompte) > 0 && (
               <div className="flex justify-between text-xs text-dim mt-1">
                 <span>{t('facturation.doc.acompte_verse')}</span>
-                <span>− {fmt(doc.acompte)} {t('facturation.fcfa')}</span>
+                <span>− {fmt(doc.acompte)}</span>
               </div>
             )}
             {restant > 0 && (
               <div className="flex justify-between text-sm font-semibold text-primary mt-1">
                 <span>{t('facturation.doc.restant')}</span>
-                <span>{fmt(restant)} {t('facturation.fcfa')}</span>
+                <span>{fmt(restant)}</span>
               </div>
             )}
           </div>
@@ -656,7 +656,7 @@ export default function FacturationPage() {
           ].map((k) => (
             <div key={k.label} className="bg-card border border-edge rounded-xl p-3 text-center">
               <div className="text-lg font-bold font-display text-ink">{k.value}</div>
-              <div className="text-[11px] text-ghost mt-0.5">{k.label} {t('facturation.fcfa')}</div>
+              <div className="text-[11px] text-ghost mt-0.5">{k.label}</div>
             </div>
           ))}
         </div>
