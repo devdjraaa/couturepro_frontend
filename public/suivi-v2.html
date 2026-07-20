@@ -232,7 +232,7 @@ const ITEMS = [
   B(30,'ABO-1',5,'done','Exiger un compte pour s\'abonner (rattacher l\'abonnement au client)'),
   F(21,'ABO-1',5,'done','Vérification de session au clic sur « S\'abonner »'),
   B(31,'ABO-2',5,'done','Socle d\'inscription à la volée (code e-mail + Google) déjà en place'),
-  L(22,'ABO-2',5,'todo','Ouverture automatique du module d\'inscription, e-mail seul, aucun compte incomplet'),
+  L(22,'ABO-2',5,'done','DÉJÀ FAIT — statut périmé, vérifié le 20/07. Le module d\'inscription s\'ouvre de lui-même sur la page d\'atterrissage (rendu dès que la session est absente), e-mail seul via code + Google en option, et le compte n\'est créé qu\'APRÈS vérification du code (ClientAuthController::verifierOtp, firstOrNew puis save) — demander le code ne crée rien, donc aucun compte incomplet possible. La reprise d\'action après connexion fonctionne aussi (suivre_createur, laisser_avis), y compris pour un utilisateur déjà connecté'),
   B(32,'ABO-3',5,'done','Session maintenue après création du compte'),
   F(23,'ABO-4',5,'done','Reprise automatique de l\'abonnement après connexion (sans recliquer)'),
   B(33,'ABO-5',5,'done','Consentement notifications distinct de l\'abonnement (APDP)'),
@@ -270,9 +270,9 @@ const ITEMS = [
   B(45,'REL-2',8,'done','Pré-rendu SEO LIVRÉ et vérifié en prod (20/07) : nginx route les robots vers /api/vitrine/seo/render — titre PAR PAGE, description, canonique, OG, contenu réel (créateurs, profils). Humains inchangés. Titres éditables en admin (seo_pages)'),
   F(38,'REL-V1',8,'todo','Points vitrine encore ouverts (à basculer depuis l\'ancien fichier vitrine)'),
   L(39,'REL-V2',8,'done','DÉJÀ FAIT — statut périmé corrigé le 20/07 : le pré-rendu SEO est en production, nginx route les robots vers /api/vitrine/seo/render et un Googlebot reçoit bien le contenu (titre par page, description, canonique, OG, liste des créateurs). Ne pas redévelopper'),
-  B(46,'REL-3',8,'done','FAIT (20/07) — cache traversant : en ligne on interroge le serveur et on écrit en local, hors ligne on sert le local. Plafond 100, brouillons et dossiers en attente conservés en priorité. LECTURE SEULE assumée : envoyer des photos hors ligne suppose une file de téléversement, un autre chantier. Bandeau explicite quand la liste vient de l\'appareil. Repli uniquement sur panne RÉSEAU — servir un cache derrière un 401 laisserait croire que tout va bien alors qu\'on est déconnecté'),
-  L(40,'REL-V3',8,'done','FAIT (20/07) — écran branché sur le cache, schéma WatermelonDB v6 + migration. Garde-fou ajouté au build : une migration mal formée ne casse pas le build, elle DÉTRUIT la base locale au premier lancement chez l\'utilisateur. Le contrôle a rattrapé une corruption réelle (bloc inséré au milieu d\'un autre, fichier valide, build vert)'),
-  L(41,'REL-V4',8,'bug','Branche android désalignée de master : 247 commits de retard côté web, 288 en propre. L\'app mobile n\'a pas les correctifs récents. Chantier à part (fusion + build APK + test appareil), pas un simple portage'),
+  B(46,'REL-3',8,'todo','« Mes Réalisations » : cache hors ligne côté application mobile'),
+  L(40,'REL-V3',8,'todo','« Mes Réalisations » mobile : intégration de la couche hors ligne'),
+  L(41,'REL-V4',8,'part','FUSION FAITE le 20/07, reste le test sur appareil. 319 vs 320 commits divergents, 294 fichiers différents, 43 en conflit (143 blocs). Règle : android d abord, master seulement si réellement meilleur — un détecteur a comparé chaque apport au contenu déjà présent. Android garde tout son natif et son écran Paramètres en sections ; master apporte la charte PDF (8 documents jamais reçus ici, partage natif préservé par un point de délégation unique), la déconnexion indépendante du serveur, la vérification de session avant éjection sur 401. 29 fichiers gagnés, AUCUN perdu, build vert. Poussé avec [skip-release] : aucune OTA envoyée aux utilisateurs'),
   F(42,'REL-V5',8,'done','Composant Toaster jamais monté : 41 appels toast.success/error sans aucun effet dans toute l\'application (aucune confirmation ni erreur visible)'),
 
   // ---------- Avis v2 (décisions direction 20/07) ----------
