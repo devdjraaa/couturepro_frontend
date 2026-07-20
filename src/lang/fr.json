@@ -2,8 +2,8 @@
   "sync": {
     "online": "En ligne",
     "hors_ligne": "Hors ligne",
-    "actions_attente": "Hors ligne — {{count}} action en attente",
-    "actions_attente_plural": "Hors ligne — {{count}} actions en attente",
+    "actions_attente": "Hors ligne : {{count}} action en attente",
+    "actions_attente_plural": "Hors ligne : {{count}} actions en attente",
     "en_cours": "Synchronisation…",
     "synchronise": "Synchronisé",
     "erreur": "Erreur de synchronisation",
@@ -11,10 +11,10 @@
     "en_attente": "Modifications en attente de synchronisation"
   },
   "artisan_app": {
-    "titre": "Votre espace est sur l'application mobile",
-    "intro": "L'espace Artisan Gextimo — gestion des clients, commandes, mesures et bien plus — est optimisé pour l'application mobile.",
-    "sous_texte": "Téléchargez l'application ou continuez sur le navigateur.",
-    "telecharger": "Télécharger sur Android",
+    "titre": "Votre espace est aussi sur mobile",
+    "intro": "Vous pouvez gérer vos clients, vos commandes et vos mesures ici, dans votre navigateur. L'application mobile reste plus confortable au quotidien, surtout à l'atelier : elle fonctionne sans connexion et vous avez vos contacts sous la main.",
+    "sous_texte": "À vous de choisir.",
+    "telecharger": "Télécharger l'application",
     "continuer": "Continuer sur le navigateur"
   },
   "galerie": {
@@ -120,7 +120,7 @@
     "banniere_vide": "Aucune bannière",
     "changer_banniere": "Changer la bannière",
     "retirer_banniere": "Retirer",
-    "banniere_hint": "Photo, GIF ou courte vidéo — affichée en couverture de votre profil public (image ≤ 4 Mo, vidéo ≤ 15 Mo).",
+    "banniere_hint": "Photo, GIF ou courte vidéo : affichée en couverture de votre profil public (image ≤ 4 Mo, vidéo ≤ 15 Mo).",
     "envoi": "Envoi…",
     "specialite": "Spécialité",
     "specialite_ph": "Ex : Haute couture, Tailleur…",
@@ -141,7 +141,7 @@
     "verifie_desc": "Le badge « Vérifié » est affiché sur votre vitrine publique.",
     "demander_verif": "Demander la vérification",
     "verif_desc": "Joignez un document officiel (CNI, diplôme, certificat de créateur…) ou un lien vers votre portfolio / profil professionnel pour obtenir le badge « Vérifié ».",
-    "verif_envoyee": "✓ Demande envoyée — nous vous répondons sous 48 h.",
+    "verif_envoyee": "✓ Demande envoyée : nous vous répondons sous 48 h.",
     "joindre_doc": "Joindre un document (PDF, JPG, PNG)",
     "portfolio_ph": "Lien vers votre portfolio (https://…)",
     "envoyer_demande": "Envoyer la demande",
@@ -158,7 +158,7 @@
     "aucune_collection": "Aucune collection pour le moment.",
     "nouvelle_collection_ph": "Nouvelle collection…",
     "avis_titre": "Avis signalés",
-    "avis_examen": "Un visiteur a signalé cet avis. L'équipe Gextimo l'examine — vous n'avez rien à faire.",
+    "avis_examen": "Un visiteur a signalé cet avis. L'équipe Gextimo l'examine, vous n'avez rien à faire.",
     "signale": "signalé",
     "devis_titre": "Demandes de devis",
     "budget": "Budget :",
@@ -177,7 +177,7 @@
     "publier_vitrine": "Publier sur la vitrine",
     "publie": "Publié",
     "masque": "Masqué",
-    "collection_opt": "— Collection",
+    "collection_opt": "Collection",
     "aide": "Touchez l'icône œil sur une création pour la publier ou la retirer de votre page publique. Les statistiques de visites et de contacts arrivent prochainement.",
     "devis_vide": "Aucune demande de devis pour le moment. Elles apparaîtront ici dès qu’un client vous en enverra depuis votre vitrine.",
     "devis_traite": "Traité",
@@ -564,9 +564,9 @@
       "libre": "Journée libre 🎉",
       "libre_desc": "Pas d'urgence aujourd'hui. Prenez de l'avance sur vos commandes.",
       "voir_commandes": "Voir toutes les commandes",
-      "livraison": "Livraison — {{vetement}}",
-      "essayage": "Essayage — {{vetement}}",
-      "solde": "Solde restant — {{montant}}"
+      "livraison": "Livraison : {{vetement}}",
+      "essayage": "Essayage : {{vetement}}",
+      "solde": "Solde restant : {{montant}}"
     },
     "onboarding": {
       "titre": "Bienvenue dans votre atelier 🎉",
@@ -722,7 +722,7 @@
       "feature_whatsapp": "L'envoi de factures par WhatsApp",
       "toast_telechargee": "Facture téléchargée.",
       "toast_erreur": "Impossible de générer la facture.",
-      "partage_titre": "Facture — {{client}}",
+      "partage_titre": "Facture : {{client}}",
       "partage_texte": "Facture commande groupée pour {{client}}"
     },
     "groupe_form": {
@@ -958,7 +958,7 @@
       "ajouter": "Créer le vêtement",
       "photos": "Photos du modèle",
       "ajouter_photos": "Ajouter des photos",
-      "photos_aide": "JPG, PNG, WebP — 4 Mo maximum par photo — {{n}} photos au total",
+      "photos_aide": "JPG, PNG, WebP, 4 Mo maximum par photo, {{n}} photos au total",
       "mesures_titre": "Mesures à prendre pour ce modèle",
       "mesures_placeholder": "ex. Tour de poitrine",
       "mesures_aide": "Ces mesures seront proposées automatiquement à la saisie quand ce modèle est choisi dans une commande."
@@ -1138,7 +1138,7 @@
       "expire_auj": "expire aujourd'hui",
       "expire_dans": "expire dans {{jours}} jour(s)",
       "action": "Choisir un plan →",
-      "mode_gratuit": "Abonnement expiré — vous êtes en mode gratuit (fonctionnalités limitées).",
+      "mode_gratuit": "Abonnement expiré : vous êtes en mode gratuit (fonctionnalités limitées).",
       "renouveler": "Renouveler →"
     },
     "code": {
@@ -1335,7 +1335,7 @@
     "demo": {
       "titre": "Données de démonstration",
       "description": "Injecte 15 clients et 25 commandes d'exemple pour explorer l'application sans saisir de données réelles. Remplace les données actuelles.",
-      "success": "Données injectées — explorez l'application !",
+      "success": "Données injectées : explorez l'application !",
       "btn": "Réinitialiser les données démo"
     },
     "encart": "Pour vos réclamations, suggestions d'amélioration, remarques, demandes d'assistance ou toute autre requête, créez un ticket afin de nous en informer. Notre équipe vous répondra dans les meilleurs délais."
@@ -1352,7 +1352,7 @@
       "description": "Envoyez des messages automatiques à vos clients via WhatsApp",
       "rappels": "Rappels WhatsApp",
       "bouton_manuel": "Bouton manuel depuis les fiches",
-      "sans_cout": "Aucun coût d'API — vous rédigez et envoyez vous-même le message depuis WhatsApp.",
+      "sans_cout": "Aucun coût d'API : vous rédigez et envoyez vous-même le message depuis WhatsApp.",
       "activer": "Activer les notifications WhatsApp",
       "numero": "Numéro WhatsApp de l'atelier",
       "enregistrer": "Enregistrer",
@@ -1470,7 +1470,7 @@
     "hint": "Proposez le patron de ce modèle au téléchargement payant.",
     "titre_label": "Titre du patron",
     "prix_label": "Prix (FCFA)",
-    "fichier_label": "Choisir un fichier (PDF, ZIP, image — max 20 Mo)",
+    "fichier_label": "Choisir un fichier (PDF, ZIP, image, max 20 Mo)",
     "publier": "Mettre en vente",
     "ventes": "{{n}} vente(s)",
     "retirer": "Retirer de la vente",
@@ -1480,8 +1480,8 @@
     "err_generic": "La mise en vente a échoué. Réessayez."
   },
   "vitrine": {
-    "promo": "✦ Nouveau — la vitrine Gextimo connecte les créateurs de mode africaine à toute l'Afrique de l'Ouest.",
-    "promo_a": "Nouveau — la vitrine",
+    "promo": "✦ Nouveau : la vitrine Gextimo connecte les créateurs de mode africaine à toute l'Afrique de l'Ouest.",
+    "promo_a": "Nouveau : la vitrine",
     "promo_b": "connecte les créateurs de mode africaine à toute l'Afrique de l'Ouest.",
     "online": "● En ligne",
     "loading": "Chargement…",
@@ -1553,7 +1553,7 @@
     },
     "espace_client": {
       "title": "Espace client",
-      "subtitle": "Suivez vos commandes, laissez des avis et échangez avec vos créateurs — sans mot de passe.",
+      "subtitle": "Suivez vos commandes, laissez des avis et échangez avec vos créateurs, sans mot de passe.",
       "ou": "ou",
       "email_label": "Votre adresse e-mail",
       "email_placeholder": "vous@exemple.com",
@@ -1589,11 +1589,11 @@
       "instructions_placeholder": "Ex. : Robe en wax pour un mariage le 20 août, taille standard 42, budget 40 000 FCFA…",
       "envoyer_commande": "Envoyer ma commande",
       "commande_envoyee": "Commande envoyée au designer.",
-      "avis_titre": "Votre avis — {{ref}}",
+      "avis_titre": "Votre avis : {{ref}}",
       "avis_placeholder": "Partagez votre expérience (qualité, délais, échanges)…",
       "publier_avis": "Publier mon avis",
       "avis_merci": "Merci pour votre avis !",
-      "reclamation_titre": "Signaler un problème — {{ref}}",
+      "reclamation_titre": "Signaler un problème : {{ref}}",
       "reclamation_sujet": "Sujet (ex. : retard de livraison)",
       "reclamation_message": "Décrivez le problème rencontré…",
       "envoyer_reclamation": "Envoyer la réclamation",
@@ -1603,10 +1603,10 @@
       "profil_prenom": "Prénom",
       "profil_nom": "Nom",
       "profil_ville": "Ville",
-      "profil_naissance_hint": "Date de naissance (facultatif) — pour un petit mot le jour J.",
+      "profil_naissance_hint": "Date de naissance (facultatif), pour un petit mot le jour J.",
       "profil_enregistrer": "Enregistrer",
       "profil_enregistre": "Profil mis à jour.",
-      "reprise_suivre": "Connectez-vous pour suivre {{createur}} — votre abonnement sera enregistré aussitôt et vous reviendrez sur son profil.",
+      "reprise_suivre": "Connectez-vous pour suivre {{createur}}, votre abonnement sera enregistré aussitôt et vous reviendrez sur son profil.",
       "reprise_ok": "Vous suivez maintenant {{createur}}.",
       "reprise_echec": "Votre abonnement n'a pas pu être enregistré. Réessayez depuis le profil du créateur.",
       "mes_createurs": "Mes créateurs suivis",
@@ -1616,7 +1616,7 @@
       "notifs_actives": "Notifications activées pour ce créateur",
       "notifs_inactives": "Notifications désactivées pour ce créateur",
       "notifs_echec": "Le réglage des notifications n'a pas pu être enregistré.",
-      "reprise_avis": "Connectez-vous pour publier votre avis — il est conservé et partira dès votre connexion, puis vous reviendrez sur le profil.",
+      "reprise_avis": "Connectez-vous pour publier votre avis, il est conservé et partira dès votre connexion, puis vous reviendrez sur le profil.",
       "avis_rejoue": "Votre avis a été publié.",
       "avis_rejoue_photos": "Votre avis a été publié. Les photos jointes n'ont pas pu être conservées pendant la connexion."
     },
@@ -1643,7 +1643,7 @@
       "menu_avis": "Donner un avis",
       "modal_avis": "Votre avis compte. Utilisez les pouces sous chaque réponse de Makila AI pour nous dire si elle vous a aidé : cela nous permet de l'améliorer en continu.",
       "equipe_hors_ligne": "Notre équipe est hors ligne",
-      "equipe_reprise": "Makila vous répond tout de suite, 24h/24 — un membre de l'équipe prend le relais dès {{heure}}h."
+      "equipe_reprise": "Makila vous répond tout de suite, 24h/24, un membre de l'équipe prend le relais dès {{heure}}h."
     },
     "hero": {
       "eyebrow": "Plateforme des créateurs de mode",
@@ -1716,7 +1716,7 @@
     "join": {
       "eyebrow": "Pour les créateurs",
       "title": "Votre vitrine pro, en quelques minutes",
-      "subtitle": "Gérez votre atelier, publiez vos créations et recevez des commandes — tout depuis un seul outil.",
+      "subtitle": "Gérez votre atelier, publiez vos créations et recevez des commandes, tout depuis un seul outil.",
       "benefits": [
         "Vitrine publique professionnelle et personnalisée",
         "Gestion des clients, commandes et mesures",
@@ -1882,7 +1882,7 @@
       "report_merci": "Signalement transmis. Notre équipe va vérifier."
     },
     "patron": {
-      "download_paid": "Télécharger — {{prix}}",
+      "download_paid": "Télécharger : {{prix}}",
       "buy_title": "Télécharger « {{titre}} »",
       "buy_name": "Nom complet",
       "buy_email": "E-mail",
@@ -1970,7 +1970,7 @@
     "about": {
       "eyebrow": "Qui sommes-nous",
       "title": "L'écosystème de la mode africaine",
-      "p1": "Gextimo connecte les créateurs de mode — couturiers, stylistes, modélistes — à leurs clients à travers le Bénin et l'Afrique de l'Ouest. Notre mission : valoriser le savoir-faire africain et faciliter la rencontre entre talents et clients.",
+      "p1": "Gextimo connecte les créateurs de mode, couturiers, stylistes, modélistes, à leurs clients à travers le Bénin et l'Afrique de l'Ouest. Notre mission : valoriser le savoir-faire africain et faciliter la rencontre entre talents et clients.",
       "p2": "Nous offrons aux créateurs une vitrine professionnelle, des outils de gestion (clients, commandes, mesures, caisse) et, bientôt, des moyens de monétiser leur visibilité.",
       "values_title": "Nos valeurs",
       "values": [
@@ -2003,7 +2003,7 @@
         }
       ],
       "contact_title": "Une autre question ?",
-      "contact": "Écrivez-nous à support.gextimo@novafriq.africa — nous répondons sous 48 h."
+      "contact": "Écrivez-nous à support.gextimo@novafriq.africa, nous répondons sous 48 h."
     },
     "artisans": {
       "eyebrow": "Artisans",
@@ -2055,7 +2055,7 @@
       "subtitle": "Choisissez votre langue et votre devise pour continuer.",
       "langue": "Langue",
       "devise": "Devise",
-      "devise_hint": "Prix indicatifs — convertis au taux du jour.",
+      "devise_hint": "Prix indicatifs : convertis au taux du jour.",
       "cta": "Commencer"
     },
     "legal_pages": {
@@ -2063,10 +2063,10 @@
         "title": "Politique de confidentialité",
         "eyebrow": "Légal & Vie privée",
         "subtitle": "Application : GEXTIMO | Éditeur : NOVAFRIQ, SASU",
-        "version": "Version 4.0 — Établie selon l'article 415 du Code du Numérique (Loi n° 2017-20 du 20 avril 2018).",
+        "version": "Version 4.0 : Établie selon l'article 415 du Code du Numérique (Loi n° 2017-20 du 20 avril 2018).",
         "articles": [
           {
-            "title": "ARTICLE 1 — IDENTITÉ DU RESPONSABLE DU TRAITEMENT",
+            "title": "ARTICLE 1 : IDENTITÉ DU RESPONSABLE DU TRAITEMENT",
             "blocks": [
               {
                 "type": "p",
@@ -2087,11 +2087,11 @@
             ]
           },
           {
-            "title": "ARTICLE 2 — FORMALITÉS PRÉALABLES AUPRÈS DE L'APDP",
+            "title": "ARTICLE 2 : FORMALITÉS PRÉALABLES AUPRÈS DE L'APDP",
             "blocks": [
               {
                 "type": "p",
-                "t": "Ce traitement est déclaré à l'APDP sous la délibération n° [NUMÉRO DE DÉLIBÉRATION APDP — à compléter après dépôt]"
+                "t": "Ce traitement est déclaré à l'APDP sous la délibération n° [NUMÉRO DE DÉLIBÉRATION APDP, à compléter après dépôt]"
               },
               {
                 "type": "p",
@@ -2100,7 +2100,7 @@
             ]
           },
           {
-            "title": "ARTICLE 3 — DONNÉES COLLECTÉES ET TRAITÉES",
+            "title": "ARTICLE 3 : DONNÉES COLLECTÉES ET TRAITÉES",
             "blocks": [
               {
                 "type": "table",
@@ -2143,7 +2143,7 @@
                   ],
                   [
                     "Données de paiement",
-                    "Mobile Money et cartes (via FedaPay) — collectées dès l'activation du paiement",
+                    "Mobile Money et cartes (via FedaPay), collectées dès l'activation du paiement",
                     "Exécution du contrat (Art. 415)",
                     "10 ans (obligation comptable OHADA)"
                   ]
@@ -2161,7 +2161,7 @@
             ]
           },
           {
-            "title": "ARTICLE 4 — FINALITÉS DU TRAITEMENT",
+            "title": "ARTICLE 4 : FINALITÉS DU TRAITEMENT",
             "blocks": [
               {
                 "type": "list",
@@ -2178,7 +2178,7 @@
             ]
           },
           {
-            "title": "ARTICLE 5 — OPÉRATIONS EFFECTUÉES SUR LES DONNÉES",
+            "title": "ARTICLE 5 : OPÉRATIONS EFFECTUÉES SUR LES DONNÉES",
             "blocks": [
               {
                 "type": "list",
@@ -2192,11 +2192,11 @@
             ]
           },
           {
-            "title": "ARTICLE 6 — DESTINATAIRES DES DONNÉES",
+            "title": "ARTICLE 6 : DESTINATAIRES DES DONNÉES",
             "blocks": [
               {
                 "type": "subtitle",
-                "t": "6.1 — Accès internes"
+                "t": "6.1 : Accès internes"
               },
               {
                 "type": "p",
@@ -2204,7 +2204,7 @@
               },
               {
                 "type": "subtitle",
-                "t": "6.2 — Prestataires techniques"
+                "t": "6.2 : Prestataires techniques"
               },
               {
                 "type": "table",
@@ -2217,7 +2217,7 @@
                 "rows": [
                   [
                     "Hostinger International Ltd",
-                    "Hébergement VPS — serveur principal et sauvegardes chiffrées",
+                    "Hébergement VPS : serveur principal et sauvegardes chiffrées",
                     "France (Paris, UE)",
                     "Toutes données stockées"
                   ],
@@ -2228,13 +2228,13 @@
                     "Référence de transaction, montant, opérateur"
                   ],
                   [
-                    "[Outil analytics — si retenu]",
+                    "[Outil analytics : si retenu]",
                     "Mesure d'audience, statistiques d'usage",
                     "[À préciser]",
                     "Données d'usage agrégées, IP"
                   ],
                   [
-                    "[WhatsApp Business / Email — à préciser]",
+                    "[WhatsApp Business / Email : à préciser]",
                     "Envoi de notifications et communications transactionnelles",
                     "[À préciser]",
                     "Email, numéro de téléphone"
@@ -2247,7 +2247,7 @@
               },
               {
                 "type": "subtitle",
-                "t": "6.3 — Destinataires légaux"
+                "t": "6.3 : Destinataires légaux"
               },
               {
                 "type": "p",
@@ -2256,7 +2256,7 @@
             ]
           },
           {
-            "title": "ARTICLE 7 — DIVULGATION PROÉMINENTE DES PERMISSIONS IN-APP",
+            "title": "ARTICLE 7 : DIVULGATION PROÉMINENTE DES PERMISSIONS IN-APP",
             "blocks": [
               {
                 "type": "table",
@@ -2305,7 +2305,7 @@
             ]
           },
           {
-            "title": "ARTICLE 8 — STOCKAGE ET HÉBERGEMENT",
+            "title": "ARTICLE 8 : STOCKAGE ET HÉBERGEMENT",
             "blocks": [
               {
                 "type": "table",
@@ -2331,7 +2331,7 @@
             ]
           },
           {
-            "title": "ARTICLE 9 — SÉCURITÉ DES DONNÉES",
+            "title": "ARTICLE 9 : SÉCURITÉ DES DONNÉES",
             "blocks": [
               {
                 "type": "list",
@@ -2351,7 +2351,7 @@
             ]
           },
           {
-            "title": "ARTICLE 10 — DROITS DES PERSONNES CONCERNÉES",
+            "title": "ARTICLE 10 : DROITS DES PERSONNES CONCERNÉES",
             "blocks": [
               {
                 "type": "table",
@@ -2400,7 +2400,7 @@
               },
               {
                 "type": "subtitle",
-                "t": "Retrait du consentement — Mécanismes pratiques"
+                "t": "Retrait du consentement : Mécanismes pratiques"
               },
               {
                 "type": "p",
@@ -2416,12 +2416,12 @@
               },
               {
                 "type": "p",
-                "t": "Pour exercer ces droits : dpo@novafriq.africa — Nous répondons sous 60 jours (Code du Numérique)."
+                "t": "Pour exercer ces droits : dpo@novafriq.africa. Nous répondons sous 60 jours (Code du Numérique)."
               }
             ]
           },
           {
-            "title": "ARTICLE 11 — PROTECTION DES MINEURS",
+            "title": "ARTICLE 11 : PROTECTION DES MINEURS",
             "blocks": [
               {
                 "type": "p",
@@ -2430,7 +2430,7 @@
             ]
           },
           {
-            "title": "ARTICLE 12 — DROIT DE PLAINTE AUPRÈS DE L'APDP",
+            "title": "ARTICLE 12 : DROIT DE PLAINTE AUPRÈS DE L'APDP",
             "blocks": [
               {
                 "type": "p",
@@ -2439,16 +2439,16 @@
             ]
           },
           {
-            "title": "ARTICLE 13 — COOKIES ET TRACEURS",
+            "title": "ARTICLE 13 : COOKIES ET TRACEURS",
             "blocks": [
               {
                 "type": "p",
-                "t": "Voir Document 4 — Politique de Gestion des Cookies et Traceurs du présent dossier."
+                "t": "Voir Document 4 : Politique de Gestion des Cookies et Traceurs du présent dossier."
               }
             ]
           },
           {
-            "title": "ARTICLE 14 — LIENS VERS DES SERVICES TIERS",
+            "title": "ARTICLE 14 : LIENS VERS DES SERVICES TIERS",
             "blocks": [
               {
                 "type": "p",
@@ -2465,7 +2465,7 @@
             ]
           },
           {
-            "title": "ARTICLE 15 — MODIFICATIONS",
+            "title": "ARTICLE 15 : MODIFICATIONS",
             "blocks": [
               {
                 "type": "p",
@@ -2491,7 +2491,7 @@
             "blocks": [
               {
                 "type": "p",
-                "t": "Les échanges avec l'assistant (chatbot) du site sont enregistrés — question posée, réponse donnée et votre éventuel avis (utile / inutile) — dans le seul but d'améliorer la qualité des réponses et le service. Ils ne sont jamais vendus ni partagés avec des tiers."
+                "t": "Les échanges avec l'assistant (chatbot) du site sont enregistrés, question posée, réponse donnée et votre éventuel avis (utile / inutile), dans le seul but d'améliorer la qualité des réponses et le service. Ils ne sont jamais vendus ni partagés avec des tiers."
               },
               {
                 "type": "p",
@@ -2502,7 +2502,7 @@
         ],
         "meta_lines": [
           "Responsable du traitement : ADJAHO Patrick Dona",
-          "Date d'entrée en vigueur : [DATE — à compléter]"
+          "Date d'entrée en vigueur : [DATE, à compléter]"
         ]
       },
       "mentions": {
@@ -2510,7 +2510,7 @@
         "eyebrow": "Légal",
         "subtitle": "Application et site web : GEXTIMO | URL : gextimo.novafriq.africa",
         "meta_lines": [
-          "Date de mise à jour : [DATE — à compléter]"
+          "Date de mise à jour : [DATE : à compléter]"
         ],
         "articles": [
           {
@@ -2541,15 +2541,15 @@
                   ],
                   [
                     "Numéro RCCM",
-                    "[NUMÉRO RCCM — à compléter après immatriculation sur monentreprise.bj]"
+                    "[NUMÉRO RCCM : à compléter après immatriculation sur monentreprise.bj]"
                   ],
                   [
                     "Numéro IFU",
-                    "[NUMÉRO IFU — à compléter après immatriculation]"
+                    "[NUMÉRO IFU : à compléter après immatriculation]"
                   ],
                   [
                     "Directeur de la publication",
-                    "ADJAHO Patrick Dona — Président"
+                    "ADJAHO Patrick Dona : Président"
                   ],
                   [
                     "Téléphone",
@@ -2615,7 +2615,7 @@
             "blocks": [
               {
                 "type": "p",
-                "t": "Voir Document 1 — Politique de confidentialité et Document 4 — Politique des cookies du présent dossier. Autorité de contrôle : APDP — www.apdp.bj"
+                "t": "Voir Document 1, Politique de confidentialité et Document 4, Politique des cookies du présent dossier. Autorité de contrôle : APDP, www.apdp.bj"
               }
             ]
           },
@@ -2648,12 +2648,12 @@
         "eyebrow": "Cookies & Traceurs",
         "subtitle": "Application : GEXTIMO | Éditeur : NOVAFRIQ, SASU",
         "meta_lines": [
-          "Date de mise à jour : [DATE — à compléter]"
+          "Date de mise à jour : [DATE : à compléter]"
         ],
-        "version": "Version 4.0 — Établie selon la Loi n° 2017-20 portant Code du Numérique en République du Bénin.",
+        "version": "Version 4.0 : Établie selon la Loi n° 2017-20 portant Code du Numérique en République du Bénin.",
         "articles": [
           {
-            "title": "ARTICLE 1 — QU'EST-CE QU'UN COOKIE ?",
+            "title": "ARTICLE 1 : QU'EST-CE QU'UN COOKIE ?",
             "blocks": [
               {
                 "type": "p",
@@ -2666,7 +2666,7 @@
             ]
           },
           {
-            "title": "ARTICLE 2 — POURQUOI GEXTIMO UTILISE DES COOKIES ?",
+            "title": "ARTICLE 2 : POURQUOI GEXTIMO UTILISE DES COOKIES ?",
             "blocks": [
               {
                 "type": "p",
@@ -2683,7 +2683,7 @@
             ]
           },
           {
-            "title": "ARTICLE 3 — TYPES DE COOKIES UTILISÉS",
+            "title": "ARTICLE 3 : TYPES DE COOKIES UTILISÉS",
             "blocks": [
               {
                 "type": "table",
@@ -2698,7 +2698,7 @@
                     "Cookies essentiels",
                     "Connexion, session, sécurité, panier",
                     "Session / 12 mois",
-                    "Non — indispensables"
+                    "Non : indispensables"
                   ],
                   [
                     "Cookies de préférences",
@@ -2723,7 +2723,7 @@
             ]
           },
           {
-            "title": "ARTICLE 4 — COOKIES TIERS",
+            "title": "ARTICLE 4 : COOKIES TIERS",
             "blocks": [
               {
                 "type": "p",
@@ -2732,9 +2732,9 @@
               {
                 "type": "list",
                 "items": [
-                  "[Outil analytics — à préciser] : mesure d'audience anonymisée",
+                  "[Outil analytics : à préciser] : mesure d'audience anonymisée",
                   "FedaPay : sécurisation des transactions de paiement",
-                  "[WhatsApp Business — si intégré] : communication avec le support"
+                  "[WhatsApp Business : si intégré] : communication avec le support"
                 ]
               },
               {
@@ -2744,7 +2744,7 @@
             ]
           },
           {
-            "title": "ARTICLE 5 — COMMENT GÉRER VOS COOKIES ?",
+            "title": "ARTICLE 5 : COMMENT GÉRER VOS COOKIES ?",
             "blocks": [
               {
                 "type": "p",
@@ -2752,7 +2752,7 @@
               },
               {
                 "type": "subtitle",
-                "t": "5.1 — Via GEXTIMO"
+                "t": "5.1 : Via GEXTIMO"
               },
               {
                 "type": "p",
@@ -2760,7 +2760,7 @@
               },
               {
                 "type": "subtitle",
-                "t": "5.2 — Via votre appareil"
+                "t": "5.2 : Via votre appareil"
               },
               {
                 "type": "p",
@@ -2768,7 +2768,7 @@
               },
               {
                 "type": "subtitle",
-                "t": "5.3 — Via votre navigateur (site web)"
+                "t": "5.3 : Via votre navigateur (site web)"
               },
               {
                 "type": "p",
@@ -2777,7 +2777,7 @@
             ]
           },
           {
-            "title": "ARTICLE 6 — DURÉE DE CONSERVATION",
+            "title": "ARTICLE 6 : DURÉE DE CONSERVATION",
             "blocks": [
               {
                 "type": "p",
@@ -2786,7 +2786,7 @@
             ]
           },
           {
-            "title": "ARTICLE 7 — CONTACT",
+            "title": "ARTICLE 7 : CONTACT",
             "blocks": [
               {
                 "type": "p",
@@ -2799,14 +2799,14 @@
       "protection_donnees": {
         "title": "Protection des données (APDP)",
         "eyebrow": "APDP · Bénin",
-        "subtitle": "Application : GEXTIMO — Marketplace de mode africaine | Éditeur : NOVAFRIQ, SASU",
+        "subtitle": "Application : GEXTIMO : Marketplace de mode africaine | Éditeur : NOVAFRIQ, SASU",
         "meta_lines": [
           "Page publique de conformité. Pour le détail, voir Document 1 (Confidentialité) et Document 4 (Cookies)."
         ],
-        "version": "Version 7.0 — Synthèse publique de conformité APDP. Voir Documents 1, 4, 5, 6, 7 pour le détail.",
+        "version": "Version 7.0 : Synthèse publique de conformité APDP. Voir Documents 1, 4, 5, 6, 7 pour le détail.",
         "articles": [
           {
-            "title": "ARTICLE 1 — NOTRE ENGAGEMENT",
+            "title": "ARTICLE 1 : NOTRE ENGAGEMENT",
             "blocks": [
               {
                 "type": "p",
@@ -2815,20 +2815,20 @@
             ]
           },
           {
-            "title": "ARTICLE 2 — DÉCLARATION APDP",
+            "title": "ARTICLE 2 : DÉCLARATION APDP",
             "blocks": [
               {
                 "type": "p",
-                "t": "Le traitement de vos données est déclaré à l'APDP sous la délibération n° [NUMÉRO DE DÉLIBÉRATION APDP — à compléter après dépôt]."
+                "t": "Le traitement de vos données est déclaré à l'APDP sous la délibération n° [NUMÉRO DE DÉLIBÉRATION APDP, à compléter après dépôt]."
               },
               {
                 "type": "p",
-                "t": "Responsable du traitement : ADJAHO Patrick Dona — NOVAFRIQ. Contact : dpo@novafriq.africa."
+                "t": "Responsable du traitement : ADJAHO Patrick Dona. NOVAFRIQ. Contact : dpo@novafriq.africa."
               }
             ]
           },
           {
-            "title": "ARTICLE 3 — VOS DROITS",
+            "title": "ARTICLE 3 : VOS DROITS",
             "blocks": [
               {
                 "type": "p",
@@ -2841,7 +2841,7 @@
             ]
           },
           {
-            "title": "ARTICLE 4 — OÙ SONT VOS DONNÉES",
+            "title": "ARTICLE 4 : OÙ SONT VOS DONNÉES",
             "blocks": [
               {
                 "type": "p",
@@ -2850,7 +2850,7 @@
             ]
           },
           {
-            "title": "ARTICLE 5 — CONTACTER L'APDP",
+            "title": "ARTICLE 5 : CONTACTER L'APDP",
             "blocks": [
               {
                 "type": "p",
@@ -2865,12 +2865,12 @@
         "eyebrow": "CGU",
         "subtitle": "Application : GEXTIMO | Éditeur : NOVAFRIQ, SASU",
         "meta_lines": [
-          "Date d'entrée en vigueur : [DATE — à compléter]"
+          "Date d'entrée en vigueur : [DATE, à compléter]"
         ],
-        "version": "Version 4.0 — Établies selon le droit béninois et le droit OHADA.",
+        "version": "Version 4.0 : Établies selon le droit béninois et le droit OHADA.",
         "articles": [
           {
-            "title": "ARTICLE 1 — OBJET ET PRÉSENTATION DU SERVICE",
+            "title": "ARTICLE 1 : OBJET ET PRÉSENTATION DU SERVICE",
             "blocks": [
               {
                 "type": "p",
@@ -2882,13 +2882,13 @@
               },
               {
                 "type": "box",
-                "title": "À noter — Mode de lancement",
+                "title": "À noter : Mode de lancement",
                 "t": "Au lancement, GEXTIMO fonctionne en mode mise en relation. Le paiement en ligne, la commission et le reversement via FedaPay ne sont pas encore actifs : les paiements se règlent directement entre le client et le créateur, hors plateforme. Ces fonctionnalités seront activées plus tard, avec un préavis de 30 jours. Dès leur activation, les Conditions de vente & commissions (Document 9) et la politique Livraison, retours & remboursements (Document 16) s'appliquent automatiquement. Tant que le paiement n'est pas actif, nous ne collectons ni vos données de paiement ni vos coordonnées de reversement."
               }
             ]
           },
           {
-            "title": "ARTICLE 2 — ACCEPTATION DES CGU",
+            "title": "ARTICLE 2 : ACCEPTATION DES CGU",
             "blocks": [
               {
                 "type": "p",
@@ -2897,7 +2897,7 @@
             ]
           },
           {
-            "title": "ARTICLE 3 — ACCÈS ET COMPTE UTILISATEUR",
+            "title": "ARTICLE 3 : ACCÈS ET COMPTE UTILISATEUR",
             "blocks": [
               {
                 "type": "p",
@@ -2910,7 +2910,7 @@
             ]
           },
           {
-            "title": "ARTICLE 4 — OFFRES ET CONDITIONS TARIFAIRES",
+            "title": "ARTICLE 4 : OFFRES ET CONDITIONS TARIFAIRES",
             "blocks": [
               {
                 "type": "table",
@@ -2956,11 +2956,11 @@
             ]
           },
           {
-            "title": "ARTICLE 5 — DONNÉES DES UTILISATEURS PROFESSIONNELS",
+            "title": "ARTICLE 5 : DONNÉES DES UTILISATEURS PROFESSIONNELS",
             "blocks": [
               {
                 "type": "p",
-                "t": "Les données que vous saisissez dans GEXTIMO — inventaires, clients, commandes, stocks, créations — vous appartiennent. NOVAFRIQ n'en devient jamais propriétaire et ne s'en sert que pour faire fonctionner le service."
+                "t": "Les données que vous saisissez dans GEXTIMO, inventaires, clients, commandes, stocks, créations, vous appartiennent. NOVAFRIQ n'en devient jamais propriétaire et ne s'en sert que pour faire fonctionner le service."
               },
               {
                 "type": "p",
@@ -2969,7 +2969,7 @@
             ]
           },
           {
-            "title": "ARTICLE 6 — OBLIGATIONS DE L'UTILISATEUR",
+            "title": "ARTICLE 6 : OBLIGATIONS DE L'UTILISATEUR",
             "blocks": [
               {
                 "type": "list",
@@ -2985,16 +2985,16 @@
             ]
           },
           {
-            "title": "ARTICLE 7 — PROPRIÉTÉ INTELLECTUELLE",
+            "title": "ARTICLE 7 : PROPRIÉTÉ INTELLECTUELLE",
             "blocks": [
               {
                 "type": "p",
-                "t": "GEXTIMO — son code, ses algorithmes, son design — appartient à NOVAFRIQ. Toute copie ou exploitation sans accord écrit est interdite. Pour les contenus des créateurs (photos, collections, modèles), voir Document 8 — Droits des créateurs & propriété intellectuelle."
+                "t": "GEXTIMO, son code, ses algorithmes, son design, appartient à NOVAFRIQ. Toute copie ou exploitation sans accord écrit est interdite. Pour les contenus des créateurs (photos, collections, modèles), voir Document 8. Droits des créateurs & propriété intellectuelle."
               }
             ]
           },
           {
-            "title": "ARTICLE 8 — RESPONSABILITÉ ET LIMITATION DE GARANTIE",
+            "title": "ARTICLE 8 : RESPONSABILITÉ ET LIMITATION DE GARANTIE",
             "blocks": [
               {
                 "type": "p",
@@ -3007,7 +3007,7 @@
             ]
           },
           {
-            "title": "ARTICLE 9 — RÉSILIATION",
+            "title": "ARTICLE 9 : RÉSILIATION",
             "blocks": [
               {
                 "type": "p",
@@ -3016,7 +3016,7 @@
             ]
           },
           {
-            "title": "ARTICLE 10 — DROIT APPLICABLE ET RÈGLEMENT DES LITIGES",
+            "title": "ARTICLE 10 : DROIT APPLICABLE ET RÈGLEMENT DES LITIGES",
             "blocks": [
               {
                 "type": "p",
@@ -3033,13 +3033,13 @@
       "droits_createurs": {
         "title": "Droits des créateurs & propriété intellectuelle",
         "eyebrow": "Créateurs & PI",
-        "subtitle": "Application : GEXTIMO — Marketplace de mode africaine | Éditeur : NOVAFRIQ, SASU",
+        "subtitle": "Application : GEXTIMO : Marketplace de mode africaine | Éditeur : NOVAFRIQ, SASU",
         "meta_lines": [
-          "Date d'entrée en vigueur : [DATE — à compléter]"
+          "Date d'entrée en vigueur : [DATE, à compléter]"
         ],
         "articles": [
           {
-            "title": "ARTICLE 1 — OBJET",
+            "title": "ARTICLE 1 : OBJET",
             "blocks": [
               {
                 "type": "p",
@@ -3048,7 +3048,7 @@
             ]
           },
           {
-            "title": "ARTICLE 2 — PROPRIÉTÉ DES CRÉATIONS",
+            "title": "ARTICLE 2 : PROPRIÉTÉ DES CRÉATIONS",
             "blocks": [
               {
                 "type": "p",
@@ -3065,7 +3065,7 @@
             ]
           },
           {
-            "title": "ARTICLE 3 — CE QUE NOVAFRIQ PEUT FAIRE AVEC LES CRÉATIONS",
+            "title": "ARTICLE 3 : CE QUE NOVAFRIQ PEUT FAIRE AVEC LES CRÉATIONS",
             "blocks": [
               {
                 "type": "list",
@@ -3083,7 +3083,7 @@
             ]
           },
           {
-            "title": "ARTICLE 4 — PROTECTION CONTRE LA COPIE ET LE PLAGIAT",
+            "title": "ARTICLE 4 : PROTECTION CONTRE LA COPIE ET LE PLAGIAT",
             "blocks": [
               {
                 "type": "p",
@@ -3096,7 +3096,7 @@
             ]
           },
           {
-            "title": "ARTICLE 5 — PROCÉDURE DE SIGNALEMENT",
+            "title": "ARTICLE 5 : PROCÉDURE DE SIGNALEMENT",
             "blocks": [
               {
                 "type": "p",
@@ -3114,7 +3114,7 @@
             ]
           },
           {
-            "title": "ARTICLE 6 — GARANTIES DU CRÉATEUR",
+            "title": "ARTICLE 6 : GARANTIES DU CRÉATEUR",
             "blocks": [
               {
                 "type": "p",
@@ -3135,7 +3135,7 @@
             ]
           },
           {
-            "title": "ARTICLE 7 — LOGO ET MARQUE GEXTIMO",
+            "title": "ARTICLE 7 : LOGO ET MARQUE GEXTIMO",
             "blocks": [
               {
                 "type": "p",
@@ -3148,15 +3148,15 @@
       "conditions_vente": {
         "title": "Conditions de vente & commissions",
         "eyebrow": "Vente & Commissions",
-        "subtitle": "Application : GEXTIMO — Marketplace de mode africaine | Éditeur : NOVAFRIQ, SASU",
+        "subtitle": "Application : GEXTIMO : Marketplace de mode africaine | Éditeur : NOVAFRIQ, SASU",
         "meta_lines": [
-          "Date d'entrée en vigueur : [DATE — à compléter]"
+          "Date d'entrée en vigueur : [DATE, à compléter]"
         ],
-        "note": "À noter — Dispositions applicables à compter de l'activation du paiement en ligne sur GEXTIMO (voir CGU — Phase de lancement). Au lancement, le service fonctionne en mise en relation : ces règles ne sont pas encore actives.",
-        "version": "Version 4.0 — NOVAFRIQ / GEXTIMO.",
+        "note": "À noter : Dispositions applicables à compter de l'activation du paiement en ligne sur GEXTIMO (voir CGU. Phase de lancement). Au lancement, le service fonctionne en mise en relation : ces règles ne sont pas encore actives.",
+        "version": "Version 4.0 : NOVAFRIQ / GEXTIMO.",
         "articles": [
           {
-            "title": "ARTICLE 1 — FONCTIONNEMENT DU MARKETPLACE",
+            "title": "ARTICLE 1 : FONCTIONNEMENT DU MARKETPLACE",
             "blocks": [
               {
                 "type": "p",
@@ -3170,8 +3170,8 @@
                 "type": "list",
                 "items": [
                   "Le client choisit une création et passe commande sur GEXTIMO",
-                  "Le paiement est effectué intégralement sur la plateforme GEXTIMO (via FedaPay — Mobile Money ou carte bancaire)",
-                  "Les fonds sont collectés par FedaPay (agrégateur agréé) pour le compte du créateur — NOVAFRIQ ne détient jamais les fonds des clients",
+                  "Le paiement est effectué intégralement sur la plateforme GEXTIMO (via FedaPay. Mobile Money ou carte bancaire)",
+                  "Les fonds sont collectés par FedaPay (agrégateur agréé) pour le compte du créateur. NOVAFRIQ ne détient jamais les fonds des clients",
                   "NOVAFRIQ prélève sa commission sur le montant total",
                   "FedaPay reverse le solde net au créateur, sur instruction de NOVAFRIQ, dans les délais convenus"
                 ]
@@ -3183,7 +3183,7 @@
             ]
           },
           {
-            "title": "ARTICLE 2 — COMMISSIONS NOVAFRIQ",
+            "title": "ARTICLE 2 : COMMISSIONS NOVAFRIQ",
             "blocks": [
               {
                 "type": "table",
@@ -3194,17 +3194,17 @@
                 ],
                 "rows": [
                   [
-                    "Vente — formule Gratuite",
+                    "Vente : formule Gratuite",
                     "15 %",
                     "85 % du prix de vente"
                   ],
                   [
-                    "Vente — formule Standard",
+                    "Vente : formule Standard",
                     "0 %",
                     "100 % du prix de vente"
                   ],
                   [
-                    "Vente — formule Premium",
+                    "Vente : formule Premium",
                     "0 %",
                     "100 % du prix de vente"
                   ],
@@ -3222,7 +3222,7 @@
             ]
           },
           {
-            "title": "ARTICLE 3 — DÉLAIS DE REVERSEMENT",
+            "title": "ARTICLE 3 : DÉLAIS DE REVERSEMENT",
             "blocks": [
               {
                 "type": "p",
@@ -3243,7 +3243,7 @@
             ]
           },
           {
-            "title": "ARTICLE 4 — PRIX ET AFFICHAGE",
+            "title": "ARTICLE 4 : PRIX ET AFFICHAGE",
             "blocks": [
               {
                 "type": "p",
@@ -3256,7 +3256,7 @@
             ]
           },
           {
-            "title": "ARTICLE 5 — REMBOURSEMENTS ET LITIGES",
+            "title": "ARTICLE 5 : REMBOURSEMENTS ET LITIGES",
             "blocks": [
               {
                 "type": "p",
@@ -3276,7 +3276,7 @@
             ]
           },
           {
-            "title": "ARTICLE 6 — OBLIGATIONS DU CRÉATEUR VENDEUR",
+            "title": "ARTICLE 6 : OBLIGATIONS DU CRÉATEUR VENDEUR",
             "blocks": [
               {
                 "type": "list",
@@ -3291,7 +3291,7 @@
             ]
           },
           {
-            "title": "ARTICLE 7 — OBLIGATIONS DE NOVAFRIQ",
+            "title": "ARTICLE 7 : OBLIGATIONS DE NOVAFRIQ",
             "blocks": [
               {
                 "type": "list",
@@ -3306,7 +3306,7 @@
             ]
           },
           {
-            "title": "ARTICLE 8 — CHARTE DU VENDEUR (STANDARDS DE SERVICE)",
+            "title": "ARTICLE 8 : CHARTE DU VENDEUR (STANDARDS DE SERVICE)",
             "blocks": [
               {
                 "type": "p",
@@ -3330,10 +3330,10 @@
               {
                 "type": "list",
                 "items": [
-                  "1er niveau — rappel : message rappelant la règle non respectée.",
-                  "2e niveau — avertissement : avertissement formel et suspension de la mise en avant.",
-                  "3e niveau — suspension : 3 annulations en 5 jours = boutique hors ligne ; 10 annulations ou remboursements en 30 jours = boutique suspendue et examinée pour fermeture.",
-                  "Récidive grave — fermeture du compte créateur, après notification et droit d'appel."
+                  "1er niveau : rappel : message rappelant la règle non respectée.",
+                  "2e niveau : avertissement : avertissement formel et suspension de la mise en avant.",
+                  "3e niveau : suspension : 3 annulations en 5 jours = boutique hors ligne ; 10 annulations ou remboursements en 30 jours = boutique suspendue et examinée pour fermeture.",
+                  "Récidive grave : fermeture du compte créateur, après notification et droit d'appel."
                 ]
               },
               {
@@ -3343,7 +3343,7 @@
             ]
           },
           {
-            "title": "ARTICLE 9 — DROIT APPLICABLE",
+            "title": "ARTICLE 9 : DROIT APPLICABLE",
             "blocks": [
               {
                 "type": "p",
@@ -3356,14 +3356,14 @@
       "produits_interdits": {
         "title": "Produits interdits & créations autorisées",
         "eyebrow": "Charte des créations",
-        "subtitle": "Application : GEXTIMO — Marketplace de mode africaine | Éditeur : NOVAFRIQ, SASU",
+        "subtitle": "Application : GEXTIMO : Marketplace de mode africaine | Éditeur : NOVAFRIQ, SASU",
         "meta_lines": [
-          "Date d'entrée en vigueur : [DATE — à compléter]"
+          "Date d'entrée en vigueur : [DATE, à compléter]"
         ],
-        "version": "Version 7.0 — Établie pour GEXTIMO, marketplace de mode.",
+        "version": "Version 7.0 : Établie pour GEXTIMO, marketplace de mode.",
         "articles": [
           {
-            "title": "ARTICLE 1 — CRÉATIONS AUTORISÉES",
+            "title": "ARTICLE 1 : CRÉATIONS AUTORISÉES",
             "blocks": [
               {
                 "type": "p",
@@ -3381,7 +3381,7 @@
             ]
           },
           {
-            "title": "ARTICLE 2 — PRODUITS ET CONTENUS INTERDITS",
+            "title": "ARTICLE 2 : PRODUITS ET CONTENUS INTERDITS",
             "blocks": [
               {
                 "type": "p",
@@ -3396,14 +3396,14 @@
                   "Drogues, tabac, médicaments et substances réglementées.",
                   "Produits issus d'espèces protégées (ivoire, peaux, etc.).",
                   "Contenus haineux, violents, discriminatoires ou à caractère sexuel.",
-                  "Tout contenu sexualisant un mineur — tolérance zéro.",
+                  "Tout contenu sexualisant un mineur, tolérance zéro.",
                   "Articles sans rapport avec une création de mode tangible."
                 ]
               }
             ]
           },
           {
-            "title": "ARTICLE 3 — CONSÉQUENCES",
+            "title": "ARTICLE 3 : CONSÉQUENCES",
             "blocks": [
               {
                 "type": "p",
@@ -3412,12 +3412,12 @@
             ]
           },
           {
-            "title": "ARTICLE 4 — SIGNALER UN PRODUIT INTERDIT",
+            "title": "ARTICLE 4 : SIGNALER UN PRODUIT INTERDIT",
             "blocks": [
               {
                 "type": "box",
                 "title": "Signalement",
-                "t": "contact@novafriq.africa — Objet : « Signalement produit interdit »"
+                "t": "contact@novafriq.africa : Objet : « Signalement produit interdit »"
               },
               {
                 "type": "p",
@@ -3462,14 +3462,14 @@
       "regles_communaute": {
         "title": "Règles de la communauté",
         "eyebrow": "Communauté Gextimo",
-        "subtitle": "Application : GEXTIMO — Marketplace de mode africaine | Éditeur : NOVAFRIQ, SASU",
+        "subtitle": "Application : GEXTIMO : Marketplace de mode africaine | Éditeur : NOVAFRIQ, SASU",
         "meta_lines": [
-          "Date d'entrée en vigueur : [DATE — à compléter]"
+          "Date d'entrée en vigueur : [DATE, à compléter]"
         ],
-        "version": "Version 7.0 — Règles de la communauté GEXTIMO.",
+        "version": "Version 7.0 : Règles de la communauté GEXTIMO.",
         "articles": [
           {
-            "title": "ARTICLE 1 — L'ESPRIT GEXTIMO",
+            "title": "ARTICLE 1 : L'ESPRIT GEXTIMO",
             "blocks": [
               {
                 "type": "p",
@@ -3478,7 +3478,7 @@
             ]
           },
           {
-            "title": "ARTICLE 2 — CONTENUS ET COMPORTEMENTS INTERDITS",
+            "title": "ARTICLE 2 : CONTENUS ET COMPORTEMENTS INTERDITS",
             "blocks": [
               {
                 "type": "p",
@@ -3490,7 +3490,7 @@
                   "La haine, la discrimination, les insultes et le harcèlement.",
                   "La violence, les menaces et l'incitation à la violence.",
                   "La nudité et les contenus à caractère sexuel.",
-                  "Tout contenu mettant en danger ou sexualisant un mineur — tolérance zéro.",
+                  "Tout contenu mettant en danger ou sexualisant un mineur, tolérance zéro.",
                   "La désinformation et l'usurpation d'identité.",
                   "Le spam, la publicité non sollicitée et les fausses évaluations.",
                   "La divulgation d'informations privées d'autrui sans accord.",
@@ -3500,7 +3500,7 @@
             ]
           },
           {
-            "title": "ARTICLE 3 — MESSAGERIE ENTRE MEMBRES",
+            "title": "ARTICLE 3 : MESSAGERIE ENTRE MEMBRES",
             "blocks": [
               {
                 "type": "p",
@@ -3509,7 +3509,7 @@
             ]
           },
           {
-            "title": "ARTICLE 4 — MODÉRATION ET SANCTIONS",
+            "title": "ARTICLE 4 : MODÉRATION ET SANCTIONS",
             "blocks": [
               {
                 "type": "p",
@@ -3523,12 +3523,12 @@
             ]
           },
           {
-            "title": "ARTICLE 5 — SIGNALER",
+            "title": "ARTICLE 5 : SIGNALER",
             "blocks": [
               {
                 "type": "box",
                 "title": "Signalement",
-                "t": "contact@novafriq.africa — Nous examinons chaque signalement et agissons rapidement."
+                "t": "contact@novafriq.africa : Nous examinons chaque signalement et agissons rapidement."
               }
             ]
           }
@@ -3537,14 +3537,14 @@
       "contact_reclamations": {
         "title": "Contact & réclamations",
         "eyebrow": "Support",
-        "subtitle": "Application : GEXTIMO — Marketplace de mode africaine | Éditeur : NOVAFRIQ, SASU",
+        "subtitle": "Application : GEXTIMO : Marketplace de mode africaine | Éditeur : NOVAFRIQ, SASU",
         "meta_lines": [
-          "Éditeur : NOVAFRIQ, SASU — Quartier Agblangandan, Sèmè-Podji, République du Bénin."
+          "Éditeur : NOVAFRIQ, SASU : Quartier Agblangandan, Sèmè-Podji, République du Bénin."
         ],
-        "version": "Version 7.0 — Contact & réclamations GEXTIMO.",
+        "version": "Version 7.0 : Contact & réclamations GEXTIMO.",
         "articles": [
           {
-            "title": "ARTICLE 1 — NOS CANAUX",
+            "title": "ARTICLE 1 : NOS CANAUX",
             "blocks": [
               {
                 "type": "p",
@@ -3582,12 +3582,12 @@
             ]
           },
           {
-            "title": "ARTICLE 2 — DÉPOSER UNE RÉCLAMATION",
+            "title": "ARTICLE 2 : DÉPOSER UNE RÉCLAMATION",
             "blocks": [
               {
                 "type": "box",
                 "title": "Réclamation",
-                "t": "support@novafriq.africa — Décrivez votre demande et, si possible, le numéro de commande."
+                "t": "support@novafriq.africa : Décrivez votre demande et, si possible, le numéro de commande."
               },
               {
                 "type": "p",
@@ -3596,7 +3596,7 @@
             ]
           },
           {
-            "title": "ARTICLE 3 — RECOURS",
+            "title": "ARTICLE 3 : RECOURS",
             "blocks": [
               {
                 "type": "list",
@@ -3609,7 +3609,7 @@
             ]
           },
           {
-            "title": "ARTICLE 4 — DÉLAIS DE TRAITEMENT ET MÉDIATION",
+            "title": "ARTICLE 4 : DÉLAIS DE TRAITEMENT ET MÉDIATION",
             "ajout": true,
             "blocks": [
               {
@@ -3664,7 +3664,7 @@
         "err_requis": "Le nom de l’organisation et l’e-mail sont requis.",
         "err_envoi": "Envoi impossible, réessayez.",
         "merci_titre": "Candidature reçue !",
-        "merci_sous": "Un e-mail de confirmation vous a été envoyé. Aucun document à signer à ce stade — notre équipe reviendra vers vous."
+        "merci_sous": "Un e-mail de confirmation vous a été envoyé. Aucun document à signer à ce stade, notre équipe reviendra vers vous."
       }
     },
     "a11y": {
@@ -3674,7 +3674,7 @@
     },
     "legal_hub": {
       "titre": "Informations légales",
-      "legende_ajout": "Passage complété par l'IA — à valider par l'équipe."
+      "legende_ajout": "Passage complété par l'IA : à valider par l'équipe."
     },
     "vasat": {
       "mdp": "Mot de passe",
@@ -3741,7 +3741,7 @@
     },
     "quota_cycle": "{{n}}/{{max}} publications ce cycle (remise à zéro le {{reset}})",
     "quota_alerte": "Plus que {{n}} publication(s) sur votre quota du cycle. Un plan supérieur en offre davantage.",
-    "quota_bloque": "Quota de publications atteint pour ce cycle. Il repart le {{reset}} — ou passez à un plan supérieur."
+    "quota_bloque": "Quota de publications atteint pour ce cycle. Il repart le {{reset}}, ou passez à un plan supérieur."
   },
   "atelier": {
     "titre": "Atelier",
@@ -3767,7 +3767,7 @@
     "anniversaire": "Date de naissance",
     "jour": "Jour",
     "mois": "Mois",
-    "anniversaire_hint": "Facultatif — jour et mois suffisent, pour un petit mot le jour J.",
+    "anniversaire_hint": "Facultatif : jour et mois suffisent, pour un petit mot le jour J.",
     "mois_liste": [
       "Janvier",
       "Février",
@@ -3802,7 +3802,7 @@
       "securite_titre": "Sécurisé",
       "securite_desc": "Vos données sont stockées de façon sécurisée et sauvegardées.",
       "rapide_titre": "Rapide",
-      "rapide_desc": "Interface conçue pour les artisans — simple, rapide, efficace."
+      "rapide_desc": "Interface conçue pour les artisans, simple, rapide, efficace."
     }
   },
   "faq": {
@@ -4017,7 +4017,7 @@
         "expire": "Expiré",
         "gele": "Gelé"
       },
-      "pagination": "Page {{current}} / {{last}} — {{total}} ateliers",
+      "pagination": "Page {{current}} / {{last}} : {{total}} ateliers",
       "filtres": "Filtres"
     },
     "atelier_detail": {
@@ -4041,7 +4041,7 @@
       "mode_demo_actif": "Mode démo actif",
       "mode_demo_inactif": "Mode démo inactif",
       "duree_essai": "Durée d'essai",
-      "duree_essai_locked": "Abonnement actif — la durée d'essai n'est plus applicable.",
+      "duree_essai_locked": "Abonnement actif : la durée d'essai n'est plus applicable.",
       "duree_essai_desc": "Redéfinit la durée d'essai pour cet atelier (défaut : 14 jours).",
       "duree_essai_sauvee": "Durée d'essai mise à jour.",
       "fidelite": "Points fidélité",
@@ -4060,7 +4060,7 @@
       "col_ip": "IP",
       "col_date": "Date",
       "aucun": "Aucun log",
-      "pagination": "{{total}} entrées — Page {{current}}/{{last}}"
+      "pagination": "{{total}} entrées : Page {{current}}/{{last}}"
     },
     "tickets": {
       "titre": "Tickets support",
@@ -4158,7 +4158,7 @@
       "profil_email": "Email",
       "profil_role": "Rôle",
       "profil_derniere_connexion": "Dernière connexion",
-      "securite": "Sécurité — Changer le mot de passe",
+      "securite": "Sécurité : Changer le mot de passe",
       "mdp_actuel": "Mot de passe actuel",
       "mdp_nouveau": "Nouveau mot de passe",
       "mdp_confirmer": "Confirmer le nouveau mot de passe",
@@ -4172,7 +4172,7 @@
       "titre": "Envoyer une notification",
       "broadcast_desc": "Laissez «Atelier» vide pour un broadcast à tous les ateliers actifs.",
       "atelier_cible": "Atelier cible (optionnel)",
-      "broadcast_tous": "Broadcast — tous les ateliers",
+      "broadcast_tous": "Broadcast : tous les ateliers",
       "type": "Type",
       "titre_label": "Titre",
       "contenu": "Contenu",
@@ -4290,7 +4290,7 @@
     "veille": {
       "titre": "Veille opportunités",
       "sous_titre": "Concours, appels à candidatures et prix détectés chaque lundi par la veille automatique (n8n + IA locale). L'e-mail ne contient plus qu'une notification.",
-      "vide": "Aucune veille reçue pour l'instant — la première arrivera lundi à 7h30.",
+      "vide": "Aucune veille reçue pour l'instant, la première arrivera lundi à 7h30.",
       "semaine_du": "Semaine du {{date}}",
       "derniere": "Dernière",
       "compteur": "{{sel}} sélection(s) IA / {{total}} résultats",
@@ -4299,7 +4299,7 @@
     },
     "pages": {
       "titre": "Pages légales",
-      "sous_titre": "Éditez les textes du footer (mentions légales, CGU, confidentialité, règles de la communauté…) comme dans Word — publiés sur le site dès l'enregistrement.",
+      "sous_titre": "Éditez les textes du footer (mentions légales, CGU, confidentialité, règles de la communauté…) comme dans Word, publiés sur le site dès l'enregistrement.",
       "choisir": "Choisissez une page à gauche pour l'éditer.",
       "personnalisee": "Personnalisée (texte en base)",
       "importer": "Importer le texte actuel",
@@ -4378,9 +4378,9 @@
       "croquis": "Aucun croquis",
       "croquis_sous": "Dessinez vos idées et photographiez-les : votre carnet de croquis numérique commence ici.",
       "fiche_technique": "Aucune fiche technique",
-      "fiche_technique_sous": "Créez des fiches structurées : matière, fournitures, coût, temps de confection et instructions — exportables en PDF.",
+      "fiche_technique_sous": "Créez des fiches structurées : matière, fournitures, coût, temps de confection et instructions, exportables en PDF.",
       "patron": "Aucun patron",
-      "patron_sous": "Archivez vos patrons avec tailles, niveau et nombre de pièces — puis vendez-les depuis votre catalogue.",
+      "patron_sous": "Archivez vos patrons avec tailles, niveau et nombre de pièces, puis vendez-les depuis votre catalogue.",
       "moodboard": "Aucun moodboard",
       "moodboard_sous": "Assemblez vos inspirations en collage et notez votre palette de couleurs."
     },
@@ -4409,7 +4409,7 @@
     "maintenant": "Mettre à jour maintenant",
     "telechargement": "Téléchargement",
     "installation_auto": "L’installation se lancera automatiquement à la fin.",
-    "notif_body": "Nouvelle version v{{version}} disponible — appuyez pour mettre à jour."
+    "notif_body": "Nouvelle version v{{version}} disponible, appuyez pour mettre à jour."
   },
   "studio": {
     "titre": "Studio",
@@ -4464,7 +4464,7 @@
       "vide_sous": "Ajoutez des liens de vidéos de présentation à afficher sur votre vitrine.",
       "confirmer_retrait": "Retirer cette vidéo ?",
       "aide": "{{n}}/{{max}} vidéos",
-      "aide_illimite": "{{n}} vidéos — illimité",
+      "aide_illimite": "{{n}} vidéos : illimité",
       "aide_chargement": "Chargement du quota…",
       "corrections": "{{n}} correction(s) restante(s) ce mois",
       "statut": {

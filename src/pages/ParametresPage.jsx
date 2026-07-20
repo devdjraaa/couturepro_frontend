@@ -55,9 +55,32 @@ function ProfilTab() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {/* ⚠️ Ce formulaire divergeait de celui de /parametres/profil : le prénom
+          et l'anniversaire n'y figuraient pas. C'est ce qui a produit le retour
+          « le prénom n'est pas affiché dans Réglages > Profil » — il l'était sur
+          une page, pas sur l'autre. Les deux portent désormais les mêmes champs. */}
+      <Input label={t('commun.prenom')} value={current?.prenom ?? ''} onChange={set('prenom')} />
       <Input label={t('commun.nom')} value={current?.nom ?? ''} onChange={set('nom')} required />
       <Input label={t('commun.telephone')} type="text" inputMode="tel" value={current?.telephone ?? ''} onChange={(e) => set('telephone')({ target: { value: sanitizePhoneInput(e.target.value) } })} placeholder="ex : +229 97 00 00 00" required />
       <Input label={t('commun.email')} type="email" value={current?.email ?? ''} onChange={set('email')} />
+
+      {/* Anniversaire (jour + mois) — nécessaire au module d'événements. */}
+      <div>
+        <label className="block text-xs text-ghost mb-1">{t('profil.anniversaire')}</label>
+        <div className="flex gap-2">
+          <select value={current?.naissance_jour ?? ''} onChange={set('naissance_jour')}
+                  className="flex-1 bg-subtle border border-edge rounded-xl px-3 py-2.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30">
+            <option value="">{t('profil.jour')}</option>
+            {Array.from({ length: 31 }, (_, i) => i + 1).map(j => <option key={j} value={j}>{j}</option>)}
+          </select>
+          <select value={current?.naissance_mois ?? ''} onChange={set('naissance_mois')}
+                  className="flex-[2] bg-subtle border border-edge rounded-xl px-3 py-2.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30">
+            <option value="">{t('profil.mois')}</option>
+            {t('profil.mois_liste', { returnObjects: true }).map((m, i) => <option key={i} value={i + 1}>{m}</option>)}
+          </select>
+        </div>
+      </div>
+
       <Button type="submit" loading={update.isPending} className="w-full">
         {t('commun.enregistrer')}
       </Button>
