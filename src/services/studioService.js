@@ -46,14 +46,13 @@ export const studioService = {
     const { data } = await api.post('/atelier-videos', { titre, url })
     return data
   },
+  async retirerVideo(id) {
+    await api.delete(`/atelier-videos/${id}`)
+  },
   // VID-2 : le quota vient du serveur (il dépend du plan et exclut les vidéos
-  // refusées) — le compter côté client donnait un chiffre faux. Cette branche
-  // ne l'avait jamais reçu : l'écran annonçait « /50 » à tout le monde.
+  // refusées) — le compter côté client donnait un chiffre faux.
   async quotaVideos() {
     const { data } = await api.get('/atelier-videos/quota')
     return data
-  },
-  async retirerVideo(id) {
-    await api.delete(`/atelier-videos/${id}`)
   },
 }

@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "node scripts/sync-pdf-theme.mjs && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "pdf:maquettes": "node scripts/sync-pdf-theme.mjs"
   },
   "dependencies": {
     "@capacitor-community/contacts": "^7.2.0",

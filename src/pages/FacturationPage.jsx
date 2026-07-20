@@ -15,11 +15,11 @@ import { IS_NATIVE } from '@/constants/routes'
 import { useAuth } from '@/contexts'
 import { factureService } from '@/services/factureService'
 import { useFactureSettings } from '@/hooks/useParametres'
+import { useMoyensPaiement } from '@/hooks/useMoyensPaiement'
 import { FeatureGate } from '@/components/abonnement'
 import { usePlanFeature } from '@/hooks/usePlanFeature'
 import { cn } from '@/utils/cn'
 
-const MODES_PAIEMENT = ['wave', 'om', 'especes', 'virement', 'autre']
 const TYPES_DOC      = ['devis', 'facture', 'recu']
 const GABARITS       = ['standard', 'personnalise']
 
@@ -84,7 +84,7 @@ const EMPTY_FORM = {
   client_telephone: '',
   date_echeance: '',
   lignes: [{ description: '', quantite: 1, prix_unitaire: '' }],
-  mode_paiement: 'wave',
+  mode_paiement: '',
   gabarit: 'standard',
   acompte: '',
   notes: '',
@@ -93,11 +93,18 @@ const EMPTY_FORM = {
 function FormulaireModal({ onClose, onCreated }) {
   const fmt = useFormatCurrency()
   const { t } = useTranslation()
+  const { moyens, defaut } = useMoyensPaiement()
   const [form, setForm] = useState(EMPTY_FORM)
   const [saving, setSaving] = useState(false)
   const [err, setErr] = useState('')
 
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }))
+
+  // Le moyen par défaut est décidé par le serveur : on l'applique dès qu'il est
+  // connu, tant que l'utilisateur n'a pas choisi lui-même.
+  useEffect(() => {
+    if (defaut) setForm((f) => (f.mode_paiement ? f : { ...f, mode_paiement: defaut }))
+  }, [defaut])
 
   const updateLigne = (i, k, v) => {
     const lignes = [...form.lignes]
@@ -208,7 +215,9 @@ function FormulaireModal({ onClose, onCreated }) {
               <label className="block text-xs font-medium text-dim mb-1">{t('facturation.modal.mode_paiement')}</label>
               <select value={form.mode_paiement} onChange={(e) => set('mode_paiement', e.target.value)}
                       className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30">
-                {MODES_PAIEMENT.map((m) => <option key={m} value={m}>{t(`facturation.modes.${m}`)}</option>)}
+                {moyens.map((m) => (
+                  <option key={m.cle} value={m.cle}>{t(`facturation.modes.${m.cle}`, m.label)}</option>
+                ))}
               </select>
             </div>
           </div>

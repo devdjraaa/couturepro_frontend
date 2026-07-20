@@ -23,6 +23,7 @@ const GESTION = [
   { to: '/admin/offres',        icon: Star,          tKey: 'admin.nav.offres'        },
   { to: '/admin/codes-promo',   icon: TicketPercent, tKey: 'admin.nav.codes_promo'   },
   { to: '/admin/signalements',  icon: Flag,          tKey: 'admin.nav.signalements'  },
+  { to: '/admin/realisations',  icon: Images,        tKey: 'admin.nav.realisations'  },
   { to: '/admin/banniere',      icon: Megaphone,     tKey: 'admin.nav.banniere'      },
   { to: '/admin/analytique',    icon: BarChart3,     tKey: 'admin.nav.analytique'    },
   { to: '/admin/reglages-vitrine', icon: Palette,    tKey: 'admin.nav.reglages_vitrine' },

@@ -61,10 +61,27 @@ createRoot(document.getElementById('root')).render(
                     <SyncProvider>
                       <App />
                       <PwaInstallBanner />
+                      {/* Le repli `0px` de `env()` est VOULU : sur un appareil
+                          sans encoche déclarée, `max(1rem, env(...))` peut
+                          rendre une valeur vide et coller le message au bord.
+                          Les couleurs viennent des jetons de thème — sans elles
+                          un message restait blanc sur blanc en mode sombre —
+                          et une erreur a plus de temps pour être lue. */}
                       <Toaster
                         position="top-center"
                         containerStyle={{ top: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
-                        toastOptions={{ duration: 3500 }}
+                        toastOptions={{
+                          duration: 3500,
+                          style: {
+                            background: 'var(--color-card)',
+                            color: 'var(--color-ink)',
+                            border: '1px solid var(--color-edge)',
+                            borderRadius: '0.75rem',
+                            fontSize: '0.875rem',
+                            maxWidth: '90vw',
+                          },
+                          error: { duration: 5000 },
+                        }}
                       />
                     </SyncProvider>
                   </AtelierProvider>

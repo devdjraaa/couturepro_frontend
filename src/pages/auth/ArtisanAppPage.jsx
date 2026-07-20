@@ -31,9 +31,8 @@ export default function ArtisanAppPage() {
 
       <div className="flex flex-col gap-3 w-full max-w-xs">
         <a
-          href="https://play.google.com/store/apps/details?id=com.gextimo.app"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/Gextimo.apk"
+          download
           className="inline-flex items-center justify-center gap-2 font-semibold px-5 py-3 rounded-xl bg-primary text-white hover:bg-primary-600 transition"
         >
           <Smartphone size={17} />

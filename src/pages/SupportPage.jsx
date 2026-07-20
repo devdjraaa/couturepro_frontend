@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { HelpCircle, Plus, Image, X, ChevronRight, FlaskConical, CheckCircle2 } from 'lucide-react'
+import { HelpCircle, Plus, Image, X, ChevronRight, FlaskConical, CheckCircle2, Info } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
 import { useTickets, useCreerTicket } from '@/hooks/useTicket'
@@ -79,6 +79,17 @@ export default function SupportPage() {
   return (
     <AppLayout showBack title={t('support.titre')} onRefresh={() => queryClient.invalidateQueries()}>
       <div className="p-4 space-y-4">
+        {/* SUP-1 : encart PERMANENT. Le seul texte expliquant à quoi sert un
+            ticket vivait dans l'état vide — il disparaissait donc dès le premier
+            ticket créé, c'est-à-dire pour tous ceux qui utilisent réellement le
+            support. */}
+        <div className="rounded-2xl border border-edge bg-subtle p-4 flex items-start gap-3">
+          <span className="shrink-0 w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+            <Info size={18} />
+          </span>
+          <p className="text-sm text-dim leading-relaxed">{t('support.encart')}</p>
+        </div>
+
         <Button icon={Plus} className="w-full" onClick={() => setShowForm(s => !s)}>
           {t('support.nouveau_ticket')}
         </Button>

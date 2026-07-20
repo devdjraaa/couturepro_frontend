@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { ChevronLeft, Search, Check, Plus, Trash2, AlertTriangle, ImagePlus, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -506,13 +507,19 @@ export default function NouvelleCommandeGroupeePage() {
         photo_tissu:           sc.photo_tissu || undefined,   // P24
       }))
 
-    const groupe = await createGroupe.mutateAsync({
-      client_id:      data.client_id,
-      note:           data.note || undefined,
-      sous_commandes: sousCommandes,
-    })
-
-    navigate(`/commandes/groupes/${groupe.id}`, { replace: true })
+    // Pt 7 (20/07) : un refus serveur restait invisible — le bouton semblait
+    // « ne rien faire ». Ce qui échoue est désormais dit à l'utilisateur.
+    try {
+      const groupe = await createGroupe.mutateAsync({
+        client_id:      data.client_id,
+        note:           data.note || undefined,
+        sous_commandes: sousCommandes,
+      })
+      navigate(`/commandes/groupes/${groupe.id}`, { replace: true })
+    } catch (err) {
+      const rep = err?.response?.data
+      toast.error(rep?.message || Object.values(rep?.errors || {})[0]?.[0] || t('commandes.groupe_form.err_envoi'))
+    }
   }
 
   return (

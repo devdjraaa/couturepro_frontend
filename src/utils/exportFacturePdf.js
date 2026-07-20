@@ -1,7 +1,5 @@
-import jsPDF from 'jspdf'
-import html2canvas from 'html2canvas'
-import QRCode from 'qrcode'
-import { IS_NATIVE } from '@/constants/routes'
+import { T, enTete, section, tableau, pastille, esc } from './pdfTheme'
+import { composerPdf, partagerOuTelecharger } from './pdfRendu'
 
 const formatCFA = (v) =>
   new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 0 }).format(Number(v) || 0) + ' FCFA'
@@ -9,194 +7,141 @@ const formatCFA = (v) =>
 const formatDate = (d) =>
   new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })
 
-function buildHeaderHtml({ atelier, factureSettings, ref, date, titre = 'FACTURE' }) {
-  const personnalise = factureSettings?.format_facture === 'personnalise'
-  const atelierNom    = atelier?.nom    || factureSettings?.atelier_nom    || 'Gextimo'
+/**
+ * En-tête — V2. Le mode « personnalisé » reste servi : l'atelier qui a fourni
+ * son logo, son IFU et son RCCM doit continuer à les voir sur ses factures,
+ * c'est une obligation légale (facture normalisée DGI), pas une décoration.
+ */
+function buildHeaderHtml({ atelier, factureSettings, ref, date, titre = 'Facture' }) {
+  const personnalise   = factureSettings?.format_facture === 'personnalise'
+  const atelierNom     = atelier?.nom     || factureSettings?.atelier_nom     || 'Gextimo'
   const atelierAdresse = atelier?.adresse || factureSettings?.atelier_adresse || ''
   const atelierVille   = atelier?.ville   || factureSettings?.atelier_ville   || ''
-  const adresseLigne   = [atelierAdresse, atelierVille].filter(Boolean).join(', ')
 
-  if (personnalise) {
-    const logo = factureSettings?.facture_logo_url
-    const ifu  = factureSettings?.facture_ifu
-    const rccm = factureSettings?.facture_rccm
+  const logo = personnalise ? factureSettings?.facture_logo_url : null
+  const ifu  = personnalise ? factureSettings?.facture_ifu  : null
+  const rccm = personnalise ? factureSettings?.facture_rccm : null
 
-    return `
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom: 2px solid #111827; padding-bottom: 16px; margin-bottom: 24px;">
-        <div style="display:flex; align-items:center; gap:12px;">
-          ${logo ? `<img src="${logo}" crossorigin="anonymous" style="width:56px;height:56px;object-fit:contain;border-radius:8px;border:1px solid #e5e7eb;" />` : ''}
-          <div>
-            <p style="font-size:15px;font-weight:bold;margin:0;color:#111827;">${atelierNom}</p>
-            ${adresseLigne ? `<p style="font-size:10px;color:#6b7280;margin:2px 0 0;">${adresseLigne}</p>` : ''}
-            ${ifu  ? `<p style="font-size:10px;color:#6b7280;margin:2px 0 0;">IFU : ${ifu}</p>`   : ''}
-            ${rccm ? `<p style="font-size:10px;color:#6b7280;margin:1px 0 0;">RCCM : ${rccm}</p>` : ''}
-          </div>
-        </div>
-        <div style="text-align:right;">
-          <h1 style="font-size:22px;font-weight:bold;margin:0;color:#111827;">${titre}</h1>
-          <p style="font-size:11px;color:#6b7280;margin:4px 0 0;">N° ${ref}</p>
-          <p style="font-size:11px;color:#6b7280;margin:2px 0 0;">${date}</p>
-        </div>
-      </div>
-    `
-  }
+  const mentions = [
+    [atelierAdresse, atelierVille].filter(Boolean).join(' · '),
+    ifu  ? `IFU : ${esc(ifu)}`   : '',
+    rccm ? `RCCM : ${esc(rccm)}` : '',
+  ].filter(Boolean).join('<br>')
 
-  return `
-    <div style="border-bottom: 2px solid #6d28d9; padding-bottom: 12px; margin-bottom: 24px;">
-      <p style="font-size: 11px; color: #7c3aed; font-weight: 600; margin: 0 0 4px;">${atelierNom}</p>
-      <h1 style="font-size: 20px; font-weight: bold; margin: 0;">${titre}</h1>
-      <p style="font-size: 13px; color: #555; margin: 4px 0 0;">N° ${ref}</p>
-      <p style="font-size: 11px; color: #888; margin: 4px 0 0;">${date}${adresseLigne ? ' · ' + adresseLigne : ''}</p>
-    </div>
-  `
+  const entete = enTete({
+    atelierNom,
+    titre,
+    reference: ref,
+    date: date ? new Date(date) : null,
+  })
+
+  const bloc = mentions
+    ? `<p style="margin:-16px 0 22px;font:400 10px/1.5 ${T.sans};color:${T.gris};">${mentions}</p>`
+    : ''
+
+  // Le logo de l'atelier prend place à gauche de l'en-tête sans écraser la
+  // composition commune : les documents restent reconnaissables entre eux.
+  const avecLogo = logo
+    ? `<div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
+         <img src="${esc(logo)}" crossorigin="anonymous"
+              style="width:52px;height:52px;object-fit:contain;border:1px solid ${T.filet};" />
+       </div>`
+    : ''
+
+  return avecLogo + entete + bloc
 }
 
+/** Bloc client. */
 function buildClientHtml(client) {
   if (!client) return ''
-  const nom = `${client.prenom ?? ''} ${client.nom ?? ''}`.trim() || client.nom_complet || 'Client'
-  return `
-    <div style="margin-bottom: 18px;">
-      <p style="font-size: 9px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 4px;">Facturé à</p>
-      <p style="font-size: 13px; font-weight: 600; margin: 0; color: #111827;">${nom}</p>
-      ${client.telephone ? `<p style="font-size: 11px; color: #6b7280; margin: 2px 0 0;">${client.telephone}</p>` : ''}
-    </div>
-  `
+  const nom = [client.prenom, client.nom].filter(Boolean).join(' ').trim() || client.nom || ''
+  const infos = [client.telephone, client.email, client.adresse].filter(Boolean)
+
+  return section('Facturé à') +
+    `<p style="margin:0 0 2px;font:600 13px/1.3 ${T.sans};color:${T.encre};">${esc(nom)}</p>` +
+    (infos.length
+      ? `<p style="margin:0;font:400 11px/1.5 ${T.sans};color:${T.encreDoux};">${infos.map(esc).join(' · ')}</p>`
+      : '')
 }
 
+/** Lignes de facture. */
 function buildLignesHtml(lignes) {
-  return `
-    <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 16px;">
-      <thead>
-        <tr style="background: #f9fafb; border-bottom: 1px solid #e5e7eb;">
-          <th style="text-align: left; padding: 8px 10px; color: #6b7280; font-weight: 600;">Désignation</th>
-          <th style="text-align: center; padding: 8px 10px; color: #6b7280; font-weight: 600;">Qté</th>
-          <th style="text-align: right; padding: 8px 10px; color: #6b7280; font-weight: 600;">P.U.</th>
-          <th style="text-align: right; padding: 8px 10px; color: #6b7280; font-weight: 600;">Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${lignes.map(l => `
-          <tr style="border-bottom: 1px solid #e5e7eb;">
-            <td style="padding: 8px 10px; color: #374151;">${l.designation}</td>
-            <td style="padding: 8px 10px; text-align: center; color: #374151;">${l.qte}</td>
-            <td style="padding: 8px 10px; text-align: right; font-family: monospace; color: #374151;">${formatCFA(l.pu)}</td>
-            <td style="padding: 8px 10px; text-align: right; font-family: monospace; font-weight: 600;">${formatCFA(l.total)}</td>
-          </tr>
-        `).join('')}
-      </tbody>
-    </table>
-  `
+  return section('Détail') + tableau({
+    colonnes: [
+      { titre: 'Désignation' },
+      { titre: 'Qté', aligne: 'droite' },
+      { titre: 'Prix unitaire', aligne: 'droite' },
+      { titre: 'Montant', aligne: 'droite' },
+    ],
+    // Structure produite par les trois appelants : { designation, qte, pu, total }
+    lignes: lignes.map(l => [
+      l.designation ?? '',
+      String(l.qte ?? 1),
+      formatCFA(l.pu),
+      formatCFA(l.total),
+    ]),
+  })
 }
 
+/** Totaux : c'est le seul endroit où le rouge de la charte est employé. */
 function buildTotauxHtml({ total, acompte, reste }) {
-  return `
-    <div style="display: flex; justify-content: flex-end; margin-bottom: 28px;">
-      <div style="width: 240px;">
-        <div style="display: flex; justify-content: space-between; padding: 6px 0;">
-          <span style="font-size: 12px; color: #6b7280;">Total</span>
-          <span style="font-size: 13px; font-weight: 600; font-family: monospace;">${formatCFA(total)}</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; padding: 6px 0;">
-          <span style="font-size: 12px; color: #6b7280;">Acompte versé</span>
-          <span style="font-size: 13px; font-weight: 600; font-family: monospace; color: #059669;">${formatCFA(acompte)}</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid #e5e7eb; margin-top: 4px;">
-          <span style="font-size: 13px; font-weight: 700; color: #111827;">Solde dû</span>
-          <span style="font-size: 15px; font-weight: 800; font-family: monospace; color: ${reste > 0 ? '#ea580c' : '#059669'};">${formatCFA(reste)}</span>
+  const entrees = [['Total', formatCFA(total)]]
+  if (Number(acompte) > 0) {
+    entrees.push(['Acompte versé', formatCFA(acompte)])
+    entrees.push(['Reste à payer', formatCFA(reste)])
+  }
+
+  const solde = Number(reste) === 0
+  const montantDu = solde ? total : reste
+
+  return `<div style="margin-top:22px;padding-top:16px;border-top:1px solid ${T.encre};">
+      <div style="display:flex;justify-content:flex-end;">
+        <div style="min-width:250px;">
+          ${entrees.map(([k, v], i) => `
+            <div style="display:flex;justify-content:space-between;gap:20px;padding:5px 0;
+                        font:${i === 0 ? '600' : '400'} 11.5px/1.3 ${T.sans};color:${T.encreDoux};">
+              <span>${esc(k)}</span>
+              <span style="font-variant-numeric:tabular-nums;color:${T.encre};">${esc(v)}</span>
+            </div>`).join('')}
+          <div style="display:flex;justify-content:space-between;gap:20px;align-items:baseline;
+                      margin-top:9px;padding-top:9px;border-top:1px solid ${T.filet};">
+            <span style="font:700 9px/1 ${T.sans};letter-spacing:.14em;text-transform:uppercase;color:${T.gris};">
+              ${solde ? 'Montant réglé' : 'Net à payer'}
+            </span>
+            <span style="font:700 19px/1 ${T.sans};color:${T.rouge};font-variant-numeric:tabular-nums;">
+              ${esc(formatCFA(montantDu))}
+            </span>
+          </div>
         </div>
       </div>
-    </div>
-  `
+      <div style="margin-top:10px;text-align:right;">
+        ${solde ? pastille('Soldée', 'valide') : pastille('En attente de règlement', 'attente')}
+      </div>
+    </div>`
 }
 
+/** Pied de page propre à la facture (mentions de l'atelier). */
 function buildFooterHtml(factureSettings, { atelier, contact } = {}) {
   const personnalise = factureSettings?.format_facture === 'personnalise'
-  const piedPage = factureSettings?.facture_pied_page
+  const piedPage = personnalise ? factureSettings?.facture_pied_page : null
+  const tel = contact?.telephone || atelier?.telephone
 
-  // SUG-15 : coordonnées de l'artisan — le destinataire du PDF peut le contacter directement.
-  const contactLigne = [
-    atelier?.nom,
-    contact?.telephone,
-    contact?.email,
-    [atelier?.adresse, atelier?.ville].filter(Boolean).join(', ') || null,
-  ].filter(Boolean).join(' · ')
+  const lignes = [piedPage, tel ? `Contact : ${tel}` : ''].filter(Boolean)
+  if (lignes.length === 0) return ''
 
-  return `
-    ${piedPage ? `<p style="font-size: 11px; color: #4b5563; white-space: pre-wrap; border-top: 1px solid #e5e7eb; padding-top: 12px; margin-top: 8px;">${piedPage}</p>` : ''}
-    ${contactLigne ? `<p style="margin-top: 14px; font-size: 10.5px; color: #374151; text-align: center; border-top: 1px solid #e5e7eb; padding-top: 10px;">${contactLigne}</p>` : ''}
-    <!-- SUG-14 : pied de page marketing Gextimo — chaque PDF sert aussi de support marketing -->
-    <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid #f3f4f6; display: flex; align-items: center; justify-content: center; gap: 8px;">
-      <img src="/favicon-192.png" style="width: 18px; height: 18px; border-radius: 4px;" />
-      <p style="font-size: 9.5px; color: #9ca3af; margin: 0; text-align: center;">
-        <strong style="color:#D00B0B;">Gextimo</strong> — Créez, Gérez, Rayonnez ·
-        La plateforme des créateurs &amp; ateliers de mode africains ·
-        <strong>gextimo.novafriq.africa</strong>
-      </p>
-    </div>
-  `
+  return `<div style="margin-top:26px;padding-top:12px;border-top:1px solid ${T.filet};
+                      font:400 10px/1.6 ${T.sans};color:${T.gris};text-align:center;">
+      ${lignes.map(esc).join('<br>')}
+    </div>`
 }
 
-// Sceau de normalisation e-MECeF (code MECeF/DGI + QR) imprimé sur la facture.
-function buildDgiHtml(dgi) {
-  if (!dgi?.code) return ''
-  return `
-    <div style="margin: 8px 0 16px; border: 1.5px solid #D00B0B; border-radius: 10px; padding: 14px 16px; display: flex; gap: 16px; align-items: center;">
-      ${dgi.qrDataUrl ? `<img src="${dgi.qrDataUrl}" alt="QR e-MECeF" style="width: 92px; height: 92px; flex-shrink: 0;" />` : ''}
-      <div style="min-width: 0;">
-        <p style="font-size: 12px; font-weight: 800; color: #D00B0B; margin: 0 0 5px;">FACTURE NORMALISÉE e-MECeF · DGI Bénin</p>
-        <p style="font-size: 12px; color: #111; margin: 0; font-family: monospace;"><strong>Code MECeF/DGI :</strong> ${dgi.code}</p>
-        <p style="font-size: 10px; color: #6b7280; margin: 6px 0 0;">Vérification : sygmef.impots.bj — saisir le code MECeF/DGI ci-dessus.</p>
-      </div>
-    </div>
-  `
-}
-
-function buildFactureHtml({ atelier, factureSettings, ref, date, client, lignes, total, acompte, reste, note, titre, dgi, contact }) {
-  return `
-    ${buildHeaderHtml({ atelier, factureSettings, ref, date, titre })}
-    ${buildClientHtml(client)}
-    ${buildLignesHtml(lignes)}
-    ${buildTotauxHtml({ total, acompte, reste })}
-    ${note ? `<p style="font-size: 11px; color: #6b7280; margin-bottom: 16px;"><strong>Note :</strong> ${note}</p>` : ''}
-    ${buildFooterHtml(factureSettings, { atelier, contact })}
-    ${buildDgiHtml(dgi)}
-  `
-}
-
-// Génère l'image QR (data URL) à partir du contenu QR e-MECeF, si la facture est normalisée.
-async function buildDgiData(facture) {
-  if (!facture?.emecef_code) return null
-  let qrDataUrl = ''
-  const contenu = facture.qr_code_url || facture.emecef_qr_url
-  if (contenu) {
-    try { qrDataUrl = await QRCode.toDataURL(String(contenu), { width: 200, margin: 1 }) }
-    catch { /* QR indisponible : on imprime au moins le code */ }
-  }
-  return { code: facture.emecef_code, qrDataUrl }
-}
-
+/**
+ * Rendu : passe par la mécanique commune (découpe multi-pages, filigrane, pied
+ * de page). L'ancienne implémentation locale tronquait tout document dépassant
+ * une page — une facture de plus de ~15 lignes perdait silencieusement sa fin.
+ */
 async function renderPdf(html) {
-  const container = document.createElement('div')
-  container.style.cssText = `
-    position: fixed; left: -9999px; top: 0;
-    width: 595px; padding: 40px;
-    font-family: sans-serif;
-    background: #ffffff; color: #111;
-  `
-  container.innerHTML = html
-  document.body.appendChild(container)
-
-  try {
-    const canvas = await html2canvas(container, { scale: 2, useCORS: true })
-    const imgData = canvas.toDataURL('image/png')
-    const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' })
-    const pageW = pdf.internal.pageSize.getWidth()
-    const ratio = pageW / canvas.width
-    pdf.addImage(imgData, 'PNG', 0, 0, pageW, canvas.height * ratio)
-    return pdf
-  } finally {
-    document.body.removeChild(container)
-  }
+  return composerPdf(html)
 }
 
 const slug = (s) => String(s ?? 'client').trim().replace(/\s+/g, '-').toLowerCase() || 'client'
@@ -276,7 +221,6 @@ export async function exportFactureDocPdf({ facture, atelier, factureSettings, c
   const total   = lignes.reduce((s, l) => s + l.total, 0)
   const acompte = Number(facture?.acompte) || 0
   const reste   = Math.max(0, total - acompte)
-  const dgi     = await buildDgiData(facture)
 
   const html = buildFactureHtml({
     atelier, factureSettings, contact,
@@ -285,7 +229,7 @@ export async function exportFactureDocPdf({ facture, atelier, factureSettings, c
     client: { nom: facture?.client_nom, telephone: facture?.client_telephone },
     lignes, total, acompte, reste,
     note: facture?.notes,
-    titre, dgi,
+    titre,
   })
 
   const pdf = await renderPdf(html)
@@ -294,40 +238,8 @@ export async function exportFactureDocPdf({ facture, atelier, factureSettings, c
 
 // Télécharge le PDF, ou ouvre le partage natif (WhatsApp, Bluetooth, etc.) si disponible
 export async function shareOrDownloadPdf(pdf, filename, { title = 'Facture', text = '' } = {}) {
-  // Chemin natif (app Capacitor) : le WebView Android n'a NI navigator.share NI un
-  // gestionnaire de téléchargement pour pdf.save() → le PDF ne sortait pas.
-  // On écrit le fichier via Filesystem puis on ouvre le partage natif (Share plugin).
-  if (IS_NATIVE) {
-    try {
-      const [{ Filesystem, Directory }, { Share }] = await Promise.all([
-        import('@capacitor/filesystem'),
-        import('@capacitor/share'),
-      ])
-      const base64 = pdf.output('datauristring').split(',')[1]
-      const safeName = (filename || 'facture.pdf').replace(/[^\w.\-]+/g, '_')
-      const { uri } = await Filesystem.writeFile({
-        path: safeName,
-        data: base64,
-        directory: Directory.Cache,
-      })
-      await Share.share({ title, text, files: [uri] })
-      return 'shared'
-    } catch (e) {
-      if (e?.message && /cancel/i.test(e.message)) return 'cancelled'
-      // dernier recours : on tente la voie navigateur ci-dessous
-    }
-  }
-  if (typeof navigator !== 'undefined' && navigator.canShare) {
-    try {
-      const file = new File([pdf.output('blob')], filename, { type: 'application/pdf' })
-      if (navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], title, text })
-        return 'shared'
-      }
-    } catch (e) {
-      if (e?.name === 'AbortError') return 'cancelled'
-    }
-  }
-  pdf.save(filename)
-  return 'downloaded'
+  // Délègue à l'implémentation commune : il en existait deux, dont une sans
+  // gestion de l'annulation utilisateur (le fichier se téléchargeait quand
+  // même après un partage annulé).
+  return partagerOuTelecharger(pdf, filename, { title, text })
 }

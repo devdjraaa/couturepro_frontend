@@ -38,6 +38,7 @@ import HistoriquePage         from '@/pages/HistoriquePage'
 import ArchivesPage           from '@/pages/ArchivesPage'
 import CaissePage             from '@/pages/CaissePage'
 import GaleriePage            from '@/pages/GaleriePage'
+import MesRealisationsPage     from '@/pages/MesRealisationsPage'
 import { FeatureGate } from '@/components/abonnement'
 import { AppLayout } from '@/components/layout'
 import { ROUTES, IS_NATIVE } from '@/constants/routes'
@@ -77,6 +78,7 @@ import DiagnosticPage           from '@/pages/admin/DiagnosticPage'
 import AdminParametresPage    from '@/pages/admin/AdminParametresPage'
 import AdminsPage             from '@/pages/admin/AdminsPage'
 import SignalementsPage       from '@/pages/admin/SignalementsPage'
+import AdminRealisationsPage   from '@/pages/admin/AdminRealisationsPage'
 import BannierePage           from '@/pages/admin/BannierePage'
 
 const PlaceholderPage = ({ title }) => (
@@ -177,6 +179,7 @@ export default function App() {
           <Route path="/admin/parametres"       element={<AdminParametresPage />} />
           <Route path="/admin/admins"           element={<AdminsPage />} />
           <Route path="/admin/signalements"     element={<SignalementsPage />} />
+          <Route path="/admin/realisations"     element={<AdminRealisationsPage />} />
           <Route path="/admin/banniere"         element={<BannierePage />} />
           <Route path="/admin/reglages-vitrine" element={<ReglagesVitrinePage />} />
           <Route path="/admin/analytique"       element={<AnalytiquePage />} />
@@ -186,6 +189,8 @@ export default function App() {
         {!IS_NATIVE && (
           <Route element={<VitrineLayout />}>
             <Route path={ROUTES.VITRINE}           element={<VitrineHome />} />
+            {/* VASAT : second produit du groupe, masqué par mot de passe (20/07). */}
+            <Route path="/vasat"                   element={<VasatPage />} />
             <Route path={ROUTES.VITRINE_CREATEURS} element={<CreateursPage />} />
             <Route path={ROUTES.VITRINE_CREATEUR}  element={<CreateurProfilPage />} />
             <Route path={ROUTES.VITRINE_SUIVI}     element={<SuiviVitrinePage />} />

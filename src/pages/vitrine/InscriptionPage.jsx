@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { Smartphone } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Download } from 'lucide-react'
 import VitrineShell from './VitrineChrome'

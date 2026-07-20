@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Documents PDF · V2 — maquettes à valider</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 28px 16px 72px;
+    font: 400 15px/1.6 'Plus Jakarta Sans', system-ui, sans-serif;
+    background: #EDE9E4; color: #1A1614;
+  }
+  .enveloppe { max-width: 700px; margin: 0 auto; }
+  h1 { font: 400 30px/1.15 'Bodoni Moda', Georgia, serif; margin: 0 0 6px; }
+  .intro { color: #5B534E; margin: 0 0 6px; }
+  .note {
+    background: #FBF9F6; border-left: 2px solid #CDA662; padding: 12px 16px;
+    margin: 20px 0 34px; font-size: 13.5px; color: #5B534E;
+  }
+  .doc { margin: 0 0 46px; }
+  .doc-tete { display: flex; align-items: baseline; gap: 10px; margin: 0 0 12px; flex-wrap: wrap; }
+  .doc-num {
+    font: 700 10px/1 'Plus Jakarta Sans', sans-serif; letter-spacing: .14em;
+    color: #A87F3E; text-transform: uppercase;
+  }
+  .doc-nom { font: 600 16px/1.2 'Plus Jakarta Sans', sans-serif; margin: 0; }
+  .doc-ou { font-size: 12.5px; color: #8A817B; }
+  /* La feuille garde le ratio A4 et se réduit sur mobile sans déformer :
+     c'est la proportion réelle du document imprimé qu'on juge. */
+  .feuille {
+    background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 12px 32px rgba(0,0,0,.10);
+    width: 595px; max-width: 100%; margin: 0 auto;
+    transform-origin: top left;
+  }
+  .cadre { overflow: hidden; }
+  footer { max-width: 700px; margin: 40px auto 0; font-size: 13px; color: #5B534E; }
+  code { background: #FBF9F6; padding: 1px 5px; border-radius: 3px; font-size: 12.5px; }
+  .choix { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0 0 8px; }
+  .choix-l {
+    font: 700 10px/1 'Plus Jakarta Sans', sans-serif; letter-spacing: .14em;
+    text-transform: uppercase; color: #8A817B; margin-right: 4px;
+  }
+  .choix button {
+    font: 600 13px/1 'Plus Jakarta Sans', sans-serif; padding: 8px 14px;
+    border: 1px solid #D9D2C9; background: #fff; color: #5B534E;
+    border-radius: 999px; cursor: pointer;
+  }
+  .choix button.actif { border-color: #1A1614; background: #1A1614; color: #fff; }
+  .choix-aide { margin: 0 0 30px; font-size: 13px; color: #5B534E; }
+</style>
+</head>
+<body>
+<div class="enveloppe">
+  <h1>Documents PDF — version 2</h1>
+  <p class="intro">Refonte des 8 sorties PDF sur la charte Gextimo. À valider document par document.</p>
+
+  <div class="note">
+    <strong>Ce que tu vois est ce qui sort.</strong> Cette page utilise le
+    <em>même</em> module de composition que les exports réels
+    (<code>src/utils/pdfTheme.js</code>) — pas une imitation. Les 8 exports sont
+    désormais câblés dessus : ces maquettes montrent les documents produits par
+    l'application.
+    <br><br>
+    En V1, chaque document avait sa propre palette (violet pour la caisse, vert
+    pour les relevés, gris ailleurs) et aucun ne portait la charte. La V2 leur
+    donne une identité commune : <strong>Bodoni Moda</strong> en titrage et le
+    <strong>rouge Gextimo</strong> sur la structure, comme validé.
+  </div>
+
+  <div class="choix">
+    <span class="choix-l">Accent des documents</span>
+    <button type="button" data-accent="rouge" class="actif">Rouge Gextimo</button>
+    <button type="button" data-accent="or">Or</button>
+  </div>
+  <p class="choix-aide" id="aide-accent"></p>
+
+  <div id="docs"></div>
+</div>
+
+<footer>
+  Les 8 documents sont en production. Les proportions sont celles d'une vraie
+  page A4 ; le filigrane et le pied de page (marque, site, téléphone) sont
+  ajoutés au moment de la génération, sur chaque page.
+  <br><br>
+  Si un document doit changer, dis lequel et quoi — le style est centralisé,
+  une retouche s'applique partout d'un coup.
+</footer>
+
+<script type="module">
+import { T, setAccent, enTete, section, paires, tableau, encart, pastille, esc } from './pdfTheme.js'
+
+const fcfa = (n) => new Intl.NumberFormat('fr-FR').format(n) + ' F'
+
+/* Jeux de données d'exemple — réalistes (atelier béninois) pour juger sur pièce. */
+const ATELIER = 'Maison Zinsou'
+
+const documents = [
+  {
+    nom: 'Fiche de mesures',
+    ou: 'Fiche client → Mesures → Exporter',
+    html: () =>
+      enTete({ atelierNom: ATELIER, titre: 'Fiche de mesures', sousTitre: 'Adjoa HOUNKPATIN', reference: 'CL-0142' }) +
+      section('Mesures relevées') +
+      paires([
+        ['Tour de poitrine', '92 cm'], ['Tour de taille', '74 cm'],
+        ['Tour de hanches', '98 cm'],  ['Longueur robe', '128 cm'],
+        ['Longueur manche', '58 cm'],  ['Carrure dos', '38 cm'],
+        ['Tour de bras', '28 cm'],     ['Hauteur poitrine', '26 cm'],
+      ]) +
+      encart('Note de l\'atelier', 'Prévoir 2 cm d\'aisance sur la taille, la cliente préfère un tombé souple.'),
+  },
+  {
+    nom: 'Facture',
+    ou: 'Facturation → Document → Partager',
+    html: () =>
+      enTete({ atelierNom: ATELIER, titre: 'Facture', sousTitre: 'Adjoa HOUNKPATIN', reference: 'FAC-2026-0087' }) +
+      `<div style="margin-bottom:4px;">${pastille('Soldée', 'valide')}</div>` +
+      section('Détail') +
+      tableau({
+        colonnes: [
+          { titre: 'Désignation' }, { titre: 'Qté', aligne: 'droite' },
+          { titre: 'Prix unitaire', aligne: 'droite' }, { titre: 'Montant', aligne: 'droite' },
+        ],
+        lignes: [
+          ['Robe de soirée, bazin riche', '1', fcfa(75000), fcfa(75000)],
+          ['Boubou grand modèle brodé', '2', fcfa(32000), fcfa(64000)],
+          ['Retouches et finitions', '1', fcfa(6000), fcfa(6000)],
+        ],
+        total: { libelle: 'Total à payer', valeur: fcfa(145000) },
+      }) +
+      encart('Règlement', 'Acompte de 70 000 F reçu le 12 juillet. Solde réglé à la livraison, le 19 juillet.'),
+  },
+  {
+    nom: 'Relevé de commande',
+    ou: 'Commande → Relevé',
+    html: () =>
+      enTete({ atelierNom: ATELIER, titre: 'Relevé de commande', sousTitre: 'Commande CMD-0231 · Adjoa HOUNKPATIN', reference: 'CMD-0231' }) +
+      `<div style="margin-bottom:4px;">${pastille('En cours', 'attente')}</div>` +
+      section('Articles') +
+      tableau({
+        colonnes: [{ titre: 'Type de vêtement' }, { titre: 'Livraison', aligne: 'droite' }, { titre: 'Montant', aligne: 'droite' }],
+        lignes: [
+          ['Robe de soirée', '19 juil.', fcfa(75000)],
+          ['Boubou grand modèle', '24 juil.', fcfa(32000)],
+        ],
+        total: { libelle: 'Total commande', valeur: fcfa(107000) },
+      }) +
+      section('Suivi des règlements') +
+      paires([
+        ['Acompte versé', fcfa(70000)],
+        ['Reste à payer', fcfa(37000)],
+        ['Mode de règlement', 'Espèces'],
+        ['Échéance', '24 juillet 2026'],
+      ], { colonnes: 2 }),
+  },
+  {
+    nom: 'Rapport de caisse',
+    ou: 'Caisse → Rapport du jour',
+    html: () =>
+      enTete({ atelierNom: ATELIER, titre: 'Rapport de caisse', sousTitre: 'Journée du 20 juillet 2026' }) +
+      section('Encaissements') +
+      tableau({
+        colonnes: [{ titre: 'Client' }, { titre: 'Moyen', aligne: 'droite' }, { titre: 'Montant', aligne: 'droite' }],
+        lignes: [
+          ['Adjoa HOUNKPATIN', 'Espèces', fcfa(70000)],
+          ['Kofi MENSAH', 'Mobile Money', fcfa(45000)],
+          ['Rachidatou ALI', 'Espèces', fcfa(18000)],
+        ],
+        total: { libelle: 'Total encaissé', valeur: fcfa(133000) },
+      }) +
+      section('Synthèse') +
+      paires([
+        ['Nombre d\'encaissements', '3'],
+        ['Espèces', fcfa(88000)],
+        ['Mobile Money', fcfa(45000)],
+        ['Panier moyen', fcfa(44333)],
+      ], { colonnes: 2 }),
+  },
+  {
+    nom: 'Rapport mensuel',
+    ou: 'Caisse → Rapport mensuel',
+    html: () =>
+      enTete({ atelierNom: ATELIER, titre: 'Rapport mensuel', sousTitre: 'Juillet 2026' }) +
+      section('Activité') +
+      paires([
+        ['Commandes enregistrées', '34'],
+        ['Commandes livrées', '28'],
+        ['Nouveaux clients', '11'],
+        ['Taux de livraison', '82 %'],
+      ], { colonnes: 2 }) +
+      section('Recettes par semaine') +
+      tableau({
+        colonnes: [{ titre: 'Période' }, { titre: 'Commandes', aligne: 'droite' }, { titre: 'Encaissé', aligne: 'droite' }],
+        lignes: [
+          ['1 au 7 juillet', '7', fcfa(310000)],
+          ['8 au 14 juillet', '9', fcfa(425000)],
+          ['15 au 21 juillet', '11', fcfa(518000)],
+          ['22 au 31 juillet', '7', fcfa(287000)],
+        ],
+        total: { libelle: 'Total du mois', valeur: fcfa(1540000) },
+      }),
+  },
+  {
+    nom: 'Fiche technique',
+    ou: 'Outils créatifs → Fiche technique',
+    html: () =>
+      enTete({ atelierNom: ATELIER, titre: 'Fiche technique', sousTitre: 'Robe de soirée — collection Racines', reference: 'MOD-018' }) +
+      section('Matières et fournitures') +
+      tableau({
+        colonnes: [{ titre: 'Élément' }, { titre: 'Référence' }, { titre: 'Quantité', aligne: 'droite' }],
+        lignes: [
+          ['Bazin riche', 'Getzner blanc cassé', '4,5 m'],
+          ['Doublure', 'Satin polyester', '3 m'],
+          ['Fil à broder', 'Or 2210', '2 bobines'],
+          ['Fermeture', 'Invisible 60 cm', '1'],
+        ],
+      }) +
+      section('Points de contrôle') +
+      paires([
+        ['Aisance poitrine', '2 cm'], ['Aisance taille', '2 cm'],
+        ['Ourlet', '4 cm'],           ['Type de finition', 'Surjet anglais'],
+      ]) +
+      encart('Consigne atelier', 'Broderie posée avant montage de la doublure. Repassage à basse température uniquement.'),
+  },
+  {
+    nom: 'Facture normalisée habillée',
+    ou: 'Facturation → Facture normalisée → Partager',
+    // Ce document n'est PAS composé en HTML dans l'application : il embarque le
+    // PDF certifié par la DGI intact (pdf-lib). La maquette ci-dessous reproduit
+    // fidèlement ce que le code dessine autour du document officiel.
+    html: () => `
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;">
+        <div>
+          <p style="margin:0 0 10px;font:700 8px/1 ${T.sans};letter-spacing:.14em;
+                    text-transform:uppercase;color:${T.orSombre};">MAISON ZINSOU</p>
+          <p style="margin:0;font:400 18px/1.1 Times,${T.serif};color:${T.encre};">Facture normalisée</p>
+        </div>
+        <div style="text-align:right;">
+          <p style="margin:0 0 6px;font:400 8px/1 ${T.sans};color:${T.gris};">Cotonou · +229 01 91 47 96 28</p>
+          <p style="margin:0;font:700 10px/1 ${T.sans};color:${T.encre};">FAC-2026-0087</p>
+        </div>
+      </div>
+      <div style="height:1.5px;background:${T.or};margin:14px 0 20px;"></div>
+
+      <!-- Le document officiel, reproduit INTACT et encadré -->
+      <div style="border:.75px solid ${T.filet};padding:6px;">
+        <div style="border:1px dashed ${T.filet};background:${T.fondDoux};padding:26px 20px;text-align:center;">
+          <p style="margin:0 0 6px;font:700 10px/1.3 ${T.sans};color:${T.encreDoux};">
+            FACTURE NORMALISÉE e-MECeF
+          </p>
+          <p style="margin:0 0 16px;font:400 9px/1.5 ${T.sans};color:${T.gris};">
+            Document officiel certifié par la DGI, embarqué tel quel<br>
+            (texte sélectionnable, QR et éléments de sécurité intacts)
+          </p>
+          <div style="width:64px;height:64px;margin:0 auto;background:
+                      repeating-conic-gradient(${T.encre} 0 25%, transparent 0 50%) 0 0/16px 16px;"></div>
+          <p style="margin:10px 0 0;font:400 8px/1 ${T.sans};color:${T.gris};">CODE MECeF/DGI · NIM</p>
+        </div>
+      </div>
+
+      <div style="height:1px;background:${T.filet};margin:22px 0 14px;"></div>
+      <p style="margin:0 0 5px;font:700 8.5px/1.3 ${T.sans};color:${T.encre};">
+        Facture normalisée certifiée e-MECeF · DGI Bénin
+      </p>
+      <p style="margin:0 0 4px;font:400 7.5px/1.4 ${T.sans};color:${T.gris};">
+        Vérification : sygmef.impots.bj/verification (saisir le code MECeF/DGI et le NIM figurant ci-dessus)
+      </p>
+      <p style="margin:0;font:400 6.8px/1.4 ${T.sans};color:${T.gris};">
+        Mise en page GEXTIMO. Les éléments de sécurité sont ceux de la facture e-MECeF reproduite ci-dessus, sans modification.
+      </p>`,
+  },
+  {
+    nom: 'Lookbook',
+    ou: 'Ma vitrine → Exporter le lookbook',
+    html: () =>
+      enTete({ atelierNom: ATELIER, titre: 'Lookbook', sousTitre: 'Collection Racines · 2026' }) +
+      `<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:4px;">
+        ${[
+          ['Robe Racines', 'Bazin riche brodé'],
+          ['Boubou Royal', 'Wax premium'],
+          ['Ensemble Sahel', 'Coton teint à la main'],
+          ['Complet Wax', 'Coupe ajustée'],
+        ].map(([nom, matiere]) => `
+          <figure style="margin:0;">
+            <div style="aspect-ratio:3/4;background:linear-gradient(140deg,${T.orPale},${T.fondDoux});
+                        border:1px solid ${T.filet};"></div>
+            <figcaption style="padding-top:9px;">
+              <p style="margin:0;font:500 13px/1.2 ${T.serif};color:${T.encre};">${esc(nom)}</p>
+              <p style="margin:3px 0 0;font:400 10.5px/1.2 ${T.sans};color:${T.gris};">${esc(matiere)}</p>
+            </figcaption>
+          </figure>`).join('')}
+      </div>` +
+      encart('', 'Pièces réalisées sur mesure. Prix et délais sur demande auprès de l\'atelier.'),
+  },
+]
+
+/* Rendu : chaque maquette dans une feuille au ratio A4, mise à l'échelle pour
+   tenir sur l'écran sans déformer les proportions du document imprimé. */
+const conteneur = document.getElementById('docs')
+
+function rendre() {
+  conteneur.innerHTML = ''
+  documents.forEach((doc, i) => {
+  const bloc = document.createElement('section')
+  bloc.className = 'doc'
+  bloc.innerHTML = `
+    <div class="doc-tete">
+      <span class="doc-num">Document ${i + 1}/8</span>
+      <p class="doc-nom">${doc.nom}</p>
+      <span class="doc-ou">${doc.ou}</span>
+    </div>
+    <div class="cadre"><div class="feuille" style="padding:${T.marge}px ${T.marge}px ${T.marge + 18}px;">
+      ${doc.html()}
+      <div style="margin-top:28px;padding-top:10px;border-top:1px solid ${T.filet};
+                  display:flex;justify-content:space-between;font:400 8.5px/1 ${T.sans};color:${T.gris};">
+        <span>Gextimo · www.gextimo.novafriq.africa · +229 01 91 47 96 28</span>
+        <span>1/1</span>
+      </div>
+    </div></div>`
+    conteneur.appendChild(bloc)
+  })
+  ajuster()
+}
+
+const AIDE = {
+  rouge: "Réglage retenu : la marque porte la structure — filets, intitulés d'atelier et encarts en rouge Gextimo. Les documents se reconnaissent au premier coup d'œil, ce qui compte au lancement. Les totaux restent en rouge appuyé.",
+  or: "Variante conservée pour comparaison : l'or porte la structure, le rouge reste réservé aux totaux. Plus discret à l'impression.",
+}
+
+const aide = document.getElementById('aide-accent')
+
+document.querySelectorAll('.choix button').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.choix button').forEach(x => x.classList.toggle('actif', x === b))
+    setAccent(b.dataset.accent)
+    aide.textContent = AIDE[b.dataset.accent]
+    rendre()
+  })
+})
+
+aide.textContent = AIDE.rouge
+rendre()
+
+/* Mise à l'échelle sur petit écran : la feuille fait 595 px de large (A4 à 72 dpi).
+   On la réduit proportionnellement et on ajuste la hauteur du cadre, sinon la
+   transformation laisserait un grand vide sous chaque document. */
+function ajuster() {
+  document.querySelectorAll('.cadre').forEach(cadre => {
+    const feuille = cadre.querySelector('.feuille')
+    feuille.style.transform = ''
+    cadre.style.height = ''
+    const dispo = cadre.clientWidth
+    if (dispo >= 595) return
+    const k = dispo / 595
+    feuille.style.transform = `scale(${k})`
+    cadre.style.height = `${feuille.offsetHeight * k}px`
+  })
+}
+ajuster()
+window.addEventListener('resize', ajuster)
+document.fonts?.ready.then(ajuster)
+</script>
+</body>
+</html>

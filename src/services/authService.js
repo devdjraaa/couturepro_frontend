@@ -68,7 +68,13 @@ export const authService = {
   // Le clear local est géré par AuthContext.logout (qui appelle ce service
   // dans un try/catch pour ne jamais bloquer en cas d'offline).
   async logout() {
-    await api.post('/auth/logout')
+    // La déconnexion locale ne doit JAMAIS dépendre du serveur : si le jeton est
+    // déjà expiré ou le réseau coupé, l'appel échoue et, sans ce garde-fou,
+    // l'exception empêchait setUser(null) — le bouton « Se déconnecter » ne
+    // faisait rien (constat direction du 20/07). Et le jeton n'était jamais
+    // retiré du stockage : même « déconnecté », on restait connecté au rechargement.
+    try { await api.post('/auth/logout') } catch { /* révocation serveur : au mieux */ }
+    setToken(null)
   },
 
   async register(payload) {

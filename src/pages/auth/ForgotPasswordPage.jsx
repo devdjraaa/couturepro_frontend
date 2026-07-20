@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { sanitizePhoneInput } from '@/utils/phoneInput'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { ArrowRight, Phone } from 'lucide-react'
@@ -49,7 +50,7 @@ export default function ForgotPasswordPage() {
           type="text"
           inputMode="tel"
           value={telephone}
-          onChange={e => setTelephone(e.target.value)}
+          onChange={e => setTelephone(sanitizePhoneInput(e.target.value))}
           placeholder="ex : +229 97 00 00 00"
           required
         />

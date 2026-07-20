@@ -1,20 +1,22 @@
-import { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { Heart, Search, Star, MapPin, Check } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { ChevronLeft, ChevronRight, Heart, Search, Star, MapPin, Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import PartenairesBanner from './PartenairesBanner'
-import { getCreators, demoModels, categories } from './vitrineApi'
+import { getCreators, getCreations, demoModels, categories } from './vitrineApi'
 import GarmentVisual from './GarmentVisual'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { useDevise } from './vitrineCurrency'
 import { useFavoris } from './useFavoris'
+import { SkeletonCreatorCard, SkeletonGalleryCard } from './VitrineSkeletons'
 
 const btnPrimary = 'vt-btn-primary inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-inverse hover:bg-primary-600'
 const btnOutline = 'vt-btn-ghost inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary'
 
 function HeroSearch({ creators }) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const [q, setQ] = useState('')
   const query = q.trim().toLowerCase()
   const list = creators || []
@@ -23,11 +25,31 @@ function HeroSearch({ creators }) {
   const idByNom = (nom) => list.find((c) => c.nom === nom)?.id
   const has = cM.length || mM.length
 
+  const handleSearch = () => {
+    const dest = q.trim() ? `/createurs?q=${encodeURIComponent(q.trim())}` : '/createurs'
+    navigate(dest)
+    setQ('')
+  }
+
   return (
     <div className="relative max-w-[540px] mx-auto mb-6 text-left">
-      <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ghost pointer-events-none" />
-      <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('vitrine.search.placeholder')}
-             className="w-full rounded-xl border border-edge bg-card pl-9 pr-4 py-3 text-sm text-ink placeholder:text-ghost focus:outline-none focus:ring-2 focus:ring-primary/30" />
+      <div className="flex items-center rounded-xl border border-edge bg-card focus-within:ring-2 focus-within:ring-primary/30 overflow-hidden">
+        <Search size={15} className="ml-3.5 shrink-0 text-ghost pointer-events-none" />
+        <input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+          placeholder={t('vitrine.search.placeholder')}
+          className="flex-1 px-3 py-3 text-sm text-ink placeholder:text-ghost bg-transparent focus:outline-none"
+        />
+        <button
+          type="button"
+          onClick={handleSearch}
+          className="m-1.5 shrink-0 px-4 py-2 rounded-[10px] bg-primary text-inverse font-semibold text-sm hover:bg-primary-600 transition whitespace-nowrap"
+        >
+          {t('vitrine.search.cta')}
+        </button>
+      </div>
       {query && (
         <div className="absolute inset-x-0 top-full mt-2 bg-card border border-edge rounded-xl shadow-lg overflow-hidden z-30">
           {!has && <div className="px-4 py-3 text-sm text-dim">{t('vitrine.search.empty')}</div>}
@@ -83,7 +105,17 @@ export default function VitrineHome() {
   usePageMeta({ path: '/' })
   const [creators, setCreators] = useState(null)
   const [cat, setCat] = useState('all')
+  const [galleryModels, setGalleryModels] = useState(null)
   const location = useLocation()
+  const carouselRef = useRef(null)
+  const [carouselEdge, setCarouselEdge] = useState({ left: false, right: false })
+
+  const checkCarouselEdge = () => {
+    const el = carouselRef.current
+    if (!el) return
+    setCarouselEdge({ left: el.scrollLeft > 4, right: el.scrollLeft + el.clientWidth < el.scrollWidth - 4 })
+  }
+  const scrollCarousel = (dir) => carouselRef.current?.scrollBy({ left: dir * 290, behavior: 'smooth' })
 
   const rotations = t('vitrine.rotations', { returnObjects: true })
   const steps = t('vitrine.how.steps', { returnObjects: true })
@@ -93,6 +125,14 @@ export default function VitrineHome() {
     return () => clearInterval(id)
   }, [])
   useEffect(() => { getCreators().then(setCreators) }, [])
+  useEffect(() => { getCreations().then(setGalleryModels) }, [])
+  useEffect(() => {
+    const el = carouselRef.current
+    if (!el) return
+    checkCarouselEdge()
+    el.addEventListener('scroll', checkCarouselEdge, { passive: true })
+    return () => el.removeEventListener('scroll', checkCarouselEdge)
+  }, [creators])
 
   useEffect(() => {
     const s = Object.assign(document.createElement('script'), { type: 'application/ld+json', id: 'gx-home-ld' })
@@ -117,44 +157,129 @@ export default function VitrineHome() {
     if (el) el.scrollIntoView({ behavior: 'smooth' })
   }, [location.hash, creators])
 
-  useEffect(() => {
-    const io = new IntersectionObserver(
-      (entries) => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target) } }),
-      { threshold: 0.14, rootMargin: '0px 0px -6% 0px' }
-    )
-    document.querySelectorAll('.vt-reveal:not(.in), .vt-stagger:not(.in)').forEach(el => io.observe(el))
-    return () => io.disconnect()
-  }, [creators])
-
-  const models = cat === 'all' ? demoModels : demoModels.filter((m) => m.cat === cat)
+  const models = galleryModels
+    ? (cat === 'all' ? galleryModels : galleryModels.filter((m) => m.cat === cat))
+    : null
+  const creatorSlugByName = creators
+    ? Object.fromEntries(creators.map((c) => [c.nom, c.id]))
+    : {}
   const rotMsg = Array.isArray(rotations) && rotations.length ? rotations[rot % rotations.length] : ''
+  const prm = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   return (
     <VitrineShell>
       {/* HERO */}
-      <section className="relative overflow-hidden pt-16 pb-12 text-center">
-        <div className="pointer-events-none absolute -top-44 -right-28 w-[520px] h-[520px] rounded-full"
-             style={{ background: 'radial-gradient(circle, color-mix(in srgb, var(--color-primary) 8%, transparent), transparent 70%)' }} />
-        <div className="vt-reveal max-w-[1180px] mx-auto px-5 relative">
-          <div className="text-[12px] font-bold tracking-[0.14em] uppercase text-primary">{t('vitrine.hero.eyebrow')}</div>
-          <h1 className="font-display font-extrabold mx-auto max-w-[880px] my-3.5 text-[clamp(34px,6vw,60px)] leading-[1.08] text-ink">
+      <section className="relative overflow-hidden min-h-[calc(100dvh-6.5rem)] flex flex-col items-center justify-center pt-10 pb-10 text-center isolate">
+        {/* ── Fond animé multicouche — ambiance défilé ── */}
+        <div className="vt-hero-bg" aria-hidden="true">
+
+          {/* Couche 1 — Fils tombants (dérive lente) */}
+          <div className="vt-hero-threads" />
+
+          {/* Couche 2 — Rubans de soie (SMIL) */}
+          <svg className="vt-hero-ribbons" viewBox="0 0 1220 640" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              {/* Rouge — fondu aux extrémités, reflet sur le pli */}
+              <linearGradient id="vt-sg1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%"   stopColor="#7A0606" stopOpacity="0" />
+                <stop offset="28%"  stopColor="#D00B0B" stopOpacity="0.9" />
+                <stop offset="48%"  stopColor="#E82A1E" stopOpacity="0.95" />
+                <stop offset="70%"  stopColor="#7A0606" stopOpacity="0.7" />
+                <stop offset="100%" stopColor="#7A0606" stopOpacity="0" />
+              </linearGradient>
+              {/* Or — fondu aux extrémités */}
+              <linearGradient id="vt-sg2" x1="0" y1="1" x2="1" y2="0">
+                <stop offset="0%"   stopColor="#A87F3E" stopOpacity="0" />
+                <stop offset="40%"  stopColor="#E4C486" stopOpacity="0.9" />
+                <stop offset="55%"  stopColor="#F7E4B8" stopOpacity="1" />
+                <stop offset="72%"  stopColor="#CDA662" stopOpacity="0.75" />
+                <stop offset="100%" stopColor="#CDA662" stopOpacity="0" />
+              </linearGradient>
+              {/* Rouge accent — accent central fin */}
+              <linearGradient id="vt-sg3" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%"   stopColor="#E82A1E" stopOpacity="0" />
+                <stop offset="50%"  stopColor="#FF6B60" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#E82A1E" stopOpacity="0" />
+              </linearGradient>
+              {/* Reflet satiné — fil de lumière */}
+              <linearGradient id="vt-sheen" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%"   stopColor="#F7E4B8" stopOpacity="0" />
+                <stop offset="50%"  stopColor="#FBF0D4" stopOpacity="0.9" />
+                <stop offset="100%" stopColor="#F7E4B8" stopOpacity="0" />
+              </linearGradient>
+              <filter id="vt-soft"><feGaussianBlur stdDeviation="1" /></filter>
+            </defs>
+
+            {/* Ruban rouge large — bande haute, gauche → droite, 28 s */}
+            <path fill="url(#vt-sg1)" filter="url(#vt-soft)" opacity="0.65"
+              d="M-100,70 C160,10 380,150 630,95 S 980,15 1360,120 L1360,250 C980,150 720,235 630,225 S 350,275 -100,200 Z">
+              {!prm && <animate attributeName="d" dur="28s" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45,0,.55,1;.45,0,.55,1" repeatCount="indefinite"
+                values="M-100,70 C160,10 380,150 630,95 S 980,15 1360,120 L1360,250 C980,150 720,235 630,225 S 350,275 -100,200 Z;M-100,110 C180,190 400,60 630,150 S 1000,210 1360,80 L1360,210 C1000,300 700,170 630,190 S 340,80 -100,150 Z;M-100,70 C160,10 380,150 630,95 S 980,15 1360,120 L1360,250 C980,150 720,235 630,225 S 350,275 -100,200 Z" />}
+            </path>
+
+            {/* Reflet satiné — fil de lumière sur le pli rouge */}
+            <path fill="none" stroke="url(#vt-sheen)" strokeWidth="1.4" opacity="0.55" style={{ mixBlendMode: 'screen' }}
+              d="M-100,135 C160,80 380,220 630,160 S 980,90 1360,185">
+              {!prm && <animate attributeName="d" dur="28s" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45,0,.55,1;.45,0,.55,1" repeatCount="indefinite"
+                values="M-100,135 C160,80 380,220 630,160 S 980,90 1360,185;M-100,180 C180,275 400,130 630,220 S 1000,285 1360,145;M-100,135 C160,80 380,220 630,160 S 980,90 1360,185" />}
+            </path>
+
+            {/* Ruban or moyen — bande basse, 36 s */}
+            <path fill="url(#vt-sg2)" filter="url(#vt-soft)" opacity="0.45" style={{ mixBlendMode: 'screen' }}
+              d="M-100,420 C220,470 430,330 700,400 S 1040,480 1360,380 L1360,470 C1040,560 750,490 700,500 S 260,600 -100,520 Z">
+              {!prm && <animate attributeName="d" dur="36s" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45,0,.55,1;.45,0,.55,1" repeatCount="indefinite"
+                values="M-100,420 C220,470 430,330 700,400 S 1040,480 1360,380 L1360,470 C1040,560 750,490 700,500 S 260,600 -100,520 Z;M-100,470 C240,360 420,520 700,440 S 1020,360 1360,500 L1360,590 C1020,480 760,570 700,560 S 300,470 -100,600 Z;M-100,420 C220,470 430,330 700,400 S 1040,480 1360,380 L1360,470 C1040,560 750,490 700,500 S 260,600 -100,520 Z" />}
+            </path>
+
+            {/* Ruban rouge fin — accent central, 20 s */}
+            <path fill="url(#vt-sg3)" filter="url(#vt-soft)" opacity="0.30"
+              d="M-100,260 C200,230 420,310 660,260 S 1000,220 1360,280 L1360,320 C1000,270 680,300 660,300 S 240,270 -100,300 Z">
+              {!prm && <animate attributeName="d" dur="20s" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45,0,.55,1;.45,0,.55,1" repeatCount="indefinite"
+                values="M-100,260 C200,230 420,310 660,260 S 1000,220 1360,280 L1360,320 C1000,270 680,300 660,300 S 240,270 -100,300 Z;M-100,300 C220,300 400,240 660,300 S 980,300 1360,240 L1360,285 C980,340 700,280 660,340 S 260,335 -100,340 Z;M-100,260 C200,230 420,310 660,260 S 1000,220 1360,280 L1360,320 C1000,270 680,300 660,300 S 240,270 -100,300 Z" />}
+            </path>
+          </svg>
+
+          {/* Couche 3 — Faisceau de podium */}
+          <div className="vt-hero-podium" />
+
+          {/* Couche 4 — Lueurs radiales pulsantes */}
+          <div className="vt-hero-glows" />
+
+          {/* Couche 5 — Reflet de défilé */}
+          <div className="vt-hero-shimmer" />
+
+          {/* Couche 6 — Grain film statique */}
+          <div className="vt-hero-grain" />
+
+          {/* Couche 7 — Voile lamé : micro-points or screen */}
+          <div className="vt-hero-lame" />
+        </div>
+
+        <div className="vt-stagger max-w-[1180px] mx-auto px-5 relative">
+          <div className="vt-item text-[12px] font-bold tracking-[0.14em] uppercase text-primary">{t('vitrine.hero.eyebrow')}</div>
+          <h1 className="vt-item font-display font-extrabold mx-auto max-w-[880px] my-3.5 text-[clamp(34px,6vw,60px)] leading-[1.08] text-ink">
             {t('vitrine.hero.title_pre')}<span className="text-primary">{t('vitrine.hero.title_hl')}</span>{t('vitrine.hero.title_post')}
           </h1>
-          <div className="h-7 mb-6 text-dim text-[clamp(15px,2vw,19px)] font-medium">
+          <div className="vt-item h-7 mb-6 text-dim text-[clamp(15px,2vw,19px)] font-medium">
             <b className="text-ink font-semibold">{rotMsg}</b>
           </div>
-          <HeroSearch creators={creators} />
-          <div className="flex gap-3 justify-center flex-wrap mb-5">
+          <div className="vt-item">
+            <HeroSearch creators={creators} />
+          </div>
+          <div className="vt-item flex gap-3 justify-center flex-wrap mb-5">
             <a href="#creators" className={btnPrimary}>{t('vitrine.hero.cta_discover')}</a>
             <a href="#how" className={btnOutline}>{t('vitrine.hero.cta_how')}</a>
           </div>
-          <div className="flex gap-6 justify-center flex-wrap text-dim text-sm">
+          <div className="vt-item flex gap-6 justify-center flex-wrap text-dim text-sm">
             <span><b className="text-ink font-bold tabular-nums">{creators ? creators.length.toLocaleString('fr-FR') : '…'}</b> {t('vitrine.hero.stat_creators')}</span>
             <span><b className="text-ink font-bold tabular-nums">{creators ? creators.filter(c => c.verifie).length : '…'}</b> {t('vitrine.hero.stat_designers')}</span>
             <span><b className="text-ink font-bold tabular-nums">{creators ? new Set(creators.map(c => c.ville)).size : '…'}</b> {t('vitrine.hero.stat_cities')}</span>
           </div>
         </div>
       </section>
+
+      {/* Corps de page — motif rondelles or (hors hero et footer) */}
+      <div className="vt-page-motif">
 
       {/* COMMENT ÇA MARCHE */}
       <section id="how" className="py-16">
@@ -180,34 +305,60 @@ export default function VitrineHome() {
         <div className="max-w-[1180px] mx-auto px-5">
           <SectionHead eyebrow={t('vitrine.creators.eyebrow')} title={t('vitrine.creators.title')} subtitle={t('vitrine.creators.subtitle')} />
           <div className="relative">
-          <div className="vt-stagger flex gap-4 overflow-x-auto pb-3.5">
-            {(creators || []).map((c) => (
-              <Link key={c.id} to={`/createurs/${c.id}`}
-                    className="vt-item vt-card relative min-w-[268px] max-w-[268px] bg-card border border-edge rounded-lg p-5">
-                <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(c.id) }} className="absolute top-3 right-3 z-10" aria-label="Favori" aria-pressed={has(c.id)}>
-                  <Heart size={16} className={has(c.id) ? 'text-primary' : 'text-ghost'} fill={has(c.id) ? 'currentColor' : 'none'} />
-                </button>
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-[50px] h-[50px] rounded-xl overflow-hidden flex items-center justify-center font-display font-bold text-lg text-inverse shrink-0" style={c.logo_url ? undefined : { background: c.gradient }}>{c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" loading="lazy" /> : c.initiales}</div>
-                  <div>
-                    <h4 className="font-bold text-[15.5px] text-ink flex items-center gap-1.5">
-                      {c.nom}
-                      {c.verifie && <span className="text-[10.5px] font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded-full">{t('vitrine.creators.verified')}</span>}
-                      {c.sponsorise && <span title={t('vitrine.a11y.sponsorise')} className="inline-flex items-center text-inverse bg-primary px-1.5 py-0.5 rounded-full"><Star size={10} className="fill-current" aria-hidden="true" /></span>}
-                    </h4>
-                    <div className="text-[12.5px] text-dim">{c.specialite}</div>
+            <div ref={carouselRef} className="vt-stagger vt-carousel flex gap-4 overflow-x-auto">
+              {(creators || []).map((c) => (
+                <Link key={c.id} to={`/createurs/${c.id}`}
+                      className="vt-item vt-card relative min-w-[268px] max-w-[268px] bg-card border border-edge rounded-lg p-5">
+                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(c.id) }} className="absolute top-3 right-3 z-10" aria-label={t('vitrine.a11y.favori')} aria-pressed={has(c.id)}>
+                    <Heart size={16} className={has(c.id) ? 'text-primary' : 'text-ghost'} fill={has(c.id) ? 'currentColor' : 'none'} />
+                  </button>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-[50px] h-[50px] rounded-xl overflow-hidden flex items-center justify-center font-display font-bold text-lg text-inverse shrink-0" style={c.logo_url ? undefined : { background: c.gradient }}>{c.logo_url ? <img src={c.logo_url} alt={c.nom} className="w-full h-full object-cover" loading="lazy" /> : c.initiales}</div>
+                    <div>
+                      <h4 className="font-bold text-[15.5px] text-ink flex items-center gap-1.5">
+                        {c.nom}
+                        {c.verifie && <span className="text-[10.5px] font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded-full">{t('vitrine.creators.verified')}</span>}
+                        {c.sponsorise && <span title={t('vitrine.a11y.sponsorise')} className="inline-flex items-center text-inverse bg-primary px-1.5 py-0.5 rounded-full"><Star size={10} className="fill-current" aria-hidden="true" /></span>}
+                      </h4>
+                      <div className="text-[12.5px] text-dim">{c.specialite}</div>
+                    </div>
                   </div>
-                </div>
-                <div className="text-[13px] text-dim mb-3.5">
-                  {c.note ? <span className="text-primary font-bold inline-flex items-center gap-1"><Star size={12} className="fill-current" aria-hidden="true" />{c.note}</span> : <span className="text-ghost">{t('vitrine.creators.new')}</span>}
-                  {' · '}<MapPin size={12} className="inline-block align-[-0.1em] mr-1" aria-hidden="true" />{c.ville}
-                </div>
-                <span className={btnOutline + ' w-full justify-center !py-2 text-[13px]'}>{t('vitrine.creators.visit')}</span>
-              </Link>
-            ))}
-            {!creators && <div className="text-dim text-sm p-4">{t('vitrine.loading')}</div>}
-          </div>
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-elevated to-transparent lg:hidden" />
+                  <div className="text-[13px] text-dim mb-3.5">
+                    {c.note ? <span className="text-primary font-bold inline-flex items-center gap-1"><Star size={12} className="fill-current" aria-hidden="true" />{c.note}</span> : <span className="text-ghost">{t('vitrine.creators.new')}</span>}
+                    {' · '}<MapPin size={12} className="inline-block align-[-0.1em] mr-1" aria-hidden="true" />{c.ville}
+                  </div>
+                  <span className={btnOutline + ' w-full justify-center !py-2 text-[13px]'}>{t('vitrine.creators.visit')}</span>
+                </Link>
+              ))}
+              {!creators && Array.from({ length: 4 }, (_, i) => (
+                <SkeletonCreatorCard key={i} className="min-w-[268px] max-w-[268px] shrink-0" />
+              ))}
+            </div>
+            {/* Flèche gauche */}
+            <button onClick={() => scrollCarousel(-1)} aria-label={t('commun.precedent')}
+              className={[
+                'absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10',
+                'w-10 h-10 rounded-full flex items-center justify-center',
+                'bg-card/90 backdrop-blur-sm border border-edge shadow-lg',
+                'text-ink hover:bg-primary hover:border-primary hover:text-inverse hover:scale-110 active:scale-95',
+                'transition-all duration-300',
+                carouselEdge.left ? 'opacity-100 scale-100' : 'opacity-0 scale-75 pointer-events-none',
+              ].join(' ')}>
+              <ChevronLeft size={17} strokeWidth={2.5} />
+            </button>
+            {/* Dégradé droite + flèche droite */}
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-elevated to-transparent" />
+            <button onClick={() => scrollCarousel(1)} aria-label={t('commun.suivant')}
+              className={[
+                'absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10',
+                'w-10 h-10 rounded-full flex items-center justify-center',
+                'bg-card/90 backdrop-blur-sm border border-edge shadow-lg',
+                'text-ink hover:bg-primary hover:border-primary hover:text-inverse hover:scale-110 active:scale-95',
+                'transition-all duration-300',
+                carouselEdge.right ? 'opacity-100 scale-100' : 'opacity-0 scale-75 pointer-events-none',
+              ].join(' ')}>
+              <ChevronRight size={17} strokeWidth={2.5} />
+            </button>
           </div>
           <div className="text-center mt-8">
             <Link to="/createurs" className={btnPrimary}>{t('vitrine.creators.see_all')}</Link>
@@ -227,21 +378,46 @@ export default function VitrineHome() {
               </button>
             ))}
           </div>
-          <div className="vt-stagger grid grid-cols-2 md:grid-cols-4 gap-4">
-            {models.map((m) => (
-              <div key={m.id} className="vt-item vt-card bg-card border border-edge rounded-lg overflow-hidden">
-                <div className="h-[160px] relative">
-                  <GarmentVisual cat={m.cat} gradient={m.gradient} className="h-full w-full" />
-                  <span data-theme="dark" className="absolute top-2.5 left-2.5 text-inverse text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-inset">{m.type}</span>
-                </div>
-                <div className="p-3.5">
-                  <h4 className="font-semibold text-[14.5px] text-ink">{m.nom}</h4>
-                  <div className="text-[12px] text-dim mt-0.5 mb-1.5">{t('vitrine.gallery.by')} {m.par}</div>
-                  <div className="font-bold text-primary text-[14.5px]">{format(m.prix)}</div>
-                </div>
+          {/* Hauteurs alternées pour l'effet masonry Pinterest */}
+          {(() => {
+            const heights = ['aspect-[2/3]', 'aspect-[3/5]', 'aspect-[3/4]', 'aspect-[2/3]', 'aspect-[3/5]']
+            return models === null ? (
+              <div className="columns-2 md:columns-4 gap-3">
+                {Array.from({ length: 8 }, (_, i) => (
+                  <div key={i} className="break-inside-avoid mb-3">
+                    <SkeletonGalleryCard imgClass={heights[i % heights.length]} />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            ) : (
+              <div className="vt-stagger columns-2 md:columns-4 gap-3">
+                {models.map((m, i) => {
+                  const slug = m.atelier_id ?? creatorSlugByName[m.par] ?? null
+                  return (
+                    <div key={m.id} className="vt-item break-inside-avoid mb-3">
+                      <Link
+                        to={slug ? `/createurs/${slug}` : '/createurs'}
+                        className="vt-card block bg-card border border-edge rounded-xl overflow-hidden group"
+                      >
+                        <div className={`${heights[i % heights.length]} relative w-full`}>
+                          {m.image_url
+                            ? <img src={m.image_url} alt={m.nom} className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+                            : <GarmentVisual cat={m.cat} gradient={m.gradient} className="absolute inset-0 h-full w-full" />}
+                          <span data-theme="dark" className="absolute top-2.5 left-2.5 text-inverse text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-inset/80 backdrop-blur-sm">{m.type}</span>
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
+                        </div>
+                        <div className="p-3">
+                          <h4 className="font-semibold text-[14px] text-ink leading-snug">{m.nom}</h4>
+                          <div className="text-[11.5px] text-dim mt-0.5 mb-1.5">{t('vitrine.gallery.by')} {m.par}</div>
+                          <div className="font-bold text-primary text-[14px]">{format(m.prix)}</div>
+                        </div>
+                      </Link>
+                    </div>
+                  )
+                })}
+              </div>
+            )
+          })()}
           <p className="text-2xs text-ghost mt-4 text-center">{t('vitrine.indicatif')}</p>
         </div>
       </section>
@@ -317,6 +493,9 @@ export default function VitrineHome() {
           </div>
         </div>
       </section>
+
+      </div>{/* fin vt-page-motif */}
+
     </VitrineShell>
   )
 }

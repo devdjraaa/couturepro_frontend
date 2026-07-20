@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Plus, X, UserPlus, Users, AlignLeft, ArrowDownAZ, ClipboardList, BookUser, Check, FileSpreadsheet } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import i18n from '@/lang/i18n'
 import { useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { useClients, useCreateClient } from '@/hooks/useClients'
@@ -44,7 +45,10 @@ async function pickContacts() {
       return { nom, prenom, telephone: tel }
     }).filter(c => c.nom && c.telephone)
   } catch {
-    toast.error("Import contacts non disponible sur cette plateforme.")
+    // Le module de contacts est NATIF : sur navigateur il n'existe pas. Plutôt
+    // qu'un message d'échec sec (le bouton semblait cassé), on explique la
+    // limite et on montre où la lever.
+    toast.error(i18n.t('clients.contacts_mobile_seul'), { duration: 5000 })
     return []
   }
 }

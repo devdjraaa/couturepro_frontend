@@ -1,6 +1,7 @@
 // Données + client de l'API publique vitrine (avec repli démo si l'API n'est
 // pas joignable / pas encore déployée).
 import { API_BASE_URL } from '@/constants/config'
+import { getClientToken } from './espaceClientApi'
 
 export const demoCreators = [
   { id: 'maison-zinsou', nom: 'Maison Zinsou', initiales: 'MZ', specialite: 'Haute couture', ville: 'Cotonou', note: '4.9', avis: 27, verifie: true, experience: '8 ans', gradient: 'linear-gradient(135deg,#D00B0B,#7a0606)' },
@@ -37,7 +38,13 @@ export const demoReviews = [
 
 async function safe(path) {
   try {
-    const r = await fetch(`${API_BASE_URL}${path}`)
+    // Le jeton client est joint s'il existe : certaines réponses publiques en
+    // dépendent (ABO-1 — savoir si CE client suit déjà le créateur). Sans lui, le
+    // profil afficherait « Suivre » à quelqu'un déjà abonné.
+    const headers = {}
+    const token = getClientToken()
+    if (token) headers.Authorization = `Bearer ${token}`
+    const r = await fetch(`${API_BASE_URL}${path}`, { headers })
     if (!r.ok) return null
     return await r.json()
   } catch {
@@ -61,16 +68,29 @@ export function getVisitorKey() {
 }
 
 async function postJson(path, body) {
+  const { ok, data } = await postDetaille(path, body)
+  return ok ? data : null
+}
+
+/**
+ * Variante de `postJson` qui rend le statut HTTP au lieu de tout aplatir sur
+ * `null`, et qui joint le jeton client s'il existe. Nécessaire depuis qu'une
+ * partie des actions vitrine exige un compte : le front doit pouvoir réagir à un
+ * 401 (proposer la connexion) autrement qu'à une coupure réseau (réessayer).
+ */
+export async function postDetaille(path, body) {
+  const headers = { 'Content-Type': 'application/json', Accept: 'application/json' }
+  const token = getClientToken()
+  if (token) headers.Authorization = `Bearer ${token}`
   try {
     const r = await fetch(`${API_BASE_URL}${path}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify(body),
+      method: 'POST', headers, body: JSON.stringify(body),
     })
-    if (!r.ok) return null
-    return await r.json()
+    const data = await r.json().catch(() => null)
+    return { ok: r.ok, status: r.status, data }
   } catch {
-    return null
+    // Pas de réponse du tout : réseau. `status: 0` le distingue d'un refus serveur.
+    return { ok: false, status: 0, data: null }
   }
 }
 
@@ -79,9 +99,55 @@ export function toggleLike(vetementId) {
   return postJson(`/vitrine/creations/${vetementId}/like`, { visitor_key: getVisitorKey() })
 }
 
-// P173 : s'abonner / se désabonner d'un créateur → { abonne, abonnes }.
-export function toggleAbonnement(atelierId) {
-  return postJson(`/vitrine/createurs/${atelierId}/abonnement`, { visitor_key: getVisitorKey() })
+/**
+ * P173 / ABO-1 : suivre ou ne plus suivre un créateur → { abonne, abonnes }.
+ *
+ * L'abonnement était anonyme (clé visiteur en localStorage) : vider son cache
+ * effaçait ses abonnements, et le compteur n'engageait personne. Le serveur exige
+ * désormais un compte et répond 401 `auth_requise` sinon — d'où le retour détaillé,
+ * que l'appelant utilise pour proposer la connexion puis rejouer l'action.
+ */
+export function toggleAbonnement(atelierId, { notifications_optin } = {}) {
+  return postDetaille(`/vitrine/createurs/${atelierId}/abonnement`, { notifications_optin })
+}
+
+/**
+ * Avis v2 (décisions 20/07) — dépôt d'un avis sur un MODÈLE, compte obligatoire.
+ * Multipart quand des photos sont jointes ; le statut HTTP est rendu pour que
+ * l'appelant distingue « connectez-vous » (401) d'un refus (422/429) et du réseau.
+ */
+export async function deposerAvis(vetementId, { auteur_nom, note, texte, photos = [] }) {
+  const headers = { Accept: 'application/json' }
+  const token = getClientToken()
+  if (token) headers.Authorization = `Bearer ${token}`
+
+  let body
+  if (photos.length > 0) {
+    body = new FormData()
+    body.append('auteur_nom', auteur_nom)
+    body.append('note', String(note))
+    body.append('texte', texte)
+    photos.forEach((f) => body.append('photos[]', f))
+  } else {
+    headers['Content-Type'] = 'application/json'
+    body = JSON.stringify({ auteur_nom, note, texte })
+  }
+
+  try {
+    const r = await fetch(`${API_BASE_URL}/vitrine/creations/${vetementId}/avis`, { method: 'POST', headers, body })
+    const data = await r.json().catch(() => null)
+    return { ok: r.ok, status: r.status, data }
+  } catch {
+    return { ok: false, status: 0, data: null }
+  }
+}
+
+/**
+ * Décision 7 — signalement motivé d'un avis. Un motif grave (contenu illégal,
+ * insulte, discrimination) déclenche une revue prioritaire immédiate côté admin.
+ */
+export function signalerAvis(avisId, motif) {
+  return postDetaille(`/vitrine/avis/${avisId}/signaler`, { motif, visitor_key: getVisitorKey() })
 }
 
 // P161-162 : achat d'un patron → { code_transaction, checkout_url } (redirection paiement).
@@ -139,6 +205,31 @@ export async function getSponsorisation() {
 export async function getCreators() {
   const d = await safe('/vitrine/createurs')
   return Array.isArray(d) && d.length ? d : demoCreators
+}
+
+export async function getCreations() {
+  // Reco v1 (brief 16/07 pt 4) : si un client vitrine est connecté, on envoie son jeton →
+  // le serveur remonte ses designers favoris en tête de galerie. Anonyme = inchangé.
+  let d = null
+  try {
+    const token = localStorage.getItem('gx_client_token')
+    const r = await fetch(`${API_BASE_URL}/vitrine/creations`, {
+      headers: token ? { Authorization: `Bearer ${token}`, Accept: 'application/json' } : { Accept: 'application/json' },
+    })
+    d = r.ok ? await r.json() : null
+  } catch { d = null }
+  if (!Array.isArray(d) || !d.length) return demoModels
+  return d.map((m) => ({
+    id:          m.id,
+    nom:         m.titre       ?? m.nom       ?? '',
+    par:         m.atelier_nom ?? m.creator_nom ?? m.par ?? '',
+    atelier_id:  m.atelier_id  ?? m.atelier_slug ?? m.createur_id ?? null,
+    prix:        m.prix        ?? m.price      ?? null,
+    cat:         m.categorie   ?? m.cat        ?? 'robe',
+    type:        m.type        ?? (m.sur_mesure ? 'Sur mesure' : 'Prêt-à-porter'),
+    gradient:    m.gradient    ?? m.atelier_gradient ?? 'linear-gradient(135deg,#1a1a1a,#444)',
+    image_url:   m.image_url   ?? (Array.isArray(m.images_urls) ? m.images_urls[0] : null) ?? null,
+  }))
 }
 
 export async function getCreator(slug) {

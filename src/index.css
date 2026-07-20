@@ -511,6 +511,10 @@ button, a, [role="button"], label, select, input[type="checkbox"], input[type="r
 /* Easing signature — décélération franche, zéro oscillation */
 :root { --ease-gx: cubic-bezier(.16,.8,.3,1); }
 
+/* ── Carousel horizontal sans scrollbar native ── */
+.vt-carousel { scrollbar-width: none; -ms-overflow-style: none; }
+.vt-carousel::-webkit-scrollbar { display: none; }
+
 /* ── Scroll reveal — fondu + glissement vers le haut (une seule fois) ── */
 .vt-reveal {
   opacity: 0;
@@ -609,6 +613,278 @@ button, a, [role="button"], label, select, input[type="checkbox"], input[type="r
 }
 .vt-filter:hover { transform: translateY(-1px); }
 
+/* ── Logo Gextimo — animations orbitales ── */
+
+/* Arc rouge : satellite qui tourne autour du centre du SVG */
+.vt-logo-arc {
+  transform-box: view-box;       /* transform-origin relatif au viewBox (0 0 100 100) */
+  transform-origin: 50% 50%;    /* = centre exact du SVG */
+  animation: vt-logo-orbit 10s linear infinite;
+  will-change: transform;
+}
+
+/* Arc 2 — anneau r=33, rotation anti-horaire */
+.vt-logo-arc2 {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: vt-logo-orbit2 8s linear infinite;
+  will-change: transform;
+}
+
+@keyframes vt-logo-orbit2 {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+
+/* Point central : pulsation subtile */
+.vt-logo-dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: vt-logo-pulse 2.4s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes vt-logo-orbit {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes vt-logo-pulse {
+  0%, 100% { transform: scale(1);    opacity: 1;    }
+  50%       { transform: scale(1.45); opacity: 0.72; }
+}
+
+/* ════════════════════════════════════════════════════════
+   HERO VITRINE — Fond animé multicouche (ambiance défilé)
+   ════════════════════════════════════════════════════════ */
+
+.vt-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Couche 1 — Fils tombants : lignes verticales or/rouge, dérive lente */
+.vt-hero-threads {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22240%22%20height%3D%22400%22%3E%3Cline%20x1%3D%2218%22%20y1%3D%220%22%20x2%3D%2218%22%20y2%3D%22400%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%220.8%22%20opacity%3D%220.18%22%2F%3E%3Cline%20x1%3D%2252%22%20y1%3D%2280%22%20x2%3D%2252%22%20y2%3D%22400%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%220.5%22%20opacity%3D%220.09%22%2F%3E%3Cline%20x1%3D%2288%22%20y1%3D%220%22%20x2%3D%2288%22%20y2%3D%22360%22%20stroke%3D%22%23D00B0B%22%20stroke-width%3D%220.6%22%20opacity%3D%220.12%22%2F%3E%3Cline%20x1%3D%22124%22%20y1%3D%2240%22%20x2%3D%22124%22%20y2%3D%22400%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%221.0%22%20opacity%3D%220.14%22%2F%3E%3Cline%20x1%3D%22162%22%20y1%3D%2210%22%20x2%3D%22162%22%20y2%3D%22380%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%220.5%22%20opacity%3D%220.08%22%2F%3E%3Cline%20x1%3D%22200%22%20y1%3D%220%22%20x2%3D%22200%22%20y2%3D%22340%22%20stroke%3D%22%23D00B0B%22%20stroke-width%3D%220.7%22%20opacity%3D%220.10%22%2F%3E%3Cline%20x1%3D%22230%22%20y1%3D%2260%22%20x2%3D%22230%22%20y2%3D%22400%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%220.6%22%20opacity%3D%220.13%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: repeat-x;
+  background-size: 240px 100%;
+  animation: vt-threads-drift 55s linear infinite;
+  will-change: background-position;
+}
+
+/* Couche 2 — Rubans SVG (SMIL) + dérive verticale CSS */
+.vt-hero-ribbons {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: vt-ribbon-drift 22s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* Couche 3 — Faisceau de podium : cône doré centré, pulse lent */
+.vt-hero-podium {
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(
+    from -10deg at 50% -8%,
+    transparent            0deg,
+    rgba(244,236,225,.06)  8deg,
+    rgba(205,166,98,.14)  13deg,
+    rgba(244,236,225,.06) 18deg,
+    transparent           26deg
+  );
+  filter: blur(22px);
+  animation: vt-podium-pulse 9s ease-in-out infinite;
+  will-change: opacity;
+}
+
+/* Couche 4 — Lueurs radiales pulsantes : rouge bas-gauche + or haut-droit */
+.vt-hero-glows {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 14% 88%, rgba(208,11,11,.24)  0%, transparent 44%),
+    radial-gradient(circle at 84% 16%, rgba(205,166,98,.18) 0%, transparent 40%);
+  animation: vt-glows-pulse 14s ease-in-out infinite alternate;
+  will-change: opacity;
+}
+
+/* Couche 5 — Reflet de défilé : raie or diagonale, flash périodique */
+.vt-hero-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    108deg,
+    transparent              38%,
+    rgba(205,166,98,.09)    49%,
+    rgba(244,236,225,.07)   51%,
+    transparent              62%
+  );
+  animation: vt-shimmer-sweep 12s ease-in-out infinite;
+  animation-delay: -2s;
+  will-change: transform;
+}
+
+
+/* Corps de page — motif rondelles or (::before pour opacité indépendante du contenu) */
+.vt-page-motif {
+  position: relative;
+}
+.vt-page-motif::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%3E%3Ccircle%20cx%3D%2280%22%20cy%3D%2280%22%20r%3D%2272%22%20fill%3D%22none%22%20stroke%3D%22%23E4C486%22%20stroke-width%3D%222%22%2F%3E%3Ccircle%20cx%3D%2280%22%20cy%3D%2280%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%221.2%22%2F%3E%3Ccircle%20cx%3D%2280%22%20cy%3D%2280%22%20r%3D%2240%22%20fill%3D%22none%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%221%22%2F%3E%3Ccircle%20cx%3D%2280%22%20cy%3D%2280%22%20r%3D%2224%22%20fill%3D%22none%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%221%22%2F%3E%3Ccircle%20cx%3D%2280%22%20cy%3D%2280%22%20r%3D%2210%22%20fill%3D%22none%22%20stroke%3D%22%23E4C486%22%20stroke-width%3D%221%22%2F%3E%3Cline%20x1%3D%228%22%20y1%3D%2280%22%20x2%3D%22152%22%20y2%3D%2280%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%22.8%22%2F%3E%3Cline%20x1%3D%2280%22%20y1%3D%228%22%20x2%3D%2280%22%20y2%3D%22152%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%22.8%22%2F%3E%3Cline%20x1%3D%2228%22%20y1%3D%2228%22%20x2%3D%22132%22%20y2%3D%22132%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%22.6%22%2F%3E%3Cline%20x1%3D%22132%22%20y1%3D%2228%22%20x2%3D%2228%22%20y2%3D%22132%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%22.6%22%2F%3E%3Ccircle%20cx%3D%220%22%20cy%3D%220%22%20r%3D%2218%22%20fill%3D%22none%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%221.2%22%2F%3E%3Ccircle%20cx%3D%22160%22%20cy%3D%220%22%20r%3D%2218%22%20fill%3D%22none%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%221.2%22%2F%3E%3Ccircle%20cx%3D%220%22%20cy%3D%22160%22%20r%3D%2218%22%20fill%3D%22none%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%221.2%22%2F%3E%3Ccircle%20cx%3D%22160%22%20cy%3D%22160%22%20r%3D%2218%22%20fill%3D%22none%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%221.2%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: repeat;
+  background-size: 160px 160px;
+  background-attachment: fixed;
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+/* Couche 6 — Grain film statique */
+.vt-hero-grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%220.9%22%20numOctaves%3D%224%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20filter%3D%22url(%23g)%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: repeat;
+  mix-blend-mode: overlay;
+  opacity: 0.025;
+}
+
+/* Couche 7 — Voile lamé : micro-points or, mix-blend-mode screen */
+.vt-hero-lame {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2260%22%20height%3D%2260%22%3E%3Ccircle%20cx%3D%2210%22%20cy%3D%2215%22%20r%3D%220.7%22%20fill%3D%22%23CDA662%22%2F%3E%3Ccircle%20cx%3D%2235%22%20cy%3D%228%22%20r%3D%220.5%22%20fill%3D%22%23CDA662%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2240%22%20r%3D%220.7%22%20fill%3D%22%23CDA662%22%2F%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%2250%22%20r%3D%220.5%22%20fill%3D%22%23CDA662%22%2F%3E%3Ccircle%20cx%3D%2248%22%20cy%3D%2222%22%20r%3D%220.6%22%20fill%3D%22%23CDA662%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: repeat;
+  mix-blend-mode: screen;
+  opacity: 0.04;
+}
+
+/* ── Keyframes ── */
+
+/* Dérive des fils tombants — déplace le SVG d'un cycle complet */
+@keyframes vt-threads-drift {
+  from { background-position: 0 0; }
+  to   { background-position: 240px 0; }
+}
+
+/* Dérive verticale + légère compression horizontale des rubans */
+@keyframes vt-ribbon-drift {
+  from { transform: translateY(-18px) scaleX(1.02); }
+  to   { transform: translateY(14px)  scaleX(0.98); }
+}
+
+/* Pulsation du faisceau de podium */
+@keyframes vt-podium-pulse {
+  0%, 100% { opacity: 0.55; }
+  50%       { opacity: 1.00; }
+}
+
+/* Pulsation des lueurs radiales */
+@keyframes vt-glows-pulse {
+  from { opacity: 0.35; }
+  to   { opacity: 1.00; }
+}
+
+/* Reflet : reste off-screen 35 %, traverse en 30 %, repart 35 % */
+@keyframes vt-shimmer-sweep {
+  0%,  35%  { transform: translateX(-115%); }
+  65%, 100% { transform: translateX(165%); }
+}
+
+/* ════════════════════════════════════════════════════════
+   FOOTER VITRINE — Fond animé subtil (ambiance défilé)
+   ════════════════════════════════════════════════════════ */
+
+.vt-foot-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Couche 1 — Mesh wash : rotation lente côté gauche */
+.vt-foot-mesh {
+  position: absolute;
+  inset: -50%;
+  background: conic-gradient(
+    from 20deg at 25% 70%,
+    transparent               0deg,
+    rgba(208, 11, 11, .32)   45deg,
+    transparent               90deg,
+    rgba(205, 166, 98, .20)  170deg,
+    transparent              220deg,
+    rgba(208, 11, 11, .24)  300deg,
+    transparent              360deg
+  );
+  filter: blur(100px);
+  opacity: 0.22;
+  animation: vt-foot-mesh-spin 130s linear infinite;
+  will-change: transform;
+}
+
+/* Couche 2 — Rubans de soie (SMIL) */
+.vt-foot-ribbons {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: vt-ribbon-drift 24s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* Couche 2 — Lueurs radiales pulsantes (rouge bas-gauche, or haut-droit) */
+.vt-foot-glows {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 6%  92%, rgba(208,11,11,.20) 0%, transparent 42%),
+    radial-gradient(ellipse at 94% 12%, rgba(205,166,98,.14) 0%, transparent 38%);
+  animation: vt-foot-glows-pulse 18s ease-in-out infinite alternate;
+  will-change: opacity;
+}
+
+/* Couche 3 — Reflet or diagonal, flash toutes les ~16 s */
+.vt-foot-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent              42%,
+    rgba(205,166,98,.07)    51%,
+    rgba(244,236,225,.05)   53%,
+    transparent              62%
+  );
+  animation: vt-foot-shimmer-sweep 16s ease-in-out infinite;
+  animation-delay: -5s;
+  will-change: transform;
+}
+
+@keyframes vt-foot-mesh-spin {
+  from { transform: rotate(0deg)   scale(1.00); }
+  to   { transform: rotate(360deg) scale(1.08); }
+}
+
+@keyframes vt-foot-glows-pulse {
+  from { opacity: 0.40; }
+  to   { opacity: 1.00; }
+}
+
+@keyframes vt-foot-shimmer-sweep {
+  0%,  40%  { transform: translateX(-120%); }
+  60%, 100% { transform: translateX(180%); }
+}
+
+
 /* ── Accessibilité — désactive tout pour prefers-reduced-motion ── */
 @media (prefers-reduced-motion: reduce) {
   .vt-reveal, .vt-reveal.in,
@@ -624,6 +900,96 @@ button, a, [role="button"], label, select, input[type="checkbox"], input[type="r
     box-shadow: none !important;
     filter: none !important;
   }
+  .vt-hero-threads  { animation: none !important; }
+  .vt-hero-ribbons  { animation: none !important; display: none; }
+  .vt-hero-podium   { animation: none !important; }
+  .vt-hero-glows    { animation: none !important; }
+  .vt-hero-shimmer  { display: none; }
+  .vt-hero-lame     { display: none; }
+  .vt-foot-mesh     { animation: none !important; }
+  .vt-foot-ribbons  { animation: none !important; display: none; }
+  .vt-foot-glows    { animation: none !important; }
+  .vt-foot-shimmer  { display: none; }
+  .vt-logo-arc      { animation: none !important; }
+  .vt-logo-arc2     { animation: none !important; }
+  .vt-logo-dot      { animation: none !important; }
+}
+
+/* ── P148 — un seul « œil » sur les champs mot de passe ──────────────────────
+   Certains navigateurs (Edge, Samsung Internet, IE) ajoutent leur propre icône
+   « révéler / effacer » dès qu'on tape, qui doublait notre bouton personnalisé.
+   On masque l'icône native ; notre bouton Eye/EyeOff reste le seul contrôle. */
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+
+/* P204 — bandeau partenaires : défilement automatique continu (pause au survol). */
+.gx-marquee { width: 100%; overflow: hidden; }
+.gx-marquee__track {
+  display: flex; width: max-content;
+  animation: gx-marquee-scroll 30s linear infinite;
+}
+.gx-marquee:hover .gx-marquee__track { animation-play-state: paused; }
+@keyframes gx-marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gx-marquee__track { animation: none; }
+}
+
+/* ── Point 57 — animations de célébration (événements dynamiques) ─────────────
+   Particules décoratives (confettis, neige, cœurs, étoiles). Purement visuel,
+   pointer-events désactivés, désactivées si l'utilisateur réduit les animations. */
+.gx-cel-layer { position: fixed; inset: 0; z-index: 101; pointer-events: none; overflow: hidden; }
+.gx-cel-part  { position: absolute; top: -6vh; will-change: transform, opacity; }
+.gx-cel-confetti { border-radius: 2px; }
+.gx-cel-snow     { border-radius: 50%; background: #fff; filter: blur(.3px); }
+@keyframes gx-cel-fall {
+  0%   { transform: translateY(-10vh) rotate(0deg);      opacity: 0; }
+  8%   { opacity: 1; }
+  100% { transform: translateY(112vh) rotate(680deg);    opacity: .9; }
+}
+@keyframes gx-cel-rise {
+  0%   { transform: translateY(12vh) scale(.5);  opacity: 0; }
+  15%  { opacity: 1; }
+  100% { transform: translateY(-96vh) scale(1);  opacity: 0; }
+}
+@keyframes gx-cel-twinkle {
+  0%, 100% { opacity: .25; transform: scale(.7); }
+  50%      { opacity: 1;   transform: scale(1.05); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gx-cel-layer { display: none; }
+}
+
+/* ── SUG-1 : ouverture de l'application ────────────────────────────────────
+   Le splash natif est une image figée qu'Android pose en fond de fenêtre. Ces
+   animations prennent le relais dès que la WebView est prête et font le pont
+   jusqu'à l'application, pour que l'ouverture s'enchaîne au lieu de sauter.
+   Tout est neutralisé si l'utilisateur a demandé moins d'animations. */
+@keyframes gx-splash-trace {
+  from { stroke-dasharray: 0 170; opacity: 0 }
+  to   { stroke-dasharray: 150 170; opacity: 1 }
+}
+@keyframes gx-splash-pop {
+  0%   { transform: scale(0);   opacity: 0 }
+  70%  { transform: scale(1.18); opacity: 1 }
+  100% { transform: scale(1);   opacity: 1 }
+}
+@keyframes gx-splash-monte {
+  from { transform: translateY(9px); opacity: 0 }
+  to   { transform: translateY(0);   opacity: 1 }
+}
+
+.gx-splash-anneau { animation: gx-splash-trace .62s cubic-bezier(.4,0,.2,1) both }
+.gx-splash-point  { transform-origin: 32px 32px; animation: gx-splash-pop .42s cubic-bezier(.34,1.56,.64,1) .46s both }
+.gx-splash-mot    { animation: gx-splash-monte .5s cubic-bezier(.4,0,.2,1) .58s both }
+.gx-splash-entree { animation: gx-splash-monte .55s cubic-bezier(.4,0,.2,1) both }
+
+@media (prefers-reduced-motion: reduce) {
+  .gx-splash-anneau, .gx-splash-point, .gx-splash-mot, .gx-splash-entree { animation: none }
 }
 
 /* ── P148 — un seul « œil » sur les champs mot de passe ──────────────────────

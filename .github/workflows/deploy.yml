@@ -45,6 +45,10 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_ed25519 \
               -o StrictHostKeyChecking=no \
+              -o ConnectionAttempts=5 \
+              -o ConnectTimeout=45 \
+              -o ServerAliveInterval=15 \
+              -o ServerAliveCountMax=4 \
               -o BatchMode=yes \
               ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} bash << 'ENGNX'
 
@@ -61,9 +65,27 @@ jobs:
               index index.html;
               client_max_body_size 20M;
               location / { try_files $uri $uri/ /index.html; }
-              location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|webp)$ {
+              # Assets hashés par Vite (/assets/) : réellement immuables → cache très long.
+              location ^~ /assets/ {
                   expires 1y;
                   add_header Cache-Control "public, immutable";
+                  access_log off;
+              }
+              # Service worker : jamais figé (doit pouvoir se mettre à jour).
+              location = /sw.js { add_header Cache-Control "no-cache"; }
+              # Statiques à URL STABLE dont le contenu change (favicon, icônes, manifest) :
+              # cache court + revalidation. En « immutable » 1 an, un changement de logo
+              # n'atteignait jamais les navigateurs (constaté le 19/07 : Edge et Chrome
+              # affichaient deux anciens favicons différents, insensibles au rafraîchissement).
+              location ~* \.(ico|png|jpg|jpeg|gif|svg|webp|webmanifest)$ {
+                  expires 1h;
+                  add_header Cache-Control "public, max-age=3600, must-revalidate";
+                  access_log off;
+              }
+              # Polices : longue durée acceptable.
+              location ~* \.(woff|woff2|ttf|eot)$ {
+                  expires 30d;
+                  add_header Cache-Control "public";
                   access_log off;
               }
               location ~ /\.(?!well-known).* { deny all; }
@@ -110,16 +132,28 @@ jobs:
           # --exclude APK : les Gextimo*.apk sont déposés par release.sh (hors dist/) —
           # sans cet exclude, --delete les efface à CHAQUE déploiement du site et le
           # bouton « Télécharger » / la MAJ in-app servent du HTML (vu en prod le 16/07).
-          rsync -az --delete \
-            --exclude='Gextimo*.apk' \
-            --chmod=D755,F644 \
-            -e "ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no -o BatchMode=yes" \
-            ./dist/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/gextimo_frontend/
+          # Réessai : la connexion SSH depuis les runners GitHub tombe par
+          # intermittence (2 déploiements perdus sur 8 le 20/07). Sans cela un
+          # push part vert côté git alors que le code n'est jamais mis en ligne.
+          for essai in 1 2 3; do
+            rsync -az --delete \
+              --exclude='Gextimo*.apk' \
+              --chmod=D755,F644 \
+              -e "ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no -o BatchMode=yes -o ConnectionAttempts=5 -o ConnectTimeout=45 -o ServerAliveInterval=15 -o ServerAliveCountMax=4" \
+              ./dist/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/gextimo_frontend/ && break
+            echo "::warning::rsync a échoué (tentative $essai/3) — nouvelle tentative dans 15 s"
+            [ "$essai" = 3 ] && exit 1
+            sleep 15
+          done
 
       - name: Reload Nginx
         run: |
           ssh -i ~/.ssh/id_ed25519 \
               -o StrictHostKeyChecking=no \
+              -o ConnectionAttempts=5 \
+              -o ConnectTimeout=45 \
+              -o ServerAliveInterval=15 \
+              -o ServerAliveCountMax=4 \
               -o BatchMode=yes \
               ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
               "sudo systemctl reload nginx && echo '✅ Frontend déployé'"

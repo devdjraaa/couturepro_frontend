@@ -35,17 +35,41 @@ api.interceptors.request.use(config => {
   return config
 })
 
+// Anti-éjection intempestive (signalé par la direction, web) : un 401 ne déconnecte
+// QUE s'il correspond à une session RÉELLEMENT expirée. On le confirme par un appel
+// léger authentifié : s'il passe, le 401 initial était transitoire (fenêtre de
+// redéploiement, hoquet réseau, endpoint particulier) et on NE déconnecte PAS.
+let verificationSessionEnCours = false
+
+async function sessionReellementExpiree() {
+  try {
+    // `_verifSession` empêche la récursion de l'interceptor sur cette requête.
+    await api.get('/abonnement/current', { _verifSession: true, timeout: 8000 })
+    return false // token accepté → le 401 initial n'était pas un vrai problème d'auth
+  } catch (e) {
+    return e?.response?.status === 401 // vraie expiration seulement si la vérif 401 aussi
+  }
+}
+
 api.interceptors.response.use(
   response => response,
-  error => {
-    // 401 = token réellement invalide (pas une erreur réseau).
-    // Network errors n'ont pas error.response → on ne touche pas à la session locale.
-    if (error.response?.status === 401 && getToken()) {
-      clearAll()
-      clearCachedSession()
-      // Évite la boucle de redirect si on est déjà sur /login
-      if (!window.location.pathname.startsWith('/login')) {
-        window.location.href = '/login'
+  async error => {
+    const cfg = error.config || {}
+    if (error.response?.status === 401 && getToken() && !cfg._verifSession && !verificationSessionEnCours) {
+      verificationSessionEnCours = true
+      try {
+        // Un 401 passager (jeton en cours de renouvellement, réseau instable)
+        // ne doit PAS éjecter l'utilisateur : on confirme auprès du serveur.
+        if (await sessionReellementExpiree()) {
+          clearAll()
+          clearCachedSession()   // NATIF : la session hors ligne aussi
+          // Évite la boucle de redirection si on est déjà sur /login
+          if (!window.location.pathname.startsWith('/login')) {
+            window.location.href = '/login'
+          }
+        }
+      } finally {
+        verificationSessionEnCours = false
       }
     }
     return Promise.reject(normalizeError(error))

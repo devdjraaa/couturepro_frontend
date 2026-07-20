@@ -15,6 +15,7 @@ import { whatsappService } from '@/services/whatsappService'
 import { AppLayout } from '@/components/layout'
 import { Button, Input, Skeleton } from '@/components/ui'
 import ClientAvatar from '@/components/clients/ClientAvatar'
+import MesuresInline from '@/components/commandes/MesuresInline'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { cn } from '@/utils/cn'
 
@@ -258,6 +259,15 @@ function StepModele({ data, setData, onNext }) {
                     <ChevronDown size={15} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-ghost pointer-events-none" />
                   </div>
                 </div>
+
+                {/* Pts 68-69 : mesures éditables SANS quitter la commande. Il fallait
+                    auparavant sortir du formulaire pour aller les saisir dans la fiche
+                    client — et la commande en cours était perdue. */}
+                <MesuresInline
+                  clientId={data.client_id}
+                  vetementNom={item.vetement_nom}
+                  libelles={vetements.find(v => v.id === item.vetement_id)?.libelles_mesures ?? []}
+                />
 
                 {/* Quantité + prix unitaire */}
                 <div className="flex gap-2 items-end">

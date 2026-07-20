@@ -33,6 +33,33 @@ export const PHONE_PREFIXES = [
   { code: '+216', country: 'Tunisie',        flag: '🇹🇳', iso2: 'TN' },
   { code: '+218', country: 'Libye',          flag: '🇱🇾', iso2: 'LY' },
   { code: '+20',  country: 'Égypte',         flag: '🇪🇬', iso2: 'EG' },
+  { code: '+249', country: 'Soudan',         flag: '🇸🇩', iso2: 'SD' },
+  // Afrique de l'Est
+  { code: '+211', country: 'Soudan du Sud',  flag: '🇸🇸', iso2: 'SS' },
+  { code: '+251', country: 'Éthiopie',       flag: '🇪🇹', iso2: 'ET' },
+  { code: '+291', country: 'Érythrée',       flag: '🇪🇷', iso2: 'ER' },
+  { code: '+253', country: 'Djibouti',       flag: '🇩🇯', iso2: 'DJ' },
+  { code: '+252', country: 'Somalie',        flag: '🇸🇴', iso2: 'SO' },
+  { code: '+254', country: 'Kenya',          flag: '🇰🇪', iso2: 'KE' },
+  { code: '+256', country: 'Ouganda',        flag: '🇺🇬', iso2: 'UG' },
+  { code: '+255', country: 'Tanzanie',       flag: '🇹🇿', iso2: 'TZ' },
+  { code: '+250', country: 'Rwanda',         flag: '🇷🇼', iso2: 'RW' },
+  { code: '+257', country: 'Burundi',        flag: '🇧🇮', iso2: 'BI' },
+  { code: '+261', country: 'Madagascar',     flag: '🇲🇬', iso2: 'MG' },
+  { code: '+230', country: 'Maurice',        flag: '🇲🇺', iso2: 'MU' },
+  { code: '+248', country: 'Seychelles',     flag: '🇸🇨', iso2: 'SC' },
+  { code: '+269', country: 'Comores',        flag: '🇰🇲', iso2: 'KM' },
+  // Afrique australe
+  { code: '+27',  country: 'Afrique du Sud', flag: '🇿🇦', iso2: 'ZA' },
+  { code: '+260', country: 'Zambie',         flag: '🇿🇲', iso2: 'ZM' },
+  { code: '+263', country: 'Zimbabwe',       flag: '🇿🇼', iso2: 'ZW' },
+  { code: '+265', country: 'Malawi',         flag: '🇲🇼', iso2: 'MW' },
+  { code: '+258', country: 'Mozambique',     flag: '🇲🇿', iso2: 'MZ' },
+  { code: '+267', country: 'Botswana',       flag: '🇧🇼', iso2: 'BW' },
+  { code: '+264', country: 'Namibie',        flag: '🇳🇦', iso2: 'NA' },
+  { code: '+266', country: 'Lesotho',        flag: '🇱🇸', iso2: 'LS' },
+  { code: '+268', country: 'Eswatini',       flag: '🇸🇿', iso2: 'SZ' },
+  { code: '+244', country: 'Angola',         flag: '🇦🇴', iso2: 'AO' },
 ]
 
 /** Extrait le préfixe et le numéro depuis une valeur combinée comme "+229 97000000" */

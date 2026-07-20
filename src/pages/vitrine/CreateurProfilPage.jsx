@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { analyserLienVideo, estFichierVideo } from '@/utils/videoEmbed'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { X, Heart, MessageCircle, Send, ShoppingBag, Award, Download, Lock, ImagePlus, Megaphone, Video, CheckCircle2, MapPin, Clock, Star, Flag } from 'lucide-react'
 import VitrineShell from './VitrineChrome'
-import { getCreator, toggleLike, toggleAbonnement, acheterPatron } from './vitrineApi'
+import { getCreator, toggleLike, toggleAbonnement, acheterPatron, deposerAvis, signalerAvis } from './vitrineApi'
+import { memoriserAction } from './actionEnAttente'
+import toast from 'react-hot-toast'
 import GarmentVisual from './GarmentVisual'
 import { useDevise } from './vitrineCurrency'
 import { useFavoris } from './useFavoris'
@@ -13,6 +15,7 @@ import { devisService } from '@/services/devisService'
 import { vitrineStatsService } from '@/services/vitrineStatsService'
 import { signalementService } from '@/services/signalementService'
 import { usePageMeta } from '@/hooks/usePageMeta'
+import { SkeletonCreatorProfile } from './VitrineSkeletons'
 
 const btnPrimary = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-inverse hover:bg-primary-600 transition'
 const btnOutline = 'inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary transition'
@@ -83,7 +86,7 @@ function DevisModal({ atelierId, createur, wa, onClose, onTrack }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
       <div className="bg-card border border-edge rounded-2xl shadow-xl w-full max-w-md p-6 relative max-h-[90dvh] overflow-y-auto">
-        <button onClick={onClose} aria-label="Fermer" className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full text-ghost hover:text-ink transition">
+        <button onClick={onClose} aria-label={t('commun.fermer')} className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full text-ghost hover:text-ink transition">
           <X size={16} />
         </button>
 
@@ -249,7 +252,7 @@ function PatronModal({ patron, format, onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
       <div className="bg-card border border-edge rounded-2xl shadow-xl w-full max-w-md p-6 relative">
-        <button onClick={onClose} aria-label="Fermer" className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full text-ghost hover:text-ink transition">
+        <button onClick={onClose} aria-label={t('commun.fermer')} className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full text-ghost hover:text-ink transition">
           <X size={16} />
         </button>
         <h2 className="font-display font-bold text-xl text-ink mb-1">{t('vitrine.patron.buy_title', { titre: patron.titre })}</h2>
@@ -286,8 +289,15 @@ function PatronModal({ patron, format, onClose }) {
 
 const MAX_AVIS_PHOTOS = 3
 
-function AvisForm({ atelierId }) {
+/**
+ * Avis v2 (décisions 20/07) : l'avis vise un MODÈLE précis et exige un compte
+ * client. Sans session, l'avis saisi est mémorisé (texte compris) puis REJOUÉ
+ * après connexion — l'utilisateur ne retape rien.
+ */
+function AvisForm({ atelierId, slug, creations = [] }) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+  const [vetementId, setVetementId] = useState('')
   const [nom, setNom] = useState('')
   const [note, setNote] = useState(5)
   const [texte, setTexte] = useState('')
@@ -295,6 +305,7 @@ function AvisForm({ atelierId }) {
   const [previews, setPreviews] = useState([])
   const [sent, setSent] = useState(false)
   const [sending, setSending] = useState(false)
+  const [erreur, setErreur] = useState('')
 
   const addPhotos = (e) => {
     const files = Array.from(e.target.files ?? []).slice(0, MAX_AVIS_PHOTOS - photos.length)
@@ -310,14 +321,41 @@ function AvisForm({ atelierId }) {
 
   const submit = async (e) => {
     e.preventDefault()
-    if (!nom.trim() || sending) return
+    if (sending) return
+
+    // Correctif prioritaire (direction, 20/07) : seul le nom était vérifié. Un
+    // avis SANS TEXTE partait donc sans le moindre message — et l'erreur
+    // serveur était avalée par un catch muet. Les trois champs sont exigés, et
+    // ce qui échoue est désormais dit.
+    if (!nom.trim())            { setErreur(t('vitrine.profil.avis_err_nom')); return }
+    if (!note)                  { setErreur(t('vitrine.profil.avis_err_note')); return }
+    if (texte.trim().length < 10) { setErreur(t('vitrine.profil.avis_err_texte')); return }
+
+    if (!vetementId) { setErreur(t('vitrine.profil.avis_err_modele')); return }
+
+    setErreur('')
     setSending(true)
-    try {
-      await avisService.submit(atelierId, { auteur_nom: nom.trim(), note, texte: texte.trim() || null, photos })
-      setSent(true)
-    } catch { /* erreur silencieuse */ } finally {
-      setSending(false)
+    const { ok, status, data } = await deposerAvis(vetementId, {
+      auteur_nom: nom.trim(), note, texte: texte.trim(), photos,
+    })
+    setSending(false)
+
+    if (ok) { setSent(true); return }
+
+    // EC-3 : compte requis. L'avis saisi part avec l'intention et sera rejoué
+    // après connexion. Les photos (fichiers) ne survivent pas au stockage de
+    // session : on prévient qu'elles seront à rejoindre.
+    if (status === 401) {
+      memoriserAction('laisser_avis', {
+        atelierId, vetementId, nom: nom.trim(), note, texte: texte.trim(),
+        avaitPhotos: photos.length > 0,
+        createur: creations.find((m) => m.id === vetementId)?.nom || '',
+      }, `/createurs/${slug}`)
+      navigate('/espace-client?action=laisser_avis')
+      return
     }
+
+    setErreur(data?.message || Object.values(data?.errors || {})[0]?.[0] || t('vitrine.profil.avis_err_envoi'))
   }
 
   if (sent) return <p className="text-sm text-success font-medium">{t('vitrine.profil.avis_thanks')}</p>
@@ -325,6 +363,12 @@ function AvisForm({ atelierId }) {
   return (
     <form onSubmit={submit} className="bg-card border border-edge rounded-lg p-5 max-w-[520px]">
       <h3 className="font-display text-lg text-ink mb-3">{t('vitrine.profil.avis_leave')}</h3>
+      {/* Décision 1 : l'avis porte sur un modèle précis, pas sur le créateur. */}
+      <select value={vetementId} onChange={(e) => setVetementId(e.target.value)}
+              className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink mb-2 focus:outline-none focus:ring-2 focus:ring-primary/30">
+        <option value="">{t('vitrine.profil.avis_choisir_modele')}</option>
+        {creations.map((m) => <option key={m.id} value={m.id}>{m.nom}</option>)}
+      </select>
       <input value={nom} onChange={(e) => setNom(e.target.value)} maxLength={80} placeholder={t('vitrine.profil.avis_name')}
              className="w-full rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink mb-2 focus:outline-none focus:ring-2 focus:ring-primary/30" />
       <div className="flex gap-1 mb-2">
@@ -343,7 +387,7 @@ function AvisForm({ atelierId }) {
         {previews.map((src, i) => (
           <div key={i} className="relative w-14 h-14 rounded-lg overflow-hidden border border-edge">
             <img src={src} alt={`photo ${i + 1}`} className="w-full h-full object-cover" />
-            <button type="button" onClick={() => removePhoto(i)} aria-label="Retirer"
+            <button type="button" onClick={() => removePhoto(i)} aria-label={t('commun.retirer')}
                     className="absolute top-0.5 right-0.5 w-5 h-5 bg-black/60 rounded-full flex items-center justify-center text-white"><X size={11} /></button>
           </div>
         ))}
@@ -355,6 +399,7 @@ function AvisForm({ atelierId }) {
         )}
       </div>
 
+      {erreur && <p className="text-xs text-danger mb-2" role="alert">{erreur}</p>}
       <button type="submit" disabled={sending} className="text-sm font-semibold px-4 py-2 rounded-lg bg-primary text-inverse hover:bg-primary-600 transition disabled:opacity-60">
         {t('vitrine.profil.avis_send')}
       </button>
@@ -367,6 +412,7 @@ export default function CreateurProfilPage() {
   const { format } = useDevise()
   const { toggle } = useFavoris()
   const { slug } = useParams()
+  const navigate = useNavigate()
   const [c, setC] = useState(undefined) // undefined = loading, null = introuvable
   const [reported, setReported] = useState(() => new Set())
   const [signaled, setSignaled] = useState(() => new Set())
@@ -376,6 +422,7 @@ export default function CreateurProfilPage() {
   const [abo, setAbo] = useState({ abonne: false, abonnes: 0 }) // P173
 
   useEffect(() => { getCreator(slug).then((d) => setC(d ?? null)) }, [slug])
+  useEffect(() => { window.scrollTo(0, 0) }, [slug])
   useEffect(() => { if (c && c.id) vitrineStatsService.track(c.id, 'visite') }, [c?.id])
 
   // Initialise l'état likes/abonnement depuis la réponse API (état propre à ce visiteur).
@@ -398,12 +445,33 @@ export default function CreateurProfilPage() {
     if (res) setLikeState((s) => ({ ...s, [vetementId]: { likes: res.likes, liked: res.liked } }))
   }
 
-  // P173 : s'abonner / se désabonner (optimiste). On garde aussi le favori local (FavorisPage).
+  // P173 / ABO-1 : suivre ou ne plus suivre. L'affichage est optimiste, mais on
+  // le REMET dans son état d'origine si le serveur refuse — sinon le bouton dit
+  // « Abonné » alors que rien n'a été enregistré.
   const onSubscribe = async () => {
-    toggle(c.id)
+    const avant = abo
     setAbo((a) => ({ abonne: !a.abonne, abonnes: Math.max(0, a.abonnes + (a.abonne ? -1 : 1)) }))
-    const res = await toggleAbonnement(c.id)
-    if (res) setAbo({ abonne: res.abonne, abonnes: res.abonnes })
+
+    const { ok, status, data } = await toggleAbonnement(c.id)
+
+    if (ok) {
+      toggle(c.id)   // favori local (FavorisPage), seulement si le serveur a suivi
+      setAbo({ abonne: data.abonne, abonnes: data.abonnes })
+      return
+    }
+
+    setAbo(avant)
+
+    // EC-3 : suivre exige un compte. Plutôt que d'afficher une erreur et de perdre
+    // le geste, on mémorise l'intention, on envoie se connecter, et l'abonnement
+    // se fait tout seul au retour.
+    if (status === 401) {
+      memoriserAction('suivre_createur', { atelierId: c.id, nom: c.nom }, `/createurs/${slug}`)
+      navigate('/espace-client?action=suivre_createur')
+      return
+    }
+
+    toast.error(data?.message || t('vitrine.profil.subscribe_error'))
   }
 
   useEffect(() => {
@@ -432,7 +500,7 @@ export default function CreateurProfilPage() {
   })
 
   if (c === undefined) {
-    return <VitrineShell><div className="py-24 text-center text-dim">{t('vitrine.loading')}</div></VitrineShell>
+    return <SkeletonCreatorProfile />
   }
   if (c === null) {
     return (
@@ -459,9 +527,15 @@ export default function CreateurProfilPage() {
   const socialCls = 'text-xs font-semibold px-3 py-1.5 rounded-full border border-edge text-dim hover:text-primary hover:border-primary transition'
   const merites = Array.isArray(c.merites) ? c.merites : []
 
-  const reportAvis = async (id) => {
+  // Décision 7 : le signalement porte un motif — un motif grave (contenu
+  // illégal, insulte, discrimination) déclenche une revue prioritaire immédiate.
+  const [motifPourAvis, setMotifPourAvis] = useState(null) // id de l'avis dont on choisit le motif
+
+  const reportAvis = async (id, motif) => {
+    setMotifPourAvis(null)
     setReported((s) => new Set(s).add(id))
-    try { await avisService.report(id) } catch { /* erreur silencieuse */ }
+    const { ok } = await signalerAvis(id, motif)
+    if (ok) toast.success(t('vitrine.profil.report_merci'))
   }
 
   const trackContact = () => vitrineStatsService.track(c?.id, 'contact')
@@ -504,9 +578,14 @@ export default function CreateurProfilPage() {
               ? <a href={waHref('vitrine.profil.wa_message', { nom: c.nom })} onClick={trackContact} target="_blank" rel="noopener noreferrer" title={t('vitrine.profil.contact')} aria-label={t('vitrine.profil.contact')} className="p-1.5 rounded-lg text-dim hover:bg-app hover:text-primary transition"><Send size={16} /></a>
               : <button title={t('vitrine.profil.contact')} aria-label={t('vitrine.profil.contact')} className="p-1.5 rounded-lg text-ghost cursor-default"><Send size={16} /></button>}
             <div className="flex-1" />
-            {wa
-              ? <a href={waHref('vitrine.profil.wa_order', { nom: c.nom, modele: m.nom })} onClick={trackContact} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-semibold text-[12.5px] px-3 py-1.5 rounded-[10px] bg-primary text-inverse hover:bg-primary-600 transition"><ShoppingBag size={14} />{t('vitrine.profil.order')}</a>
-              : <button className="inline-flex items-center gap-1 font-semibold text-[12.5px] px-3 py-1.5 rounded-[10px] bg-primary text-inverse hover:bg-primary-600 transition"><ShoppingBag size={14} />{t('vitrine.profil.order')}</button>}
+            {/* P202 : Commander → espace client (commande suivie qui atterrit dans l'outil du designer). */}
+            {/* EC-5 : l'intention est mémorisée EN PLUS du paramètre d'URL. Le
+                paramètre seul ne survit pas à un aller-retour hors du site (lien
+                reçu par e-mail, connexion via un autre onglet) — l'utilisateur
+                revenait alors sur un espace client sans rapport avec son clic. */}
+            <Link to={`/espace-client?commander=${encodeURIComponent(c.id)}&designer=${encodeURIComponent(c.nom)}`}
+                  onClick={() => { trackContact(); memoriserAction('commander', { atelierId: c.id, nom: c.nom }, null) }}
+                  className="inline-flex items-center gap-1 font-semibold text-[12.5px] px-3 py-1.5 rounded-[10px] bg-primary text-inverse hover:bg-primary-600 transition"><ShoppingBag size={14} />{t('vitrine.profil.order')}</Link>
           </div>
           {/* P161 : bouton Télécharger (contenu payant) */}
           {m.patron && (
@@ -557,7 +636,7 @@ export default function CreateurProfilPage() {
               {c.verifie && <span className="text-[12px] font-bold text-primary bg-primary-50 px-2.5 py-0.5 rounded-full">{t('vitrine.creators.verified')}</span>}
               {/* PL-8 : badge Designer Pro (plan Atelier+) */}
               {c.badge_pro && (
-                <span className="inline-flex items-center gap-1 text-[12px] font-bold text-amber-700 bg-amber-100 px-2.5 py-0.5 rounded-full">
+                <span className="inline-flex items-center gap-1 text-[12px] font-bold text-gold-dark bg-gold-light px-2.5 py-0.5 rounded-full">
                   <Award size={12} /> {t('vitrine.creators.pro')}
                 </span>
               )}
@@ -587,7 +666,7 @@ export default function CreateurProfilPage() {
                 {ttUrl && <a href={ttUrl} target="_blank" rel="noopener noreferrer" className={socialCls}>TikTok</a>}
                 {ytUrl && <a href={ytUrl} target="_blank" rel="noopener noreferrer" className={socialCls}>YouTube</a>}
                 {liUrl && <a href={liUrl} target="_blank" rel="noopener noreferrer" className={socialCls}>LinkedIn</a>}
-                {siteUrl && <a href={siteUrl} target="_blank" rel="noopener noreferrer" className={socialCls}>Site web</a>}
+                {siteUrl && <a href={siteUrl} target="_blank" rel="noopener noreferrer" className={socialCls}>{t('vitrine.profil.site_web')}</a>}
               </div>
             )}
           </div>
@@ -728,6 +807,27 @@ export default function CreateurProfilPage() {
           renderGrid(creations)
         )}
 
+        {/* Point 101 : réalisations publiées (photos filigranées, modérées) */}
+        {Array.isArray(c.realisations) && c.realisations.length > 0 && (
+          <>
+            <h2 className="font-display text-2xl mt-12 mb-5 text-ink">{t('realisations.profil_titre')}</h2>
+            <div className="space-y-8">
+              {c.realisations.map((r) => (
+                <div key={r.id}>
+                  <h3 className="font-display text-lg text-ink mb-1">{r.titre}</h3>
+                  {r.description && <p className="text-sm text-dim mb-3 max-w-2xl">{r.description}</p>}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {(r.images || []).map((src, i) => (
+                      <img key={i} src={src} alt={r.titre} loading="lazy"
+                           className="w-full aspect-square object-cover rounded-xl border border-edge" />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
         {/* Avis */}
         <h2 id="avis-section" className="font-display text-2xl mt-12 mb-5 text-ink">{t('vitrine.profil.reviews')}</h2>
         {(c.avis && c.avis.length > 0) ? (
@@ -755,14 +855,23 @@ export default function CreateurProfilPage() {
                 )}
                 {r.id && (reported.has(r.id)
                   ? <span className="text-[11px] text-ghost mt-2 inline-block">{t('vitrine.profil.report_done')}</span>
-                  : <button onClick={() => reportAvis(r.id)} className="text-[11px] text-ghost hover:text-danger mt-2">{t('vitrine.profil.report')}</button>)}
+                  : motifPourAvis === r.id
+                    ? <div className="flex flex-wrap gap-1.5 mt-2">
+                        {['contenu_illegal', 'insulte', 'discrimination', 'autre'].map((m) => (
+                          <button key={m} onClick={() => reportAvis(r.id, m)}
+                                  className="text-[10.5px] px-2 py-1 rounded-full border border-edge text-dim hover:border-danger hover:text-danger transition">
+                            {t(`vitrine.profil.motif_${m}`)}
+                          </button>
+                        ))}
+                      </div>
+                    : <button onClick={() => setMotifPourAvis(r.id)} className="text-[11px] text-ghost hover:text-danger mt-2">{t('vitrine.profil.report')}</button>)}
               </figure>
             ))}
           </div>
         ) : (
           <p className="text-dim mb-6">{t('vitrine.profil.avis_no')}</p>
         )}
-        <div className="mb-12"><AvisForm atelierId={c.id} /></div>
+        <div className="mb-12"><AvisForm atelierId={c.id} slug={slug} creations={c.creations || []} /></div>
 
         <div className="pb-16 flex items-center gap-4 flex-wrap">
           <Link to="/createurs" className={btnOutline}>{t('vitrine.profil.all_creators')}</Link>

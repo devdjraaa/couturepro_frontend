@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
+import { useTranslation, Trans } from 'react-i18next'
 import { Eye, EyeOff, Check, X, ArrowRight, MessageSquare } from 'lucide-react'
 import { useAuth } from '@/contexts'
 import { AuthLayout } from '@/components/layout'
@@ -61,7 +61,17 @@ export default function RegisterPage() {
     return () => { alive = false }
   }, [])
 
-  const set = key => e => setForm(f => ({ ...f, [key]: e.target.value }))
+  // Pt 1 (20/07) : le NOM de famille est toujours enregistré en MAJUSCULES,
+  // quelle que soit la frappe. Appliqué à la saisie pour que l'utilisateur voie
+  // le résultat, pas seulement au moment de l'enregistrement.
+  // Le prénom suit la casse de présentation : première lettre de chaque mot en
+  // majuscule (« jean michel » → « Jean Michel »), y compris après un tiret.
+  const set = key => e => {
+    let v = e.target.value
+    if (key === 'nom') v = v.toLocaleUpperCase('fr')
+    if (key === 'prenom') v = v.toLocaleLowerCase('fr').replace(/(^|[\s'-])(\p{L})/gu, (_, sep, c) => sep + c.toLocaleUpperCase('fr'))
+    setForm(f => ({ ...f, [key]: v }))
+  }
 
   const handleRegister = async e => {
     e.preventDefault()
@@ -280,18 +290,19 @@ export default function RegisterPage() {
             {accepteCgu && <Check size={11} className="text-white" strokeWidth={3} />}
           </div>
           <span className="text-sm text-dim leading-snug">
-            {t('auth.inscription.accepter_cgu_debut')}{' '}
-            {/* SUG-5/6 : la page CGU publique du site s'ouvre en externe — le formulaire
-               reste intact (avant : route interne protégée → redirection login + données perdues). */}
-            <a
-              href={`${SITE_BASE_URL}/cgu`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline underline-offset-2"
-              style={{ color: 'var(--color-gold)' }}
-            >
-              {t('auth.inscription.accepter_cgu_lien')}
-            </a>
+            {/* Formulation standard exigée par la direction (20/07) : les DEUX
+                documents nommés explicitement, chacun avec son propre lien.
+                SUG-5/6 : ouverture externe — le formulaire reste intact (avant :
+                route interne protégée → redirection login + données perdues). */}
+            <Trans
+              i18nKey="auth.inscription.accepter_legal"
+              components={{
+                cgu: <a href={`${SITE_BASE_URL}/cgu`} target="_blank" rel="noopener noreferrer"
+                        className="underline underline-offset-2" style={{ color: 'var(--color-gold)' }} />,
+                conf: <a href={`${SITE_BASE_URL}/confidentialite`} target="_blank" rel="noopener noreferrer"
+                         className="underline underline-offset-2" style={{ color: 'var(--color-gold)' }} />,
+              }}
+            />
           </span>
         </label>
 

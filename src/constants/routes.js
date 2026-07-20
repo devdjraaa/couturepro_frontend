@@ -26,6 +26,20 @@ export const ROUTES = {
   VITRINE_FAVORIS:   '/favoris',
   VITRINE_INSCRIPTION:      '/inscription',
   VITRINE_SPONSORISATION:   '/mise-en-avant',
+  VITRINE_ESPACE_CLIENT:    '/espace-client',
+
+  // Pages légales vitrine
+  VITRINE_CONFIDENTIALITE:    '/confidentialite',
+  VITRINE_MENTIONS:           '/mentions-legales',
+  VITRINE_COOKIES:            '/cookies',
+  VITRINE_PROTECTION_DONNEES: '/protection-donnees',
+  VITRINE_CGU:                '/cgu',
+  VITRINE_DROITS_CREATEURS:   '/droits-createurs',
+  VITRINE_CONDITIONS_VENTE:   '/conditions-vente',
+  VITRINE_PRODUITS_INTERDITS: '/produits-interdits',
+  VITRINE_LIVRAISON_RETOURS:  '/livraison-retours',
+  VITRINE_REGLES_COMMUNAUTE:  '/regles-communaute',
+  VITRINE_CONTACT_RECLAMATIONS: '/contact-reclamations',
 
   // App (protégées) — '/app' sur le web, '/' sur mobile
   DASHBOARD:        IS_NATIVE ? '/' : '/app',
@@ -81,6 +95,7 @@ export const ROUTES = {
 
   // Autres
   PHOTOS_VIP:  '/photos-vip',
+  REALISATIONS: '/realisations',
   HISTORIQUE:  '/historique',
   FAQ:         '/faq',
   CONTACT:     '/contact',

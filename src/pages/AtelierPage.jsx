@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import {
   Scissors, Ruler, Building2, Users, MapPin,
   Palette, MessageCircle, Globe, CreditCard,
-  Lock, HelpCircle, ChevronRight, RefreshCw,
+  Lock, HelpCircle, ChevronRight, RefreshCw, Images,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import toast from 'react-hot-toast'
@@ -137,6 +137,11 @@ export default function AtelierPage() {
             icon={Ruler}
             label={t('atelier.fiches_mesures')}
             onClick={() => navigate('/clients')}
+          />
+          <SettingsRow
+            icon={Images}
+            label={t('realisations.titre')}
+            onClick={() => navigate('/realisations')}
           />
         </Section>
 

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { sanitizePhoneInput } from '@/utils/phoneInput'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { ArrowRight, Eye, EyeOff } from 'lucide-react'
@@ -173,7 +174,7 @@ export default function RecoverAccountPage() {
             type="text"
             inputMode="tel"
             value={tel}
-            onChange={e => setTel(e.target.value)}
+            onChange={e => setTel(sanitizePhoneInput(e.target.value))}
             placeholder="ex : +229 97 00 00 00"
             required
           />

@@ -6,8 +6,8 @@ import VitrineShell from './VitrineChrome'
 import { getCreators } from './vitrineApi'
 import { useFavoris } from './useFavoris'
 import { usePageMeta } from '@/hooks/usePageMeta'
-import { Spinner } from '@/components/ui'
 import { cn } from '@/utils/cn'
+import { SkeletonCreatorCard } from './VitrineSkeletons'
 
 function distKm(a, b) {
   const toRad = (d) => (d * Math.PI) / 180
@@ -220,8 +220,8 @@ export default function CreateursPage() {
 
           {/* État chargement */}
           {!creators && !error && (
-            <div className="flex justify-center py-16">
-              <Spinner size="lg" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {Array.from({ length: 6 }, (_, i) => <SkeletonCreatorCard key={i} />)}
             </div>
           )}
 
@@ -256,7 +256,7 @@ export default function CreateursPage() {
             {sorted.map((c) => (
               <Link key={c.id} to={`/createurs/${c.id}`}
                     className="relative bg-card border border-edge rounded-lg p-5 transition hover:-translate-y-0.5 hover:shadow-lg hover:border-primary">
-                <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(c.id) }} className="absolute top-3 right-3 z-10" aria-label="Favori" aria-pressed={has(c.id)}>
+                <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(c.id) }} className="absolute top-3 right-3 z-10" aria-label={t('vitrine.a11y.favori')} aria-pressed={has(c.id)}>
                   <Heart size={16} className={has(c.id) ? 'text-primary' : 'text-ghost'} fill={has(c.id) ? 'currentColor' : 'none'} />
                 </button>
                 <div className="flex items-center gap-3 mb-3">

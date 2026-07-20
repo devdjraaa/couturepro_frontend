@@ -103,7 +103,12 @@ export default function CataloguePage() {
         )}
       </div>
 
-      <FloatingActionButton icon={Plus} onClick={() => setEditing('new')} />
+      {/* S02A-26b : quand la liste est vide, l'état vide porte déjà l'invitation à
+          créer — afficher AUSSI le bouton flottant faisait deux boutons pour la
+          même action. On ne le montre donc que lorsqu'il y a des modèles. */}
+      {mesModeles.length > 0 && (
+        <FloatingActionButton icon={Plus} onClick={() => setEditing('new')} />
+      )}
 
       <BottomSheet
         isOpen={editing !== null}

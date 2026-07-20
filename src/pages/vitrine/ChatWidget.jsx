@@ -1,0 +1,233 @@
+// Makila AI (charte validée par la direction) : assistant conversationnel de la vitrine.
+// Header fixe (nom + signature) avec menu et fenêtre d'information, fil de discussion,
+// feedback pouce haut/bas, reprise de session, transparence sur l'enregistrement des échanges.
+import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import { MessageCircle, X, Send, ThumbsUp, ThumbsDown, Menu, Info } from 'lucide-react'
+import { API_BASE_URL } from '@/constants/config'
+import { getClientToken } from './espaceClientApi'
+
+function sessionId() {
+  try {
+    let s = sessionStorage.getItem('gx_session_id')
+    if (!s) {
+      s = (crypto?.randomUUID?.() || `s-${Date.now()}-${Math.random().toString(36).slice(2)}`).slice(0, 64)
+      sessionStorage.setItem('gx_session_id', s)
+    }
+    return s
+  } catch { return 'anon' }
+}
+
+async function api(path, body) {
+  const token = getClientToken()
+  const r = await fetch(`${API_BASE_URL}${path}`, {
+    method: body ? 'POST' : 'GET',
+    headers: {
+      Accept: 'application/json',
+      ...(body ? { 'Content-Type': 'application/json' } : {}),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  })
+  if (!r.ok) throw new Error('chatbot_api')
+  return r.json()
+}
+
+/* Fenêtre légère à l'intérieur du chatbot (menu : à propos, confidentialité, aide, avis). */
+function ModaleLegere({ titre, texte, lien, lienLabel, onClose }) {
+  return (
+    <div className="absolute inset-0 z-10 bg-black/40 flex items-end" onClick={onClose}>
+      <div className="w-full bg-card rounded-t-2xl p-4 max-h-[70%] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="font-display font-bold text-[14px] text-ink">{titre}</h4>
+          <button onClick={onClose} aria-label={t('commun.fermer')} className="p-1 rounded-lg text-ghost hover:text-ink"><X size={15} /></button>
+        </div>
+        <p className="text-[13px] text-dim leading-relaxed whitespace-pre-line">{texte}</p>
+        {lien && (
+          <Link to={lien} onClick={onClose} className="inline-block mt-3 text-[12.5px] font-semibold text-primary hover:underline">
+            {lienLabel}
+          </Link>
+        )}
+      </div>
+    </div>
+  )
+}
+
+export default function ChatWidget() {
+  const { t, i18n } = useTranslation()
+  const [open, setOpen] = useState(false)
+  const [menuOuvert, setMenuOuvert] = useState(false)
+  const [modale, setModale] = useState(null) // apropos | confidentialite | aide | avis | infos
+  const [messages, setMessages] = useState([])
+  const [saisie, setSaisie] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [conversationId, setConversationId] = useState(null)
+  const fil = useRef(null)
+
+  useEffect(() => {
+    if (!open || messages.length) return
+    api(`/vitrine/chatbot/historique?session_id=${encodeURIComponent(sessionId())}`)
+      .then((d) => { setConversationId(d.conversation_id); setMessages(d.messages || []) })
+      .catch(() => {})
+  }, [open]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Défilement du SEUL conteneur du fil (jamais scrollIntoView : il faisait défiler
+  // toute la page et « déplaçait » le widget — bug signalé par la direction).
+  useEffect(() => {
+    if (fil.current) fil.current.scrollTop = fil.current.scrollHeight
+  }, [messages, open])
+
+  const envoyer = async () => {
+    const q = saisie.trim()
+    if (!q || loading) return
+    setSaisie('')
+    setLoading(true)
+    setMessages((m) => [...m, { id: 'tmp', question: q, reponse: null }])
+    try {
+      const d = await api('/vitrine/chatbot/message', {
+        session_id: sessionId(), message: q, conversation_id: conversationId,
+        langue: i18n.language?.startsWith('en') ? 'en' : 'fr',
+      })
+      setConversationId(d.conversation_id)
+      setMessages((m) => m.map((x) => x.id === 'tmp' ? { id: d.message_id, question: q, reponse: d.reponse, utile: null } : x))
+    } catch {
+      setMessages((m) => m.map((x) => x.id === 'tmp' ? { ...x, reponse: t('vitrine.chatbot.erreur') } : x))
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const noter = async (id, utile) => {
+    setMessages((m) => m.map((x) => x.id === id ? { ...x, utile } : x))
+    try { await api('/vitrine/chatbot/feedback', { message_id: id, session_id: sessionId(), utile }) } catch { /* silencieux */ }
+  }
+
+  // 20/07 : présence de l'ÉQUIPE HUMAINE (Makila, lui, répond 24h/24).
+  // Chargée une fois à l'affichage ; si l'appel échoue, pas de badge — ne
+  // jamais annoncer « hors ligne » sur une simple erreur réseau.
+  const [equipe, setEquipe] = useState(null)
+  useEffect(() => {
+    api('/vitrine/chatbot/statut')
+      .then((d) => setEquipe(d))
+      .catch(() => setEquipe(null))
+  }, [])
+
+  const MENU = [
+    { cle: 'apropos', lien: '/qui-sommes-nous' },
+    { cle: 'confidentialite', lien: '/confidentialite' },
+    { cle: 'aide', lien: '/aide' },
+    { cle: 'avis', lien: null },
+  ]
+
+  return (
+    <>
+      {/* Badge « équipe hors ligne » (20/07) : informatif seulement — le chat
+          reste ouvert et Makila répond normalement. */}
+      {!open && equipe && equipe.equipe_en_ligne === false && (
+        <div className="fixed bottom-21 right-5 z-[89] max-w-[240px] rounded-2xl rounded-br-sm bg-card border border-edge shadow-lg px-3.5 py-2.5">
+          <p className="text-xs font-semibold text-ink flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-warning inline-block" />
+            {t('vitrine.chatbot.equipe_hors_ligne')}
+          </p>
+          <p className="text-2xs text-dim mt-0.5">
+            {t('vitrine.chatbot.equipe_reprise', { heure: equipe.reprise_heure })}
+          </p>
+        </div>
+      )}
+
+      <button onClick={() => setOpen((v) => !v)} aria-label={t('vitrine.chatbot.ouvrir')}
+              className="fixed bottom-5 right-5 z-[90] w-13 h-13 p-3.5 rounded-full bg-primary text-inverse shadow-lg hover:bg-primary-600 transition"
+              style={{ marginBottom: 'env(safe-area-inset-bottom)' }}>
+        {open ? <X size={22} /> : <MessageCircle size={22} />}
+      </button>
+
+      {open && (
+        <div className="fixed bottom-21 right-5 z-[90] w-[min(92vw,360px)] h-[min(70vh,500px)] bg-card border border-edge rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+          {/* Header fixe : nom + signature + menu + information */}
+          <div className="px-4 py-3 bg-inset text-ink flex items-start justify-between gap-2" data-theme="dark">
+            <div className="min-w-0">
+              <p className="font-display font-bold text-[15px]">{t('vitrine.chatbot.titre')}</p>
+              <p className="text-[11px] text-dim">{t('vitrine.chatbot.signature')}</p>
+            </div>
+            <div className="flex items-center gap-0.5 flex-none">
+              <button onClick={() => setModale('infos')} aria-label={t('vitrine.chatbot.infos_titre')}
+                      className="p-1.5 rounded-lg text-dim hover:text-ink transition"><Info size={16} /></button>
+              <button onClick={() => setMenuOuvert((v) => !v)} aria-label="Menu"
+                      className="p-1.5 rounded-lg text-dim hover:text-ink transition"><Menu size={16} /></button>
+            </div>
+          </div>
+
+          {/* Menu déroulant */}
+          {menuOuvert && (
+            <div className="absolute right-2 top-12 z-20 bg-card border border-edge rounded-xl shadow-xl py-1.5 w-56">
+              {MENU.map(({ cle }) => (
+                <button key={cle} onClick={() => { setMenuOuvert(false); setModale(cle) }}
+                        className="w-full text-left px-3.5 py-2 text-[13px] text-dim hover:bg-subtle hover:text-ink transition">
+                  {t(`vitrine.chatbot.menu_${cle}`)}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Fil de discussion */}
+          <div ref={fil} className="flex-1 overflow-y-auto p-3 space-y-3" onClick={() => setMenuOuvert(false)}>
+            {messages.length === 0 && (
+              <div className="bg-subtle rounded-xl rounded-tl-sm px-3 py-2.5 text-[13px] text-ink max-w-[90%] whitespace-pre-line">
+                {t('vitrine.chatbot.accueil')}
+              </div>
+            )}
+            {messages.map((m, i) => (
+              <div key={m.id + i} className="space-y-2">
+                <div className="flex justify-end">
+                  <div className="bg-primary text-inverse rounded-xl rounded-tr-sm px-3 py-2.5 text-[13px] max-w-[85%]">{m.question}</div>
+                </div>
+                {m.reponse === null ? (
+                  <div className="bg-subtle rounded-xl rounded-tl-sm px-3 py-2.5 text-[13px] text-ghost max-w-[85%]">…</div>
+                ) : (
+                  <div className="max-w-[85%]">
+                    <div className="bg-subtle rounded-xl rounded-tl-sm px-3 py-2.5 text-[13px] text-ink whitespace-pre-line">{m.reponse}</div>
+                    {m.id !== 'tmp' && (
+                      <div className="flex gap-1 mt-1 pl-1">
+                        <button onClick={() => noter(m.id, true)} aria-label={t('vitrine.chatbot.utile')}
+                                className={'p-1 rounded transition ' + (m.utile === true ? 'text-primary' : 'text-ghost hover:text-primary')}>
+                          <ThumbsUp size={13} />
+                        </button>
+                        <button onClick={() => noter(m.id, false)} aria-label={t('vitrine.chatbot.inutile')}
+                                className={'p-1 rounded transition ' + (m.utile === false ? 'text-danger' : 'text-ghost hover:text-danger')}>
+                          <ThumbsDown size={13} />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Saisie */}
+          <div className="p-2.5 border-t border-edge flex gap-2">
+            <input value={saisie} onChange={(e) => setSaisie(e.target.value)}
+                   onKeyDown={(e) => { if (e.key === 'Enter') envoyer() }}
+                   placeholder={t('vitrine.chatbot.placeholder')}
+                   className="flex-1 rounded-xl px-3 py-2.5 text-[13px] outline-none text-ink bg-subtle border border-edge placeholder:text-ghost focus:border-primary transition" />
+            <button onClick={envoyer} disabled={loading || !saisie.trim()} aria-label={t('vitrine.chatbot.envoyer')}
+                    className="px-3.5 rounded-xl bg-primary text-inverse hover:bg-primary-600 transition disabled:opacity-50">
+              <Send size={16} />
+            </button>
+          </div>
+
+          {/* Fenêtres légères */}
+          {modale === 'infos' && (
+            <ModaleLegere titre={t('vitrine.chatbot.infos_titre')} texte={t('vitrine.chatbot.infos_texte')}
+                          lien="/confidentialite" lienLabel={t('vitrine.chatbot.lire_suite')} onClose={() => setModale(null)} />
+          )}
+          {MENU.map(({ cle, lien }) => modale === cle && (
+            <ModaleLegere key={cle} titre={t(`vitrine.chatbot.menu_${cle}`)} texte={t(`vitrine.chatbot.modal_${cle}`)}
+                          lien={lien} lienLabel={lien ? t('vitrine.chatbot.lire_suite') : null} onClose={() => setModale(null)} />
+          ))}
+        </div>
+      )}
+    </>
+  )
+}
