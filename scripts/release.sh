@@ -144,7 +144,13 @@ release_apk() {
   [[ -f "$apk" ]] || die "APK introuvable après build : $apk"
 
   scp -q "$apk" "$VPS:$SITE_DIR/$site_apk"
-  vps "cp $SITE_DIR/$site_apk $SITE_DIR/Gextimo-v1.0.apk"   # garde le lien vitrine à jour
+  # Le site pointe vers /Gextimo.apk — c'est CE nom qu'il faut rafraîchir.
+  # Il ne l'était pas : le script ne mettait à jour que « Gextimo-v1.0.apk »,
+  # si bien que le bouton de téléchargement de la vitrine servait encore, le
+  # 20/07, un APK du 16 juillet. Les deux noms sont désormais publiés — l'ancien
+  # est conservé parce que des liens et des QR codes le référencent peut-être.
+  vps "cp $SITE_DIR/$site_apk $SITE_DIR/Gextimo.apk"
+  vps "cp $SITE_DIR/$site_apk $SITE_DIR/Gextimo-v1.0.apk"
 
   note="$(build_note)"; [[ -n "$note" ]] || note="• Améliorations et corrections diverses"
   note_b64="$(printf '%s' "$note" | sed ':a;N;$!ba;s/\n/\\n/g' | base64 -w0)"

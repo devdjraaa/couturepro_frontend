@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import SplashDemarrage from '@/components/layout/SplashDemarrage'
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { setDeepLinkNavigator } from '@/utils/deepLink'
 import AppUpdateGate from '@/components/AppUpdateGate'
@@ -143,6 +144,14 @@ export default function App() {
   return (
     <>
       <AppUpdateGate />
+
+      {/* SUG-1 — ouverture « favicon → logo → connexion ». Monté à la RACINE :
+          dans AppLayout il se remonterait à chaque navigation. Une fois par
+          session, passable, et rien du tout si l'utilisateur a demandé moins
+          d'animations. Porte aussi l'habillage saisonnier (brief 16/07 pt 6),
+          dont le socle serveur n'était appelé par aucun écran. */}
+      {APP_TARGET !== 'admin' && <SplashDemarrage />}
+
       <Routes>
 
         {/* ── Routes admin ────────────────────────────────────────────── */}
