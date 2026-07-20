@@ -18,6 +18,8 @@ export const QUERY_KEYS = {
   points:               ['points'],
   pointsHistory:        ['points', 'historique'],
   notifications:        ['notifications'],
+  infos:              ['infos'],
+  infosCount:         ['infos', 'count'],
   notificationsCount:   ['notifications', 'count'],
   quota:                ['quota'],
   tickets:              ['tickets'],

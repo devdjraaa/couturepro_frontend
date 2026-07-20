@@ -17,7 +17,7 @@ import {
   CommandesPage, CommandeDetailPage, NouvelleCommandePage,
   NouvelleCommandeGroupeePage, CommandeGroupeDetailPage,
   AtelierPage, CataloguePage, EquipePage, PointsPage,
-  NotificationsPage, ParametresPage, CommunicationsPage,
+  NotificationsPage, InfosPage, ParametresPage, CommunicationsPage,
   SupportPage, SupportTicketDetailPage, ThemePage,
 } from '@/pages'
 import PaiementRetourPage     from '@/pages/PaiementRetourPage'
@@ -76,6 +76,7 @@ import CodesPromoPage          from '@/pages/admin/CodesPromoPage'
 import ListeNoirePage          from '@/pages/admin/ListeNoirePage'
 import AuditPage               from '@/pages/admin/AuditPage'
 import AdminNotificationsPage  from '@/pages/admin/AdminNotificationsPage'
+import AdminInfosPage         from '@/pages/admin/AdminInfosPage'
 import DiagnosticPage           from '@/pages/admin/DiagnosticPage'
 import AdminParametresPage    from '@/pages/admin/AdminParametresPage'
 import AdminsPage             from '@/pages/admin/AdminsPage'
@@ -183,6 +184,7 @@ export default function App() {
           <Route path="/admin/liste-noire"      element={<ListeNoirePage />} />
           <Route path="/admin/audit"            element={<AuditPage />} />
           <Route path="/admin/notifications"    element={<AdminNotificationsPage />} />
+          <Route path="/admin/infos"            element={<AdminInfosPage />} />
           <Route path="/admin/diagnostic"       element={<DiagnosticPage />} />{/* P110-111 */}
           <Route path="/admin/parametres"       element={<AdminParametresPage />} />
           <Route path="/admin/admins"           element={<AdminsPage />} />
@@ -263,6 +265,7 @@ export default function App() {
           <Route path={ROUTES.POINTS}           element={<PointsPage />}         />
           <Route path={ROUTES.EQUIPE}           element={<EquipePage />}         />
           <Route path={ROUTES.NOTIFICATIONS}    element={<NotificationsPage />}  />
+          <Route path={ROUTES.INFOS}            element={<InfosPage />}          />
           <Route path={ROUTES.PARAMETRES}       element={<ParametresPage />}     />
           <Route path={ROUTES.PROFIL}           element={<ProfilPage />}          />
           <Route path={ROUTES.COMMUNICATIONS}   element={<CommunicationsPage />} />
