@@ -20,11 +20,12 @@
     --info:#5B6470; --info-bg:#ECEEF1;
     --back:#0F766E; --back-bg:#DCF2EF;
     --front:#7C3AED; --front-bg:#EFE7FD;
+    --dir:#B45309;   --dir-bg:#FDF0DC;
   }
   :root[data-theme="dark"]{
     --page:#12100E; --card:#1B1815; --ink:#F2EDE6; --gris:#9C9186; --edge:#2E2822; --inset:#221E1A;
     --done-bg:#12301F; --part-bg:#332708; --bug-bg:#331B0F; --todo-bg:#26221E; --spec-bg:#111F3A; --info-bg:#20242A;
-    --back-bg:#0C2422; --front-bg:#1F1533;
+    --back-bg:#0C2422; --front-bg:#1F1533; --dir-bg:#2A1C08;
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--page);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:14px;line-height:1.5}
@@ -89,6 +90,8 @@
   .own{font-size:10px;font-weight:800;border-radius:5px;padding:2px 7px;letter-spacing:.3px;white-space:nowrap}
   .o-back{color:var(--back);background:var(--back-bg)}
   .o-front{color:var(--front);background:var(--front-bg)}
+  .o-dir{color:var(--dir);background:var(--dir-bg)}
+  .subbar.d i{background:var(--dir)}
   .foot{text-align:center;color:var(--gris);font-size:11.5px;margin-top:22px}
 </style>
 </head>
@@ -96,7 +99,7 @@
 
 <header class="top">
   <div class="in">
-    <h1>Gextimo — Suivi v2<small>Retours direction · juillet 2026 · backend / frontend séparés</small></h1>
+    <h1>Gextimo — Suivi v2<small>Ce qui reste à faire · juillet 2026 · technique (backend / frontend) et direction</small></h1>
     <div class="kpi">
       <div class="n" id="kpiCount">0<span id="kpiTot"> / 0</span></div>
       <div class="bar"><i id="kpiBar" style="width:0%"></i></div>
@@ -106,15 +109,16 @@
   <div class="subbars">
     <div class="subbar b"><div class="lbl"><span>Backend</span><span id="lblBack">0 / 0</span></div><div class="bar"><i id="barBack" style="width:0%"></i></div></div>
     <div class="subbar f"><div class="lbl"><span>Frontend (Aquilas)</span><span id="lblFront">0 / 0</span></div><div class="bar"><i id="barFront" style="width:0%"></i></div></div>
+    <div class="subbar d"><div class="lbl"><span>Direction (Patrick)</span><span id="lblDir">0 / 0</span></div><div class="bar"><i id="barDir" style="width:0%"></i></div></div>
   </div>
 </header>
 
 <div class="wrap">
 
   <div class="note">
-    <p><b>Comment lire cette page.</b> Le badge de droite est le <b>statut constaté dans le code</b> (audit du 19/07). La case à cocher, c'est la <b>validation de la direction</b> : coche quand tu considères le point comme réglé.</p>
-    <p>Chaque ligne porte son responsable : <span class="own o-back">BACK</span> ou <span class="own o-front">FRONT</span>. Utilise les filtres pour n'afficher qu'une seule couche.</p>
-    <p>Le détail complet est dans <b>SUIVI_BACKEND.md</b> et <b>SUIVI_FRONTEND.md</b>.</p>
+    <p><b>Comment lire cette page.</b> Elle ne montre plus que <b>ce qui reste à faire</b> — les points livrés en sont retirés au fur et à mesure. Le badge de droite est le statut constaté ; la case à cocher est votre validation.</p>
+    <p>Trois volets : <span class="own o-back">BACK</span> et <span class="own o-front">FRONT</span> sont pris en charge par l'équipe technique ; <span class="own o-dir">DIRECTION</span> regroupe les <b>réglages et arbitrages que Patrick fait lui-même</b> depuis l'administration, sans développeur. Les filtres n'affichent qu'un volet à la fois.</p>
+    <p>Le mode d'emploi détaillé du volet Direction est dans <b>POUR_LA_DIRECTION.md</b>. Le détail technique reste dans <b>SUIVI_BACKEND.md</b> et <b>SUIVI_FRONTEND.md</b>.</p>
     <div class="stats" id="auditStats"></div>
   </div>
 
@@ -129,9 +133,10 @@
     </div>
     <div class="sep"></div>
     <div class="chips" id="ownerChips">
-      <button class="chip" data-o="all" aria-pressed="true">2 couches</button>
+      <button class="chip" data-o="all" aria-pressed="true">Tout</button>
       <button class="chip" data-o="back" aria-pressed="false">Backend</button>
       <button class="chip" data-o="front" aria-pressed="false">Frontend</button>
+      <button class="chip" data-o="dir" aria-pressed="false">Direction (Patrick)</button>
     </div>
     <div class="sep"></div>
     <input type="password" id="codeIn" inputmode="numeric" maxlength="6" placeholder="code" style="display:none;width:88px" />
@@ -141,7 +146,7 @@
 
   <div id="blocks"></div>
 
-  <p class="foot">Statuts posés après audit du code réel. Mise à jour au fil des livraisons.</p>
+  <p class="foot">Les points livrés sont retirés de cette page au fur et à mesure : ce qui s'affiche est ce qui reste. Statuts posés après lecture du code réel.</p>
 </div>
 
 <script>
@@ -157,7 +162,8 @@ const GROUPS = {
   7:'Studio Vidéos & Support',
   8:'Reliquat ouvert',
   9:'Avis v2 — décisions du 20/07 (avis par modèle)',
-  10:'Reliquat re-trié (consolidation du 20/07)'
+  10:'Reliquat re-trié (consolidation du 20/07)',
+  11:'À faire par la direction — dans l\'administration'
 };
 const SLABEL = {done:'Fait',part:'Partiel',bug:'Bug',todo:'À faire',spec:'Spec',info:'Info'};
 
@@ -169,166 +175,63 @@ const F = (n,ref,g,s,t)=>({id:'s70t'+n, ref, g, o:'front', s, t});
 // pour Aquilas. L'identifiant garde le préfixe s70t d'origine — le changer
 // réinitialiserait l'état déjà enregistré côté serveur.
 const L = (n,ref,g,s,t)=>({id:'s70t'+n, ref, g, o:'back',  s, t});
+// D = direction (série s80). Ce ne sont PAS des développements : ce sont des
+// réglages et des arbitrages que Patrick fait lui-même depuis l'administration.
+// Il coche ici quand c'est fait. Le format d'identifiant reste `s<n>t<n>`,
+// contrainte du serveur qui enregistre l'état.
+const D = (n,ref,g,s,t)=>({id:'s80t'+n, ref, g, o:'dir',   s, t});
 
 const ITEMS = [
   // ---------- Sprint 02A ----------
-  F(1,'S02A-25',1,'done','Bouton d\'édition d\'un modèle : « Modifier » → « Enregistrer » (+ passer par les traductions, porter sur android)'),
-  F(2,'S02A-26',1,'done','Positionnement du bouton : pied de page collant dans le panneau, bouton principal qui défile hors écran'),
-  F(3,'S02A-26b',1,'done','Doublon : le bouton « Nouveau » de l\'état vide et le bouton flottant font la même action'),
-  B(1,'S02A-27',1,'done','Quota galerie piloté par l\'abonnement (lecture dynamique + endpoint de quota)'),
-  B(2,'S02A-27b',1,'done','Messages d\'upsell codés en dur à dériver de la configuration réelle'),
-  B(3,'S02A-28',1,'done','Configuration centralisée des abonnements (source unique de vérité, ~37 clés)'),
-  B(4,'S02A-28b',1,'done','Mapping « fonctionnalité → plan requis » en dur, sans lien avec la configuration'),
-  F(4,'S02A-28',1,'done','Limites de photos issues du plan (max_photos_vetement / max_photos_realisation). Au passage : le serveur n\'imposait AUCUNE limite sur les photos de modele — corrige'),
-  F(5,'S02A-28b',1,'done','Ecran admin des plans pilote par le referentiel serveur (libelle, type, unite) : plus de liste en dur qui derive a chaque migration'),
 
   // ---------- Sprint 08vC ----------
-  B(5,'S08C-29a',2,'done','Publication automatique des avis (plus d\'attente de validation)'),
-  B(6,'S08C-29b',2,'done','Le créateur modère ses propres avis (juge et partie) — route à supprimer'),
-  B(7,'S08C-29c',2,'done','Signalement d\'un avis public, sans authentification ni limitation → dépublication abusive'),
-  B(8,'S08C-29d',2,'done','Unicité des avis : aucune contrainte sur le chemin public'),
-  B(9,'S08C-29e',2,'done','Lier les avis aux collections (le lien n\'existe pas aujourd\'hui) — décision requise'),
-  F(6,'S08C-29',2,'done','Retirer l\'interface de modération des avis côté créateur'),
-  B(10,'S08C-30',2,'done','Exposer une liste de moyens de paiement unique et configurable'),
-  F(7,'S08C-30',2,'done','Facturation : n\'afficher que FedaPay (liste actuellement en dur)'),
-  B(11,'S08C-31',2,'done','Documentation du système de fidélité livrée (SYSTEME_FIDELITE.md)'),
-  B(12,'S08C-31b',2,'done','CLOS CÔTÉ DÉVELOPPEMENT (20/07) — défauts techniques corrigés (3 règles inexistantes retirées, permission points.convert, crédit actif aussi sur le chemin web, libellé corrigé) et paliers/gains rendus ÉDITABLES EN ADMIN : plus aucun redéploiement pour recalibrer. Il ne reste qu\'un arbitrage commercial de la direction — le programme est mathématiquement inatteignable en l\'état. Voir POUR_LA_DIRECTION.md'),
 
   // ---------- Workflow photos ----------
-  B(13,'PHOTO-1',3,'done','Contrôle qualité automatique à l\'envoi (netteté, luminosité, résolution, cadrage)'),
   F(8,'PHOTO-1',3,'todo','Retour qualité instantané et purement visuel (icône/couleur/animation, aucun texte)'),
-  B(14,'PHOTO-2',3,'done','Workflow artisan : publication immédiate + modération a posteriori'),
-  B(15,'PHOTO-3',3,'done','Workflow designer : fenêtre de confirmation admin de 24 h'),
-  L(9,'PHOTO-3',3,'done','FAIT (20/07) — décompte des 24 h sur chaque dossier (orange sous 6 h, rouge en retard, réévalué chaque minute) et retouche légère intégrée : rotation par quarts de tour, recadrage libre/carré/portrait/paysage, luminosité et contraste. Export à la RÉSOLUTION D\'ORIGINE'),
-  B(16,'PHOTO-4',3,'done','Quota designer : compteur de solde, décrément à l\'envoi, réattribution si refus/suppression'),
-  F(10,'PHOTO-4',3,'done','Affichage du solde, alerte à 80 %, blocage à 0 avec message et bouton d\'upgrade'),
-  B(17,'PHOTO-5',3,'done','Cycle de renouvellement : le 22 du mois à 00h00 (heure de Cotonou)'),
-  B(18,'PHOTO-6',3,'done','Statuts de suivi complets (contrôle auto, validée auto, refusée auto)'),
-  B(19,'PHOTO-7',3,'done','API de modération : compte à rebours, retouche, archivage de l\'original'),
-  L(11,'PHOTO-7',3,'done','FAIT (20/07) — après retouche la vignette montre la version publiée, avec une pastille « Original » qui ouvre la photo telle qu\'envoyée. Servie par une route ADMIN authentifiée, pas depuis /storage : une réalisation en attente n\'est pas publiée, et le canvas exige une image de même origine (aucun en-tête CORS sur /storage, vérifié en production)'),
 
   // ---------- Annonces ----------
-  B(20,'ANN-1',4,'done','Table « annonces » dédiée (titre, message, image, début, durée, statut)'),
-  L(12,'ANN-1',4,'done','SOCLE SERVEUR COMPLET (quota, création, image, boost, modération, diffusion) — il ne manque que l écran. Formulaire complet : titre, message, image, date de début, durée'),
-  B(21,'ANN-2',4,'done','Durée 1→10 jours, date de fin calculée côté serveur, publication gratuite'),
-  L(13,'ANN-2',4,'done','Sélecteur de durée par incrémentation (1 à 10 jours)'),
-  B(22,'ANN-3',4,'done','Limite d\'une annonce par jour et par designer'),
-  L(14,'ANN-3',4,'done','Blocage jusqu\'au lendemain + message d\'information sur le Boost'),
-  B(23,'ANN-4',4,'done','Historique des annonces + statuts (en cours / terminée / expirée / boostée)'),
-  L(15,'ANN-4',4,'done','Section « Historique » sous le formulaire avec les statuts'),
-  B(24,'ANN-5',4,'done','Boost : modèle de données + planification de la date de début'),
-  L(16,'ANN-5',4,'done','Bouton Boost discret + fenêtre modale (date + durée 1/3/7 jours)'),
-  B(25,'ANN-6',4,'done','Boost : tarification et encaissement (100 / 200 / 300 F)'),
-  L(17,'ANN-6',4,'done','Prix affiché automatiquement selon la durée, champ non modifiable'),
-  B(26,'ANN-7',4,'done','Diffusion trois fois par jour pendant le boost'),
   F(18,'ANN-7',4,'todo','Information « diffusée trois fois par jour » dans la modale'),
-  B(27,'ANN-8',4,'done','Flux public listant les annonces actives de tous les ateliers'),
   F(19,'ANN-8',4,'todo','Bande d\'annonces défilante en haut de l\'application (CSS déjà disponible)'),
-  B(28,'ANN-9',4,'done','Upload et exposition de l\'image de bannière'),
-  L(20,'ANN-9',4,'done','Rendu avec/sans bannière + bouton « Aperçu » avant publication'),
-  B(29,'ANN-10',4,'done','Modération des annonces — à arbitrer'),
 
-  // ---------- Abonnement créateurs ----------
-  B(30,'ABO-1',5,'done','Exiger un compte pour s\'abonner (rattacher l\'abonnement au client)'),
-  F(21,'ABO-1',5,'done','Vérification de session au clic sur « S\'abonner »'),
-  B(31,'ABO-2',5,'done','Socle d\'inscription à la volée (code e-mail + Google) déjà en place'),
-  L(22,'ABO-2',5,'done','DÉJÀ FAIT — statut périmé, vérifié le 20/07. Le module d\'inscription s\'ouvre de lui-même sur la page d\'atterrissage (rendu dès que la session est absente), e-mail seul via code + Google en option, et le compte n\'est créé qu\'APRÈS vérification du code (ClientAuthController::verifierOtp, firstOrNew puis save) — demander le code ne crée rien, donc aucun compte incomplet possible. La reprise d\'action après connexion fonctionne aussi (suivre_createur, laisser_avis), y compris pour un utilisateur déjà connecté'),
-  B(32,'ABO-3',5,'done','Session maintenue après création du compte'),
-  F(23,'ABO-4',5,'done','Reprise automatique de l\'abonnement après connexion (sans recliquer)'),
-  B(33,'ABO-5',5,'done','Consentement notifications distinct de l\'abonnement (APDP)'),
-  F(24,'ABO-5',5,'done','Case à cocher dédiée aux notifications, indépendante de l\'abonnement'),
-  B(34,'ABO-6',5,'done','Anti-abus : pas d\'auto-abonnement, comptage après validation e-mail, limitation de débit'),
-  F(25,'ABO-6',5,'done','Le message du serveur est desormais affiche (auto-abonnement, deja abonne)'),
-  B(35,'ABO-7',5,'done','API : liste des abonnements d\'un client + désabonnement'),
-  F(26,'ABO-7',5,'done','Espace client : section « Mes createurs suivis » avec desabonnement et bascule des notifications'),
-  B(36,'ABO-8',5,'done','Traçabilité : lien compte, statut actif/inactif, exploitation statistique'),
-  B(37,'ABO-9',5,'done','DÉCISION : que fait-on des abonnements anonymes existants ?'),
 
-  // ---------- Espace client ----------
-  B(38,'EC-1',6,'done','Session créée et persistante (le backend n\'est pas en cause dans le blocage)'),
-  F(27,'EC-1',6,'done','Session restaurée au chargement, purge si jeton invalide'),
-  F(28,'EC-2',6,'done','Ouverture automatique de l\'espace client après authentification'),
-  F(29,'EC-3',6,'done','PRIORITÉ — mécanisme générique de reprise de l\'action initiale après connexion'),
-  F(30,'EC-4',6,'done','Message d\'erreur clair si la reprise échoue (pas de blocage silencieux)'),
-  F(31,'EC-5',6,'done','Vérifier l\'enchaînement sur toutes les actions nécessitant un compte'),
-  B(39,'EC-5',6,'done','Favoris et abonnements inexistants en base → prérequis à la reprise d\'action'),
 
   // ---------- Studio vidéos & support ----------
   F(32,'VID-1',7,'part','PARTAGÉ. La LOGIQUE est faite (20/07) : reconnaissance YouTube/Vimeo/Dailymotion sous les formes réellement collées — lien court, Shorts, timestamp, paramètres de partage — extraction de l identifiant, lecture sur place, et un lien non reconnu reste un lien plutôt qu un cadre vide. RESTE POUR TOI : l habillage du lecteur, les cartes uniformes en grille'),
-  B(40,'VID-2',7,'done','Nombre maximum de vidéos par plan (1 / 3 / 5) — aujourd\'hui 50 en dur'),
-  F(33,'VID-2',7,'done','Compteur servi par /atelier-videos/quota (plafond du plan, corrections restantes) + statut de modération par vidéo'),
-  B(41,'VID-3',7,'done','Route de modification d\'une vidéo + compteur de corrections mensuelles'),
-  L(34,'VID-3',7,'done','Règles de modification selon le plan (remplacement auto, 1/mois, 2/mois)'),
-  B(42,'VID-4',7,'done','Import direct de fichier vidéo (stockage + traitement)'),
-  L(35,'VID-4',7,'done','Double entrée : lien YouTube ou import de fichier'),
-  B(43,'VID-5',7,'done','Validation obligatoire avant publication (24 h, refus → quota restitué)'),
-  L(36,'VID-5',7,'done','Statut « en attente » affiché côté créateur (fait) ; écran de validation admin restant'),
   F(37,'SUP-1',7,'todo','Encart d\'information permanent dans Support > Tickets'),
 
   // ---------- Reliquat ----------
-  B(44,'REL-1',8,'done','Correctif cache nginx — bloqué : le jeton du dépôt n\'a pas la portée « workflow »'),
-  B(45,'REL-2',8,'done','Pré-rendu SEO LIVRÉ et vérifié en prod (20/07) : nginx route les robots vers /api/vitrine/seo/render — titre PAR PAGE, description, canonique, OG, contenu réel (créateurs, profils). Humains inchangés. Titres éditables en admin (seo_pages)'),
   F(38,'REL-V1',8,'todo','Points vitrine encore ouverts (à basculer depuis l\'ancien fichier vitrine)'),
-  L(39,'REL-V2',8,'done','DÉJÀ FAIT — statut périmé corrigé le 20/07 : le pré-rendu SEO est en production, nginx route les robots vers /api/vitrine/seo/render et un Googlebot reçoit bien le contenu (titre par page, description, canonique, OG, liste des créateurs). Ne pas redévelopper'),
-  B(46,'REL-3',8,'done','FAIT (20/07) — cache traversant : en ligne on interroge le serveur et on écrit en local, hors ligne on sert le local. Plafond 100, brouillons et dossiers en attente conservés en priorité. LECTURE SEULE assumée : envoyer des photos hors ligne suppose une file de téléversement, un autre chantier. Repli uniquement sur panne RÉSEAU. Bandeau explicite quand la liste vient de l\'appareil'),
-  L(40,'REL-V3',8,'done','FAIT (20/07) — écran branché sur le cache, schéma WatermelonDB v6 + migration VÉRIFIÉE SUR APPAREIL (« Migrating from version 5 to 6… Migration successful »). Garde-fou ajouté au build : une migration mal formée ne casse pas le build, elle échoue à l\'ouverture de la base chez l\'utilisateur et WatermelonDB repart d\'une base VIDE. Le contrôle a rattrapé une corruption réelle ; testé sur 3 défauts injectés'),
-  L(41,'REL-V4',8,'done','FAIT ET VÉRIFIÉ (20/07) — fusion des branches puis test sur appareil réel : 4 OTA successives (1.0.94 à 1.0.97) appliquées, notifyAppReady appelé à chaque fois, AUCUN retour arrière'),
-  F(42,'REL-V5',8,'done','Composant Toaster jamais monté : 41 appels toast.success/error sans aucun effet dans toute l\'application (aucune confirmation ni erreur visible)'),
 
-  // ---------- Avis v2 (décisions direction 20/07) ----------
-  B(50,'AV2-BUG',9,'done','CORRECTIF PRIORITAIRE : un avis pouvait partir sans texte, sans message d\'erreur (texte facultatif côté serveur, erreurs avalées côté front). Trois champs obligatoires des deux côtés'),
-  B(51,'AV2-1',9,'done','Avis rattaché au MODÈLE (vetement_id) — piste « collection » abandonnée, 5 avis historiques conservés tels quels'),
-  B(52,'AV2-2',9,'done','Un seul avis par compte et par modèle (index unique en base + message clair)'),
-  B(53,'AV2-3',9,'done','Compte client obligatoire pour déposer un avis (401 auth_requise)'),
-  B(54,'AV2-7',9,'done','Signalement motivé : table dédiée, une empreinte = une voix, seuil configurable, motif grave = revue prioritaire immédiate. Jamais de dépublication automatique'),
-  B(55,'AV2-8',9,'done','Anti-spam : plafond d\'avis/jour par compte + refus du même texte re-publié (30 j)'),
-  B(56,'AV2-9',9,'done','Champ « achat vérifié » prêt en base — logique différée (décision direction)'),
-  B(57,'AV2-11',9,'done','Photos jointes validées par l\'admin AVANT publication (le texte publie immédiatement) ; photos existantes réputées validées'),
-  B(58,'AV2-12',9,'done','Mots bannis : liste éditable en admin (démarre vide), frontières de mots, avis publié mais marqué prioritaire — pas bloqué (faux positifs)'),
-  B(59,'AV2-ADM',9,'done','Admin : file priorisée (graves en tête), filtre photos en attente, réglages GET/PUT moderation-avis, rétablir purge les signalements'),
-  F(43,'AV2-F1',9,'done','Formulaire : choix du modèle obligatoire + validation des 3 champs + erreurs affichées'),
-  F(44,'AV2-F2',9,'done','Sans compte : avis mémorisé (texte compris), connexion expliquée, REJOUÉ automatiquement après connexion, retour au profil'),
-  F(45,'AV2-F3',9,'done','Signalement en un clic avec motif (4 choix) ; panneau créateur : un avis signalé reste publié en attendant l\'admin'),
-  L(46,'AV2-F4',9,'done','UI admin des réglages de modération (seuils, motifs, mots bannis) et de la file photos — parti pris visuel : Aquilas'),
 
-  // ---------- REL-4 débloqué ----------
-  B(47,'REL-4',8,'done','Éditer les mesures : CLOS le 20/07, testé de bout en bout sur appareil avec APK à jour (suggestions rapides, ajout de champ, saisie, enregistrement, réédition pré-remplie). Donnée de test nettoyée. Défaut trouvé pendant le test et corrigé : un enregistrement VIDÉ restait truthy -> écran dégradé + export CSV et partage WhatsApp de mesures inexistantes'),
-  F(47,'REL-4',8,'done','Éditeur des mesures par modèle + panneau MesuresInline dans la commande (fusion, jamais d\'écrasement). TESTÉ SUR TÉLÉPHONE le 20/07 : libellés → panneau 0/2 → saisie → fiche client en base → pré-rempli 2/2. Données de test purgées'),
 
-  // ---------- Groupe 10 : reliquat des anciens suivis, re-trié le 20/07 ----------
-  // (détail ligne par ligne : docs/CONSOLIDATION_GLOBALE.md — 17 points étaient
   //  en réalité déjà livrés, le reste est regroupé ici ou bloqué par un tiers)
   B(61,'QA-1',10,'part','EN COURS (20/07). VÉRIFIÉS FAITS : pt 11 newsletter, pt 46 consentement structuré, pt 47 nom en majuscules, pt 49 aucun anglais résiduel, pt 50-52 filigrane PDF + WhatsApp, pt 56 type de document, pt 75 historique des MAJ. LIVRÉ CE JOUR : pt 24 notifications du client final (l\'e-mail seul se perdait ; source de textes unique partagée avec l\'e-mail, 7 tests). ⚠️ UN CONSTAT MARQUÉ FAIT NE L\'ÉTAIT PAS : pt 55 liens sociaux — « instagram.com/x » devenait https://instagram.com/instagram.com/x, un lien mort, et le test vivait recopié six fois. Corrigé (17 cas). RESTENT : pt 25 messagerie client-créateur et pt 30 code promo client (décisions produit à cadrer), pt 67 onboarding 3 étapes (façade)'),
   F(48,'VIT-1',10,'todo','Structure vitrine (Aquilas) : menus header Solutions/Tarifs/Documentation, barre de contact fine, bulle retour vitrine, onboarding client et pro'),
   F(49,'VIT-2',10,'todo','Textes et retouches vitrine (Aquilas) : message de confiance, police, header auth, footer (tarif, liens, APDP), phrases d\'accroche, ordre Paramètres, « Bientôt » sur le non-prêt'),
-  B(62,'CLI-1',10,'todo','Modules côté client à cadrer puis développer : notifications, code promo, newsletter, historique des MAJ, messages officiels, bibliothèque photos catégorisée, détection pays/devise, vérification Designer (type de document)'),
+  B(62,'CLI-1',10,'part','LIVRÉ : historique des MAJ (« Quoi de neuf »), messages officiels (Gextimo Infos), notifications du client final, vérification Designer (type de document). RESTE : bibliothèque photos catégorisée, détection pays/devise. Newsletter côté admin écartée pour l\'instant — 0 inscrit en production, un écran d\'export pour zéro ligne serait prématuré'),
   B(63,'INF-1',10,'todo','Infra : Cloudflare phase 2 (proxy) + soumission Search Console dès réception des accès direction'),
-  B(64,'QA-2',10,'done','Bug « Se déconnecter ne fait rien » : le jeton n\'était jamais retiré du stockage ET une erreur serveur bloquait la déconnexion locale. Corrigé (20/07) + sélecteur pays drapeau+nom+indicatif trié, commission 0%→15%, casse Novafriq'),
   F(50,'VIT-3',10,'todo','Bannière Ma vitrine : recadrage interactif avant enregistrement (aperçu temps réel, déplacement dans le cadre, proportions conservées — façon LinkedIn/WhatsApp). Parti pris visuel : Aquilas, le back stocke le cadrage'),
-  B(65,'EVT-2',10,'done','DÉJÀ FAIT — statut périmé, vérifié le 20/07. Les 4 exigences sont en place : champ date de naissance sur les DEUX branches, overlay de coin (mode toast) avec 4 variantes d animation, mémorisation locale quotidienne, et priorité utilisateur 4000 > gextimo 3000 > national 2000 > marketing 1000. Reste le test grandeur nature de 3-4 jours, qui ne peut se faire qu à l usage'),
-  B(66,'CLI-2',10,'done','FAIT (20/07) — onglet distinct avec entrée de menu et pastille, 8 catégories configurables en admin (libellé/couleur/icône servis par l\'API, rien en dur à l\'écran), diffusion ciblée (tous / type de compte / formule / ville / ateliers précis) avec APERÇU DE PORTÉE avant envoi, programmation et expiration, épinglage. Défaut du socle corrigé : is_read était porté par la ligne diffusée — le premier lecteur masquait l\'annonce pour tous ; état de lecture désormais par atelier. Ciblage résolu côté serveur. 15 tests'),
-  B(67,'CLI-3',10,'done','FAIT (20/07) — bande d\'approche + chrono plein écran le jour J, tous deux refermables et auto-masqués après l\'échéance. Entièrement paramétrable en admin (date, heure, seuil d\'apparition, titres, textes à marqueurs {{jours}}, couleur, lien) : réutilisable pour toute annonce datée, inactif par défaut. Décompte en jours CALENDAIRES heure de Cotonou — un calcul en tranches de 24 h déclenchait le plein écran la veille au soir'),
 
   // ---------- Lot 2 direction (20/07) ----------
-  B(68,'L2-7',10,'done','BUG BLOQUANT commande groupée : le serveur exigeait vetement_id sur chaque sous-commande alors qu\'un article EST le vêtement. Rattachement au catalogue rendu facultatif ; le refus serveur, jusque-là avalé, est affiché'),
-  F(51,'L2-1',10,'done','Nom de famille forcé en MAJUSCULES à la saisie ; prénom en casse de présentation (Jean Michel Alain), tirets/apostrophes/accents gérés'),
-  F(52,'L2-2',10,'done','Case légale au format standard : « Conditions Générales d\'Utilisation » ET « Politique de confidentialité », deux liens distincts'),
-  B(69,'L2-CONSENT',10,'done','Consentements SEPARES : privacy_policy_accepted + _at + _version (tracabilite si la politique change) et newsletter_opt_in + _at. Jamais fusionnes, jamais precoches, aucune valeur retroactive. Desinscription par URL signee 90 j (sans connexion) + reglage dans le compte'),
-  B(70,'L2-PDF',10,'done','Filigrane REPETE en diagonale (7% opacite) + pied de page marque/site/telephone sur chaque page. utils/pdfBranding reutilisable par les autres exports ; API jsPDF verifiee a l\'execution'),
-  B(71,'L2-WA',10,'done','Cause trouvee : DEUX constructeurs de message concurrents produisaient des contenus differents selon le chemin. Source unique (utils/partageMesures) + bloc de signature + message explicite si aucune mesure'),
-  F(53,'L2-SOCIAL',10,'done','Saisie tolerante : @pseudo, pseudo, domaine ou URL complete donnent tous un lien qui s\'ouvre. Le cas « instagram.com/x » sans protocole est reconnu comme domaine (sinon URL absurde)'),
-  B(72,'L2-DOC',10,'done','Vérification Designer : champ « type de document » (carte d\'identité, registre de commerce, justificatif de domicile…) par pièce jointe, pour la modération'),
-  F(54,'L2-ARTICLE',10,'done','« Article » renomme « Type de vetement » dans tout le parcours commande (11 libelles x2 langues). La facturation garde « articles » au sens comptable : ce ne sont pas des vetements'),
-  B(48,'REL-5',8,'info','Relecture juridique des pages légales — tâche équipe'),
-  B(73,'REL-7',8,'done','Identité légale : les 11 pages juridiques affichaient EN PROD « [NUMÉRO RCCM : à compléter] », « [DATE, à compléter] », délibération APDP (12 FR + 12 EN). Valeurs déplacées dans VitrineSetting, éditables en admin ; toute ligne citant une valeur absente DISPARAÎT. Vérifié : 0 gabarit sur 11 pages. RESTE À LA DIRECTION : saisir RCCM/IFU/APDP le jour de l\'immatriculation'),
-  B(74,'REL-9',8,'done','Règles absolues : 24 textes français en dur retirés du JSX (7 avaient déjà une clé ailleurs — code qui redoublait la traduction), 40 emoji remplacés par des icônes lucide avec aria-label sur les notations, 11 fonds de palette claire qui restaient blancs en thème sombre alignés sur les jetons. Vérifié sur 17 pages en prod. Porté sur android, où le second constructeur WhatsApp vivait encore'),
-  B(75,'REL-8',8,'done','Deux APK : les saveurs partageaient le même applicationId (installer la console REMPLAÇAIT l\'app des pros). 4 défauts empilés corrigés — sed non ancré, build.gradle non restauré, icônes et nom recopiés dans le dossier PARTAGÉ src/main/res, google-services incomplet. La saveur admin a ses 17 ressources propres. Vérifié : les deux cohabitent sur l\'appareil'),
-  B(76,'REL-10',8,'done','OTA servie PAR APPLICATION : /api/app/updates renvoyait un bundle unique, si bien que la console admin téléchargeait celui des pros et se faisait remplacer par lui à chaque démarrage. Table indexée par identifiant de paquet, application absente = aucune OTA (cas sûr). Vérifié en prod : pros -> 1.0.90, admin -> vide'),
-  B(77,'SUG-1',8,'done','Écran de démarrage « favicon -> logo -> connexion » : le splash natif est une image figée qu Android pose en fond de fenêtre, ni animable ni datable. SplashDemarrage prend le relais dès que la WebView est prête (anneau tracé, point, mot, fondu). Au passage : l habillage saisonnier existait côté serveur mais AUCUN écran ne l appelait, et favicon.svg était un glyphe violet resté d un gabarit — c est lui qui s affichait dans les onglets'),
-  B(78,'REL-11',8,'done','Lien de téléchargement du site PÉRIMÉ : le site pointe vers /Gextimo.apk mais release.sh ne rafraîchissait que Gextimo-v1.0.apk. Le bouton de la vitrine servait un APK du 16 juillet. Script corrigé + lien rafraîchi immédiatement'),
-  B(79,'REL-12',8,'done','Trois jeux de réglages vivaient côté serveur SANS écran : périodes saisonnières et identité légale n avaient qu une route d écriture, la modération des avis n était reliée à rien. Lectures ajoutées + écran /admin/reglages-vitrine'),
-  B(80,'REL-13',8,'done','Analytique : le calcul existait côté serveur depuis le 16/07 et la collecte tournait, mais AUCUNE route ni entrée de menu ne menait à /admin/analytique — quatre jours de données illisibles. Écran livré : vue d ensemble, clients (dont les RECHERCHES SANS RÉSULTAT), créateurs, tendances. Ces chiffres viennent de NOS tables : disponibles sans clé GA4/Meta/Clarity, qui restent facultatives'),
-  B(49,'REL-6',8,'info','Clés externes (analytics, Search Console) — dépend de la direction')
+
+  // ---------- Volet DIRECTION (Patrick) ----------
+  // Ce ne sont pas des développements : tout est déjà en place et paramétrable.
+  // Ce sont des décisions et des saisies que Patrick fait lui-même depuis
+  // l'administration, sans passer par un développeur. Mode d'emploi complet
+  // dans POUR_LA_DIRECTION.md.
+  D(1,'DIR-1',11,'todo','BLOQUANT — Recalibrer le programme de fidélité (Réglages vitrine → Programme de fidélité). Le programme est mathématiquement inatteignable : les ateliers génèrent très peu de points face au premier palier, donc personne ne convertit. Deux leviers au choix : baisser les paliers, ou augmenter les gains par action. Repère : un palier doit s\'atteindre en quelques SEMAINES pour un atelier actif, pas en années'),
+  D(2,'DIR-2',11,'todo','BLOQUANT — Saisir l\'identité légale (Réglages vitrine → Identité légale) : RCCM, IFU, numéro de délibération APDP, dates. Tant qu\'un champ est vide, toute phrase qui le mentionne DISPARAÎT des 11 pages juridiques — choix assumé : mieux vaut une mention absente qu\'un « à compléter » affiché publiquement'),
+  D(3,'DIR-3',11,'todo','Régler le compte à rebours de lancement (Réglages vitrine → Compte à rebours). ÉTEINT par défaut : rien ne s\'affiche tant qu\'il n\'est pas activé. Bande d\'approche + chrono plein écran le jour J, textes et couleur libres, marqueurs {{jours}} / {{heures}}. Se masque tout seul une fois la date passée'),
+  D(4,'DIR-4',11,'todo','Publier le premier message « Gextimo Infos » (menu Gextimo Infos). Ciblage possible : tous, type de compte, formule, ville, ateliers précis. L\'écran affiche le NOMBRE DE DESTINATAIRES avant l\'envoi — s\'il est à zéro, une valeur de ciblage est mal saisie'),
+  D(7,'DIR-7',11,'todo','Vérifier les coordonnées officielles (Réglages vitrine → Coordonnées) : marque, site, téléphone. Elles apparaissent dans les PDF et les partages WhatsApp envoyés par les ateliers'),
+  D(8,'DIR-8',11,'todo','Décider des moyens de paiement proposés en facturation (Réglages vitrine → Moyens de paiement). Ne concerne NI la caisse NI les commandes, qui enregistrent comment le client a réellement payé sur place, espèces comprises'),
+  D(9,'DIR-9',11,'todo','Ajuster la modération des avis (Réglages vitrine → Modération des avis) : nombre d\'avis par jour, seuil de signalements avant retrait automatique, motifs graves, mots bannis'),
+  D(10,'DIR-10',11,'todo','Définir le mot de passe VASAT quand le produit sortira (Réglages vitrine → Accès VASAT). Le mot de passe n\'est jamais réaffiché : champ vide = on garde l\'actuel. Tant qu\'aucun n\'est défini, l\'accès reste fermé'),
+  D(11,'DIR-11',11,'todo','EN CONTINU — Entretenir « Quoi de neuf » (Réglages vitrine → Journal des mises à jour) à chaque livraison. Les mises à jour partent automatiquement, parfois plusieurs fois par jour : sans cette page les professionnels voient l\'application changer sans savoir quoi. 4 entrées déjà rédigées comme exemple du ton attendu — écrire pour un utilisateur d\'atelier, pas pour un développeur'),
+  D(12,'DIR-12',11,'todo','ARBITRAGE À RENDRE — Messagerie client ↔ créateur (module entier, non commencé). Qui écrit à qui ? La conversation est-elle rattachée à une commande ? Que se passe-t-il en cas d\'abus ? Rien ne peut être chiffré tant que ce n\'est pas tranché'),
+  D(13,'DIR-13',11,'todo','ARBITRAGE À RENDRE — Code promo côté client (non commencé). Qui finance la remise, Gextimo ou le créateur ? Elle porte sur quoi ? Cumulable avec autre chose ?'),
+  D(14,'DIR-14',11,'todo','Faire relire les pages légales par un juriste (mentions légales, CGU, CGV, confidentialité, cookies). Le texte se modifie dans Pages légales ; les numéros RCCM / IFU / APDP se saisissent dans Réglages vitrine → Identité légale'),
+  D(15,'DIR-15',11,'todo','Fournir les clés externes le jour d\'une campagne payante : GA4, Pixel Meta, Clarity, et l\'accès Search Console. FACULTATIF — l\'analytique interne tourne déjà sans elles et l\'écran /admin/analytique est alimenté')
 ];
 
 let state = { checked:{}, code:null, editing:false, filter:'all', owner:'all', q:'' };
@@ -339,7 +242,7 @@ function renderAuditStats(){
   const order=['done','part','bug','todo','spec','info'];
   const c={}; ITEMS.forEach(it=>c[it.s]=(c[it.s]||0)+1);
   const host=$('#auditStats');
-  host.innerHTML='<span style="font-size:11px;color:var(--gris);width:100%;margin-bottom:2px">Constaté dans le code ('+ITEMS.length+' lignes) :</span>';
+  host.innerHTML='<span style="font-size:11px;color:var(--gris);width:100%;margin-bottom:2px">Reste à traiter ('+ITEMS.length+' points) :</span>';
   order.forEach(s=>{ if(c[s]) host.appendChild(el('span','badge b-'+s,c[s]+' '+SLABEL[s])); });
 }
 
@@ -376,7 +279,7 @@ function render(){
       lab.appendChild(cb);
       const body = el('div','body');
       body.appendChild(el('div','t','<span class="id">'+it.ref+'</span>'+it.t));
-      body.appendChild(el('span','own o-'+it.o, it.o==='back'?'BACK':'FRONT'));
+      body.appendChild(el('span','own o-'+it.o, {back:'BACK',front:'FRONT',dir:'DIRECTION'}[it.o] || it.o.toUpperCase()));
       body.appendChild(el('span','badge b-'+es,SLABEL[es]));
       row.appendChild(lab); row.appendChild(body);
       items.appendChild(row);
@@ -395,13 +298,14 @@ function updateKpi(){
   const done = ITEMS.filter(it=>state.checked[it.id]).length;
   $('#kpiCount').firstChild.textContent = done;
   $('#kpiTot').textContent = ' / '+ITEMS.length;
-  $('#kpiBar').style.width = Math.round(done/ITEMS.length*100)+'%';
-  ['back','front'].forEach(o=>{
+  $('#kpiBar').style.width = Math.round(done/(ITEMS.length||1)*100)+'%';
+  // Trois volets. `|| 1` au dénominateur : un volet vidé de tous ses points
+  // donnerait sinon une largeur NaN et une barre qui disparaît.
+  [['back','Back'],['front','Front'],['dir','Dir']].forEach(([o,cap])=>{
     const l = ITEMS.filter(it=>it.o===o);
     const d = l.filter(it=>state.checked[it.id]).length;
-    const cap = o==='back'?'Back':'Front';
     $('#lbl'+cap).textContent = d+' / '+l.length;
-    $('#bar'+cap).style.width = Math.round(d/l.length*100)+'%';
+    $('#bar'+cap).style.width = Math.round(d/(l.length||1)*100)+'%';
   });
 }
 
