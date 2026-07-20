@@ -382,8 +382,9 @@
     "inconnu": "An unexpected error occurred.",
     "chargement": "Unable to load data. Check your connection.",
     "generique_titre": "Something went wrong",
-    "generique_description": "The app ran into a problem. Your local data is safe.",
-    "reessayer": "Try again"
+    "generique_description": "The app ran into a problem. Nothing you saved has been lost.",
+    "reessayer": "Try again",
+    "generique_description_natif": "The app ran into a problem. The data saved on this device is safe."
   },
   "auth": {
     "social": {

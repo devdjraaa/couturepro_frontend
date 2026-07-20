@@ -382,8 +382,9 @@
     "inconnu": "Une erreur inattendue s'est produite.",
     "chargement": "Impossible de charger les données. Vérifiez votre connexion.",
     "generique_titre": "Une erreur est survenue",
-    "generique_description": "L'application a rencontré un problème. Vos données locales sont conservées.",
-    "reessayer": "Réessayer"
+    "generique_description": "L'application a rencontré un problème. Rien de ce que vous avez enregistré n'est perdu.",
+    "reessayer": "Réessayer",
+    "generique_description_natif": "L'application a rencontré un problème. Vos données enregistrées sur cet appareil sont conservées."
   },
   "auth": {
     "social": {

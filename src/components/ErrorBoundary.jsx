@@ -44,7 +44,13 @@ export default class ErrorBoundary extends Component {
           {i18n.t('erreurs.generique_titre')}
         </h1>
         <p style={{ fontSize: '14px', color: '#666', maxWidth: '320px', margin: 0 }}>
-          {i18n.t('erreurs.generique_description')}
+          {/* Le message parlait de « données locales conservées » PARTOUT — or
+              sur le web il n'y a ni base locale ni mode hors ligne : la phrase
+              était fausse pour la moitié des utilisateurs. On dit maintenant ce
+              qui est vrai selon l'endroit où l'application tourne. */}
+          {i18n.t(window.Capacitor?.isNativePlatform?.()
+            ? 'erreurs.generique_description_natif'
+            : 'erreurs.generique_description')}
         </p>
         <button
           onClick={this.handleReset}
