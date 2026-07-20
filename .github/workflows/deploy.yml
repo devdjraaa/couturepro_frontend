@@ -115,18 +115,35 @@ jobs:
             sudo nginx -t; exit 1
           fi
 
-          if [ ! -d "/etc/letsencrypt/live/$DOMAIN" ]; then
-            if command -v certbot > /dev/null; then
-              echo "→ Génération SSL..."
-              sudo timeout 180 certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos -m dev.djraaa@gmail.com --redirect \
-                || echo "⚠️  certbot n'a pas abouti — le déploiement continue, le certificat sera repris au prochain passage"
-              echo "✅ SSL activé"
-            else
-              echo "⏭️  certbot absent"
-            fi
+          # ⚠️ La configuration écrite plus haut n'écoute QU'EN HTTP. Le bloc 443
+          # est ajouté par certbot, et il est donc EFFACÉ à chaque réécriture.
+          #
+          # La condition d'origine — « ne rien faire si le certificat existe » —
+          # partait du principe que certbot ne sert qu'à l'émission. C'est faux :
+          # il sert aussi à INSTALLER le certificat dans nginx. Résultat, le
+          # 20/07 : configuration réécrite, bloc 443 perdu, certbot sauté, plus
+          # rien n'écoutait en HTTPS pour le domaine — nginx retombait sur le
+          # site par défaut (l'API) et servait SON certificat. Site inaccessible.
+          #
+          # On appelle donc certbot À CHAQUE déploiement. L'opération est
+          # idempotente et ne consomme aucun quota Let's Encrypt quand le
+          # certificat est encore valide : il est simplement redéployé.
+          if command -v certbot > /dev/null; then
+            echo "→ Installation du certificat dans nginx…"
+            sudo timeout 180 certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos -m dev.djraaa@gmail.com --redirect \
+              || echo "⚠️  certbot n'a pas abouti — le site reste servi en HTTP, à reprendre"
           else
-            echo "→ SSL déjà présent"
+            echo "⏭️  certbot absent — le site ne sera servi qu'en HTTP"
           fi
+
+          # Garde-fou : on vérifie que le domaine écoute RÉELLEMENT en 443 avant
+          # de déclarer le déploiement réussi. Sans ce contrôle, la panne du
+          # 20/07 est passée inaperçue jusqu'à ce qu'un humain ouvre le site.
+          if ! sudo grep -q "listen 443" "$CONF_DEST"; then
+            echo "❌ Aucune écoute HTTPS pour $DOMAIN — le site serait inaccessible."
+            exit 1
+          fi
+          echo "✅ HTTPS en place"
           ENGNX
 
       - name: Deploy dist to VPS
