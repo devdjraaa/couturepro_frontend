@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Scissors, Spool, Shirt, Crown, Ruler, Palette, UserRound } from 'lucide-react'
 import { cn } from '@/utils/cn'
 
@@ -44,11 +45,20 @@ export default function Avatar({ nom, name, photo_url, src, avatar_index, size =
   const label = nom ?? name ?? ''
   const photo  = photo_url ?? src
 
-  if (photo) {
+  // Pt 91 — une photo dont le fichier a disparu affichait l'icône d'image
+  // cassée du navigateur, en plein milieu d'une liste de clients. On repasse
+  // alors sur les initiales, exactement comme si aucune photo n'était fournie :
+  // l'absence d'image est un état normal, pas une erreur à montrer.
+  const [photoCassee, setPhotoCassee] = useState(false)
+
+  useEffect(() => { setPhotoCassee(false) }, [photo])
+
+  if (photo && !photoCassee) {
     return (
       <img
         src={photo}
         alt={label}
+        onError={() => setPhotoCassee(true)}
         className={cn('rounded-[13px] object-cover shrink-0', sizes[size], className)}
       />
     )
