@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Archive, RotateCcw, User, ShoppingBag, Ruler } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { AppLayout } from '@/components/layout'
+import EmptyState from '@/components/ui/EmptyState'
 import { useArchives, useDesarchiver } from '@/hooks/useArchives'
 import { formatDate } from '@/utils/formatDate'
 
@@ -39,10 +40,11 @@ export default function ArchivesPage() {
         )}
 
         {!isLoading && archives.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-16 gap-3">
-            <Archive size={36} className="text-ghost" />
-            <p className="text-sm text-dim">{t('archives.vide')}</p>
-          </div>
+          <EmptyState
+            icon={Archive}
+            title={t('archives.vide_titre')}
+            description={t('archives.vide_description')}
+          />
         )}
 
         {archives.map(item => {
