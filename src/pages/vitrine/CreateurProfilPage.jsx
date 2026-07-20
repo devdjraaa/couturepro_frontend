@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { analyserLienVideo, estFichierVideo } from '@/utils/videoEmbed'
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { X, Heart, MessageCircle, Send, ShoppingBag, Award, Download, Lock, ImagePlus, Megaphone, Video, CheckCircle2, MapPin, Clock, Star, Flag } from 'lucide-react'
@@ -652,14 +653,48 @@ export default function CreateurProfilPage() {
         {Array.isArray(c.videos) && c.videos.length > 0 && (
           <>
             <h2 className="font-display text-2xl mt-10 mb-5 text-ink">{t('vitrine.profil.videos')}</h2>
-            <div className="flex flex-col gap-2">
-              {c.videos.map((v, i) => (
-                <a key={i} href={v.url} target="_blank" rel="noopener noreferrer"
-                   className="flex items-center gap-2 bg-card border border-edge rounded-xl px-3 py-2.5 text-sm text-primary hover:border-primary transition">
-                  <Video size={16} className="shrink-0" />
-                  <span className="truncate">{v.titre || v.url}</span>
-                </a>
-              ))}
+            {/* VID-1 : lecture SUR PLACE. Un lien sortant envoyait le visiteur
+                sur YouTube — il quittait la vitrine du créateur et ne revenait
+                pas forcément. Le lien non reconnu reste un lien : mieux vaut
+                cela qu'un cadre vide. */}
+            <div className="flex flex-col gap-3">
+              {c.videos.map((v, i) => {
+                const lu = analyserLienVideo(v.url)
+                const fichier = estFichierVideo(v.url)
+
+                if (fichier) {
+                  return (
+                    <figure key={i} className="rounded-xl overflow-hidden border border-edge bg-card">
+                      <video src={v.url} controls preload="metadata" className="w-full aspect-video bg-black" />
+                      {v.titre && <figcaption className="px-3 py-2 text-sm text-dim truncate">{v.titre}</figcaption>}
+                    </figure>
+                  )
+                }
+
+                if (lu) {
+                  return (
+                    <figure key={i} className="rounded-xl overflow-hidden border border-edge bg-card">
+                      <iframe
+                        src={lu.embed}
+                        title={v.titre || t('vitrine.profil.videos')}
+                        loading="lazy"
+                        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        className="w-full aspect-video border-0 bg-black"
+                      />
+                      {v.titre && <figcaption className="px-3 py-2 text-sm text-dim truncate">{v.titre}</figcaption>}
+                    </figure>
+                  )
+                }
+
+                return (
+                  <a key={i} href={v.url} target="_blank" rel="noopener noreferrer"
+                     className="flex items-center gap-2 bg-card border border-edge rounded-xl px-3 py-2.5 text-sm text-primary hover:border-primary transition">
+                    <Video size={16} className="shrink-0" aria-hidden="true" />
+                    <span className="truncate">{v.titre || v.url}</span>
+                  </a>
+                )
+              })}
             </div>
           </>
         )}

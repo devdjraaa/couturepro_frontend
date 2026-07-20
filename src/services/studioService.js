@@ -30,8 +30,27 @@ export const studioService = {
     const { data } = await api.get('/atelier-videos')
     return data
   },
-  async ajouterVideo(payload) {
-    const { data } = await api.post('/atelier-videos', payload)
+  // VID-4 : deux entrées possibles — lien OU fichier. Le serveur accepte les
+  // deux depuis le 19/07 (`required_without`), seul le champ manquait à l'écran.
+  // Un fichier impose multipart ; un lien reste du JSON.
+  async ajouterVideo({ titre, url, fichier }) {
+    if (fichier) {
+      const form = new FormData()
+      if (titre) form.append('titre', titre)
+      form.append('fichier', fichier)
+      const { data } = await api.post('/atelier-videos', form, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      return data
+    }
+    const { data } = await api.post('/atelier-videos', { titre, url })
+    return data
+  },
+  // VID-2 : le quota vient du serveur (il dépend du plan et exclut les vidéos
+  // refusées) — le compter côté client donnait un chiffre faux. Cette branche
+  // ne l'avait jamais reçu : l'écran annonçait « /50 » à tout le monde.
+  async quotaVideos() {
+    const { data } = await api.get('/atelier-videos/quota')
     return data
   },
   async retirerVideo(id) {

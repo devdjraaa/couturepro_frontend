@@ -4476,7 +4476,14 @@
       "statut": {
         "en_attente": "under review",
         "refusee": "rejected"
-      }
+      },
+      "remplacement": "Your plan allows a single video: the one you add will REPLACE the previous one.",
+      "delai": "An added video becomes visible after review, within {{h}} h.",
+      "lien_ou_fichier": "Paste a link or upload a file",
+      "importer": "Upload a video",
+      "fichier_choisi": "Chosen file: {{nom}}",
+      "lien_non_reconnu": "This link is not recognised as a video. It will stay a plain link, without embedded playback.",
+      "formats": "MP4, MOV or WebM · 100 MB maximum"
     }
   },
   "realisations": {

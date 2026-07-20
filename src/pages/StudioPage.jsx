@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { analyserLienVideo, estFichierVideo } from '@/utils/videoEmbed'
 import { useTranslation } from 'react-i18next'
 import toast from 'react-hot-toast'
-import { Plus, Trash2, Phone, Clock, Check, X, Megaphone, Calculator, Video, ExternalLink } from 'lucide-react'
+import { Plus, Trash2, Phone, Clock, Check, X, Megaphone, Calculator, Video, ExternalLink, Upload } from 'lucide-react'
 import { AppLayout } from '@/components/layout'
 import { TabBar, Button, EmptyState, Skeleton, Input } from '@/components/ui'
 import { FeatureGate } from '@/components/abonnement'
@@ -197,21 +198,27 @@ function AnnonceTab({ t }) {
 // PL-7 — Vidéos de présentation
 function VideosTab({ t }) {
   const [items, setItems] = useState(null)
+  const [quota, setQuota] = useState(null)
   const [form, setForm] = useState({ titre: '', url: '' })
+  const [fichier, setFichier] = useState(null)
   const [saving, setSaving] = useState(false)
+  const champFichier = useRef(null)
 
   const load = async () => {
     try { setItems(await studioService.videos()) } catch { setItems([]) }
+    try { setQuota(await studioService.quotaVideos()) } catch { setQuota(null) }
   }
   useEffect(() => { load() }, [])
 
   const ajouter = async (e) => {
     e.preventDefault()
-    if (!form.url.trim()) return
+    if (!form.url.trim() && !fichier) return
     setSaving(true)
     try {
-      await studioService.ajouterVideo(form)
+      await studioService.ajouterVideo({ ...form, fichier })
       setForm({ titre: '', url: '' })
+      setFichier(null)
+      if (champFichier.current) champFichier.current.value = ''
       load()
     } catch (err) {
       toast.error(err?.response?.data?.message || t('studio.erreur'))
@@ -229,10 +236,58 @@ function VideosTab({ t }) {
     <div className="space-y-4">
       <form onSubmit={ajouter} className="bg-card border border-edge rounded-xl p-4 space-y-3">
         <Input value={form.titre} onChange={e => setForm(f => ({ ...f, titre: e.target.value }))} placeholder={t('studio.videos.titre')} />
-        <Input value={form.url} onChange={e => setForm(f => ({ ...f, url: e.target.value }))} placeholder={t('studio.videos.url')} inputMode="url" />
+        <Input value={form.url} onChange={e => setForm(f => ({ ...f, url: e.target.value }))} placeholder={t('studio.videos.url')} inputMode="url" disabled={!!fichier} />
+
+        {/* VID-1 : on prévient TOUT DE SUITE qu'un lien non reconnu ne sera pas
+            lisible sur place, plutôt que de laisser découvrir un cadre vide. */}
+        {form.url.trim() && !analyserLienVideo(form.url) && !estFichierVideo(form.url) && (
+          <p className="text-2xs text-warning leading-relaxed">{t('studio.videos.lien_non_reconnu')}</p>
+        )}
+
+        {/* VID-4 : import direct — tous les créateurs n'ont pas de chaîne. */}
+        {!form.url.trim() && (
+          fichier ? (
+            <p className="text-2xs text-dim flex items-center justify-between gap-2">
+              <span className="truncate">{t('studio.videos.fichier_choisi', { nom: fichier.name })}</span>
+              <button type="button" onClick={() => { setFichier(null); if (champFichier.current) champFichier.current.value = '' }}
+                      className="text-ghost hover:text-danger shrink-0" aria-label={t('commun.retirer')}>
+                <X size={13} aria-hidden="true" />
+              </button>
+            </p>
+          ) : (
+            <label className="flex items-center justify-center gap-2 h-16 rounded-xl border border-dashed border-edge text-2xs text-ghost cursor-pointer hover:border-primary hover:text-primary transition">
+              <Upload size={14} aria-hidden="true" />
+              <span>{t('studio.videos.importer')}</span>
+              <input ref={champFichier} type="file" accept="video/mp4,video/quicktime,video/webm" className="hidden"
+                     onChange={e => setFichier(e.target.files?.[0] ?? null)} />
+            </label>
+          )
+        )}
+        <p className="text-2xs text-ghost text-center">{t('studio.videos.formats')}</p>
+
+        {/* VID-3 : la règle de REMPLACEMENT doit être dite AVANT l'envoi. Sans
+            cela, un créateur du plan Gratuit perd sa vidéo sans l'avoir voulu. */}
+        {quota?.corrections?.remplacement_auto && (
+          <p className="text-2xs text-warning leading-relaxed">{t('studio.videos.remplacement')}</p>
+        )}
+
         <Button type="submit" loading={saving} icon={Plus} className="w-full">{t('studio.videos.ajouter')}</Button>
       </form>
-      <p className="text-2xs text-ghost text-center">{t('studio.videos.aide', { n: items.length })}</p>
+      {/* VID-2 : plafond réel du plan (le libellé annonçait « /50 » à tout le
+          monde) et corrections restantes du mois, servis par /atelier-videos/quota. */}
+      <p className="text-2xs text-ghost text-center">
+        {quota
+          ? (quota.illimite
+              ? t('studio.videos.aide_illimite', { n: quota.utilise })
+              : t('studio.videos.aide', { n: quota.utilise, max: quota.max }))
+          : t('studio.videos.aide_chargement')}
+        {quota?.corrections?.max > 0 && (
+          <> · {t('studio.videos.corrections', { n: quota.corrections.restantes })}</>
+        )}
+        {quota?.delai_validation_h > 0 && (
+          <> · {t('studio.videos.delai', { h: quota.delai_validation_h })}</>
+        )}
+      </p>
 
       {items.length === 0 ? (
         <EmptyState icon={Video} title={t('studio.videos.vide')} description={t('studio.videos.vide_sous')} />
