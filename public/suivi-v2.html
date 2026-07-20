@@ -165,9 +165,9 @@ const F = (n,ref,g,s,t)=>({id:'s70t'+n, ref, g, o:'front', s, t});
 
 const ITEMS = [
   // ---------- Sprint 02A ----------
-  F(1,'S02A-25',1,'todo','Bouton d\'édition d\'un modèle : « Modifier » → « Enregistrer » (+ passer par les traductions, porter sur android)'),
-  F(2,'S02A-26',1,'bug','Positionnement du bouton : pied de page collant dans le panneau, bouton principal qui défile hors écran'),
-  F(3,'S02A-26b',1,'bug','Doublon : le bouton « Nouveau » de l\'état vide et le bouton flottant font la même action'),
+  F(1,'S02A-25',1,'done','Bouton d\'édition d\'un modèle : « Modifier » → « Enregistrer » (+ passer par les traductions, porter sur android)'),
+  F(2,'S02A-26',1,'done','Positionnement du bouton : pied de page collant dans le panneau, bouton principal qui défile hors écran'),
+  F(3,'S02A-26b',1,'done','Doublon : le bouton « Nouveau » de l\'état vide et le bouton flottant font la même action'),
   B(1,'S02A-27',1,'done','Quota galerie piloté par l\'abonnement (lecture dynamique + endpoint de quota)'),
   B(2,'S02A-27b',1,'done','Messages d\'upsell codés en dur à dériver de la configuration réelle'),
   B(3,'S02A-28',1,'done','Configuration centralisée des abonnements (source unique de vérité, ~37 clés)'),
@@ -181,9 +181,9 @@ const ITEMS = [
   B(7,'S08C-29c',2,'done','Signalement d\'un avis public, sans authentification ni limitation → dépublication abusive'),
   B(8,'S08C-29d',2,'done','Unicité des avis : aucune contrainte sur le chemin public'),
   B(9,'S08C-29e',2,'done','Lier les avis aux collections (le lien n\'existe pas aujourd\'hui) — décision requise'),
-  F(6,'S08C-29',2,'todo','Retirer l\'interface de modération des avis côté créateur'),
+  F(6,'S08C-29',2,'done','Retirer l\'interface de modération des avis côté créateur'),
   B(10,'S08C-30',2,'done','Exposer une liste de moyens de paiement unique et configurable'),
-  F(7,'S08C-30',2,'todo','Facturation : n\'afficher que FedaPay (liste actuellement en dur)'),
+  F(7,'S08C-30',2,'done','Facturation : n\'afficher que FedaPay (liste actuellement en dur)'),
   B(11,'S08C-31',2,'done','Documentation du système de fidélité livrée (SYSTEME_FIDELITE.md)'),
   B(12,'S08C-31b',2,'part','Corriger les anomalies de fidélité (3 règles annoncées inexistantes, crédit hors ligne uniquement…)'),
 
@@ -194,7 +194,7 @@ const ITEMS = [
   B(15,'PHOTO-3',3,'done','Workflow designer : fenêtre de confirmation admin de 24 h'),
   F(9,'PHOTO-3',3,'part','Écran de modération : compte à rebours 24 h + retouche légère avant validation'),
   B(16,'PHOTO-4',3,'done','Quota designer : compteur de solde, décrément à l\'envoi, réattribution si refus/suppression'),
-  F(10,'PHOTO-4',3,'todo','Affichage du solde, alerte à 80 %, blocage à 0 avec message et bouton d\'upgrade'),
+  F(10,'PHOTO-4',3,'done','Affichage du solde, alerte à 80 %, blocage à 0 avec message et bouton d\'upgrade'),
   B(17,'PHOTO-5',3,'done','Cycle de renouvellement : le 22 du mois à 00h00 (heure de Cotonou)'),
   B(18,'PHOTO-6',3,'done','Statuts de suivi complets (contrôle auto, validée auto, refusée auto)'),
   B(19,'PHOTO-7',3,'done','API de modération : compte à rebours, retouche, archivage de l\'original'),
@@ -223,11 +223,11 @@ const ITEMS = [
 
   // ---------- Abonnement créateurs ----------
   B(30,'ABO-1',5,'done','Exiger un compte pour s\'abonner (rattacher l\'abonnement au client)'),
-  F(21,'ABO-1',5,'todo','Vérification de session au clic sur « S\'abonner »'),
+  F(21,'ABO-1',5,'done','Vérification de session au clic sur « S\'abonner »'),
   B(31,'ABO-2',5,'done','Socle d\'inscription à la volée (code e-mail + Google) déjà en place'),
   F(22,'ABO-2',5,'todo','Ouverture automatique du module d\'inscription, e-mail seul, aucun compte incomplet'),
   B(32,'ABO-3',5,'done','Session maintenue après création du compte'),
-  F(23,'ABO-4',5,'todo','Reprise automatique de l\'abonnement après connexion (sans recliquer)'),
+  F(23,'ABO-4',5,'done','Reprise automatique de l\'abonnement après connexion (sans recliquer)'),
   B(33,'ABO-5',5,'done','Consentement notifications distinct de l\'abonnement (APDP)'),
   F(24,'ABO-5',5,'todo','Case à cocher dédiée aux notifications, indépendante de l\'abonnement'),
   B(34,'ABO-6',5,'done','Anti-abus : pas d\'auto-abonnement, comptage après validation e-mail, limitation de débit'),
@@ -241,21 +241,21 @@ const ITEMS = [
   B(38,'EC-1',6,'done','Session créée et persistante (le backend n\'est pas en cause dans le blocage)'),
   F(27,'EC-1',6,'done','Session restaurée au chargement, purge si jeton invalide'),
   F(28,'EC-2',6,'part','Ouverture automatique de l\'espace client après authentification'),
-  F(29,'EC-3',6,'todo','PRIORITÉ — mécanisme générique de reprise de l\'action initiale après connexion'),
-  F(30,'EC-4',6,'todo','Message d\'erreur clair si la reprise échoue (pas de blocage silencieux)'),
+  F(29,'EC-3',6,'done','PRIORITÉ — mécanisme générique de reprise de l\'action initiale après connexion'),
+  F(30,'EC-4',6,'done','Message d\'erreur clair si la reprise échoue (pas de blocage silencieux)'),
   F(31,'EC-5',6,'todo','Vérifier l\'enchaînement sur toutes les actions nécessitant un compte'),
   B(39,'EC-5',6,'part','Favoris et abonnements inexistants en base → prérequis à la reprise d\'action'),
 
   // ---------- Studio vidéos & support ----------
   F(32,'VID-1',7,'todo','Lecture intégrée : embed, contrôles complets, cartes uniformes en grille'),
   B(40,'VID-2',7,'done','Nombre maximum de vidéos par plan (1 / 3 / 5) — aujourd\'hui 50 en dur'),
-  F(33,'VID-2',7,'todo','Compteur visible (0/1, 2/3, 5/5)'),
+  F(33,'VID-2',7,'done','Compteur servi par /atelier-videos/quota (plafond du plan, corrections restantes) + statut de modération par vidéo'),
   B(41,'VID-3',7,'done','Route de modification d\'une vidéo + compteur de corrections mensuelles'),
   F(34,'VID-3',7,'todo','Règles de modification selon le plan (remplacement auto, 1/mois, 2/mois)'),
   B(42,'VID-4',7,'done','Import direct de fichier vidéo (stockage + traitement)'),
   F(35,'VID-4',7,'todo','Double entrée : lien YouTube ou import de fichier'),
   B(43,'VID-5',7,'done','Validation obligatoire avant publication (24 h, refus → quota restitué)'),
-  F(36,'VID-5',7,'todo','Statut « en attente de validation » côté créateur + écran de validation admin'),
+  F(36,'VID-5',7,'part','Statut « en attente » affiché côté créateur (fait) ; écran de validation admin restant'),
   F(37,'SUP-1',7,'todo','Encart d\'information permanent dans Support > Tickets'),
 
   // ---------- Reliquat ----------
@@ -265,6 +265,8 @@ const ITEMS = [
   F(39,'REL-V2',8,'todo','Pré-rendu SEO côté vitrine (métadonnées par page)'),
   B(46,'REL-3',8,'todo','« Mes Réalisations » : cache hors ligne côté application mobile'),
   F(40,'REL-V3',8,'todo','« Mes Réalisations » mobile : intégration de la couche hors ligne'),
+  F(41,'REL-V4',8,'bug','Branche android désalignée de master : 247 commits de retard côté web, 288 en propre. L\'app mobile n\'a pas les correctifs récents. Chantier à part (fusion + build APK + test appareil), pas un simple portage'),
+  F(42,'REL-V5',8,'done','Composant Toaster jamais monté : 41 appels toast.success/error sans aucun effet dans toute l\'application (aucune confirmation ni erreur visible)'),
   B(47,'REL-4',8,'todo','Flux « Éditer les mesures » (points 68-69) — test sur appareil requis'),
   B(48,'REL-5',8,'info','Relecture juridique des pages légales — tâche équipe'),
   B(49,'REL-6',8,'info','Clés externes (analytics, Search Console) — dépend de la direction')
