@@ -3,7 +3,17 @@ import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
 import { cn } from '@/utils/cn'
 
-export default function BottomSheet({ isOpen, onClose, title, children, className }) {
+/**
+ * Panneau glissant depuis le bas.
+ *
+ * `footer` : rangée d'actions COLLÉE en pied de panneau. Sans elle, les boutons
+ * « Annuler / Créer » se trouvent en fin de formulaire : sur un petit écran
+ * (360x640, très répandu au Bénin), il faut dérouler toute la saisie pour les
+ * atteindre, et la barre de navigation du système vient s'y superposer.
+ * Constaté par la direction, reproduit en QA le 20/07 sur la facturation où les
+ * boutons tombaient à 818 px pour un écran de 640.
+ */
+export default function BottomSheet({ isOpen, onClose, title, children, footer, className }) {
   useEffect(() => {
     if (!isOpen) return
     document.body.style.overflow = 'hidden'
@@ -54,8 +64,16 @@ export default function BottomSheet({ isOpen, onClose, title, children, classNam
             </button>
           </div>
         )}
-        {/* Body */}
-        <div className="flex-1 overflow-y-auto">{children}</div>
+        {/* Corps défilant */}
+        <div className="flex-1 overflow-y-auto min-h-0">{children}</div>
+
+        {/* Pied d'actions : toujours visible, au-dessus de la barre système. */}
+        {footer && (
+          <div className="shrink-0 border-t border-edge bg-card px-5 py-3
+                          pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+            {footer}
+          </div>
+        )}
       </div>
     </div>,
     document.body,

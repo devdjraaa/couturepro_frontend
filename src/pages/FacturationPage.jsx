@@ -148,7 +148,22 @@ function FormulaireModal({ onClose, onCreated }) {
   }
 
   return (
-    <BottomSheet isOpen onClose={onClose} title={t('facturation.modal.titre')}>
+    <BottomSheet
+      isOpen
+      onClose={onClose}
+      title={t('facturation.modal.titre')}
+      footer={
+        <div className="flex gap-2">
+          <button onClick={onClose} className="flex-1 px-4 py-2.5 rounded-xl border border-edge text-sm font-semibold text-dim hover:text-ink transition">
+            {t('commun.annuler')}
+          </button>
+          <button onClick={submit} disabled={saving}
+                  className="flex-1 px-5 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-600 transition disabled:opacity-60">
+            {saving ? t('facturation.modal.creation') : t('facturation.modal.creer')}
+          </button>
+        </div>
+      }
+    >
         <div className="p-5 space-y-4">
           {/* Type de document */}
           <div>
@@ -268,15 +283,6 @@ function FormulaireModal({ onClose, onCreated }) {
           {err && <p className="text-xs text-danger font-medium">{err}</p>}
         </div>
 
-        <div className="px-5 pb-5 flex justify-end gap-2">
-          <button onClick={onClose} className="px-4 py-2 rounded-xl border border-edge text-sm font-semibold text-dim hover:text-ink transition">
-            {t('commun.annuler')}
-          </button>
-          <button onClick={submit} disabled={saving}
-                  className="px-5 py-2 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-600 transition disabled:opacity-60">
-            {saving ? t('facturation.modal.creation') : t('facturation.modal.creer')}
-          </button>
-        </div>
     </BottomSheet>
   )
 }
