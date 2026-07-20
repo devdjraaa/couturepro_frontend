@@ -317,6 +317,8 @@ const ITEMS = [
   B(48,'REL-5',8,'info','Relecture juridique des pages légales — tâche équipe'),
   B(73,'REL-7',8,'done','Identité légale : les 11 pages juridiques affichaient EN PROD « [NUMÉRO RCCM : à compléter] », « [DATE, à compléter] », délibération APDP (12 FR + 12 EN). Valeurs déplacées dans VitrineSetting, éditables en admin ; toute ligne citant une valeur absente DISPARAÎT. Vérifié : 0 gabarit sur 11 pages. RESTE À LA DIRECTION : saisir RCCM/IFU/APDP le jour de l\'immatriculation'),
   B(74,'REL-9',8,'done','Règles absolues : 24 textes français en dur retirés du JSX (7 avaient déjà une clé ailleurs — code qui redoublait la traduction), 40 emoji remplacés par des icônes lucide avec aria-label sur les notations, 11 fonds de palette claire qui restaient blancs en thème sombre alignés sur les jetons. Vérifié sur 17 pages en prod. Porté sur android, où le second constructeur WhatsApp vivait encore'),
+  B(75,'REL-8',8,'done','Deux APK : les saveurs partageaient le même applicationId (installer la console REMPLAÇAIT l\'app des pros). 4 défauts empilés corrigés — sed non ancré, build.gradle non restauré, icônes et nom recopiés dans le dossier PARTAGÉ src/main/res, google-services incomplet. La saveur admin a ses 17 ressources propres. Vérifié : les deux cohabitent sur l\'appareil'),
+  B(76,'REL-10',8,'done','OTA servie PAR APPLICATION : /api/app/updates renvoyait un bundle unique, si bien que la console admin téléchargeait celui des pros et se faisait remplacer par lui à chaque démarrage. Table indexée par identifiant de paquet, application absente = aucune OTA (cas sûr). Vérifié en prod : pros -> 1.0.90, admin -> vide'),
   B(49,'REL-6',8,'info','Clés externes (analytics, Search Console) — dépend de la direction')
 ];
 
