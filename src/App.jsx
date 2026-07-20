@@ -130,7 +130,7 @@ export default function App() {
           session, passable, et rien du tout si l'utilisateur a demandé moins
           d'animations. Porte aussi l'habillage saisonnier (brief 16/07 pt 6),
           dont le socle serveur n'était appelé par aucun écran. */}
-      {APP_TARGET !== 'admin' && <SplashDemarrage />}
+      {!window.location.pathname.startsWith('/admin') && <SplashDemarrage />}
 
       <Routes>
 

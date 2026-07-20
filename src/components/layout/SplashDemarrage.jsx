@@ -25,7 +25,6 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { API_BASE_URL } from '@/constants/config'
 
-const CLE_SESSION = 'gx_splash_vu'
 const DUREE_MARQUE = 1500
 const DUREE_SAISON = 2300
 
@@ -42,11 +41,13 @@ export default function SplashDemarrage() {
   }
 
   useEffect(() => {
-    // Déjà vu dans cette session : on ne rejoue pas à chaque navigation.
-    try {
-      if (sessionStorage.getItem(CLE_SESSION)) return
-      sessionStorage.setItem(CLE_SESSION, '1')
-    } catch { return }
+    // Rejoué à CHAQUE chargement de page — au lancement de l'application comme
+    // au rechargement d'un onglet ou à l'arrivée par une URL directe. Ce
+    // composant étant monté à la racine, une navigation INTERNE ne le remonte
+    // pas : on ne le revoit donc pas en passant d'un écran à l'autre.
+    //
+    // (Un garde par `sessionStorage` avait été essayé : il survivait aux
+    // rechargements, si bien qu'on ne voyait l'ouverture qu'une fois par onglet.)
 
     // L'utilisateur a demandé qu'on lui épargne les animations : on n'insiste pas.
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches) return
