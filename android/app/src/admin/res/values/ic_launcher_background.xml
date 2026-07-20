@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fond de l'icône adaptative propre à la console interne (rouge sombre).
+     Déclaré PAR SAVEUR, plus écrasé dans src/main/res à chaque build. -->
+<resources>
+    <color name="ic_launcher_background">#991B1B</color>
+</resources>

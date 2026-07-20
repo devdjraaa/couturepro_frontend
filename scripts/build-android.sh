@@ -51,32 +51,18 @@ npx cap sync android
 # de cohabiter avec elle. Les saveurs restent maîtresses de leur identifiant.
 sed -i "0,/applicationId \"[^\"]*\"/s//applicationId \"$APP_ID\"/" android/app/build.gradle
 
-# 4c) Patcher le label affiché sur l'écran d'accueil
-sed -i "s|<string name=\"app_name\">[^<]*</string>|<string name=\"app_name\">$APP_NAME</string>|" android/app/src/main/res/values/strings.xml
-sed -i "s|<string name=\"title_activity_main\">[^<]*</string>|<string name=\"title_activity_main\">$APP_NAME</string>|" android/app/src/main/res/values/strings.xml
-
-# 4d) Copier les icônes du target dans les dossiers mipmap
-ICON_DIR="assets/icons/$TARGET"
-if [[ -d "$ICON_DIR" ]]; then
-  for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
-    src="$ICON_DIR/mipmap-$density"
-    dst="android/app/src/main/res/mipmap-$density"
-    if [[ -d "$src" && -d "$dst" ]]; then
-      cp "$src/ic_launcher.png"            "$dst/ic_launcher.png"
-      cp "$src/ic_launcher_round.png"      "$dst/ic_launcher_round.png"
-      cp "$src/ic_launcher_foreground.png" "$dst/ic_launcher_foreground.png"
-    fi
-  done
-  echo "🎨 Icônes $TARGET copiées dans les mipmaps"
-fi
-
-# 4e) Patcher la couleur de fond de l'adaptive icon
-if [[ "$TARGET" == "admin" ]]; then
-  BG_COLOR="#991B1B"
-else
-  BG_COLOR="#FFFFFF"
-fi
-sed -i "s|<color name=\"ic_launcher_background\">[^<]*</color>|<color name=\"ic_launcher_background\">$BG_COLOR</color>|" android/app/src/main/res/values/ic_launcher_background.xml
+# 4c-4e) SUPPRIMÉS (20/07) — nom, icônes et couleur de fond étaient recopiés
+# dans android/app/src/main/res, dossier PARTAGÉ par les deux saveurs, et jamais
+# restaurés ensuite. Le dépôt gardait donc l'identité de la dernière saveur
+# construite : après un build admin, l'app des professionnels serait sortie avec
+# l'icône rouge et le nom « Gextimo Admin ». C'est ce mécanisme qui avait déjà
+# fait disparaître l'applicationId distinct de la console (cf. build.gradle).
+#
+# Chaque saveur porte désormais ses propres ressources, et Gradle les applique
+# sans qu'aucun fichier partagé ne soit touché :
+#   android/app/src/gextimo/res/  (nom, icônes)
+#   android/app/src/admin/res/    (nom, icônes, couleur de fond)
+# Ajouter une saveur = créer son dossier res, plus rien à modifier ici.
 
 # 5) Build l'APK — RELEASE (signée) si keystore.properties présent, sinon debug.
 FLAVOR_CAP="$( [ "$TARGET" = admin ] && echo Admin || echo Gextimo )"

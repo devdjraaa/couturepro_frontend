@@ -7,12 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:655944068016:android:b1b3340363622b0ed7c475",
+        "mobilesdk_app_id": "1:655944068016:android:96eefb9c6d039eacd7c475",
         "android_client_info": {
-          "package_name": "com.couturepro.app"
+          "package_name": "com.couturepro.admin"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "655944068016-olnb0065ot3ndahjtoloaf89m10sdmt4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCe7RMCEDAzOIJveZiOG9lfx8XqkOQavwU"
@@ -20,7 +25,41 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "655944068016-olnb0065ot3ndahjtoloaf89m10sdmt4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:655944068016:android:b1b3340363622b0ed7c475",
+        "android_client_info": {
+          "package_name": "com.couturepro.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "655944068016-olnb0065ot3ndahjtoloaf89m10sdmt4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCe7RMCEDAzOIJveZiOG9lfx8XqkOQavwU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "655944068016-olnb0065ot3ndahjtoloaf89m10sdmt4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
