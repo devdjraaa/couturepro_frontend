@@ -301,12 +301,20 @@ export default function OutilsCreatifsPage() {
     } catch { /* silencieux */ }
   }
 
-  const handleShare = (item, imgUrl) => {
-    shareToInstagram({
+  const handleShare = async (item, imgUrl) => {
+    // Le retour était ignoré : sur un navigateur de bureau, où le partage natif
+    // n'existe pas, le bouton ne produisait rien du tout. On dit ce qui se passe.
+    const resultat = await shareToInstagram({
       imageUrl: imgUrl,
-      text: `${item.titre} — ${atelier?.nom || 'GEXTIMO'}`,
+      text: `${item.titre}, ${atelier?.nom || 'Gextimo'}`,
       instagramHandle: atelier?.instagram,
     })
+
+    if (resultat === 'unsupported') {
+      toast(t('outils_creatifs.partage_indisponible'), { duration: 5000 })
+    } else if (resultat === 'opened_profile') {
+      toast(t('outils_creatifs.partage_profil'), { duration: 4000 })
+    }
   }
 
   // Fiche technique → PDF structuré aux couleurs de l'atelier.

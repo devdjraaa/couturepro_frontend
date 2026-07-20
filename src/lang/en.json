@@ -2545,7 +2545,9 @@
       "moodboard_sous": "Collage your inspirations and note your color palette."
     },
     "vendre": "Sell",
-    "vendre_aide": "Open a catalog creation, then the Pattern section, to put it on sale."
+    "vendre_aide": "Open a catalog creation, then the Pattern section, to put it on sale.",
+    "partage_indisponible": "Direct sharing is not available in this browser. Download the image, or use the mobile app.",
+    "partage_profil": "Instagram opens on your profile: post the image from the app."
   },
   "sidebar": {
     "outils_creatifs": "Creative tools"
