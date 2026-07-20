@@ -39,6 +39,16 @@ export const reglagesVitrineAdminService = {
     return data?.compte_a_rebours ?? payload
   },
 
+  async getJournalMaj() {
+    const { data } = await adminApi.get('/vitrine/journal-maj')
+    return data?.entrees ?? []
+  },
+
+  async setJournalMaj(entrees) {
+    const { data } = await adminApi.put('/vitrine/journal-maj', { entrees })
+    return data?.entrees ?? entrees
+  },
+
   async getModerationAvis() {
     const { data } = await adminApi.get('/vitrine/moderation-avis')
     return data?.reglages ?? {}

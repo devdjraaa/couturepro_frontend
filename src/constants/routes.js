@@ -98,6 +98,7 @@ export const ROUTES = {
   PHOTOS_VIP:  '/photos-vip',
   REALISATIONS: '/realisations',
   HISTORIQUE:  '/historique',
+  QUOI_DE_NEUF: '/quoi-de-neuf',   // CLI-1 — journal des mises à jour
   FAQ:         '/faq',
   CONTACT:     '/contact',
   SUPPORT:          '/support',

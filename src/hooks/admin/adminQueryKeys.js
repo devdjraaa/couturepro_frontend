@@ -21,5 +21,6 @@ export const ADMIN_KEYS = {
   identiteLegale:   ['admin', 'identite-legale'],
   moderationAvis:   ['admin', 'moderation-avis'],
   compteRebours:    ['admin', 'compte-a-rebours'],
+  journalMaj:       ['admin', 'journal-maj'],
   analytique:       ['admin', 'analytique'],
 }

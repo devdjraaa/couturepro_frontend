@@ -1496,7 +1496,8 @@
     "studio": "Studio",
     "gestion_atelier": "Gestion d'atelier",
     "annonces": "Annonces",
-    "infos": "Gextimo Infos"
+    "infos": "Gextimo Infos",
+    "quoi_de_neuf": "Quoi de neuf"
   },
   "pwa": {
     "installer_titre": "Installer Gextimo",
@@ -4417,6 +4418,22 @@
       "confirmer_suppression": "Retirer cette info ?",
       "aucune": "Aucune info diffusée.",
       "aide": "Une info est un message éditorial vers les professionnels (annonce, nouveauté, astuce). À distinguer des notifications, qui signalent un événement sur l'atelier et appellent une action."
+    },
+    "journal_maj": {
+      "titre": "Journal des mises à jour",
+      "aide": "Ce que les professionnels lisent dans « Quoi de neuf ». Les publications étant automatiques, c'est ici qu'on décrit ce qui a changé — sinon l'application évolue sans que personne ne sache quoi.",
+      "vide": "Aucune entrée pour le moment.",
+      "ajouter": "Ajouter une entrée",
+      "entree": "Entrée {{n}}",
+      "version": "Version",
+      "date": "Date",
+      "type": "Type",
+      "type_nouveaute": "Nouveauté",
+      "type_amelioration": "Amélioration",
+      "type_correction": "Correction",
+      "champ_titre": "Titre",
+      "lignes": "Détails",
+      "lignes_aide": "Un point par ligne. Écrivez pour un utilisateur, pas pour un développeur."
     }
   },
   "bienvenue": {
@@ -4715,5 +4732,11 @@
     "vide_titre": "Aucune info pour le moment",
     "vide_desc": "Les annonces, nouveautés et astuces de l'équipe Gextimo apparaîtront ici.",
     "vide_categorie": "Aucune info dans cette catégorie."
+  },
+  "quoi_de_neuf": {
+    "titre": "Quoi de neuf",
+    "version": "Version {{v}}",
+    "vide_titre": "Rien à signaler pour l’instant",
+    "vide_desc": "Les nouveautés et corrections apportées à l’application apparaîtront ici."
   }
 }

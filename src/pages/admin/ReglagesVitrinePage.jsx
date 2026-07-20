@@ -7,6 +7,7 @@ import {
   useIdentiteLegale, useSetIdentiteLegale,
   useModerationAvis, useSetModerationAvis,
   useCompteRebours, useSetCompteRebours,
+  useJournalMaj, useSetJournalMaj,
 } from '@/hooks/admin/useReglagesVitrine'
 
 /**
@@ -69,6 +70,16 @@ export default function ReglagesVitrinePage() {
   })
   const [reboursSaved, setReboursSaved] = useState(false)
 
+  // CLI-1 — journal des mises à jour. Éditable ici parce que les publications
+  // sont AUTOMATIQUES au push : exiger un déploiement pour décrire une version
+  // reviendrait à ne jamais la décrire.
+  const majQ = useJournalMaj()
+  const setMaj = useSetJournalMaj()
+  const [maj, setLocalMaj] = useState([])
+  const [majSaved, setMajSaved] = useState(false)
+
+  useEffect(() => { if (majQ.data) setLocalMaj(majQ.data) }, [majQ.data])
+
   useEffect(() => { if (themesQ.data) setLocalThemes(themesQ.data) }, [themesQ.data])
   useEffect(() => { if (legalQ.data) setLocalLegal((v) => ({ ...v, ...legalQ.data })) }, [legalQ.data])
   useEffect(() => { if (modQ.data) setLocalMod((v) => ({ ...v, ...modQ.data })) }, [modQ.data])
@@ -129,6 +140,21 @@ export default function ReglagesVitrinePage() {
     })
     setReboursSaved(true)
     setTimeout(() => setReboursSaved(false), 1600)
+  }
+
+  const majEntree = (i, cle, val) =>
+    setLocalMaj((l) => l.map((e, idx) => (idx === i ? { ...e, [cle]: val } : e)))
+
+  const ajouterEntree = () => setLocalMaj((l) => [{
+    version: '', date: new Date().toISOString().slice(0, 10),
+    titre: '', type: 'nouveaute', lignes: [],
+  }, ...l])
+
+  const enregistrerMaj = async (e) => {
+    e.preventDefault()
+    await setMaj.mutateAsync(maj.map((x) => ({ ...x, lignes: (x.lignes ?? []).filter(Boolean) })))
+    setMajSaved(true)
+    setTimeout(() => setMajSaved(false), 1600)
   }
 
   const lignesVersTableau = (v) =>
@@ -255,6 +281,82 @@ export default function ReglagesVitrinePage() {
             {t('commun.enregistrer')}
           </button>
         </form>
+        {/* ── CLI-1 : journal des mises à jour ──────────────────────────── */}
+        <form onSubmit={enregistrerMaj} className="bg-card border border-edge rounded-2xl p-5">
+          <div className="flex items-center justify-between gap-3 mb-1">
+            <h2 className="text-sm font-semibold text-ink">{t('admin.journal_maj.titre')}</h2>
+            {majSaved && (
+              <span className="text-xs text-success font-medium inline-flex items-center gap-1">
+                <Check size={12} aria-hidden="true" />{t('commun.enregistre')}
+              </span>
+            )}
+          </div>
+          <p className="text-xs text-dim leading-relaxed mb-4">{t('admin.journal_maj.aide')}</p>
+
+          <div className="space-y-4">
+            {maj.length === 0 && <p className="text-sm text-ghost py-3">{t('admin.journal_maj.vide')}</p>}
+
+            {maj.map((e, i) => (
+              <div key={i} className="border border-edge rounded-xl p-4 space-y-3">
+                <div className="flex items-start justify-between gap-3">
+                  <span className="text-xs text-ghost">{t('admin.journal_maj.entree', { n: i + 1 })}</span>
+                  <button type="button" onClick={() => setLocalMaj((l) => l.filter((_, idx) => idx !== i))}
+                          className="text-ghost hover:text-danger" aria-label={t('commun.retirer')}>
+                    <X size={15} aria-hidden="true" />
+                  </button>
+                </div>
+
+                <div className="grid sm:grid-cols-3 gap-3">
+                  <div>
+                    <span className={LABEL}>{t('admin.journal_maj.version')}</span>
+                    <input className={INPUT} maxLength={20} value={e.version ?? ''}
+                           onChange={(ev) => majEntree(i, 'version', ev.target.value)} />
+                  </div>
+                  <div>
+                    <span className={LABEL}>{t('admin.journal_maj.date')}</span>
+                    <input type="date" className={INPUT} value={e.date ?? ''}
+                           onChange={(ev) => majEntree(i, 'date', ev.target.value)} />
+                  </div>
+                  <div>
+                    <span className={LABEL}>{t('admin.journal_maj.type')}</span>
+                    <select className={INPUT} value={e.type ?? 'nouveaute'}
+                            onChange={(ev) => majEntree(i, 'type', ev.target.value)}>
+                      {['nouveaute', 'amelioration', 'correction'].map((x) => (
+                        <option key={x} value={x}>{t(`admin.journal_maj.type_${x}`)}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <span className={LABEL}>{t('admin.journal_maj.champ_titre')}</span>
+                  <input className={INPUT} maxLength={120} value={e.titre ?? ''}
+                         onChange={(ev) => majEntree(i, 'titre', ev.target.value)} />
+                </div>
+
+                <div>
+                  <span className={LABEL}>{t('admin.journal_maj.lignes')}</span>
+                  <textarea className={INPUT + ' resize-none'} rows={4}
+                            value={(e.lignes ?? []).join('\n')}
+                            onChange={(ev) => majEntree(i, 'lignes', lignesVersTableau(ev.target.value))} />
+                  <p className="text-[11px] text-ghost mt-1">{t('admin.journal_maj.lignes_aide')}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-3 mt-4">
+            <button type="button" onClick={ajouterEntree}
+                    className="inline-flex items-center gap-1.5 text-sm text-primary font-medium">
+              <Plus size={14} aria-hidden="true" />{t('admin.journal_maj.ajouter')}
+            </button>
+            <button type="submit" disabled={setMaj.isPending}
+                    className="ml-auto rounded-xl bg-primary text-inverse text-sm font-semibold px-5 py-2 disabled:opacity-50">
+              {t('commun.enregistrer')}
+            </button>
+          </div>
+        </form>
+
         {/* ── CLI-3 : compte à rebours de lancement ─────────────────────── */}
         <form onSubmit={enregistrerRebours} className="bg-card border border-edge rounded-2xl p-5">
           <div className="flex items-center justify-between gap-3 mb-1">
