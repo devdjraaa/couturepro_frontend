@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { X, Plus } from 'lucide-react'
 import { useAuth } from '@/contexts'
 import { Input, Button } from '@/components/ui'
@@ -14,6 +15,7 @@ const toSlug = (str) =>
     .replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '')
 
 export default function MesureForm({ initialData, onSubmit, isLoading }) {
+  const { t } = useTranslation()
   const { atelier } = useAuth()
   const uniteMesure = atelier?.unite_mesure ?? 'cm'
   const [fields, setFields] = useState(() => {
@@ -80,7 +82,7 @@ export default function MesureForm({ initialData, onSubmit, isLoading }) {
 
       {unusedSuggestions.length > 0 && (
         <div>
-          <p className="text-xs text-dim mb-2">Suggestions rapides</p>
+          <p className="text-xs text-dim mb-2">{t('mesures.suggestions_rapides')}</p>
           <div className="flex flex-wrap gap-2">
             {unusedSuggestions.map(s => (
               <button

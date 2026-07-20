@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Heart, Search, AlertCircle, SlidersHorizontal, X } from 'lucide-react'
+import { Heart, Search, AlertCircle, SlidersHorizontal, X, Star, MapPin } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { getCreators } from './vitrineApi'
@@ -152,7 +152,11 @@ export default function CreateursPage() {
                               'px-3 py-1.5 rounded-lg border text-xs font-bold transition',
                               noteMin === n ? 'border-primary bg-primary/5 text-primary' : 'border-edge text-dim hover:border-primary',
                             )}>
-                      {n === 0 ? t('vitrine.createurs_page.filter_all') : `★ ${n}+`}
+                      {n === 0 ? t('vitrine.createurs_page.filter_all') : (
+                        <span className="inline-flex items-center gap-1">
+                          <Star size={12} className="fill-current" aria-hidden="true" />{n}+
+                        </span>
+                      )}
                     </button>
                   ))}
                 </div>
@@ -183,7 +187,8 @@ export default function CreateursPage() {
                 ) : (
                   <button onClick={findNearby}
                           className="inline-flex items-center gap-1.5 rounded-lg border border-edge px-3 py-2 text-sm text-dim hover:border-primary hover:text-primary transition">
-                    📍 {t('vitrine.createurs_page.near_me')}
+                    <MapPin size={14} aria-hidden="true" />
+                    {t('vitrine.createurs_page.near_me')}
                   </button>
                 )}
                 {geoDenied && !myPos && (
@@ -262,7 +267,7 @@ export default function CreateursPage() {
                     <h3 className="font-bold text-base text-ink flex items-center gap-1.5 flex-wrap">
                       {c.nom}
                       {c.verifie && <span className="text-[10.5px] font-bold text-primary bg-primary-50 px-1.5 py-0.5 rounded-full">{t('vitrine.creators.verified')}</span>}
-                      {c.sponsorise && <span title={t('vitrine.a11y.sponsorise')} className="text-[10.5px] font-bold text-inverse bg-primary px-1.5 py-0.5 rounded-full">★</span>}
+                      {c.sponsorise && <span title={t('vitrine.a11y.sponsorise')} className="inline-flex items-center text-inverse bg-primary px-1.5 py-0.5 rounded-full"><Star size={10} className="fill-current" aria-hidden="true" /></span>}
                     </h3>
                     <div className="text-[12.5px] text-dim">{c.specialite} · {c.ville}</div>
                   </div>

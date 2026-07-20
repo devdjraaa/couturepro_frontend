@@ -23,7 +23,10 @@ function CodeAccesModal({ membre, onClose }) {
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 p-4">
       <div className="bg-surface border border-border rounded-2xl w-full max-w-sm p-6 space-y-4">
         <div className="text-center">
-          <p className="font-semibold text-content">{t('equipe.formulaire.titre')} ✓</p>
+          <p className="font-semibold text-content inline-flex items-center gap-1.5">
+            {t('equipe.formulaire.titre')}
+            <CheckCircle2 size={16} className="text-success" aria-hidden="true" />
+          </p>
           <p className="text-sm text-content-secondary mt-1">
             Transmettez ce code d'accès à <strong>{membre.prenom} {membre.nom}</strong>.
             Il servira d'identifiant et de mot de passe initial.
@@ -40,7 +43,7 @@ function CodeAccesModal({ membre, onClose }) {
         </div>
 
         <p className="text-xs text-content-secondary text-center">
-          Le membre se connecte via <strong>Accès assistant</strong> sur la page de connexion.
+          Le membre se connecte via <strong>{t('equipe.acces_assistant')}</strong> sur la page de connexion.
         </p>
 
         <Button className="w-full" onClick={onClose}>{t('commun.confirmer')}</Button>
@@ -124,7 +127,7 @@ export default function EquipePage() {
               <div className="flex flex-col items-center gap-4 py-10 px-6 text-center bg-surface border border-border rounded-2xl">
                 <Users size={32} className="text-content-secondary" />
                 <div>
-                  <p className="font-semibold text-content mb-1">Membres d'équipe non inclus</p>
+                  <p className="font-semibold text-content mb-1">{t('equipe.membres_non_inclus')}</p>
                   <p className="text-sm text-content-secondary">
                     Votre plan actuel ne permet pas d'ajouter des membres d'équipe. Passez à un plan supérieur pour collaborer.
                   </p>

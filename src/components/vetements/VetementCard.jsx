@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { MoreHorizontal, ChevronLeft, ChevronRight } from 'lucide-react'
 import GarmentIcon from '@/utils/garmentIcon'
 
 export default function VetementCard({ vetement, onEdit, onDelete }) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [imgIndex, setImgIndex] = useState(0)
   const menuRef = useRef(null)
@@ -71,9 +73,9 @@ export default function VetementCard({ vetement, onEdit, onDelete }) {
         <p className="text-sm font-medium text-ink truncate">{vetement.nom}</p>
         <div className="flex items-center gap-1.5 mt-0.5">
           {vetement.is_systeme ? (
-            <span className="text-[10px] text-ghost bg-subtle px-1.5 py-0.5 rounded font-medium">Modèle système</span>
+            <span className="text-[10px] text-ghost bg-subtle px-1.5 py-0.5 rounded font-medium">{t('vetements.modele_systeme')}</span>
           ) : (
-            <span className="text-[10px] text-primary/70 bg-primary/5 px-1.5 py-0.5 rounded font-medium">Mon catalogue</span>
+            <span className="text-[10px] text-primary/70 bg-primary/5 px-1.5 py-0.5 rounded font-medium">{t('atelier.section_catalogue')}</span>
           )}
           {images.length > 1 && (
             <span className="text-[10px] text-ghost">{images.length} photos</span>

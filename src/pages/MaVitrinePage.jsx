@@ -4,8 +4,7 @@ import {
   Store, ExternalLink, Copy, Check, Eye, EyeOff, MessageCircle,
   Sparkles, ClipboardList, Wallet, Image as ImageIcon,
   ShieldCheck, ShieldAlert, Upload, Link as LinkIcon,
-  Star, Clock, BookOpen,
-} from 'lucide-react'
+  Star, Clock, BookOpen, MapPin, X } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { exportLookbookPdf } from '@/utils/exportLookbookPdf'
 import { useTranslation } from 'react-i18next'
@@ -419,7 +418,8 @@ export default function MaVitrinePage() {
             <input value={siteWeb} onChange={(e) => setSiteWeb(e.target.value)} maxLength={255} placeholder={t('ma_vitrine.site_ph')} className="rounded-lg border border-edge bg-app px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/30" />
           </div>
           <button type="button" onClick={useMyPosition} className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline">
-            📍 {t('ma_vitrine.utiliser_position')} {geoMsg && <span className="text-xs text-dim font-normal">{geoMsg}</span>}
+            <MapPin size={14} className="inline-block mr-1.5 align-[-0.15em]" aria-hidden="true" />
+            {t('ma_vitrine.utiliser_position')} {geoMsg && <span className="text-xs text-dim font-normal">{geoMsg}</span>}
           </button>
           <div className="flex items-center gap-3 mt-3">
             <button onClick={saveProfile} disabled={savingProfile}
@@ -561,7 +561,7 @@ export default function MaVitrinePage() {
             {collections.map((c) => (
               <span key={c.id} className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-subtle text-ink">
                 {c.nom}{c.vetements_count != null && <span className="text-ghost">· {c.vetements_count}</span>}
-                <button onClick={() => removeCollection(c.id)} className="text-ghost hover:text-danger" aria-label={t('commun.supprimer')}>✕</button>
+                <button onClick={() => removeCollection(c.id)} className="text-ghost hover:text-danger" aria-label={t('commun.supprimer')}><X size={14} aria-hidden="true" /></button>
               </span>
             ))}
           </div>
@@ -587,7 +587,11 @@ export default function MaVitrinePage() {
                 <div key={a.id} className="border border-edge rounded-lg p-3">
                   <div className="flex items-center justify-between">
                     <b className="text-sm text-ink">{a.auteur_nom}</b>
-                    <span className="text-primary text-xs">{'★'.repeat(a.note)}{'☆'.repeat(5 - a.note)}</span>
+                    <span className="inline-flex items-center gap-0.5 text-primary" aria-label={`${a.note}/5`}>
+                      {Array.from({ length: 5 }, (_, i) => (
+                        <Star key={i} size={11} className={i < a.note ? 'fill-current' : 'opacity-30'} aria-hidden="true" />
+                      ))}
+                    </span>
                   </div>
                   {a.texte && <p className="text-xs text-dim mt-1">{a.texte}</p>}
                 </div>

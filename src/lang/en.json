@@ -355,7 +355,8 @@
     "aucun": "None",
     "securite": "Security",
     "identite": "Identity",
-    "retirer": "Remove"
+    "retirer": "Remove",
+    "contacter_support": "Contact support"
   },
   "erreurs": {
     "reseau": "Connection error. Check your network.",
@@ -375,7 +376,10 @@
     "champ_requis": "This field is required.",
     "format_invalide": "Invalid format.",
     "inconnu": "An unexpected error occurred.",
-    "chargement": "Unable to load data. Check your connection."
+    "chargement": "Unable to load data. Check your connection.",
+    "generique_titre": "Something went wrong",
+    "generique_description": "The app ran into a problem. Your local data is safe.",
+    "reessayer": "Try again"
   },
   "auth": {
     "social": {
@@ -939,7 +943,15 @@
       "bientot": "Deliveries within 48h"
     },
     "solde": "Paid",
-    "prix_a_definir": "Price to be set"
+    "prix_a_definir": "Price to be set",
+    "prix_total": "Total price",
+    "deja_encaisse": "Already collected",
+    "photo_tissu_placeholder": "Fabric or model photo",
+    "frise": {
+      "creee": "Order created",
+      "payee": "Payment received: {{montant}} ({{mode}})",
+      "livree": "Order delivered"
+    }
   },
   "catalogue": {
     "titre": "Common Models",
@@ -1009,7 +1021,8 @@
     "date": "Taken on",
     "exporter": "Export PDF",
     "historique": "Measurement history",
-    "aucune_enregistree": "No measurements recorded"
+    "aucune_enregistree": "No measurements recorded",
+    "suggestions_rapides": "Quick suggestions"
   },
   "equipe": {
     "titre": "Team",
@@ -1047,7 +1060,9 @@
       "confirmer": "Revoke",
       "annuler": "Cancel"
     },
-    "permissions_titre": "Permissions"
+    "permissions_titre": "Permissions",
+    "acces_assistant": "Assistant access",
+    "membres_non_inclus": "Team members not included"
   },
   "points": {
     "titre": "Loyalty points",
@@ -1161,7 +1176,8 @@
       "illimite": "Unlimited",
       "utilises": "{{utilises}} / {{limite}} used",
       "depasse": "Quota exceeded"
-    }
+    },
+    "commandes_ce_mois": "Orders this month"
   },
   "parametres": {
     "titre": "Settings",
@@ -1296,7 +1312,11 @@
     },
     "section_compte": "Account",
     "section_facturation": "Billing & subscription",
-    "section_app": "Application"
+    "section_app": "Application",
+    "format_facture": "Invoice format",
+    "logo_atelier": "Workshop logo",
+    "pied_page": "Footer",
+    "assujetti_tva": "VAT registered"
   },
   "theme": {
     "titre": "Appearance",
@@ -1439,7 +1459,8 @@
     "note_label": "Note",
     "archive_le": "Archived on",
     "vide_titre": "No archived items",
-    "vide_description": "Clients, orders and measurements you archive will be kept here"
+    "vide_description": "Clients, orders and measurements you archive will be kept here",
+    "archiver_element": "Archive this item"
   },
   "langue": {
     "titre": "Language",
@@ -1467,7 +1488,8 @@
     "plus": "More",
     "menu": "Menu",
     "outils_creatifs": "Creative tools",
-    "studio": "Studio"
+    "studio": "Studio",
+    "gestion_atelier": "Workshop management"
   },
   "pwa": {
     "installer_titre": "Install Gextimo",
@@ -4472,5 +4494,8 @@
         "refusee": "rejected"
       }
     }
+  },
+  "vetements": {
+    "modele_systeme": "System model"
   }
 }

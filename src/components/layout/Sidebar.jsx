@@ -131,7 +131,7 @@ export default function Sidebar() {
           </div>
           <div className="min-w-0">
             <p className="font-bold font-display text-ink leading-tight">Gextimo</p>
-            <p className="text-2xs text-ghost leading-tight mt-px">Gestion d'atelier</p>
+            <p className="text-2xs text-ghost leading-tight mt-px">{t('nav.gestion_atelier')}</p>
           </div>
         </div>
       </div>

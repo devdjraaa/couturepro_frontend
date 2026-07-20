@@ -355,7 +355,8 @@
     "aucun": "Aucun",
     "securite": "Sécurité",
     "identite": "Identité",
-    "retirer": "Retirer"
+    "retirer": "Retirer",
+    "contacter_support": "Contacter le support"
   },
   "erreurs": {
     "reseau": "Erreur de connexion. Vérifiez votre réseau.",
@@ -375,7 +376,10 @@
     "champ_requis": "Ce champ est requis.",
     "format_invalide": "Format invalide.",
     "inconnu": "Une erreur inattendue s'est produite.",
-    "chargement": "Impossible de charger les données. Vérifiez votre connexion."
+    "chargement": "Impossible de charger les données. Vérifiez votre connexion.",
+    "generique_titre": "Une erreur est survenue",
+    "generique_description": "L'application a rencontré un problème. Vos données locales sont conservées.",
+    "reessayer": "Réessayer"
   },
   "auth": {
     "social": {
@@ -939,7 +943,15 @@
       "bientot": "Livraisons dans 48h"
     },
     "solde": "Soldé",
-    "prix_a_definir": "Prix à définir"
+    "prix_a_definir": "Prix à définir",
+    "prix_total": "Prix total",
+    "deja_encaisse": "Déjà encaissé",
+    "photo_tissu_placeholder": "Photo du tissu ou modèle",
+    "frise": {
+      "creee": "Commande créée",
+      "payee": "Paiement reçu : {{montant}} ({{mode}})",
+      "livree": "Commande livrée"
+    }
   },
   "catalogue": {
     "titre": "Modèles Courants",
@@ -1009,7 +1021,8 @@
     "date": "Prises le",
     "exporter": "Exporter PDF",
     "historique": "Historique des mesures",
-    "aucune_enregistree": "Aucune mesure enregistrée"
+    "aucune_enregistree": "Aucune mesure enregistrée",
+    "suggestions_rapides": "Suggestions rapides"
   },
   "equipe": {
     "titre": "Équipe",
@@ -1047,7 +1060,9 @@
       "confirmer": "Révoquer",
       "annuler": "Annuler"
     },
-    "permissions_titre": "Permissions"
+    "permissions_titre": "Permissions",
+    "acces_assistant": "Accès assistant",
+    "membres_non_inclus": "Membres d'équipe non inclus"
   },
   "points": {
     "titre": "Points de fidélité",
@@ -1161,7 +1176,8 @@
       "illimite": "Illimité",
       "utilises": "{{utilises}} / {{limite}} utilisés",
       "depasse": "Quota dépassé"
-    }
+    },
+    "commandes_ce_mois": "Commandes ce mois"
   },
   "parametres": {
     "titre": "Paramètres",
@@ -1296,7 +1312,11 @@
     },
     "section_compte": "Compte",
     "section_facturation": "Facturation & abonnement",
-    "section_app": "Application"
+    "section_app": "Application",
+    "format_facture": "Format de facture",
+    "logo_atelier": "Logo de l'atelier",
+    "pied_page": "Pied de page",
+    "assujetti_tva": "Assujetti à la TVA"
   },
   "theme": {
     "titre": "Apparence",
@@ -1439,7 +1459,8 @@
     "note_label": "Note",
     "archive_le": "Archivé le",
     "vide_titre": "Aucun élément archivé",
-    "vide_description": "Les clients, commandes et mesures que vous archivez seront rangés ici"
+    "vide_description": "Les clients, commandes et mesures que vous archivez seront rangés ici",
+    "archiver_element": "Archiver cet élément"
   },
   "langue": {
     "titre": "Langue",
@@ -1467,7 +1488,8 @@
     "plus": "Plus",
     "menu": "Menu",
     "outils_creatifs": "Outils créatifs",
-    "studio": "Studio"
+    "studio": "Studio",
+    "gestion_atelier": "Gestion d'atelier"
   },
   "pwa": {
     "installer_titre": "Installer Gextimo",
@@ -4485,5 +4507,8 @@
         "refusee": "refusée"
       }
     }
+  },
+  "vetements": {
+    "modele_systeme": "Modèle système"
   }
 }

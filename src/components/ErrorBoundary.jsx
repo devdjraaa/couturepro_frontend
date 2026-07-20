@@ -1,7 +1,14 @@
 import { Component } from 'react'
+import { AlertCircle } from 'lucide-react'
+import i18n from '@/lang/i18n'
 
 // SUG-24 / P109 : garde-fou global. Un crash de rendu affiche un écran de reprise
 // (« réessayer ») au lieu d'un écran blanc — robustesse en utilisation prolongée.
+//
+// Les textes passent par l'INSTANCE i18n et non par le hook `useTranslation` :
+// un composant de classe ne peut pas appeler de hook, et surtout cet écran doit
+// s'afficher alors que l'arbre React vient de tomber. Les styles restent en
+// ligne pour la même raison — il ne dépend d'aucune feuille de style.
 export default class ErrorBoundary extends Component {
   constructor(props) {
     super(props)
@@ -32,10 +39,12 @@ export default class ErrorBoundary extends Component {
         alignItems: 'center', justifyContent: 'center', gap: '14px',
         padding: '24px', textAlign: 'center', fontFamily: 'system-ui, sans-serif',
       }}>
-        <div style={{ fontSize: '40px' }}>😕</div>
-        <h1 style={{ fontSize: '18px', fontWeight: 700, margin: 0 }}>Une erreur est survenue</h1>
+        <AlertCircle size={40} strokeWidth={1.5} color="#D00B0B" aria-hidden="true" />
+        <h1 style={{ fontSize: '18px', fontWeight: 700, margin: 0 }}>
+          {i18n.t('erreurs.generique_titre')}
+        </h1>
         <p style={{ fontSize: '14px', color: '#666', maxWidth: '320px', margin: 0 }}>
-          L'application a rencontré un problème. Vos données locales sont conservées.
+          {i18n.t('erreurs.generique_description')}
         </p>
         <button
           onClick={this.handleReset}
@@ -45,7 +54,7 @@ export default class ErrorBoundary extends Component {
             fontSize: '14px', fontWeight: 700, cursor: 'pointer',
           }}
         >
-          Réessayer
+          {i18n.t('erreurs.reessayer')}
         </button>
       </div>
     )

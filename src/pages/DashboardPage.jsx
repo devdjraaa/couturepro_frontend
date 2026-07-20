@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, ChevronDown, CheckCircle2, CircleUser, Sun, Moon, Store, X, Layers, Users2, Star, FileText, Crown } from 'lucide-react'
+import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, ChevronDown, CheckCircle2, CircleUser, Sun, Moon, Store, X, Layers, Users2, Star, FileText, Crown, Hand } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { isToday, isPast, parseISO, differenceInCalendarDays, isThisMonth, subDays } from 'date-fns'
 import { useQueryClient } from '@tanstack/react-query'
@@ -40,7 +40,8 @@ function Greeting({ user, subtitle, hero = false }) {
             {dateStr}
           </p>
           <h1 className={cn('font-bold font-display', hero ? 'text-[34px] leading-[1.08] text-inverse' : 'text-xl leading-tight text-ink')}>
-            {greeting}, {user?.prenom ?? user?.nom?.split(' ')[0] ?? ''} 👋
+            {greeting}, {user?.prenom ?? user?.nom?.split(' ')[0] ?? ''}
+            <Hand size={hero ? 28 : 18} className="inline-block ml-2 align-[-0.15em] text-accent" aria-hidden="true" />
           </h1>
         </div>
         {hero && (

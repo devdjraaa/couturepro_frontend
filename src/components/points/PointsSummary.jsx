@@ -1,4 +1,5 @@
 import { Star, Zap, Medal } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { usePoints } from '@/hooks/usePoints'
 import { Skeleton } from '@/components/ui'
 
@@ -26,6 +27,7 @@ const TONS = [
 ]
 
 export default function PointsSummary() {
+  const { t } = useTranslation()
   const { data, isLoading } = usePoints()
 
   if (isLoading) return <Skeleton className="h-40 rounded-2xl" />
@@ -54,7 +56,7 @@ export default function PointsSummary() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Star size={18} className="text-accent-600" fill="currentColor" />
-          <p className="text-sm font-semibold text-ink">Points de fidélité</p>
+          <p className="text-sm font-semibold text-ink">{t('points.titre')}</p>
         </div>
         {/* #40 — Badge niveau auto-mis à jour */}
         {badge && (
