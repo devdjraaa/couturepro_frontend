@@ -158,8 +158,8 @@ export default function GaleriePage() {
               title={t('galerie.vide_titre')}
               description={t('galerie.vide_desc')}
               action={
-                <Button onClick={() => fileRef.current?.click()} disabled={upload.isPending}>
-                  <ImagePlus size={15} className="mr-1" /> {t('galerie.ajouter_photo')}
+                <Button onClick={() => fileRef.current?.click()} disabled={upload.isPending} icon={ImagePlus}>
+                  {t('galerie.ajouter_photo')}
                 </Button>
               }
             />

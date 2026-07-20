@@ -51,12 +51,13 @@ export default function Button({
         ? <Spinner size="sm" color={variant === 'secondary' || variant === 'ghost' ? 'dim' : 'inverse'} />
         : Icon && <Icon size={iconSize} className="shrink-0" />
       }
-      {/* `inline` sur le libellé : une icône passée en ENFANT plutôt que par la
-          propriété `icon` se retrouvait dans ce span, et Tailwind rend les `svg`
-          en `display:block` — le texte partait à la ligne sous l'icône. Vu sur
-          les trois boutons du Studio. Le rendre en ligne rend le composant
-          tolérant aux deux écritures. */}
-      {children && <span className="inline">{children}</span>}
+      {/* Une icône passée en ENFANT (plutôt que par la propriété `icon`) atterrit
+          dans ce span, et Tailwind rend les `svg` en `display:block` : le texte
+          partait alors à la ligne SOUS l'icône. Remettre le span en `inline` ne
+          suffit pas, c'est le `svg` qu'il faut viser. */}
+      {children && (
+        <span className="inline [&_svg]:inline-block [&_svg]:align-[-0.125em]">{children}</span>
+      )}
       {!loading && IconRight && <IconRight size={iconSize} className="shrink-0" />}
     </button>
   )
