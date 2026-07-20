@@ -308,12 +308,12 @@ const ITEMS = [
   B(68,'L2-7',10,'done','BUG BLOQUANT commande groupée : le serveur exigeait vetement_id sur chaque sous-commande alors qu\'un article EST le vêtement. Rattachement au catalogue rendu facultatif ; le refus serveur, jusque-là avalé, est affiché'),
   F(51,'L2-1',10,'done','Nom de famille forcé en MAJUSCULES à la saisie ; prénom en casse de présentation (Jean Michel Alain), tirets/apostrophes/accents gérés'),
   F(52,'L2-2',10,'done','Case légale au format standard : « Conditions Générales d\'Utilisation » ET « Politique de confidentialité », deux liens distincts'),
-  B(69,'L2-CONSENT',10,'todo','Consentement espace client : privacy_policy_accepted + _at + _version (traçabilité si la politique change) et newsletter_opt_in + _at séparés — jamais fusionnés, jamais précochés, désinscription par lien e-mail et depuis les réglages'),
-  B(70,'L2-PDF',10,'todo','Branding export mesures : filigrane répété en diagonale (logo + URL, semi-transparent) + pied de page (logo, URL, téléphone) sur chaque page du PDF'),
-  B(71,'L2-WA',10,'todo','Partage WhatsApp des mesures : bloc de signature automatique (Généré par Gextimo, URL, téléphone) — ET correction du bug où les mesures elles-mêmes ne partent pas dans le message'),
-  F(53,'L2-SOCIAL',10,'todo','Profil Designer : champs Instagram/Facebook en LIEN complet (pas un pseudo), rendus cliquables sur la vitrine'),
-  B(72,'L2-DOC',10,'todo','Vérification Designer : champ « type de document » (carte d\'identité, registre de commerce, justificatif de domicile…) par pièce jointe, pour la modération'),
-  F(54,'L2-ARTICLE',10,'todo','Renommer « Article » en « Type de vêtement » partout (cohérence avec la création de commande)'),
+  B(69,'L2-CONSENT',10,'done','Consentements SEPARES : privacy_policy_accepted + _at + _version (tracabilite si la politique change) et newsletter_opt_in + _at. Jamais fusionnes, jamais precoches, aucune valeur retroactive. Desinscription par URL signee 90 j (sans connexion) + reglage dans le compte'),
+  B(70,'L2-PDF',10,'done','Filigrane REPETE en diagonale (7% opacite) + pied de page marque/site/telephone sur chaque page. utils/pdfBranding reutilisable par les autres exports ; API jsPDF verifiee a l\'execution'),
+  B(71,'L2-WA',10,'done','Cause trouvee : DEUX constructeurs de message concurrents produisaient des contenus differents selon le chemin. Source unique (utils/partageMesures) + bloc de signature + message explicite si aucune mesure'),
+  F(53,'L2-SOCIAL',10,'done','Saisie tolerante : @pseudo, pseudo, domaine ou URL complete donnent tous un lien qui s\'ouvre. Le cas « instagram.com/x » sans protocole est reconnu comme domaine (sinon URL absurde)'),
+  B(72,'L2-DOC',10,'done','Vérification Designer : champ « type de document » (carte d\'identité, registre de commerce, justificatif de domicile…) par pièce jointe, pour la modération'),
+  F(54,'L2-ARTICLE',10,'done','« Article » renomme « Type de vetement » dans tout le parcours commande (11 libelles x2 langues). La facturation garde « articles » au sens comptable : ce ne sont pas des vetements'),
   B(48,'REL-5',8,'info','Relecture juridique des pages légales — tâche équipe'),
   B(49,'REL-6',8,'info','Clés externes (analytics, Search Console) — dépend de la direction')
 ];
