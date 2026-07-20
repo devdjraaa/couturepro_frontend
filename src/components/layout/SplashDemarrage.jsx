@@ -126,7 +126,7 @@ export default function SplashDemarrage() {
               pas. Les proportions sont relevées sur le logo officiel coloré
               (public/logo-officiel.png) : point central, anneau noir épais,
               arc rouge de rayon 42 ouvert sur la gauche, balayé sur 300°. */}
-          <svg viewBox="0 0 100 100" className="w-[168px] h-[168px]" aria-hidden="true">
+          <svg viewBox="0 -58 100 158" className="w-[168px] h-[265px] -mt-[97px]" aria-hidden="true" style={{ overflow: 'visible' }}>
             {/* L'ARC ROUGE et l'ANNEAU NOIR arrivent EN MÊME TEMPS : l'anneau
                 se révèle en fondu pendant que l'arc se trace, au même rythme.
 
