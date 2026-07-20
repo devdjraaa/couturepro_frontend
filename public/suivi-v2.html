@@ -156,7 +156,8 @@ const GROUPS = {
   6:'Parcours Espace Client',
   7:'Studio Vidéos & Support',
   8:'Reliquat ouvert',
-  9:'Avis v2 — décisions du 20/07 (avis par modèle)'
+  9:'Avis v2 — décisions du 20/07 (avis par modèle)',
+  10:'Reliquat re-trié (consolidation du 20/07)'
 };
 const SLABEL = {done:'Fait',part:'Partiel',bug:'Bug',todo:'À faire',spec:'Spec',info:'Info'};
 
@@ -288,6 +289,15 @@ const ITEMS = [
   // ---------- REL-4 débloqué ----------
   B(60,'REL-4',8,'done','Colonne libelles_mesures RÉTABLIE (supprimée en avril alors que le modèle Eloquent la référençait) + acceptée à la création/édition d\'un modèle. Au passage : le garde-fou max:5 figé des Requests aurait plafonné un plan Studio à 5 photos'),
   F(47,'REL-4',8,'done','Éditeur des mesures par modèle + panneau MesuresInline dans la commande (fusion, jamais d\'écrasement). TESTÉ SUR TÉLÉPHONE le 20/07 : libellés → panneau 0/2 → saisie → fiche client en base → pré-rempli 2/2. Données de test purgées'),
+
+  // ---------- Groupe 10 : reliquat des anciens suivis, re-trié le 20/07 ----------
+  // (détail ligne par ligne : docs/CONSOLIDATION_GLOBALE.md — 17 points étaient
+  //  en réalité déjà livrés, le reste est regroupé ici ou bloqué par un tiers)
+  B(61,'QA-1',10,'todo','Campagne de re-test des constats anciens (≈20 points spec 130 + Novafriq : sidebar, profils, pays, imports, plans premium…) — beaucoup sont probablement tombés avec les refontes, à confirmer sur la version actuelle'),
+  F(48,'VIT-1',10,'todo','Structure vitrine (Aquilas) : menus header Solutions/Tarifs/Documentation, barre de contact fine, bulle retour vitrine, onboarding client et pro'),
+  F(49,'VIT-2',10,'todo','Textes et retouches vitrine (Aquilas) : message de confiance, police, header auth, footer (tarif, liens, APDP), phrases d\'accroche, ordre Paramètres, « Bientôt » sur le non-prêt'),
+  B(62,'CLI-1',10,'todo','Modules côté client à cadrer puis développer : notifications, code promo, newsletter, historique des MAJ, messages officiels, bibliothèque photos catégorisée, détection pays/devise, vérification Designer (type de document)'),
+  B(63,'INF-1',10,'todo','Infra : Cloudflare phase 2 (proxy) + soumission Search Console dès réception des accès direction'),
   B(48,'REL-5',8,'info','Relecture juridique des pages légales — tâche équipe'),
   B(49,'REL-6',8,'info','Clés externes (analytics, Search Console) — dépend de la direction')
 ];
