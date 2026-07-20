@@ -134,8 +134,8 @@
     "site_ph": "Website",
     "utiliser_position": "Use my location",
     "enregistrement": "Saving…",
-    "enregistre": "✓ Saved",
-    "geo_enregistre": "✓ Location saved",
+    "enregistre": "Saved",
+    "geo_enregistre": "Location saved",
     "geo_echec": "Failed",
     "geo_refuse": "Location denied",
     "limite_atteinte": "Limit reached.",
@@ -143,7 +143,7 @@
     "verifie_desc": "The “Verified” badge is shown on your public showcase.",
     "demander_verif": "Request verification",
     "verif_desc": "Attach an official document (ID, diploma, designer certificate…) or a link to your portfolio / professional profile to get the “Verified” badge.",
-    "verif_envoyee": "✓ Request sent: we'll reply within 48 h.",
+    "verif_envoyee": "Request sent: we'll reply within 48 h.",
     "joindre_doc": "Attach a document (PDF, JPG, PNG)",
     "portfolio_ph": "Link to your portfolio (https://…)",
     "envoyer_demande": "Send request",
@@ -272,10 +272,10 @@
       "montant_acompte": "Deposit amount:",
       "maj": "Update",
       "dgi_titre": "DGI normalized invoice",
-      "dgi_normalisee": "✓ Normalized via e-MECeF",
+      "dgi_normalisee": "Normalized via e-MECeF",
       "dgi_qr": "DGI QR",
       "dgi_code": "MECeF/DGI code:",
-      "dgi_pdf_joint": "✓ DGI PDF attached",
+      "dgi_pdf_joint": "DGI PDF attached",
       "telecharger": "Download",
       "imprimer_habillage": "Print / Share (GEXTIMO layout)",
       "habillage_generation": "Generating…",
@@ -569,7 +569,7 @@
       "encaisse_auj": "Collected today"
     },
     "todo": {
-      "libre": "Free day 🎉",
+      "libre": "Free day",
       "libre_desc": "No urgent tasks today. Get ahead on your orders.",
       "voir_commandes": "View all orders",
       "livraison": "Delivery: {{vetement}}",
@@ -577,7 +577,7 @@
       "solde": "Balance due: {{montant}}"
     },
     "onboarding": {
-      "titre": "Welcome to your workshop 🎉",
+      "titre": "Welcome to your workshop",
       "etapes": "{{fait}} / {{total}} steps completed",
       "step_client": "Add your first client",
       "step_client_sub": "Create a profile with measurements",
@@ -1097,7 +1097,7 @@
     "paliers": {
       "titre": "Loyalty tiers",
       "restant": "{{pts}} pts left to reach {{palier}}",
-      "max": "Highest tier reached 🎉"
+      "max": "Highest tier reached"
     }
   },
   "notifications": {
@@ -1513,7 +1513,7 @@
     "err_generic": "Putting on sale failed. Please try again."
   },
   "vitrine": {
-    "promo": "✦ New: the Gextimo showcase connects African fashion designers across West Africa.",
+    "promo": "New: the Gextimo showcase connects African fashion designers across West Africa.",
     "promo_a": "New: the",
     "promo_b": "showcase connects African fashion designers across West Africa.",
     "online": "● Online",
@@ -1723,7 +1723,7 @@
       "title": "Find your designer",
       "subtitle": "Verified talents, near you or anywhere in Africa.",
       "visit": "Visit profile",
-      "verified": "✓ Verified",
+      "verified": "Verified",
       "new": "New",
       "see_all": "See all designers →",
       "creations_count": "{{n}} creation",
@@ -1765,7 +1765,7 @@
       "stat_2_l": "to create an account",
       "stat_3_v": "15%",
       "stat_3_l": "commission on your sales",
-      "stat_4_v": "✓ Badge",
+      "stat_4_v": "Badge",
       "stat_4_l": "verification available"
     },
     "testimonials": {
@@ -1864,8 +1864,8 @@
     },
     "profil": {
       "quote": "Request a quote",
-      "contact": "📱 Contact",
-      "save": "♡ Save",
+      "contact": "Contact",
+      "save": "Save",
       "catalogue": "Catalogue",
       "no_creations": "No creation published yet.",
       "order": "Order",

@@ -426,7 +426,7 @@ export default function MaVitrinePage() {
                     className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-600 transition disabled:opacity-60">
               {savingProfile ? t('ma_vitrine.enregistrement') : t('commun.enregistrer')}
             </button>
-            {profileSaved && <span className="text-xs text-success font-medium">{t('ma_vitrine.enregistre')}</span>}
+            {profileSaved && <span className="text-xs text-success font-medium inline-flex items-center gap-1"><Check size={12} aria-hidden="true" />{t('ma_vitrine.enregistre')}</span>}
           </div>
         </div>
 

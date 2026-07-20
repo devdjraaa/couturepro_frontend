@@ -508,7 +508,7 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
             <p className="text-xs font-semibold text-ghost uppercase tracking-wider mb-2">{t('facturation.doc.dgi_titre')}</p>
             {doc.emecef_code ? (
               <div className="space-y-2">
-                <span className="text-xs text-success font-medium">{t('facturation.doc.dgi_normalisee')}</span>
+                <span className="text-xs text-success font-medium inline-flex items-center gap-1"><Check size={12} aria-hidden="true" />{t('facturation.doc.dgi_normalisee')}</span>
                 {qrDataUrl && (
                   <img src={qrDataUrl} alt={t('facturation.doc.dgi_qr')} className="w-28 h-28 border border-edge rounded-lg bg-white p-1" />
                 )}
