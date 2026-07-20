@@ -327,6 +327,7 @@ const ITEMS = [
   B(77,'SUG-1',8,'done','Écran de démarrage « favicon -> logo -> connexion » : le splash natif est une image figée qu Android pose en fond de fenêtre, ni animable ni datable. SplashDemarrage prend le relais dès que la WebView est prête (anneau tracé, point, mot, fondu). Au passage : l habillage saisonnier existait côté serveur mais AUCUN écran ne l appelait, et favicon.svg était un glyphe violet resté d un gabarit — c est lui qui s affichait dans les onglets'),
   B(78,'REL-11',8,'done','Lien de téléchargement du site PÉRIMÉ : le site pointe vers /Gextimo.apk mais release.sh ne rafraîchissait que Gextimo-v1.0.apk. Le bouton de la vitrine servait un APK du 16 juillet. Script corrigé + lien rafraîchi immédiatement'),
   B(79,'REL-12',8,'done','Trois jeux de réglages vivaient côté serveur SANS écran : périodes saisonnières et identité légale n avaient qu une route d écriture, la modération des avis n était reliée à rien. Lectures ajoutées + écran /admin/reglages-vitrine'),
+  B(80,'REL-13',8,'done','Analytique : le calcul existait côté serveur depuis le 16/07 et la collecte tournait, mais AUCUNE route ni entrée de menu ne menait à /admin/analytique — quatre jours de données illisibles. Écran livré : vue d ensemble, clients (dont les RECHERCHES SANS RÉSULTAT), créateurs, tendances. Ces chiffres viennent de NOS tables : disponibles sans clé GA4/Meta/Clarity, qui restent facultatives'),
   B(49,'REL-6',8,'info','Clés externes (analytics, Search Console) — dépend de la direction')
 ];
 
