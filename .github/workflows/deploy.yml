@@ -42,6 +42,7 @@ jobs:
           ssh-keyscan -T 10 -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
 
       - name: Deploy Nginx
+        timeout-minutes: 4
         run: |
           ssh -i ~/.ssh/id_ed25519 \
               -o StrictHostKeyChecking=no \
@@ -117,7 +118,8 @@ jobs:
           if [ ! -d "/etc/letsencrypt/live/$DOMAIN" ]; then
             if command -v certbot > /dev/null; then
               echo "→ Génération SSL..."
-              sudo certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos -m dev.djraaa@gmail.com --redirect
+              sudo timeout 180 certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos -m dev.djraaa@gmail.com --redirect \
+                || echo "⚠️  certbot n'a pas abouti — le déploiement continue, le certificat sera repris au prochain passage"
               echo "✅ SSL activé"
             else
               echo "⏭️  certbot absent"
@@ -128,6 +130,7 @@ jobs:
           ENGNX
 
       - name: Deploy dist to VPS
+        timeout-minutes: 6
         run: |
           # --exclude APK : les Gextimo*.apk sont déposés par release.sh (hors dist/) —
           # sans cet exclude, --delete les efface à CHAQUE déploiement du site et le
