@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ImagePlus, X, Shirt } from 'lucide-react'
 import { Input, Button } from '@/components/ui'
 import { cn } from '@/utils/cn'
@@ -6,6 +7,7 @@ import { cn } from '@/utils/cn'
 const MAX_IMAGES = 5
 
 export default function VetementForm({ initialData, onSubmit, onCancel, isLoading }) {
+  const { t } = useTranslation()
   const [nom, setNom] = useState(initialData?.nom ?? '')
   const [previews, setPreviews] = useState(initialData?.images_urls ?? (initialData?.image_url ? [initialData.image_url] : []))
   const [files, setFiles] = useState([])
@@ -113,12 +115,15 @@ export default function VetementForm({ initialData, onSubmit, onCancel, isLoadin
         )}
       </div>
 
-      <div className="flex gap-3 pt-1">
+      {/* S02A-25/26 : un SEUL bouton d'action, en pied de panneau collant — il
+          défilait hors écran sur les fiches longues. En édition, le libellé est
+          « Enregistrer » : l'utilisateur est déjà dans l'écran de modification. */}
+      <div className="sticky bottom-0 -mx-5 mt-2 flex gap-3 border-t border-edge bg-card px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
         <Button type="button" variant="ghost" onClick={onCancel} className="flex-1">
-          Annuler
+          {t('commun.annuler')}
         </Button>
         <Button type="submit" loading={isLoading} className="flex-1">
-          {initialData ? 'Modifier' : 'Ajouter'}
+          {initialData ? t('catalogue.formulaire.enregistrer') : t('catalogue.formulaire.ajouter')}
         </Button>
       </div>
     </form>

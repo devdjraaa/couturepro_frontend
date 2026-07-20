@@ -13,6 +13,8 @@ export const avisService = {
       fd.append('auteur_nom', payload.auteur_nom)
       fd.append('note', String(payload.note))
       if (payload.texte) fd.append('texte', payload.texte)
+      // S08C-29e : avis ciblant une collection précise (facultatif).
+      if (payload.collection_id) fd.append('collection_id', payload.collection_id)
       photos.forEach((f) => fd.append('photos[]', f))
       const { data } = await api.post(`/vitrine/createurs/${atelierId}/avis`, fd, {
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -30,11 +32,9 @@ export const avisService = {
     return data
   },
 
-  async moderate(id, statut) {
-    if (isMock()) { await delay(); return {} }
-    const { data } = await api.post(`/avis/${id}/moderation`, { statut })
-    return data
-  },
+  // S08C-29 : la modération par le créateur a été RETIRÉE — il était juge et
+  // partie et pouvait rejeter tout avis négatif. Les avis sont publiés
+  // automatiquement ; l'arbitrage se fait côté admin, a posteriori.
 
   // Signalement public d'un avis.
   async report(id) {

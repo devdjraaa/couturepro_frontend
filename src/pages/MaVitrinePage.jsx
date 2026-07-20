@@ -93,7 +93,9 @@ export default function MaVitrinePage() {
     setInstagram(atelier?.instagram || ''); setFacebook(atelier?.facebook || ''); setSiteWeb(atelier?.site_web || '')
   }, [atelier?.instagram, atelier?.facebook, atelier?.site_web])
   useEffect(() => { collectionService.getAll().then((d) => setCollections(d || [])).catch(() => {}) }, [])
-  useEffect(() => { avisService.getMine().then((d) => setPendingAvis((d || []).filter((a) => a.statut === 'en_attente' || a.statut === 'signale'))).catch(() => {}) }, [])
+  // S08C-29 : les avis sont publiés directement ; seuls les avis SIGNALÉS
+  // remontent ici, et en lecture seule — l'arbitrage appartient à l'admin.
+  useEffect(() => { avisService.getMine().then((d) => setPendingAvis((d || []).filter((a) => a.statut === 'signale'))).catch(() => {}) }, [])
   useEffect(() => { devisService.getMine().then((d) => setDevis(d || [])).catch(() => {}) }, [])
   useEffect(() => {
     abonnementService.getSponsoOffres().then((d) => {
@@ -258,11 +260,6 @@ export default function MaVitrinePage() {
   const assignCollection = async (vetementId, collectionId) => {
     setCreations((list) => list.map((v) => (v.id === vetementId ? { ...v, collection_id: collectionId || null } : v)))
     try { await vetementService.setCollection(vetementId, collectionId) } catch { /* erreur silencieuse */ }
-  }
-
-  const moderateAvis = async (id, statut) => {
-    setPendingAvis((l) => l.filter((a) => a.id !== id))
-    try { await avisService.moderate(id, statut) } catch { /* erreur silencieuse */ }
   }
 
   const traiterDevis = async (id) => {
@@ -576,19 +573,19 @@ export default function MaVitrinePage() {
         {/* Avis à valider */}
         {pendingAvis.length > 0 && (
           <div className="mt-4 bg-card border border-edge rounded-xl p-4">
-            <p className="text-sm font-semibold text-ink mb-3">{t('ma_vitrine.avis_titre')} <span className="text-primary">({pendingAvis.length})</span></p>
+            <p className="text-sm font-semibold text-ink">{t('ma_vitrine.avis_titre')} <span className="text-primary">({pendingAvis.length})</span></p>
+            <div className="flex items-start gap-2 mt-2 mb-3">
+              <ShieldAlert size={13} className="text-ghost mt-0.5 shrink-0" />
+              <p className="text-xs text-ghost">{t('ma_vitrine.avis_examen')}</p>
+            </div>
             <div className="space-y-3">
               {pendingAvis.map((a) => (
                 <div key={a.id} className="border border-edge rounded-lg p-3">
                   <div className="flex items-center justify-between">
-                    <b className="text-sm text-ink">{a.auteur_nom}{a.statut === 'signale' && <span className="text-[10px] font-bold text-danger ml-1.5">{t('ma_vitrine.signale')}</span>}</b>
+                    <b className="text-sm text-ink">{a.auteur_nom}</b>
                     <span className="text-primary text-xs">{'★'.repeat(a.note)}{'☆'.repeat(5 - a.note)}</span>
                   </div>
                   {a.texte && <p className="text-xs text-dim mt-1">{a.texte}</p>}
-                  <div className="flex gap-2 mt-2">
-                    <button onClick={() => moderateAvis(a.id, 'valide')} className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-white hover:bg-primary-600 transition">{t('ma_vitrine.valider')}</button>
-                    <button onClick={() => moderateAvis(a.id, 'rejete')} className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-edge text-dim hover:text-danger hover:border-danger transition">{t('ma_vitrine.rejeter')}</button>
-                  </div>
                 </div>
               ))}
             </div>
