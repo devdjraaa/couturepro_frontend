@@ -261,7 +261,7 @@ export default function AtelierDetailPage() {
                 {atelier.equipesMembres.map(m => (
                   <div key={m.id} className="flex justify-between text-sm py-1.5 border-b border-edge last:border-0">
                     <span className="text-dim">{m.prenom} {m.nom}</span>
-                    <span className="text-ghost">{m.role}</span>
+                    <span className="text-ghost">{t(`roles.${m.role}`, m.role)}</span>
                   </div>
                 ))}
               </div>
