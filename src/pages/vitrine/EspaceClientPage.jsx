@@ -1,6 +1,7 @@
 // P202 : Espace client vitrine — connexion sans mot de passe (Google / OTP e-mail),
 // consentement APDP, mes commandes (suivi par étapes), avis (si livrée) et réclamations.
 import { useEffect, useMemo, useRef, useState } from 'react'
+import i18n from '@/lang/i18n'
 import { useSearchParams, useNavigate, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Mail, LogOut, Package, Star, AlertTriangle, Send, ShieldCheck, CheckCircle2, Heart, BellRing, BellOff } from 'lucide-react'
@@ -148,7 +149,9 @@ function Login({ config, onDone }) {
     const clientId = config?.google_web_client_id
     if (!clientId || !googleRef.current) return
     const s = document.createElement('script')
-    s.src = 'https://accounts.google.com/gsi/client'
+    // `hl` fixe la langue du bouton Google : sans lui, il suit la langue du
+    // compte Google et affichait « Sign in as… » en anglais sur une page française.
+    s.src = `https://accounts.google.com/gsi/client?hl=${i18n.language?.split('-')[0] || 'fr'}`
     s.async = true
     s.onload = () => {
       window.google?.accounts.id.initialize({
@@ -158,7 +161,10 @@ function Login({ config, onDone }) {
           if (ok) { setClientToken(data.token); track('vue_profil_designer', {}); onDone({ client: data.client, consentement: data.consentement }) }
         },
       })
-      window.google?.accounts.id.renderButton(googleRef.current, { theme: 'outline', size: 'large', width: 320 })
+      window.google?.accounts.id.renderButton(googleRef.current, {
+        theme: 'outline', size: 'large', width: 320,
+        locale: i18n.language?.split('-')[0] || 'fr',
+      })
     }
     document.head.appendChild(s)
   }, [config?.google_web_client_id]) // eslint-disable-line react-hooks/exhaustive-deps

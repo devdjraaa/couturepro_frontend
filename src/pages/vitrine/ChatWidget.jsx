@@ -137,7 +137,8 @@ export default function ChatWidget() {
       )}
 
       <button onClick={() => setOpen((v) => !v)} aria-label={t('vitrine.chatbot.ouvrir')}
-              className="fixed bottom-5 right-5 z-[90] w-13 h-13 p-3.5 rounded-full bg-primary text-inverse shadow-lg hover:bg-primary-600 transition">
+              className="fixed bottom-5 right-5 z-[90] w-13 h-13 p-3.5 rounded-full bg-primary text-inverse shadow-lg hover:bg-primary-600 transition"
+              style={{ marginBottom: 'env(safe-area-inset-bottom)' }}>
         {open ? <X size={22} /> : <MessageCircle size={22} />}
       </button>
 
