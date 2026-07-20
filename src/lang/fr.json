@@ -949,7 +949,10 @@
       "libelle_placeholder": "ex: Poitrine, Longueur…",
       "ajouter_libelle": "Ajouter une mesure",
       "enregistrer": "Enregistrer",
-      "ajouter": "Créer le vêtement"
+      "ajouter": "Créer le vêtement",
+      "photos": "Photos du modèle",
+      "ajouter_photos": "Ajouter des photos",
+      "photos_aide": "JPG, PNG, WebP — 4 Mo maximum par photo — {{n}} photos au total"
     },
     "supprimer_confirm": {
       "titre": "Supprimer ce vêtement ?",

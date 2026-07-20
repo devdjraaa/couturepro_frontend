@@ -949,7 +949,10 @@
       "libelle_placeholder": "e.g. Chest, Length…",
       "ajouter_libelle": "Add measurement",
       "enregistrer": "Save",
-      "ajouter": "Create garment"
+      "ajouter": "Create garment",
+      "photos": "Model photos",
+      "ajouter_photos": "Add photos",
+      "photos_aide": "JPG, PNG, WebP — 4 MB max per photo — {{n}} photos in total"
     },
     "supprimer_confirm": {
       "titre": "Delete this garment?",

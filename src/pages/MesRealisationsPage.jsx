@@ -8,7 +8,9 @@ import { compressImage } from '@/utils/compressImage'
 import { cn } from '@/utils/cn'
 import { formatDateShort } from '@/utils/formatDate'
 
-const MAX_PHOTOS = 6
+// S02A-28 : repli si le quota n'est pas encore chargé. La limite réelle vient du
+// plan (`max_photos_realisation`), servie par /realisations/quota.
+const MAX_PHOTOS_DEFAUT = 6
 
 const STATUT_META = {
   brouillon:  { variant: 'default' },
@@ -159,6 +161,7 @@ export default function MesRealisationsPage() {
       {editing && (
         <EditeurRealisation
           initial={editing}
+          maxPhotos={quota?.max_photos_par_realisation ?? MAX_PHOTOS_DEFAUT}
           onClose={() => setEditing(null)}
           onSaved={() => { setEditing(null); charger() }}
         />
@@ -168,7 +171,8 @@ export default function MesRealisationsPage() {
 }
 
 /* Éditeur : création puis ajout de photos, certification/consentement bloquants, soumission. */
-function EditeurRealisation({ initial, onClose, onSaved }) {
+function EditeurRealisation({ initial, maxPhotos, onClose, onSaved }) {
+  const MAX_PHOTOS = maxPhotos ?? MAX_PHOTOS_DEFAUT
   const { t } = useTranslation()
   const fileRef = useRef(null)
   const [rea, setRea]       = useState(initial.nouveau ? null : initial)

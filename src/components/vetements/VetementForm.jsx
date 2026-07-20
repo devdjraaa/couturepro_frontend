@@ -3,11 +3,17 @@ import { useTranslation } from 'react-i18next'
 import { ImagePlus, X, Shirt } from 'lucide-react'
 import { Input, Button } from '@/components/ui'
 import { cn } from '@/utils/cn'
+import { usePlanLimit } from '@/hooks/usePlanFeature'
 
-const MAX_IMAGES = 5
+// S02A-28 : repli si l'abonnement n'est pas encore chargé. La vraie limite vient
+// du plan (`max_photos_vetement`, éditable en admin) — elle était figée à 5 pour
+// toutes les formules, et le serveur, lui, n'en imposait aucune.
+const MAX_IMAGES_DEFAUT = 5
 
 export default function VetementForm({ initialData, onSubmit, onCancel, isLoading }) {
   const { t } = useTranslation()
+  const { max: maxPlan } = usePlanLimit('max_photos_vetement')
+  const MAX_IMAGES = maxPlan ?? MAX_IMAGES_DEFAUT
   const [nom, setNom] = useState(initialData?.nom ?? '')
   const [previews, setPreviews] = useState(initialData?.images_urls ?? (initialData?.image_url ? [initialData.image_url] : []))
   const [files, setFiles] = useState([])
@@ -44,17 +50,17 @@ export default function VetementForm({ initialData, onSubmit, onCancel, isLoadin
   return (
     <form onSubmit={handleSubmit} className="space-y-5 p-5">
       <Input
-        label="Nom du modèle"
+        label={t('catalogue.formulaire.nom')}
         value={nom}
         onChange={e => setNom(e.target.value)}
-        placeholder="Robe de soirée, Boubou grand…"
+        placeholder={t('catalogue.formulaire.nom_placeholder')}
         required
         autoFocus
       />
 
       <div>
         <div className="flex items-center justify-between mb-2">
-          <p className="text-sm font-medium text-ink">Photos du modèle</p>
+          <p className="text-sm font-medium text-ink">{t('catalogue.formulaire.photos')}</p>
           <span className="text-xs text-ghost">{previews.length}/{MAX_IMAGES}</span>
         </div>
 
@@ -83,7 +89,7 @@ export default function VetementForm({ initialData, onSubmit, onCancel, isLoadin
                 )}
               >
                 <ImagePlus size={20} />
-                <span className="text-[10px]">Ajouter</span>
+                <span className="text-[10px]">{t('commun.ajouter')}</span>
               </button>
             )}
           </div>
@@ -98,7 +104,7 @@ export default function VetementForm({ initialData, onSubmit, onCancel, isLoadin
             {/* SUG-17 : icône officielle du module « modèle » (Shirt, cohérente avec la nav
                 et l'action-sheet « Nouveau modèle ») au lieu d'un placeholder image générique. */}
             <Shirt size={28} />
-            <span className="text-xs">Ajouter des photos</span>
+            <span className="text-xs">{t('catalogue.formulaire.ajouter_photos')}</span>
           </button>
         )}
 
@@ -111,7 +117,7 @@ export default function VetementForm({ initialData, onSubmit, onCancel, isLoadin
           onChange={handleFiles}
         />
         {previews.length === 0 && (
-          <p className="text-xs text-ghost mt-1.5">JPG, PNG, WebP — max 4 Mo par photo — {MAX_IMAGES} photos max</p>
+          <p className="text-xs text-ghost mt-1.5">{t('catalogue.formulaire.photos_aide', { n: MAX_IMAGES })}</p>
         )}
       </div>
 
