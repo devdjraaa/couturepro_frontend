@@ -1,6 +1,6 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Plus, X, UserPlus, Users, AlignLeft, ArrowDownAZ, ClipboardList, BookUser, Check, FileSpreadsheet } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
@@ -98,6 +98,7 @@ function AlphaIndex({ letters, onJump }) {
 
 export default function ClientsPage() {
   const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
   const { t } = useTranslation()
   const queryClient = useQueryClient()
   const [search, setSearch]   = useState('')
@@ -155,6 +156,15 @@ export default function ClientsPage() {
   }
 
   // Lancer la sélection de contacts
+  // Ouverture demandée par le bouton « + » de la barre du bas.
+  useEffect(() => {
+    if (searchParams.get('nouveau') === '1') {
+      setShowSheet(true)
+      searchParams.delete('nouveau')
+      setSearchParams(searchParams, { replace: true })
+    }
+  }, [searchParams, setSearchParams])
+
   const handleOpenContacts = async () => {
     const contacts = await pickContacts()
     if (contacts.length === 0) return

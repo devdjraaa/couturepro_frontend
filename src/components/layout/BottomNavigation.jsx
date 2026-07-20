@@ -130,9 +130,12 @@ export default function BottomNavigation() {
             <ChevronRight size={16} className="text-ghost shrink-0" />
           </button>
 
+          {/* « Nouveau client » se contentait de naviguer vers la liste sans ouvrir
+              le formulaire : depuis la page Clients, l'action ne produisait rien.
+              Le paramètre demande explicitement l'ouverture. */}
           <button
             type="button"
-            onClick={() => { setShowNewSheet(false); navigate('/clients') }}
+            onClick={() => { setShowNewSheet(false); navigate('/clients?nouveau=1') }}
             className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-subtle transition-colors text-left"
           >
             <div className="w-10 h-10 rounded-xl bg-success/10 text-success flex items-center justify-center shrink-0">

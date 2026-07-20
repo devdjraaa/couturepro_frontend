@@ -526,7 +526,7 @@ export default function DashboardPage() {
           {/* 3 premières — toujours visibles */}
           <div className="grid grid-cols-3 gap-3">
             <QuickActionTile icon={Plus}     label={t('dashboard.action.nouvelle_commande')} color="primary"  onClick={() => navigate('/commandes/new')} />
-            <QuickActionTile icon={UserPlus} label={t('dashboard.action.nouveau_client')}    color="success"  onClick={() => navigate('/clients')} />
+            <QuickActionTile icon={UserPlus} label={t('dashboard.action.nouveau_client')}    color="success"  onClick={() => navigate('/clients?nouveau=1')} />
             <QuickActionTile icon={Wallet}   label={t('dashboard.action.paiement')}          color="gold"     onClick={() => navigate('/caisse')} />
           </div>
 
