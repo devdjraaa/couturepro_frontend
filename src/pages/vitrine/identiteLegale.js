@@ -80,6 +80,62 @@ export function resoudreListe(liste, identite) {
 }
 
 /**
+ * Gabarits « à l'ancienne » : `[NUMÉRO RCCM : à compléter après immatriculation]`,
+ * `[DATE — à compléter]`, y compris leurs variantes anglaises et leurs tirets
+ * cadratins. Ils viennent des pages rédigées en admin et stockées en base, que
+ * personne ne convertira en `{{variables}}`.
+ *
+ * On les traite comme des valeurs manquantes : la phrase qui les porte est
+ * retirée. Défensif à dessein — un texte collé demain en back-office avec la
+ * même habitude d'écriture sera nettoyé sans nouvelle intervention.
+ */
+const GABARIT_LEGACY = /\[[^\]]*(?:à\s*compl[ée]ter|to\s+be\s+completed)[^\]]*\]/giu
+
+/**
+ * Assainit du HTML rédigé en admin : interpole les `{{variables}}` connues et
+ * SUPPRIME tout élément de bloc qui contient encore un gabarit non renseigné.
+ *
+ * Retirer un paragraphe entier plutôt que le seul crochet est délibéré : une
+ * phrase « déclaré à l'APDP sous la délibération n°  » qui s'arrête net est plus
+ * inquiétante à lire, sur une page juridique, que la même phrase absente.
+ */
+export function assainirHtmlLegal(html, identite) {
+  if (typeof html !== 'string' || !html) return html
+  if (!html.includes('{{') && !GABARIT_LEGACY.test(html)) return html
+
+  const doc = new DOMParser().parseFromString(`<div id="r">${html}</div>`, 'text/html')
+  const racine = doc.getElementById('r')
+
+  // 1. Interpoler ce qui peut l'être.
+  racine.querySelectorAll('*').forEach((el) => {
+    el.childNodes.forEach((n) => {
+      if (n.nodeType === 3 && n.nodeValue.includes('{{')) {
+        n.nodeValue = n.nodeValue.replace(/\{\{(\w+)\}\}/g, (m, cle) => identite?.[cle] || m)
+      }
+    })
+  })
+
+  // 2. Retirer les blocs où subsiste un gabarit — variable non résolue ou
+  //    crochet hérité. On remonte au bloc porteur, pas au conteneur entier.
+  const BLOCS = 'p, li, td, tr, h1, h2, h3, h4, div'
+  let restant = true
+  while (restant) {
+    restant = false
+    for (const el of racine.querySelectorAll(BLOCS)) {
+      const txt = el.textContent || ''
+      if (!/\{\{\w+\}\}/.test(txt) && !new RegExp(GABARIT_LEGACY.source, 'iu').test(txt)) continue
+      // Ne retirer que le bloc le plus intérieur qui porte le gabarit.
+      if (el.querySelector(BLOCS)) continue
+      el.remove()
+      restant = true
+      break
+    }
+  }
+
+  return racine.innerHTML
+}
+
+/**
  * Résout un arbre de contenu légal entier (articles, blocs, tableaux, listes).
  *
  * Appliqué UNE fois en amont du rendu plutôt que dans chaque composant : les

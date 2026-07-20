@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
@@ -6,7 +6,7 @@ import { usePageMeta } from '@/hooks/usePageMeta'
 import { API_BASE_URL } from '@/constants/config'
 import { ROUTES } from '@/constants/routes'
 import { cn } from '@/utils/cn'
-import { useIdentiteLegale, resoudreArbre, resoudreListe } from './identiteLegale'
+import { useIdentiteLegale, resoudreArbre, resoudreListe, assainirHtmlLegal } from './identiteLegale'
 
 /* ── Pt 121 : module unique « pages légales » avec navigation sidebar ──────────
    Toutes les pages légales du footer partagent le même gabarit : une sidebar à
@@ -98,9 +98,16 @@ const PROSE =
 
 function PageLegaleDb({ page, path, ns }) {
   const { i18n } = useTranslation()
+  const identite = useIdentiteLegale()
   const en = i18n.language?.startsWith('en')
   const titre = (en ? page.titre_en : page.titre_fr) || page.titre_fr || page.titre_en || ''
-  const contenu = (en ? page.contenu_en : page.contenu_fr) || page.contenu_fr || page.contenu_en || ''
+  const brut = (en ? page.contenu_en : page.contenu_fr) || page.contenu_fr || page.contenu_en || ''
+
+  // Les pages rédigées en admin échappent à la résolution des textes i18n :
+  // c'est par là que « [NUMÉRO DE DÉLIBÉRATION APDP — à compléter] » restait
+  // affiché sur /confidentialite alors que les dix autres pages étaient propres.
+  const contenu = useMemo(() => assainirHtmlLegal(brut, identite), [brut, identite])
+
   usePageMeta({ title: titre, path })
   return (
     <LegalShell active={ns}>
