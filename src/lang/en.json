@@ -4621,6 +4621,8 @@
       "taille_base": "Base size",
       "instructions": "Assembly instructions",
       "tailles": "Sizes",
+      "niveau": "Choose the pattern level",
+      "nb_pieces": "Number of pieces",
       "pieces": "pieces",
       "palette": "Color palette",
       "palette_aide": "Tip: paste color codes (#c2410c, #0e7490…) to display swatches.",

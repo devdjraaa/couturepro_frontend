@@ -105,6 +105,9 @@ function CandidatureModal({ categories, onClose, t }) {
 
 export default function PartenairesPage() {
   const { t } = useTranslation()
+  // Mentions de partenariat : emplacement optionnel, masqué tant que la clé
+  // n'est pas fournie (voir le commentaire au point d'affichage).
+  const mentionsPartenariat = t('vitrine.partenaires.mentions', { defaultValue: '' })
   usePageMeta({ title: t('vitrine.partenaires.titre'), description: t('vitrine.partenaires.sous'), path: '/partenaires' })
 
   const [data, setData] = useState(null)
@@ -173,9 +176,11 @@ export default function PartenairesPage() {
             Ne pas développer en dur tant que la décision n'est pas confirmée → masqué par défaut,
             activable via la clé i18n vitrine.partenaires.mentions quand elle sera fournie.
           */}
-          {t('vitrine.partenaires.mentions', { defaultValue: '' }) && (
+          {/* Lu une seule fois, avec son repli : le second appel n'avait pas de
+              `defaultValue` et passait pour une clé oubliée. */}
+          {mentionsPartenariat && (
             <p className="text-xs text-ghost mt-10 text-center max-w-[680px] mx-auto">
-              {t('vitrine.partenaires.mentions')}
+              {mentionsPartenariat}
             </p>
           )}
         </div>
