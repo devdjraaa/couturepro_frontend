@@ -102,6 +102,13 @@ export default function AppLayout({
       <Sidebar />
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        {/* ANN-8 — bande d'annonces, tout en haut, avec les autres bandeaux.
+            Elle était placée SOUS l'en-tête, mais le tableau de bord masque
+            celui-ci sur mobile : la bande devenait alors le premier élément et
+            passait sous la barre système — l'heure et les icônes réseau se
+            superposaient au texte. Constaté sur l'appareil, invisible au
+            navigateur. Elle gère donc sa propre zone sûre, comme ses voisines. */}
+        <BandeAnnonces />
         <AccountStatusBanner />
         <ExpiryBanner />
         <div className={noMobileHeader ? 'hidden lg:block' : ''}>
@@ -112,11 +119,6 @@ export default function AppLayout({
             rightAction={rightAction}
           />
         </div>
-
-        {/* ANN-8 — bande d'annonces, sous l'en-tête et au-dessus du contenu.
-            Elle disparaît d'elle-même quand aucune annonce n'est en cours :
-            une bande vide rongerait l'espace utile de chaque écran. */}
-        <BandeAnnonces />
 
         <main
           ref={containerRef}

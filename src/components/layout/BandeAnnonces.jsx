@@ -52,7 +52,8 @@ export default function BandeAnnonces() {
 
   return (
     <div className="gx-marquee border-b border-edge bg-primary/[0.06]"
-         role="region" aria-label={t('annonces.bande_titre')}>
+         role="region" aria-label={t('annonces.bande_titre')}
+         style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
       <div className="gx-marquee__track py-1.5">
         {suite.map((a, i) => (
           <span key={`${a.id}-${i}`} className="flex items-center gap-2 px-6 shrink-0 text-[13px]">
