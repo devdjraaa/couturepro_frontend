@@ -1552,12 +1552,13 @@
     },
     "inscription": {
       "eyebrow": "Gextimo",
-      "title": "Create your designer account",
-      "subtitle": "Sign-up happens on the Gextimo mobile app.",
-      "body": "Download the app to create your account, manage your workshop, publish your creations and your public showcase.",
+      "title": "Your African design showcase is waiting",
+      "subtitle": "Create your space in 2 minutes, from your browser.",
+      "body": "Your space is available on the web as soon as you sign up. To go further — manage orders on the move, get notifications and reach advanced features — download the mobile app.",
       "cta": "Download the app",
       "have_account": "Already have an account?",
-      "login": "Log in"
+      "login": "Log in",
+      "cta_web": "Create my space"
     },
     "soon": "Soon",
     "cookies": {
