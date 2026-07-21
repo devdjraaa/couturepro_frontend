@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
-  Home, Users, ClipboardList, Layers, Settings, PanelLeftClose, PanelLeftOpen,   Bell, Star, Users2, LogOut, HelpCircle, Archive, Wallet, Store, FileText, Palette, Images, History, Sparkles, Megaphone, Rocket } from 'lucide-react'
+  Home, Users, ClipboardList, Layers, Settings, PanelLeftClose, PanelLeftOpen,
+  Bell, Star, Users2, LogOut, HelpCircle, Archive, Wallet, Store, FileText, Palette, Images, History, Sparkles, Megaphone, Rocket } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
 import { useAuth } from '@/contexts'
