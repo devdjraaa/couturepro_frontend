@@ -2,6 +2,16 @@ import api from './api'
 import { setToken } from '@/utils/storage'
 
 function normalizeMe(data) {
+  // Membre d'équipe (assistant) : la réponse porte `membre`, pas `atelier_maitre`.
+  // On rebâtit exactement la même session que `equipeLogin`, pour que le
+  // rafraîchissement au démarrage ne déconnecte plus l'assistant.
+  if (data.membre) {
+    return {
+      user:    { ...data.membre, role: data.membre.role, permissions: data.permissions ?? [] },
+      atelier: null,
+    }
+  }
+
   const { atelier_maitre, ...proprietaire } = data
   const params  = atelier_maitre?.parametres ?? {}
   const atelier = atelier_maitre
