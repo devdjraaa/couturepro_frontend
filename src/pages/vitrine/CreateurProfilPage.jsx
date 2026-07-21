@@ -421,6 +421,11 @@ export default function CreateurProfilPage() {
   const [patronBuy, setPatronBuy] = useState(null)            // P161 : patron en cours d'achat
   const [likeState, setLikeState] = useState({})              // P159 : { [vetementId]: { likes, liked } }
   const [abo, setAbo] = useState({ abonne: false, abonnes: 0 }) // P173
+  // ⚠️ Ce hook DOIT rester ici, avec les autres : plus bas il se trouvait
+  // APRÈS les `return` de chargement, donc appelé seulement au second rendu.
+  // React comptait alors plus de hooks qu'au rendu précédent et refusait de
+  // rendre la page — écran « Une erreur est survenue » sur tous les profils.
+  const [motifPourAvis, setMotifPourAvis] = useState(null) // id de l'avis dont on choisit le motif
 
   useEffect(() => { getCreator(slug).then((d) => setC(d ?? null)) }, [slug])
   useEffect(() => { window.scrollTo(0, 0) }, [slug])
@@ -535,7 +540,6 @@ export default function CreateurProfilPage() {
 
   // Décision 7 : le signalement porte un motif — un motif grave (contenu
   // illégal, insulte, discrimination) déclenche une revue prioritaire immédiate.
-  const [motifPourAvis, setMotifPourAvis] = useState(null) // id de l'avis dont on choisit le motif
 
   const reportAvis = async (id, motif) => {
     setMotifPourAvis(null)
