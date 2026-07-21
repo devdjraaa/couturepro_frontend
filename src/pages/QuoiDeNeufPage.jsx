@@ -63,7 +63,10 @@ export default function QuoiDeNeufPage() {
                   </span>
 
                   <div className="min-w-0">
-                    <p className="font-semibold text-ink truncate">{e.titre}</p>
+                    {/* Pas de `truncate` : sur mobile, un titre coupé à mi-mot
+                        perd son sens (« Vos réalisations consultables sans ré… »).
+                        Deux lignes suffisent, et la carte s'ajuste. */}
+                    <p className="font-semibold text-ink leading-snug">{e.titre}</p>
                     <p className="text-[11px] text-ghost">
                       {t('quoi_de_neuf.version', { v: e.version })} · {formatDate(e.date)}
                     </p>
