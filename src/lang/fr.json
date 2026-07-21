@@ -1552,12 +1552,13 @@
     },
     "inscription": {
       "eyebrow": "Gextimo",
-      "title": "Créez votre compte créateur",
-      "subtitle": "L'inscription se fait sur l'application mobile Gextimo.",
-      "body": "Téléchargez l'application pour créer votre compte, gérer votre atelier, publier vos créations et votre vitrine publique.",
+      "title": "Votre vitrine de création africaine vous attend",
+      "subtitle": "Créez votre espace en 2 minutes, depuis votre navigateur.",
+      "body": "Votre espace est accessible depuis le web dès votre inscription. Pour aller plus loin — gérer vos commandes en mobilité, recevoir des notifications et accéder aux fonctionnalités avancées — téléchargez l'application mobile.",
       "cta": "Télécharger l'application",
       "have_account": "Déjà un compte ?",
-      "login": "Se connecter"
+      "login": "Se connecter",
+      "cta_web": "Créer mon espace"
     },
     "cookies": {
       "text": "Nous utilisons des cookies pour améliorer votre expérience et mémoriser vos préférences (langue, devise, thème).",
