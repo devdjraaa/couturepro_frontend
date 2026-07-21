@@ -187,17 +187,17 @@ const ITEMS = [
   // ---------- Sprint 08vC ----------
 
   // ---------- Workflow photos ----------
-  F(8,'PHOTO-1',3,'todo','Retour qualité instantané et purement visuel (icône/couleur/animation, aucun texte)'),
+  F(14,'PHOTO-1',3,'done','FAIT (21/07) — le contrôle qualité tournait déjà côté serveur et renvoyait des codes ; l\'écran affichait le message d\'erreur brut, une phrase qui ne dit pas au créateur CE QU\'IL doit changer. Désormais une icône par cause (agrandir, recadrer, lumière, mise au point), rouge si refus, ambre pour une réserve, pastille verte si tout passe. AUCUN texte affiché — mais conservé en title et aria-label pour les lecteurs d\'écran. Le verdict s\'efface seul et respecte le réglage « moins d\'animations ». Un test verrouille la correspondance code → icône : un code inconnu laisserait le créateur sans aucune indication'),
 
   // ---------- Annonces ----------
-  F(18,'ANN-7',4,'todo','Information « diffusée trois fois par jour » dans la modale'),
-  F(19,'ANN-8',4,'todo','Bande d\'annonces défilante en haut de l\'application (CSS déjà disponible)'),
+  F(15,'ANN-7',4,'done','FAIT (21/07) — le texte disait « diffusée plusieurs fois par jour », vague, alors que la valeur réelle arrivait déjà dans la réponse serveur sans être utilisée. Elle vient maintenant de la configuration : un créateur qui paie un Boost lit ce qu\'il achète, et la direction peut changer ce nombre en admin'),
+  F(16,'ANN-8',4,'done','FAIT (21/07) — bande défilante en haut de l\'application. Le socle serveur était complet depuis le 19/07 mais les annonces n\'avaient AUCUN endroit où paraître : un créateur pouvait payer un Boost sans que personne ne voie son annonce. Ordre décidé par le serveur (boostées d\'abord) — le trier à l\'écran reviendrait à décider côté client de ce qui a été payé. La bande disparaît quand il n\'y a rien à dire'),
 
 
 
   // ---------- Studio vidéos & support ----------
   F(32,'VID-1',7,'part','PARTAGÉ. La LOGIQUE est faite (20/07) : reconnaissance YouTube/Vimeo/Dailymotion sous les formes réellement collées — lien court, Shorts, timestamp, paramètres de partage — extraction de l identifiant, lecture sur place, et un lien non reconnu reste un lien plutôt qu un cadre vide. RESTE POUR TOI : l habillage du lecteur, les cartes uniformes en grille'),
-  F(37,'SUP-1',7,'todo','Encart d\'information permanent dans Support > Tickets'),
+  F(17,'SUP-1',7,'done','DÉJÀ FAIT — statut périmé, vérifié le 21/07 : l\'encart d\'information permanent existe bien dans Support > Tickets (SupportPage, section commentée SUP-1)'),
 
   // ---------- Reliquat ----------
   F(38,'REL-V1',8,'todo','Points vitrine encore ouverts (à basculer depuis l\'ancien fichier vitrine)'),
