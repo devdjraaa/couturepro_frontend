@@ -12,6 +12,7 @@ import {
   useRetirerImage, useSupprimerAnnonce,
 } from '@/hooks/useAnnonces'
 import { annonceService } from '@/services/annonceService'
+import { jourCotonou } from '@/utils/jourCotonou'
 
 /**
  * ANN-1..9 — Annonces du créateur.
@@ -51,7 +52,17 @@ function ModaleBoost({ annonce, boost, onClose }) {
   const { t } = useTranslation()
   const offres = boost?.offres ?? []
   const [jours, setJours] = useState(offres[0]?.jours ?? 1)
-  const [debut, setDebut] = useState(new Date().toISOString().slice(0, 10))
+
+  // Le Boost doit démarrer DANS la fenêtre de diffusion de l'annonce et pas dans
+  // le passé — le serveur le refuse sinon (« doit démarrer pendant la période »).
+  // On calcule « aujourd'hui » en heure de Cotonou, comme le serveur : proposer
+  // le jour UTC faisait rejeter le clic près de minuit. Et on borne le sélecteur
+  // à [début, fin] pour qu'aucune date invalide ne soit choisissable.
+  const finFenetre = String(annonce.date_fin || '').slice(0, 10)
+  const debutFenetre = String(annonce.date_debut || '').slice(0, 10)
+  const debutMin = debutFenetre > jourCotonou() ? debutFenetre : jourCotonou()
+
+  const [debut, setDebut] = useState(debutMin)
   const [envoi, setEnvoi] = useState(false)
 
   // Le prix AFFICHÉ vient de la configuration serveur ; il n'est ni saisi ni
@@ -90,7 +101,7 @@ function ModaleBoost({ annonce, boost, onClose }) {
             <div>
               <span className={LABEL}>{t('annonces.boost_debut')}</span>
               <input type="date" className={INPUT} value={debut}
-                     min={new Date().toISOString().slice(0, 10)}
+                     min={debutMin} max={finFenetre || undefined}
                      onChange={(e) => setDebut(e.target.value)} />
             </div>
 
@@ -140,7 +151,7 @@ export default function AnnoncesPage() {
 
   const [form, setForm] = useState({
     titre: '', message: '', duree_jours: 1,
-    date_debut: new Date().toISOString().slice(0, 10),
+    date_debut: jourCotonou(),
   })
   const [fichier, setFichier] = useState(null)
   const [boostVise, setBoostVise] = useState(null)
@@ -162,7 +173,7 @@ export default function AnnoncesPage() {
         try { await envoyerImage.mutateAsync({ id: annonce.id, fichier }) }
         catch { toast.error(t('erreurs.generique_titre')) }
       }
-      setForm({ titre: '', message: '', duree_jours: 1, date_debut: new Date().toISOString().slice(0, 10) })
+      setForm({ titre: '', message: '', duree_jours: 1, date_debut: jourCotonou() })
       setFichier(null)
       if (champFichier.current) champFichier.current.value = ''
     } catch (e2) {
@@ -212,7 +223,7 @@ export default function AnnoncesPage() {
               <div>
                 <span className={LABEL}>{t('annonces.form_debut')}</span>
                 <input type="date" className={INPUT} required value={form.date_debut}
-                       min={new Date().toISOString().slice(0, 10)}
+                       min={jourCotonou()}
                        onChange={(e) => setForm((f) => ({ ...f, date_debut: e.target.value }))} />
               </div>
               <div>
