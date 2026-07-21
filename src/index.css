@@ -1100,3 +1100,15 @@ input::-ms-clear {
 @media (prefers-reduced-motion: reduce) {
   .gx-verdict { animation: none; }
 }
+
+/* Indice « ça défile » sur les indicateurs du tableau de bord : un petit
+   va-et-vient, assez pour être remarqué sans attirer l'œil en permanence. */
+@keyframes gx-indice-glisse {
+  0%, 100% { transform: translateX(0); opacity: .55; }
+  50%      { transform: translateX(-4px); opacity: 1; }
+}
+.gx-indice-defilement { animation: gx-indice-glisse 1.6s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gx-indice-defilement { animation: none; opacity: .8; }
+}

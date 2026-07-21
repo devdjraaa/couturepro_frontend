@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
 import Sidebar from './Sidebar'
 import Header from './Header'
-import BandeAnnonces from './BandeAnnonces'
 import BottomNavigation from './BottomNavigation'
 import { useSubscriptionGate } from '@/hooks/useSubscriptionGate'
 import { GlobalSearch } from '@/components/ui'
@@ -102,13 +101,6 @@ export default function AppLayout({
       <Sidebar />
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* ANN-8 — bande d'annonces, tout en haut, avec les autres bandeaux.
-            Elle était placée SOUS l'en-tête, mais le tableau de bord masque
-            celui-ci sur mobile : la bande devenait alors le premier élément et
-            passait sous la barre système — l'heure et les icônes réseau se
-            superposaient au texte. Constaté sur l'appareil, invisible au
-            navigateur. Elle gère donc sa propre zone sûre, comme ses voisines. */}
-        <BandeAnnonces />
         <AccountStatusBanner />
         <ExpiryBanner />
         <div className={noMobileHeader ? 'hidden lg:block' : ''}>
