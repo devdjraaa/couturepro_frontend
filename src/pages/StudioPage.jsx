@@ -3,12 +3,11 @@ import { analyserLienVideo, estFichierVideo } from '@/utils/videoEmbed'
 import CarteVideo from '@/components/video/CarteVideo'
 import { useTranslation } from 'react-i18next'
 import toast from 'react-hot-toast'
-import { Plus, Trash2, Phone, Clock, Check, X, Megaphone, Calculator, Video, ExternalLink, Upload } from 'lucide-react'
+import { Plus, Trash2, Phone, Clock, Check, X, Calculator, Video, ExternalLink, Upload } from 'lucide-react'
 import { AppLayout } from '@/components/layout'
 import { TabBar, Button, EmptyState, Skeleton, Input } from '@/components/ui'
 import { FeatureGate } from '@/components/abonnement'
 import { studioService } from '@/services/studioService'
-import { collectionService } from '@/services/collectionService'
 import { useFormatCurrency } from '@/utils/formatCurrency'
 import { cn } from '@/utils/cn'
 
@@ -149,52 +148,10 @@ function SimulateurTab({ t }) {
   )
 }
 
-// PL-6 — Annonce de collection
-function AnnonceTab({ t }) {
-  const [collections, setCollections] = useState(null)
-  const [selected, setSelected] = useState('')
-  const [message, setMessage] = useState('')
-  const [sending, setSending] = useState(false)
-
-  useEffect(() => {
-    collectionService.getAll().then(setCollections).catch(() => setCollections([]))
-  }, [])
-
-  const annoncer = async () => {
-    if (!selected) { toast(t('studio.annonce.choisir')); return }
-    setSending(true)
-    try {
-      await studioService.annoncerCollection(selected, { message })
-      toast.success(t('studio.annonce.envoyee'))
-      setMessage('')
-    } catch (err) {
-      toast.error(err?.response?.data?.message || t('studio.erreur'))
-    } finally { setSending(false) }
-  }
-
-  if (collections === null) return <Skeleton className="h-40 rounded-xl" />
-  if (collections.length === 0) return <EmptyState icon={Megaphone} title={t('studio.annonce.aucune_collection')} description={t('studio.annonce.aucune_collection_sous')} />
-
-  return (
-    <div className="space-y-4">
-      <div className="bg-card border border-edge rounded-xl p-4 space-y-3">
-        <label className="block">
-          <span className="text-xs text-dim">{t('studio.annonce.collection')}</span>
-          <select value={selected} onChange={e => setSelected(e.target.value)}
-            className="w-full mt-1 rounded-xl border border-edge bg-card px-3 py-2 text-sm text-ink">
-            <option value="">{t('studio.annonce.choisir')}</option>
-            {collections.map(c => <option key={c.id} value={c.id}>{c.nom}</option>)}
-          </select>
-        </label>
-        <textarea value={message} onChange={e => setMessage(e.target.value)} rows={4}
-          placeholder={t('studio.annonce.message')}
-          className="w-full rounded-xl border border-edge bg-card px-3 py-2 text-sm text-ink resize-none" />
-        <Button onClick={annoncer} loading={sending} icon={Megaphone} className="w-full">{t('studio.annonce.publier')}</Button>
-      </div>
-      <p className="text-2xs text-ghost text-center">{t('studio.annonce.aide')}</p>
-    </div>
-  )
-}
+// L'onglet « Annonce de collection » (PL-6) vivait ici, mais le module Annonces
+// du menu principal (/annonces, avec Boost payant et diffusion) fait la même
+// chose en mieux : deux entrées pour annoncer, c'est une de trop. On garde la
+// riche, dans le menu, et on retire le doublon du Studio.
 
 // PL-7 — Vidéos de présentation
 function VideosTab({ t }) {
@@ -308,7 +265,6 @@ function VideosTab({ t }) {
 const TABS = [
   { key: 'attente', feature: 'liste_attente', icon: Clock },
   { key: 'simulateur', feature: 'simulateur_revenus', icon: Calculator },
-  { key: 'annonce', feature: 'annonce_collection', icon: Megaphone },
   { key: 'videos', feature: 'videos_presentation', icon: Video },
 ]
 
@@ -331,9 +287,7 @@ export default function StudioPage() {
             ? <ListeAttenteTab t={t} />
             : tab === 'simulateur'
               ? <SimulateurTab t={t} />
-              : tab === 'annonce'
-                ? <AnnonceTab t={t} />
-                : <VideosTab t={t} />}
+              : <VideosTab t={t} />}
         </FeatureGate>
       </div>
     </AppLayout>
