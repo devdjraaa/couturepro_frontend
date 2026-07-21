@@ -923,7 +923,14 @@ input::-ms-clear {
   display: flex; width: max-content;
   animation: gx-marquee-scroll 30s linear infinite;
 }
-.gx-marquee:hover .gx-marquee__track { animation-play-state: paused; }
+/* Pause au survol — RÉSERVÉE aux appareils qui survolent vraiment.
+   Sur un écran tactile, un appui déclenche l'état :hover et l'y LAISSE : la
+   bande se fige au premier contact et ne repart plus jusqu'à ce qu'on touche
+   ailleurs. Constaté sur l'appareil le 21/07. `hover: hover` exclut le tactile,
+   où la pause n'apporte de toute façon rien — on ne survole pas pour lire. */
+@media (hover: hover) and (pointer: fine) {
+  .gx-marquee:hover .gx-marquee__track { animation-play-state: paused; }
+}
 @keyframes gx-marquee-scroll {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
