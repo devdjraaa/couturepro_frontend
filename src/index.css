@@ -925,9 +925,12 @@ input::-ms-clear {
 }
 
 /* P204 — bandeau partenaires : défilement automatique continu (pause au survol). */
-.gx-marquee { width: 100%; overflow: hidden; }
+/* `align-items` aux DEUX niveaux : sans quoi le texte se range où le parent le
+   décide — sur le tableau de bord il tombait au bas de la bande. Une bande
+   défilante centre son contenu, quelle que soit la hauteur qu'on lui donne. */
+.gx-marquee { width: 100%; overflow: hidden; display: flex; align-items: center; }
 .gx-marquee__track {
-  display: flex; width: max-content;
+  display: flex; align-items: center; width: max-content;
   animation: gx-marquee-scroll 30s linear infinite;
 }
 /* Pause au survol — RÉSERVÉE aux appareils qui survolent vraiment.
@@ -1044,21 +1047,6 @@ input::-ms-clear {
 input::-ms-reveal,
 input::-ms-clear {
   display: none;
-}
-
-/* P204 — bandeau partenaires : défilement automatique continu (pause au survol). */
-.gx-marquee { width: 100%; overflow: hidden; }
-.gx-marquee__track {
-  display: flex; width: max-content;
-  animation: gx-marquee-scroll 30s linear infinite;
-}
-.gx-marquee:hover .gx-marquee__track { animation-play-state: paused; }
-@keyframes gx-marquee-scroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .gx-marquee__track { animation: none; }
 }
 
 /* ── Point 57 — animations de célébration (événements dynamiques) ─────────────
