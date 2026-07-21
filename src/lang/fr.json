@@ -824,6 +824,8 @@
       "type_vetement": "Type de vêtement",
       "choisir_type": "Choisir un type de vêtement…",
       "mesures_titre": "Mesures du client",
+      "mesures_non_configurees": "Aucune mesure n'est configurée pour « {{vetement}} ». Les libellés se définissent une seule fois par type de vêtement.",
+      "mesures_configurer": "Les configurer",
       "mesures_aide": "Mesures attendues pour « {{vetement}} ». Elles sont enregistrées sur la fiche du client.",
       "mesures_enregistrer": "Enregistrer les mesures",
       "mesures_enregistrees": "Enregistrées"
