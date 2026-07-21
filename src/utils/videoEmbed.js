@@ -19,23 +19,29 @@ const MOTIFS = [
     fournisseur: 'youtube',
     test: /(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/|v\/)|youtu\.be\/)([\w-]{11})/i,
     embed: (id) => `https://www.youtube-nocookie.com/embed/${id}`,
+    vignette: (id) => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
   },
   // vimeo.com/ID · player.vimeo.com/video/ID
   {
     fournisseur: 'vimeo',
     test: /vimeo\.com\/(?:video\/)?(\d{6,})/i,
     embed: (id) => `https://player.vimeo.com/video/${id}`,
+    // Vimeo n'expose pas d'adresse de vignette prévisible : il faudrait
+    // interroger son API. On s'en passe plutôt que d'ajouter un appel réseau
+    // par vidéo — la carte affiche alors un fond neutre.
+    vignette: () => null,
   },
   // dailymotion.com/video/ID · dai.ly/ID
   {
     fournisseur: 'dailymotion',
     test: /(?:dailymotion\.com\/video\/|dai\.ly\/)([a-z0-9]+)/i,
     embed: (id) => `https://www.dailymotion.com/embed/video/${id}`,
+    vignette: (id) => `https://www.dailymotion.com/thumbnail/video/${id}`,
   },
 ]
 
 /**
- * @returns {{fournisseur: string, id: string, embed: string}|null}
+ * @returns {{fournisseur: string, id: string, embed: string, vignette: string|null}|null}
  *   `null` = lien non reconnu ; l'appelant doit alors le traiter comme un lien
  *   sortant ordinaire plutôt que de tenter une intégration qui afficherait un
  *   cadre vide.
@@ -47,7 +53,7 @@ export function analyserLienVideo(url) {
   for (const m of MOTIFS) {
     const r = v.match(m.test)
     if (r?.[1]) {
-      return { fournisseur: m.fournisseur, id: r[1], embed: m.embed(r[1]) }
+      return { fournisseur: m.fournisseur, id: r[1], embed: m.embed(r[1]), vignette: m.vignette?.(r[1]) ?? null }
     }
   }
 

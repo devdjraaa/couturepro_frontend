@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { analyserLienVideo, estFichierVideo } from '@/utils/videoEmbed'
+import CarteVideo from '@/components/video/CarteVideo'
 import { useTranslation } from 'react-i18next'
 import toast from 'react-hot-toast'
 import { Plus, Trash2, Phone, Clock, Check, X, Megaphone, Calculator, Video, ExternalLink, Upload } from 'lucide-react'
@@ -292,16 +293,11 @@ function VideosTab({ t }) {
       {items.length === 0 ? (
         <EmptyState icon={Video} title={t('studio.videos.vide')} description={t('studio.videos.vide_sous')} />
       ) : (
-        <div className="space-y-2">
+        /* VID-1 — grille de cartes au lieu d'une liste de liens. Le créateur
+           voit enfin ce qu'il a publié, et la vidéo se regarde sur place. */
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {items.map(item => (
-            <div key={item.id} className="bg-card border border-edge rounded-xl p-3 flex items-center justify-between gap-2">
-              <a href={item.url} target="_blank" rel="noopener noreferrer" className="min-w-0 flex items-center gap-2 text-sm text-primary">
-                <Video size={15} className="shrink-0" />
-                <span className="truncate">{item.titre || item.url}</span>
-                <ExternalLink size={12} className="shrink-0 opacity-60" />
-              </a>
-              <button onClick={() => retirer(item)} className="text-danger shrink-0"><Trash2 size={15} /></button>
-            </div>
+            <CarteVideo key={item.id} video={item} onRetirer={retirer} />
           ))}
         </div>
       )}
