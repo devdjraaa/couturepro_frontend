@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import BandeAnnonces from '@/components/layout/BandeAnnonces'
 import { useNavigate } from 'react-router-dom'
 import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, ChevronDown, CheckCircle2, CircleUser, Sun, Moon, Store, X, Layers, Users2, Star, FileText, Crown, Hand } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -407,6 +408,24 @@ export default function DashboardPage() {
   const fmt = useFormatCurrency()
   const { t } = useTranslation()
   const queryClient = useQueryClient()
+
+  // Indice de défilement des KPI : il disparaît une fois le bout atteint.
+  const kpiRef = useRef(null)
+  const [kpiAuBout, setKpiAuBout] = useState(false)
+
+  const majFinKpi = () => {
+    const el = kpiRef.current
+    if (!el) return
+    // Marge de 4 px : les navigateurs arrondissent, et sans elle l'indice
+    // resterait affiché alors qu'on est visuellement au bout.
+    setKpiAuBout(el.scrollLeft + el.clientWidth >= el.scrollWidth - 4)
+  }
+
+  useEffect(() => {
+    // Sur un grand écran tout tient : aucun indice à montrer.
+    const el = kpiRef.current
+    if (el && el.scrollWidth <= el.clientWidth) setKpiAuBout(true)
+  }, [loadingStats])
   const { user, atelier }  = useAuth()
   const { isDesigner } = useAccountType()
   const { data: commandes = [], isLoading: loadingCmd } = useCommandes()
@@ -444,6 +463,12 @@ export default function DashboardPage() {
       <div className="header-gradient px-4 pt-safe pb-5 lg:hidden sticky top-0 z-20">
         <Greeting user={user} subtitle={dynamicSub} hero />
       </div>
+
+      {/* ANN-8 — bande d'annonces, entre l'en-tête et les indicateurs. Elle
+          vivait dans AppLayout, tout en haut : sur cet écran l'en-tête mobile
+          est masqué (noMobileHeader), donc elle passait sous la barre système.
+          Ici elle est protégée par le hero, et c'est la place demandée. */}
+      <BandeAnnonces />
 
       <div className="p-4 space-y-5 pb-safe">
 
@@ -489,8 +514,13 @@ export default function DashboardPage() {
           <TodoList commandes={commandes} isLoading={loadingCmd} navigate={navigate} />
         </div>
 
-        {/* KPIs secondaires */}
-        <div className="bg-card border border-edge rounded-2xl overflow-x-auto scrollbar-none">
+        {/* KPIs secondaires — cinq vignettes dont deux visibles à la fois.
+            Rien ne disait qu'on pouvait faire défiler : un dégradé de bord et
+            un chevron le montrent, et ils s'effacent dès qu'on a défilé, pour
+            ne pas rester à encombrer une fois le geste compris. */}
+        <div className="relative">
+          <div ref={kpiRef} onScroll={majFinKpi}
+               className="bg-card border border-edge rounded-2xl overflow-x-auto scrollbar-none">
           <div className="flex divide-x divide-edge">
             {loadingStats ? (
               [...Array(4)].map((_, i) => <Skeleton key={i} className="shrink-0 w-24 h-[72px] rounded-xl m-3" />)
@@ -504,6 +534,15 @@ export default function DashboardPage() {
               </>
             )}
           </div>
+          </div>
+
+          {!kpiAuBout && (
+            <div aria-hidden="true"
+                 className="pointer-events-none absolute inset-y-0 right-0 w-16 rounded-r-2xl flex items-center justify-end pr-2
+                            bg-gradient-to-l from-card via-card/80 to-transparent">
+              <ChevronRight size={18} className="text-ghost gx-indice-defilement" />
+            </div>
+          )}
         </div>
 
         {/* Actions rapides */}
