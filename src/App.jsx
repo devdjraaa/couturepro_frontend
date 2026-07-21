@@ -5,6 +5,7 @@ import ReglagesVitrinePage from '@/pages/admin/ReglagesVitrinePage'
 import SplashDemarrage from '@/components/layout/SplashDemarrage'
 import CompteReboursLancement from '@/components/vitrine/CompteReboursLancement'
 import { Routes, Route, Navigate } from 'react-router-dom'
+import ScrollToTop from '@/components/ScrollToTop'
 import { ProtectedRoute, DesignerRoute } from '@/components/layout'
 import { AdminProtectedRoute } from '@/components/admin'
 import {
@@ -128,6 +129,7 @@ export default function App() {
 
   return (
     <>
+      <ScrollToTop />
       {/* SUG-1 — ouverture « favicon → logo → connexion ». Monté à la RACINE :
           dans AppLayout il se remonterait à chaque navigation. Une fois par
           session, passable, et rien du tout si l'utilisateur a demandé moins

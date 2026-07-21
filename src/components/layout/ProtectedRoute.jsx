@@ -1,10 +1,11 @@
-import { Navigate, Outlet } from 'react-router-dom'
+import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts'
 import { Spinner } from '@/components/ui'
 import SubscriptionWall from './SubscriptionWall'
 
 export default function ProtectedRoute() {
   const { user, isLoading } = useAuth()
+  const { pathname } = useLocation()
 
   if (isLoading) {
     return (
@@ -18,7 +19,9 @@ export default function ProtectedRoute() {
 
   return (
     <>
-      <Outlet />
+      <div key={pathname} className="gx-page-enter">
+        <Outlet />
+      </div>
       <SubscriptionWall />
     </>
   )

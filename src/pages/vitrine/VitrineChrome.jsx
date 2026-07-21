@@ -597,6 +597,7 @@ function WelcomePopup() {
 }
 
 export default function VitrineShell({ children }) {
+  const { pathname } = useLocation()
   useEffect(() => {
     const io = new IntersectionObserver(
       (entries) => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target) } }),
@@ -612,7 +613,7 @@ export default function VitrineShell({ children }) {
     <div className="min-h-dvh bg-app text-ink font-sans">
       <EvenementCelebration />
       <VitrineNavbar />
-      <main>{children}</main>
+      <main key={pathname} className="gx-page-enter">{children}</main>
       <VitrineFooter />
       <VitrineCookies />
       <WelcomePopup />
