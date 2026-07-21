@@ -491,17 +491,33 @@ export function VitrineFooter() {
         <div className="vt-foot-shimmer" />
       </div>
       <div className="relative z-10 max-w-[1180px] mx-auto px-5">
-        <div className="vt-reveal grid grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr_1.1fr_1.1fr] gap-x-5 gap-y-5 pb-5 border-b border-edge">
+        {/* cols = [Platform, Company, Legal, Rules] */}
+        <div className="vt-reveal grid grid-cols-2 md:grid-cols-[1.4fr_1fr_1.1fr_1.1fr] gap-x-5 gap-y-5 pb-5 border-b border-edge">
           <div className="col-span-2 md:col-span-1">
             <VitrineLogo onDark />
             <p className="text-[13px] mt-2 max-w-[280px] text-dim">{t('vitrine.footer.tagline')}</p>
           </div>
-          {cols.map((c) => (
-            <div key={c.h} className="flex flex-col">
-              <h5 className="text-[12px] font-bold uppercase tracking-[0.1em] mb-2">{c.h}</h5>
-              {c.links.map((l) => <FooterLink key={l.l} to={l.to}>{l.l}</FooterLink>)}
+          {/* Entreprise */}
+          <div className="flex flex-col">
+            <h5 className="text-[12px] font-bold uppercase tracking-[0.1em] mb-2">{cols[1].h}</h5>
+            {cols[1].links.map((l) => <FooterLink key={l.l} to={l.to}>{l.l}</FooterLink>)}
+          </div>
+          {/* Légal + Plateforme empilés dans la même colonne */}
+          <div className="flex flex-col gap-y-5">
+            <div className="flex flex-col">
+              <h5 className="text-[12px] font-bold uppercase tracking-[0.1em] mb-2">{cols[2].h}</h5>
+              {cols[2].links.map((l) => <FooterLink key={l.l} to={l.to}>{l.l}</FooterLink>)}
             </div>
-          ))}
+            <div className="flex flex-col">
+              <h5 className="text-[12px] font-bold uppercase tracking-[0.1em] mb-2">{cols[0].h}</h5>
+              {cols[0].links.map((l) => <FooterLink key={l.l} to={l.to}>{l.l}</FooterLink>)}
+            </div>
+          </div>
+          {/* Règles */}
+          <div className="flex flex-col">
+            <h5 className="text-[12px] font-bold uppercase tracking-[0.1em] mb-2">{cols[3].h}</h5>
+            {cols[3].links.map((l) => <FooterLink key={l.l} to={l.to}>{l.l}</FooterLink>)}
+          </div>
         </div>
         <div className="vt-reveal text-center pt-3 text-[12.5px] text-dim">
           <span className="font-display font-bold text-ink">{t('vitrine.footer.solution_novafriq')}<span className="text-primary"> ·</span></span>{' '}
