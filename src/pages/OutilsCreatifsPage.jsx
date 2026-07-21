@@ -14,6 +14,7 @@ import { exportFicheTechniquePdf } from '@/utils/exportFicheTechniquePdf'
 import { ROUTES } from '@/constants/routes'
 import { useAuth } from '@/contexts'
 import { cn } from '@/utils/cn'
+import { useDeviseAtelier } from '@/utils/formatCurrency'
 
 // Point 7 — l'ordre suit le processus de création d'un designer :
 // inspiration → dessin → documentation technique → patron. Il était rangé par
@@ -158,6 +159,7 @@ function CreationCard({ item, onEdit, onDelete, onShare, onVendre, onPdf, t }) {
 }
 
 function CreationForm({ initial, categorieParDefaut, onSave, onCancel, t }) {
+  const { symbole: devise } = useDeviseAtelier()
   const [form, setForm] = useState(
     initial || { ...EMPTY_FORM, categorie: categorieParDefaut || EMPTY_FORM.categorie },
   )
@@ -220,7 +222,9 @@ function CreationForm({ initial, categorieParDefaut, onSave, onCancel, t }) {
       {META_FIELDS[form.categorie]?.map(f => {
         const val = form.metadata?.[f.key] ?? ''
         const setMeta = (e) => setForm(prev => ({ ...prev, metadata: { ...prev.metadata, [f.key]: e.target.value } }))
-        const ph = t(`outils_creatifs.meta.${f.key}`)
+        // La devise n'intéresse que « coût matière », mais la clé est calculée :
+        // on la fournit à tous, les autres l'ignorent.
+        const ph = t(`outils_creatifs.meta.${f.key}`, { devise })
         if (f.type === 'textarea') {
           return (
             <textarea key={f.key} value={val} onChange={setMeta} placeholder={ph} rows={4}

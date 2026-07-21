@@ -93,7 +93,15 @@ export default function ClientDetailPage() {
     )
   }
 
-  if (!client) return null
+  // Identifiant inconnu (lien périmé, élément supprimé, adresse tapée à la
+  // main) : on renvoyait `null`, donc un écran BLANC sans même un retour.
+  if (!client) {
+    return (
+      <AppLayout showBack title={t('erreurs.introuvable_titre')}>
+        <RessourceIntrouvable />
+      </AppLayout>
+    )
+  }
 
   const isVip = !!client.is_vip
 
