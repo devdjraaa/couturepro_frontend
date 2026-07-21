@@ -4744,14 +4744,15 @@
     "du_au": "Du {{debut}} au {{fin}}",
     "boost": "Booster",
     "boost_titre": "Booster cette annonce",
-    "boost_aide": "Pendant toute la durée du Boost, votre annonce est diffusée plusieurs fois par jour en tête de la bande d'annonces.",
+    "boost_aide": "Pendant toute la durée du Boost, votre annonce est diffusée {{n}} fois par jour en tête de la bande d'annonces.",
     "boost_debut": "Démarrer le",
     "boost_duree": "Durée",
     "boost_total": "Montant",
     "boost_payer": "Payer et booster",
     "boost_indispo": "Le Boost n'est pas disponible pour le moment.",
     "apercu": "Aperçu",
-    "supprimer_confirmer": "Supprimer cette annonce ?"
+    "supprimer_confirmer": "Supprimer cette annonce ?",
+    "bande_titre": "Annonces des créateurs"
   },
   "compte_rebours": {
     "heures": "heures",
