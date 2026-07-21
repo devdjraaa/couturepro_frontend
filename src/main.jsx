@@ -24,9 +24,9 @@ CapApp.addListener('backButton', ({ canGoBack }) => {
   }
 })
 
-// OTA : confirme à Capgo que le bundle web démarre bien (sinon rollback auto).
-import { notifyAppReady } from '@/utils/appUpdate'
-notifyAppReady()
+// OTA : la confirmation du bundle part d'App.jsx, une fois l'arbre monté et
+// tenu quelques secondes — la confirmer ici reviendrait à déclarer sain tout
+// bundle qui se parse, même s'il plante à l'écran juste après.
 
 // PWA (P186) — web uniquement (inerte en natif : ne doit jamais toucher l'OTA Capgo).
 import { registerPwa } from '@/utils/pwa'

@@ -8,6 +8,7 @@ import CompteReboursLancement from '@/components/vitrine/CompteReboursLancement'
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { setDeepLinkNavigator } from '@/utils/deepLink'
 import AppUpdateGate from '@/components/AppUpdateGate'
+import ConfirmationBundle from '@/components/ConfirmationBundle'
 import { ProtectedRoute, DesignerRoute } from '@/components/layout'
 import { AdminProtectedRoute } from '@/components/admin'
 import {
@@ -152,6 +153,7 @@ export default function App() {
 
   return (
     <>
+      <ConfirmationBundle />
       <AppUpdateGate />
 
       {/* SUG-1 — ouverture « favicon → logo → connexion ». Monté à la RACINE :

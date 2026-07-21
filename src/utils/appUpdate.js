@@ -18,13 +18,49 @@ export function cmpVersion(a, b) {
   return 0
 }
 
-// Confirme à Capgo que le bundle web courant fonctionne (à appeler au démarrage).
-export async function notifyAppReady() {
-  if (!IS_NATIVE) return
+// Confirmation du bundle OTA — le filet de sécurité de Capgo.
+//
+// Tant que `notifyAppReady()` n'est pas appelé, Capgo considère le bundle comme
+// non validé et revient au précédent au prochain démarrage. Encore faut-il ne
+// pas le confirmer trop tôt : l'appel se faisait au CHARGEMENT DU MODULE, donc
+// tout bundle qui se parse était déclaré sain. Le 21/07, un bundle qui plantait
+// à l'écran a ainsi été confirmé « success » et l'application est restée morte
+// sur l'appareil — le filet existait, il ne pouvait simplement pas se déclencher.
+//
+// Désormais la confirmation demande DEUX preuves :
+//   1. l'arbre React a monté (`signalerAppMontee`) — sinon rien ne s'affiche ;
+//   2. il a tenu quelques secondes sans que le garde-fou global se déclenche.
+// Un plantage au premier écran annule définitivement la confirmation, et Capgo
+// rend la main à la version précédente.
+
+// Large devant un démarrage normal, court devant le délai de Capgo : on veut
+// laisser passer le premier rendu, pas attendre que l'utilisateur navigue.
+const DELAI_CONFIRMATION_MS = 8000
+
+let minuteur = null
+let condamne = false
+
+async function confirmerAupresDeCapgo() {
   try {
     const { CapacitorUpdater } = await import('@capgo/capacitor-updater')
     await CapacitorUpdater.notifyAppReady()
   } catch { /* plugin absent (web) : rien à faire */ }
+}
+
+/** L'arbre React a monté : on lance le compte à rebours de confirmation. */
+export function signalerAppMontee() {
+  if (!IS_NATIVE || condamne || minuteur) return
+  minuteur = setTimeout(() => { minuteur = null; confirmerAupresDeCapgo() }, DELAI_CONFIRMATION_MS)
+}
+
+/**
+ * Le garde-fou global s'est déclenché : ce bundle ne démarre pas correctement.
+ * On ne le confirme jamais — y compris s'il plante après coup, car un bundle
+ * qui tombe une fois retombera.
+ */
+export function signalerDemarrageRate() {
+  condamne = true
+  if (minuteur) { clearTimeout(minuteur); minuteur = null }
 }
 
 // Version native installée (ex. "1.0"), ou null hors natif.

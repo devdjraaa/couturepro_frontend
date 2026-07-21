@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import { AlertCircle } from 'lucide-react'
 import i18n from '@/lang/i18n'
+import { signalerDemarrageRate } from '@/utils/appUpdate'
 
 // SUG-24 / P109 : garde-fou global. Un crash de rendu affiche un écran de reprise
 // (« réessayer ») au lieu d'un écran blanc — robustesse en utilisation prolongée.
@@ -20,6 +21,10 @@ export default class ErrorBoundary extends Component {
   }
 
   componentDidCatch(error, info) {
+    // Ce bundle OTA ne sera jamais confirmé auprès de Capgo : au prochain
+    // démarrage, l'appareil revient à la version précédente au lieu de rester
+    // bloqué sur cet écran.
+    signalerDemarrageRate()
     // Trace utile au support (P110) sans casser l'app.
     if (typeof console !== 'undefined') console.error('[ErrorBoundary]', error, info?.componentStack)
   }
