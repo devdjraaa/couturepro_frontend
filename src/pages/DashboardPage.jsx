@@ -409,6 +409,11 @@ export default function DashboardPage() {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
 
+  const { user, atelier }  = useAuth()
+  const { isDesigner } = useAccountType()
+  const { data: commandes = [], isLoading: loadingCmd } = useCommandes()
+  const { data: stats,          isLoading: loadingStats } = useCommandeStats()
+
   // Indice de défilement des KPI : il disparaît une fois le bout atteint.
   const kpiRef = useRef(null)
   const [kpiAuBout, setKpiAuBout] = useState(false)
@@ -426,10 +431,6 @@ export default function DashboardPage() {
     const el = kpiRef.current
     if (el && el.scrollWidth <= el.clientWidth) setKpiAuBout(true)
   }, [loadingStats])
-  const { user, atelier }  = useAuth()
-  const { isDesigner } = useAccountType()
-  const { data: commandes = [], isLoading: loadingCmd } = useCommandes()
-  const { data: stats,          isLoading: loadingStats } = useCommandeStats()
   const { data: clients = [] }  = useClients()
 
   const activeCount   = commandes.filter(c => c.statut === 'en_cours' || c.statut === 'essai').length
