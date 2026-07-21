@@ -178,39 +178,32 @@ export default function VitrineHome() {
         {/* ── Fond animé multicouche — ambiance défilé ── */}
         <div className="vt-hero-bg" aria-hidden="true">
 
-          {/* Couche 1 — Fils tombants (dérive lente) */}
-          <div className="vt-hero-threads" />
-
-          {/* Couche 2 — Rubans de soie (SMIL) */}
+          {/* Couche 1 — Rubans de soie (SMIL) */}
           <svg className="vt-hero-ribbons" viewBox="0 0 1220 640" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              {/* Rouge — fondu aux extrémités, reflet sur le pli */}
               <linearGradient id="vt-sg1" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%"   stopColor="#7A0606" stopOpacity="0" />
-                <stop offset="28%"  stopColor="#D00B0B" stopOpacity="0.9" />
-                <stop offset="48%"  stopColor="#E82A1E" stopOpacity="0.95" />
-                <stop offset="70%"  stopColor="#7A0606" stopOpacity="0.7" />
-                <stop offset="100%" stopColor="#7A0606" stopOpacity="0" />
+                <stop offset="0%"   stopColor="var(--color-primary-700)" stopOpacity="0" />
+                <stop offset="28%"  stopColor="var(--color-primary)" stopOpacity="0.9" />
+                <stop offset="48%"  stopColor="var(--color-primary-400)" stopOpacity="0.95" />
+                <stop offset="70%"  stopColor="var(--color-primary-700)" stopOpacity="0.7" />
+                <stop offset="100%" stopColor="var(--color-primary-700)" stopOpacity="0" />
               </linearGradient>
-              {/* Or — fondu aux extrémités */}
               <linearGradient id="vt-sg2" x1="0" y1="1" x2="1" y2="0">
-                <stop offset="0%"   stopColor="#A87F3E" stopOpacity="0" />
-                <stop offset="40%"  stopColor="#E4C486" stopOpacity="0.9" />
-                <stop offset="55%"  stopColor="#F7E4B8" stopOpacity="1" />
-                <stop offset="72%"  stopColor="#CDA662" stopOpacity="0.75" />
-                <stop offset="100%" stopColor="#CDA662" stopOpacity="0" />
+                <stop offset="0%"   stopColor="var(--color-gold-dark)" stopOpacity="0" />
+                <stop offset="40%"  stopColor="var(--color-gold-hi)" stopOpacity="0.9" />
+                <stop offset="55%"  stopColor="var(--color-gold-hi)" stopOpacity="1" />
+                <stop offset="72%"  stopColor="var(--color-gold)" stopOpacity="0.75" />
+                <stop offset="100%" stopColor="var(--color-gold)" stopOpacity="0" />
               </linearGradient>
-              {/* Rouge accent — accent central fin */}
               <linearGradient id="vt-sg3" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%"   stopColor="#E82A1E" stopOpacity="0" />
-                <stop offset="50%"  stopColor="#FF6B60" stopOpacity="0.8" />
-                <stop offset="100%" stopColor="#E82A1E" stopOpacity="0" />
+                <stop offset="0%"   stopColor="var(--color-primary-400)" stopOpacity="0" />
+                <stop offset="50%"  stopColor="var(--color-primary-300)" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="var(--color-primary-400)" stopOpacity="0" />
               </linearGradient>
-              {/* Reflet satiné — fil de lumière */}
               <linearGradient id="vt-sheen" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%"   stopColor="#F7E4B8" stopOpacity="0" />
-                <stop offset="50%"  stopColor="#FBF0D4" stopOpacity="0.9" />
-                <stop offset="100%" stopColor="#F7E4B8" stopOpacity="0" />
+                <stop offset="0%"   stopColor="var(--color-gold-hi)" stopOpacity="0" />
+                <stop offset="50%"  stopColor="var(--color-gold-hi)" stopOpacity="0.9" />
+                <stop offset="100%" stopColor="var(--color-gold-hi)" stopOpacity="0" />
               </linearGradient>
               <filter id="vt-soft"><feGaussianBlur stdDeviation="1" /></filter>
             </defs>
@@ -266,7 +259,7 @@ export default function VitrineHome() {
             {t('vitrine.hero.title_pre')}<span className="text-primary">{t('vitrine.hero.title_hl')}</span>{t('vitrine.hero.title_post')}
           </h1>
           <div className="vt-item h-7 mb-6 text-dim text-[clamp(15px,2vw,19px)] font-medium">
-            <b className="text-ink font-semibold">{rotMsg}</b>
+            <b key={rot} className="vt-rotmsg text-ink font-semibold">{rotMsg}</b>
           </div>
           <div className="vt-item">
             <HeroSearch creators={creators} />

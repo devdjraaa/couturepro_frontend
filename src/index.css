@@ -666,18 +666,7 @@ button, a, [role="button"], label, select, input[type="checkbox"], input[type="r
   pointer-events: none;
 }
 
-/* Couche 1 — Fils tombants : lignes verticales or/rouge, dérive lente */
-.vt-hero-threads {
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22240%22%20height%3D%22400%22%3E%3Cline%20x1%3D%2218%22%20y1%3D%220%22%20x2%3D%2218%22%20y2%3D%22400%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%220.8%22%20opacity%3D%220.18%22%2F%3E%3Cline%20x1%3D%2252%22%20y1%3D%2280%22%20x2%3D%2252%22%20y2%3D%22400%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%220.5%22%20opacity%3D%220.09%22%2F%3E%3Cline%20x1%3D%2288%22%20y1%3D%220%22%20x2%3D%2288%22%20y2%3D%22360%22%20stroke%3D%22%23D00B0B%22%20stroke-width%3D%220.6%22%20opacity%3D%220.12%22%2F%3E%3Cline%20x1%3D%22124%22%20y1%3D%2240%22%20x2%3D%22124%22%20y2%3D%22400%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%221.0%22%20opacity%3D%220.14%22%2F%3E%3Cline%20x1%3D%22162%22%20y1%3D%2210%22%20x2%3D%22162%22%20y2%3D%22380%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%220.5%22%20opacity%3D%220.08%22%2F%3E%3Cline%20x1%3D%22200%22%20y1%3D%220%22%20x2%3D%22200%22%20y2%3D%22340%22%20stroke%3D%22%23D00B0B%22%20stroke-width%3D%220.7%22%20opacity%3D%220.10%22%2F%3E%3Cline%20x1%3D%22230%22%20y1%3D%2260%22%20x2%3D%22230%22%20y2%3D%22400%22%20stroke%3D%22%23CDA662%22%20stroke-width%3D%220.6%22%20opacity%3D%220.13%22%2F%3E%3C%2Fsvg%3E");
-  background-repeat: repeat-x;
-  background-size: 240px 100%;
-  animation: vt-threads-drift 55s linear infinite;
-  will-change: background-position;
-}
-
-/* Couche 2 — Rubans SVG (SMIL) + dérive verticale CSS */
+/* Couche 1 — Rubans SVG (SMIL) + dérive verticale CSS */
 .vt-hero-ribbons {
   position: absolute;
   inset: 0;
@@ -770,10 +759,14 @@ button, a, [role="button"], label, select, input[type="checkbox"], input[type="r
 
 /* ── Keyframes ── */
 
-/* Dérive des fils tombants — déplace le SVG d'un cycle complet */
-@keyframes vt-threads-drift {
-  from { background-position: 0 0; }
-  to   { background-position: 240px 0; }
+/* Message rotatif du hero — fondu entrant à chaque rotation */
+.vt-rotmsg {
+  display: inline-block;
+  animation: vt-rotmsg-fade 0.4s ease both;
+}
+@keyframes vt-rotmsg-fade {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* Dérive verticale + légère compression horizontale des rubans */
@@ -900,7 +893,7 @@ button, a, [role="button"], label, select, input[type="checkbox"], input[type="r
     box-shadow: none !important;
     filter: none !important;
   }
-  .vt-hero-threads  { animation: none !important; }
+  .vt-rotmsg        { animation: none !important; }
   .vt-hero-ribbons  { animation: none !important; display: none; }
   .vt-hero-podium   { animation: none !important; }
   .vt-hero-glows    { animation: none !important; }
