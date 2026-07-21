@@ -153,9 +153,14 @@ export default function VitrineHome() {
 
   useEffect(() => {
     if (!location.hash) return
-    const el = document.querySelector(location.hash)
-    if (el) el.scrollIntoView({ behavior: 'smooth' })
-  }, [location.hash, creators])
+    // Déclenché uniquement sur changement de hash (pas sur chargement des données)
+    // Le timeout laisse le temps au layout de s'établir avant de scroller
+    const tid = setTimeout(() => {
+      const el = document.querySelector(location.hash)
+      if (el) el.scrollIntoView({ behavior: 'smooth' })
+    }, 80)
+    return () => clearTimeout(tid)
+  }, [location.hash])
 
   const models = galleryModels
     ? (cat === 'all' ? galleryModels : galleryModels.filter((m) => m.cat === cat))
@@ -282,7 +287,7 @@ export default function VitrineHome() {
       <div className="vt-page-motif">
 
       {/* COMMENT ÇA MARCHE */}
-      <section id="how" className="py-16">
+      <section id="how" className="py-16 scroll-mt-[76px]">
         <div className="max-w-[1180px] mx-auto px-5">
           <SectionHead eyebrow={t('vitrine.how.eyebrow')} title={t('vitrine.how.title')} subtitle={t('vitrine.how.subtitle')} />
           <div className="vt-stagger grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -301,7 +306,7 @@ export default function VitrineHome() {
       <PartenairesBanner />
 
       {/* CRÉATEURS */}
-      <section id="creators" className="py-16 bg-elevated">
+      <section id="creators" className="py-16 bg-elevated scroll-mt-[76px]">
         <div className="max-w-[1180px] mx-auto px-5">
           <SectionHead eyebrow={t('vitrine.creators.eyebrow')} title={t('vitrine.creators.title')} subtitle={t('vitrine.creators.subtitle')} />
           <div className="relative">
@@ -367,7 +372,7 @@ export default function VitrineHome() {
       </section>
 
       {/* GALERIE */}
-      <section id="gallery" className="py-16">
+      <section id="gallery" className="py-16 scroll-mt-[76px]">
         <div className="max-w-[1180px] mx-auto px-5">
           <SectionHead eyebrow={t('vitrine.gallery.eyebrow')} title={t('vitrine.gallery.title')} subtitle={t('vitrine.gallery.subtitle')} />
           <div className="vt-reveal flex gap-2.5 justify-center flex-wrap mb-7">

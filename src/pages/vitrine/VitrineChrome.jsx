@@ -379,7 +379,7 @@ export function VitrineNavbar() {
 }
 
 function FooterLink({ to, children }) {
-  const cls = 'vt-foot-link text-[13.5px] mb-2.5 text-dim hover:text-ink'
+  const cls = 'vt-foot-link text-[13.5px] mb-1.5 text-dim hover:text-ink'
   const isAnchor = to.startsWith('#') || to.includes('/#')
   return isAnchor
     ? <a href={to} className={cls}>{children}</a>
@@ -426,7 +426,7 @@ export function VitrineFooter() {
     ] },
   ]
   return (
-    <footer data-theme="dark" className="relative overflow-hidden isolate bg-inset text-ink pt-14 pb-6 mt-2">
+    <footer data-theme="dark" className="relative overflow-hidden isolate bg-inset text-ink pt-8 pb-4 mt-2">
       {/* ── Fond animé multicouche — ambiance défilé ── */}
       <div className="vt-foot-bg" aria-hidden="true">
         {/* Couche 1 — Mesh wash */}
@@ -491,19 +491,19 @@ export function VitrineFooter() {
         <div className="vt-foot-shimmer" />
       </div>
       <div className="relative z-10 max-w-[1180px] mx-auto px-5">
-        <div className="vt-reveal grid grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr_1.1fr_1.1fr] gap-x-6 gap-y-8 pb-9 border-b border-edge">
+        <div className="vt-reveal grid grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr_1.1fr_1.1fr] gap-x-5 gap-y-5 pb-5 border-b border-edge">
           <div className="col-span-2 md:col-span-1">
             <VitrineLogo onDark />
-            <p className="text-[13px] mt-3.5 max-w-[280px] text-dim">{t('vitrine.footer.tagline')}</p>
+            <p className="text-[13px] mt-2 max-w-[280px] text-dim">{t('vitrine.footer.tagline')}</p>
           </div>
           {cols.map((c) => (
             <div key={c.h} className="flex flex-col">
-              <h5 className="text-[12px] font-bold uppercase tracking-[0.1em] mb-3.5">{c.h}</h5>
+              <h5 className="text-[12px] font-bold uppercase tracking-[0.1em] mb-2">{c.h}</h5>
               {c.links.map((l) => <FooterLink key={l.l} to={l.to}>{l.l}</FooterLink>)}
             </div>
           ))}
         </div>
-        <div className="vt-reveal text-center pt-5 text-[12.5px] text-dim">
+        <div className="vt-reveal text-center pt-3 text-[12.5px] text-dim">
           <span className="font-display font-bold text-ink">{t('vitrine.footer.solution_novafriq')}<span className="text-primary"> ·</span></span>{' '}
           {t('vitrine.footer.rights')}
         </div>
