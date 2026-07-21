@@ -4012,7 +4012,8 @@
       "pages": "Legal pages",
       "reglages_vitrine": "Storefront settings",
       "analytique": "Analytics",
-      "infos": "Gextimo News"
+      "infos": "Gextimo News",
+      "reseaux": "Social networks"
     },
     "dashboard": {
       "bonjour": "Hello,",
@@ -4544,6 +4545,35 @@
       "mdp": "New password (8 characters minimum)",
       "deja_defini": "A password is already set.",
       "non_defini": "No password set: access is closed."
+    },
+    "reseaux": {
+      "titre": "Social networks",
+      "page_titre": "Facebook Page",
+      "page_aide": "Connect the Page to collect reach, impressions and engagement daily. Read only: nothing can be published from here.",
+      "ouvrir_explorateur": "Open the Facebook API explorer",
+      "page_id": "Page ID",
+      "jeton": "Page access token",
+      "jeton_pose": "A token is set (ends with {{fin}}). Leave empty to keep it.",
+      "jeton_absent": "No token saved.",
+      "actif": "Enable daily collection",
+      "derniere_erreur": "Last error: {{message}}",
+      "enregistre": "Saved.",
+      "echec": "The operation failed.",
+      "collecte_titre": "Collection",
+      "collecte_aide": "Collection runs once a day. The button below triggers it immediately — useful to check a freshly added token.",
+      "nb_posts": "{{n}} post(s) tracked",
+      "nb_releves": "{{n}} reading(s)",
+      "collecter": "Collect now",
+      "collecte_ok": "Collection done.",
+      "voir_rapport": "View report",
+      "rapport_titre": "Top posts ({{n}} analysed)",
+      "rapport_vide": "Not enough data yet.",
+      "sans_texte": "(post without text)",
+      "portee": "{{n}} reach",
+      "engagements": "{{n}} engagements",
+      "commun_heures": "Publishing hours",
+      "commun_formats": "Formats",
+      "commun_sujets": "Topics"
     }
   },
   "bienvenue": {

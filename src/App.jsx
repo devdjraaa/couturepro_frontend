@@ -93,6 +93,7 @@ import ListeNoirePage          from '@/pages/admin/ListeNoirePage'
 import AuditPage               from '@/pages/admin/AuditPage'
 import AdminNotificationsPage  from '@/pages/admin/AdminNotificationsPage'
 import AdminInfosPage         from '@/pages/admin/AdminInfosPage'
+import AdminReseauxPage       from '@/pages/admin/AdminReseauxPage'
 import DiagnosticPage           from '@/pages/admin/DiagnosticPage'
 import AdminParametresPage    from '@/pages/admin/AdminParametresPage'
 import AdminsPage             from '@/pages/admin/AdminsPage'
@@ -164,6 +165,7 @@ export default function App() {
           <Route path="/admin/audit"            element={<AuditPage />} />
           <Route path="/admin/notifications"    element={<AdminNotificationsPage />} />
           <Route path="/admin/infos"            element={<AdminInfosPage />} />
+          <Route path="/admin/reseaux"          element={<AdminReseauxPage />} />
           <Route path="/admin/diagnostic"       element={<DiagnosticPage />} />{/* P110-111 */}
           <Route path="/admin/parametres"       element={<AdminParametresPage />} />
           <Route path="/admin/admins"           element={<AdminsPage />} />

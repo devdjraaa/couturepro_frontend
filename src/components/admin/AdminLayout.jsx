@@ -17,6 +17,7 @@ const ROUTE_KEYS = {
   '/admin/audit':         'admin.nav.audit',
   '/admin/notifications': 'admin.nav.notifications',
   '/admin/infos': 'admin.nav.infos',
+  '/admin/reseaux': 'admin.nav.reseaux',
   '/admin/admins':        'admin.nav.admins',
   '/admin/parametres':    'admin.nav.parametres',
 }

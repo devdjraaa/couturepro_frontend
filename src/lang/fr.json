@@ -4025,7 +4025,8 @@
       "pages": "Pages légales",
       "reglages_vitrine": "Réglages vitrine",
       "analytique": "Analytique",
-      "infos": "Gextimo Infos"
+      "infos": "Gextimo Infos",
+      "reseaux": "Réseaux sociaux"
     },
     "dashboard": {
       "bonjour": "Bonjour,",
@@ -4557,6 +4558,35 @@
       "mdp": "Nouveau mot de passe (8 caractères minimum)",
       "deja_defini": "Un mot de passe est déjà défini.",
       "non_defini": "Aucun mot de passe défini : l'accès est fermé."
+    },
+    "reseaux": {
+      "titre": "Réseaux sociaux",
+      "page_titre": "Page Facebook",
+      "page_aide": "Branchez la Page pour relever chaque jour la portée, les impressions et les engagements de vos publications. Lecture seule : rien ne peut être publié depuis ici. Mode d'emploi complet dans docs/FACEBOOK_JETON.md.",
+      "ouvrir_explorateur": "Ouvrir l'explorateur d'API Facebook",
+      "page_id": "ID de la Page",
+      "jeton": "Jeton d'accès de Page",
+      "jeton_pose": "Un jeton est en place (se termine par {{fin}}). Laissez vide pour le conserver.",
+      "jeton_absent": "Aucun jeton enregistré.",
+      "actif": "Activer la collecte quotidienne",
+      "derniere_erreur": "Dernière erreur : {{message}}",
+      "enregistre": "Enregistré.",
+      "echec": "L'opération a échoué.",
+      "collecte_titre": "Collecte",
+      "collecte_aide": "La collecte tourne une fois par jour. Le bouton ci-dessous la déclenche immédiatement — utile pour vérifier un jeton qui vient d’être posé.",
+      "nb_posts": "{{n}} publication(s) suivie(s)",
+      "nb_releves": "{{n}} relevé(s)",
+      "collecter": "Collecter maintenant",
+      "collecte_ok": "Collecte effectuée.",
+      "voir_rapport": "Voir le rapport",
+      "rapport_titre": "Meilleures publications ({{n}} analysées)",
+      "rapport_vide": "Pas encore assez de données.",
+      "sans_texte": "(publication sans texte)",
+      "portee": "{{n}} de portée",
+      "engagements": "{{n}} engagements",
+      "commun_heures": "Heures de publication",
+      "commun_formats": "Formats",
+      "commun_sujets": "Sujets"
     }
   },
   "bienvenue": {
