@@ -4748,7 +4748,9 @@
       "importer": "Importer une vidéo",
       "fichier_choisi": "Fichier choisi : {{nom}}",
       "lien_non_reconnu": "Ce lien n'est pas reconnu comme une vidéo. Il restera un lien à ouvrir, sans lecture intégrée.",
-      "formats": "MP4, MOV ou WebM · 100 Mo maximum"
+      "formats": "MP4, MOV ou WebM · 100 Mo maximum",
+      "lire": "Lire {{titre}}",
+      "ouvrir_lien": "Ouvrir le lien"
     }
   },
   "vetements": {

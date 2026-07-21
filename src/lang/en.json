@@ -4735,7 +4735,9 @@
       "importer": "Upload a video",
       "fichier_choisi": "Chosen file: {{nom}}",
       "lien_non_reconnu": "This link is not recognised as a video. It will stay a plain link, without embedded playback.",
-      "formats": "MP4, MOV or WebM · 100 MB maximum"
+      "formats": "MP4, MOV or WebM · 100 MB maximum",
+      "lire": "Play {{titre}}",
+      "ouvrir_lien": "Open link"
     }
   },
   "vetements": {
