@@ -3788,6 +3788,13 @@
       "appliquer": "Apply retouch",
       "echec": "The retouch could not be saved. Nothing was changed.",
       "echec_chargement": "Photo could not be loaded."
+    },
+    "qualite": {
+      "resolution": "Photo too small — move closer or use a higher resolution",
+      "cadrage": "Framing too elongated — crop closer to a square",
+      "luminosite": "Photo too dark or too bright — retake it with better lighting",
+      "nettete": "Photo blurry — steady the device and refocus",
+      "ok": "Photo accepted"
     }
   },
   "atelier": {

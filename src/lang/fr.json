@@ -3801,6 +3801,13 @@
       "appliquer": "Appliquer la retouche",
       "echec": "La retouche n'a pas pu être enregistrée. Rien n'a été modifié.",
       "echec_chargement": "Photo impossible à charger."
+    },
+    "qualite": {
+      "resolution": "Photo trop petite — rapprochez-vous ou utilisez une meilleure définition",
+      "cadrage": "Cadrage trop allongé — recadrez plus proche du carré",
+      "luminosite": "Photo trop sombre ou trop claire — refaites-la avec un meilleur éclairage",
+      "nettete": "Photo floue — stabilisez l'appareil et refaites la mise au point",
+      "ok": "Photo acceptée"
     }
   },
   "atelier": {

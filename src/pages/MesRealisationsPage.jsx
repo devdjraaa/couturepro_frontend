@@ -5,6 +5,7 @@ import { AppLayout } from '@/components/layout'
 import { Button, Badge, Modal, Input, EmptyState, Skeleton } from '@/components/ui'
 import { realisationService } from '@/services/realisationService'
 import { compressImage } from '@/utils/compressImage'
+import VerdictQualite, { VerdictOk } from '@/components/realisations/VerdictQualite'
 import { cn } from '@/utils/cn'
 import { formatDateShort } from '@/utils/formatDate'
 
@@ -181,6 +182,8 @@ function EditeurRealisation({ initial, maxPhotos, onClose, onSaved }) {
   const [certif, setCertif] = useState(false)
   const [consent, setConsent] = useState(false)
   const [busy, setBusy]     = useState(false)
+  // PHOTO-1 — verdict du contrôle qualité, affiché en icônes puis effacé seul.
+  const [verdict, setVerdict] = useState(null)
   const [err, setErr]       = useState('')
 
   const editable = !rea || rea.statut === 'brouillon' || rea.statut === 'refusee'
@@ -211,13 +214,30 @@ function EditeurRealisation({ initial, maxPhotos, onClose, onSaved }) {
     let cible = rea
     if (!cible) { cible = await enregistrer(); if (!cible) return }
     if ((cible.images?.length || 0) >= MAX_PHOTOS) { setErr(t('realisations.max_photos', { n: MAX_PHOTOS })); return }
-    setBusy(true); setErr('')
+    setBusy(true); setErr(''); setVerdict(null)
     try {
       const compressed = await compressImage(file)
       const saved = await realisationService.addPhoto(cible.id, compressed)
       setRea(saved)
+
+      // PHOTO-1 — la photo est acceptée, mais le serveur peut signaler des
+      // réserves non bloquantes (netteté limite). On les montre en icônes
+      // ambrées ; sans réserve, une simple pastille verte.
+      const derniere = saved?.images?.[saved.images.length - 1]
+      setVerdict(derniere?.avertissements?.length
+        ? { avertissements: derniere.avertissements }
+        : { ok: true })
     } catch (e2) {
-      setErr(e2?.response?.data?.message || t('realisations.erreur_photo'))
+      const d = e2?.response?.data
+
+      // Refus du contrôle automatique : retour PUREMENT VISUEL, sans phrase.
+      // Le message brut du serveur ne disait pas au créateur ce qu'il devait
+      // changer — une icône par cause le lui montre d'un coup d'œil.
+      if (d?.code === 'qualite' && d?.problemes?.length) {
+        setVerdict({ problemes: d.problemes })
+      } else {
+        setErr(d?.message || t('realisations.erreur_photo'))
+      }
     } finally { setBusy(false) }
   }
 
@@ -258,6 +278,20 @@ function EditeurRealisation({ initial, maxPhotos, onClose, onSaved }) {
         {/* Photos */}
         <div>
           <p className="text-sm font-medium text-ink mb-1.5">{t('realisations.photos')} ({images.length}/{MAX_PHOTOS})</p>
+
+          {/* PHOTO-1 — verdict du contrôle qualité, juste au-dessus des photos :
+              c'est là que le regard se porte après un envoi. */}
+          {verdict?.ok && <div className="mb-2"><VerdictOk onFini={() => setVerdict(null)} /></div>}
+          {(verdict?.problemes || verdict?.avertissements) && (
+            <div className="mb-2">
+              <VerdictQualite
+                problemes={verdict.problemes || []}
+                avertissements={verdict.avertissements || []}
+                onFini={() => setVerdict(null)}
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-3 gap-2">
             {images.map((im) => (
               <div key={im.path} className="relative aspect-square rounded-xl overflow-hidden bg-subtle">
