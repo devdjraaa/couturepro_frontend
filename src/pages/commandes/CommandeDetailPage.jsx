@@ -27,6 +27,7 @@ import { formatDate } from '@/utils/formatDate'
 import { exportRelevePdf } from '@/utils/exportRelevePdf'
 import { exportFacturePdf, shareOrDownloadPdf } from '@/utils/exportFacturePdf'
 import { cn } from '@/utils/cn'
+import RessourceIntrouvable from '@/components/ui/RessourceIntrouvable'
 
 // ── Onglets internes ──────────────────────────────────────────────────────────
 const TABS = ['Aperçu', 'Paiements', 'Mesures', 'Historique']

@@ -64,13 +64,76 @@ const doublons = []
   }
 })('src')
 
+// TROISIÈME classe, et le vrai angle mort : un COMPOSANT JSX utilisé sans être
+// importé. `no-undef` ne le voit pas — il faudrait `react/jsx-no-undef`, qui
+// vient avec `eslint-plugin-react`, absent d'ici. Le 21/07, un
+// `<RessourceIntrouvable />` sans son import a passé la construction, passé ce
+// garde-fou, et n'a planté que sur l'appareil.
+const jsxInconnus = []
+;(function parcourirJsx(d) {
+  for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+    const p = path.join(d, e.name)
+    if (e.isDirectory()) { parcourirJsx(p); continue }
+    if (!/\.jsx$/.test(e.name)) continue
+
+    // Les commentaires portent souvent des exemples de balises : les garder
+    // ferait crier le garde-fou à tort, et un garde-fou bruyant finit ignoré.
+    const src = fs.readFileSync(p, 'utf8')
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/^\s*\/\/.*$/gm, '')
+
+    const connus = new Set()
+    for (const r of src.matchAll(/^import\s+(?:\{([^}]*)\}|([A-Za-z_$][\w$]*))(?:\s*,\s*\{([^}]*)\})?\s+from/gm)) {
+      for (const groupe of [r[1], r[3]]) {
+        if (groupe) for (const n of groupe.split(',')) connus.add(n.trim().split(/\s+as\s+/).pop())
+      }
+      if (r[2]) connus.add(r[2])
+    }
+    // Défini sur place : composant local, constante, classe.
+    for (const r of src.matchAll(/(?:^|\n)\s*(?:export\s+default\s+|export\s+)?(?:function|class|const|let)\s+([A-Z][\w$]*)/g)) {
+      connus.add(r[1])
+    }
+    // Reçu par déstructuration, très courant pour les icônes : `{ icon: Icon }`
+    // en paramètre de composant ou dans un `.map()`. Sans ça le garde-fou criait
+    // sur quatre écrans parfaitement sains.
+    for (const r of src.matchAll(/:\s*([A-Z][\w$]*)/g)) connus.add(r[1])
+    // Déstructuré depuis un TABLEAU : `.map(([cle, Icone]) => …)`.
+    for (const r of src.matchAll(/\[([^\[\]]*)\]\s*(?:=[^=>]|=>|\))/g)) {
+      for (const n of r[1].split(',')) {
+        const nom = n.trim()
+        if (/^[A-Z][\w$]*$/.test(nom)) connus.add(nom)
+      }
+    }
+    // Déstructuré sans renommage : `const { Provider } = ...`, `({ Icone })`.
+    for (const r of src.matchAll(/\{([^{}]*)\}\s*(?:=[^=>]|=>|\))/g)) {
+      for (const n of r[1].split(',')) {
+        const nom = n.trim().split(/[:=\s]/)[0]
+        if (/^[A-Z][\w$]*$/.test(nom)) connus.add(nom)
+      }
+    }
+
+    for (const r of src.matchAll(/<([A-Z][\w$]*)/g)) {
+      const nom = r[1]
+      if (connus.has(nom)) continue
+      const ligne = src.slice(0, r.index).split('\n').length
+      jsxInconnus.push(`${p}:${ligne}  <${nom}> utilisé sans import ni définition`)
+    }
+  }
+})('src')
+
+if (jsxInconnus.length) {
+  console.error('\n✖ Composants JSX utilisés sans être définis :\n')
+  for (const x of [...new Set(jsxInconnus)]) console.error('   ' + x)
+  console.error('')
+}
+
 if (doublons.length) {
   console.error('\n✖ Identifiants importés plusieurs fois :\n')
   for (const x of doublons) console.error('   ' + x)
   console.error('')
 }
 
-if (fautes.length || doublons.length) {
+if (fautes.length || doublons.length || jsxInconnus.length) {
   if (fautes.length) {
     console.error('\n✖ Identifiants utilisés sans être définis :\n')
     for (const x of fautes) console.error('   ' + x)
