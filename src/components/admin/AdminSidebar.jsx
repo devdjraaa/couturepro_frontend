@@ -2,8 +2,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Home, Layers, CreditCard, MessageCircle,
   ShieldBan, ClipboardList, Bell, Star, LogOut,
-  Sun, Moon, Monitor, Users, Wallet, X, Flag, Megaphone, TicketPercent, Activity, Palette, BarChart3, Images,
-} from 'lucide-react'
+  Sun, Moon, Monitor, Users, Wallet, X, Flag, Megaphone, TicketPercent, Activity, Radar, FileText, Images, Palette, BarChart3, Share2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useAdminAuth, useTheme } from '@/contexts'
 import { LanguageSwitcher } from '@/components/ui'
@@ -27,10 +26,13 @@ const GESTION = [
   { to: '/admin/banniere',      icon: Megaphone,     tKey: 'admin.nav.banniere'      },
   { to: '/admin/analytique',    icon: BarChart3,     tKey: 'admin.nav.analytique'    },
   { to: '/admin/reglages-vitrine', icon: Palette,    tKey: 'admin.nav.reglages_vitrine' },
+  { to: '/admin/veille',        icon: Radar,         tKey: 'admin.nav.veille'        },
+  { to: '/admin/pages',         icon: FileText,      tKey: 'admin.nav.pages'         },
   { to: '/admin/liste-noire',   icon: ShieldBan,     tKey: 'admin.nav.liste_noire'   },
   { to: '/admin/audit',         icon: ClipboardList, tKey: 'admin.nav.audit'         },
   { to: '/admin/notifications', icon: Bell,          tKey: 'admin.nav.notifications' },
   { to: '/admin/infos',         icon: Megaphone,      tKey: 'admin.nav.infos' },
+  { to: '/admin/reseaux',       icon: Share2,         tKey: 'admin.nav.reseaux' },
   { to: '/admin/diagnostic',    icon: Activity,      tKey: 'admin.nav.diagnostic'    },
 ]
 
@@ -133,9 +135,10 @@ export default function AdminSidebar({ isOpen, onClose }) {
       )}>
         {/* Logo */}
         <div className="px-4 py-4 border-b border-inverse/5 flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shrink-0">
-            <span className="text-sm font-bold text-inverse">CP</span>
-          </div>
+          {/* Point 88 — « CP » était l'initiale de CouturePro, l'ancien nom du
+              produit. Le signe officiel Gextimo, comme dans la barre des pros. */}
+          <img src="/favicon.svg" alt="" aria-hidden="true"
+               className="w-9 h-9 rounded-xl shrink-0" />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-bold text-inverse leading-tight">Gextimo</p>
             <p className="text-xs text-admin-muted leading-tight">{t('admin.nav.sidebar_subtitle')}</p>
