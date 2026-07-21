@@ -918,9 +918,12 @@ input::-ms-clear {
 }
 
 /* P204 — bandeau partenaires : défilement automatique continu (pause au survol). */
-.gx-marquee { width: 100%; overflow: hidden; }
+/* `align-items` aux DEUX niveaux : sans quoi le texte se range où le parent le
+   décide — sur le tableau de bord il tombait au bas de la bande. Une bande
+   défilante centre son contenu, quelle que soit la hauteur qu'on lui donne. */
+.gx-marquee { width: 100%; overflow: hidden; display: flex; align-items: center; }
 .gx-marquee__track {
-  display: flex; width: max-content;
+  display: flex; align-items: center; width: max-content;
   animation: gx-marquee-scroll 30s linear infinite;
 }
 /* Pause au survol — RÉSERVÉE aux appareils qui survolent vraiment.
