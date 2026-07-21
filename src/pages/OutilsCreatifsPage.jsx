@@ -15,9 +15,14 @@ import { ROUTES } from '@/constants/routes'
 import { useAuth } from '@/contexts'
 import { cn } from '@/utils/cn'
 
-const CATEGORIES = ['croquis', 'fiche_technique', 'patron', 'moodboard']
+// Point 7 — l'ordre suit le processus de création d'un designer :
+// inspiration → dessin → documentation technique → patron. Il était rangé par
+// commodité de code (croquis en premier), ce qui faisait commencer le créateur
+// par le dessin alors qu'il part de son moodboard.
+const CATEGORIES = ['moodboard', 'croquis', 'fiche_technique', 'patron']
 
-const EMPTY_FORM = { titre: '', description: '', categorie: 'croquis', public: false, images: [], metadata: {} }
+// Le formulaire s'ouvre donc sur la première catégorie, plus sur « croquis ».
+const EMPTY_FORM = { titre: '', description: '', categorie: CATEGORIES[0], public: false, images: [], metadata: {} }
 
 // Chaque onglet est un OUTIL distinct : champs structurés propres à sa catégorie
 // (stockés dans metadata) + rendu et état vide dédiés.
@@ -152,8 +157,10 @@ function CreationCard({ item, onEdit, onDelete, onShare, onVendre, onPdf, t }) {
   )
 }
 
-function CreationForm({ initial, onSave, onCancel, t }) {
-  const [form, setForm] = useState(initial || EMPTY_FORM)
+function CreationForm({ initial, categorieParDefaut, onSave, onCancel, t }) {
+  const [form, setForm] = useState(
+    initial || { ...EMPTY_FORM, categorie: categorieParDefaut || EMPTY_FORM.categorie },
+  )
   const [files, setFiles] = useState([])
   const [saving, setSaving] = useState(false)
   const fileRef = useRef()
@@ -355,6 +362,10 @@ export default function OutilsCreatifsPage() {
         {(showForm || editing) && (
           <CreationForm
             initial={editing}
+            /* Point 5 — créer depuis l'onglet Croquis crée un croquis. La
+               catégorie retombait sur la première de la liste, obligeant à la
+               re-choisir dans un menu déroulant alors qu'on venait de l'ouvrir. */
+            categorieParDefaut={filter}
             t={t}
             onCancel={() => { setShowForm(false); setEditing(null) }}
             onSave={() => { setShowForm(false); setEditing(null); load() }}

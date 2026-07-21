@@ -4520,6 +4520,8 @@
       "taille_base": "Taille de base",
       "instructions": "Instructions de montage",
       "tailles": "Tailles",
+      "niveau": "Choisir le niveau du patron",
+      "nb_pieces": "Nombre de pièces",
       "pieces": "pièces",
       "palette": "Palette de couleurs",
       "palette_aide": "Astuce : collez des codes couleur (#c2410c, #0e7490…) pour afficher les pastilles.",

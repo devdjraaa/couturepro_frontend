@@ -103,7 +103,7 @@ export default function AdminInfosPage() {
     } catch (err) {
       // Le message du serveur est plus utile qu'un texte générique : il nomme
       // le champ refusé.
-      setErreur(err?.response?.data?.message || t('erreurs.generique'))
+      setErreur(err?.response?.data?.message || t('erreurs.inconnu'))
     } finally { setEnvoi(false) }
   }
 
