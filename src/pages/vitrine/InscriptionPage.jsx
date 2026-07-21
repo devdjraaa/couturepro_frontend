@@ -27,7 +27,10 @@ export default function InscriptionPage() {
                   className="inline-flex items-center gap-2 font-semibold text-sm px-6 py-3.5 rounded-xl bg-primary text-inverse hover:bg-primary-600 transition">
               <Globe size={16} aria-hidden="true" /> {t('vitrine.inscription.cta_web')}
             </Link>
-            <a href="/Gextimo.apk" download
+            {/* APK stable, maintenue par release.sh et protégée du rsync
+                --delete du CI — c'est le chemin que la branche android emploie,
+                les deux doivent pointer au même endroit. */}
+            <a href="/Gextimo-v1.0.apk" download
                className="inline-flex items-center gap-2 font-semibold text-sm px-6 py-3.5 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary transition">
               <Smartphone size={16} aria-hidden="true" /> {t('vitrine.inscription.cta')}
             </a>
