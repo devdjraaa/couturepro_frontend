@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import BanniereAtelier from '@/components/vitrine/BanniereAtelier'
+import RecadrageBanniere from '@/components/vitrine/RecadrageBanniere'
 import { Link } from 'react-router-dom'
 import {
   Store, ExternalLink, Copy, Check, Eye, EyeOff, MessageCircle,
@@ -59,6 +61,11 @@ export default function MaVitrinePage() {
   const [uploadingLogo, setUploadingLogo] = useState(false)
   const [banniereUrl, setBanniereUrl] = useState(() => atelier?.banniere_url || null)   // P134
   const [banniereType, setBanniereType] = useState(() => atelier?.banniere_type || null)
+  // VIT-3 — cadrage choisi par le créateur. Un nouvel envoi le remet à zéro
+  // côté serveur : le conserver tronquerait la nouvelle image sans raison
+  // visible pour lui.
+  const [cadrage, setCadrage] = useState(() => atelier?.parametres?.banniere_cadrage || atelier?.banniere_cadrage || null)
+  const [recadrer, setRecadrer] = useState(false)
   const [uploadingBanniere, setUploadingBanniere] = useState(false)
   const [instagram, setInstagram] = useState(() => atelier?.instagram || '')
   const [facebook, setFacebook] = useState(() => atelier?.facebook || '')
@@ -226,7 +233,7 @@ export default function MaVitrinePage() {
     setUploadingBanniere(true)
     try {
       const { banniere_url, banniere_type } = await parametresService.uploadAtelierBanniere(file)
-      setBanniereUrl(banniere_url); setBanniereType(banniere_type)
+      setBanniereUrl(banniere_url); setBanniereType(banniere_type); setCadrage(null)
     } catch { /* erreur silencieuse */ } finally {
       setUploadingBanniere(false)
       e.target.value = ''
@@ -377,9 +384,7 @@ export default function MaVitrinePage() {
           <div className="mb-4">
             <div className="relative h-24 rounded-lg overflow-hidden bg-subtle border border-edge">
               {banniereUrl ? (
-                banniereType === 'video'
-                  ? <video src={banniereUrl} className="w-full h-full object-cover" autoPlay muted loop playsInline />
-                  : <img src={banniereUrl} alt="" className="w-full h-full object-cover" />
+                <BanniereAtelier url={banniereUrl} type={banniereType} cadrage={cadrage} />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-ghost text-xs">{t('ma_vitrine.banniere_vide')}</div>
               )}
@@ -389,6 +394,12 @@ export default function MaVitrinePage() {
                 {uploadingBanniere ? t('ma_vitrine.envoi') : t('ma_vitrine.changer_banniere')}
                 <input type="file" accept="image/*,video/mp4,video/webm" onChange={onBanniereChange} disabled={uploadingBanniere} className="hidden" />
               </label>
+              {banniereUrl && banniereType !== 'video' && (
+                <button type="button" onClick={() => setRecadrer(true)} disabled={uploadingBanniere}
+                        className="text-xs font-semibold text-primary hover:underline">
+                  {t('ma_vitrine.recadrer_banniere')}
+                </button>
+              )}
               {banniereUrl && <button type="button" onClick={onBanniereRemove} disabled={uploadingBanniere} className="text-xs text-error hover:opacity-80">{t('ma_vitrine.retirer_banniere')}</button>}
             </div>
             <p className="text-[11px] text-ghost mt-1">{t('ma_vitrine.banniere_hint')}</p>
@@ -715,6 +726,15 @@ export default function MaVitrinePage() {
           {t('ma_vitrine.aide')}
         </p>
       </div>
+      {recadrer && banniereUrl && (
+        <RecadrageBanniere
+          url={banniereUrl}
+          cadrageInitial={cadrage}
+          onEnregistrer={async (c) => { await parametresService.cadrerAtelierBanniere(c); setCadrage(c) }}
+          onFermer={() => setRecadrer(false)}
+        />
+      )}
+
     </AppLayout>
   )
 }

@@ -186,6 +186,16 @@ export const parametresService = {
   },
 
   // P134 : bannière du profil (photo/GIF/vidéo).
+  /**
+   * VIT-3 — enregistre le cadrage choisi, en FRACTIONS de l'image (0 → 1).
+   * Jamais en pixels : la bannière est servie à plusieurs tailles, et des
+   * pixels deviendraient faux dès la première miniature.
+   */
+  async cadrerAtelierBanniere(cadrage) {
+    const { data } = await api.put('/parametres/atelier/banniere/cadrage', cadrage)
+    return data?.banniere_cadrage ?? cadrage
+  },
+
   async uploadAtelierBanniere(file) {
     if (isMock()) {
       await delay()

@@ -192,7 +192,16 @@
     "lookbook_upgrade": "The PDF Lookbook is available on paid plans. Upgrade to the Atelier plan to enable it.",
     "lookbook_vide": "Publish at least one creation to generate the lookbook.",
     "lookbook_erreur": "Could not generate the lookbook.",
-    "sponsoriser_n_plural": "Sponsor for {{n}} days"
+    "sponsoriser_n_plural": "Sponsor for {{n}} days",
+    "recadrer_banniere": "Reframe",
+    "recadrage": {
+      "titre": "Frame the banner",
+      "aide": "Move the frame to choose what visitors will see. The preview shows the real result on your public profile.",
+      "apercu": "Public profile preview",
+      "recentrer": "Re-centre",
+      "appliquer": "Apply framing",
+      "echec": "The framing could not be saved."
+    }
   },
   "facturation": {
     "titre": "Invoicing",

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import BanniereAtelier from '@/components/vitrine/BanniereAtelier'
 import { lienSocial } from '@/utils/liensSociaux'
 import { analyserLienVideo, estFichierVideo } from '@/utils/videoEmbed'
 import { Link, useParams, useNavigate } from 'react-router-dom'
@@ -628,9 +629,12 @@ export default function CreateurProfilPage() {
     <VitrineShell>
       {/* P134 : bannière photo/GIF/vidéo, sinon dégradé par défaut */}
       {c.banniere_url ? (
-        c.banniere_type === 'video'
-          ? <video src={c.banniere_url} className="h-[180px] w-full object-cover" autoPlay muted loop playsInline />
-          : <img src={c.banniere_url} alt="" className="h-[180px] w-full object-cover" />
+        <div className="h-[180px] w-full">
+          {/* VIT-3 — le cadrage choisi par le créateur est appliqué ici. Sans
+              lui, `object-cover` centrait l'image d'office et coupait le sujet
+              quand il n'était pas au milieu. */}
+          <BanniereAtelier url={c.banniere_url} type={c.banniere_type} cadrage={c.banniere_cadrage} />
+        </div>
       ) : (
         <div className="h-[180px]" style={{ background: c.gradient }} />
       )}
