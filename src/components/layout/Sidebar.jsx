@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
-  Home, Users, ClipboardList, Layers, Settings, Scissors,
-  Bell, Star, Users2, LogOut, HelpCircle, Archive, Wallet, Store, FileText, Palette, Images, History, Sparkles, Megaphone, Rocket } from 'lucide-react'
+  Home, Users, ClipboardList, Layers, Settings, PanelLeftClose, PanelLeftOpen,   Bell, Star, Users2, LogOut, HelpCircle, Archive, Wallet, Store, FileText, Palette, Images, History, Sparkles, Megaphone, Rocket } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
 import { useAuth } from '@/contexts'
@@ -59,13 +58,19 @@ export const NAV_GROUPS = [
  * réservée à une entrée précise, et toute nouvelle entrée à compteur — comme
  * « Gextimo Infos » — aurait demandé un second cas particulier ici.
  */
-function NavItem({ to, icon: Icon, navKey, end, badge = 0, t }) {
+function NavItem({ to, icon: Icon, navKey, end, badge = 0, reduite = false, t }) {
+  const libelle = t(`nav.${navKey}`)
   return (
     <NavLink
       to={to}
       end={end}
+      // Réduite, l'icône seule ne dit pas où elle mène : l'infobulle native
+      // rend le libellé sans dépendre du survol d'un composant maison.
+      title={reduite ? libelle : undefined}
+      aria-label={reduite ? libelle : undefined}
       className={({ isActive }) => cn(
-        'group relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150',
+        'group relative flex items-center gap-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150',
+        reduite ? 'px-0 justify-center' : 'px-3',
         isActive
           ? 'bg-primary/10 text-primary'
           : 'text-dim hover:text-ink hover:bg-subtle',
@@ -83,13 +88,17 @@ function NavItem({ to, icon: Icon, navKey, end, badge = 0, t }) {
             strokeWidth={isActive ? 2.5 : 1.8}
             className="shrink-0"
           />
-          <span className="flex-1 truncate">{t(`nav.${navKey}`)}</span>
+          {!reduite && <span className="flex-1 truncate">{libelle}</span>}
 
-          {badge > 0 && (
+          {badge > 0 && (reduite ? (
+            // Réduite, la pastille chiffrée ne tient pas : un point suffit à
+            // dire qu'il y a du nouveau, ce qui est toute son utilité ici.
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-danger" />
+          ) : (
             <span className="text-2xs bg-danger text-inverse px-1.5 py-0.5 rounded-full font-semibold leading-none">
               {badge > 9 ? '9+' : badge}
             </span>
-          )}
+          ))}
         </>
       )}
     </NavLink>
@@ -114,8 +123,26 @@ function NavItem({ to, icon: Icon, navKey, end, badge = 0, t }) {
  */
 let defilementMenu = 0
 
+/**
+ * Point 89 — barre développée (menu complet) ou réduite (icônes seules).
+ *
+ * Conservé sur l'appareil, contrairement au défilement : c'est une PRÉFÉRENCE
+ * de travail, pas un état de session. Quelqu'un qui replie sa barre pour gagner
+ * de la place ne veut pas la retrouver dépliée à chaque ouverture.
+ */
+const CLE_REDUITE = 'gx.sidebar.reduite'
+
 export default function Sidebar() {
   const navRef = useRef(null)
+  const [reduite, setReduite] = useState(() => {
+    try { return localStorage.getItem(CLE_REDUITE) === '1' } catch { return false }
+  })
+
+  const basculer = () => setReduite((r) => {
+    const suivant = !r
+    try { localStorage.setItem(CLE_REDUITE, suivant ? '1' : '0') } catch { /* stockage refusé : la préférence ne survit pas, l'écran marche */ }
+    return suivant
+  })
   const { user, logout } = useAuth()
   const { isDesigner } = useAccountType()
   const navigate = useNavigate()
@@ -144,19 +171,40 @@ export default function Sidebar() {
   }, [])
 
   return (
-    <aside className="hidden lg:flex flex-col w-64 bg-card border-r border-edge shrink-0 sticky top-0 h-screen">
+    <aside className={cn(
+      'hidden lg:flex flex-col bg-card border-r border-edge shrink-0 sticky top-0 h-screen transition-[width] duration-200',
+      reduite ? 'w-16' : 'w-64',
+    )}>
 
-      {/* Logo */}
-      <div className="px-5 py-4 border-b border-edge shrink-0">
+      {/* Logo + bascule développé / réduit (Pt 89) */}
+      <div className={cn('py-4 border-b border-edge shrink-0', reduite ? 'px-3' : 'px-5')}>
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shrink-0">
-            <Scissors size={16} className="text-inverse" />
-          </div>
-          <div className="min-w-0">
-            <p className="font-bold font-display text-ink leading-tight">Gextimo</p>
-            <p className="text-2xs text-ghost leading-tight mt-px">{t('nav.gestion_atelier')}</p>
-          </div>
+          {/* Point 88 — la marque, pas une paire de ciseaux génériques. Le signe
+              officiel (l'anneau ouvert du « o ») sert déjà de favicon : une
+              seule ressource, donc un seul endroit à reprendre si elle change. */}
+          <img src="/favicon.svg" alt="" aria-hidden="true"
+               className="w-9 h-9 rounded-xl shrink-0" />
+          {!reduite && (
+            <div className="min-w-0 flex-1">
+              <p className="font-bold font-display text-ink leading-tight">Gextimo</p>
+              <p className="text-2xs text-ghost leading-tight mt-px">{t('nav.gestion_atelier')}</p>
+            </div>
+          )}
+          {!reduite && (
+            <button type="button" onClick={basculer}
+                    title={t('nav.reduire_menu')} aria-label={t('nav.reduire_menu')}
+                    className="shrink-0 w-7 h-7 flex items-center justify-center rounded-lg text-ghost hover:text-ink hover:bg-subtle transition-colors">
+              <PanelLeftClose size={16} aria-hidden="true" />
+            </button>
+          )}
         </div>
+        {reduite && (
+          <button type="button" onClick={basculer}
+                  title={t('nav.developper_menu')} aria-label={t('nav.developper_menu')}
+                  className="mt-3 w-full h-7 flex items-center justify-center rounded-lg text-ghost hover:text-ink hover:bg-subtle transition-colors">
+            <PanelLeftOpen size={16} aria-hidden="true" />
+          </button>
+        )}
       </div>
 
       {/* Navigation */}
@@ -171,7 +219,7 @@ export default function Sidebar() {
 
           return (
             <div key={key}>
-              {label && (
+              {label && !reduite && (
                 <p className="px-3 mb-1 text-2xs font-semibold text-ghost uppercase tracking-widest">
                   {label}
                 </p>
@@ -185,6 +233,7 @@ export default function Sidebar() {
                     navKey={navKey}
                     end={end}
                     badge={badges[to] ?? 0}
+                    reduite={reduite}
                     t={t}
                   />
                 ))}
@@ -200,21 +249,28 @@ export default function Sidebar() {
           <button
             type="button"
             onClick={() => navigate('/parametres/profil')}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-subtle transition-colors"
+            title={reduite ? user.nom : undefined}
+            className={cn('w-full flex items-center gap-3 py-2.5 rounded-xl hover:bg-subtle transition-colors',
+                          reduite ? 'px-0 justify-center' : 'px-3')}
           >
             <Avatar name={user.nom} src={user.avatar} size="sm" />
-            <div className="flex-1 min-w-0 text-left">
-              <p className="text-sm font-medium text-ink truncate">{user.nom}</p>
-              <p className="text-xs text-ghost truncate capitalize">{user.role}</p>
-            </div>
+            {!reduite && (
+              <div className="flex-1 min-w-0 text-left">
+                <p className="text-sm font-medium text-ink truncate">{user.nom}</p>
+                <p className="text-xs text-ghost truncate capitalize">{user.role}</p>
+              </div>
+            )}
           </button>
           <button
             type="button"
             onClick={logout}
-            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-ghost hover:text-danger hover:bg-danger/10 transition-colors"
+            title={reduite ? t('auth.deconnexion') : undefined}
+            aria-label={reduite ? t('auth.deconnexion') : undefined}
+            className={cn('w-full flex items-center gap-3 py-2 rounded-xl text-sm text-ghost hover:text-danger hover:bg-danger/10 transition-colors',
+                          reduite ? 'px-0 justify-center' : 'px-3')}
           >
             <LogOut size={16} className="shrink-0" />
-            <span>{t('auth.deconnexion')}</span>
+            {!reduite && <span>{t('auth.deconnexion')}</span>}
           </button>
         </div>
       )}
