@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Ruler, ChevronDown, Check } from 'lucide-react'
 import { useMesures, useSaveMesures } from '@/hooks/useMesures'
 import { cn } from '@/utils/cn'
+import { ROUTES } from '@/constants/routes'
 
 /**
  * Pts 68-69 — Édition des mesures sans quitter la création de commande.
@@ -34,7 +36,25 @@ export default function MesuresInline({ clientId, libelles = [], vetementNom }) 
     setValeurs(Object.fromEntries(libelles.map((l) => [l, existantes[l] ?? ''])))
   }, [ouvert, mesure]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!clientId || libelles.length === 0) return null
+  if (!clientId) return null
+
+  // Type de vêtement sans libellés configurés : le panneau ne rendait RIEN.
+  // Le créateur arrivait au prix sans avoir jamais vu de champ de mesures, sans
+  // savoir que ça se règle dans le Catalogue — la fonction existait et restait
+  // invisible. On le dit, et on l'y emmène.
+  if (libelles.length === 0) {
+    return (
+      <div className="rounded-lg border border-edge bg-subtle px-3 py-2 flex items-start gap-2">
+        <Ruler size={14} className="text-ghost shrink-0 mt-0.5" aria-hidden="true" />
+        <p className="text-2xs text-dim leading-relaxed">
+          {t('commandes.creation.mesures_non_configurees', { vetement: vetementNom })}{' '}
+          <Link to={ROUTES.VETEMENTS} className="font-semibold text-primary">
+            {t('commandes.creation.mesures_configurer')}
+          </Link>
+        </p>
+      </div>
+    )
+  }
 
   const renseignees = libelles.filter((l) => existantes[l] !== undefined && existantes[l] !== '').length
 

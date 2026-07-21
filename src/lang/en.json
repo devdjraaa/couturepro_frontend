@@ -822,6 +822,8 @@
       "type_vetement": "Garment type",
       "choisir_type": "Choose a garment type…",
       "mesures_titre": "Client measurements",
+      "mesures_non_configurees": "No measurements are set up for \u201c{{vetement}}\u201d. Labels are defined once per garment type.",
+      "mesures_configurer": "Set them up",
       "mesures_aide": "Measurements required for \"{{vetement}}\". They are saved on the client’s record.",
       "mesures_enregistrer": "Save measurements",
       "mesures_enregistrees": "Saved"
