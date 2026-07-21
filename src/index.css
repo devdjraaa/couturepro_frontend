@@ -1079,3 +1079,17 @@ input::-ms-clear {
   .gx-cel-layer { display: none; }
 }
 
+
+/* PHOTO-1 — verdict qualité : l'animation fait partie du message.
+   Une apparition franche attire l'œil là où une phrase serait lue en diagonale
+   (ou pas lue du tout). Respecte le réglage système « moins d'animations ». */
+@keyframes gx-verdict-apparition {
+  0%   { opacity: 0; transform: translateY(-6px) scale(.96); }
+  60%  { opacity: 1; transform: translateY(0) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.gx-verdict { animation: gx-verdict-apparition .32s cubic-bezier(.2,.8,.3,1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gx-verdict { animation: none; }
+}
