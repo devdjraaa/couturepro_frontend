@@ -50,10 +50,13 @@ export default function BandeAnnonces() {
   // La liste est dupliquée pour que la boucle se referme sans saut visible.
   const suite = [...annonces, ...annonces]
 
+  // Pas de marge de zone sûre ici : la bande vivait tout en haut de l'app, sous
+  // la barre d'état, et devait s'en écarter. Elle est désormais placée SOUS
+  // l'en-tête rouge, qui absorbe déjà cette zone — garder la marge ajoutait une
+  // hauteur fantôme de barre d'état et collait le texte au bas de la bande.
   return (
     <div className="gx-marquee border-b border-edge bg-primary/[0.06]"
-         role="region" aria-label={t('annonces.bande_titre')}
-         style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+         role="region" aria-label={t('annonces.bande_titre')}>
       <div className="gx-marquee__track py-1.5">
         {suite.map((a, i) => (
           <span key={`${a.id}-${i}`} className="flex items-center gap-2 px-6 shrink-0 text-[13px]">
