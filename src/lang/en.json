@@ -4728,14 +4728,15 @@
     "du_au": "From {{debut}} to {{fin}}",
     "boost": "Boost",
     "boost_titre": "Boost this announcement",
-    "boost_aide": "For the whole Boost duration, your announcement is shown several times a day at the top of the announcement bar.",
+    "boost_aide": "For the whole Boost period, your announcement is shown {{n}} times a day at the top of the announcement band.",
     "boost_debut": "Start on",
     "boost_duree": "Duration",
     "boost_total": "Amount",
     "boost_payer": "Pay and boost",
     "boost_indispo": "Boost is not available at the moment.",
     "apercu": "Preview",
-    "supprimer_confirmer": "Delete this announcement?"
+    "supprimer_confirmer": "Delete this announcement?",
+    "bande_titre": "Creator announcements"
   },
   "compte_rebours": {
     "heures": "hours",

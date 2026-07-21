@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
 import Sidebar from './Sidebar'
 import Header from './Header'
+import BandeAnnonces from './BandeAnnonces'
 import BottomNavigation from './BottomNavigation'
 import { useSubscriptionGate } from '@/hooks/useSubscriptionGate'
 import { GlobalSearch } from '@/components/ui'
@@ -107,6 +108,11 @@ export default function AppLayout({
             rightAction={rightAction}
           />
         </div>
+
+        {/* ANN-8 — bande d'annonces, sous l'en-tête et au-dessus du contenu.
+            Elle disparaît d'elle-même quand aucune annonce n'est en cours :
+            une bande vide rongerait l'espace utile de chaque écran. */}
+        <BandeAnnonces />
 
         <main
           ref={containerRef}

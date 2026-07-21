@@ -76,7 +76,11 @@ function ModaleBoost({ annonce, boost, onClose }) {
       <div className="px-5 pb-5 space-y-4">
         <p className="flex items-start gap-2 text-[13px] text-dim leading-relaxed">
           <Info size={14} className="shrink-0 mt-0.5 text-primary" aria-hidden="true" />
-          {t('annonces.boost_aide')}
+          {/* ANN-7 — le nombre de diffusions vient de la CONFIGURATION serveur,
+              pas d'un « plusieurs fois » vague ni d'un « trois » figé : la
+              direction peut le changer en admin, et le créateur qui paie un
+              Boost doit lire ce qu'il achète réellement. */}
+          {t('annonces.boost_aide', { n: boost?.diffusions_par_jour ?? 3 })}
         </p>
 
         {offres.length === 0 ? (
