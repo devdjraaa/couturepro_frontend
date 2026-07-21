@@ -3,11 +3,12 @@ import { useTranslation } from 'react-i18next'
 import { FileText, Upload, Trash2, Tag } from 'lucide-react'
 import { Input, Button } from '@/components/ui'
 import { patronService } from '@/services/patronService'
-import { formatCurrency } from '@/utils/formatCurrency'
+import { useDeviseAtelier } from '@/utils/formatCurrency'
 
 // P161-163 (créateur) : met en vente / retire le patron payant d'une création.
 export default function PatronManager({ vetement }) {
   const { t } = useTranslation()
+  const { symbole: devise, format: formatCurrency } = useDeviseAtelier()
   const [patron, setPatron] = useState(undefined) // undefined = chargement, null = aucun
   const [titre, setTitre] = useState('')
   const [prix, setPrix] = useState('')
@@ -29,7 +30,7 @@ export default function PatronManager({ vetement }) {
   const publier = async () => {
     setError('')
     if (!fichier) { setError(t('patron.err_fichier')); return }
-    if (!prix || Number(prix) < 100) { setError(t('patron.err_prix')); return }
+    if (!prix || Number(prix) < 100) { setError(t('patron.err_prix', { devise })); return }
     setBusy(true)
     try {
       await patronService.create({
@@ -89,7 +90,7 @@ export default function PatronManager({ vetement }) {
         <div className="space-y-2.5">
           <p className="text-xs text-ghost">{t('patron.hint')}</p>
           <Input label={t('patron.titre_label')} value={titre} onChange={e => setTitre(e.target.value)} placeholder={vetement.nom} />
-          <Input label={t('patron.prix_label')} type="number" min="100" value={prix} onChange={e => setPrix(e.target.value)} placeholder="5000" />
+          <Input label={t('patron.prix_label', { devise })} type="number" min="100" value={prix} onChange={e => setPrix(e.target.value)} placeholder="5000" />
           <label className="flex items-center gap-2 w-full py-2.5 px-3 rounded-xl border-2 border-dashed border-edge text-ghost hover:border-primary hover:text-primary transition cursor-pointer text-sm">
             <Upload size={16} />
             <span className="truncate">{fichier ? fichier.name : t('patron.fichier_label')}</span>

@@ -15,7 +15,7 @@ import { AppLayout } from '@/components/layout'
 import { Button, Input, Skeleton } from '@/components/ui'
 import ClientAvatar from '@/components/clients/ClientAvatar'
 import MesuresInline from '@/components/commandes/MesuresInline'
-import { formatCurrency } from '@/utils/formatCurrency'
+import { useDeviseAtelier } from '@/utils/formatCurrency'
 import { cn } from '@/utils/cn'
 
 const TODAY = new Date().toISOString().split('T')[0]
@@ -170,6 +170,7 @@ function StepClient({ data, setData, onNext }) {
 // ── Étape 2 — Modèle (multi-articles) ────────────────────────────────────────
 function StepModele({ data, setData, onNext }) {
   const { t } = useTranslation()
+  const { symbole: devise, format: formatCurrency } = useDeviseAtelier()
   const { data: vetements = [], isLoading } = useVetements()
   const fileRef = useRef(null)
 
@@ -290,7 +291,7 @@ function StepModele({ data, setData, onNext }) {
                     />
                   </div>
                   <div className="flex-1">
-                    <label className="block text-xs text-ghost mb-1">{t('commandes.creation.prix_unitaire')}</label>
+                    <label className="block text-xs text-ghost mb-1">{t('commandes.creation.prix_unitaire', { devise })}</label>
                     <input
                       type="number"
                       min="0"
@@ -431,6 +432,7 @@ function StepDelai({ data, setData, onNext }) {
 // ── Étape 4 — Prix & Acompte ──────────────────────────────────────────────────
 function StepPrix({ data, setData, onSubmit, isLoading }) {
   const { t } = useTranslation()
+  const { symbole: devise, format: formatCurrency } = useDeviseAtelier()
   const itemsTotal = data.items.reduce((s, it) => s + (Number(it.quantite) * Number(it.prix_unitaire || 0)), 0)
   const prix       = Number(data.prix || 0) || itemsTotal
   const acompte    = Number(data.acompte || 0)
@@ -452,7 +454,7 @@ function StepPrix({ data, setData, onSubmit, isLoading }) {
   return (
     <div className="flex flex-col flex-1 px-4 pb-4 space-y-4">
       <Input
-        label={t('commandes.creation.prix_total')}
+        label={t('commandes.creation.prix_total', { devise })}
         type="number"
         min="0"
         value={data.prix}
@@ -463,7 +465,7 @@ function StepPrix({ data, setData, onSubmit, isLoading }) {
       />
 
       <Input
-        label={t('commandes.creation.acompte')}
+        label={t('commandes.creation.acompte', { devise })}
         type="number"
         min="0"
         max={prix || undefined}

@@ -26,6 +26,7 @@ import { formatDate } from '@/utils/formatDate'
 import { exportRelevePdf } from '@/utils/exportRelevePdf'
 import { exportFacturePdf, shareOrDownloadPdf } from '@/utils/exportFacturePdf'
 import { cn } from '@/utils/cn'
+import RessourceIntrouvable from '@/components/ui/RessourceIntrouvable'
 
 // ── Onglets internes ──────────────────────────────────────────────────────────
 const TABS = ['Aperçu', 'Paiements', 'Mesures', 'Historique']
@@ -667,6 +668,7 @@ function TabHistorique({ commande, paiements }) {
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function CommandeDetailPage() {
+  const { t }            = useTranslation()
   const { id }           = useParams()
   const navigate         = useNavigate()
   const commandeId       = id
@@ -702,7 +704,15 @@ export default function CommandeDetailPage() {
     )
   }
 
-  if (!commande) return null
+  // Identifiant inconnu (lien périmé, élément supprimé, adresse tapée à la
+  // main) : on renvoyait `null`, donc un écran BLANC sans même un retour.
+  if (!commande) {
+    return (
+      <AppLayout showBack title={t('erreurs.introuvable_titre')}>
+        <RessourceIntrouvable />
+      </AppLayout>
+    )
+  }
 
   return (
     <AppLayout showBack title={commande.vetement_nom ?? 'Commande'}>

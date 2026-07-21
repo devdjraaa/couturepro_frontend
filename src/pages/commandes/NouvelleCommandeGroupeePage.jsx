@@ -9,7 +9,7 @@ import { useCreateCommandeGroupe } from '@/hooks/useCommandeGroupes'
 import { AppLayout } from '@/components/layout'
 import { Button, Input, Skeleton } from '@/components/ui'
 import ClientAvatar from '@/components/clients/ClientAvatar'
-import { formatCurrency } from '@/utils/formatCurrency'
+import { useDeviseAtelier } from '@/utils/formatCurrency'
 import { cn } from '@/utils/cn'
 
 const TODAY = new Date().toISOString().split('T')[0]
@@ -142,6 +142,7 @@ function StepClient({ data, setData, onNext }) {
 // ── Une sous-commande ─────────────────────────────────────────────────────────
 function SousCommandeCard({ index, sc, vetements, onChange, onRemove, canRemove }) {
   const { t } = useTranslation()
+  const { symbole: devise, format: formatCurrency } = useDeviseAtelier()
   const set = (field, value) => onChange(index, field, value)
 
   const total = (Number(sc.quantite) || 1) * Number(sc.prix || 0)
@@ -210,7 +211,7 @@ function SousCommandeCard({ index, sc, vetements, onChange, onRemove, canRemove 
           />
         </div>
         <div className="flex-1">
-          <label className="block text-xs text-ghost mb-1">{t('commandes.groupe_form.prix_total')}</label>
+          <label className="block text-xs text-ghost mb-1">{t('commandes.groupe_form.prix_total', { devise })}</label>
           <input
             type="number"
             min="0"
@@ -236,7 +237,7 @@ function SousCommandeCard({ index, sc, vetements, onChange, onRemove, canRemove 
 
       {/* Acompte */}
       <div>
-        <label className="block text-xs text-ghost mb-1">{t('commandes.groupe_form.acompte')}</label>
+        <label className="block text-xs text-ghost mb-1">{t('commandes.groupe_form.acompte', { devise })}</label>
         <input
           type="number"
           min="0"
@@ -354,6 +355,7 @@ function SousCommandeCard({ index, sc, vetements, onChange, onRemove, canRemove 
 // ── Étape 2 — Sous-commandes ──────────────────────────────────────────────────
 function StepSousCommandes({ data, setData, onSubmit, isLoading }) {
   const { t } = useTranslation()
+  const { symbole: devise, format: formatCurrency } = useDeviseAtelier()
   const { data: vetements = [], isLoading: loadingVetements } = useVetements()
   const [error, setError] = useState('')
 

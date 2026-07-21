@@ -15,6 +15,7 @@ import { formatDate } from '@/utils/formatDate'
 import { exportFactureGroupePdf, shareOrDownloadPdf } from '@/utils/exportFacturePdf'
 import { toCommandeDetail } from '@/constants/routes'
 import { cn } from '@/utils/cn'
+import RessourceIntrouvable from '@/components/ui/RessourceIntrouvable'
 
 export default function CommandeGroupeDetailPage() {
   const { t } = useTranslation()
@@ -55,7 +56,15 @@ export default function CommandeGroupeDetailPage() {
     )
   }
 
-  if (!groupe) return null
+  // Identifiant inconnu (lien périmé, élément supprimé, adresse tapée à la
+  // main) : on renvoyait `null`, donc un écran BLANC sans même un retour.
+  if (!groupe) {
+    return (
+      <AppLayout showBack title={t('erreurs.introuvable_titre')}>
+        <RessourceIntrouvable />
+      </AppLayout>
+    )
+  }
 
   const canGenerateFacture = can('factures.generate')
 
