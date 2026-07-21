@@ -194,7 +194,16 @@
     "lookbook_vide": "Publiez au moins une création pour générer le lookbook.",
     "lookbook_erreur": "Impossible de générer le lookbook.",
     "sponsoriser_n_plural": "Sponsoriser {{n}} jours",
-    "avis_examen": "Un visiteur a signalé cet avis. L'équipe Gextimo l'examine, vous n'avez rien à faire."
+    "avis_examen": "Un visiteur a signalé cet avis. L'équipe Gextimo l'examine, vous n'avez rien à faire.",
+    "recadrer_banniere": "Recadrer",
+    "recadrage": {
+      "titre": "Cadrer la bannière",
+      "aide": "Déplacez le cadre pour choisir ce que vos visiteurs verront. L'aperçu montre le rendu réel sur votre profil public.",
+      "apercu": "Aperçu du profil public",
+      "recentrer": "Recentrer",
+      "appliquer": "Appliquer le cadrage",
+      "echec": "Le cadrage n'a pas pu être enregistré."
+    }
   },
   "facturation": {
     "titre": "Facturation",
