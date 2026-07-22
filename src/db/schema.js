@@ -1,7 +1,7 @@
 import { appSchema, tableSchema } from '@nozbe/watermelondb'
 
 export default appSchema({
-  version: 6,
+  version: 7,
   tables: [
     tableSchema({
       name: 'clients',
@@ -35,6 +35,9 @@ export default appSchema({
         { name: 'statut',                   type: 'string' },
         { name: 'description',              type: 'string', isOptional: true },
         { name: 'note_interne',             type: 'string', isOptional: true },
+        // Date de la commande : elle n'était PAS stockée en local, si bien que
+        // l'accueil affichait « — » à la place de la date hors ligne.
+        { name: 'date_commande',            type: 'string', isOptional: true },
         { name: 'date_livraison_prevue',    type: 'string', isOptional: true },
         { name: 'date_livraison_effective', type: 'string', isOptional: true },
         { name: 'urgence',                  type: 'boolean' },

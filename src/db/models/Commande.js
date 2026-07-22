@@ -13,6 +13,9 @@ export default class Commande extends Model {
   get vetement_id()              { return this._getRaw('vetement_id')              ?? null }
   set vetement_id(v)             { this._setRaw('vetement_id', v) }
 
+  get date_commande()            { return this._getRaw('date_commande')            ?? null }
+  set date_commande(v)           { this._setRaw('date_commande', v) }
+
   get reference()                { return this._getRaw('reference')                ?? '' }
   set reference(v)               { this._setRaw('reference', v) }
 
