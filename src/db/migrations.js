@@ -93,17 +93,6 @@ export default schemaMigrations({
     },
     // v5 → v6 : REL-3, cache hors ligne de « Mes Réalisations ».
     {
-      // La date de commande n'était pas conservée en local : hors ligne,
-      // l'accueil ne pouvait afficher aucune date et montrait « — ».
-      toVersion: 7,
-      steps: [
-        addColumns({
-          table: 'commandes',
-          columns: [{ name: 'date_commande', type: 'string', isOptional: true }],
-        }),
-      ],
-    },
-    {
       toVersion: 6,
       steps: [
         createTable({
@@ -120,6 +109,17 @@ export default schemaMigrations({
             { name: 'atelier_id',   type: 'string',  isOptional: true },
             { name: 'synced_at',    type: 'number',  isOptional: true },
           ],
+        }),
+      ],
+    },
+    {
+      // La date de commande n'était pas conservée en local : hors ligne,
+      // l'accueil ne pouvait afficher aucune date et montrait « — ».
+      toVersion: 7,
+      steps: [
+        addColumns({
+          table: 'commandes',
+          columns: [{ name: 'date_commande', type: 'string', isOptional: true }],
         }),
       ],
     },
