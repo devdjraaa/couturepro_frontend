@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Check, EyeOff, RotateCcw, Star, Megaphone, Video } from 'lucide-react'
 import { AdminLayout, AdminTable, AdminBadge } from '@/components/admin'
 import {
@@ -19,12 +20,6 @@ import { formatDate } from '@/utils/formatDate'
  * Chaque retrait demande un MOTIF : il est repris tel quel dans l'avis envoyé
  * au créateur. Retirer un contenu sans dire pourquoi n'est pas modérer.
  */
-
-const ONGLETS = [
-  { cle: 'avis',     libelle: 'Avis',     icone: Star },
-  { cle: 'annonces', libelle: 'Annonces', icone: Megaphone },
-  { cle: 'videos',   libelle: 'Vidéos',   icone: Video },
-]
 
 function Compteurs({ valeurs }) {
   const entrees = Object.entries(valeurs || {})
@@ -64,6 +59,7 @@ function demanderMotif(question) {
 }
 
 function OngletAvis() {
+  const { t } = useTranslation()
   const [filtre, setFiltre] = useState('signales')
   const { data, isLoading } = useAdminAvis({ filtre })
   const { data: compteurs } = useAvisCompteurs()
@@ -74,12 +70,12 @@ function OngletAvis() {
   const rows = data?.data ?? data ?? []
 
   const colonnes = [
-    { key: 'atelier', label: 'Créateur', render: (r) => r.atelier?.nom ?? '—' },
-    { key: 'note',    label: 'Note',     render: (r) => <span className="tabular-nums">{r.note ?? '—'}</span> },
-    { key: 'commentaire', label: 'Avis', render: (r) => <span className="text-xs">{r.commentaire || '—'}</span> },
-    { key: 'signalements_count', label: 'Signalé', render: (r) => <span className="tabular-nums">{r.signalements_count ?? 0}</span> },
-    { key: 'statut',  label: 'Statut',   render: (r) => <AdminBadge value={r.statut} /> },
-    { key: 'created_at', label: 'Date',  render: (r) => formatDate(r.created_at) },
+    { key: 'atelier', label: t('admin.moderation.createur'), render: (r) => r.atelier?.nom ?? '—' },
+    { key: 'note',    label: t('admin.moderation.note'),     render: (r) => <span className="tabular-nums">{r.note ?? '—'}</span> },
+    { key: 'commentaire', label: t('admin.moderation.avis'), render: (r) => <span className="text-xs">{r.commentaire || '—'}</span> },
+    { key: 'signalements_count', label: t('admin.moderation.signale'), render: (r) => <span className="tabular-nums">{r.signalements_count ?? 0}</span> },
+    { key: 'statut',  label: t('admin.moderation.statut'),   render: (r) => <AdminBadge value={r.statut} /> },
+    { key: 'created_at', label: t('admin.moderation.date'),  render: (r) => formatDate(r.created_at) },
     {
       key: 'actions', label: '',
       render: (r) => (
@@ -87,20 +83,20 @@ function OngletAvis() {
           {filtre === 'photos' ? (
             <>
               <button onClick={() => photos.mutate({ id: r.id, action: 'valider' })}
-                      className="text-xs font-medium text-success hover:underline">Valider les photos</button>
+                      className="text-xs font-medium text-success hover:underline">{t('admin.moderation.valider_photos')}</button>
               <button onClick={() => photos.mutate({ id: r.id, action: 'refuser' })}
-                      className="text-xs font-medium text-danger hover:underline">Refuser</button>
+                      className="text-xs font-medium text-danger hover:underline">{t('admin.moderation.refuser')}</button>
             </>
           ) : r.statut === 'masque' ? (
             <button onClick={() => retablir.mutate(r.id)}
                     className="text-xs font-medium text-primary hover:underline inline-flex items-center gap-1">
-              <RotateCcw size={12} />Rétablir
+              <RotateCcw size={12} />{t('admin.moderation.retablir')}
             </button>
           ) : (
             <button
-              onClick={() => { const m = demanderMotif('Motif du retrait (facultatif) :'); masquer.mutate({ id: r.id, motif: m }) }}
+              onClick={() => { const m = demanderMotif(t('admin.moderation.motif_facultatif')); masquer.mutate({ id: r.id, motif: m }) }}
               className="text-xs font-semibold text-danger hover:underline inline-flex items-center gap-1">
-              <EyeOff size={12} />Masquer
+              <EyeOff size={12} />{t('admin.moderation.masquer')}
             </button>
           )}
         </div>
@@ -112,15 +108,18 @@ function OngletAvis() {
     <>
       <Compteurs valeurs={compteurs} />
       <Filtres actif={filtre} onChange={setFiltre} options={[
-        { v: 'signales', l: 'Signalés' }, { v: 'photos', l: 'Photos à valider' }, { v: 'masques', l: 'Masqués' },
+        { v: 'signales', l: t('admin.moderation.signales') },
+        { v: 'photos',   l: t('admin.moderation.photos_a_valider') },
+        { v: 'masques',  l: t('admin.moderation.masques') },
       ]} />
-      {isLoading ? <p className="text-sm text-ghost">Chargement…</p>
-        : <AdminTable columns={colonnes} rows={rows} emptyLabel="Aucun avis à modérer" />}
+      {isLoading ? <p className="text-sm text-ghost">{t('commun.chargement')}</p>
+        : <AdminTable columns={colonnes} rows={rows} emptyLabel={t('admin.moderation.aucun_avis')} />}
     </>
   )
 }
 
 function OngletAnnonces() {
+  const { t } = useTranslation()
   const [filtre, setFiltre] = useState('signalees')
   const { data, isLoading } = useAdminAnnonces({ filtre })
   const { data: compteurs } = useAnnoncesCompteurs()
@@ -130,11 +129,11 @@ function OngletAnnonces() {
   const rows = data?.data ?? data ?? []
 
   const colonnes = [
-    { key: 'atelier', label: 'Créateur', render: (r) => r.atelier?.nom ?? '—' },
-    { key: 'titre',   label: 'Titre',    render: (r) => r.titre || '—' },
-    { key: 'message', label: 'Message',  render: (r) => <span className="text-xs">{r.message || '—'}</span> },
-    { key: 'signalements_count', label: 'Signalé', render: (r) => <span className="tabular-nums">{r.signalements_count ?? 0}</span> },
-    { key: 'statut',  label: 'Statut',   render: (r) => <AdminBadge value={r.masquee_at ? 'masquee' : r.statut} /> },
+    { key: 'atelier', label: t('admin.moderation.createur'), render: (r) => r.atelier?.nom ?? '—' },
+    { key: 'titre',   label: t('admin.moderation.titre'),    render: (r) => r.titre || '—' },
+    { key: 'message', label: t('admin.moderation.message'),  render: (r) => <span className="text-xs">{r.message || '—'}</span> },
+    { key: 'signalements_count', label: t('admin.moderation.signale'), render: (r) => <span className="tabular-nums">{r.signalements_count ?? 0}</span> },
+    { key: 'statut',  label: t('admin.moderation.statut'),   render: (r) => <AdminBadge value={r.masquee_at ? 'masquee' : r.statut} /> },
     {
       key: 'actions', label: '',
       render: (r) => (
@@ -142,18 +141,18 @@ function OngletAnnonces() {
           {r.masquee_at ? (
             <button onClick={() => retablir.mutate(r.id)}
                     className="text-xs font-medium text-primary hover:underline inline-flex items-center gap-1">
-              <RotateCcw size={12} />Rétablir
+              <RotateCcw size={12} />{t('admin.moderation.retablir')}
             </button>
           ) : (
             <button
               onClick={() => {
                 // Le serveur EXIGE le motif ici : il est recopié dans la
                 // notification envoyée au créateur.
-                const m = demanderMotif('Motif du retrait (obligatoire) :')
+                const m = demanderMotif(t('admin.moderation.motif_obligatoire'))
                 if (m) masquer.mutate({ id: r.id, motif: m })
               }}
               className="text-xs font-semibold text-danger hover:underline inline-flex items-center gap-1">
-              <EyeOff size={12} />Retirer
+              <EyeOff size={12} />{t('admin.moderation.retirer')}
             </button>
           )}
         </div>
@@ -165,15 +164,17 @@ function OngletAnnonces() {
     <>
       <Compteurs valeurs={compteurs} />
       <Filtres actif={filtre} onChange={setFiltre} options={[
-        { v: 'signalees', l: 'Signalées' }, { v: 'masquees', l: 'Masquées' },
+        { v: 'signalees', l: t('admin.moderation.signalees') },
+        { v: 'masquees',  l: t('admin.moderation.masquees') },
       ]} />
-      {isLoading ? <p className="text-sm text-ghost">Chargement…</p>
-        : <AdminTable columns={colonnes} rows={rows} emptyLabel="Aucune annonce à modérer" />}
+      {isLoading ? <p className="text-sm text-ghost">{t('commun.chargement')}</p>
+        : <AdminTable columns={colonnes} rows={rows} emptyLabel={t('admin.moderation.aucune_annonce')} />}
     </>
   )
 }
 
 function OngletVideos() {
+  const { t } = useTranslation()
   const [statut, setStatut] = useState('en_attente')
   const { data, isLoading } = useAdminVideos({ statut })
   const { data: compteurs } = useVideosCompteurs()
@@ -183,28 +184,28 @@ function OngletVideos() {
   const rows = data?.data ?? data ?? []
 
   const colonnes = [
-    { key: 'atelier', label: 'Créateur', render: (r) => r.atelier?.nom ?? '—' },
-    { key: 'titre',   label: 'Titre',    render: (r) => r.titre || '—' },
-    { key: 'url',     label: 'Lien',     render: (r) => r.url
-        ? <a href={r.url} target="_blank" rel="noreferrer" className="text-xs text-primary underline break-all">Ouvrir</a>
+    { key: 'atelier', label: t('admin.moderation.createur'), render: (r) => r.atelier?.nom ?? '—' },
+    { key: 'titre',   label: t('admin.moderation.titre'),    render: (r) => r.titre || '—' },
+    { key: 'url',     label: t('admin.moderation.lien'),     render: (r) => r.url
+        ? <a href={r.url} target="_blank" rel="noreferrer" className="text-xs text-primary underline break-all">{t('admin.moderation.ouvrir')}</a>
         : '—' },
-    { key: 'statut',  label: 'Statut',   render: (r) => <AdminBadge value={r.statut} /> },
-    { key: 'created_at', label: 'Date',  render: (r) => formatDate(r.created_at) },
+    { key: 'statut',  label: t('admin.moderation.statut'),   render: (r) => <AdminBadge value={r.statut} /> },
+    { key: 'created_at', label: t('admin.moderation.date'),  render: (r) => formatDate(r.created_at) },
     {
       key: 'actions', label: '',
       render: (r) => r.statut === 'en_attente' ? (
         <div className="flex items-center gap-3 justify-end">
           <button onClick={() => approuver.mutate(r.id)}
                   className="text-xs font-semibold text-success hover:underline inline-flex items-center gap-1">
-            <Check size={12} />Publier
+            <Check size={12} />{t('admin.moderation.publier')}
           </button>
           <button
             onClick={() => {
               // Motif obligatoire côté serveur : le créateur doit savoir pourquoi.
-              const m = demanderMotif('Motif du refus (obligatoire) :')
+              const m = demanderMotif(t('admin.moderation.motif_refus_obligatoire'))
               if (m) refuser.mutate({ id: r.id, motif: m })
             }}
-            className="text-xs font-semibold text-danger hover:underline">Refuser</button>
+            className="text-xs font-semibold text-danger hover:underline">{t('admin.moderation.refuser')}</button>
         </div>
       ) : <Check size={13} className="text-ghost" aria-hidden="true" />,
     },
@@ -214,19 +215,28 @@ function OngletVideos() {
     <>
       <Compteurs valeurs={compteurs} />
       <Filtres actif={statut} onChange={setStatut} options={[
-        { v: 'en_attente', l: 'À valider' }, { v: 'publiee', l: 'Publiées' }, { v: 'refusee', l: 'Refusées' },
+        { v: 'en_attente', l: t('admin.moderation.a_valider') },
+        { v: 'publiee',    l: t('admin.moderation.publiees') },
+        { v: 'refusee',    l: t('admin.moderation.refusees') },
       ]} />
-      {isLoading ? <p className="text-sm text-ghost">Chargement…</p>
-        : <AdminTable columns={colonnes} rows={rows} emptyLabel="Aucune vidéo" />}
+      {isLoading ? <p className="text-sm text-ghost">{t('commun.chargement')}</p>
+        : <AdminTable columns={colonnes} rows={rows} emptyLabel={t('admin.moderation.aucune_video')} />}
     </>
   )
 }
 
 export default function ModerationPage() {
+  const { t } = useTranslation()
   const [onglet, setOnglet] = useState('avis')
 
+  const ONGLETS = [
+    { cle: 'avis',     libelle: t('admin.moderation.onglet_avis'),     icone: Star },
+    { cle: 'annonces', libelle: t('admin.moderation.onglet_annonces'), icone: Megaphone },
+    { cle: 'videos',   libelle: t('admin.moderation.onglet_videos'),   icone: Video },
+  ]
+
   return (
-    <AdminLayout title="Modération des contenus">
+    <AdminLayout title={t('admin.moderation.titre_page')}>
       <div className="flex gap-2 mb-5 border-b border-edge">
         {ONGLETS.map(({ cle, libelle, icone: Icone }) => (
           <button key={cle} onClick={() => setOnglet(cle)}

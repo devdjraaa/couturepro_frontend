@@ -368,7 +368,8 @@
     "contacter_support": "Contacter le support",
     "enregistre": "Enregistré",
     "verifier": "Vérifier",
-    "enregistrement": "Enregistrement…"
+    "enregistrement": "Enregistrement…",
+    "compte_suspendu": "Votre compte est temporairement suspendu. "
   },
   "erreurs": {
     "reseau": "Erreur de connexion. Vérifiez votre réseau.",
@@ -919,7 +920,11 @@
       "paiement_btn": "Paiement",
       "voir_mesures": "Voir les mesures du client",
       "supprimer_btn": "Supprimer cette commande",
-      "note_interne": "Note interne"
+      "note_interne": "Note interne",
+      "aucune_echeance": "Aucune échéance. Ajoutez-en pour mieux planifier.",
+      "envoyer_recap_whatsapp": "Envoyer le récap WhatsApp ?",
+      "aucune_mesure_client": "Aucune mesure enregistrée pour ce client.",
+      "aucun_client_associe": "Aucun client associé."
     },
     "modes_paiement": {
       "especes": "Espèces",
@@ -976,6 +981,14 @@
       "creee": "Commande créée",
       "payee": "Paiement reçu : {{montant}} ({{mode}})",
       "livree": "Commande livrée"
+    },
+    "form": {
+      "client": "Client",
+      "choisir_client": "Choisir un client…",
+      "modele": "Modèle / vêtement",
+      "choisir_modele": "Choisir un modèle…",
+      "aucun_modele": "Aucun modèle dans le catalogue. ",
+      "creer_modele": "Créer un modèle →"
     }
   },
   "catalogue": {
@@ -1341,7 +1354,8 @@
     "format_facture": "Format de facture",
     "logo_atelier": "Logo de l'atelier",
     "pied_page": "Pied de page",
-    "assujetti_tva": "Assujetti à la TVA"
+    "assujetti_tva": "Assujetti à la TVA",
+    "personnalisation_desc": "Logo, références IFU/RCCM et pied de page personnalisés."
   },
   "theme": {
     "titre": "Apparence",
@@ -1390,7 +1404,8 @@
       "success": "Données injectées : explorez l'application !",
       "btn": "Réinitialiser les données démo"
     },
-    "encart": "Pour vos réclamations, suggestions d'amélioration, remarques, demandes d'assistance ou toute autre requête, créez un ticket afin de nous en informer. Notre équipe vous répondra dans les meilleurs délais."
+    "encart": "Pour vos réclamations, suggestions d'amélioration, remarques, demandes d'assistance ou toute autre requête, créez un ticket afin de nous en informer. Notre équipe vous répondra dans les meilleurs délais.",
+    "limite_caracteres": "Limite de 5 000 caractères atteinte."
   },
   "communications": {
     "titre": "Communications",
@@ -4222,7 +4237,12 @@
       "annuler_ajust": "Annuler",
       "unite_minutes": "minutes",
       "unite_heures": "heures",
-      "unite_jours": "jours"
+      "unite_jours": "jours",
+      "type_compte": "Type de compte",
+      "verification_en_attente": "Demande de vérification en attente",
+      "voir_document": "Voir le document",
+      "lien_fourni": "Lien fourni",
+      "valider_verification": "Valider la vérification"
     },
     "audit": {
       "titre": "Journal d'audit",
@@ -4697,6 +4717,47 @@
       "commun_heures": "Heures de publication",
       "commun_formats": "Formats",
       "commun_sujets": "Sujets"
+    },
+    "moderation": {
+      "titre_page": "Modération des contenus",
+      "createur": "Créateur",
+      "note": "Note",
+      "avis": "Avis",
+      "signale": "Signalé",
+      "statut": "Statut",
+      "date": "Date",
+      "titre": "Titre",
+      "message": "Message",
+      "lien": "Lien",
+      "valider_photos": "Valider les photos",
+      "refuser": "Refuser",
+      "retablir": "Rétablir",
+      "masquer": "Masquer",
+      "retirer": "Retirer",
+      "publier": "Publier",
+      "ouvrir": "Ouvrir",
+      "motif_facultatif": "Motif du retrait (facultatif) :",
+      "motif_obligatoire": "Motif du retrait (obligatoire) :",
+      "motif_refus_obligatoire": "Motif du refus (obligatoire) :",
+      "signales": "Signalés",
+      "photos_a_valider": "Photos à valider",
+      "masques": "Masqués",
+      "signalees": "Signalées",
+      "masquees": "Masquées",
+      "a_valider": "À valider",
+      "publiees": "Publiées",
+      "refusees": "Refusées",
+      "aucun_avis": "Aucun avis à modérer",
+      "aucune_annonce": "Aucune annonce à modérer",
+      "aucune_video": "Aucune vidéo",
+      "onglet_avis": "Avis",
+      "onglet_annonces": "Annonces",
+      "onglet_videos": "Vidéos"
+    },
+    "banniere": {
+      "sponsorisation_titre": "Offres de sponsorisation",
+      "sponsorisation_desc": "Le créateur paie pour apparaître en tête de la vitrine. Prix en FCFA, modifiable sans toucher au code.",
+      "aucune_offre": "Aucune offre. Ajoutez-en une."
     }
   },
   "bienvenue": {
