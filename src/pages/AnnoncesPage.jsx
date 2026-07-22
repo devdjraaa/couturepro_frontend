@@ -147,6 +147,13 @@ export default function AnnoncesPage() {
   const annonces = data?.annonces ?? []
   const quota = data?.quota
   const boost = data?.boost
+
+  // Bornes de durée : elles viennent du SERVEUR, comme les tarifs du Boost.
+  // Elles étaient écrites « 1 à 10 » en dur ici — un changement de limite en
+  // configuration n'aurait rien changé à l'écran, et une durée devenue
+  // interdite serait restée proposée jusqu'au refus à l'envoi.
+  const dureeMin = Number(data?.duree?.min) || 1
+  const dureeMax = Number(data?.duree?.max) || dureeMin
   const peutPublier = quota?.peut_publier !== false
 
   const [form, setForm] = useState({
@@ -230,9 +237,13 @@ export default function AnnoncesPage() {
                 {/* Le créateur choisit un NOMBRE DE JOURS, jamais une date de
                     fin : c'est le serveur qui la calcule (durée inclusive). */}
                 <span className={LABEL}>{t('annonces.form_duree')}</span>
-                <select className={INPUT} value={form.duree_jours}
+                {/* Borné à l'affichage : le formulaire s'initialise avant que
+                    les bornes du serveur ne soient connues, et une valeur hors
+                    liste laisserait le champ vide. */}
+                <select className={INPUT}
+                        value={Math.min(Math.max(form.duree_jours, dureeMin), dureeMax)}
                         onChange={(e) => setForm((f) => ({ ...f, duree_jours: Number(e.target.value) }))}>
-                  {Array.from({ length: 10 }, (_, i) => i + 1).map((j) => (
+                  {Array.from({ length: Math.max(dureeMax - dureeMin + 1, 1) }, (_, i) => dureeMin + i).map((j) => (
                     <option key={j} value={j}>{t('annonces.form_jours', { count: j })}</option>
                   ))}
                 </select>
