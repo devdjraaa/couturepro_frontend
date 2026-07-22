@@ -249,7 +249,7 @@ export default function VitrineHome() {
       <BandeAnnonces />
 
       {/* HERO */}
-      <section className="relative overflow-hidden min-h-[calc(100dvh-6.5rem)] flex flex-col items-center justify-center pt-10 pb-10 text-center isolate">
+      <section className="relative overflow-hidden min-h-[calc(100dvh-6.5rem)] flex flex-col items-center justify-center pt-10 pb-10 text-center isolate bg-app">
         {/* ── Fond animé multicouche — ambiance défilé ── */}
         <div className="vt-hero-bg" aria-hidden="true">
 
