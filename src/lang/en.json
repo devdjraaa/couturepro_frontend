@@ -4746,6 +4746,32 @@
       "sponsorisation_titre": "Sponsorship offers",
       "sponsorisation_desc": "The creator pays to appear at the top of the storefront. Price in FCFA, editable without touching the code.",
       "aucune_offre": "No offer yet. Add one."
+    },
+    "partenaires": {
+      "titre_page": "Partners",
+      "organisation": "Organisation",
+      "contact": "Contact",
+      "categorie": "Category",
+      "apport": "Contribution",
+      "message": "Message",
+      "statut": "Status",
+      "recue_le": "Received on",
+      "valider": "Approve",
+      "rejeter": "Reject",
+      "remettre_en_attente": "Set back to pending",
+      "avertissement_convention": "Approving an application does not trigger any automatic email: the agreement still needs to be sent manually.",
+      "en_attente": "Pending",
+      "validees": "Approved",
+      "rejetees": "Rejected",
+      "toutes": "All",
+      "aucune_candidature": "No applications",
+      "nom": "Name",
+      "site": "Website",
+      "ouvrir": "Open",
+      "actif": "Active",
+      "aucun_partenaire": "No partners",
+      "onglet_candidatures": "Applications",
+      "onglet_partenaires": "Partners"
     }
   },
   "bienvenue": {

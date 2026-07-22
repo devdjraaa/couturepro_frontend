@@ -4759,6 +4759,32 @@
       "sponsorisation_titre": "Offres de sponsorisation",
       "sponsorisation_desc": "Le créateur paie pour apparaître en tête de la vitrine. Prix en FCFA, modifiable sans toucher au code.",
       "aucune_offre": "Aucune offre. Ajoutez-en une."
+    },
+    "partenaires": {
+      "titre_page": "Partenaires",
+      "organisation": "Organisation",
+      "contact": "Contact",
+      "categorie": "Catégorie",
+      "apport": "Apport",
+      "message": "Message",
+      "statut": "Statut",
+      "recue_le": "Reçue le",
+      "valider": "Valider",
+      "rejeter": "Rejeter",
+      "remettre_en_attente": "Remettre en attente",
+      "avertissement_convention": "Valider une candidature ne déclenche aucun envoi automatique : la convention reste à transmettre à la main.",
+      "en_attente": "En attente",
+      "validees": "Validées",
+      "rejetees": "Rejetées",
+      "toutes": "Toutes",
+      "aucune_candidature": "Aucune candidature",
+      "nom": "Nom",
+      "site": "Site",
+      "ouvrir": "Ouvrir",
+      "actif": "Actif",
+      "aucun_partenaire": "Aucun partenaire",
+      "onglet_candidatures": "Candidatures",
+      "onglet_partenaires": "Partenaires"
     }
   },
   "bienvenue": {
