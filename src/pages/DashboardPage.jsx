@@ -106,16 +106,18 @@ function EnteteMarque({ navigate, nbNotifs }) {
 
   return (
     <div className="bg-card px-4 pt-safe pb-3 flex items-center justify-between gap-3 border-b border-edge">
+      {/* Dimensionné en LARGEUR : la charte interdit de descendre sous 120 px,
+          en dessous le logotype n'est plus lisible. La hauteur suit d'elle-même. */}
       <img
         src="/logo-gextimo-complet.png"
         alt="Gextimo"
-        className="h-8 object-contain object-left dark:hidden"
+        className="w-[132px] h-auto object-contain object-left dark:hidden"
       />
       {/* En thème sombre le logotype noir disparaîtrait : version claire. */}
       <img
         src="/logo-gextimo-complet-blanc.png"
         alt="Gextimo"
-        className="h-8 object-contain object-left hidden dark:block"
+        className="w-[132px] h-auto object-contain object-left hidden dark:block"
       />
 
       <button
