@@ -126,53 +126,50 @@ export default function SplashDemarrage() {
               pas. Les proportions sont relevées sur le logo officiel coloré
               (public/logo-officiel.png) : point central, anneau noir épais,
               arc rouge de rayon 42 ouvert sur la gauche, balayé sur 300°. */}
-          <svg viewBox="0 -58 100 158" className="w-[168px] h-[265px] -mt-[97px]" aria-hidden="true" style={{ overflow: 'visible' }}>
-            {/* L'ARC ROUGE et l'ANNEAU NOIR arrivent EN MÊME TEMPS : l'anneau
-                se révèle en fondu pendant que l'arc se trace, au même rythme.
+          {/* Le « o » du logotype, RELEVÉ AU PIXEL sur le logo officiel
+              (public/logo-officiel.png) plutôt qu'estimé à l'œil.
 
-                L'arc part de la GAUCHE, passe par le haut, descend à droite et
-                S'ARRÊTE AVANT LE BAS du « o » — 205°, soit 4/7 du tour, comme
-                le logo. Il ne fait jamais le tour complet.
+              L'ancien dessin plaçait l'arc à un rayon de 45 pour un anneau de
+              27 : il en était trop proche et trop court. Le relevé donne un
+              tout autre objet — l'arc n'est pas un cercle mais une SPIRALE,
+              dont le rayon passe de 67 aux extrémités à 54 au milieu, et dont
+              l'épaisseur va de 0 à 6 puis revient à 0. C'est ce double effet
+              qui lui donne sa forme de croissant.
 
-                Sa forme est celle d'un CROISSANT DE LUNE très fin : épaisseur
-                nulle aux deux extrémités — donc des bouts francs, pointus — et
-                à peine 2,8 au plus large. Une première version allait du fin
-                vers l'épais et finissait en massue.
+              Balayage relevé : 196°, du bas-droite (312°) vers le haut-gauche
+              (148°) en remontant par la droite.
 
-                Un trait SVG ayant une épaisseur constante, c'est un contour
-                REMPLI ; et comme un remplissage ne se prête pas au tracé
-                progressif, il est dévoilé par un masque animé. */}
-            <defs>
-            <mask id="gx-arc-mask" maskUnits="userSpaceOnUse" x="-10" y="-10" width="120" height="120">
-              <circle
-                cx="50" cy="50" r="45"
-                fill="none"
-                stroke="#fff"
-                strokeWidth="14"
-                strokeLinecap="round"
-                transform="rotate(-176 50 50)"
+              58 points au lieu de plusieurs centaines : c'est la finesse du
+              tracé, pas le masque, qui faisait accrocher l'ouverture. */}
+          <svg viewBox="-20 -58 140 158" className="w-[235px] h-[265px] -mt-[97px]" aria-hidden="true">
+            {/* L'arc se dévoile d'un bout à l'autre. Un remplissage ne sait pas
+                se tracer progressivement : on révèle le croissant par un masque
+                dont la ligne centrale, elle, se trace. `pathLength="1"` la
+                normalise, si bien que l'animation ne dépend plus d'une longueur
+                calculée à la main — celle d'avant valait 161 et ne correspondait
+                plus au tracé depuis longtemps. */}
+            <mask id="gx-arc-mask" maskUnits="userSpaceOnUse" x="-25" y="-25" width="150" height="150">
+              <path
+                d="M 94.7 99.7 L 99.8 93.3 L 103.6 86.2 L 106.4 78.8 L 108.3 71.2 L 109.3 63.7 L 109.3 56.2 L 108.5 49.0 L 107.0 42.0 L 104.7 35.3 L 101.8 29.1 L 98.3 23.3 L 94.2 17.9 L 89.7 13.0 L 84.7 8.7 L 79.3 4.9 L 73.6 1.7 L 67.6 -1.0 L 61.3 -3.0 L 54.8 -4.4 L 48.1 -5.1 L 41.3 -5.1 L 34.4 -4.3 L 27.6 -2.8 L 20.8 -0.6 L 14.2 2.5 L 7.9 6.4 L 1.9 11.1 L -3.1 16.8"
+                pathLength="1" fill="none" stroke="#fff" strokeWidth="13"
                 className="gx-splash-arc-reveal"
               />
             </mask>
-            </defs>
-            <path d="M 5.11 46.86 L 5.10 45.91 L 5.14 44.96 L 5.21 44.01 L 5.31 43.06 L 5.43 42.12 L 5.57 41.17 L 5.73 40.23 L 5.91 39.30 L 6.12 38.36 L 6.35 37.43 L 6.59 36.51 L 6.86 35.59 L 7.15 34.68 L 7.45 33.77 L 7.78 32.87 L 8.13 31.97 L 8.49 31.08 L 8.88 30.20 L 9.28 29.33 L 9.71 28.47 L 10.15 27.61 L 10.61 26.77 L 11.09 25.93 L 11.58 25.11 L 12.10 24.29 L 12.63 23.49 L 13.18 22.70 L 13.75 21.92 L 14.33 21.15 L 14.93 20.39 L 15.55 19.65 L 16.18 18.92 L 16.83 18.20 L 17.50 17.50 L 18.18 16.81 L 18.87 16.13 L 19.58 15.47 L 20.30 14.83 L 21.04 14.20 L 21.79 13.59 L 22.55 12.99 L 23.33 12.41 L 24.12 11.84 L 24.92 11.30 L 25.73 10.76 L 26.56 10.25 L 27.39 9.76 L 28.24 9.28 L 29.10 8.82 L 29.96 8.38 L 30.84 7.95 L 31.72 7.55 L 32.62 7.16 L 33.52 6.80 L 34.43 6.45 L 35.34 6.12 L 36.27 5.82 L 37.20 5.53 L 38.13 5.26 L 39.08 5.01 L 40.02 4.78 L 40.98 4.58 L 41.93 4.39 L 42.89 4.22 L 43.86 4.08 L 44.83 3.95 L 45.79 3.85 L 46.77 3.76 L 47.74 3.70 L 48.72 3.66 L 49.69 3.63 L 50.67 3.63 L 51.64 3.65 L 52.62 3.69 L 53.59 3.76 L 54.56 3.84 L 55.54 3.94 L 56.50 4.07 L 57.47 4.21 L 58.43 4.38 L 59.39 4.56 L 60.34 4.77 L 61.29 5.00 L 62.24 5.24 L 63.18 5.51 L 64.11 5.80 L 65.04 6.11 L 65.96 6.43 L 66.87 6.78 L 67.78 7.14 L 68.67 7.53 L 69.56 7.93 L 70.44 8.36 L 71.31 8.80 L 72.17 9.26 L 73.02 9.74 L 73.86 10.24 L 74.69 10.75 L 75.51 11.28 L 76.32 11.83 L 77.11 12.40 L 77.90 12.98 L 78.66 13.58 L 79.42 14.20 L 80.16 14.83 L 80.89 15.48 L 81.61 16.14 L 82.31 16.82 L 82.99 17.51 L 83.66 18.22 L 84.32 18.94 L 84.96 19.67 L 85.58 20.42 L 86.19 21.18 L 86.78 21.96 L 87.35 22.74 L 87.91 23.54 L 88.45 24.35 L 88.97 25.17 L 89.47 26.00 L 89.96 26.85 L 90.43 27.70 L 90.88 28.56 L 91.31 29.43 L 91.72 30.31 L 92.11 31.20 L 92.49 32.09 L 92.84 33.00 L 93.18 33.91 L 93.49 34.83 L 93.79 35.75 L 94.06 36.68 L 94.32 37.61 L 94.55 38.55 L 94.77 39.50 L 94.96 40.44 L 95.13 41.39 L 95.29 42.35 L 95.42 43.31 L 95.53 44.27 L 95.63 45.23 L 95.70 46.19 L 95.75 47.15 L 95.78 48.12 L 95.79 49.08 L 95.77 50.05 L 95.74 51.01 L 95.69 51.97 L 95.62 52.93 L 95.52 53.89 L 95.41 54.84 L 95.27 55.79 L 95.11 56.74 L 94.94 57.69 L 94.74 58.63 L 94.52 59.56 L 94.29 60.49 L 94.03 61.41 L 93.75 62.33 L 93.46 63.24 L 93.14 64.14 L 92.80 65.03 L 92.45 65.92 L 92.07 66.80 L 91.67 67.66 L 91.26 68.52 L 90.82 69.37 L 90.37 70.20 L 89.88 71.02 L 89.36 71.82 L 89.36 71.82 L 89.73 70.94 L 90.12 70.08 L 90.49 69.21 L 90.85 68.34 L 91.19 67.46 L 91.51 66.57 L 91.82 65.69 L 92.11 64.79 L 92.38 63.89 L 92.64 62.99 L 92.87 62.08 L 93.09 61.17 L 93.29 60.25 L 93.47 59.33 L 93.63 58.41 L 93.77 57.49 L 93.90 56.56 L 94.00 55.63 L 94.09 54.70 L 94.15 53.77 L 94.20 52.84 L 94.23 51.91 L 94.24 50.98 L 94.23 50.05 L 94.20 49.12 L 94.15 48.19 L 94.08 47.26 L 93.99 46.33 L 93.89 45.41 L 93.76 44.49 L 93.62 43.57 L 93.45 42.66 L 93.27 41.75 L 93.07 40.84 L 92.85 39.94 L 92.62 39.05 L 92.36 38.16 L 92.09 37.27 L 91.80 36.40 L 91.49 35.52 L 91.16 34.66 L 90.81 33.80 L 90.45 32.95 L 90.07 32.11 L 89.67 31.28 L 89.26 30.45 L 88.82 29.64 L 88.38 28.83 L 87.91 28.03 L 87.43 27.25 L 86.93 26.47 L 86.42 25.70 L 85.89 24.95 L 85.35 24.21 L 84.79 23.47 L 84.22 22.75 L 83.63 22.05 L 83.03 21.35 L 82.41 20.67 L 81.78 20.00 L 81.13 19.34 L 80.48 18.70 L 79.81 18.07 L 79.12 17.45 L 78.43 16.85 L 77.72 16.27 L 77.00 15.70 L 76.27 15.14 L 75.53 14.60 L 74.77 14.08 L 74.01 13.57 L 73.23 13.07 L 72.45 12.60 L 71.65 12.13 L 70.85 11.69 L 70.04 11.26 L 69.22 10.85 L 68.39 10.46 L 67.55 10.08 L 66.71 9.72 L 65.86 9.38 L 65.00 9.06 L 64.13 8.75 L 63.26 8.47 L 62.38 8.20 L 61.50 7.94 L 60.61 7.71 L 59.72 7.50 L 58.82 7.30 L 57.92 7.12 L 57.02 6.96 L 56.11 6.82 L 55.20 6.70 L 54.29 6.60 L 53.38 6.51 L 52.46 6.45 L 51.54 6.40 L 50.63 6.38 L 49.71 6.37 L 48.79 6.38 L 47.87 6.41 L 46.96 6.46 L 46.04 6.53 L 45.12 6.61 L 44.21 6.72 L 43.30 6.84 L 42.39 6.99 L 41.49 7.15 L 40.59 7.33 L 39.69 7.53 L 38.79 7.75 L 37.91 7.98 L 37.02 8.24 L 36.14 8.51 L 35.27 8.80 L 34.40 9.11 L 33.54 9.44 L 32.69 9.79 L 31.84 10.15 L 31.00 10.53 L 30.17 10.93 L 29.34 11.34 L 28.53 11.78 L 27.72 12.23 L 26.93 12.69 L 26.14 13.17 L 25.36 13.67 L 24.59 14.19 L 23.84 14.72 L 23.09 15.27 L 22.36 15.83 L 21.63 16.40 L 20.92 17.00 L 20.22 17.60 L 19.54 18.23 L 18.86 18.86 L 18.20 19.51 L 17.55 20.18 L 16.92 20.85 L 16.30 21.54 L 15.69 22.25 L 15.10 22.96 L 14.53 23.69 L 13.96 24.43 L 13.42 25.19 L 12.88 25.95 L 12.37 26.73 L 11.87 27.51 L 11.38 28.31 L 10.92 29.12 L 10.46 29.93 L 10.03 30.76 L 9.61 31.59 L 9.21 32.44 L 8.83 33.29 L 8.46 34.15 L 8.11 35.02 L 7.78 35.90 L 7.46 36.78 L 7.17 37.67 L 6.89 38.57 L 6.63 39.47 L 6.38 40.38 L 6.16 41.29 L 5.95 42.21 L 5.76 43.13 L 5.58 44.06 L 5.42 44.99 L 5.27 45.92 L 5.11 46.86 Z" fill="var(--color-primary)" mask="url(#gx-arc-mask)" />
 
-            {/* L'anneau du « o », agrandi. */}
-            <circle
-              cx="50" cy="50" r="27"
-              fill="none"
-              stroke="var(--color-ink)"
-              strokeWidth="15"
-              className="gx-splash-anneau"
-            />
+            {/* Le croissant rouge. */}
+            <path d="M 94.9 99.8 L 100.3 93.7 L 104.5 86.8 L 107.7 79.4 L 110.0 71.8 L 111.2 64.1 L 111.5 56.5 L 110.9 48.9 L 109.6 41.6 L 107.3 34.6 L 104.4 28.0 L 100.8 21.8 L 96.6 16.1 L 91.8 11.0 L 86.6 6.4 L 80.9 2.4 L 74.9 -1.0 L 68.5 -3.7 L 61.8 -5.7 L 55.0 -7.0 L 48.0 -7.6 L 40.9 -7.4 L 33.8 -6.4 L 26.8 -4.7 L 19.9 -2.1 L 13.3 1.3 L 7.1 5.6 L 1.4 10.7 L -3.5 16.6 L -2.8 17.0 L 2.5 11.5 L 8.7 7.2 L 15.1 3.7 L 21.7 1.0 L 28.4 -0.9 L 35.0 -2.1 L 41.7 -2.7 L 48.2 -2.5 L 54.5 -1.7 L 60.7 -0.2 L 66.6 1.8 L 72.3 4.3 L 77.7 7.4 L 82.8 11.0 L 87.5 15.0 L 91.8 19.6 L 95.7 24.7 L 99.1 30.2 L 102.0 36.1 L 104.4 42.4 L 106.1 49.0 L 107.1 56.0 L 107.3 63.2 L 106.6 70.6 L 105.1 78.1 L 102.8 85.6 L 99.4 92.9 L 94.6 99.5 Z" fill="var(--color-primary)" mask="url(#gx-arc-mask)" />
 
-            {/* Le point rouge : il TOMBE du haut et rebondit sur ce point,
-                avec une légère dilatation à l'impact. Le centre de l'écran lui
-                sert de sol. */}
-            <circle cx="50" cy="50" r="9" fill="var(--color-primary)" className="gx-splash-point" />
+            {/* L'anneau noir du « o » : épaisseur 17 pour un rayon 27, relevée
+                sur le logo (rayons 70 et 134 px, ramenés à notre échelle). */}
+            <circle cx="50" cy="50" r="27" fill="none" stroke="var(--color-ink)"
+                    strokeWidth="17" className="gx-splash-anneau" />
+
+            {/* Le point rouge : il tombe du haut et rebondit. Rayon 10,4 relevé
+                sur le logo, contre 9 auparavant. */}
+            <circle cx="50" cy="50" r="10.4" fill="var(--color-primary)" className="gx-splash-point" />
           </svg>
 
-          <p className="font-display font-bold text-[clamp(26px,7vw,40px)] text-ink lowercase tracking-tight gx-splash-mot">
+          <p className="gx-logotype font-bold text-[clamp(26px,7vw,40px)] text-ink lowercase tracking-tight gx-splash-mot">
             gextimo
           </p>
         </>

@@ -4,6 +4,7 @@ import { Sun, Moon, Heart, Globe, X, Menu, LogIn, UserPlus, Lock, Settings2, Spa
 import { useTranslation } from 'react-i18next'
 import { useTheme, useLang } from '@/contexts'
 import { cn } from '@/utils/cn'
+import BandeAnnonces from '@/components/layout/BandeAnnonces'
 import { useDevise, DEVISES } from './vitrineCurrency'
 import { getBanniere } from './vitrineApi'
 import { useFavoris } from './useFavoris'
@@ -436,7 +437,13 @@ export function VitrineNavbar() {
               : promo.texte)
           : <><Sparkles size={12} className="inline-block text-primary align-[-0.1em]" aria-hidden="true" />{' '}{t('vitrine.promo_a')}{' '}<span className="font-bold text-primary">Gextimo</span>{' '}{t('vitrine.promo_b')}</>}
       </div>
-      <header className="sticky top-0 z-40 bg-app border-b border-edge">
+      {/* La barre de navigation et la bande d'annonces ne forment qu'un seul
+          BLOC COLLANT. La bande vivait dans le contenu de la page : elle
+          disparaissait au premier défilement, alors qu'une annonce boostée est
+          payée pour rester visible. Les rendre collantes séparément les aurait
+          fait se chevaucher — d'où le conteneur commun. */}
+      <div className="sticky top-0 z-40">
+      <header className="bg-app border-b border-edge">
         <div className="max-w-[1180px] mx-auto pl-4 pr-2 sm:px-5 h-[68px] grid grid-cols-[auto_1fr_auto] items-center gap-4 lg:gap-6">
           {/* Logo */}
           <Link to="/" aria-label="Gextimo"><VitrineLogo /></Link>
@@ -472,6 +479,8 @@ export function VitrineNavbar() {
           </div>
         </div>
       </header>
+      <BandeAnnonces />
+      </div>
     </>
   )
 }

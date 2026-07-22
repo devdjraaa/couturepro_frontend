@@ -1008,6 +1008,13 @@ input::-ms-clear {
 /* 1. La chute. Le mouvement accélère (gravité), s'écrase brièvement au contact,
       rebondit une fois puis se stabilise. L'origine de la transformation est
       posée sous le point : c'est là qu'il touche, donc là qu'il s'écrase. */
+/* Le mot « gextimo » de l'écran d'ouverture appartient au LOGO, pas à
+   l'interface. Les deux familles de la charte — Inter et Playfair Display — ne
+   dessinent ni l'une ni l'autre le mot de la marque ; l'y forcer donnait un
+   logotype qui n'était pas le nôtre. Police servie en sous-ensemble de sept
+   glyphes (1,9 ko) depuis notre domaine. */
+.gx-logotype { font-family: 'Gextimo Logotype', Georgia, serif }
+
 @keyframes gx-splash-chute {
   0%   { transform: translateY(-58px) scale(1); opacity: 0;
          animation-timing-function: cubic-bezier(.45, 0, .9, .42) }
@@ -1030,9 +1037,11 @@ input::-ms-clear {
 }
 
 /* 2b. L'arc : dévoilé d'un bout à l'autre, EN MÊME TEMPS que l'anneau.
-       Longueur du chemin : r = 45 sur 205° → ~161. */
+       Le tracé porte `pathLength="1"` : sa longueur vaut 1 quelle que soit sa
+       géométrie. La valeur en dur d'avant (161, pour un rayon de 45) ne
+       correspondait plus au dessin et laissait une portion jamais révélée. */
 @keyframes gx-splash-arc {
-  from { stroke-dashoffset: 161 }
+  from { stroke-dashoffset: 1 }
   to   { stroke-dashoffset: 0 }
 }
 
@@ -1050,9 +1059,8 @@ input::-ms-clear {
                         animation: gx-splash-chute .92s both }
 .gx-splash-anneau     { will-change: opacity, stroke-dasharray;
                         animation: gx-splash-anneau .62s cubic-bezier(.4,0,.2,1) .82s both }
-.gx-splash-arc-reveal { stroke-dasharray: 161 300;
+.gx-splash-arc-reveal { stroke-dasharray: 1;
                         will-change: stroke-dashoffset;
-                        transform-box: fill-box;
                         animation: gx-splash-arc .62s cubic-bezier(.35,0,.2,1) .82s both }
 .gx-splash-mot        { will-change: transform, opacity;
                         animation: gx-splash-mot .45s cubic-bezier(.4,0,.2,1) 1.32s both }
@@ -1068,6 +1076,7 @@ input::-ms-clear {
   .gx-splash-point, .gx-splash-anneau, .gx-splash-arc-reveal,
   .gx-splash-mot, .gx-splash-entree { animation: none }
   .gx-splash-arc-reveal { stroke-dashoffset: 0 }
+  /* Le mot du logotype reste lisible sans animation. */
 }
 
 /* PHOTO-1 — verdict qualité : l'animation fait partie du message.

@@ -76,3 +76,17 @@
   src: url(/fonts/PlayfairDisplay-700.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+
+/* Le MOT du logo, et lui seul.
+   Le logotype Gextimo n'est pas composé dans une police du système : la charte
+   fixe Inter pour l'interface et Playfair Display pour l'éditorial, aucune des
+   deux ne dessine le mot de la marque. Ce fichier ne contient que les sept
+   lettres de « gextimo » — quelques kilo-octets, servis depuis notre domaine,
+   pour que l'écran d'ouverture n'attende jamais un service extérieur. */
+@font-face {
+  font-family: 'Gextimo Logotype';
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url('/fonts/BodoniModa-logo.woff2') format('woff2');
+}
