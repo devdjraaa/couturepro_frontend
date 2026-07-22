@@ -1050,6 +1050,7 @@ input::-ms-clear {
                         animation: gx-splash-anneau .62s cubic-bezier(.4,0,.2,1) .82s both }
 .gx-splash-arc-reveal { stroke-dasharray: 161 300;
                         will-change: stroke-dashoffset;
+                        transform-box: fill-box;
                         animation: gx-splash-arc .62s cubic-bezier(.35,0,.2,1) .82s both }
 .gx-splash-mot        { will-change: transform, opacity;
                         animation: gx-splash-mot .45s cubic-bezier(.4,0,.2,1) 1.32s both }

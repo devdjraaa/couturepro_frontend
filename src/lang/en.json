@@ -3833,6 +3833,10 @@
     "mes_reglages": "My Settings"
   },
   "profil": {
+    "photo_ajouter": "Add a photo",
+    "photo_changer": "Change photo",
+    "photo_retirer": "Remove photo",
+    "photo_enregistree": "Photo saved.",
     "titre": "My profile",
     "section_informations": "Information",
     "section_securite": "Security",
