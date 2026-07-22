@@ -1,3 +1,4 @@
+@import url("/fonts/gextimo-fonts.css");
 @import "tailwindcss";
 
 /* ── Variante dark basée sur data-theme (géré par ThemeContext) ── */
@@ -14,9 +15,17 @@
      Google au démarrage, et le texte qui changeait de forme en cours de route.
      Ses chiffres ont tous la même largeur : les montants restent alignés en
      colonne sans police à chasse fixe. */
-  --font-display: Arial, Helvetica, sans-serif;
-  --font-sans:    Arial, Helvetica, sans-serif;
-  --font-mono:    Arial, Helvetica, sans-serif;
+  /* Système typographique Gextimo (charte) :
+       · Inter            → interface et communications digitales
+       · Playfair Display → supports institutionnels et éditoriaux
+     Les deux sont HÉBERGÉES AVEC L'APPLICATION (public/fonts) et non chargées
+     depuis Google Fonts : plus d'attente réseau au démarrage — c'est ce qui
+     faisait accrocher l'ouverture — et l'application reste juste hors ligne.
+     Les chiffres passent par Inter en `tabular-nums` : colonnes alignées sans
+     police à chasse fixe. */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-sans:    'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono:    'Inter', system-ui, sans-serif;
 
   /* Ancien accent doré, retiré à la demande de la direction (« pas beau à
      voir »). Les noms de variables sont conservés : ils sont utilisés à 27
@@ -25,7 +34,7 @@
        · texte (montants, libellés) → NOIR : sobre et lisible, et un rouge sur
          un encaissement se lirait comme une alerte ;
        · fonds et accents → ROUGE DILUÉ, dans la charte, sans jaune. */
-  --color-gold:       #A32B26;   /* accent cliquable → ROUGE DILUÉ */
+  --color-gold:       #D00B0B;   /* accent cliquable → ROUGE OFFICIEL (charte : aucune autre teinte) */
   --color-gold-dark:  #171310;   /* montants → NOIR */
   --color-gold-hi:    #4A403C;   /* dégradé d'avatar (sombre) */
 
@@ -153,7 +162,7 @@
   --color-info:    #1F6BC8;
 
   /* ── Surfaces — fond crème chaud ── */
-  --color-bg-app:      #FAF8F5;
+  --color-bg-app:      #F8F5F0;   /* blanc cassé imposé par la charte */
   --color-bg-card:     #FFFFFF;
   --color-bg-elevated: #F4F1EC;
   --color-bg-subtle:   #F0EDE8;
