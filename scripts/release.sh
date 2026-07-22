@@ -123,6 +123,17 @@ release_ota() {
   rm -f "$zip"
   deploy ota "$next" "$zip"
   ok "OTA $next en ligne : $url"
+
+  # Prévenir les professionnels. Sans ça, une version publiée n'était visible
+  # que dans « Quoi de neuf » — un écran qu'il faut penser à ouvrir : personne
+  # n'était donc AVERTI. La commande dépose la notification dans l'application
+  # et envoie la notification système aux appareils enregistrés.
+  # Un échec ici ne doit jamais faire échouer une publication déjà en ligne.
+  if ssh "$VPS" "cd /var/www/gextimo_backend && php artisan app:notifier-maj '$next'" >/dev/null 2>&1; then
+    ok "Professionnels prévenus de la version $next"
+  else
+    say "Publication OK, mais la notification n'est pas partie (à relancer à la main)"
+  fi
 }
 
 # ── APK ──────────────────────────────────────────────────────────────────────
@@ -157,6 +168,14 @@ release_apk() {
 
   deploy apk "$next_vn" "$site_apk" "$note_b64"
   ok "APK $next_vn déployée + version-gate à jour : $url"
+
+  # Grosse mise à jour : elle demande une INSTALLATION, il faut donc d'autant
+  # plus prévenir — le version-gate seul n'alerte qu'à la prochaine ouverture.
+  if ssh "$VPS" "cd /var/www/gextimo_backend && php artisan app:notifier-maj '$next_vn' --majeure" >/dev/null 2>&1; then
+    ok "Professionnels prévenus de la version $next_vn"
+  else
+    say "Publication OK, mais la notification n'est pas partie (à relancer à la main)"
+  fi
 
   # Commit du bump (+ artefacts icônes régénérés) — part au prochain push. [skip-release]
   # add -u : uniquement les fichiers DÉJÀ suivis (pas les artefacts de build dist/, apk/).
