@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import BandeAnnonces from '@/components/layout/BandeAnnonces'
+import BandeInfosGextimo from '@/components/layout/BandeInfosGextimo'
 import { useNavigate } from 'react-router-dom'
 import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, ChevronDown, CheckCircle2, CircleUser, Sun, Moon, Store, X, Layers, Users2, Star, FileText, Crown, Hand, Bell, ShoppingBag, Truck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -664,12 +664,11 @@ export default function DashboardPage() {
       <div className="bg-card lg:hidden sticky top-0 z-20">
         <EnteteMarque navigate={navigate} nbNotifs={nbNotifs} />
       </div>
-
-      {/* ANN-8 — bande d'annonces, entre l'en-tête et les indicateurs. Elle
-          vivait dans AppLayout, tout en haut : sur cet écran l'en-tête mobile
-          est masqué (noMobileHeader), donc elle passait sous la barre système.
-          Ici elle est protégée par le hero, et c'est la place demandée. */}
-      <BandeAnnonces />
+      {/* Les annonces des CRÉATEURS sont parties sur la vitrine publique : les
+          montrer ici revenait à afficher les promos des concurrents dans
+          l'espace de travail. À leur place, les communications de Gextimo vers
+          les professionnels — ce qu'on s'attend à trouver ici. */}
+      <BandeInfosGextimo />
 
       <div className="p-4 space-y-4 pb-safe">
 
