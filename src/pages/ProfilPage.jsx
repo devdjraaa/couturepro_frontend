@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef} from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts'
 import {
@@ -7,6 +7,69 @@ import {
 } from '@/hooks/useParametres'
 import { AppLayout } from '@/components/layout'
 import { Input, Button, Skeleton } from '@/components/ui'
+import Avatar from '@/components/ui/Avatar'
+import toast from 'react-hot-toast'
+import { useQueryClient } from '@tanstack/react-query'
+import { parametresService } from '@/services/parametresService'
+
+/** Photo de profil : choisir, remplacer, ou revenir aux initiales. */
+function PhotoProfil({ photoUrl, nom }) {
+  const { t } = useTranslation()
+  const qc = useQueryClient()
+  const champ = useRef(null)
+  const [envoi, setEnvoi] = useState(false)
+
+  const rafraichir = () => {
+    qc.invalidateQueries({ queryKey: ['profil'] })
+    qc.invalidateQueries({ queryKey: ['auth', 'me'] })
+  }
+
+  const choisir = async (e) => {
+    const fichier = e.target.files?.[0]
+    if (!fichier) return
+    setEnvoi(true)
+    try {
+      await parametresService.envoyerPhotoProfil(fichier)
+      rafraichir()
+      toast.success(t('profil.photo_enregistree'))
+    } catch (err) {
+      toast.error(err?.response?.data?.message || t('erreurs.inconnu'))
+    } finally {
+      setEnvoi(false)
+      if (champ.current) champ.current.value = ''
+    }
+  }
+
+  const retirer = async () => {
+    setEnvoi(true)
+    try {
+      await parametresService.supprimerPhotoProfil()
+      rafraichir()
+    } catch (err) {
+      toast.error(err?.response?.data?.message || t('erreurs.inconnu'))
+    } finally { setEnvoi(false) }
+  }
+
+  return (
+    <div className="flex items-center gap-4">
+      <Avatar nom={nom} photo_url={photoUrl} size="xl" />
+      <div className="flex flex-col gap-1.5">
+        <button type="button" onClick={() => champ.current?.click()} disabled={envoi}
+                className="text-sm font-semibold text-primary disabled:opacity-50 text-left">
+          {photoUrl ? t('profil.photo_changer') : t('profil.photo_ajouter')}
+        </button>
+        {photoUrl && (
+          <button type="button" onClick={retirer} disabled={envoi}
+                  className="text-xs text-ghost hover:text-danger disabled:opacity-50 text-left">
+            {t('profil.photo_retirer')}
+          </button>
+        )}
+        <input ref={champ} type="file" accept="image/jpeg,image/png,image/webp"
+               onChange={choisir} className="hidden" />
+      </div>
+    </div>
+  )
+}
 
 function ProfilSection() {
   const { t } = useTranslation()
@@ -30,6 +93,10 @@ function ProfilSection() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Photo de profil du COMPTE — à ne pas confondre avec le logo de
+          l'atelier, qui se règle dans « Ma Vitrine ». */}
+      <PhotoProfil photoUrl={current?.photo_url} nom={current?.nom} />
+
       {/* Pt 71 : le prénom manquait dans Réglages > Profil. */}
       <Input label={t('commun.prenom')} value={current?.prenom ?? ''} onChange={set('prenom')} />
       <Input label={t('commun.nom')} value={current?.nom ?? ''} onChange={set('nom')} required />
