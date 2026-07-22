@@ -129,7 +129,11 @@ release_ota() {
   # n'était donc AVERTI. La commande dépose la notification dans l'application
   # et envoie la notification système aux appareils enregistrés.
   # Un échec ici ne doit jamais faire échouer une publication déjà en ligne.
-  if ssh "$VPS" "cd /var/www/gextimo_backend && php artisan app:notifier-maj '$next'" >/dev/null 2>&1; then
+  # Le sujet du dernier commit sert d'intitulé au journal « Quoi de neuf » :
+  # sans lui, l'écran des nouveautés restait figé sur d'anciennes versions.
+  local sujet
+  sujet="$(git log -1 --pretty=%s | sed "s/'/’/g" | cut -c1-110)"
+  if ssh "$VPS" "cd /var/www/gextimo_backend && php artisan app:notifier-maj '$next' --titre='$sujet'" >/dev/null 2>&1; then
     ok "Professionnels prévenus de la version $next"
   else
     say "Publication OK, mais la notification n'est pas partie (à relancer à la main)"
@@ -171,7 +175,9 @@ release_apk() {
 
   # Grosse mise à jour : elle demande une INSTALLATION, il faut donc d'autant
   # plus prévenir — le version-gate seul n'alerte qu'à la prochaine ouverture.
-  if ssh "$VPS" "cd /var/www/gextimo_backend && php artisan app:notifier-maj '$next_vn' --majeure" >/dev/null 2>&1; then
+  local sujet_apk
+  sujet_apk="$(git log -1 --pretty=%s | sed "s/'/’/g" | cut -c1-110)"
+  if ssh "$VPS" "cd /var/www/gextimo_backend && php artisan app:notifier-maj '$next_vn' --majeure --titre='$sujet_apk'" >/dev/null 2>&1; then
     ok "Professionnels prévenus de la version $next_vn"
   else
     say "Publication OK, mais la notification n'est pas partie (à relancer à la main)"
