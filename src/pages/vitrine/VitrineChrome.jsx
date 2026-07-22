@@ -464,8 +464,8 @@ export function VitrineNavbar() {
             <ThemeToggle />
             <LocaleMenu />
             <div className="hidden lg:block h-5 w-px bg-edge mx-1.5" />
-            <Link to="/inscription" className="vt-btn-ghost hidden lg:inline-flex items-center justify-center font-semibold text-[13px] h-9 px-4 rounded-[10px] border border-edge text-ink hover:border-primary hover:text-primary">{t('vitrine.nav.signup')}</Link>
-            <Link to="/login" className="vt-btn-primary hidden lg:inline-flex items-center justify-center font-semibold text-[13px] h-9 px-4 rounded-[10px] border border-transparent bg-primary text-inverse hover:bg-primary-600">{t('vitrine.nav.login')}</Link>
+            <Link to="/inscription" className="vt-btn-ghost hidden lg:inline-flex items-center justify-center font-semibold text-[13px] h-9 px-4 rounded-[10px] border border-edge text-ink hover:border-primary hover:text-primary whitespace-nowrap shrink-0">{t('vitrine.nav.signup')}</Link>
+            <Link to="/login" className="vt-btn-primary hidden lg:inline-flex items-center justify-center font-semibold text-[13px] h-9 px-4 rounded-[10px] border border-transparent bg-primary text-inverse hover:bg-primary-600 whitespace-nowrap shrink-0">{t('vitrine.nav.login')}</Link>
             <div className="lg:hidden mr-0.5">
               <NavMenu />
             </div>
