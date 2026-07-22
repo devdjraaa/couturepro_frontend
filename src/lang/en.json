@@ -2079,6 +2079,8 @@
       "consent_titre": "Your privacy, your choices",
       "consent_texte": "Choose what Gextimo may use to improve your experience. You can change this anytime. See the",
       "consent_politique": "privacy policy",
+      "accepter_politique": "I accept the",
+      "accepter_newsletter": "I want to receive news and offers by email (optional).",
       "consent_cookies": "Essential cookies",
       "consent_analytics": "Usage statistics",
       "consent_perso": "Personalization",
