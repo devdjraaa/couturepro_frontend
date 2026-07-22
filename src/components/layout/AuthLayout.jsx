@@ -28,7 +28,7 @@ export default function AuthLayout({ children, subtitle, className }) {
               Gérez vos clients, commandes, mesures et paiements en toute simplicité.
             </p>
           </div>
-          <p className="text-inverse/60 text-xs">© Gextimo · Novafriq</p>
+          <p className="text-inverse/60 text-xs">© Gextimo · NovafriQ</p>
         </div>
       </div>
 
