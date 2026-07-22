@@ -31,11 +31,14 @@ export default function VeillePage() {
 
   return (
     <AdminLayout title={t('admin.veille.titre')}>
-      <p className="text-sm text-dim mb-5">{t('admin.veille.sous_titre')}</p>
-
-      {/* Les termes de recherche étaient éditables « en base » — donc par
-          personne. La direction les enrichit elle-même ici. */}
-      <ConfigVeille />
+      {/* Le réglage des termes est derrière un bouton, pas déplié dans la
+          page : on vient ici pour LIRE les résultats tous les jours, et pour
+          régler la recherche de temps en temps. C'est aux résultats de garder
+          la place. */}
+      <div className="flex items-start justify-between gap-4 mb-5">
+        <p className="text-sm text-dim">{t('admin.veille.sous_titre')}</p>
+        <ConfigVeille />
+      </div>
 
       {semaines === null && <p className="text-dim text-sm">{t('commun.chargement')}</p>}
 

@@ -4468,7 +4468,6 @@
         "retirer": "Remove {{terme}}",
         "liste_vide": "No term yet.",
         "compteur_termes": "{{n}} term(s)",
-        "enregistre": "Saved.",
         "echec": "Could not save.",
         "prise_en_compte": "Changes apply to the next night's report, at 4:30 am."
       }
