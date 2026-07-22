@@ -7,7 +7,7 @@
 // « en base », donc par personne.
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ExternalLink, Radar, ChevronDown, ChevronRight, Sparkles } from 'lucide-react'
+import { ExternalLink, Radar, ChevronDown, ChevronRight, Sparkles, AlertTriangle } from 'lucide-react'
 import { AdminLayout, ConfigVeille } from '@/components/admin'
 import adminApi from '@/services/adminApi'
 import { cn } from '@/utils/cn'
@@ -15,11 +15,19 @@ import { cn } from '@/utils/cn'
 export default function VeillePage() {
   const { t } = useTranslation()
   const [semaines, setSemaines] = useState(null)
+  const [incident, setIncident] = useState(null)
   const [ouverts, setOuverts] = useState({})
 
   useEffect(() => {
     adminApi.get('/veille')
-      .then(({ data }) => setSemaines(Array.isArray(data) ? data : []))
+      .then(({ data }) => {
+        // La réponse portait un simple tableau ; elle porte désormais les
+        // relevés ET l'incident éventuel. On accepte les deux formes : un
+        // serveur et un écran ne se déploient jamais à la même seconde.
+        const releves = Array.isArray(data) ? data : (data?.releves ?? [])
+        setSemaines(Array.isArray(releves) ? releves : [])
+        setIncident(Array.isArray(data) ? null : (data?.incident ?? null))
+      })
       .catch(() => setSemaines([]))
   }, [])
 
@@ -35,6 +43,17 @@ export default function VeillePage() {
           page : on vient ici pour LIRE les résultats tous les jours, et pour
           régler la recherche de temps en temps. C'est aux résultats de garder
           la place. */}
+      {/* Le digest est envoyé par un automate extérieur : s'il ne part pas,
+          rien ne le signale — un courriel qui n'arrive pas ne fait aucun bruit.
+          C'est l'ABSENCE de confirmation qui alerte, et elle atterrit ici,
+          seul écran qu'on ouvre pour la veille. */}
+      {incident && (
+        <div role="alert" className="flex items-start gap-2.5 mb-4 px-4 py-3 rounded-xl border border-primary/30 bg-primary/[0.07]">
+          <AlertTriangle size={16} className="text-primary shrink-0 mt-0.5" aria-hidden="true" />
+          <p className="text-[13px] text-ink leading-relaxed">{incident.message}</p>
+        </div>
+      )}
+
       <div className="flex items-start justify-between gap-4 mb-5">
         <p className="text-sm text-dim">{t('admin.veille.sous_titre')}</p>
         <ConfigVeille />
