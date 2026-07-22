@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/verifier-identifiants.mjs && node scripts/verifier-traductions.mjs && node scripts/sync-pdf-theme.mjs && vite build",
+    "build": "node scripts/verifier-identifiants.mjs && node scripts/verifier-traductions.mjs && node scripts/verifier-hooks.mjs && node scripts/sync-pdf-theme.mjs && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "pdf:maquettes": "node scripts/sync-pdf-theme.mjs",
