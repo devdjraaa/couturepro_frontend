@@ -12,6 +12,8 @@ export const ADMIN_KEYS = {
   offres:       ['admin', 'offres'],
   listeNoire:       ['admin', 'liste-noire'],
   signalements:     ['admin', 'signalements'],
+  moderationContenu: ['admin', 'moderation-contenu'],
+  partenaires:      ['admin', 'partenaires'],
   banniere:         ['admin', 'banniere'],
   sponsorisation:   ['admin', 'sponsorisation'],
   audit:            ['admin', 'audit'],

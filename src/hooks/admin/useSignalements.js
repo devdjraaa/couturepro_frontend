@@ -30,9 +30,10 @@ export function useTraiterSignalement() {
 export function useSanctionnerSignalement() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: async ({ id, type, cibleId }) => {
+    mutationFn: async ({ id, type, cibleId, motif }) => {
       if (type === 'profil') await ateliersAdminService.geler(cibleId)
       else if (type === 'avis') await signalementsAdminService.masquerAvis(cibleId)
+      else if (type === 'creation') await signalementsAdminService.archiverCreation(cibleId, motif)
       return signalementsAdminService.traiter(id)
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ADMIN_KEYS.signalements }),

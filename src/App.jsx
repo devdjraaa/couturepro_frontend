@@ -98,6 +98,8 @@ import DiagnosticPage           from '@/pages/admin/DiagnosticPage'
 import AdminParametresPage    from '@/pages/admin/AdminParametresPage'
 import AdminsPage             from '@/pages/admin/AdminsPage'
 import SignalementsPage       from '@/pages/admin/SignalementsPage'
+import ModerationPage        from '@/pages/admin/ModerationPage'
+import PartenairesAdminPage  from '@/pages/admin/PartenairesAdminPage'
 import AdminRealisationsPage   from '@/pages/admin/AdminRealisationsPage'
 import BannierePage           from '@/pages/admin/BannierePage'
 
@@ -170,6 +172,10 @@ export default function App() {
           <Route path="/admin/parametres"       element={<AdminParametresPage />} />
           <Route path="/admin/admins"           element={<AdminsPage />} />
           <Route path="/admin/signalements"     element={<SignalementsPage />} />
+
+          <Route path="/admin/moderation"  element={<ModerationPage />} />
+
+          <Route path="/admin/partenaires" element={<PartenairesAdminPage />} />
           <Route path="/admin/realisations"     element={<AdminRealisationsPage />} />
           <Route path="/admin/banniere"         element={<BannierePage />} />
           <Route path="/admin/reglages-vitrine" element={<ReglagesVitrinePage />} />

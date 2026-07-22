@@ -18,4 +18,10 @@ export const signalementsAdminService = {
     const { data } = await adminApi.post(`/avis/${avisId}/masquer`)
     return data
   },
+
+  /** Le motif est obligatoire : il est recopié dans l'avis envoyé au créateur. */
+  async archiverCreation(vetementId, motif) {
+    const { data } = await adminApi.post(`/creations/${vetementId}/archiver`, { motif })
+    return data
+  },
 }

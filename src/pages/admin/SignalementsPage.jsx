@@ -30,13 +30,22 @@ export default function SignalementsPage() {
         // permettait de geler la boutique d'un créateur avec trois requêtes
         // anonymes. C'est donc ICI que l'arbitrage se fait — encore fallait-il
         // que l'écran le propose, ce qu'il ne faisait pas.
-        const sanction = { profil: 'Geler l’atelier', avis: 'Masquer l’avis' }[r.type]
+        const sanction = { profil: 'Geler l’atelier', avis: 'Masquer l’avis', creation: 'Retirer la création' }[r.type]
 
         return (
           <div className="flex items-center gap-3 justify-end">
             {sanction && (
               <button
-                onClick={() => sanctionner.mutate({ id: r.id, type: r.type, cibleId: r.cible_id })}
+                onClick={() => {
+                  // Retirer une création exige un motif côté serveur : il est
+                  // recopié dans l'avis envoyé au créateur.
+                  let motif
+                  if (r.type === 'creation') {
+                    motif = window.prompt('Motif du retrait (obligatoire) :')?.trim()
+                    if (!motif) return
+                  }
+                  sanctionner.mutate({ id: r.id, type: r.type, cibleId: r.cible_id, motif })
+                }}
                 disabled={sanctionner.isPending}
                 className="text-xs font-semibold text-danger hover:underline disabled:opacity-50"
               >
