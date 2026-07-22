@@ -1,3 +1,4 @@
+@import url("/fonts/gextimo-fonts.css");
 @import "tailwindcss";
 
 /* ── Variante dark basée sur data-theme (géré par ThemeContext) ── */
@@ -12,12 +13,16 @@
      présente partout : rien à télécharger, donc plus d'attente réseau au
      démarrage ni de texte qui change de forme. Ses chiffres ont tous la même
      largeur, les montants restent alignés sans police à chasse fixe. */
-  --font-display: Arial, Helvetica, sans-serif;
-  --font-sans:    Arial, Helvetica, sans-serif;
-  --font-mono:    Arial, Helvetica, sans-serif;
+  /* Système typographique Gextimo (charte) : Inter pour l'interface, Playfair
+     Display pour l'institutionnel. HÉBERGÉES AVEC L'APPLICATION (public/fonts)
+     et non chargées depuis Google Fonts : plus d'attente réseau au démarrage —
+     c'est ce qui faisait accrocher l'ouverture — et ça marche hors ligne. */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-sans:    'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono:    'Inter', system-ui, sans-serif;
 
   /* Gold — accent premium (statiques, référence charte Couture) */
-  --color-gold:       #A32B26;   /* accent cliquable → ROUGE DILUÉ */
+  --color-gold:       #D00B0B;   /* accent cliquable → ROUGE OFFICIEL (charte) */
   --color-gold-dark:  #171310;   /* montants → NOIR */
   --color-gold-hi:    #4A403C;   /* dégradé d'avatar (sombre) */
 
@@ -145,7 +150,7 @@
   --color-info:    #1F6BC8;
 
   /* ── Surfaces — fond crème chaud ── */
-  --color-bg-app:      #FAF8F5;
+  --color-bg-app:      #F8F5F0;   /* blanc cassé imposé par la charte */
   --color-bg-card:     #FFFFFF;
   --color-bg-elevated: #F4F1EC;
   --color-bg-subtle:   #F0EDE8;

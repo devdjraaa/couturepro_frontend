@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import BandeAnnonces from '@/components/layout/BandeAnnonces'
 import { useNavigate } from 'react-router-dom'
-import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, ChevronDown, CheckCircle2, CircleUser, Sun, Moon, Store, X, Layers, Users2, Star, FileText, Crown, Bell } from 'lucide-react'
+import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, ChevronDown, CheckCircle2, CircleUser, Sun, Moon, Store, X, Layers, Users2, Star, FileText, Crown, Bell, ShoppingBag, Truck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { isToday, isPast, parseISO, differenceInCalendarDays, isThisMonth, subDays } from 'date-fns'
 import { useQueryClient } from '@tanstack/react-query'
@@ -17,6 +17,8 @@ import { useAccountType } from '@/hooks/useAccountType'
 import MultiAteliersStats from '@/components/dashboard/MultiAteliersStats'
 import { ROUTES } from '@/constants/routes'
 import { useFormatCurrency } from '@/utils/formatCurrency'
+import Avatar from '@/components/ui/Avatar'
+import { formatDate } from '@/utils/formatDate'
 import { cn } from '@/utils/cn'
 
 // ── En-tête accueil : contrôles à gauche · cloche de notifs à droite ─────────
@@ -88,6 +90,175 @@ function Greeting({ user, subtitle, hero = false }) {
             </span>
           )}
         </button>
+      </div>
+    </div>
+  )
+}
+
+/* ══ Blocs de l'accueil, d'après la maquette fournie par la direction ══════════
+   L'accueil ouvrait sur un grand aplat rouge sans logo. La maquette pose un
+   en-tête BLANC portant la marque, puis une suite de cartes : salutation,
+   vue d'ensemble rouge, solde, commandes récentes. On s'y tient. */
+
+/** En-tête blanc : la marque à gauche, les notifications à droite. */
+function EnteteMarque({ navigate, nbNotifs }) {
+  const { t } = useTranslation()
+
+  return (
+    <div className="bg-card px-4 pt-safe pb-3 flex items-center justify-between gap-3 border-b border-edge">
+      <img
+        src="/logo-gextimo-complet.png"
+        alt="Gextimo"
+        className="h-8 object-contain object-left dark:hidden"
+      />
+      {/* En thème sombre le logotype noir disparaîtrait : version claire. */}
+      <img
+        src="/logo-gextimo-complet-blanc.png"
+        alt="Gextimo"
+        className="h-8 object-contain object-left hidden dark:block"
+      />
+
+      <button
+        type="button"
+        onClick={() => navigate('/notifications')}
+        className="relative w-10 h-10 flex items-center justify-center rounded-xl hover:bg-subtle transition-colors shrink-0"
+        aria-label={t('nav.notifications')}
+      >
+        <Bell size={20} className="text-ink" />
+        {nbNotifs > 0 && (
+          <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-primary text-inverse text-[10px] font-bold flex items-center justify-center">
+            {nbNotifs > 9 ? '9+' : nbNotifs}
+          </span>
+        )}
+      </button>
+    </div>
+  )
+}
+
+/** Carte de salutation : qui je suis, ce qui m'attend. */
+function CarteSalutation({ user, sousTitre, navigate }) {
+  const { t } = useTranslation()
+  const heure = new Date().getHours()
+  const salut = heure < 12 ? t('dashboard.bonjour') : heure < 18 ? t('dashboard.bon_aprem') : t('dashboard.bonsoir')
+  const prenom = user?.prenom ?? user?.nom?.split(' ')[0] ?? ''
+
+  return (
+    <div className="bg-card border border-edge rounded-2xl p-4 flex items-center justify-between gap-3">
+      <div className="min-w-0">
+        <h1 className="text-[19px] font-bold text-ink leading-tight">
+          {salut}, {prenom} !{' '}
+          {/* Seul emoji autorisé ici avec celui des confettis (accord direction) :
+              la main de salutation, comme sur la maquette. Partout ailleurs on
+              reste sur les icônes lucide. */}
+          <span role="img" aria-label="salutation">👋</span>
+        </h1>
+        <p className="text-[13px] text-dim mt-0.5">
+          {sousTitre ?? t('dashboard.resume_du_jour')}
+        </p>
+      </div>
+      <button type="button" onClick={() => navigate('/parametres/profil')}
+              className="shrink-0" aria-label={t('nav.profil')}>
+        <Avatar nom={user?.nom} photo_url={user?.avatar} size="lg" />
+      </button>
+    </div>
+  )
+}
+
+/** Vue d'ensemble : les quatre chiffres du jour, sur l'aplat rouge de la marque. */
+function VueEnsemble({ nbCommandes, nbClients, nbLivraisons, nbPaiements, navigate }) {
+  const { t } = useTranslation()
+
+  const cases = [
+    { icone: ShoppingBag, valeur: nbCommandes, libelle: t('nav.commandes'), to: '/commandes' },
+    { icone: Users2,      valeur: nbClients,   libelle: t('nav.clients'),   to: '/clients' },
+    { icone: Truck,       valeur: nbLivraisons, libelle: t('dashboard.vue_livraisons'), to: '/commandes' },
+    { icone: Wallet,      valeur: nbPaiements, libelle: t('dashboard.vue_paiements'),  to: '/caisse' },
+  ]
+
+  return (
+    <div className="rounded-2xl p-4 text-inverse" style={{ background: 'linear-gradient(135deg, var(--color-primary-700) 0%, var(--color-primary) 100%)' }}>
+      <p className="text-[15px] font-bold mb-3">{t('dashboard.vue_titre')}</p>
+      <div className="grid grid-cols-4 gap-1">
+        {cases.map(({ icone: Icone, valeur, libelle, to }, i) => (
+          <button key={libelle} type="button" onClick={() => navigate(to)}
+                  className={'flex flex-col items-center gap-1 py-1 ' + (i > 0 ? 'border-l border-inverse/20' : '')}>
+            <Icone size={18} className="text-inverse/80" aria-hidden="true" />
+            <span className="text-[21px] font-bold leading-none tabular-nums">{valeur}</span>
+            <span className="text-[11px] text-inverse/75 leading-tight text-center">{libelle}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/** Solde du jour — le montant se lit d'un coup d'œil, en noir. */
+function SoldeDuJour({ montant, fmt, navigate }) {
+  const { t } = useTranslation()
+
+  return (
+    <button type="button" onClick={() => navigate('/caisse')}
+            className="w-full bg-card border border-edge rounded-2xl p-4 flex items-center justify-between gap-3 text-left">
+      <div className="min-w-0">
+        <p className="text-[13px] font-semibold text-ink">{t('dashboard.solde_titre')}</p>
+        <p className="text-[26px] font-bold text-ink leading-tight mt-0.5 tabular-nums">{fmt(montant)}</p>
+        <p className="text-[12px] text-ghost mt-0.5">{t('dashboard.solde_disponible')}</p>
+      </div>
+      <span className="shrink-0 w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center">
+        <Wallet size={24} className="text-primary" aria-hidden="true" />
+      </span>
+    </button>
+  )
+}
+
+/** Trois dernières commandes, avec leur état et leur montant. */
+function CommandesRecentes({ commandes, fmt, navigate }) {
+  const { t } = useTranslation()
+  const recentes = [...commandes]
+    .sort((a, b) => new Date(b.created_at ?? 0) - new Date(a.created_at ?? 0))
+    .slice(0, 3)
+
+  if (recentes.length === 0) return null
+
+  const TON = {
+    livre:    'bg-success/10 text-success',
+    en_cours: 'bg-warning/10 text-warning',
+    essai:    'bg-info/10 text-info',
+    annule:   'bg-subtle text-ghost',
+  }
+
+  return (
+    <div className="bg-card border border-edge rounded-2xl p-4">
+      <div className="flex items-center justify-between mb-3">
+        <p className="text-[15px] font-bold text-ink">{t('dashboard.recentes')}</p>
+        <button type="button" onClick={() => navigate('/commandes')} className="text-[13px] font-semibold text-primary">
+          {t('commun.voir_tout')}
+        </button>
+      </div>
+
+      <div className="divide-y divide-edge">
+        {recentes.map((c) => (
+          <button key={c.id} type="button" onClick={() => navigate(`/commandes/${c.id}`)}
+                  className="w-full flex items-center gap-3 py-2.5 text-left first:pt-0 last:pb-0">
+            <span className="shrink-0 w-11 h-11 rounded-xl bg-subtle flex items-center justify-center overflow-hidden">
+              {c.image_url
+                ? <img src={c.image_url} alt="" className="w-full h-full object-cover" />
+                : <ClipboardList size={18} className="text-ghost" aria-hidden="true" />}
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-[14px] font-semibold text-ink truncate">
+                {c.reference ?? c.vetement_nom ?? t('nav.commandes')}
+              </p>
+              <p className="text-[11.5px] text-ghost">{formatDate(c.created_at)}</p>
+            </div>
+            <div className="shrink-0 text-right">
+              <span className={'text-[10.5px] font-bold px-2 py-0.5 rounded-full ' + (TON[c.statut] ?? TON.annule)}>
+                {t(`commandes.statut.${c.statut}`, c.statut)}
+              </span>
+              <p className="text-[13.5px] font-bold text-ink mt-1 tabular-nums">{fmt(c.prix ?? 0)}</p>
+            </div>
+          </button>
+        ))}
       </div>
     </div>
   )
@@ -450,6 +621,12 @@ export default function DashboardPage() {
     if (el && el.scrollWidth <= el.clientWidth) setKpiAuBout(true)
   }, [loadingStats])
   const { data: clients = [] }  = useClients()
+  const { data: nbNotifs = 0 }  = useNotificationsCount()
+
+  // « Paiements » de la vue d'ensemble = commandes encore à encaisser.
+  const nbPaiementsEnAttente = commandes.filter(
+    (c) => c.statut !== 'annule' && (Number(c.prix ?? 0) - Number(c.acompte ?? 0)) > 0,
+  ).length
 
   const activeCount   = commandes.filter(c => c.statut === 'en_cours' || c.statut === 'essai').length
   const livreCeMois   = commandes.filter(c => c.statut === 'livre' && c.date_livraison_prevue && isThisMonth(parseISO(c.date_livraison_prevue))).length
@@ -479,8 +656,11 @@ export default function DashboardPage() {
     <AppLayout title={t('dashboard.titre_auj')} noMobileHeader onRefresh={() => queryClient.invalidateQueries()}>
 
       {/* Hero rouge (dégradé des en-têtes) — mobile uniquement, couvre la status bar */}
-      <div className="header-gradient px-4 pt-safe pb-5 lg:hidden sticky top-0 z-20">
-        <Greeting user={user} subtitle={dynamicSub} hero />
+      {/* En-tête BLANC portant la marque (maquette direction). La charte
+          interdit d'ailleurs le logo sur un fond coloré autre que noir,
+          blanc ou bordeaux : l'aplat rouge n'était pas conforme. */}
+      <div className="bg-card lg:hidden sticky top-0 z-20">
+        <EnteteMarque navigate={navigate} nbNotifs={nbNotifs} />
       </div>
 
       {/* ANN-8 — bande d'annonces, entre l'en-tête et les indicateurs. Elle
@@ -488,7 +668,25 @@ export default function DashboardPage() {
           est masqué (noMobileHeader), donc elle passait sous la barre système. */}
       <BandeAnnonces />
 
-      <div className="p-4 space-y-5 pb-safe">
+      <div className="p-4 space-y-4 pb-safe">
+
+        {/* ── Suite de la maquette : salutation, vue d'ensemble, solde,
+               commandes récentes. Les blocs existants suivent en dessous. ── */}
+        <div className="lg:hidden">
+          <CarteSalutation user={user} sousTitre={dynamicSub} navigate={navigate} />
+        </div>
+
+        <VueEnsemble
+          nbCommandes={activeCount}
+          nbClients={clients.length}
+          nbLivraisons={livreCeMois}
+          nbPaiements={nbPaiementsEnAttente}
+          navigate={navigate}
+        />
+
+        <SoldeDuJour montant={stats?.total_encaisse ?? 0} fmt={fmt} navigate={navigate} />
+
+        <CommandesRecentes commandes={commandes} fmt={fmt} navigate={navigate} />
 
         {/* Salutation desktop uniquement */}
         <div className="hidden lg:block">
