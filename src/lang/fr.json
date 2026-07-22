@@ -3762,6 +3762,10 @@
     "mes_reglages": "Mes Réglages"
   },
   "profil": {
+    "photo_ajouter": "Ajouter une photo",
+    "photo_changer": "Changer la photo",
+    "photo_retirer": "Retirer la photo",
+    "photo_enregistree": "Photo enregistrée.",
     "titre": "Mon profil",
     "section_informations": "Informations",
     "section_securite": "Sécurité",

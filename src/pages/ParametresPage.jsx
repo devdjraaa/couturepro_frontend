@@ -32,6 +32,7 @@ import { abonnementService } from '@/services/abonnementService'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { IS_NATIVE } from '@/constants/routes'
 import { cn } from '@/utils/cn'
+import Avatar from '@/components/ui/Avatar'
 
 // ── Menu-liste (design « Mes Réglages ») ────────────────────────────────────────
 function Section({ title, children }) {
@@ -73,6 +74,65 @@ const DEVISES = [
   { value: 'MAD', label: 'Dirham (MAD)'           },
 ]
 
+/** Photo de profil : choisir, remplacer, ou revenir aux initiales. */
+function PhotoProfil({ photoUrl, nom }) {
+  const { t } = useTranslation()
+  const qc = useQueryClient()
+  const champ = useRef(null)
+  const [envoi, setEnvoi] = useState(false)
+
+  const rafraichir = () => {
+    qc.invalidateQueries({ queryKey: ['profil'] })
+    qc.invalidateQueries({ queryKey: ['auth', 'me'] })
+  }
+
+  const choisir = async (e) => {
+    const fichier = e.target.files?.[0]
+    if (!fichier) return
+    setEnvoi(true)
+    try {
+      await parametresService.envoyerPhotoProfil(fichier)
+      rafraichir()
+      toast.success(t('profil.photo_enregistree'))
+    } catch (err) {
+      toast.error(err?.response?.data?.message || t('erreurs.inconnu'))
+    } finally {
+      setEnvoi(false)
+      if (champ.current) champ.current.value = ''
+    }
+  }
+
+  const retirer = async () => {
+    setEnvoi(true)
+    try {
+      await parametresService.supprimerPhotoProfil()
+      rafraichir()
+    } catch (err) {
+      toast.error(err?.response?.data?.message || t('erreurs.inconnu'))
+    } finally { setEnvoi(false) }
+  }
+
+  return (
+    <div className="flex items-center gap-4">
+      <Avatar nom={nom} photo_url={photoUrl} size="xl" />
+      <div className="flex flex-col gap-1.5">
+        <button type="button" onClick={() => champ.current?.click()} disabled={envoi}
+                className="text-sm font-semibold text-primary disabled:opacity-50 text-left">
+          {photoUrl ? t('profil.photo_changer') : t('profil.photo_ajouter')}
+        </button>
+        {photoUrl && (
+          <button type="button" onClick={retirer} disabled={envoi}
+                  className="text-xs text-ghost hover:text-danger disabled:opacity-50 text-left">
+            {t('profil.photo_retirer')}
+          </button>
+        )}
+        <input ref={champ} type="file" accept="image/jpeg,image/png,image/webp"
+               onChange={choisir} className="hidden" />
+      </div>
+    </div>
+  )
+}
+
 function ProfilTab() {
   const { t } = useTranslation()
   const { data: profil, isLoading } = useProfil()
@@ -92,6 +152,10 @@ function ProfilTab() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Photo de profil — elle n'existait pas : le propriétaire restait sur
+          ses initiales sans aucun moyen d'y remédier. */}
+      <PhotoProfil photoUrl={current?.photo_url} nom={current?.nom} />
+
       {/* ⚠️ Ce formulaire divergeait de celui de /parametres/profil : le prénom
           et l'anniversaire n'y figuraient pas. C'est ce qui a produit le retour
           « le prénom n'est pas affiché dans Réglages > Profil » — il l'était sur

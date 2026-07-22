@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom'
 import { useState, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Bell, Package, CreditCard, AlertCircle } from 'lucide-react'
@@ -172,9 +173,15 @@ export default function NotificationsPage() {
       )}
 
       {/* Popup lecture complète (utile pour les longs messages de l'admin) */}
-      {selected && (
+      {/* Rendu dans un PORTAIL, à la racine du document.
+          En `position: fixed` à l'intérieur de la page, il suffit qu'un ancêtre
+          porte un `transform` (ou un `filter`, un `will-change`) pour que le
+          « fixed » se cale sur CET ancêtre au lieu de l'écran : le popup partait
+          alors en bas du contenu et il fallait faire défiler pour le voir.
+          Au niveau du document, il est toujours centré dans l'écran. */}
+      {selected && createPortal(
         <div
-          className="fixed inset-0 z-[90] flex items-end sm:items-center justify-center bg-black/50 p-4"
+          className="fixed inset-0 z-[90] flex items-center justify-center bg-black/50 p-4"
           onClick={() => setSelected(null)}
         >
           <div
@@ -204,9 +211,10 @@ export default function NotificationsPage() {
                 {t('commun.fermer')}
               </button>
             </div>
-          </div>
         </div>
-      )}
+      </div>,
+      document.body,
+    )}
     </AppLayout>
   )
 }
