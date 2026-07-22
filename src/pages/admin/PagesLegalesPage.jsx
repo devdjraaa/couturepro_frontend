@@ -8,12 +8,10 @@ import {
   Bold, Italic, Underline, Heading2, Heading3, List, ListOrdered,
   Link as LinkIcon, Eraser, Save, FileText, Download, CheckCircle2,
 } from 'lucide-react'
-import { AdminLayout } from '@/components/admin'
+import { AdminLayout, ADMIN_INPUT } from '@/components/admin'
 import adminApi from '@/services/adminApi'
 import i18n from '@/lang/i18n'
 import { cn } from '@/utils/cn'
-
-const INPUT = 'w-full border border-edge rounded-xl px-3 py-2 text-sm text-ink bg-card focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary'
 
 /* ── Éditeur riche (contentEditable + barre d'outils) ────────────────────── */
 function RichEditor({ html, onChange }) {
@@ -194,7 +192,7 @@ export default function PagesLegalesPage() {
 
             <div>
               <label className="text-xs text-ghost">{t('admin.pages.titre_page')}</label>
-              <input value={form[champTitre]} onChange={(e) => setForm((f) => ({ ...f, [champTitre]: e.target.value }))} className={INPUT + ' mt-1'} />
+              <input value={form[champTitre]} onChange={(e) => setForm((f) => ({ ...f, [champTitre]: e.target.value }))} className={ADMIN_INPUT + ' mt-1'} />
             </div>
 
             <RichEditor html={form[champContenu]} onChange={(html) => setForm((f) => ({ ...f, [champContenu]: html }))} />

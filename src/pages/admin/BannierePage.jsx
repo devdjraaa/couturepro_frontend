@@ -1,12 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { AdminLayout } from '@/components/admin'
+import { AdminLayout, ADMIN_INPUT, ADMIN_LABEL } from '@/components/admin'
 import { useAdminBanniere, useUpdateBanniere } from '@/hooks/admin/useBanniere'
 import { useAdminSponsorisation, useUpdateSponsorisation } from '@/hooks/admin/useSponsorisation'
-
-const INPUT = 'w-full border border-edge rounded-xl px-3 py-2 text-sm text-ink bg-card mt-1 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary'
-const LABEL = 'text-xs text-ghost'
 
 export default function BannierePage() {
   const { t } = useTranslation()
@@ -65,12 +62,12 @@ export default function BannierePage() {
               <input type="checkbox" checked={form.actif} onChange={e => setForm(f => ({ ...f, actif: e.target.checked }))} />
             </label>
             <div>
-              <label className={LABEL}>Texte</label>
-              <input value={form.texte} onChange={e => setForm(f => ({ ...f, texte: e.target.value }))} maxLength={300} className={INPUT} />
+              <label className={ADMIN_LABEL}>Texte</label>
+              <input value={form.texte} onChange={e => setForm(f => ({ ...f, texte: e.target.value }))} maxLength={300} className={ADMIN_INPUT} />
             </div>
             <div>
-              <label className={LABEL}>Lien (optionnel)</label>
-              <input value={form.lien} onChange={e => setForm(f => ({ ...f, lien: e.target.value }))} maxLength={500} placeholder="https://…" className={INPUT} />
+              <label className={ADMIN_LABEL}>Lien (optionnel)</label>
+              <input value={form.lien} onChange={e => setForm(f => ({ ...f, lien: e.target.value }))} maxLength={500} placeholder="https://…" className={ADMIN_INPUT} />
             </div>
             <div className="flex items-center gap-3">
               <button type="submit" disabled={update.isPending} className="bg-primary text-inverse text-sm font-medium px-4 py-2 rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors">
@@ -98,8 +95,8 @@ export default function BannierePage() {
             <div className="space-y-2">
               {sForm.offres.map((o, i) => (
                 <div key={i} className="flex items-center gap-2">
-                  <input type="number" min="1" value={o.jours} onChange={e => setOffre(i, 'jours', e.target.value)} placeholder="Jours" className={INPUT + ' !mt-0'} />
-                  <input type="number" min="0" value={o.prix} onChange={e => setOffre(i, 'prix', e.target.value)} placeholder="Prix (FCFA)" className={INPUT + ' !mt-0'} />
+                  <input type="number" min="1" value={o.jours} onChange={e => setOffre(i, 'jours', e.target.value)} placeholder="Jours" className={ADMIN_INPUT + ' !mt-0'} />
+                  <input type="number" min="0" value={o.prix} onChange={e => setOffre(i, 'prix', e.target.value)} placeholder="Prix (FCFA)" className={ADMIN_INPUT + ' !mt-0'} />
                   <button type="button" onClick={() => removeOffre(i)} aria-label="Supprimer" className="text-ghost hover:text-danger text-xl px-1 leading-none">×</button>
                 </div>
               ))}

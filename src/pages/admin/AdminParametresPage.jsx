@@ -1,14 +1,11 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Sun, Moon, Monitor, Lock, User, Check } from 'lucide-react'
-import { AdminLayout } from '@/components/admin'
+import { AdminLayout, ADMIN_INPUT, ADMIN_LABEL } from '@/components/admin'
 import { useAdminAuth } from '@/contexts'
 import { useTheme } from '@/contexts'
 import { adminAuthService } from '@/services/admin/adminAuthService'
 import { cn } from '@/utils/cn'
-
-const INPUT = 'w-full border border-edge rounded-xl px-3 py-2 text-sm bg-card text-ink focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary'
-const LABEL = 'block text-xs text-ghost mb-1'
 
 function ThemeSection() {
   const { t } = useTranslation()
@@ -129,16 +126,16 @@ function SecuriteSection() {
       </div>
       <form onSubmit={handleSubmit} className="space-y-3">
         <div>
-          <label className={LABEL}>{t('admin.parametres.mdp_actuel')}</label>
-          <input type="password" value={form.ancien} onChange={set('ancien')} required className={INPUT} placeholder="••••••••" />
+          <label className={ADMIN_LABEL}>{t('admin.parametres.mdp_actuel')}</label>
+          <input type="password" value={form.ancien} onChange={set('ancien')} required className={ADMIN_INPUT} placeholder="••••••••" />
         </div>
         <div>
-          <label className={LABEL}>{t('admin.parametres.mdp_nouveau')}</label>
-          <input type="password" value={form.nouveau} onChange={set('nouveau')} required className={INPUT} placeholder="••••••••" />
+          <label className={ADMIN_LABEL}>{t('admin.parametres.mdp_nouveau')}</label>
+          <input type="password" value={form.nouveau} onChange={set('nouveau')} required className={ADMIN_INPUT} placeholder="••••••••" />
         </div>
         <div>
-          <label className={LABEL}>{t('admin.parametres.mdp_confirmer')}</label>
-          <input type="password" value={form.confirmation} onChange={set('confirmation')} required className={INPUT} placeholder="••••••••" />
+          <label className={ADMIN_LABEL}>{t('admin.parametres.mdp_confirmer')}</label>
+          <input type="password" value={form.confirmation} onChange={set('confirmation')} required className={ADMIN_INPUT} placeholder="••••••••" />
         </div>
 
         {error   && <p className="text-sm text-danger">{error}</p>}

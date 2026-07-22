@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Check, Loader2, RefreshCw, ExternalLink, AlertTriangle, Share2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { AdminLayout } from '@/components/admin'
+import { AdminLayout, ADMIN_INPUT, ADMIN_LABEL } from '@/components/admin'
 import { reseauxAdminService } from '@/services/admin/reseauxAdminService'
 
 /**
@@ -15,9 +15,6 @@ import { reseauxAdminService } from '@/services/admin/reseauxAdminService'
  * derniers caractères, de quoi vérifier qu'on a posé le bon sans jamais
  * l'exposer.
  */
-
-const INPUT = 'w-full border border-edge rounded-xl px-3 py-2 text-sm text-ink bg-card mt-1 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary'
-const LABEL = 'text-xs text-ghost'
 
 export default function AdminReseauxPage() {
   const { t } = useTranslation()
@@ -94,14 +91,14 @@ export default function AdminReseauxPage() {
 
           <div className="grid sm:grid-cols-2 gap-3">
             <div>
-              <span className={LABEL}>{T('page_id')}</span>
-              <input className={INPUT} maxLength={50} inputMode="numeric"
+              <span className={ADMIN_LABEL}>{T('page_id')}</span>
+              <input className={ADMIN_INPUT} maxLength={50} inputMode="numeric"
                      placeholder="123456789012345" value={form.page_id}
                      onChange={(e) => setForm((f) => ({ ...f, page_id: e.target.value.trim() }))} />
             </div>
             <div>
-              <span className={LABEL}>{T('jeton')}</span>
-              <input type="password" className={INPUT} maxLength={500} autoComplete="off"
+              <span className={ADMIN_LABEL}>{T('jeton')}</span>
+              <input type="password" className={ADMIN_INPUT} maxLength={500} autoComplete="off"
                      placeholder={fb?.token ? T('jeton_pose', { fin: fb.token }) : T('jeton_absent')}
                      value={form.token}
                      onChange={(e) => setForm((f) => ({ ...f, token: e.target.value.trim() }))} />
@@ -193,7 +190,7 @@ export default function AdminReseauxPage() {
 
                     return (
                       <div key={cle} className="border border-edge rounded-xl p-3">
-                        <p className={LABEL}>{T(`commun_${cle}`)}</p>
+                        <p className={ADMIN_LABEL}>{T(`commun_${cle}`)}</p>
                         {entrees.length === 0
                           ? <p className="text-xs text-ghost mt-1">—</p>
                           : entrees.map(([k, n]) => (

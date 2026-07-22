@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Plus, Trash2, Pencil, Users, X, Loader2, Pin } from 'lucide-react'
+import { Plus, Trash2, Pencil, Users, Loader2, Pin } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { AdminLayout } from '@/components/admin'
+import { AdminLayout, AdminModal, ADMIN_INPUT, ADMIN_LABEL } from '@/components/admin'
 import { infosAdminService } from '@/services/admin/reglagesVitrineAdminService'
 import { formatDate } from '@/utils/formatDate'
 
@@ -14,9 +14,6 @@ import { formatDate } from '@/utils/formatDate'
  * clé de formule qui n'existe plus — produit une diffusion qui n'atteint
  * personne, et rien ne le signale.
  */
-
-const INPUT = 'w-full border border-edge rounded-xl px-3 py-2 text-sm text-ink bg-card mt-1 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary'
-const LABEL = 'text-xs text-ghost'
 
 const MODES = ['tous', 'types_compte', 'plans', 'villes', 'ateliers']
 
@@ -174,53 +171,59 @@ export default function AdminInfosPage() {
       </div>
 
       {form && (
-        <div className="fixed inset-0 z-[80] bg-black/60 flex items-start justify-center p-4 overflow-auto"
-             role="dialog" aria-modal="true">
-          <form onSubmit={enregistrer} className="bg-card rounded-2xl w-full max-w-xl p-5 my-8">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-semibold text-ink">{form.id ? T('modifier') : T('nouvelle')}</h2>
-              <button type="button" onClick={() => setForm(null)} aria-label={t('commun.fermer')}
-                      className="p-1.5 rounded-full text-ghost hover:bg-subtle">
-                <X size={17} aria-hidden="true" />
+        <AdminModal
+          onClose={() => setForm(null)}
+          title={form.id ? T('modifier') : T('nouvelle')}
+          size="xl"
+          footer={
+            <>
+              <button type="button" onClick={() => setForm(null)} className="text-sm text-dim">
+                {t('commun.annuler')}
               </button>
-            </div>
-
+              <button type="submit" form="info-form" disabled={envoi}
+                      className="ml-auto rounded-xl bg-primary text-inverse text-sm font-semibold px-5 py-2 disabled:opacity-50">
+                {envoi ? t('commun.chargement') : T('diffuser')}
+              </button>
+            </>
+          }
+        >
+          <form id="info-form" onSubmit={enregistrer}>
             <div>
-              <span className={LABEL}>{T('champ_titre')}</span>
-              <input className={INPUT} maxLength={120} required value={form.titre}
+              <span className={ADMIN_LABEL}>{T('champ_titre')}</span>
+              <input className={ADMIN_INPUT} maxLength={120} required value={form.titre}
                      onChange={(e) => setForm((f) => ({ ...f, titre: e.target.value }))} />
             </div>
 
             <div className="mt-3">
-              <span className={LABEL}>{T('contenu')}</span>
-              <textarea className={INPUT + ' resize-none'} rows={5} maxLength={4000} required value={form.contenu}
+              <span className={ADMIN_LABEL}>{T('contenu')}</span>
+              <textarea className={ADMIN_INPUT + ' resize-none'} rows={5} maxLength={4000} required value={form.contenu}
                         onChange={(e) => setForm((f) => ({ ...f, contenu: e.target.value }))} />
             </div>
 
             <div className="grid sm:grid-cols-2 gap-3 mt-3">
               <div>
-                <span className={LABEL}>{T('categorie')}</span>
-                <select className={INPUT} required value={form.categorie}
+                <span className={ADMIN_LABEL}>{T('categorie')}</span>
+                <select className={ADMIN_INPUT} required value={form.categorie}
                         onChange={(e) => setForm((f) => ({ ...f, categorie: e.target.value }))}>
                   {categories.map((c) => <option key={c.cle} value={c.cle}>{c.label}</option>)}
                 </select>
               </div>
               <div>
-                <span className={LABEL}>{T('lien')}</span>
-                <input className={INPUT} maxLength={300} value={form.lien}
+                <span className={ADMIN_LABEL}>{T('lien')}</span>
+                <input className={ADMIN_INPUT} maxLength={300} value={form.lien}
                        onChange={(e) => setForm((f) => ({ ...f, lien: e.target.value }))} />
               </div>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-3 mt-3">
               <div>
-                <span className={LABEL}>{T('publie_at')}</span>
-                <input type="datetime-local" className={INPUT} value={form.publie_at}
+                <span className={ADMIN_LABEL}>{T('publie_at')}</span>
+                <input type="datetime-local" className={ADMIN_INPUT} value={form.publie_at}
                        onChange={(e) => setForm((f) => ({ ...f, publie_at: e.target.value }))} />
               </div>
               <div>
-                <span className={LABEL}>{T('expire_at')}</span>
-                <input type="datetime-local" className={INPUT} value={form.expire_at}
+                <span className={ADMIN_LABEL}>{T('expire_at')}</span>
+                <input type="datetime-local" className={ADMIN_INPUT} value={form.expire_at}
                        onChange={(e) => setForm((f) => ({ ...f, expire_at: e.target.value }))} />
               </div>
             </div>
@@ -233,16 +236,16 @@ export default function AdminInfosPage() {
 
             {/* ── Ciblage ─────────────────────────────────────────────── */}
             <div className="mt-4 pt-4 border-t border-edge">
-              <span className={LABEL}>{T('cible')}</span>
-              <select className={INPUT} value={form.cible.mode}
+              <span className={ADMIN_LABEL}>{T('cible')}</span>
+              <select className={ADMIN_INPUT} value={form.cible.mode}
                       onChange={(e) => majCible('mode', e.target.value)}>
                 {MODES.map((m) => <option key={m} value={m}>{T(`cible_${m}`)}</option>)}
               </select>
 
               {form.cible.mode !== 'tous' && (
                 <div className="mt-3">
-                  <span className={LABEL}>{T('valeurs')}</span>
-                  <textarea className={INPUT + ' resize-none font-mono text-[13px]'} rows={3}
+                  <span className={ADMIN_LABEL}>{T('valeurs')}</span>
+                  <textarea className={ADMIN_INPUT + ' resize-none font-mono text-[13px]'} rows={3}
                             value={(form.cible.valeurs ?? []).join('\n')}
                             onChange={(e) => majCible('valeurs',
                               e.target.value.split('\n').map((x) => x.trim()).filter(Boolean))} />
@@ -258,18 +261,8 @@ export default function AdminInfosPage() {
             </div>
 
             {erreur && <p className="text-xs text-danger mt-3">{erreur}</p>}
-
-            <div className="flex items-center gap-2 mt-5">
-              <button type="button" onClick={() => setForm(null)} className="text-sm text-dim">
-                {t('commun.annuler')}
-              </button>
-              <button type="submit" disabled={envoi}
-                      className="ml-auto rounded-xl bg-primary text-inverse text-sm font-semibold px-5 py-2 disabled:opacity-50">
-                {envoi ? t('commun.chargement') : T('diffuser')}
-              </button>
-            </div>
           </form>
-        </div>
+        </AdminModal>
       )}
     </AdminLayout>
   )

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Building2, ExternalLink, Check, Star } from 'lucide-react'
-import { AdminLayout, AdminBadge } from '@/components/admin'
+import { AdminLayout, AdminBadge, ADMIN_CONTROL } from '@/components/admin'
 import {
   useAdminAtelier, useGelerAtelier, useDegelerAtelier, useVerifierAtelier, useSponsoriserAtelier,
   useAdminAtelierFidelite, useAjusterFidelite,
@@ -10,8 +10,6 @@ import {
   useAdminSousAteliers, useSetTrialGlobal, useChangerTypeAtelier,
 } from '@/hooks/admin/useAteliers'
 import { formatDate } from '@/utils/formatDate'
-
-const INPUT = 'border border-edge rounded-xl px-3 py-2 text-sm text-ink bg-card focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary'
 
 function InfoRow({ label, value }) {
   return (
@@ -95,13 +93,13 @@ function SousAteliersSection({ atelierId }) {
                 type="number" min="1"
                 value={globalForm.duree}
                 onChange={e => { setGlobalSaved(false); setGlobalForm(f => ({ ...f, duree: e.target.value })) }}
-                className={`w-full sm:w-20 ${INPUT}`}
+                className={`w-full sm:w-20 ${ADMIN_CONTROL}`}
                 required
               />
               <select
                 value={globalForm.unite}
                 onChange={e => setGlobalForm(f => ({ ...f, unite: e.target.value }))}
-                className={INPUT}
+                className={ADMIN_CONTROL}
               >
                 {UNITE_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
               </select>
@@ -316,13 +314,13 @@ export default function AtelierDetailPage() {
                           type="number" min="1"
                           value={trialForm.duree}
                           onChange={e => { setTrialSaved(false); setTrialForm(f => ({ ...f, duree: e.target.value })) }}
-                          className={`flex-1 ${INPUT}`}
+                          className={`flex-1 ${ADMIN_CONTROL}`}
                           required
                         />
                         <select
                           value={trialForm.unite}
                           onChange={e => { setTrialSaved(false); setTrialForm(f => ({ ...f, unite: e.target.value })) }}
-                          className={INPUT}
+                          className={ADMIN_CONTROL}
                         >
                           {UNITE_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                         </select>
@@ -356,14 +354,14 @@ export default function AtelierDetailPage() {
                   onChange={e => setAjustForm(f => ({ ...f, points: e.target.value }))}
                   placeholder="Ex: 50 ou -20"
                   required
-                  className={`w-full ${INPUT}`}
+                  className={`w-full ${ADMIN_CONTROL}`}
                 />
                 <input
                   value={ajustForm.description}
                   onChange={e => setAjustForm(f => ({ ...f, description: e.target.value }))}
                   placeholder="Motif"
                   required
-                  className={`w-full ${INPUT}`}
+                  className={`w-full ${ADMIN_CONTROL}`}
                 />
                 <button type="submit" disabled={ajuster.isPending}
                   className="w-full bg-primary text-inverse text-sm py-2 rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors">
