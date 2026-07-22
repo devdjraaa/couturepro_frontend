@@ -12,18 +12,20 @@ import { useIdentiteLegale, resoudreArbre, resoudreListe, assainirHtmlLegal } fr
    Toutes les pages légales du footer partagent le même gabarit : une sidebar à
    gauche (titres) + le contenu à droite. La navigation est SPA (React Router →
    aucun rechargement de page). Ordre pensé pour l'utilisateur (données d'abord). */
+// P140 : CGU en tête (« mettre le lien en avant ») — « mentions » retiré de
+// la liste, /mentions-legales redirige déjà vers /cgu (App.jsx) ; le garder
+// ici affichait deux entrées pour la même destination.
 const LEGAL_PAGES = [
+  { ns: 'cgu',                 route: ROUTES.VITRINE_CGU },
   { ns: 'confidentialite',     route: ROUTES.VITRINE_CONFIDENTIALITE },
   { ns: 'protection_donnees',  route: ROUTES.VITRINE_PROTECTION_DONNEES },
   { ns: 'cookies',             route: ROUTES.VITRINE_COOKIES },
-  { ns: 'cgu',                 route: ROUTES.VITRINE_CGU },
   { ns: 'conditions_vente',    route: ROUTES.VITRINE_CONDITIONS_VENTE },
   { ns: 'droits_createurs',    route: ROUTES.VITRINE_DROITS_CREATEURS },
   { ns: 'produits_interdits',  route: ROUTES.VITRINE_PRODUITS_INTERDITS },
   { ns: 'livraison_retours',   route: ROUTES.VITRINE_LIVRAISON_RETOURS },
   { ns: 'regles_communaute',   route: ROUTES.VITRINE_REGLES_COMMUNAUTE },
   { ns: 'contact_reclamations', route: ROUTES.VITRINE_CONTACT_RECLAMATIONS },
-  { ns: 'mentions',            route: ROUTES.VITRINE_MENTIONS },
 ]
 
 function LegalShell({ active, children }) {
@@ -322,10 +324,6 @@ function RichLegalPage({ ns, path }) {
 
 export function ConfidentialitePage() {
   return <RichLegalPage ns="confidentialite" path="/confidentialite" />
-}
-
-export function MentionsLegalesPage() {
-  return <RichLegalPage ns="mentions" path="/mentions-legales" />
 }
 
 export function CookiesPage() {

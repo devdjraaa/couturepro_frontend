@@ -60,7 +60,6 @@ import SponsorisationPage    from '@/pages/vitrine/SponsorisationPage'
 import Vitrine404Page        from '@/pages/vitrine/Vitrine404Page'
 import {
   ConfidentialitePage,
-  MentionsLegalesPage,
   CookiesPage,
   ProtectionDonneesPage,
   CguPage,
