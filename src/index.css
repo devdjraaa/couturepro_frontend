@@ -8,17 +8,21 @@
    ════════════════════════════════════════════════════════ */
 @theme {
   /* Typographie — Gextimo Couture */
-  --font-display: 'Bodoni Moda', serif;
-  --font-sans:    'Plus Jakarta Sans', sans-serif;
-  --font-mono:    'JetBrains Mono', monospace;
+  /* Une SEULE famille sur toute la plateforme (demande direction). Arial est
+     présente partout : rien à télécharger, donc plus d'attente réseau au
+     démarrage ni de texte qui change de forme. Ses chiffres ont tous la même
+     largeur, les montants restent alignés sans police à chasse fixe. */
+  --font-display: Arial, Helvetica, sans-serif;
+  --font-sans:    Arial, Helvetica, sans-serif;
+  --font-mono:    Arial, Helvetica, sans-serif;
 
   /* Gold — accent premium (statiques, référence charte Couture) */
-  --color-gold:       #CDA662;
-  --color-gold-dark:  #A87F3E;
-  --color-gold-hi:    #E4C486;
+  --color-gold:       #A32B26;   /* accent cliquable → ROUGE DILUÉ */
+  --color-gold-dark:  #171310;   /* montants → NOIR */
+  --color-gold-hi:    #4A403C;   /* dégradé d'avatar (sombre) */
 
   /* Avatar — brun foncé pour texte sur fond or */
-  --color-avatar-on-gold: #2a1c0a;
+  --color-avatar-on-gold: #FFFFFF;
 
   /* Tailles de texte custom */
   --text-2xs: 0.625rem;   /* 10px — badges, labels compacts */
@@ -158,11 +162,11 @@
   --color-border-strong: #D6D3D1;
 
   /* ── Gold-light ── */
-  --color-gold-light: #F5E6C8;
+  --color-gold-light: rgba(208,11,11,.08);
 
   /* ── Tokens Couture (mode clair) ── */
-  --color-hair-gold: rgba(200,148,31,.30);
-  --color-gold-soft: rgba(200,148,31,.12);
+  --color-hair-gold: rgba(208,11,11,.26);
+  --color-gold-soft: rgba(208,11,11,.10);
   --color-red-hi:    #E85F5F;
 
   /* ── Transitions ── */
@@ -220,11 +224,15 @@
   --color-info:    #60A5FA;
 
   /* ── Gold-light ── */
-  --color-gold-light: rgba(205,166,98,.14);
+  /* Accentué en thème sombre : les valeurs de base sont sombres. */
+  --color-gold:       #E8736C;
+  --color-gold-dark:  #F5F1EC;
+  --color-gold-hi:    #6B5F59;
+  --color-gold-light: rgba(242,86,78,.14);
 
   /* ── Tokens Couture (mode sombre) ── */
-  --color-hair-gold: rgba(201,162,90,.35);
-  --color-gold-soft: rgba(205,166,98,.14);
+  --color-hair-gold: rgba(242,86,78,.32);
+  --color-gold-soft: rgba(242,86,78,.12);
   --color-red-hi:    #F5443A;
 }
 
@@ -246,7 +254,7 @@ body {
   /* P109 : pas de défilement horizontal parasite — UNIQUEMENT sur body.
      (Le mettre sur <html> casse le scroll VERTICAL tactile sur WebView Android.) */
   overflow-x: hidden;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--font-sans);
   background-color: var(--color-bg-app);
   color: var(--color-text-primary);
   -webkit-tap-highlight-color: transparent;
@@ -1021,9 +1029,11 @@ input::-ms-clear {
 }
 
 .gx-splash-point      { transform-origin: 50px 58px;
+                        will-change: transform, opacity;
                         animation: gx-splash-chute .92s both }
 .gx-splash-anneau     { animation: gx-splash-anneau .62s cubic-bezier(.4,0,.2,1) .82s both }
 .gx-splash-arc-reveal { stroke-dasharray: 161 300;
+                        will-change: stroke-dashoffset;
                         animation: gx-splash-arc .62s cubic-bezier(.35,0,.2,1) .82s both }
 .gx-splash-mot        { animation: gx-splash-mot .45s cubic-bezier(.4,0,.2,1) 1.32s both }
 

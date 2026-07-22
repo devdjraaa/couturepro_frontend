@@ -38,6 +38,15 @@ function Greeting({ user, subtitle, hero = false }) {
 
   return (
     <div className="pt-2 pb-1">
+      {/* La marque n'apparaissait NULLE PART sur l'écran d'accueil : on ouvrait
+          l'application sans jamais voir le logo. Version blanche officielle —
+          le signe est rouge, donc invisible sur ce fond. */}
+      <div className="flex items-center gap-2 mb-3">
+        <img src="/logo-gextimo-blanc.png" alt="" aria-hidden="true"
+             className="w-7 h-7 shrink-0 object-contain" />
+        <span className="text-inverse font-bold text-[17px] lowercase tracking-tight">gextimo</span>
+      </div>
+
       <div className="flex items-center justify-between gap-2">
         {/* Gauche : Profil · Thème · Langue · Wifi — pastilles claires uniformes */}
         <div className="flex items-center gap-2">
@@ -45,7 +54,7 @@ function Greeting({ user, subtitle, hero = false }) {
             type="button"
             onClick={() => navigate('/parametres/profil')}
             className="w-11 h-11 flex items-center justify-center rounded-2xl text-[13px] font-bold shrink-0"
-            style={{ background: 'linear-gradient(135deg, var(--color-gold-hi) 0%, var(--color-gold) 100%)', color: 'var(--color-bg-app, #100B0A)' }}
+            style={{ background: 'linear-gradient(135deg, var(--color-gold-hi) 0%, var(--color-gold-dark) 100%)', color: 'var(--color-avatar-on-gold)' }}
             aria-label={t('nav.profil')}
           >
             {initials}
