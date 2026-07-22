@@ -31,6 +31,7 @@ export const NAV_GROUPS = [
     items: [
       { to: '/equipe',          icon: Users2,   key: 'equipe'                     },
       { to: '/galerie',         icon: Images,   key: 'galerie'                    },
+      { to: ROUTES.REALISATIONS, icon: Images,   key: 'realisations'               },
       { to: '/points',          icon: Star,     key: 'points'                     },
       { to: ROUTES.FACTURATION,      icon: FileText, key: 'facturation'                },
       { to: ROUTES.OUTILS_CREATIFS, icon: Palette,  key: 'outils_creatifs', designerOnly: true },

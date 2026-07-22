@@ -551,11 +551,11 @@
     "toutes_ateliers": "All",
     "stats_globales": "Global view",
     "recentes": "Recent orders",
-    "resume_du_jour": "Here\u2019s what\u2019s happening today",
+    "resume_du_jour": "Here’s what’s happening today",
     "vue_titre": "Overview",
     "vue_livraisons": "Deliveries",
     "vue_paiements": "Payments",
-    "solde_titre": "Today\u2019s balance",
+    "solde_titre": "Today’s balance",
     "solde_disponible": "Available balance",
     "solde_encaisse": "Collected balance",
     "mise_a_jour": "Updated just now",
@@ -832,7 +832,7 @@
       "type_vetement": "Garment type",
       "choisir_type": "Choose a garment type…",
       "mesures_titre": "Client measurements",
-      "mesures_non_configurees": "No measurements are set up for \u201c{{vetement}}\u201d. Labels are defined once per garment type.",
+      "mesures_non_configurees": "No measurements are set up for “{{vetement}}”. Labels are defined once per garment type.",
       "mesures_configurer": "Set them up",
       "mesures_aide": "Measurements required for \"{{vetement}}\". They are saved on the client’s record.",
       "mesures_enregistrer": "Save measurements",
@@ -1518,7 +1518,8 @@
     "developper_menu": "Expand menu",
     "annonces": "Announcements",
     "infos": "Gextimo News",
-    "quoi_de_neuf": "What's new"
+    "quoi_de_neuf": "What's new",
+    "realisations": "My Work"
   },
   "pwa": {
     "installer_titre": "Install Gextimo",

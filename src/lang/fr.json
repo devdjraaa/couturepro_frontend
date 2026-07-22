@@ -551,8 +551,8 @@
     "toutes_ateliers": "Tous",
     "stats_globales": "Vue globale",
     "recentes": "Commandes récentes",
-    "resume_du_jour": "Voici ce qui se passe aujourd\u2019hui",
-    "vue_titre": "Vue d\u2019ensemble",
+    "resume_du_jour": "Voici ce qui se passe aujourd’hui",
+    "vue_titre": "Vue d’ensemble",
     "vue_livraisons": "Livraisons",
     "vue_paiements": "Paiements",
     "solde_titre": "Solde du jour",
@@ -1518,7 +1518,8 @@
     "developper_menu": "Développer le menu",
     "annonces": "Annonces",
     "infos": "Gextimo Infos",
-    "quoi_de_neuf": "Quoi de neuf"
+    "quoi_de_neuf": "Quoi de neuf",
+    "realisations": "Mes Réalisations"
   },
   "pwa": {
     "installer_titre": "Installer Gextimo",

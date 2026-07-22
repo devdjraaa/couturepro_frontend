@@ -4,7 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { API_BASE_URL } from '@/constants/config'
 
 /**
- * ANN-8 — Bande d'annonces défilante, en haut de l'application.
+ * ANN-8 — Bande d'annonces défilante, COLLÉE EN HAUT au défilement.
+ *
+ * Elle disparaissait dès qu'on descendait dans la page : une annonce boostée
+ * payée n'était visible que le temps du premier écran. Elle reste désormais
+ * accrochée pendant tout le défilement — c'est la visibilité qui est vendue.
  *
  * Les annonces des créateurs existaient déjà côté serveur (publication, durée,
  * Boost payant, modération) mais n'avaient **aucun endroit où s'afficher** :
@@ -50,12 +54,8 @@ export default function BandeAnnonces() {
   // La liste est dupliquée pour que la boucle se referme sans saut visible.
   const suite = [...annonces, ...annonces]
 
-  // Pas de marge de zone sûre ici : la bande vivait tout en haut de l'app, sous
-  // la barre d'état, et devait s'en écarter. Elle est désormais placée SOUS
-  // l'en-tête rouge, qui absorbe déjà cette zone — garder la marge ajoutait une
-  // hauteur fantôme de barre d'état et collait le texte au bas de la bande.
   return (
-    <div className="gx-marquee border-b border-edge bg-primary/[0.06]"
+    <div className="gx-marquee sticky top-0 z-30 border-b border-edge bg-primary/[0.06] backdrop-blur-sm"
          role="region" aria-label={t('annonces.bande_titre')}>
       <div className="gx-marquee__track py-1.5">
         {suite.map((a, i) => (

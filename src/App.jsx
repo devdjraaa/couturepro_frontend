@@ -276,6 +276,7 @@ export default function App() {
           <Route path={ROUTES.APROPOS}          element={<AProposPage />}         />
           <Route path={ROUTES.PHOTOS_VIP}       element={<GaleriePage />} />
           <Route path="/galerie"               element={<GaleriePage />} />
+          <Route path={ROUTES.REALISATIONS}      element={<MesRealisationsPage />} />
           <Route path="/annonces"               element={<AnnoncesPage />}       />
           <Route path={ROUTES.FACTURATION}      element={<FacturationPage />}     />
           <Route path={ROUTES.HISTORIQUE}       element={<HistoriquePage />}      />
