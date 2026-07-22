@@ -143,6 +143,13 @@ function Login({ config, onDone }) {
   const [etape, setEtape] = useState('email') // email | code
   const [err, setErr] = useState('')
   const [loading, setLoading] = useState(false)
+  // Politique : obligatoire pour continuer. Newsletter : libre, et sans effet
+  // sur l'accès au service. Le serveur attendait ces deux champs depuis le
+  // 20/07 mais le formulaire ne les a jamais envoyés — aucun client n'avait
+  // donc d'acceptation enregistrée, alors que les colonnes existent pour la
+  // prouver (date et version de la politique).
+  const [politiqueOk, setPolitiqueOk] = useState(false)
+  const [newsletterOk, setNewsletterOk] = useState(false)
   const googleRef = useRef(null)
 
   // Bouton Google officiel (GIS) — uniquement si le client ID est configuré côté serveur.
@@ -180,7 +187,13 @@ function Login({ config, onDone }) {
 
   const verifier = async () => {
     setErr(''); setLoading(true)
-    const { ok, data } = await verifierOtp(email.trim(), code.trim())
+    // Les deux consentements accompagnent la vérification : le serveur ne les
+    // enregistre qu'à la CRÉATION du compte, un client qui revient n'est donc
+    // pas réécrit. Sans eux, aucune acceptation n'était jamais enregistrée.
+    const { ok, data } = await verifierOtp(email.trim(), code.trim(), {
+      privacy_policy_accepted: politiqueOk,
+      newsletter_opt_in: newsletterOk,
+    })
     setLoading(false)
     if (ok) { setClientToken(data.token); onDone({ client: data.client, consentement: data.consentement }) }
     else setErr(data?.message || t('vitrine.espace_client.code_invalide'))
@@ -201,7 +214,25 @@ function Login({ config, onDone }) {
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t('vitrine.espace_client.email_placeholder')}
                  onKeyDown={(e) => e.key === 'Enter' && envoyer()} className={input} />
           <p className="text-xs text-ghost mt-2">{t('vitrine.espace_client.sans_mdp')}</p>
-          <button onClick={envoyer} disabled={loading || !email.includes('@')} className={btn + ' w-full mt-4'}>{t('vitrine.espace_client.recevoir_code')}</button>
+
+          <label className="flex items-start gap-2.5 mt-4 text-[13px] text-dim cursor-pointer">
+            <input type="checkbox" checked={politiqueOk} onChange={(e) => setPolitiqueOk(e.target.checked)}
+                   className="mt-0.5 accent-[var(--rouge,#D00B0B)]" />
+            <span>
+              {t('vitrine.espace_client.accepter_politique')}{' '}
+              <Link to="/confidentialite" className="text-primary underline">
+                {t('vitrine.espace_client.consent_politique')}
+              </Link>
+            </span>
+          </label>
+
+          <label className="flex items-start gap-2.5 mt-2.5 text-[13px] text-dim cursor-pointer">
+            <input type="checkbox" checked={newsletterOk} onChange={(e) => setNewsletterOk(e.target.checked)}
+                   className="mt-0.5 accent-[var(--rouge,#D00B0B)]" />
+            <span>{t('vitrine.espace_client.accepter_newsletter')}</span>
+          </label>
+
+          <button onClick={envoyer} disabled={loading || !email.includes('@') || !politiqueOk} className={btn + ' w-full mt-4'}>{t('vitrine.espace_client.recevoir_code')}</button>
         </>
       ) : (
         <>

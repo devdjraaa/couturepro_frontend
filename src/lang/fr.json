@@ -1623,6 +1623,8 @@
       "consent_titre": "Votre vie privée, vos choix",
       "consent_texte": "Choisissez ce que Gextimo peut utiliser pour améliorer votre expérience. Modifiable à tout moment. Voir la",
       "consent_politique": "politique de confidentialité",
+      "accepter_politique": "J'accepte la",
+      "accepter_newsletter": "Je souhaite recevoir les actualités et offres par e-mail (facultatif).",
       "consent_cookies": "Cookies essentiels",
       "consent_analytics": "Statistiques d'utilisation",
       "consent_perso": "Personnalisation",

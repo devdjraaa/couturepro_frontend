@@ -46,7 +46,7 @@ function contexte() {
 }
 
 export const demanderOtp  = (email) => call('/vitrine/client/otp/demander', { method: 'POST', body: { email } })
-export const verifierOtp  = (email, code) => call('/vitrine/client/otp/verifier', { method: 'POST', body: { email, code, ...contexte() } })
+export const verifierOtp  = (email, code, consentements = {}) => call('/vitrine/client/otp/verifier', { method: 'POST', body: { email, code, ...consentements, ...contexte() } })
 export const loginGoogle  = (idToken) => call('/vitrine/client/google', { method: 'POST', body: { id_token: idToken, ...contexte() } })
 export const getMe        = () => call('/vitrine/client/me', { auth: true })
 export const majProfil    = (profil) => call('/vitrine/client/me', { method: 'PATCH', body: profil, auth: true })
