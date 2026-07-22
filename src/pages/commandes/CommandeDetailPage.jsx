@@ -284,7 +284,7 @@ function TabApercu({ commande, onEdit, onStatut, onDelete, navigate }) {
         )}
 
         {echeances.length === 0 && (
-          <p className="text-xs text-ghost">Aucune échéance. Ajoutez-en pour mieux planifier.</p>
+          <p className="text-xs text-ghost">{t('commandes.detail.aucune_echeance')}</p>
         )}
       </div>
 
@@ -459,7 +459,7 @@ function TabPaiements({ commande, commandeId }) {
         <div className="bg-[#25d366]/10 border border-[#25d366]/30 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
           <div>
             <p className="text-sm font-semibold text-ink">{t('commandes.detail.releve_pret')}</p>
-            <p className="text-xs text-ghost">Envoyer le récap WhatsApp ?</p>
+            <p className="text-xs text-ghost">{t('commandes.detail.envoyer_recap_whatsapp')}</p>
           </div>
           <div className="flex gap-2 shrink-0">
             <Button variant="secondary" icon={Send} className="text-xs" onClick={() => { window.open(whatsappUrl, '_blank'); setWhatsappUrl(null) }}>
@@ -579,13 +579,14 @@ const MESURE_LABELS = {
 }
 
 function TabMesures({ commande }) {
+  const { t } = useTranslation()
   const { data: mesures = {}, isLoading } = useMesures(commande.client_id)
   const entries = Object.entries(mesures).filter(([, v]) => v != null && v !== '')
 
   if (!commande.client_id) {
     return (
       <div className="p-4">
-        <p className="text-sm text-ghost text-center py-8">Aucun client associé.</p>
+        <p className="text-sm text-ghost text-center py-8">{t('commandes.detail.aucun_client_associe')}</p>
       </div>
     )
   }
@@ -601,7 +602,7 @@ function TabMesures({ commande }) {
   if (entries.length === 0) {
     return (
       <div className="p-4">
-        <p className="text-sm text-ghost text-center py-8">Aucune mesure enregistrée pour ce client.</p>
+        <p className="text-sm text-ghost text-center py-8">{t('commandes.detail.aucune_mesure_client')}</p>
         <div className="text-center">
           <Link to={`/clients/${commande.client_id}`} state={{ tab: 'mesures' }} className="text-sm text-primary underline">
             Saisir les mesures →

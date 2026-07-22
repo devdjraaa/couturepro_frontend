@@ -390,7 +390,7 @@ function FactureTab() {
               Personnalisée
               {!dispo && <Lock size={12} className="text-ghost" />}
             </p>
-            <p className="text-xs text-ghost">Logo, références IFU/RCCM et pied de page personnalisés.</p>
+            <p className="text-xs text-ghost">{t('parametres.personnalisation_desc')}</p>
           </div>
         </label>
 

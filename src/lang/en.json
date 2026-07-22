@@ -369,7 +369,8 @@
     "retirer": "Remove",
     "contacter_support": "Contact support",
     "enregistre": "Saved",
-    "verifier": "Verify"
+    "verifier": "Verify",
+    "compte_suspendu": "Your account is temporarily suspended. "
   },
   "erreurs": {
     "reseau": "Connection error. Check your network.",
@@ -918,7 +919,11 @@
       "paiement_btn": "Payment",
       "voir_mesures": "View client measurements",
       "supprimer_btn": "Delete this order",
-      "note_interne": "Internal note"
+      "note_interne": "Internal note",
+      "aucune_echeance": "No due date yet. Add one to plan ahead.",
+      "envoyer_recap_whatsapp": "Send the WhatsApp summary?",
+      "aucune_mesure_client": "No measurements recorded for this client.",
+      "aucun_client_associe": "No client linked."
     },
     "modes_paiement": {
       "especes": "Cash",
@@ -975,6 +980,14 @@
       "creee": "Order created",
       "payee": "Payment received: {{montant}} ({{mode}})",
       "livree": "Order delivered"
+    },
+    "form": {
+      "client": "Client",
+      "choisir_client": "Choose a client…",
+      "modele": "Model / garment",
+      "choisir_modele": "Choose a model…",
+      "aucun_modele": "No models in the catalogue. ",
+      "creer_modele": "Create a model →"
     }
   },
   "catalogue": {
@@ -1350,7 +1363,8 @@
     "format_facture": "Invoice format",
     "logo_atelier": "Workshop logo",
     "pied_page": "Footer",
-    "assujetti_tva": "VAT registered"
+    "assujetti_tva": "VAT registered",
+    "personnalisation_desc": "Custom logo, tax ID references and footer."
   },
   "theme": {
     "titre": "Appearance",
@@ -1399,7 +1413,8 @@
       "success": "Data injected — explore the app!",
       "btn": "Reset demo data"
     },
-    "encart": "For complaints, improvement suggestions, remarks, assistance requests or any other query, create a ticket to let us know. Our team will get back to you as soon as possible."
+    "encart": "For complaints, improvement suggestions, remarks, assistance requests or any other query, create a ticket to let us know. Our team will get back to you as soon as possible.",
+    "limite_caracteres": "5,000 character limit reached."
   },
   "communications": {
     "titre": "Communications",
@@ -4062,7 +4077,12 @@
       "annuler_ajust": "Cancel",
       "unite_minutes": "minutes",
       "unite_heures": "hours",
-      "unite_jours": "days"
+      "unite_jours": "days",
+      "type_compte": "Account type",
+      "verification_en_attente": "Verification request pending",
+      "voir_document": "View document",
+      "lien_fourni": "Link provided",
+      "valider_verification": "Approve verification"
     },
     "audit": {
       "titre": "Audit log",
@@ -4490,6 +4510,11 @@
       "mdp": "New password (8 characters minimum)",
       "deja_defini": "A password is already set.",
       "non_defini": "No password set: access is closed."
+    },
+    "banniere": {
+      "sponsorisation_titre": "Sponsorship offers",
+      "sponsorisation_desc": "The creator pays to appear at the top of the storefront. Price in FCFA, editable without touching the code.",
+      "aucune_offre": "No offer yet. Add one."
     }
   },
   "bienvenue": {

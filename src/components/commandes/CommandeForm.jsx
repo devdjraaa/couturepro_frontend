@@ -76,11 +76,11 @@ export default function CommandeForm({ initialData, lockedClientId = false, onSu
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 p-5">
-      <Select label="Client" value={form.client_id} onChange={set('client_id')} options={clientOptions} placeholder="Choisir un client…" required disabled={lockedClientId} />
-      <Select label="Modèle / vêtement" value={form.vetement_id} onChange={set('vetement_id')} options={vetOptions} placeholder="Choisir un modèle…" required disabled={vetements.length === 0} />
+      <Select label={t('commandes.form.client')} value={form.client_id} onChange={set('client_id')} options={clientOptions} placeholder={t('commandes.form.choisir_client')} required disabled={lockedClientId} />
+      <Select label={t('commandes.form.modele')} value={form.vetement_id} onChange={set('vetement_id')} options={vetOptions} placeholder={t('commandes.form.choisir_modele')} required disabled={vetements.length === 0} />
       {vetements.length === 0 && (
         <p className="text-xs text-warning -mt-2">
-          Aucun modèle dans le catalogue. <a href="/catalogue" className="underline font-medium">Créer un modèle →</a>
+          {t('commandes.form.aucun_modele')}<a href="/catalogue" className="underline font-medium">{t('commandes.form.creer_modele')}</a>
         </p>
       )}
 

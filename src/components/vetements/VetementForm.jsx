@@ -115,7 +115,7 @@ export default function VetementForm({ initialData, onSubmit, onCancel, isLoadin
             {/* SUG-17 : icône officielle du module « modèle » (Shirt, cohérente avec la nav
                 et l'action-sheet « Nouveau modèle ») au lieu d'un placeholder image générique. */}
             <Shirt size={28} />
-            <span className="text-xs">Ajouter des photos</span>
+            <span className="text-xs">{t('catalogue.formulaire.ajouter_photos')}</span>
           </button>
         )}
 

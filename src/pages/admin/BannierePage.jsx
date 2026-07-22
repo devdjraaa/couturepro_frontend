@@ -89,8 +89,8 @@ export default function BannierePage() {
           <p className="text-sm text-ghost">{t('admin.commun.chargement')}</p>
         ) : (
           <form onSubmit={submitSponso} className="max-w-md space-y-4 bg-card border border-edge rounded-2xl p-6">
-            <h2 className="text-sm font-semibold text-ink">Offres de sponsorisation</h2>
-            <p className="text-xs text-ghost">Le créateur paie pour apparaître en tête de la vitrine. Prix en FCFA, modifiable sans toucher au code.</p>
+            <h2 className="text-sm font-semibold text-ink">{t('admin.banniere.sponsorisation_titre')}</h2>
+            <p className="text-xs text-ghost">{t('admin.banniere.sponsorisation_desc')}</p>
             <label className="flex items-center justify-between cursor-pointer">
               <span className="text-sm text-ink">Sponsorisation disponible</span>
               <input type="checkbox" checked={sForm.actif} onChange={e => setSForm(f => ({ ...f, actif: e.target.checked }))} />
@@ -103,7 +103,7 @@ export default function BannierePage() {
                   <button type="button" onClick={() => removeOffre(i)} aria-label="Supprimer" className="text-ghost hover:text-danger text-xl px-1 leading-none">×</button>
                 </div>
               ))}
-              {sForm.offres.length === 0 && <p className="text-xs text-ghost">Aucune offre. Ajoutez-en une.</p>}
+              {sForm.offres.length === 0 && <p className="text-xs text-ghost">{t('admin.banniere.aucune_offre')}</p>}
               <button type="button" onClick={addOffre} className="text-xs font-medium text-primary hover:text-primary-600">+ Ajouter une offre</button>
             </div>
             <div className="flex items-center gap-3">

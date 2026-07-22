@@ -141,7 +141,7 @@ export default function SupportPage() {
                 required
               />
               {form.message.length >= 5000 && (
-                <p className="text-xs text-error mt-1">Limite de 5 000 caractères atteinte.</p>
+                <p className="text-xs text-error mt-1">{t('support.limite_caracteres')}</p>
               )}
             </div>
 
