@@ -1,14 +1,11 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Plus } from 'lucide-react'
-import { AdminLayout, AdminTable, AdminBadge } from '@/components/admin'
+import { AdminLayout, AdminTable, AdminBadge, AdminModal, AdminSelectField } from '@/components/admin'
 import { useAdminTransactions, useCreateTransaction, useCancelTransaction } from '@/hooks/admin/useTransactions'
 import { useAdminAteliers } from '@/hooks/admin/useAteliers'
 import { useAdminPlans } from '@/hooks/admin/usePlans'
 import { formatDate } from '@/utils/formatDate'
-
-const INPUT = 'w-full border border-edge rounded-xl px-3 py-2 text-sm text-ink bg-card mt-1 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary'
-const LABEL = 'text-xs text-ghost'
 
 export default function TransactionsPage() {
   const { t } = useTranslation()
@@ -98,49 +95,47 @@ export default function TransactionsPage() {
       )}
 
       {showModal && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-          <div className="bg-card rounded-2xl w-full max-w-sm p-6 shadow-xl">
-            <h3 className="font-semibold text-ink mb-4">{t('admin.transactions.generer_titre')}</h3>
-            <form onSubmit={handleCreate} className="space-y-3">
-              <div>
-                <label className={LABEL}>{t('admin.transactions.col_atelier')}</label>
-                <select
-                  value={form.atelier_id}
-                  onChange={e => setForm(f => ({ ...f, atelier_id: e.target.value }))}
-                  required
-                  className={INPUT}
-                >
-                  <option value="">{t('admin.commun.selectionner')}</option>
-                  {ateliersList.map(a => <option key={a.id} value={a.id}>{a.nom}</option>)}
-                </select>
-              </div>
-              <div>
-                <label className={LABEL}>{t('admin.transactions.col_plan')}</label>
-                <select
-                  value={form.niveau_cle}
-                  onChange={e => setForm(f => ({ ...f, niveau_cle: e.target.value }))}
-                  required
-                  className={INPUT}
-                >
-                  <option value="">{t('admin.commun.selectionner')}</option>
-                  {plans.map(p => <option key={p.id} value={p.cle}>{p.label}</option>)}
-                </select>
-              </div>
-              <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 pt-2">
-                <button type="button" onClick={() => setShowModal(false)} className="text-sm text-ghost hover:text-dim transition-colors">
-                  {t('admin.commun.annuler')}
-                </button>
-                <button
-                  type="submit"
-                  disabled={create.isPending}
-                  className="bg-primary text-inverse text-sm font-medium px-4 py-2 rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors"
-                >
-                  {create.isPending ? t('admin.transactions.generation') : t('admin.transactions.generer')}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <AdminModal
+          onClose={() => setShowModal(false)}
+          title={t('admin.transactions.generer_titre')}
+          size="md"
+          footer={
+            <>
+              <button type="button" onClick={() => setShowModal(false)} className="text-sm text-ghost hover:text-dim transition-colors">
+                {t('admin.commun.annuler')}
+              </button>
+              <button
+                type="submit"
+                form="transaction-form"
+                disabled={create.isPending}
+                className="bg-primary text-inverse text-sm font-medium px-4 py-2 rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors"
+              >
+                {create.isPending ? t('admin.transactions.generation') : t('admin.transactions.generer')}
+              </button>
+            </>
+          }
+        >
+          <form id="transaction-form" onSubmit={handleCreate} className="space-y-3">
+            <AdminSelectField
+              label={t('admin.transactions.col_atelier')}
+              value={form.atelier_id}
+              onChange={e => setForm(f => ({ ...f, atelier_id: e.target.value }))}
+              required
+            >
+              <option value="">{t('admin.commun.selectionner')}</option>
+              {ateliersList.map(a => <option key={a.id} value={a.id}>{a.nom}</option>)}
+            </AdminSelectField>
+            <AdminSelectField
+              label={t('admin.transactions.col_plan')}
+              value={form.niveau_cle}
+              onChange={e => setForm(f => ({ ...f, niveau_cle: e.target.value }))}
+              required
+            >
+              <option value="">{t('admin.commun.selectionner')}</option>
+              {plans.map(p => <option key={p.id} value={p.cle}>{p.label}</option>)}
+            </AdminSelectField>
+          </form>
+        </AdminModal>
       )}
     </AdminLayout>
   )
