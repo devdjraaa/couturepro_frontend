@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { ChevronLeft, ChevronRight, Heart, Search, Star, MapPin, Check } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Heart, Search, Star, MapPin, Check, Scissors, ShieldCheck, Headphones, Sparkles as SparklesIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import PartenairesBanner from './PartenairesBanner'
@@ -14,6 +14,73 @@ import BandeAnnonces from '@/components/layout/BandeAnnonces'
 
 const btnPrimary = 'vt-btn-primary inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-inverse hover:bg-primary-600'
 const btnOutline = 'vt-btn-ghost inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary'
+
+/* Strip de confiance — 4 arguments sous le hero (VIT-2). */
+function TrustStrip() {
+  const { t } = useTranslation()
+  const items = [
+    { Icon: ShieldCheck,   key: 'item_1' },
+    { Icon: Check,         key: 'item_2' },
+    { Icon: Headphones,    key: 'item_3' },
+    { Icon: SparklesIcon,  key: 'item_4' },
+  ]
+  return (
+    <div className="border-y border-edge py-3 bg-subtle">
+      <div className="max-w-[1180px] mx-auto px-5 flex flex-wrap justify-center gap-x-8 gap-y-2">
+        {items.map(({ Icon, key }) => (
+          <div key={key} className="flex items-center gap-2 text-[13px] text-dim">
+            <Icon size={14} className="text-primary shrink-0" />
+            <span>{t(`vitrine.trust.${key}`)}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/* Section « Par où commencer ? » — onboarding client / créateur (VIT-1). */
+function OnboardingSection() {
+  const { t } = useTranslation()
+  return (
+    <section className="py-14 px-5">
+      <div className="max-w-[1180px] mx-auto">
+        <p className="text-center text-[11px] font-bold uppercase tracking-[0.14em] text-primary mb-8">
+          {t('vitrine.onboarding.label')}
+        </p>
+        <div className="vt-stagger grid md:grid-cols-2 gap-6 max-w-[820px] mx-auto">
+          {/* Créateur */}
+          <div className="vt-item border border-edge rounded-2xl p-7 flex flex-col gap-4 hover:border-primary/40 transition-colors">
+            <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center">
+              <Scissors size={20} className="text-primary" />
+            </div>
+            <div>
+              <h3 className="font-display font-bold text-[18px] text-ink">{t('vitrine.onboarding.creator_title')}</h3>
+              <p className="text-dim text-sm mt-1.5 leading-relaxed">{t('vitrine.onboarding.creator_desc')}</p>
+            </div>
+            <Link to="/inscription"
+              className="mt-auto inline-flex items-center gap-2 font-semibold text-sm px-5 py-2.5 rounded-xl bg-primary text-inverse hover:bg-primary-600 transition w-fit">
+              {t('vitrine.onboarding.creator_cta')}
+            </Link>
+          </div>
+          {/* Client */}
+          <div className="vt-item border border-edge rounded-2xl p-7 flex flex-col gap-4 hover:border-primary/40 transition-colors">
+            <div className="w-11 h-11 rounded-xl bg-primary/5 flex items-center justify-center">
+              <Search size={20} className="text-primary" />
+            </div>
+            <div>
+              <h3 className="font-display font-bold text-[18px] text-ink">{t('vitrine.onboarding.client_title')}</h3>
+              <p className="text-dim text-sm mt-1.5 leading-relaxed">{t('vitrine.onboarding.client_desc')}</p>
+            </div>
+            <Link to="/createurs"
+              className="mt-auto inline-flex items-center gap-2 font-semibold text-sm px-5 py-2.5 rounded-xl border border-primary text-primary hover:bg-primary/5 transition w-fit">
+              {t('vitrine.onboarding.client_cta')}
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
 
 function HeroSearch({ creators }) {
   const { t } = useTranslation()
@@ -284,8 +351,14 @@ export default function VitrineHome() {
         </div>
       </section>
 
+      {/* Strip confiance — juste sous le hero (VIT-2) */}
+      <TrustStrip />
+
       {/* Corps de page — motif rondelles or (hors hero et footer) */}
       <div className="vt-page-motif">
+
+      {/* ONBOARDING client / créateur (VIT-1) */}
+      <OnboardingSection />
 
       {/* COMMENT ÇA MARCHE */}
       <section id="how" className="py-16 scroll-mt-[76px]">

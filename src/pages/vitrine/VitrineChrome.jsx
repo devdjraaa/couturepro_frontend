@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Sun, Moon, Heart, Globe, X, Menu, LogIn, UserPlus, Lock, Settings2, Sparkles, BarChart3, Megaphone, Cookie as CookieIcon } from 'lucide-react'
+import { Sun, Moon, Heart, Globe, X, Menu, LogIn, UserPlus, Lock, Settings2, Sparkles, BarChart3, Megaphone, Cookie as CookieIcon, ChevronDown, ArrowLeft } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useTheme, useLang } from '@/contexts'
 import { cn } from '@/utils/cn'
@@ -120,14 +120,15 @@ function NavMenu() {
           {/* Nav mobile (masqué sur desktop) */}
           <div className="lg:hidden px-2 pb-2 border-b border-edge mb-2">
             {[
-              { label: t('vitrine.nav.how'),         to: '/#how' },
-              { label: t('vitrine.nav.creators'),    to: '/createurs' },
-              { label: t('vitrine.menu2.artisans'),  to: '/artisans' },
-              { label: t('vitrine.nav.collections'), to: '/#gallery' },
-              { label: t('vitrine.nav.suivi'),       to: '/suivi' },
+              { label: t('vitrine.nav.how'),           to: '/#how' },
+              { label: t('vitrine.nav.creators'),      to: '/createurs' },
+              { label: t('vitrine.menu2.artisans'),    to: '/artisans' },
+              { label: t('vitrine.nav.collections'),   to: '/#gallery' },
+              { label: t('vitrine.footer.pricing'),    to: '/premium' },
+              { label: t('vitrine.nav.suivi'),         to: '/suivi' },
               { label: t('vitrine.nav.espace_client'), to: '/espace-client' },
-              { label: t('vitrine.menu2.support'),   to: '/aide' },
-              { label: t('vitrine.menu2.about'),     to: '/qui-sommes-nous' },
+              { label: t('vitrine.menu2.support'),     to: '/aide' },
+              { label: t('vitrine.menu2.about'),       to: '/qui-sommes-nous' },
             ].map(({ label, to }) => (
               <Link key={to} to={to} onClick={close}
                 className="block px-3 py-2 rounded-lg text-[13px] text-dim hover:text-ink hover:bg-subtle transition">
@@ -177,6 +178,72 @@ function NavMenu() {
               {t('vitrine.nav.login')}
             </Link>
           </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* Barre de contact fine — au-dessus du bandeau promo (P180). */
+function ContactBar() {
+  const { t } = useTranslation()
+  return (
+    <div className="text-center text-[11px] py-1.5 px-4 bg-subtle border-b border-edge text-ghost">
+      {t('vitrine.contact_bar.text')}{' '}
+      <a href={`mailto:${t('vitrine.contact_bar.email')}`}
+         className="text-primary hover:underline font-semibold">
+        {t('vitrine.contact_bar.email')}
+      </a>
+    </div>
+  )
+}
+
+/* Menu déroulant desktop — Solutions / Tarifs / Documentation (VIT-1). */
+function NavDropdown({ label, items }) {
+  const { t } = useTranslation()
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+  useEffect(() => {
+    if (!open) return
+    const onMouse = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
+    const onKbd   = (e) => { if (e.key === 'Escape') setOpen(false) }
+    document.addEventListener('mousedown', onMouse)
+    document.addEventListener('keydown', onKbd)
+    return () => {
+      document.removeEventListener('mousedown', onMouse)
+      document.removeEventListener('keydown', onKbd)
+    }
+  }, [open])
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen(v => !v)}
+        aria-expanded={open}
+        className={cn(
+          'flex items-center gap-1 text-sm whitespace-nowrap transition',
+          open ? 'text-primary' : 'text-dim hover:text-ink',
+        )}
+      >
+        {label}
+        <ChevronDown size={12} className={cn('transition-transform duration-150', open && 'rotate-180')} />
+      </button>
+      {open && (
+        <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2.5 w-64 bg-card border border-edge rounded-xl shadow-xl z-50 p-1.5">
+          {items.map((item) => (
+            <Link key={item.label} to={item.to} onClick={() => setOpen(false)}
+              className="group flex flex-col px-3 py-2.5 rounded-lg hover:bg-subtle transition">
+              <span className="text-[13px] font-semibold text-ink group-hover:text-primary transition flex items-center gap-2">
+                {item.label}
+                {item.soon && (
+                  <span className="text-[9px] font-bold text-ghost uppercase bg-subtle px-1.5 py-0.5 rounded-full border border-edge">
+                    {t('vitrine.soon')}
+                  </span>
+                )}
+              </span>
+              <span className="text-[11.5px] text-ghost mt-0.5 leading-snug">{item.desc}</span>
+            </Link>
+          ))}
         </div>
       )}
     </div>
@@ -328,8 +395,40 @@ export function VitrineNavbar() {
   const [banniere, setBanniere] = useState(null)
   useEffect(() => { getBanniere().then(setBanniere).catch(() => {}) }, [])
   const promo = (banniere?.actif && banniere?.texte) ? banniere : null
+
+  // Header simplifié sur les pages d'authentification (VIT-2 — P132).
+  if (loc.pathname === '/inscription') {
+    return (
+      <header className="sticky top-0 z-40 bg-app border-b border-edge">
+        <div className="max-w-[1180px] mx-auto px-5 h-[68px] flex items-center justify-between gap-4">
+          <Link to="/" aria-label="Gextimo"><VitrineLogo /></Link>
+          <Link to="/" className="flex items-center gap-1.5 text-sm text-dim hover:text-ink transition">
+            <ArrowLeft size={14} />
+            {t('vitrine.nav.retour_vitrine')}
+          </Link>
+        </div>
+      </header>
+    )
+  }
+
+  const solutionsItems = [
+    { label: t('vitrine.dropdown.solutions.createurs.label'), desc: t('vitrine.dropdown.solutions.createurs.desc'), to: '/createurs' },
+    { label: t('vitrine.dropdown.solutions.clients.label'),   desc: t('vitrine.dropdown.solutions.clients.desc'),   to: '/espace-client' },
+    { label: t('vitrine.dropdown.solutions.artisans.label'),  desc: t('vitrine.dropdown.solutions.artisans.desc'),  to: '/artisans' },
+  ]
+  const tarifsItems = [
+    { label: t('vitrine.dropdown.tarifs.plans.label'), desc: t('vitrine.dropdown.tarifs.plans.desc'), to: '/premium' },
+    { label: t('vitrine.dropdown.tarifs.boost.label'), desc: t('vitrine.dropdown.tarifs.boost.desc'), to: '/mise-en-avant' },
+  ]
+  const docsItems = [
+    { label: t('vitrine.dropdown.docs.aide.label'),  desc: t('vitrine.dropdown.docs.aide.desc'),  to: '/aide' },
+    { label: t('vitrine.dropdown.docs.suivi.label'), desc: t('vitrine.dropdown.docs.suivi.desc'), to: '/suivi' },
+    { label: t('vitrine.dropdown.docs.about.label'), desc: t('vitrine.dropdown.docs.about.desc'), to: '/qui-sommes-nous' },
+  ]
+
   return (
     <>
+      <ContactBar />
       <div data-theme="dark" className="text-center text-[13px] py-2 px-10 bg-inset text-ink">
         {promo
           ? (promo.lien
@@ -342,15 +441,14 @@ export function VitrineNavbar() {
           {/* Logo */}
           <Link to="/" aria-label="Gextimo"><VitrineLogo /></Link>
 
-          {/* Nav centré */}
-          <nav className="hidden lg:flex items-center justify-center gap-7">
+          {/* Nav centré — dropdowns Solutions/Tarifs/Docs + liens directs (VIT-1) */}
+          <nav className="hidden lg:flex items-center justify-center gap-5">
+            <NavDropdown label={t('vitrine.nav.solutions')} items={solutionsItems} />
+            <NavDropdown label={t('vitrine.nav.tarifs')}    items={tarifsItems} />
+            <NavDropdown label={t('vitrine.nav.docs')}      items={docsItems} />
             <a href="/#how" className="text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.nav.how')}</a>
-            <Link to="/createurs" aria-current={loc.pathname.startsWith('/createurs') ? 'page' : undefined} className="text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.nav.creators')}</Link>
-            <Link to="/artisans" aria-current={loc.pathname === '/artisans' ? 'page' : undefined} className="text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.menu2.artisans')}</Link>
             <a href="/#gallery" className="text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.nav.collections')}</a>
-            <Link to="/suivi" aria-current={loc.pathname === '/suivi' ? 'page' : undefined} className="text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.nav.suivi')}</Link>
             <Link to="/espace-client" aria-current={loc.pathname === '/espace-client' ? 'page' : undefined} className="text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.nav.espace_client')}</Link>
-            <Link to="/aide" aria-current={loc.pathname === '/aide' ? 'page' : undefined} className="text-sm text-dim hover:text-ink whitespace-nowrap">{t('vitrine.menu2.support')}</Link>
           </nav>
 
           {/* Contrôles droite */}
@@ -411,10 +509,9 @@ export function VitrineFooter() {
     ] },
     { h: t('vitrine.footer.col_legal'), links: [
       { l: t('vitrine.footer.legal_privacy'), to: '/confidentialite' },
-      { l: t('vitrine.footer.legal_mentions'), to: '/mentions-legales' },
+      { l: t('vitrine.footer.legal_cgu'), to: '/cgu' },
       { l: t('vitrine.footer.legal_cookies'), to: '/cookies' },
       { l: t('vitrine.footer.legal_apdp'), to: '/protection-donnees' },
-      { l: t('vitrine.footer.legal_cgu'), to: '/cgu' },
     ] },
     { h: t('vitrine.footer.col_rules'), links: [
       { l: t('vitrine.footer.legal_creator_rights'), to: '/droits-createurs' },

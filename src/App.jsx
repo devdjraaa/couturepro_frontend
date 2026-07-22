@@ -200,7 +200,8 @@ export default function App() {
             <Route path="/premium"               element={<PremiumPage />} />
             <Route path={ROUTES.VITRINE_SPONSORISATION} element={<SponsorisationPage />} />
             <Route path={ROUTES.VITRINE_CONFIDENTIALITE}    element={<ConfidentialitePage />} />
-            <Route path={ROUTES.VITRINE_MENTIONS}           element={<MentionsLegalesPage />} />
+            {/* P140 — « Mentions légales » fusionné avec CGU : la route redirige. */}
+            <Route path={ROUTES.VITRINE_MENTIONS} element={<Navigate to={ROUTES.VITRINE_CGU} replace />} />
             <Route path={ROUTES.VITRINE_COOKIES}            element={<CookiesPage />} />
             <Route path={ROUTES.VITRINE_PROTECTION_DONNEES} element={<ProtectionDonneesPage />} />
             <Route path={ROUTES.VITRINE_CGU}                element={<CguPage />} />

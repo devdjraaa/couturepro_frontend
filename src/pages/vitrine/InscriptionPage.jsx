@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Smartphone, Globe } from 'lucide-react'
+import { Smartphone, Globe, Zap } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import VitrineShell from './VitrineChrome'
 import { usePageMeta } from '@/hooks/usePageMeta'
@@ -39,6 +39,23 @@ export default function InscriptionPage() {
             {t('vitrine.inscription.have_account')}{' '}
             <Link to="/login" className="text-primary font-semibold hover:underline">{t('vitrine.inscription.login')}</Link>
           </p>
+        </div>
+      </section>
+
+      {/* P138 — Aperçu tarifs sous le formulaire d'inscription */}
+      <section className="py-12 border-t border-edge bg-subtle">
+        <div className="max-w-[640px] mx-auto px-5 text-center">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <Zap size={16} className="text-primary" />
+            <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-primary">
+              {t('vitrine.inscription.tarifs_label')}
+            </p>
+          </div>
+          <p className="text-dim text-sm mt-1">{t('vitrine.inscription.tarifs_desc')}</p>
+          <Link to="/premium"
+            className="mt-6 inline-flex items-center gap-2 font-semibold text-sm px-5 py-2.5 rounded-xl border border-primary text-primary hover:bg-primary/5 transition">
+            {t('vitrine.inscription.tarifs_cta')}
+          </Link>
         </div>
       </section>
     </VitrineShell>

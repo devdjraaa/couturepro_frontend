@@ -1570,7 +1570,10 @@
       "cta": "Télécharger l'application",
       "have_account": "Déjà un compte ?",
       "login": "Se connecter",
-      "cta_web": "Créer mon espace"
+      "cta_web": "Créer mon espace",
+      "tarifs_label": "Choisissez votre formule",
+      "tarifs_desc": "Commencez gratuitement. Passez à la formule supérieure quand votre activité grandit.",
+      "tarifs_cta": "Voir tous les tarifs"
     },
     "soon": "Bientôt",
     "cookies": {
@@ -1602,7 +1605,11 @@
       "suivi": "Suivi",
       "espace_client": "Espace client",
       "signup": "S'inscrire",
-      "login": "Se connecter"
+      "login": "Se connecter",
+      "solutions": "Solutions",
+      "tarifs": "Tarifs",
+      "docs": "Documentation",
+      "retour_vitrine": "Retour sur la vitrine"
     },
     "suivi_etapes": {
       "commande": "Commande reçue",
@@ -3746,6 +3753,42 @@
       "entrer": "Entrer",
       "erreur": "Accès refusé.",
       "indisponible": "Cet espace n'est pas encore ouvert."
+    },
+    "contact_bar": {
+      "text": "Une question ? Écrivez-nous à",
+      "email": "contact@gextimo.com"
+    },
+    "dropdown": {
+      "solutions": {
+        "createurs": { "label": "Ateliers & Créateurs", "desc": "Gérez votre atelier, vos commandes et publiez vos créations" },
+        "clients":   { "label": "Espace client",        "desc": "Suivez vos commandes et partagez vos mesures en ligne" },
+        "artisans":  { "label": "Artisans partenaires", "desc": "Découvrez les artisans et savoir-faire partenaires" }
+      },
+      "tarifs": {
+        "plans": { "label": "Nos formules",    "desc": "De gratuit à Premium — comparez et choisissez" },
+        "boost": { "label": "Mise en avant",   "desc": "Boostez la visibilité de votre atelier sur la vitrine" }
+      },
+      "docs": {
+        "aide":  { "label": "Aide & FAQ",       "desc": "Guides, réponses aux questions fréquentes" },
+        "suivi": { "label": "Suivi du projet",  "desc": "Avancement des fonctionnalités en développement" },
+        "about": { "label": "Qui sommes-nous",  "desc": "L'équipe et la mission derrière Gextimo" }
+      }
+    },
+    "onboarding": {
+      "label": "Par où commencer ?",
+      "creator_title": "Je suis créateur de mode",
+      "creator_desc": "Gérez votre atelier, publiez vos créations et recevez des commandes directement depuis la vitrine.",
+      "creator_cta": "Créer mon espace",
+      "client_title": "Je cherche un créateur",
+      "client_desc": "Trouvez un atelier, partagez vos mesures et suivez l'avancement de votre commande en temps réel.",
+      "client_cta": "Explorer les créateurs"
+    },
+    "trust": {
+      "label": "Pourquoi nous faire confiance ?",
+      "item_1": "Données protégées (APDP)",
+      "item_2": "Accès sécurisé",
+      "item_3": "Support dédié",
+      "item_4": "Sans engagement"
     }
   },
   "realisations": {

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
   Home, Users, ClipboardList, Layers, Settings, PanelLeftClose, PanelLeftOpen,
-  Bell, Star, Users2, LogOut, HelpCircle, Archive, Wallet, Store, FileText, Palette, Images, History, Sparkles, Megaphone, Rocket } from 'lucide-react'
+  Bell, Star, Users2, LogOut, HelpCircle, Archive, Wallet, Store, FileText, Palette, Images, History, Sparkles, Megaphone, Rocket, ExternalLink } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
 import { useAuth } from '@/contexts'
@@ -244,9 +244,22 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* Pied de page — profil + déconnexion */}
+      {/* Pied de page — retour vitrine + profil + déconnexion */}
       {user && (
         <div className="border-t border-edge p-3 shrink-0 space-y-0.5">
+          {/* Lien retour vitrine (VIT-1 — bulle retour) */}
+          <a
+            href="/"
+            title={reduite ? t('vitrine.nav.retour_vitrine') : undefined}
+            aria-label={reduite ? t('vitrine.nav.retour_vitrine') : undefined}
+            className={cn(
+              'w-full flex items-center gap-3 py-2 rounded-xl text-sm text-ghost hover:text-primary hover:bg-primary/5 transition-colors mb-1',
+              reduite ? 'px-0 justify-center' : 'px-3',
+            )}
+          >
+            <ExternalLink size={15} className="shrink-0" />
+            {!reduite && <span>{t('vitrine.nav.retour_vitrine')}</span>}
+          </a>
           <button
             type="button"
             onClick={() => navigate('/parametres/profil')}

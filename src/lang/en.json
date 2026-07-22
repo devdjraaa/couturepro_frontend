@@ -1570,7 +1570,10 @@
       "cta": "Download the app",
       "have_account": "Already have an account?",
       "login": "Log in",
-      "cta_web": "Create my space"
+      "cta_web": "Create my space",
+      "tarifs_label": "Choose your plan",
+      "tarifs_desc": "Start for free. Move up when your business grows.",
+      "tarifs_cta": "See all plans"
     },
     "soon": "Soon",
     "cookies": {
@@ -1602,7 +1605,11 @@
       "suivi": "Tracking",
       "espace_client": "My account",
       "signup": "Sign up",
-      "login": "Log in"
+      "login": "Log in",
+      "solutions": "Solutions",
+      "tarifs": "Pricing",
+      "docs": "Documentation",
+      "retour_vitrine": "Back to the showcase"
     },
     "suivi_etapes": {
       "commande": "Order received",
@@ -3733,6 +3740,42 @@
       "entrer": "Enter",
       "erreur": "Access denied.",
       "indisponible": "This space is not open yet."
+    },
+    "contact_bar": {
+      "text": "Got a question? Write to us at",
+      "email": "contact@gextimo.com"
+    },
+    "dropdown": {
+      "solutions": {
+        "createurs": { "label": "Workshops & Designers", "desc": "Manage your workshop, orders and showcase your creations" },
+        "clients":   { "label": "Client space",          "desc": "Track your orders and share your measurements online" },
+        "artisans":  { "label": "Partner artisans",      "desc": "Discover partner artisans and their craft" }
+      },
+      "tarifs": {
+        "plans": { "label": "Our plans",      "desc": "From free to Premium — compare and choose" },
+        "boost": { "label": "Boost listing",  "desc": "Increase your workshop's visibility on the showcase" }
+      },
+      "docs": {
+        "aide":  { "label": "Help & FAQ",      "desc": "Guides and answers to common questions" },
+        "suivi": { "label": "Project tracker", "desc": "Feature development progress" },
+        "about": { "label": "About us",        "desc": "The team and mission behind Gextimo" }
+      }
+    },
+    "onboarding": {
+      "label": "Where to start?",
+      "creator_title": "I am a fashion designer",
+      "creator_desc": "Manage your workshop, publish your creations and receive orders directly from the showcase.",
+      "creator_cta": "Create my space",
+      "client_title": "I'm looking for a designer",
+      "client_desc": "Find a workshop, share your measurements and track your order progress in real time.",
+      "client_cta": "Browse designers"
+    },
+    "trust": {
+      "label": "Why trust us?",
+      "item_1": "Data protected (APDP)",
+      "item_2": "Secure access",
+      "item_3": "Dedicated support",
+      "item_4": "No commitment"
     }
   },
   "realisations": {
