@@ -127,10 +127,22 @@ build_note() {
   local last_tag range
   last_tag="$(git describe --tags --match 'apk-v*' --abbrev=0 2>/dev/null || true)"
   range="${last_tag:+$last_tag..}HEAD"; [[ -n "$last_tag" ]] || range="HEAD~30..HEAD"
-  git log "$range" --format='%s' 2>/dev/null \
+
+  # `mapfile` lit le pipe JUSQU'AU BOUT avant de trancher aux 8 premières
+  # lignes. La version précédente terminait sur `| head -8` : dès que la
+  # plage contenait plus de 8 commits feat/fix (arrivé aujourd'hui, avec le
+  # volume de commits de la journée), `head` lisait ses 8 lignes puis fermait
+  # le pipe — `git log`/`grep`/`sed` recevaient SIGPIPE, `pipefail` propageait
+  # leur code 141, et `set -e` arrêtait NET la release en plein milieu, sans
+  # message, juste après le build APK. C'est exactement ce qui s'est produit
+  # en poussant ce commit : la release s'est interrompue après « APK généré »,
+  # sans rien publier ni notifier personne. Trancher APRÈS avoir tout lu
+  # rend la fermeture anticipée du pipe impossible.
+  local -a lignes
+  mapfile -t lignes < <(git log "$range" --format='%s' 2>/dev/null \
     | grep -E '^(feat|fix)(\(|!|:)' \
-    | sed -E 's/^(feat|fix)(\([^)]*\))?!?:[[:space:]]*/• /' \
-    | head -8
+    | sed -E 's/^(feat|fix)(\([^)]*\))?!?:[[:space:]]*/• /')
+  (( ${#lignes[@]} )) && printf '%s\n' "${lignes[@]:0:8}"
 }
 
 # Construit les arguments --titre/--ligne de `app:notifier-maj` à partir des
