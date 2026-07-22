@@ -3,6 +3,14 @@
 //    notifyAppReady() confirme que le bundle démarre bien (sinon rollback Capgo).
 //  - Version native (grosse MAJ) : on interroge le backend /app/version et on
 //    compare à la version installée pour proposer / imposer le téléchargement APK.
+//
+// RÉGLAGE `autoUpdate: 'atBackground'` (capacitor.config.json) — pas le défaut
+// historique de ce projet (`directUpdate: true`, équivalent à `'always'`).
+// `'always'` recharge le bundle à CHAQUE retour au premier plan, y compris en
+// pleine saisie d'une commande : un artisan qui reçoit un appel, quitte l'app
+// trois secondes et y revient aurait perdu sa saisie, sans qu'aucun état ne
+// soit sauvegardé pour la lui rendre. `'atBackground'` applique la mise à jour
+// quand l'app PASSE en arrière-plan — jamais pendant qu'on la regarde.
 import { IS_NATIVE } from '@/constants/routes'
 import api from '@/services/api'
 
@@ -40,10 +48,33 @@ const DELAI_CONFIRMATION_MS = 8000
 let minuteur = null
 let condamne = false
 
+// Le 22/07, la version 1.0.143 a échoué en silence sur un appareil de test :
+// rien ne l'aurait signalé sans un test manuel, appareil branché. Un atelier
+// dont la mise à jour échoue en continu ne le signale jamais de lui-même — il
+// ignore même qu'une version plus récente existe. `/app/ota-evenement` inverse
+// la charge de la preuve : l'appareil rapporte l'ISSUE de chaque tentative,
+// succès ou échec, et un tableau de bord peut désormais voir un incident réel
+// au lieu d'attendre qu'un humain teste à la main.
+//
+// Fire-and-forget assumé : un appareil hors ligne ne peut de toute façon pas
+// prévenir de son propre échec de connexion, et bloquer sur cet appel
+// retarderait une confirmation qui, elle, ne doit jamais attendre le réseau.
+function rapporterEvenementOta(evenement, version, detail) {
+  if (!IS_NATIVE || !version) return
+  api.post('/app/ota-evenement', {
+    app_id: 'com.couturepro.app',
+    version,
+    evenement,
+    detail: detail ? String(detail).slice(0, 300) : undefined,
+  }).catch(() => { /* rien à faire : le prochain événement retentera */ })
+}
+
 async function confirmerAupresDeCapgo() {
   try {
     const { CapacitorUpdater } = await import('@capgo/capacitor-updater')
+    const bundleActuel = await CapacitorUpdater.current().catch(() => null)
     await CapacitorUpdater.notifyAppReady()
+    rapporterEvenementOta('succes', bundleActuel?.bundle?.version)
   } catch { /* plugin absent (web) : rien à faire */ }
 }
 
@@ -51,6 +82,26 @@ async function confirmerAupresDeCapgo() {
 export function signalerAppMontee() {
   if (!IS_NATIVE || condamne || minuteur) return
   minuteur = setTimeout(() => { minuteur = null; confirmerAupresDeCapgo() }, DELAI_CONFIRMATION_MS)
+}
+
+// Enregistré une seule fois au démarrage (voir ConfirmationBundle) : le bundle
+// EN COURS D'EXÉCUTION — donc, par définition, celui qui fonctionne encore —
+// est le seul capable de rapporter qu'un téléchargement ou qu'une application
+// de mise à jour a échoué en arrière-plan. Le bundle défaillant, lui, ne
+// démarre jamais assez pour prévenir de rien.
+let ecouteursPoses = false
+export async function surveillerMisesAJourOta() {
+  if (!IS_NATIVE || ecouteursPoses) return
+  ecouteursPoses = true
+  try {
+    const { CapacitorUpdater } = await import('@capgo/capacitor-updater')
+    CapacitorUpdater.addListener('downloadFailed', (e) => {
+      rapporterEvenementOta('echec_telechargement', e?.version)
+    })
+    CapacitorUpdater.addListener('updateFailed', (e) => {
+      rapporterEvenementOta('echec_application', e?.bundle?.version, e?.bundle?.status)
+    })
+  } catch { /* plugin absent (web) : rien à faire */ }
 }
 
 /**

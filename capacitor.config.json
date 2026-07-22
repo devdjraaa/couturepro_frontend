@@ -20,9 +20,9 @@
       "insetsHandling": "disable"
     },
     "CapacitorUpdater": {
-      "autoUpdate": true,
-      "directUpdate": true,
+      "autoUpdate": "atBackground",
       "updateUrl": "https://gextimoapi.novafriq.africa/api/app/updates",
+      "statsUrl": "",
       "autoDeleteFailed": true,
       "autoDeletePrevious": true
     }

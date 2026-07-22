@@ -22,7 +22,20 @@
 #           bundle, éditer le .env backend, config:cache, reload php-fpm) passe
 #           par le script root du VPS /usr/local/sbin/gextimo-deploy, autorisé
 #           sans mot de passe via /etc/sudoers.d/gextimo-deploy (NOPASSWD).
-#           Le reste (scp du site, /tmp) se fait avec l'utilisateur SSH normal.
+#           Le reste (scp du site, /tmp, artisan) se fait avec l'utilisateur SSH
+#           normal — enregistrer une empreinte ou notifier ne demande pas root.
+#
+# NOTIFICATIONS — convention « Notification-Titre » / « Notification-Ligne » :
+#           un pied de commit peut porter le texte à montrer aux professionnels,
+#           par exemple :
+#               Notification-Titre: Vos réalisations sont accessibles partout
+#               Notification-Ligne: Le lien manquait dans le menu ; c'est réparé.
+#               Notification-Ligne: Vos brouillons restent lisibles sans réseau.
+#           Sans ce pied, AUCUN texte de secours n'est fabriqué à partir du sujet
+#           du commit (git log brut) — c'est justement ce qui donnait des titres
+#           de notification illisibles du type « fix(réalisations): … ». Sans
+#           trailer, `app:notifier-maj` retombe sur son propre défaut neutre
+#           (« Améliorations et corrections »), jamais sur un message technique.
 #
 set -euo pipefail
 
@@ -37,6 +50,11 @@ BUNDLES_DIR="/var/www/app-bundles"
 API="https://gextimoapi.novafriq.africa/api"
 SITE_URL="https://gextimo.novafriq.africa"
 GRADLE="android/app/build.gradle"
+
+# Identifiant de paquet lu dans la config plutôt qu'écrit en dur : le jour où
+# ce script sert aussi la console admin (com.couturepro.admin), il n'y a rien
+# à changer ici.
+APP_ID="$(python3 -c "import json;print(json.load(open('capacitor.config.json'))['appId'])" 2>/dev/null || echo com.couturepro.app)"
 
 # Optionnel : overrides locaux non versionnés (ex. GEXTIMO_VPS=autrehôte).
 [[ -f "$ROOT/scripts/.deploy.env" ]] && source "$ROOT/scripts/.deploy.env"
@@ -54,6 +72,11 @@ deploy() { ssh "$VPS" "sudo -n /usr/local/sbin/gextimo-deploy $*"; }
 
 # Incrémente le dernier segment : 1.0.4 -> 1.0.5, 1.0.11 -> 1.0.12
 bump_patch() { local v="$1"; echo "${v%.*}.$(( ${v##*.} + 1 ))"; }
+
+# Échappe une apostrophe pour un argument shell simple-quoté, sans casser la
+# citation ('#39; devient '’' plutôt que de fermer/rouvrir des guillemets) —
+# même convention que le reste du script.
+esc() { printf '%s' "$1" | sed "s/'/’/g"; }
 
 # ── 0. On ne release que la branche android ─────────────────────────────────
 cur_branch="$(git rev-parse --abbrev-ref HEAD)"
@@ -97,6 +120,9 @@ else say "Changements tooling/docs seulement → rien à déployer."; exit 0; fi
 say "Release: TYPE=$TYPE (natif=$NATIVE force_apk=$FORCE_APK force_ota=$FORCE_OTA)"
 
 # ── 2. Génère la note de changelog (depuis le dernier tag apk-v*) ────────────
+# Alimente le version-gate natif (popup de grosse MAJ) — mécanisme séparé et
+# déjà propre : il ne recopie jamais un sujet de commit brut, seulement les
+# commits `feat`/`fix` nettoyés de leur préfixe.
 build_note() {
   local last_tag range
   last_tag="$(git describe --tags --match 'apk-v*' --abbrev=0 2>/dev/null || true)"
@@ -107,9 +133,46 @@ build_note() {
     | head -8
 }
 
+# Construit les arguments --titre/--ligne de `app:notifier-maj` à partir des
+# trailers « Notification-Titre » / « Notification-Ligne » posés sur les
+# commits de la plage poussée $RANGE (voir convention en tête de fichier).
+#
+# AUCUN repli sur le sujet brut d'un commit : c'est précisément ce qui, ajouté
+# dans une session précédente, avait cassé la lisibilité des notifications
+# (« fix(réalisations): page importée mais jamais routée sur mobile » montré
+# tel quel à un professionnel). Sans trailer, on ne passe RIEN, et
+# `app:notifier-maj` retombe sur son propre défaut neutre.
+notif_args() {
+  local titre lignes=() ligne args=()
+
+  # Le plus récent d'abord (git log liste du plus récent au plus ancien) :
+  # `grep -m1` prend donc le titre du commit le plus proche de HEAD.
+  titre="$(git log $RANGE --format='%B' 2>/dev/null \
+    | grep -m1 '^Notification-Titre:' \
+    | sed -E 's/^Notification-Titre:[[:space:]]*//')"
+  [[ -n "$titre" ]] && args+=(--titre="$(esc "$titre")")
+
+  while IFS= read -r ligne; do
+    [[ -n "$ligne" ]] || continue
+    args+=(--ligne="$(esc "$ligne")")
+  done < <(git log $RANGE --format='%B' 2>/dev/null \
+    | grep '^Notification-Ligne:' \
+    | sed -E 's/^Notification-Ligne:[[:space:]]*//')
+
+  # Garde impérative : avec un tableau VIDE, `printf '%s\n' "${args[@]}"`
+  # traite quand même son format une fois et imprime une ligne vide — cette
+  # ligne vide serait ensuite lue comme UN argument fantôme par `mapfile`, et
+  # transmise à `app:notifier-maj` comme un argument positionnel inattendu :
+  # Symfony Console la rejette, et la commande échoue en silence (branche
+  # « non partie ») précisément dans le cas qu'on veut couvrir — l'absence de
+  # trailer. Testé en isolation avant de le corriger.
+  (( ${#args[@]} )) && printf '%s\n' "${args[@]}"
+}
+
 # ── OTA ──────────────────────────────────────────────────────────────────────
 release_ota() {
-  local cur next zip url
+  local cur next zip url sha256 sha_servi
+
   cur="$(curl -s -X POST "$API/app/updates" | python3 -c 'import sys,json;print(json.load(sys.stdin).get("version",""))' 2>/dev/null || true)"
   [[ -n "$cur" ]] || cur="$(vps "grep -oP '(?<=^APP_OTA_VERSION=).*' $BACKEND_DIR/.env" 2>/dev/null || echo '1.0.0')"
   next="$(bump_patch "$cur")"
@@ -118,10 +181,48 @@ release_ota() {
 
   say "OTA $cur → $next"
   npm run build
-  ( cd dist && zip -qr "../$zip" . )
+
+  # L'APK est EXCLU du paquet OTA. Il est copié dans dist/ parce qu'il vit dans
+  # public/ et que le site web le propose au téléchargement — mais dans une mise
+  # à jour à chaud il ne sert à rien, et il en représentait 74 % : 14,16 Mo sur
+  # 14,6. Un paquet de cette taille met plusieurs minutes sur une connexion
+  # mobile, et Capgo supprime le téléchargement partiel dès que l'application se
+  # ferme (autoDeleteFailed) : tout repart de zéro à chaque fois, et la mise à
+  # jour n'arrive jamais. Constaté sur appareil le 22/07 — la 1.0.143 a échoué
+  # six fois avant d'aboutir en laissant l'application ouverte trois minutes.
+  # Le site continue de servir l'APK : seul le paquet OTA s'allège.
+  ( cd dist && zip -qr "../$zip" . -x '*.apk' )
+
+  # Intégrité du paquet, en TROIS temps indépendants — aucun ne remplace les
+  # autres, chacun attrape une panne que les deux autres laisseraient passer :
+  #   1. le zip lui-même est lisible avant même de l'envoyer ;
+  unzip -tq "$zip" >/dev/null || die "Paquet OTA corrompu à la création (zip -t a échoué) — rien n'est publié."
+
+  sha256="$(sha256sum "$zip" | cut -d' ' -f1)"
   scp -q "$zip" "$VPS:/tmp/$zip"
   rm -f "$zip"
   deploy ota "$next" "$zip"
+
+  #   2. ce qui est SERVI par nginx est bien ce qu'on vient d'envoyer — une
+  #      écriture interrompue côté serveur (disque plein, coupure au mauvais
+  #      moment) donnerait sinon un fichier différent de celui vérifié en 1,
+  #      installé sans que rien ne s'en aperçoive ;
+  sha_servi="$(curl -fsSL -m 90 "$url" | sha256sum | cut -d' ' -f1 || true)"
+  [[ "$sha_servi" == "$sha256" ]] \
+    || die "Empreinte du paquet servi différente de celle envoyée — publication interrompue, AUCUNE notification partie. Rejouer la release."
+  ok "Intégrité du paquet vérifiée (${sha256:0:12}…)"
+
+  #   3. l'APPAREIL vérifiera lui-même l'empreinte avant d'installer — Capgo
+  #      lit le champ `checksum` de la réponse `/app/updates` (voir
+  #      AppVersionController). Un échec ici ne bloque pas la publication :
+  #      c'est un filet de plus, pas une condition pour publier — le paquet
+  #      reste installable même sans lui, seulement moins vérifié à l'arrivée.
+  if ssh "$VPS" "cd $BACKEND_DIR && php artisan app:enregistrer-checksum-ota '$APP_ID' '$next' '$sha256'" >/dev/null 2>&1; then
+    ok "Empreinte enregistrée pour vérification côté appareil"
+  else
+    warn "Empreinte non enregistrée (le paquet reste installable, sans ce filet côté appareil)"
+  fi
+
   ok "OTA $next en ligne : $url"
 
   # Prévenir les professionnels. Sans ça, une version publiée n'était visible
@@ -129,11 +230,9 @@ release_ota() {
   # n'était donc AVERTI. La commande dépose la notification dans l'application
   # et envoie la notification système aux appareils enregistrés.
   # Un échec ici ne doit jamais faire échouer une publication déjà en ligne.
-  # Le sujet du dernier commit sert d'intitulé au journal « Quoi de neuf » :
-  # sans lui, l'écran des nouveautés restait figé sur d'anciennes versions.
-  local sujet
-  sujet="$(git log -1 --pretty=%s | sed "s/'/’/g" | cut -c1-110)"
-  if ssh "$VPS" "cd /var/www/gextimo_backend && php artisan app:notifier-maj '$next' --titre='$sujet'" >/dev/null 2>&1; then
+  local args=()
+  mapfile -t args < <(notif_args)
+  if ssh "$VPS" "cd $BACKEND_DIR && php artisan app:notifier-maj '$next' ${args[@]@Q}" >/dev/null 2>&1; then
     ok "Professionnels prévenus de la version $next"
   else
     say "Publication OK, mais la notification n'est pas partie (à relancer à la main)"
@@ -175,9 +274,9 @@ release_apk() {
 
   # Grosse mise à jour : elle demande une INSTALLATION, il faut donc d'autant
   # plus prévenir — le version-gate seul n'alerte qu'à la prochaine ouverture.
-  local sujet_apk
-  sujet_apk="$(git log -1 --pretty=%s | sed "s/'/’/g" | cut -c1-110)"
-  if ssh "$VPS" "cd /var/www/gextimo_backend && php artisan app:notifier-maj '$next_vn' --majeure --titre='$sujet_apk'" >/dev/null 2>&1; then
+  local args=()
+  mapfile -t args < <(notif_args)
+  if ssh "$VPS" "cd $BACKEND_DIR && php artisan app:notifier-maj '$next_vn' --majeure ${args[@]@Q}" >/dev/null 2>&1; then
     ok "Professionnels prévenus de la version $next_vn"
   else
     say "Publication OK, mais la notification n'est pas partie (à relancer à la main)"
