@@ -1086,7 +1086,17 @@
     },
     "permissions_titre": "Permissions",
     "acces_assistant": "Assistant access",
-    "membres_non_inclus": "Team members not included"
+    "membres_non_inclus": "Team members not included",
+    "groupes": {
+      "clients": "Clients",
+      "commandes": "Orders",
+      "mesures": "Measurements",
+      "catalogue": "Catalogue",
+      "paiements": "Payments",
+      "points": "Loyalty points",
+      "notifications": "Notifications",
+      "factures": "Invoices"
+    }
   },
   "points": {
     "titre": "Loyalty points",
@@ -4796,5 +4806,52 @@
     "version": "Version {{v}}",
     "vide_titre": "Nothing to report yet",
     "vide_desc": "New features and fixes will appear here."
+  },
+  "permissions": {
+    "clients": {
+      "view": "View clients",
+      "create": "Create a client",
+      "archive": "Archive a client",
+      "edit": "Edit a client",
+      "delete": "Delete a client"
+    },
+    "commandes": {
+      "view": "View orders",
+      "create": "Create an order",
+      "archive": "Archive an order",
+      "edit": "Edit an order",
+      "delete": "Delete an order"
+    },
+    "mesures": {
+      "view": "View measurements",
+      "archive": "Archive measurements",
+      "edit": "Enter and edit measurements"
+    },
+    "vetements": {
+      "manage": "Manage the garment catalogue"
+    },
+    "paiements": {
+      "view": "View payments",
+      "create": "Take a payment"
+    },
+    "points": {
+      "convert": "Convert loyalty points"
+    },
+    "notifications": {
+      "view": "View notifications"
+    },
+    "factures": {
+      "generate": "Generate invoices"
+    }
+  },
+  "aide": {
+    "titre": "Help",
+    "fermer": "Close help",
+    "role_titre": "What can each role do?",
+    "role_intro": "These rights are YOUR workshop's. If you tightened them, that is what you see here.",
+    "accorde": "Can do",
+    "refuse": "Cannot do",
+    "chargement": "Reading rights…",
+    "indispo": "Rights unavailable right now."
   }
 }

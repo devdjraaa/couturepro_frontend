@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import AideRoles from '@/components/equipe/AideRoles'
 import { createPortal } from 'react-dom'
 import { UserPlus, Users, Copy, CheckCheck, BadgeCheck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -191,7 +192,16 @@ export default function EquipePage() {
             onChange={(e) => set('telephone')({ target: { value: sanitizePhoneInput(e.target.value) } })}
             placeholder="ex : +229 97 00 00 00"
           />
-          <Select label={t('equipe.formulaire.role')} value={form.role} onChange={set('role')} options={ROLE_OPTIONS} />
+          {/* Le rôle engage ce que la personne pourra faire dans l'atelier ;
+              le choisir sans le savoir revient à trancher à l'aveugle. */}
+          <div className="flex items-end gap-2">
+            <div className="flex-1 min-w-0">
+              <Select label={t('equipe.formulaire.role')} value={form.role} onChange={set('role')} options={ROLE_OPTIONS} />
+            </div>
+            <div className="pb-2.5">
+              <AideRoles />
+            </div>
+          </div>
           {apiError && <p className="text-sm text-danger">{apiError}</p>}
           <div className="sticky bottom-0 -mx-5 mt-2 flex gap-3 border-t border-edge bg-card px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
             <Button type="button" variant="ghost" onClick={() => setShowInvite(false)} className="flex-1">

@@ -1086,7 +1086,17 @@
     },
     "permissions_titre": "Permissions",
     "acces_assistant": "Accès assistant",
-    "membres_non_inclus": "Membres d'équipe non inclus"
+    "membres_non_inclus": "Membres d'équipe non inclus",
+    "groupes": {
+      "clients": "Clients",
+      "commandes": "Commandes",
+      "mesures": "Mesures",
+      "catalogue": "Catalogue",
+      "paiements": "Paiements",
+      "points": "Points fidélité",
+      "notifications": "Notifications",
+      "factures": "Factures"
+    }
   },
   "points": {
     "titre": "Points de fidélité",
@@ -4809,5 +4819,52 @@
     "version": "Version {{v}}",
     "vide_titre": "Rien à signaler pour l’instant",
     "vide_desc": "Les nouveautés et corrections apportées à l’application apparaîtront ici."
+  },
+  "permissions": {
+    "clients": {
+      "view": "Consulter les clients",
+      "create": "Créer un client",
+      "archive": "Archiver un client",
+      "edit": "Modifier un client",
+      "delete": "Supprimer un client"
+    },
+    "commandes": {
+      "view": "Consulter les commandes",
+      "create": "Créer une commande",
+      "archive": "Archiver une commande",
+      "edit": "Modifier une commande",
+      "delete": "Supprimer une commande"
+    },
+    "mesures": {
+      "view": "Consulter les mesures",
+      "archive": "Archiver des mesures",
+      "edit": "Saisir et modifier des mesures"
+    },
+    "vetements": {
+      "manage": "Gérer le catalogue de vêtements"
+    },
+    "paiements": {
+      "view": "Consulter les paiements",
+      "create": "Encaisser un paiement"
+    },
+    "points": {
+      "convert": "Convertir les points de fidélité"
+    },
+    "notifications": {
+      "view": "Consulter les notifications"
+    },
+    "factures": {
+      "generate": "Générer des factures"
+    }
+  },
+  "aide": {
+    "titre": "Aide",
+    "fermer": "Fermer l'aide",
+    "role_titre": "Que peut faire chaque rôle ?",
+    "role_intro": "Ces droits sont ceux de VOTRE atelier. Si vous les avez resserrés, c'est ce réglage qui s'affiche.",
+    "accorde": "Peut faire",
+    "refuse": "Ne peut pas faire",
+    "chargement": "Lecture des droits…",
+    "indispo": "Droits indisponibles pour le moment."
   }
 }

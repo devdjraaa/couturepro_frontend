@@ -1,80 +1,82 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Shield } from 'lucide-react'
 import { usePermissions, useUpdatePermissions } from '@/hooks/useEquipe'
 import { Button } from '@/components/ui'
 
 const GROUPES = [
   {
-    label: 'Clients',
+    cle: 'clients',
     actions: [
-      { perm: 'clients.view',    label: 'Consulter' },
-      { perm: 'clients.create',  label: 'Créer'     },
-      { perm: 'clients.archive', label: 'Archiver'  },
-      { perm: 'clients.edit',    label: 'Modifier'  },
-      { perm: 'clients.delete',  label: 'Supprimer' },
+      { perm: 'clients.view' },
+      { perm: 'clients.create' },
+      { perm: 'clients.archive' },
+      { perm: 'clients.edit' },
+      { perm: 'clients.delete' },
     ],
   },
   {
-    label: 'Commandes',
+    cle: 'commandes',
     actions: [
-      { perm: 'commandes.view',    label: 'Consulter' },
-      { perm: 'commandes.create',  label: 'Créer'     },
-      { perm: 'commandes.archive', label: 'Archiver'  },
-      { perm: 'commandes.edit',    label: 'Modifier'  },
-      { perm: 'commandes.delete',  label: 'Supprimer' },
+      { perm: 'commandes.view' },
+      { perm: 'commandes.create' },
+      { perm: 'commandes.archive' },
+      { perm: 'commandes.edit' },
+      { perm: 'commandes.delete' },
     ],
   },
   {
-    label: 'Mesures',
+    cle: 'mesures',
     actions: [
-      { perm: 'mesures.view',    label: 'Consulter' },
-      { perm: 'mesures.archive', label: 'Archiver'  },
-      { perm: 'mesures.edit',    label: 'Modifier'  },
+      { perm: 'mesures.view' },
+      { perm: 'mesures.archive' },
+      { perm: 'mesures.edit' },
     ],
   },
   {
-    label: 'Catalogue',
+    cle: 'catalogue',
     actions: [
-      { perm: 'vetements.manage', label: 'Gérer' },
+      { perm: 'vetements.manage' },
     ],
   },
   {
-    label: 'Paiements',
+    cle: 'paiements',
     actions: [
-      { perm: 'paiements.view',   label: 'Consulter'    },
-      { perm: 'paiements.create', label: 'Enregistrer'  },
+      { perm: 'paiements.view' },
+      { perm: 'paiements.create' },
     ],
   },
   {
-    label: 'Points fidélité',
+    cle: 'points',
     actions: [
-      { perm: 'points.convert', label: 'Convertir' },
+      { perm: 'points.convert' },
     ],
   },
   {
-    label: 'Notifications',
+    cle: 'notifications',
     actions: [
-      { perm: 'notifications.view', label: 'Consulter' },
+      { perm: 'notifications.view' },
     ],
   },
   {
-    label: 'Factures',
+    cle: 'factures',
     roles: ['assistant'],
     actions: [
-      { perm: 'factures.generate', label: 'Enregistrer / Partager' },
+      { perm: 'factures.generate' },
     ],
   },
 ]
 
 function RoleColumn({ role, label, perms, onChange }) {
+  const { t } = useTranslation()
   const groupes = GROUPES.filter(g => !g.roles || g.roles.includes(role))
 
   return (
     <div className="flex-1">
       <p className="text-xs font-semibold text-dim uppercase tracking-wide text-center mb-3">{label}</p>
       {groupes.map(g => (
-        <div key={g.label} className="mb-3">
-          <p className="text-[10px] text-ghost font-medium mb-1 px-1">{g.label}</p>
+        <div key={g.cle} className="mb-3">
+          <p className="text-[10px] text-ghost font-medium mb-1 px-1">{t(`equipe.groupes.${g.cle}`)}</p>
           {g.actions.map(({ perm, label: aLabel }) => {
             const checked = perms.includes(perm)
             return (
@@ -99,6 +101,7 @@ function RoleColumn({ role, label, perms, onChange }) {
 }
 
 export default function PermissionsGrid() {
+  const { t } = useTranslation()
   const { data: assistantData } = usePermissions('assistant')
   const { data: membreData }    = usePermissions('membre')
   const update = useUpdatePermissions()
