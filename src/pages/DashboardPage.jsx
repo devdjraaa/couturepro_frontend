@@ -438,8 +438,8 @@ function WelcomeChecklist({ user, atelier, clients, commandes, isLoading, naviga
     },
     ...(isDesigner ? [{
       icon: Store,
-      label: 'Configurer ma vitrine',
-      sub: 'Ajoutez votre bio et spécialité pour attirer des clients',
+      label: t('dashboard.onboarding.step_vitrine'),
+      sub: t('dashboard.onboarding.step_vitrine_sub'),
       done: !!(atelier?.bio),
       to: '/ma-vitrine',
     }] : []),

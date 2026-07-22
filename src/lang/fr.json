@@ -603,7 +603,9 @@
       "step_commande": "Créer votre première commande",
       "step_commande_sub": "Suivi des délais et paiements",
       "step_profil": "Compléter votre profil",
-      "step_profil_sub": "Nom, téléphone de contact"
+      "step_profil_sub": "Nom, téléphone de contact",
+      "step_vitrine": "Configurer ma vitrine",
+      "step_vitrine_sub": "Ajoutez votre bio et votre spécialité pour attirer des clients"
     },
     "kpi": {
       "en_attente": "En attente paiement",

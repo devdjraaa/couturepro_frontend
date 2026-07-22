@@ -603,7 +603,9 @@
       "step_commande": "Create your first order",
       "step_commande_sub": "Track deadlines and payments",
       "step_profil": "Complete your profile",
-      "step_profil_sub": "Name, contact phone number"
+      "step_profil_sub": "Name, contact phone number",
+      "step_vitrine": "Set up my storefront",
+      "step_vitrine_sub": "Add your bio and specialty to attract clients"
     },
     "kpi": {
       "en_attente": "Payment pending",
