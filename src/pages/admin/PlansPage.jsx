@@ -141,7 +141,11 @@ function PlanModal({ initial, onClose, onSubmit, isLoading }) {
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 overflow-y-auto">
-      <div className="bg-card rounded-2xl w-full max-w-lg my-auto sm:my-4 shadow-xl">
+      {/* Élargi (lg -> 4xl) et réorganisé en 2 colonnes : le formulaire empilait
+          6 sections en une seule colonne étroite — beaucoup de défilement
+          vertical pour très peu de largeur utilisée. Plus large que haut,
+          comme pour le reste des formulaires de ce genre dans l'admin. */}
+      <div className="bg-card rounded-2xl w-full max-w-4xl my-auto sm:my-4 shadow-xl">
         <div className="px-6 pt-5 pb-3 border-b border-edge">
           <h3 className="font-semibold text-ink">
             {isEdit ? t('admin.plans.modifier') : t('admin.plans.nouveau')}
@@ -149,77 +153,87 @@ function PlanModal({ initial, onClose, onSubmit, isLoading }) {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div className="px-6 py-4 space-y-3">
-            {!isEdit && (
+          <div className="px-6 py-4 grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-3">
+            <div className="space-y-3">
+              {!isEdit && (
+                <div>
+                  <label className={LABEL}>{t('admin.plans.form_cle')}</label>
+                  <input value={form.cle} onChange={setField('cle')} required placeholder="ex: premium_mensuel" className={INPUT} />
+                </div>
+              )}
               <div>
-                <label className={LABEL}>{t('admin.plans.form_cle')}</label>
-                <input value={form.cle} onChange={setField('cle')} required placeholder="ex: premium_mensuel" className={INPUT} />
+                <label className={LABEL}>{t('admin.plans.form_label')}</label>
+                <input value={form.label} onChange={setField('label')} required className={INPUT} />
               </div>
-            )}
-            <div>
-              <label className={LABEL}>{t('admin.plans.form_label')}</label>
-              <input value={form.label} onChange={setField('label')} required className={INPUT} />
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label className={LABEL}>{t('admin.plans.form_duree')}</label>
-                <input type="number" min="1" value={form.duree_jours} onChange={setField('duree_jours')} required className={INPUT} />
-              </div>
-              <div>
-                <label className={LABEL}>{t('admin.plans.form_prix')}</label>
-                <input type="number" min="0" value={form.prix_xof} onChange={setField('prix_xof')} required className={INPUT} />
-              </div>
-            </div>
-            <div>
-              <label className={LABEL}>{t('admin.plans.form_description')}</label>
-              <input value={form.description_courte ?? ''} onChange={setField('description_courte')} className={INPUT} />
-            </div>
-
-            <div className={SECTION}>
-              <p className={SECT_HEAD}>{t('admin.plans.section_limites')}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <NumField label={t('admin.plans.clients_mois')}    name="max_clients_par_mois"    value={form.config.max_clients_par_mois}    onChange={setCfg} />
-                <NumField label={t('admin.plans.photos_vip_mois')} name="max_photos_vip_par_mois" value={form.config.max_photos_vip_par_mois} onChange={setCfg} unlimited />
-                <NumField label={t('admin.plans.factures_mois')}   name="max_factures_par_mois"   value={form.config.max_factures_par_mois}   onChange={setCfg} unlimited />
-                <NumField label={t('admin.plans.membres')}         name="max_membres"             value={form.config.max_membres}             onChange={setCfg} />
-                <NumField label={t('admin.plans.assistants')}      name="max_assistants"          value={form.config.max_assistants}          onChange={setCfg} />
-                <NumField label={t('admin.plans.sous_ateliers')}   name="max_sous_ateliers"       value={form.config.max_sous_ateliers ?? 0}  onChange={setCfg} />
+                <div>
+                  <label className={LABEL}>{t('admin.plans.form_duree')}</label>
+                  <input type="number" min="1" value={form.duree_jours} onChange={setField('duree_jours')} required className={INPUT} />
+                </div>
+                <div>
+                  <label className={LABEL}>{t('admin.plans.form_prix')}</label>
+                  <input type="number" min="0" value={form.prix_xof} onChange={setField('prix_xof')} required className={INPUT} />
+                </div>
+              </div>
+              <div>
+                <label className={LABEL}>{t('admin.plans.form_description')}</label>
+                <input value={form.description_courte ?? ''} onChange={setField('description_courte')} className={INPUT} />
+              </div>
+
+              <div className={SECTION}>
+                <p className={SECT_HEAD}>{t('admin.plans.section_limites')}</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <NumField label={t('admin.plans.clients_mois')}    name="max_clients_par_mois"    value={form.config.max_clients_par_mois}    onChange={setCfg} />
+                  <NumField label={t('admin.plans.photos_vip_mois')} name="max_photos_vip_par_mois" value={form.config.max_photos_vip_par_mois} onChange={setCfg} unlimited />
+                  <NumField label={t('admin.plans.factures_mois')}   name="max_factures_par_mois"   value={form.config.max_factures_par_mois}   onChange={setCfg} unlimited />
+                  <NumField label={t('admin.plans.membres')}         name="max_membres"             value={form.config.max_membres}             onChange={setCfg} />
+                  <NumField label={t('admin.plans.assistants')}      name="max_assistants"          value={form.config.max_assistants}          onChange={setCfg} />
+                  <NumField label={t('admin.plans.sous_ateliers')}   name="max_sous_ateliers"       value={form.config.max_sous_ateliers ?? 0}  onChange={setCfg} />
+                </div>
+              </div>
+
+              <div className={SECTION}>
+                <p className={SECT_HEAD}>Vitrine</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <NumField label="Créations publiables (galerie)" name="max_creations_vitrine"  value={form.config.max_creations_vitrine ?? 0}  onChange={setCfg} unlimited />
+                  <NumField label="Commandes / mois"               name="max_commandes_par_mois" value={form.config.max_commandes_par_mois ?? -1} onChange={setCfg} unlimited />
+                </div>
+                <div className="mt-1">
+                  <Toggle label="Visible dans la galerie" name="visible_galerie" value={form.config.visible_galerie} onChange={setCfg} />
+                </div>
               </div>
             </div>
 
-            <div className={SECTION}>
-              <p className={SECT_HEAD}>Vitrine</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <NumField label="Créations publiables (galerie)" name="max_creations_vitrine"  value={form.config.max_creations_vitrine ?? 0}  onChange={setCfg} unlimited />
-                <NumField label="Commandes / mois"               name="max_commandes_par_mois" value={form.config.max_commandes_par_mois ?? -1} onChange={setCfg} unlimited />
+            <div className="space-y-3">
+              <div className={cn(SECTION, 'lg:border-t-0 lg:pt-0')}>
+                <p className={SECT_HEAD}>{t('admin.plans.section_fidelite')}</p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <NumField label={t('admin.plans.pts_client')}     name="pts_par_client"   value={form.config.pts_par_client}   onChange={setCfg} />
+                  <NumField label={t('admin.plans.pts_commande')}   name="pts_par_commande" value={form.config.pts_par_commande} onChange={setCfg} />
+                  <NumField label={t('admin.plans.pts_activation')} name="pts_activation"   value={form.config.pts_activation}   onChange={setCfg} />
+                </div>
+                <div className="mt-3">
+                  <NumField label={t('admin.plans.seuil_conversion')} name="seuil_conversion_pts" value={form.config.seuil_conversion_pts} onChange={setCfg} />
+                </div>
               </div>
-              <div className="mt-1">
-                <Toggle label="Visible dans la galerie" name="visible_galerie" value={form.config.visible_galerie} onChange={setCfg} />
+
+              <div className={SECTION}>
+                <p className={SECT_HEAD}>{t('admin.plans.section_fonctionnalites')}</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+                  <Toggle label="Photos VIP"       name="photos_vip"       value={form.config.photos_vip}       onChange={setCfg} />
+                  <Toggle label="Facture WhatsApp" name="facture_whatsapp" value={form.config.facture_whatsapp} onChange={setCfg} />
+                  <Toggle label="Sauvegarde auto"  name="sauvegarde_auto"  value={form.config.sauvegarde_auto}  onChange={setCfg} />
+                  <Toggle label="Module caisse"    name="module_caisse"    value={form.config.module_caisse}    onChange={setCfg} />
+                  <Toggle label="Multi-ateliers"   name="multi_ateliers"   value={form.config.multi_ateliers}   onChange={setCfg} />
+                  <Toggle label="Export PDF"       name="export_pdf"       value={form.config.export_pdf}       onChange={setCfg} />
+                </div>
               </div>
             </div>
 
-            <div className={SECTION}>
-              <p className={SECT_HEAD}>{t('admin.plans.section_fidelite')}</p>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <NumField label={t('admin.plans.pts_client')}     name="pts_par_client"   value={form.config.pts_par_client}   onChange={setCfg} />
-                <NumField label={t('admin.plans.pts_commande')}   name="pts_par_commande" value={form.config.pts_par_commande} onChange={setCfg} />
-                <NumField label={t('admin.plans.pts_activation')} name="pts_activation"   value={form.config.pts_activation}   onChange={setCfg} />
-              </div>
-              <div className="mt-3">
-                <NumField label={t('admin.plans.seuil_conversion')} name="seuil_conversion_pts" value={form.config.seuil_conversion_pts} onChange={setCfg} />
-              </div>
-            </div>
-
-            <div className={SECTION}>
-              <p className={SECT_HEAD}>{t('admin.plans.section_fonctionnalites')}</p>
-              <Toggle label="Photos VIP"       name="photos_vip"       value={form.config.photos_vip}       onChange={setCfg} />
-              <Toggle label="Facture WhatsApp" name="facture_whatsapp" value={form.config.facture_whatsapp} onChange={setCfg} />
-              <Toggle label="Sauvegarde auto"  name="sauvegarde_auto"  value={form.config.sauvegarde_auto}  onChange={setCfg} />
-              <Toggle label="Module caisse"    name="module_caisse"    value={form.config.module_caisse}    onChange={setCfg} />
-              <Toggle label="Multi-ateliers"   name="multi_ateliers"   value={form.config.multi_ateliers}   onChange={setCfg} />
-              <Toggle label="Export PDF"       name="export_pdf"       value={form.config.export_pdf}       onChange={setCfg} />
-            </div>
-
+            {/* Pleine largeur : longueur imprévisible (référentiel serveur +
+                clés ajoutées à la volée), un forçage en 2 colonnes casserait
+                la lisibilité dès qu'elle dépasse quelques entrées. */}
+            <div className="lg:col-span-2">
             {/* S02A-28b : les clés qui n'ont pas de champ dédié étaient affichées
                 en BRUT (« max_photos_vetement »), sans libellé ni type, et la
                 liste dérivait à chaque migration. Elles sont maintenant rendues
@@ -265,6 +279,7 @@ function PlanModal({ initial, onClose, onSubmit, isLoading }) {
                 <input value={newKey} onChange={e => setNewKey(e.target.value)} placeholder="nouvelle_cle" className={INPUT + ' max-w-[200px]'} />
                 <button type="button" onClick={addKey} className="text-sm font-medium text-primary whitespace-nowrap">+ Ajouter</button>
               </div>
+            </div>
             </div>
           </div>
 
