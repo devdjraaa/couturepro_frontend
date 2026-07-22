@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { AdminLayout, AdminTable, AdminBadge } from '@/components/admin'
-import { useAdminSignalements, useTraiterSignalement } from '@/hooks/admin/useSignalements'
+import { useAdminSignalements, useTraiterSignalement, useSanctionnerSignalement } from '@/hooks/admin/useSignalements'
 import { formatDate } from '@/utils/formatDate'
 
 export default function SignalementsPage() {
@@ -12,7 +12,8 @@ export default function SignalementsPage() {
   const rows        = data?.data         ?? data ?? []
   const currentPage = data?.current_page ?? 1
   const lastPage    = data?.last_page    ?? 1
-  const traiter = useTraiterSignalement()
+  const traiter    = useTraiterSignalement()
+  const sanctionner = useSanctionnerSignalement()
 
   const columns = [
     { key: 'type',       label: 'Type',   render: r => <AdminBadge value={r.type} /> },
@@ -22,9 +23,32 @@ export default function SignalementsPage() {
     { key: 'created_at', label: 'Date',   render: r => formatDate(r.created_at) },
     {
       key: 'actions', label: '',
-      render: r => r.statut === 'en_attente'
-        ? <button onClick={() => traiter.mutate(r.id)} className="text-xs font-medium text-primary hover:underline">Traiter</button>
-        : <Check size={13} className="text-ghost" aria-hidden="true" />,
+      render: (r) => {
+        if (r.statut !== 'en_attente') return <Check size={13} className="text-ghost" aria-hidden="true" />
+
+        // La sanction automatique au 3ᵉ signalement a été retirée : elle
+        // permettait de geler la boutique d'un créateur avec trois requêtes
+        // anonymes. C'est donc ICI que l'arbitrage se fait — encore fallait-il
+        // que l'écran le propose, ce qu'il ne faisait pas.
+        const sanction = { profil: 'Geler l’atelier', avis: 'Masquer l’avis' }[r.type]
+
+        return (
+          <div className="flex items-center gap-3 justify-end">
+            {sanction && (
+              <button
+                onClick={() => sanctionner.mutate({ id: r.id, type: r.type, cibleId: r.cible_id })}
+                disabled={sanctionner.isPending}
+                className="text-xs font-semibold text-danger hover:underline disabled:opacity-50"
+              >
+                {sanction}
+              </button>
+            )}
+            <button onClick={() => traiter.mutate(r.id)} className="text-xs font-medium text-primary hover:underline">
+              Classer sans suite
+            </button>
+          </div>
+        )
+      },
     },
   ]
 
