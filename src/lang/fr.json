@@ -4480,7 +4480,6 @@
         "ajouter_placeholder": "Saisir un terme puis Entrée",
         "retirer": "Retirer {{terme}}",
         "liste_vide": "Aucun terme pour l'instant.",
-        "compteur_termes": "{{n}} terme(s)",
         "echec": "Enregistrement impossible.",
         "prise_en_compte": "Les modifications s'appliquent au relevé de la nuit suivante, à 4h30."
       }

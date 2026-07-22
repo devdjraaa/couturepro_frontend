@@ -4467,7 +4467,6 @@
         "ajouter_placeholder": "Type a term then Enter",
         "retirer": "Remove {{terme}}",
         "liste_vide": "No term yet.",
-        "compteur_termes": "{{n}} term(s)",
         "echec": "Could not save.",
         "prise_en_compte": "Changes apply to the next night's report, at 4:30 am."
       }

@@ -18,10 +18,15 @@ import { cn } from '@/utils/cn'
  * bonne centaine de termes et repoussaient les résultats de la veille hors de
  * l'écran. On vient les régler de temps en temps ; on vient lire les résultats
  * tous les jours. C'est donc aux résultats de garder la place.
+ *
+ * Et en ONGLETS à l'intérieur, pas empilées : une liste d'une centaine
+ * d'étiquettes pousse la suivante bien au-delà du bas de la fenêtre, si bien
+ * qu'on ignorait qu'il y avait autre chose à régler. Le compteur porté par
+ * chaque onglet montre d'un coup d'œil ce que contient l'ensemble.
  */
 
 /** Une liste de termes : on ajoute, on retire, rien d'autre. */
-function ListeTermes({ titre, aide, termes, onChange, obligatoire }) {
+function ListeTermes({ aide, termes, onChange, obligatoire }) {
   const { t } = useTranslation()
   const [saisie, setSaisie] = useState('')
 
@@ -35,12 +40,8 @@ function ListeTermes({ titre, aide, termes, onChange, obligatoire }) {
 
   return (
     <div className="mb-5 last:mb-0">
-      <div className="flex items-baseline justify-between gap-3 mb-1">
-        <h3 className="font-semibold text-ink text-[14px]">{titre}</h3>
-        <span className="text-[11px] text-ghost tabular-nums shrink-0">
-          {t('admin.veille.config.compteur_termes', { n: termes.length })}
-        </span>
-      </div>
+      {/* Le titre est déjà porté par l'onglet actif : le répéter ici ne ferait
+          que voler de la hauteur à la liste. */}
       <p className="text-[12.5px] text-dim mb-2.5">{aide}</p>
 
       <div className="flex gap-2 mb-2.5">
@@ -91,6 +92,7 @@ function ListeTermes({ titre, aide, termes, onChange, obligatoire }) {
 export default function ConfigVeille() {
   const { t } = useTranslation()
   const [ouvert, setOuvert] = useState(false)
+  const [onglet, setOnglet] = useState('recherches')
 
   // La configuration n'est demandée qu'à l'ouverture : la page de veille sert
   // d'abord à lire les résultats, et cet appel n'a rien à y faire tant que
@@ -130,11 +132,47 @@ export default function ConfigVeille() {
 
   // Fermer en abandonnant : la saisie non enregistrée est rendue au serveur,
   // sans quoi la fenêtre rouvrirait sur des termes qui n'existent nulle part.
-  const fermer = () => { reinitialiser(); setOuvert(false) }
+  const fermer = () => { reinitialiser(); setOnglet('recherches'); setOuvert(false) }
 
   const soumettre = () => {
     enregistrer.mutate({ recherches, mots_cles: mots }, { onSuccess: () => setModifie(false) })
   }
+
+  // L'ordre suit la chaîne de traitement : ce qui est RAMENÉ d'abord, puis ce
+  // qui décide de la PERTINENCE de ce qui a été ramené.
+  const rubriques = [
+    {
+      cle: 'recherches',
+      titre: t('admin.veille.config.recherches'),
+      aide: t('admin.veille.config.recherches_aide'),
+      termes: recherches,
+      onChange: majRecherches,
+      obligatoire: true,
+    },
+    {
+      cle: 'benin',
+      titre: t('admin.veille.config.axe_benin'),
+      aide: t('admin.veille.config.axe_benin_aide'),
+      termes: mots.benin,
+      onChange: majMots('benin'),
+      obligatoire: true,
+    },
+    {
+      cle: 'metier',
+      titre: t('admin.veille.config.axe_metier'),
+      aide: t('admin.veille.config.axe_metier_aide'),
+      termes: mots.metier,
+      onChange: majMots('metier'),
+      obligatoire: true,
+    },
+    {
+      cle: 'occasion',
+      titre: t('admin.veille.config.axe_occasion'),
+      aide: t('admin.veille.config.axe_occasion_aide'),
+      termes: mots.occasion,
+      onChange: majMots('occasion'),
+    },
+  ]
 
   return (
     <>
@@ -191,36 +229,37 @@ export default function ConfigVeille() {
           <p className="text-dim text-sm">{t('commun.chargement')}</p>
         ) : (
           <>
-            <ListeTermes
-              titre={t('admin.veille.config.recherches')}
-              aide={t('admin.veille.config.recherches_aide')}
-              termes={recherches}
-              onChange={majRecherches}
-              obligatoire
-            />
+            <div role="tablist" aria-label={t('admin.veille.config.titre')}
+                 className="flex gap-1 mb-4 border-b border-edge -mx-1 px-1 overflow-x-auto">
+              {rubriques.map((r) => (
+                <button
+                  key={r.cle}
+                  type="button"
+                  role="tab"
+                  aria-selected={onglet === r.cle}
+                  onClick={() => setOnglet(r.cle)}
+                  className={cn(
+                    'shrink-0 px-3 py-2 -mb-px border-b-2 text-[13px] font-medium transition whitespace-nowrap',
+                    onglet === r.cle
+                      ? 'border-primary text-primary'
+                      : 'border-transparent text-dim hover:text-ink',
+                  )}
+                >
+                  {r.titre}
+                  <span className="ml-1.5 text-[11px] text-ghost tabular-nums">{r.termes.length}</span>
+                </button>
+              ))}
+            </div>
 
-            <div className="h-px bg-edge my-5" />
-
-            <ListeTermes
-              titre={t('admin.veille.config.axe_benin')}
-              aide={t('admin.veille.config.axe_benin_aide')}
-              termes={mots.benin}
-              onChange={majMots('benin')}
-              obligatoire
-            />
-            <ListeTermes
-              titre={t('admin.veille.config.axe_metier')}
-              aide={t('admin.veille.config.axe_metier_aide')}
-              termes={mots.metier}
-              onChange={majMots('metier')}
-              obligatoire
-            />
-            <ListeTermes
-              titre={t('admin.veille.config.axe_occasion')}
-              aide={t('admin.veille.config.axe_occasion_aide')}
-              termes={mots.occasion}
-              onChange={majMots('occasion')}
-            />
+            {rubriques.filter((r) => r.cle === onglet).map((r) => (
+              <ListeTermes
+                key={r.cle}
+                aide={r.aide}
+                termes={r.termes}
+                onChange={r.onChange}
+                obligatoire={r.obligatoire}
+              />
+            ))}
 
             <p className="text-[12px] text-ghost mt-4">{t('admin.veille.config.prise_en_compte')}</p>
           </>
