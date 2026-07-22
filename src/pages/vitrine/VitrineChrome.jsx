@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Sun, Moon, Heart, Globe, X, Menu, LogIn, UserPlus, Lock, Settings2, Sparkles, BarChart3, Megaphone, Cookie as CookieIcon, ChevronDown, ArrowLeft } from 'lucide-react'
+import { Sun, Moon, Heart, Globe, X, Menu, LogIn, UserPlus, Lock, Settings2, Sparkles, BarChart3, Megaphone, Cookie as CookieIcon, ChevronDown, ArrowLeft, Phone, MessageCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useTheme, useLang } from '@/contexts'
 import { cn } from '@/utils/cn'
@@ -186,15 +186,31 @@ function NavMenu() {
 }
 
 /* Barre de contact fine — au-dessus du bandeau promo (P180). */
+/**
+ * P180 — fine bande de contact, téléphone + WhatsApp, au-dessus du header.
+ * Fond sombre volontairement distinct du header lui-même (bg-app, clair) :
+ * c'est ce contraste qui la fait lire comme une ligne d'info à part.
+ */
 function ContactBar() {
   const { t } = useTranslation()
+  const numero = t('vitrine.contact_bar.telephone')
+  const numeroAffiche = t('vitrine.contact_bar.telephone_affiche')
+  const numeroWhatsapp = numero.replace(/[^\d+]/g, '')
+
   return (
-    <div className="text-center text-[11px] py-1.5 px-4 bg-subtle border-b border-edge text-ghost">
-      {t('vitrine.contact_bar.text')}{' '}
-      <a href={`mailto:${t('vitrine.contact_bar.email')}`}
-         className="text-primary hover:underline font-semibold">
-        {t('vitrine.contact_bar.email')}
-      </a>
+    <div data-theme="dark" className="bg-ink text-inverse">
+      <div className="max-w-[1180px] mx-auto px-5 h-9 flex items-center justify-end gap-3 text-[12px]">
+        <a href={`tel:${numero}`} className="flex items-center gap-1.5 hover:text-primary transition">
+          <Phone size={12} aria-hidden="true" />
+          {numeroAffiche}
+        </a>
+        <span className="w-px h-3.5 bg-inverse/25" aria-hidden="true" />
+        <a href={`https://wa.me/${numeroWhatsapp.replace('+', '')}`} target="_blank" rel="noopener noreferrer"
+           className="flex items-center gap-1.5 hover:text-primary transition">
+          <MessageCircle size={12} aria-hidden="true" />
+          {numeroAffiche}
+        </a>
+      </div>
     </div>
   )
 }
@@ -421,10 +437,13 @@ export function VitrineNavbar() {
     { label: t('vitrine.dropdown.tarifs.plans.label'), desc: t('vitrine.dropdown.tarifs.plans.desc'), to: '/premium' },
     { label: t('vitrine.dropdown.tarifs.boost.label'), desc: t('vitrine.dropdown.tarifs.boost.desc'), to: '/mise-en-avant' },
   ]
+  // P183-184 : les 3 rubriques demandées, plutôt qu'Aide/Suivi/Qui sommes-nous
+  // — ces trois-là restent atteignables ailleurs (menu mobile, footer), rien
+  // n'est perdu, seul ce dropdown change de contenu.
   const docsItems = [
-    { label: t('vitrine.dropdown.docs.aide.label'),  desc: t('vitrine.dropdown.docs.aide.desc'),  to: '/aide' },
-    { label: t('vitrine.dropdown.docs.suivi.label'), desc: t('vitrine.dropdown.docs.suivi.desc'), to: '/suivi' },
-    { label: t('vitrine.dropdown.docs.about.label'), desc: t('vitrine.dropdown.docs.about.desc'), to: '/qui-sommes-nous' },
+    { label: t('vitrine.dropdown.docs.creer_vitrine.label'),      desc: t('vitrine.dropdown.docs.creer_vitrine.desc'),      to: '/inscription' },
+    { label: t('vitrine.dropdown.docs.tarifs_commissions.label'), desc: t('vitrine.dropdown.docs.tarifs_commissions.desc'), to: '/premium' },
+    { label: t('vitrine.dropdown.docs.donnees_securite.label'),   desc: t('vitrine.dropdown.docs.donnees_securite.desc'),   to: '/confidentialite' },
   ]
 
   return (

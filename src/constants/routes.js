@@ -21,6 +21,7 @@ export const ROUTES = {
   VITRINE_SUIVI:     '/suivi',
   VITRINE_ABOUT:     '/qui-sommes-nous',
   VITRINE_AIDE:      '/aide',
+  VITRINE_DOCUMENTATION: '/documentation',
   VITRINE_ARTISANS:  '/artisans',
   VITRINE_PARTENAIRES: '/partenaires',
   VITRINE_FAVORIS:   '/favoris',

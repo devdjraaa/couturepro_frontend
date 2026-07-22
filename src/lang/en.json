@@ -369,7 +369,8 @@
     "enregistre": "Saved",
     "verifier": "Verify",
     "enregistrement": "Saving…",
-    "compte_suspendu": "Your account is temporarily suspended. "
+    "compte_suspendu": "Your account is temporarily suspended. ",
+    "en_savoir_plus": "Learn more"
   },
   "erreurs": {
     "reseau": "Connection error. Check your network.",
@@ -3762,8 +3763,8 @@
       "indisponible": "This space is not open yet."
     },
     "contact_bar": {
-      "text": "Got a question? Write to us at",
-      "email": "contact@gextimo.com"
+      "telephone": "+2290191479628",
+      "telephone_affiche": "+229 01 91 47 96 28"
     },
     "dropdown": {
       "solutions": {
@@ -3791,17 +3792,17 @@
         }
       },
       "docs": {
-        "aide": {
-          "label": "Help & FAQ",
-          "desc": "Guides and answers to common questions"
+        "creer_vitrine": {
+          "label": "Set up your storefront",
+          "desc": "Publish your collections, manage your online shop"
         },
-        "suivi": {
-          "label": "Project tracker",
-          "desc": "Feature development progress"
+        "tarifs_commissions": {
+          "label": "Pricing & Commissions",
+          "desc": "Understand the Free/Standard/Premium plans before signing up"
         },
-        "about": {
-          "label": "About us",
-          "desc": "The team and mission behind Gextimo"
+        "donnees_securite": {
+          "label": "Your data & security",
+          "desc": "What Gextimo collects, your rights, APDP compliance"
         }
       }
     },
@@ -3820,6 +3821,10 @@
       "item_2": "Secure access",
       "item_3": "Dedicated support",
       "item_4": "No commitment"
+    },
+    "documentation": {
+      "eyebrow": "Documentation",
+      "title": "Everything you need to know before you start"
     }
   },
   "realisations": {

@@ -52,7 +52,7 @@ import CreateursPage      from '@/pages/vitrine/CreateursPage'
 import CreateurProfilPage from '@/pages/vitrine/CreateurProfilPage'
 import SuiviVitrinePage   from '@/pages/vitrine/SuiviPage'
 import { VitrineLayout }  from '@/pages/vitrine/vitrineCurrency'
-import { QuiSommesNousPage, AidePage, ArtisansPage } from '@/pages/vitrine/VitrineInfoPages'
+import { QuiSommesNousPage, AidePage, ArtisansPage, DocumentationPage } from '@/pages/vitrine/VitrineInfoPages'
 import FavorisPage         from '@/pages/vitrine/FavorisPage'
 import InscriptionPage     from '@/pages/vitrine/InscriptionPage'
 import PremiumPage           from '@/pages/vitrine/PremiumPage'
@@ -193,6 +193,7 @@ export default function App() {
             <Route path={ROUTES.VITRINE_SUIVI}     element={<SuiviVitrinePage />} />
             <Route path={ROUTES.VITRINE_ABOUT}     element={<QuiSommesNousPage />} />
             <Route path={ROUTES.VITRINE_AIDE}      element={<AidePage />} />
+            <Route path={ROUTES.VITRINE_DOCUMENTATION} element={<DocumentationPage />} />
             <Route path={ROUTES.VITRINE_ARTISANS}  element={<ArtisansPage />} />
             <Route path={ROUTES.VITRINE_PARTENAIRES} element={<PartenairesPage />} />
             <Route path={ROUTES.VITRINE_FAVORIS}   element={<FavorisPage />} />

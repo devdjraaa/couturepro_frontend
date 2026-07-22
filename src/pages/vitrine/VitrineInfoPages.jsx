@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { Store, CreditCard, ShieldCheck, ArrowRight } from 'lucide-react'
 import VitrineShell from './VitrineChrome'
 import { usePageMeta } from '@/hooks/usePageMeta'
 
@@ -37,6 +38,47 @@ export function QuiSommesNousPage() {
 
           <div data-theme="dark" className="rounded-2xl p-6 text-center bg-inset text-ink font-display font-bold">
             {t('vitrine.about.novafrique')}
+          </div>
+        </div>
+      </section>
+    </VitrineShell>
+  )
+}
+
+/**
+ * P183-184 — page « en cartes » vers laquelle pointe le dropdown Documentation
+ * du header : chaque carte renvoie au contenu complet correspondant, comme
+ * demandé. Reprend exactement les 3 rubriques et leur texte.
+ */
+export function DocumentationPage() {
+  const { t } = useTranslation()
+  usePageMeta({ title: t('vitrine.documentation.title'), path: '/documentation' })
+
+  const cartes = [
+    { icone: Store,       cle: 'creer_vitrine',       to: '/inscription' },
+    { icone: CreditCard,  cle: 'tarifs_commissions',  to: '/premium' },
+    { icone: ShieldCheck, cle: 'donnees_securite',    to: '/confidentialite' },
+  ]
+
+  return (
+    <VitrineShell>
+      <section className="py-16">
+        <div className="max-w-[900px] mx-auto px-5">
+          <PageHead eyebrow={t('vitrine.documentation.eyebrow')} title={t('vitrine.documentation.title')} />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {cartes.map(({ icone: Icone, cle, to }) => (
+              <Link key={cle} to={to}
+                className="group bg-card border border-edge rounded-2xl p-5 hover:border-primary transition flex flex-col">
+                <span className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4">
+                  <Icone size={18} aria-hidden="true" />
+                </span>
+                <p className="font-display font-bold text-ink mb-1.5">{t(`vitrine.dropdown.docs.${cle}.label`)}</p>
+                <p className="text-[13px] text-dim leading-relaxed flex-1">{t(`vitrine.dropdown.docs.${cle}.desc`)}</p>
+                <span className="text-primary text-[13px] font-semibold inline-flex items-center gap-1 mt-4 group-hover:gap-2 transition-all">
+                  {t('commun.en_savoir_plus')}<ArrowRight size={13} aria-hidden="true" />
+                </span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
