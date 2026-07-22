@@ -1,16 +1,13 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Plus, Edit2, Trash2 } from 'lucide-react'
-import { AdminLayout, AdminTable, AdminBadge } from '@/components/admin'
+import { AdminLayout, AdminTable, AdminBadge, AdminModal, AdminField, AdminSelectField, AdminFormGrid } from '@/components/admin'
 import { useAdminOffres, useCreateOffre, useUpdateOffre, useDeleteOffre } from '@/hooks/admin/useOffres'
 import { useAdminAteliers } from '@/hooks/admin/useAteliers'
 import { useAdminPlans } from '@/hooks/admin/usePlans'
 import { formatDate } from '@/utils/formatDate'
 
 const EMPTY = { atelier_id: '', label: '', niveau_base_cle: '', config_override: '{}', prix_special: '', duree_jours: '', expire_at: '', notes_internes: '' }
-
-const INPUT = 'w-full border border-edge rounded-xl px-3 py-2 text-sm text-ink bg-card mt-1 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary'
-const LABEL = 'text-xs text-ghost'
 
 function OffreModal({ initial, onClose, onSubmit, isLoading, ateliers, plans }) {
   const { t } = useTranslation()
@@ -28,72 +25,51 @@ function OffreModal({ initial, onClose, onSubmit, isLoading, ateliers, plans }) 
   const ateliersList = ateliers?.data ?? ateliers ?? []
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-      <div className="bg-card rounded-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto shadow-xl">
-        <h3 className="font-semibold text-ink mb-4">
-          {isEdit ? t('admin.offres.modifier_titre') : t('admin.offres.nouvelle_titre')}
-        </h3>
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <div>
-            <label className={LABEL}>{t('admin.offres.col_atelier')}</label>
-            <select value={form.atelier_id} onChange={set('atelier_id')} required className={INPUT}>
-              <option value="">{t('admin.commun.selectionner')}</option>
-              {ateliersList.map(a => <option key={a.id} value={a.id}>{a.nom}</option>)}
-            </select>
-          </div>
-          <div>
-            <label className={LABEL}>{t('admin.offres.col_label')}</label>
-            <input value={form.label} onChange={set('label')} required className={INPUT} />
-          </div>
-          <div>
-            <label className={LABEL}>{t('admin.offres.plan_base')}</label>
-            <select value={form.niveau_base_cle} onChange={set('niveau_base_cle')} required className={INPUT}>
-              <option value="">{t('admin.commun.selectionner')}</option>
-              {(plans ?? []).map(p => <option key={p.id} value={p.cle}>{p.label}</option>)}
-            </select>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label className={LABEL}>{t('admin.offres.prix_special')}</label>
-              <input type="number" value={form.prix_special} onChange={set('prix_special')} min="0" className={INPUT} />
-            </div>
-            <div>
-              <label className={LABEL}>{t('admin.offres.duree')}</label>
-              <input type="number" value={form.duree_jours} onChange={set('duree_jours')} required min="1" className={INPUT} />
-            </div>
-          </div>
-          <div>
-            <label className={LABEL}>{t('admin.offres.expire_le')}</label>
-            <input type="date" value={form.expire_at} onChange={set('expire_at')} className={INPUT} />
-          </div>
-          <div>
-            <label className={LABEL}>{t('admin.offres.config_override')}</label>
-            <textarea
-              value={typeof form.config_override === 'object' ? JSON.stringify(form.config_override, null, 2) : form.config_override}
-              onChange={set('config_override')}
-              rows={2}
-              className={`${INPUT} font-mono`}
-            />
-          </div>
-          <div>
-            <label className={LABEL}>{t('admin.offres.notes_internes')}</label>
-            <textarea value={form.notes_internes} onChange={set('notes_internes')} rows={2} className={INPUT} />
-          </div>
-          <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 pt-2">
-            <button type="button" onClick={onClose} className="text-sm text-ghost hover:text-dim transition-colors text-center sm:text-left">
-              {t('admin.commun.annuler')}
-            </button>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="bg-primary text-inverse text-sm font-medium px-4 py-2 rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors"
-            >
-              {isLoading ? t('admin.commun.enregistrement') : t('admin.plans.enregistrer')}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+    <AdminModal
+      onClose={onClose}
+      title={isEdit ? t('admin.offres.modifier_titre') : t('admin.offres.nouvelle_titre')}
+      size="lg"
+      footer={
+        <>
+          <button type="button" onClick={onClose} className="text-sm text-ghost hover:text-dim transition-colors">
+            {t('admin.commun.annuler')}
+          </button>
+          <button
+            type="submit"
+            form="offre-form"
+            disabled={isLoading}
+            className="bg-primary text-inverse text-sm font-medium px-4 py-2 rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors"
+          >
+            {isLoading ? t('admin.commun.enregistrement') : t('admin.plans.enregistrer')}
+          </button>
+        </>
+      }
+    >
+      <form id="offre-form" onSubmit={handleSubmit} className="space-y-3">
+        <AdminSelectField label={t('admin.offres.col_atelier')} value={form.atelier_id} onChange={set('atelier_id')} required>
+          <option value="">{t('admin.commun.selectionner')}</option>
+          {ateliersList.map(a => <option key={a.id} value={a.id}>{a.nom}</option>)}
+        </AdminSelectField>
+        <AdminField label={t('admin.offres.col_label')} value={form.label} onChange={set('label')} required />
+        <AdminSelectField label={t('admin.offres.plan_base')} value={form.niveau_base_cle} onChange={set('niveau_base_cle')} required>
+          <option value="">{t('admin.commun.selectionner')}</option>
+          {(plans ?? []).map(p => <option key={p.id} value={p.cle}>{p.label}</option>)}
+        </AdminSelectField>
+        <AdminFormGrid cols={2}>
+          <AdminField label={t('admin.offres.prix_special')} type="number" value={form.prix_special} onChange={set('prix_special')} min="0" />
+          <AdminField label={t('admin.offres.duree')} type="number" value={form.duree_jours} onChange={set('duree_jours')} required min="1" />
+        </AdminFormGrid>
+        <AdminField label={t('admin.offres.expire_le')} type="date" value={form.expire_at} onChange={set('expire_at')} />
+        <AdminField
+          label={t('admin.offres.config_override')}
+          value={typeof form.config_override === 'object' ? JSON.stringify(form.config_override, null, 2) : form.config_override}
+          onChange={set('config_override')}
+          rows={2}
+          mono
+        />
+        <AdminField label={t('admin.offres.notes_internes')} value={form.notes_internes} onChange={set('notes_internes')} rows={2} />
+      </form>
+    </AdminModal>
   )
 }
 

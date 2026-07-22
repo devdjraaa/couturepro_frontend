@@ -1,14 +1,12 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Plus, TicketPercent } from 'lucide-react'
-import { AdminLayout, AdminBadge } from '@/components/admin'
+import { AdminLayout, AdminBadge, AdminModal, AdminField, AdminSelectField, AdminFormGrid } from '@/components/admin'
 import { useAdminCodesPromo, useCreateCodePromo, useToggleCodePromo } from '@/hooks/admin/useCodesPromo'
 import { formatDate } from '@/utils/formatDate'
 
 // P153-158 : panneau admin des codes promo / ambassadeurs.
 const EMPTY = { code: '', type: 'evenement', jours_bonus: '17', expire_at: '', max_utilisations: '', note: '' }
-const INPUT = 'w-full border border-edge rounded-xl px-3 py-2 text-sm text-ink bg-card mt-1 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary'
-const LABEL = 'text-xs text-ghost'
 
 function CodeModal({ onClose, onSubmit, isLoading }) {
   const { t } = useTranslation()
@@ -28,54 +26,42 @@ function CodeModal({ onClose, onSubmit, isLoading }) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-      <div className="bg-card rounded-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto shadow-xl">
-        <h3 className="font-semibold text-ink mb-4">{t('admin.codes_promo.nouveau_titre')}</h3>
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <div>
-            <label className={LABEL}>{t('admin.codes_promo.col_code')}</label>
-            <input value={form.code} onChange={e => setForm(f => ({ ...f, code: e.target.value.toUpperCase() }))}
-                   placeholder="GEXTIMO15JUILLET" required maxLength={40} className={`${INPUT} font-mono`} />
-          </div>
-          <div>
-            <label className={LABEL}>{t('admin.codes_promo.col_type')}</label>
-            <select value={form.type} onChange={set('type')} className={INPUT}>
-              <option value="evenement">{t('admin.codes_promo.type_evenement')}</option>
-              <option value="ambassadeur">{t('admin.codes_promo.type_ambassadeur')}</option>
-            </select>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className={LABEL}>{t('admin.codes_promo.col_jours')}</label>
-              <input type="number" min="1" max="365" value={form.jours_bonus} onChange={set('jours_bonus')} required className={INPUT} />
-            </div>
-            <div>
-              <label className={LABEL}>{t('admin.codes_promo.col_max')}</label>
-              <input type="number" min="1" value={form.max_utilisations} onChange={set('max_utilisations')}
-                     placeholder={t('admin.codes_promo.illimite')} className={INPUT} />
-            </div>
-          </div>
-          <div>
-            <label className={LABEL}>{t('admin.codes_promo.col_expire')}</label>
-            <input type="datetime-local" value={form.expire_at} onChange={set('expire_at')} className={INPUT} />
-          </div>
-          <div>
-            <label className={LABEL}>{t('admin.codes_promo.col_note')}</label>
-            <input value={form.note} onChange={set('note')} maxLength={255} className={INPUT} />
-          </div>
-          <div className="flex gap-2 pt-2">
-            <button type="button" onClick={onClose}
-                    className="flex-1 border border-edge text-dim text-sm py-2 rounded-xl hover:text-ink transition-colors">
-              {t('admin.commun.annuler')}
-            </button>
-            <button type="submit" disabled={isLoading}
-                    className="flex-1 bg-primary text-inverse text-sm py-2 rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors">
-              {isLoading ? '…' : t('admin.codes_promo.creer_btn')}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+    <AdminModal
+      onClose={onClose}
+      title={t('admin.codes_promo.nouveau_titre')}
+      size="lg"
+      footer={
+        <>
+          <button type="button" onClick={onClose}
+                  className="flex-1 border border-edge text-dim text-sm py-2 rounded-xl hover:text-ink transition-colors">
+            {t('admin.commun.annuler')}
+          </button>
+          <button type="submit" form="code-promo-form" disabled={isLoading}
+                  className="flex-1 bg-primary text-inverse text-sm py-2 rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors">
+            {isLoading ? '…' : t('admin.codes_promo.creer_btn')}
+          </button>
+        </>
+      }
+    >
+      <form id="code-promo-form" onSubmit={handleSubmit} className="space-y-3">
+        <AdminField label={t('admin.codes_promo.col_code')} value={form.code}
+                    onChange={e => setForm(f => ({ ...f, code: e.target.value.toUpperCase() }))}
+                    placeholder="GEXTIMO15JUILLET" required maxLength={40} mono />
+        <AdminSelectField label={t('admin.codes_promo.col_type')} value={form.type} onChange={set('type')}>
+          <option value="evenement">{t('admin.codes_promo.type_evenement')}</option>
+          <option value="ambassadeur">{t('admin.codes_promo.type_ambassadeur')}</option>
+        </AdminSelectField>
+        <AdminFormGrid cols={2}>
+          <AdminField label={t('admin.codes_promo.col_jours')} type="number" min="1" max="365"
+                      value={form.jours_bonus} onChange={set('jours_bonus')} required />
+          <AdminField label={t('admin.codes_promo.col_max')} type="number" min="1"
+                      value={form.max_utilisations} onChange={set('max_utilisations')}
+                      placeholder={t('admin.codes_promo.illimite')} />
+        </AdminFormGrid>
+        <AdminField label={t('admin.codes_promo.col_expire')} type="datetime-local" value={form.expire_at} onChange={set('expire_at')} />
+        <AdminField label={t('admin.codes_promo.col_note')} value={form.note} onChange={set('note')} maxLength={255} />
+      </form>
+    </AdminModal>
   )
 }
 
