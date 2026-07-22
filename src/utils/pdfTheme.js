@@ -43,8 +43,12 @@ export const T = {
   accentSombre: '#8E0707',
   accentPale:   '#FBE9E9',
 
-  serif:      "'Bodoni Moda', Georgia, serif",
-  sans:       "'Plus Jakarta Sans', -apple-system, 'Segoe UI', sans-serif",
+  // Une seule famille sur toute la plateforme, écrans ET documents (demande
+  // direction). Arial est présente partout, donc les PDF s'impriment à
+  // l'identique quel que soit l'appareil — plus de police absente remplacée en
+  // silence par une autre au moment de l'impression.
+  serif:      "Arial, Helvetica, sans-serif",
+  sans:       "Arial, Helvetica, sans-serif",
 
   // A4 à 72 dpi (unité de jsPDF) : 595 × 842 pt.
   largeur:    595,

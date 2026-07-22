@@ -11,12 +11,10 @@
 // Les couleurs sont DÉRIVÉES de pdfTheme : ce document suit automatiquement
 // toute bascule d'accent décidée pour les sept autres.
 //
-// Contrainte technique assumée : pdf-lib ne dispose que des polices standard du
-// format PDF (Helvetica, Times, Courier). La charte utilise Bodoni Moda, qu'il
-// faudrait embarquer via fontkit — plusieurs centaines de kilo-octets à charger
-// pour chaque facture, sur des connexions béninoises souvent limitées. On emploie
-// donc Times Roman pour le titrage : c'est un serif classique, dans l'esprit du
-// Bodoni, et il ne coûte pas un octet de téléchargement.
+// Police : la plateforme est passée à une famille unique (Arial). pdf-lib ne
+// dispose que des polices standard du format PDF, dont Helvetica — métriquement
+// identique à Arial. Le document rend donc comme les écrans, sans embarquer un
+// seul octet de police, ce qui compte sur des connexions béninoises limitées.
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib'
 import api from '@/services/api'
 import { T } from './pdfTheme'
@@ -87,7 +85,10 @@ export async function genererFactureHabillee(doc, atelier) {
   const srcBytes = await chargerPdfOfficiel(doc)
 
   const out    = await PDFDocument.create()
-  const serif  = await out.embedFont(StandardFonts.TimesRoman)
+  // Une seule famille sur le document (demande direction). Helvetica est la
+  // police standard du format PDF métriquement identique à Arial : le rendu
+  // correspond aux écrans, sans embarquer un seul octet de police.
+  const serif  = await out.embedFont(StandardFonts.HelveticaBold)
   const sans   = await out.embedFont(StandardFonts.Helvetica)
   const sansB  = await out.embedFont(StandardFonts.HelveticaBold)
   const pages  = await out.embedPdf(srcBytes)

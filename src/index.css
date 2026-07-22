@@ -7,18 +7,30 @@
    TOKENS STATIQUES — ne changent pas avec le thème
    ════════════════════════════════════════════════════════ */
 @theme {
-  /* Typographie — Gextimo Couture */
-  --font-display: 'Bodoni Moda', serif;
-  --font-sans:    'Plus Jakarta Sans', sans-serif;
-  --font-mono:    'JetBrains Mono', monospace;
+  /* Typographie — Gextimo.
+     Une SEULE famille sur toute la plateforme (demande direction) : écrans,
+     documents et PDF. Arial est présente sur tous les appareils, donc rien à
+     télécharger — ce qui supprime au passage l'attente réseau des polices
+     Google au démarrage, et le texte qui changeait de forme en cours de route.
+     Ses chiffres ont tous la même largeur : les montants restent alignés en
+     colonne sans police à chasse fixe. */
+  --font-display: Arial, Helvetica, sans-serif;
+  --font-sans:    Arial, Helvetica, sans-serif;
+  --font-mono:    Arial, Helvetica, sans-serif;
 
-  /* Gold — accent premium (statiques, référence charte Couture) */
-  --color-gold:       #CDA662;
-  --color-gold-dark:  #A87F3E;
-  --color-gold-hi:    #E4C486;
+  /* Ancien accent doré, retiré à la demande de la direction (« pas beau à
+     voir »). Les noms de variables sont conservés : ils sont utilisés à 27
+     endroits, les renommer n'aurait rien changé au rendu et aurait multiplié
+     les risques. Seules les VALEURS changent.
+       · texte (montants, libellés) → NOIR : sobre et lisible, et un rouge sur
+         un encaissement se lirait comme une alerte ;
+       · fonds et accents → ROUGE DILUÉ, dans la charte, sans jaune. */
+  --color-gold:       #A32B26;   /* accent cliquable → ROUGE DILUÉ */
+  --color-gold-dark:  #171310;   /* montants → NOIR */
+  --color-gold-hi:    #4A403C;   /* dégradé d'avatar (sombre) */
 
-  /* Avatar — brun foncé pour texte sur fond or */
-  --color-avatar-on-gold: #2a1c0a;
+  /* Texte posé sur l'avatar (fond sombre) */
+  --color-avatar-on-gold: #FFFFFF;
 
   /* Tailles de texte custom */
   --text-2xs: 0.625rem;   /* 10px — badges, labels compacts */
@@ -157,12 +169,12 @@
   --color-border:        #E7E5E4;
   --color-border-strong: #D6D3D1;
 
-  /* ── Gold-light ── */
-  --color-gold-light: #F5E6C8;
+  /* ── ex-Gold-light : fond doux, rouge dilué ── */
+  --color-gold-light: rgba(208,11,11,.08);
 
-  /* ── Tokens Couture (mode clair) ── */
-  --color-hair-gold: rgba(200,148,31,.30);
-  --color-gold-soft: rgba(200,148,31,.12);
+  /* ── Tokens Couture (mode clair) — accents en rouge dilué ── */
+  --color-hair-gold: rgba(208,11,11,.26);
+  --color-gold-soft: rgba(208,11,11,.10);
   --color-red-hi:    #E85F5F;
 
   /* ── Transitions ── */
@@ -219,12 +231,18 @@
   --color-danger:  #F87171;
   --color-info:    #60A5FA;
 
-  /* ── Gold-light ── */
-  --color-gold-light: rgba(205,166,98,.14);
+  /* Texte accentué en thème sombre : les valeurs de base sont quasi noires
+     (lisibles sur fond clair) — sur fond sombre elles disparaîtraient. */
+  --color-gold:       #E8736C;   /* accent cliquable, lisible sur fond sombre */
+  --color-gold-dark:  #F5F1EC;   /* montants, clairs sur fond sombre */
+  --color-gold-hi:    #6B5F59;
 
-  /* ── Tokens Couture (mode sombre) ── */
-  --color-hair-gold: rgba(201,162,90,.35);
-  --color-gold-soft: rgba(205,166,98,.14);
+  /* ── ex-Gold-light : fond doux, rouge dilué ── */
+  --color-gold-light: rgba(242,86,78,.14);
+
+  /* ── Tokens Couture (mode sombre) — accents en rouge dilué ── */
+  --color-hair-gold: rgba(242,86,78,.32);
+  --color-gold-soft: rgba(242,86,78,.12);
   --color-red-hi:    #F5443A;
 }
 
@@ -246,7 +264,7 @@ body {
   /* P109 : pas de défilement horizontal parasite — UNIQUEMENT sur body.
      (Le mettre sur <html> casse le scroll VERTICAL tactile sur WebView Android.) */
   overflow-x: hidden;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--font-sans);
   background-color: var(--color-bg-app);
   color: var(--color-text-primary);
   -webkit-tap-highlight-color: transparent;
@@ -1013,12 +1031,19 @@ input::-ms-clear {
   to   { transform: translateY(0);    opacity: 1 }
 }
 
+/* Indices de compositing : sans eux le navigateur redessine à chaque image.
+   L'arc est révélé par un MASQUE appliqué à un tracé très détaillé — c'est la
+   partie coûteuse de l'ouverture, celle qui faisait accrocher l'animation. */
 .gx-splash-point      { transform-origin: 50px 58px;
+                        will-change: transform, opacity;
                         animation: gx-splash-chute .92s both }
-.gx-splash-anneau     { animation: gx-splash-anneau .62s cubic-bezier(.4,0,.2,1) .82s both }
+.gx-splash-anneau     { will-change: opacity, stroke-dasharray;
+                        animation: gx-splash-anneau .62s cubic-bezier(.4,0,.2,1) .82s both }
 .gx-splash-arc-reveal { stroke-dasharray: 161 300;
+                        will-change: stroke-dashoffset;
                         animation: gx-splash-arc .62s cubic-bezier(.35,0,.2,1) .82s both }
-.gx-splash-mot        { animation: gx-splash-mot .45s cubic-bezier(.4,0,.2,1) 1.32s both }
+.gx-splash-mot        { will-change: transform, opacity;
+                        animation: gx-splash-mot .45s cubic-bezier(.4,0,.2,1) 1.32s both }
 
 /* Habillage saisonnier : entrée simple, le visuel se suffit. */
 @keyframes gx-splash-monte {

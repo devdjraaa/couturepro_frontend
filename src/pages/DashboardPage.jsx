@@ -32,11 +32,27 @@ function Greeting({ user, subtitle, hero = false }) {
 
   return (
     <div className={hero ? 'pt-2 pb-1' : 'pt-4 pb-2'}>
+      {/* La marque n'apparaissait NULLE PART sur l'écran d'accueil : on ouvrait
+          l'application sans jamais voir le logo. Il est posé en tête de l'en-tête,
+          en blanc — le signe officiel est rouge, donc invisible sur ce fond.
+          (Version blanche fournie par la direction, reprise du dépôt backend.) */}
+      {hero && (
+        <div className="flex items-center gap-2 mb-3">
+          <img
+            src="/logo-gextimo-blanc.png" alt="" aria-hidden="true"
+            className="w-7 h-7 shrink-0 object-contain"
+          />
+          <span className="text-inverse font-bold text-[17px] lowercase tracking-tight">gextimo</span>
+        </div>
+      )}
+
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
           <p
             className={cn('mb-1', hero ? 'text-[11px] font-bold uppercase tracking-[.18em]' : 'text-xs capitalize text-ghost')}
-            style={hero ? { color: 'var(--color-gold-hi, #E4C486)' } : undefined}
+            /* Sur le rouge de l'en-tête il faut un ton CLAIR : cette ligne
+               utilisait l'ancien doré, devenu sombre — elle aurait disparu. */
+            style={hero ? { color: 'rgba(255,255,255,.72)' } : undefined}
           >
             {dateStr}
           </p>
@@ -60,7 +76,7 @@ function Greeting({ user, subtitle, hero = false }) {
               type="button"
               onClick={() => navigate('/parametres/profil')}
               className="w-11 h-11 flex items-center justify-center rounded-2xl text-[13px] font-bold shrink-0"
-              style={{ background: 'linear-gradient(135deg, var(--color-gold-hi) 0%, var(--color-gold) 100%)', color: 'var(--color-bg-app, #100B0A)' }}
+              style={{ background: 'linear-gradient(135deg, var(--color-gold-hi) 0%, var(--color-gold-dark) 100%)', color: 'var(--color-avatar-on-gold)' }}
               aria-label={t('nav.profil')}
             >
               {initials}
