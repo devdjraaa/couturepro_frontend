@@ -549,11 +549,11 @@
     "toutes_ateliers": "All",
     "stats_globales": "Global view",
     "recentes": "Recent orders",
-    "resume_du_jour": "Here\u2019s what\u2019s happening today",
+    "resume_du_jour": "Here’s what’s happening today",
     "vue_titre": "Overview",
     "vue_livraisons": "Deliveries",
     "vue_paiements": "Payments",
-    "solde_titre": "Today\u2019s balance",
+    "solde_titre": "Today’s balance",
     "solde_disponible": "Available balance",
     "solde_encaisse": "Collected balance",
     "mise_a_jour": "Updated just now",
@@ -830,7 +830,7 @@
       "type_vetement": "Garment type",
       "choisir_type": "Choose a garment type…",
       "mesures_titre": "Client measurements",
-      "mesures_non_configurees": "No measurements are set up for \u201c{{vetement}}\u201d. Labels are defined once per garment type.",
+      "mesures_non_configurees": "No measurements are set up for “{{vetement}}”. Labels are defined once per garment type.",
       "mesures_configurer": "Set them up",
       "mesures_aide": "Measurements required for \"{{vetement}}\". They are saved on the client’s record.",
       "mesures_enregistrer": "Save measurements",
@@ -3747,18 +3747,42 @@
     },
     "dropdown": {
       "solutions": {
-        "createurs": { "label": "Workshops & Designers", "desc": "Manage your workshop, orders and showcase your creations" },
-        "clients":   { "label": "Client space",          "desc": "Track your orders and share your measurements online" },
-        "artisans":  { "label": "Partner artisans",      "desc": "Discover partner artisans and their craft" }
+        "createurs": {
+          "label": "Workshops & Designers",
+          "desc": "Manage your workshop, orders and showcase your creations"
+        },
+        "clients": {
+          "label": "Client space",
+          "desc": "Track your orders and share your measurements online"
+        },
+        "artisans": {
+          "label": "Partner artisans",
+          "desc": "Discover partner artisans and their craft"
+        }
       },
       "tarifs": {
-        "plans": { "label": "Our plans",      "desc": "From free to Premium — compare and choose" },
-        "boost": { "label": "Boost listing",  "desc": "Increase your workshop's visibility on the showcase" }
+        "plans": {
+          "label": "Our plans",
+          "desc": "From free to Premium — compare and choose"
+        },
+        "boost": {
+          "label": "Boost listing",
+          "desc": "Increase your workshop's visibility on the showcase"
+        }
       },
       "docs": {
-        "aide":  { "label": "Help & FAQ",      "desc": "Guides and answers to common questions" },
-        "suivi": { "label": "Project tracker", "desc": "Feature development progress" },
-        "about": { "label": "About us",        "desc": "The team and mission behind Gextimo" }
+        "aide": {
+          "label": "Help & FAQ",
+          "desc": "Guides and answers to common questions"
+        },
+        "suivi": {
+          "label": "Project tracker",
+          "desc": "Feature development progress"
+        },
+        "about": {
+          "label": "About us",
+          "desc": "The team and mission behind Gextimo"
+        }
       }
     },
     "onboarding": {
@@ -4420,9 +4444,9 @@
     },
     "veille": {
       "titre": "Opportunity watch",
-      "sous_titre": "Contests, calls for applications and awards detected every Monday by the automatic watch (n8n + local AI). The e-mail is now just a notification.",
-      "vide": "No watch received yet: the first one arrives Monday at 7:30 AM.",
-      "semaine_du": "Week of {{date}}",
+      "sous_titre": "Contests, calls for applications, funding and sector news, collected every day from about thirty Benin-focused sources, then sorted by Makila. The digest is e-mailed at 7:30 am.",
+      "vide": "No report yet. The first one arrives tomorrow at 7:30 am.",
+      "semaine_du": "Report of {{date}}",
       "derniere": "Latest",
       "compteur": "{{sel}} AI pick(s) / {{total}} results",
       "aucune_selection": "The AI selected nothing this week (see raw results below).",

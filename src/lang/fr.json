@@ -550,7 +550,7 @@
     "stats_globales": "Vue globale",
     "recentes": "Commandes récentes",
     "resume_du_jour": "Voici ce qui se passe aujourd'hui",
-    "vue_titre": "Vue d\u2019ensemble",
+    "vue_titre": "Vue d’ensemble",
     "vue_livraisons": "Livraisons",
     "vue_paiements": "Paiements",
     "solde_titre": "Solde du jour",
@@ -3760,18 +3760,42 @@
     },
     "dropdown": {
       "solutions": {
-        "createurs": { "label": "Ateliers & Créateurs", "desc": "Gérez votre atelier, vos commandes et publiez vos créations" },
-        "clients":   { "label": "Espace client",        "desc": "Suivez vos commandes et partagez vos mesures en ligne" },
-        "artisans":  { "label": "Artisans partenaires", "desc": "Découvrez les artisans et savoir-faire partenaires" }
+        "createurs": {
+          "label": "Ateliers & Créateurs",
+          "desc": "Gérez votre atelier, vos commandes et publiez vos créations"
+        },
+        "clients": {
+          "label": "Espace client",
+          "desc": "Suivez vos commandes et partagez vos mesures en ligne"
+        },
+        "artisans": {
+          "label": "Artisans partenaires",
+          "desc": "Découvrez les artisans et savoir-faire partenaires"
+        }
       },
       "tarifs": {
-        "plans": { "label": "Nos formules",    "desc": "De gratuit à Premium — comparez et choisissez" },
-        "boost": { "label": "Mise en avant",   "desc": "Boostez la visibilité de votre atelier sur la vitrine" }
+        "plans": {
+          "label": "Nos formules",
+          "desc": "De gratuit à Premium — comparez et choisissez"
+        },
+        "boost": {
+          "label": "Mise en avant",
+          "desc": "Boostez la visibilité de votre atelier sur la vitrine"
+        }
       },
       "docs": {
-        "aide":  { "label": "Aide & FAQ",       "desc": "Guides, réponses aux questions fréquentes" },
-        "suivi": { "label": "Suivi du projet",  "desc": "Avancement des fonctionnalités en développement" },
-        "about": { "label": "Qui sommes-nous",  "desc": "L'équipe et la mission derrière Gextimo" }
+        "aide": {
+          "label": "Aide & FAQ",
+          "desc": "Guides, réponses aux questions fréquentes"
+        },
+        "suivi": {
+          "label": "Suivi du projet",
+          "desc": "Avancement des fonctionnalités en développement"
+        },
+        "about": {
+          "label": "Qui sommes-nous",
+          "desc": "L'équipe et la mission derrière Gextimo"
+        }
       }
     },
     "onboarding": {
@@ -4433,9 +4457,9 @@
     },
     "veille": {
       "titre": "Veille opportunités",
-      "sous_titre": "Concours, appels à candidatures et prix détectés chaque lundi par la veille automatique (n8n + IA locale). L'e-mail ne contient plus qu'une notification.",
-      "vide": "Aucune veille reçue pour l'instant, la première arrivera lundi à 7h30.",
-      "semaine_du": "Semaine du {{date}}",
+      "sous_titre": "Concours, appels à candidatures, financements et actualités du secteur, relevés chaque jour sur une trentaine de sources centrées sur le Bénin, puis triés par Makila. Le digest part par e-mail à 7h30.",
+      "vide": "Aucun relevé pour l'instant. Le premier arrive demain à 7h30.",
+      "semaine_du": "Relevé du {{date}}",
       "derniere": "Dernière",
       "compteur": "{{sel}} sélection(s) IA / {{total}} résultats",
       "aucune_selection": "L'IA n'a rien retenu cette semaine (voir les résultats bruts ci-dessous).",
