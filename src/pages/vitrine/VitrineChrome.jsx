@@ -732,7 +732,7 @@ export default function VitrineShell({ children }) {
     return () => { io.disconnect(); mo.disconnect() }
   }, [])
   return (
-    <div className="min-h-dvh bg-app text-ink font-sans">
+    <div className="min-h-dvh text-ink font-sans">
       <EvenementCelebration />
       <VitrineNavbar />
       <div aria-hidden="true" className="vt-page-motif" />
