@@ -1,11 +1,9 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { AdminLayout, AdminTable, AdminBadge } from '@/components/admin'
+import { AdminLayout, AdminTable, AdminBadge, ADMIN_CONTROL } from '@/components/admin'
 import { useAdminTickets } from '@/hooks/admin/useTickets'
 import { formatDate } from '@/utils/formatDate'
-
-const SELECT = 'border border-edge rounded-xl px-3 py-2 text-sm text-ink bg-card focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary'
 
 const PRIORITE_COLORS = {
   haute:   'text-danger font-medium',
@@ -60,13 +58,13 @@ export default function TicketsPage() {
   return (
     <AdminLayout title={t('admin.tickets.titre')}>
       <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mb-5">
-        <select value={statut} onChange={e => changeStatut(e.target.value)} className={SELECT}>
+        <select value={statut} onChange={e => changeStatut(e.target.value)} className={ADMIN_CONTROL}>
           <option value="">{t('admin.tickets.statuts.tous')}</option>
           <option value="ouvert">{t('admin.tickets.statuts.ouvert')}</option>
           <option value="en_cours">{t('admin.tickets.statuts.en_cours')}</option>
           <option value="ferme">{t('admin.tickets.statuts.ferme')}</option>
         </select>
-        <select value={priorite} onChange={e => changePriorite(e.target.value)} className={SELECT}>
+        <select value={priorite} onChange={e => changePriorite(e.target.value)} className={ADMIN_CONTROL}>
           <option value="">{t('admin.tickets.priorites.toutes')}</option>
           <option value="haute">{t('admin.tickets.priorites.haute')}</option>
           <option value="normale">{t('admin.tickets.priorites.normale')}</option>

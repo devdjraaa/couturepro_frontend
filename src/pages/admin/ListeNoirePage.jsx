@@ -1,12 +1,9 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Plus, Trash2 } from 'lucide-react'
-import { AdminLayout, AdminTable, AdminModal, AdminField, AdminSelectField, ADMIN_INPUT } from '@/components/admin'
+import { AdminLayout, AdminTable, AdminModal, AdminField, AdminSelectField, ADMIN_CONTROL } from '@/components/admin'
 import { useListeNoire, useAddListeNoire, useRemoveListeNoire } from '@/hooks/admin/useListeNoire'
 import { formatDate } from '@/utils/formatDate'
-
-// Filtre hors formulaire : même style que les champs du kit, sans le w-full.
-const SELECT = ADMIN_INPUT.replace('w-full ', '')
 
 export default function ListeNoirePage() {
   const { t } = useTranslation()
@@ -60,7 +57,7 @@ export default function ListeNoirePage() {
   return (
     <AdminLayout title={t('admin.liste_noire.titre')}>
       <div className="flex flex-col sm:flex-row sm:justify-between gap-2 mb-5">
-        <select value={typeFilter} onChange={e => changeType(e.target.value)} className={SELECT}>
+        <select value={typeFilter} onChange={e => changeType(e.target.value)} className={ADMIN_CONTROL}>
           <option value="">{t('admin.liste_noire.types.tous')}</option>
           <option value="telephone">{t('admin.liste_noire.types.telephone')}</option>
           <option value="email">{t('admin.liste_noire.types.email')}</option>

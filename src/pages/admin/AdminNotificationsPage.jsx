@@ -1,12 +1,9 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from '@tanstack/react-query'
-import { AdminLayout } from '@/components/admin'
+import { AdminLayout, ADMIN_INPUT, ADMIN_LABEL } from '@/components/admin'
 import { notifAdminService } from '@/services/admin/notifAdminService'
 import { useAdminAteliers } from '@/hooks/admin/useAteliers'
-
-const INPUT = 'w-full border border-edge rounded-xl px-3 py-2 text-sm text-ink bg-card mt-1 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary'
-const LABEL = 'text-xs font-medium text-ghost'
 
 export default function AdminNotificationsPage() {
   const { t } = useTranslation()
@@ -47,29 +44,29 @@ export default function AdminNotificationsPage() {
 
         <form onSubmit={handleSubmit} className="bg-card border border-edge rounded-xl p-6 space-y-4">
           <div>
-            <label className={LABEL}>{t('admin.notifications.atelier_cible')}</label>
-            <select value={form.atelier_id} onChange={set('atelier_id')} className={INPUT}>
+            <label className={ADMIN_LABEL}>{t('admin.notifications.atelier_cible')}</label>
+            <select value={form.atelier_id} onChange={set('atelier_id')} className={ADMIN_INPUT}>
               <option value="">{t('admin.notifications.broadcast_tous')}</option>
               {ateliersList.map(a => <option key={a.id} value={a.id}>{a.nom}</option>)}
             </select>
           </div>
 
           <div>
-            <label className={LABEL}>{t('admin.notifications.type')}</label>
-            <select value={form.type} onChange={set('type')} className={INPUT}>
+            <label className={ADMIN_LABEL}>{t('admin.notifications.type')}</label>
+            <select value={form.type} onChange={set('type')} className={ADMIN_INPUT}>
               {TYPES.map(tp => <option key={tp.value} value={tp.value}>{tp.label}</option>)}
             </select>
           </div>
 
           <div>
-            <label className={LABEL}>{t('admin.notifications.titre_label')}</label>
-            <input value={form.titre} onChange={set('titre')} required maxLength={150} className={INPUT} />
+            <label className={ADMIN_LABEL}>{t('admin.notifications.titre_label')}</label>
+            <input value={form.titre} onChange={set('titre')} required maxLength={150} className={ADMIN_INPUT} />
           </div>
 
           <div>
-            <label className={LABEL}>{t('admin.notifications.contenu')}</label>
+            <label className={ADMIN_LABEL}>{t('admin.notifications.contenu')}</label>
             <textarea value={form.contenu} onChange={set('contenu')} required rows={4}
-              className={`${INPUT} resize-none`} />
+              className={`${ADMIN_INPUT} resize-none`} />
           </div>
 
           {send.isError && (

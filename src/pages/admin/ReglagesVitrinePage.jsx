@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Check, Plus, X, AlertTriangle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { AdminLayout } from '@/components/admin'
+import { AdminLayout, ADMIN_INPUT, ADMIN_LABEL } from '@/components/admin'
 import {
   useSplashThemes, useSetSplashThemes,
   useIdentiteLegale, useSetIdentiteLegale,
@@ -24,9 +24,6 @@ import {
  * activer un habillage de Noël ou bannir un mot — exactement ce que la
  * configuration éditable cherche à éviter.
  */
-
-const INPUT = 'w-full border border-edge rounded-xl px-3 py-2 text-sm text-ink bg-card mt-1 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary'
-const LABEL = 'text-xs text-ghost'
 
 /** Deux périodes qui se recouvrent : le serveur retient la PREMIÈRE trouvée. */
 function chevauche(themes, i) {
@@ -262,33 +259,33 @@ export default function ReglagesVitrinePage() {
                 </div>
 
                 <div>
-                  <span className={LABEL}>{T('splash_nom')}</span>
-                  <input className={INPUT} maxLength={60} value={th.nom ?? ''}
+                  <span className={ADMIN_LABEL}>{T('splash_nom')}</span>
+                  <input className={ADMIN_INPUT} maxLength={60} value={th.nom ?? ''}
                          onChange={(e) => majTheme(i, 'nom', e.target.value)} />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <span className={LABEL}>{T('splash_debut')}</span>
-                    <input type="date" className={INPUT} value={th.date_debut ?? ''}
+                    <span className={ADMIN_LABEL}>{T('splash_debut')}</span>
+                    <input type="date" className={ADMIN_INPUT} value={th.date_debut ?? ''}
                            onChange={(e) => majTheme(i, 'date_debut', e.target.value)} />
                   </div>
                   <div>
-                    <span className={LABEL}>{T('splash_fin')}</span>
-                    <input type="date" className={INPUT} value={th.date_fin ?? ''}
+                    <span className={ADMIN_LABEL}>{T('splash_fin')}</span>
+                    <input type="date" className={ADMIN_INPUT} value={th.date_fin ?? ''}
                            onChange={(e) => majTheme(i, 'date_fin', e.target.value)} />
                   </div>
                 </div>
 
                 <div>
-                  <span className={LABEL}>{T('splash_texte')}</span>
-                  <input className={INPUT} maxLength={150} value={th.texte ?? ''}
+                  <span className={ADMIN_LABEL}>{T('splash_texte')}</span>
+                  <input className={ADMIN_INPUT} maxLength={150} value={th.texte ?? ''}
                          onChange={(e) => majTheme(i, 'texte', e.target.value)} />
                 </div>
 
                 <div>
-                  <span className={LABEL}>{T('splash_image')}</span>
-                  <input className={INPUT} maxLength={500} value={th.image_url ?? ''}
+                  <span className={ADMIN_LABEL}>{T('splash_image')}</span>
+                  <input className={ADMIN_INPUT} maxLength={500} value={th.image_url ?? ''}
                          onChange={(e) => majTheme(i, 'image_url', e.target.value)} />
                 </div>
 
@@ -335,8 +332,8 @@ export default function ReglagesVitrinePage() {
               ['date_maj', 'legal_maj', 40],
             ].map(([cle, libelle, max]) => (
               <div key={cle}>
-                <span className={LABEL}>{T(libelle)}</span>
-                <input className={INPUT} maxLength={max} value={legal[cle] ?? ''}
+                <span className={ADMIN_LABEL}>{T(libelle)}</span>
+                <input className={ADMIN_INPUT} maxLength={max} value={legal[cle] ?? ''}
                        onChange={(e) => setLocalLegal((v) => ({ ...v, [cle]: e.target.value }))} />
               </div>
             ))}
@@ -363,13 +360,13 @@ export default function ReglagesVitrinePage() {
             {paliers.map((p, i) => (
               <div key={i} className="grid grid-cols-[1fr_1fr_auto] gap-3 items-end">
                 <div>
-                  <span className={LABEL}>{t('admin.fidelite.nom')}</span>
-                  <input className={INPUT} maxLength={40} value={p.nom ?? ''}
+                  <span className={ADMIN_LABEL}>{t('admin.fidelite.nom')}</span>
+                  <input className={ADMIN_INPUT} maxLength={40} value={p.nom ?? ''}
                          onChange={(e) => setLocalPaliers((l) => l.map((x, idx) => (idx === i ? { ...x, nom: e.target.value } : x)))} />
                 </div>
                 <div>
-                  <span className={LABEL}>{t('admin.fidelite.seuil')}</span>
-                  <input type="number" min={0} className={INPUT} value={p.seuil ?? 0}
+                  <span className={ADMIN_LABEL}>{t('admin.fidelite.seuil')}</span>
+                  <input type="number" min={0} className={ADMIN_INPUT} value={p.seuil ?? 0}
                          onChange={(e) => setLocalPaliers((l) => l.map((x, idx) => (idx === i ? { ...x, seuil: e.target.value } : x)))} />
                 </div>
                 <button type="button" onClick={() => setLocalPaliers((l) => l.filter((_, idx) => idx !== i))}
@@ -408,8 +405,8 @@ export default function ReglagesVitrinePage() {
           <div className="grid sm:grid-cols-3 gap-3">
             {[['marque', 60], ['site', 120], ['telephone', 30]].map(([cle, max]) => (
               <div key={cle}>
-                <span className={LABEL}>{t(`admin.coordonnees.${cle}`)}</span>
-                <input className={INPUT} maxLength={max} value={coord[cle] ?? ''}
+                <span className={ADMIN_LABEL}>{t(`admin.coordonnees.${cle}`)}</span>
+                <input className={ADMIN_INPUT} maxLength={max} value={coord[cle] ?? ''}
                        onChange={(e) => setLocalCoord((v) => ({ ...v, [cle]: e.target.value }))} />
               </div>
             ))}
@@ -436,7 +433,7 @@ export default function ReglagesVitrinePage() {
           <div className="space-y-3">
             {moyens.map((m, i) => (
               <div key={i} className="flex items-center gap-3">
-                <input className={INPUT + ' flex-1'} maxLength={60} value={m.label ?? ''}
+                <input className={ADMIN_INPUT + ' flex-1'} maxLength={60} value={m.label ?? ''}
                        onChange={(e) => setLocalMoyens((l) => l.map((x, idx) => (idx === i ? { ...x, label: e.target.value } : x)))} />
                 <label className="flex items-center gap-1.5 text-xs text-dim shrink-0">
                   <input type="checkbox" checked={!!m.actif}
@@ -483,8 +480,8 @@ export default function ReglagesVitrinePage() {
           </label>
 
           <div className="mt-3">
-            <span className={LABEL}>{t('admin.vasat.mdp')}</span>
-            <input type="password" className={INPUT} minLength={8} maxLength={100}
+            <span className={ADMIN_LABEL}>{t('admin.vasat.mdp')}</span>
+            <input type="password" className={ADMIN_INPUT} minLength={8} maxLength={100}
                    autoComplete="new-password" value={vasat.mdp}
                    onChange={(e) => setLocalVasat((v) => ({ ...v, mdp: e.target.value }))} />
             <p className="text-[11px] text-ghost mt-1">
@@ -525,18 +522,18 @@ export default function ReglagesVitrinePage() {
 
                 <div className="grid sm:grid-cols-3 gap-3">
                   <div>
-                    <span className={LABEL}>{t('admin.journal_maj.version')}</span>
-                    <input className={INPUT} maxLength={20} value={e.version ?? ''}
+                    <span className={ADMIN_LABEL}>{t('admin.journal_maj.version')}</span>
+                    <input className={ADMIN_INPUT} maxLength={20} value={e.version ?? ''}
                            onChange={(ev) => majEntree(i, 'version', ev.target.value)} />
                   </div>
                   <div>
-                    <span className={LABEL}>{t('admin.journal_maj.date')}</span>
-                    <input type="date" className={INPUT} value={e.date ?? ''}
+                    <span className={ADMIN_LABEL}>{t('admin.journal_maj.date')}</span>
+                    <input type="date" className={ADMIN_INPUT} value={e.date ?? ''}
                            onChange={(ev) => majEntree(i, 'date', ev.target.value)} />
                   </div>
                   <div>
-                    <span className={LABEL}>{t('admin.journal_maj.type')}</span>
-                    <select className={INPUT} value={e.type ?? 'nouveaute'}
+                    <span className={ADMIN_LABEL}>{t('admin.journal_maj.type')}</span>
+                    <select className={ADMIN_INPUT} value={e.type ?? 'nouveaute'}
                             onChange={(ev) => majEntree(i, 'type', ev.target.value)}>
                       {['nouveaute', 'amelioration', 'correction'].map((x) => (
                         <option key={x} value={x}>{t(`admin.journal_maj.type_${x}`)}</option>
@@ -546,14 +543,14 @@ export default function ReglagesVitrinePage() {
                 </div>
 
                 <div>
-                  <span className={LABEL}>{t('admin.journal_maj.champ_titre')}</span>
-                  <input className={INPUT} maxLength={120} value={e.titre ?? ''}
+                  <span className={ADMIN_LABEL}>{t('admin.journal_maj.champ_titre')}</span>
+                  <input className={ADMIN_INPUT} maxLength={120} value={e.titre ?? ''}
                          onChange={(ev) => majEntree(i, 'titre', ev.target.value)} />
                 </div>
 
                 <div>
-                  <span className={LABEL}>{t('admin.journal_maj.lignes')}</span>
-                  <textarea className={INPUT + ' resize-none'} rows={4}
+                  <span className={ADMIN_LABEL}>{t('admin.journal_maj.lignes')}</span>
+                  <textarea className={ADMIN_INPUT + ' resize-none'} rows={4}
                             value={(e.lignes ?? []).join('\n')}
                             onChange={(ev) => majEntree(i, 'lignes', lignesVersTableau(ev.target.value))} />
                   <p className="text-[11px] text-ghost mt-1">{t('admin.journal_maj.lignes_aide')}</p>
@@ -594,33 +591,33 @@ export default function ReglagesVitrinePage() {
 
           <div className="grid sm:grid-cols-2 gap-3 mt-4">
             <div>
-              <span className={LABEL}>{t('admin.compte_rebours.date_cible')}</span>
-              <input type="datetime-local" className={INPUT}
+              <span className={ADMIN_LABEL}>{t('admin.compte_rebours.date_cible')}</span>
+              <input type="datetime-local" className={ADMIN_INPUT}
                      value={(rebours.date_cible ?? '').replace(' ', 'T')}
                      onChange={(e) => setLocalRebours((v) => ({ ...v, date_cible: e.target.value.replace('T', ' ').slice(0, 16) }))} />
             </div>
             <div>
-              <span className={LABEL}>{t('admin.compte_rebours.jours_avant')}</span>
-              <input type="number" min={1} max={365} className={INPUT} value={rebours.jours_avant ?? 30}
+              <span className={ADMIN_LABEL}>{t('admin.compte_rebours.jours_avant')}</span>
+              <input type="number" min={1} max={365} className={ADMIN_INPUT} value={rebours.jours_avant ?? 30}
                      onChange={(e) => setLocalRebours((v) => ({ ...v, jours_avant: e.target.value }))} />
             </div>
           </div>
 
           <div className="mt-3">
-            <span className={LABEL}>{t('admin.compte_rebours.entete')}</span>
-            <input className={INPUT} maxLength={80} value={rebours.titre ?? ''}
+            <span className={ADMIN_LABEL}>{t('admin.compte_rebours.entete')}</span>
+            <input className={ADMIN_INPUT} maxLength={80} value={rebours.titre ?? ''}
                    onChange={(e) => setLocalRebours((v) => ({ ...v, titre: e.target.value }))} />
           </div>
 
           <div className="grid sm:grid-cols-2 gap-3 mt-3">
             <div>
-              <span className={LABEL}>{t('admin.compte_rebours.texte_bande')}</span>
-              <input className={INPUT} maxLength={160} value={rebours.texte_bande ?? ''}
+              <span className={ADMIN_LABEL}>{t('admin.compte_rebours.texte_bande')}</span>
+              <input className={ADMIN_INPUT} maxLength={160} value={rebours.texte_bande ?? ''}
                      onChange={(e) => setLocalRebours((v) => ({ ...v, texte_bande: e.target.value }))} />
             </div>
             <div>
-              <span className={LABEL}>{t('admin.compte_rebours.texte_jour_j')}</span>
-              <input className={INPUT} maxLength={160} value={rebours.texte_jour_j ?? ''}
+              <span className={ADMIN_LABEL}>{t('admin.compte_rebours.texte_jour_j')}</span>
+              <input className={ADMIN_INPUT} maxLength={160} value={rebours.texte_jour_j ?? ''}
                      onChange={(e) => setLocalRebours((v) => ({ ...v, texte_jour_j: e.target.value }))} />
             </div>
           </div>
@@ -628,13 +625,13 @@ export default function ReglagesVitrinePage() {
 
           <div className="grid sm:grid-cols-2 gap-3 mt-3">
             <div>
-              <span className={LABEL}>{t('admin.compte_rebours.couleur')}</span>
-              <input type="color" className={INPUT + ' h-10 p-1'} value={rebours.couleur || '#D00B0B'}
+              <span className={ADMIN_LABEL}>{t('admin.compte_rebours.couleur')}</span>
+              <input type="color" className={ADMIN_INPUT + ' h-10 p-1'} value={rebours.couleur || '#D00B0B'}
                      onChange={(e) => setLocalRebours((v) => ({ ...v, couleur: e.target.value }))} />
             </div>
             <div>
-              <span className={LABEL}>{t('admin.compte_rebours.lien')}</span>
-              <input className={INPUT} maxLength={300} value={rebours.lien ?? ''}
+              <span className={ADMIN_LABEL}>{t('admin.compte_rebours.lien')}</span>
+              <input className={ADMIN_INPUT} maxLength={300} value={rebours.lien ?? ''}
                      onChange={(e) => setLocalRebours((v) => ({ ...v, lien: e.target.value }))} />
             </div>
           </div>
@@ -665,15 +662,15 @@ export default function ReglagesVitrinePage() {
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <span className={LABEL}>{t('admin.moderation_avis.max_jour')}</span>
-              <input type="number" min={1} max={100} className={INPUT}
+              <span className={ADMIN_LABEL}>{t('admin.moderation_avis.max_jour')}</span>
+              <input type="number" min={1} max={100} className={ADMIN_INPUT}
                      value={mod.max_avis_par_jour ?? 5}
                      onChange={(e) => setLocalMod((v) => ({ ...v, max_avis_par_jour: e.target.value }))} />
               <p className="text-[11px] text-ghost mt-1">{t('admin.moderation_avis.max_jour_aide')}</p>
             </div>
             <div>
-              <span className={LABEL}>{t('admin.moderation_avis.seuil')}</span>
-              <input type="number" min={1} max={100} className={INPUT}
+              <span className={ADMIN_LABEL}>{t('admin.moderation_avis.seuil')}</span>
+              <input type="number" min={1} max={100} className={ADMIN_INPUT}
                      value={mod.seuil_signalements ?? 3}
                      onChange={(e) => setLocalMod((v) => ({ ...v, seuil_signalements: e.target.value }))} />
               <p className="text-[11px] text-ghost mt-1">{t('admin.moderation_avis.seuil_aide')}</p>
@@ -681,8 +678,8 @@ export default function ReglagesVitrinePage() {
           </div>
 
           <div className="mt-4">
-            <span className={LABEL}>{t('admin.moderation_avis.motifs')}</span>
-            <textarea className={INPUT + ' resize-none font-mono text-[13px]'} rows={3}
+            <span className={ADMIN_LABEL}>{t('admin.moderation_avis.motifs')}</span>
+            <textarea className={ADMIN_INPUT + ' resize-none font-mono text-[13px]'} rows={3}
                       value={(mod.motifs_graves ?? []).join('\n')}
                       onChange={(e) => setLocalMod((v) => ({ ...v, motifs_graves: lignesVersTableau(e.target.value) }))} />
             <p className="text-[11px] text-ghost mt-1">{t('admin.moderation_avis.motifs_aide')}</p>
@@ -690,12 +687,12 @@ export default function ReglagesVitrinePage() {
 
           <div className="mt-4">
             <div className="flex items-baseline justify-between">
-              <span className={LABEL}>{t('admin.moderation_avis.mots')}</span>
+              <span className={ADMIN_LABEL}>{t('admin.moderation_avis.mots')}</span>
               <span className="text-[11px] text-ghost">
                 {t('admin.moderation_avis.mots_compte', { count: (mod.mots_bannis ?? []).length })}
               </span>
             </div>
-            <textarea className={INPUT + ' resize-none font-mono text-[13px]'} rows={6}
+            <textarea className={ADMIN_INPUT + ' resize-none font-mono text-[13px]'} rows={6}
                       value={(mod.mots_bannis ?? []).join('\n')}
                       onChange={(e) => setLocalMod((v) => ({ ...v, mots_bannis: lignesVersTableau(e.target.value) }))} />
             <p className="text-[11px] text-ghost mt-1">{t('admin.moderation_avis.mots_aide')}</p>

@@ -1,12 +1,9 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UserPlus, Trash2, Shield, ChevronDown, ChevronUp, Eye, EyeOff } from 'lucide-react'
-import { AdminLayout, AdminBadge, AtelierAvatar } from '@/components/admin'
+import { AdminLayout, AdminBadge, AtelierAvatar, ADMIN_INPUT, ADMIN_LABEL } from '@/components/admin'
 import { useAdmins, useCreateAdmin, useUpdateAdminPermissions, useRevokeAdmin } from '@/hooks/admin/useAdmins'
 import { formatDate } from '@/utils/formatDate'
-
-const INPUT = 'w-full border border-edge rounded-xl px-3 py-2 text-sm text-ink bg-card focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary'
-const LABEL = 'block text-xs text-ghost mb-1'
 
 const EMPTY_FORM = { nom: '', prenom: '', email: '', password: '', role: 'admin', permissions: [] }
 
@@ -134,26 +131,26 @@ export default function AdminsPage() {
           <p className="font-semibold text-ink text-sm">{t('admin.admins.creer_titre')}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className={LABEL}>{t('admin.admins.nom')}</label>
-              <input value={form.nom} onChange={set('nom')} required placeholder="Koné" className={INPUT} />
+              <label className={ADMIN_LABEL}>{t('admin.admins.nom')}</label>
+              <input value={form.nom} onChange={set('nom')} required placeholder="Koné" className={ADMIN_INPUT} />
             </div>
             <div>
-              <label className={LABEL}>{t('admin.admins.prenom')}</label>
-              <input value={form.prenom} onChange={set('prenom')} required placeholder="Kadiatou" className={INPUT} />
+              <label className={ADMIN_LABEL}>{t('admin.admins.prenom')}</label>
+              <input value={form.prenom} onChange={set('prenom')} required placeholder="Kadiatou" className={ADMIN_INPUT} />
             </div>
           </div>
           <div>
-            <label className={LABEL}>{t('admin.admins.email')}</label>
-            <input type="email" value={form.email} onChange={set('email')} required placeholder="admin.gextimo@novafriq.africa" className={INPUT} />
+            <label className={ADMIN_LABEL}>{t('admin.admins.email')}</label>
+            <input type="email" value={form.email} onChange={set('email')} required placeholder="admin.gextimo@novafriq.africa" className={ADMIN_INPUT} />
           </div>
           <div>
-            <label className={LABEL}>{t('admin.admins.mdp')}</label>
+            <label className={ADMIN_LABEL}>{t('admin.admins.mdp')}</label>
             <div className="relative">
               <input
                 type={showPw ? 'text' : 'password'}
                 value={form.password} onChange={set('password')} required
                 placeholder={t('admin.admins.mdp_placeholder')}
-                className={INPUT}
+                className={ADMIN_INPUT}
               />
               <button type="button" onClick={() => setShowPw(x => !x)}
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 text-ghost hover:text-dim transition-colors">
@@ -162,8 +159,8 @@ export default function AdminsPage() {
             </div>
           </div>
           <div>
-            <label className={LABEL}>{t('admin.admins.role')}</label>
-            <select value={form.role} onChange={set('role')} className={INPUT}>
+            <label className={ADMIN_LABEL}>{t('admin.admins.role')}</label>
+            <select value={form.role} onChange={set('role')} className={ADMIN_INPUT}>
               <option value="admin">Admin</option>
               <option value="support">Support</option>
             </select>

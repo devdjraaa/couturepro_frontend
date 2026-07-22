@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { CheckCircle, RotateCcw, MoreHorizontal } from 'lucide-react'
-import { AdminLayout, AdminTable, AdminBadge, AtelierAvatar } from '@/components/admin'
+import { AdminLayout, AdminTable, AdminBadge, AtelierAvatar, ADMIN_FILTER } from '@/components/admin'
 import { useAdminPaiements, useValiderPaiement, useRembourserPaiement } from '@/hooks/admin/useAdminPaiements'
 import { formatDate } from '@/utils/formatDate'
 import { cn } from '@/utils/cn'
@@ -20,8 +20,6 @@ const PROVIDERS = [
   { key: 'wave',         label: 'Wave'            },
   { key: 'mtn_momo',     label: 'MTN MoMo'        },
 ]
-
-const INPUT = 'border border-edge rounded-xl px-3 py-1.5 text-xs text-ink bg-card focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary'
 
 export default function AdminPaiementsPage() {
   const { t } = useTranslation()
@@ -141,7 +139,7 @@ export default function AdminPaiementsPage() {
             </button>
           ))}
         </div>
-        <select value={provider} onChange={e => changeProvider(e.target.value)} className={`${INPUT} sm:w-auto`}>
+        <select value={provider} onChange={e => changeProvider(e.target.value)} className={`${ADMIN_FILTER} sm:w-auto`}>
           {PROVIDERS.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
         </select>
       </div>
