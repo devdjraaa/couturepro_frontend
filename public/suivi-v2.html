@@ -166,7 +166,8 @@ const GROUPS = {
   11:'À faire par la direction — dans l\'administration',
   12:'Veille opportunités & Makila (22/07)',
   13:'Fiabilité des mises à jour OTA (22/07)',
-  14:'Écrans inatteignables retrouvés (22/07)'
+  14:'Écrans inatteignables retrouvés (22/07)',
+  15:'Administration — mise en forme (22/07)'
 };
 const SLABEL = {done:'Fait',part:'Partiel',bug:'Bug',todo:'À faire',spec:'Spec',info:'Info'};
 
@@ -206,7 +207,7 @@ const ITEMS = [
   F(19,'REL-V1',8,'done','BASCULÉ (21/07) — l\'ancien fichier VITRINE_TODO_FRONTEND.md listait 19 points. Vérification faite : P135 (détection pays/devise) est LIVRÉ ce jour, P143 (menu Galerie des artisans) et P190/P142 (footer APDP, page protection-donnees) sont en place, P128 (police du nom stylisé) est appliqué. Les 14 restants sont repris ci-dessous en VIT-4 à VIT-7, regroupés par nature. L\'ancien fichier ne sert plus de référence'),
   F(20,'VIT-4',8,'todo','HEADER (repris de l\'ancien fichier vitrine) : P180 barre de contact fine au-dessus du header · P181 menu déroulant « Solutions » · P182 menu déroulant « Tarifs » · P183-184 menu « Documentation » en cartes + la page · P132 header et retour sur les pages inscription-connexion · P194 alignement du header'),
   F(21,'VIT-5',8,'todo','P131 — bouton « S\'inscrire » absent sur mobile. VÉRIFIÉ le 21/07 : le lien existe dans le menu burger (VitrineChrome ligne 169) mais le bouton de la barre du haut porte « hidden lg:inline-flex », donc invisible sous 1024 px. Le remonter dans la barre est un choix visuel'),
-  F(22,'VIT-6',8,'part','P187 FAIT (21/07). P192/P193 FAITS (22/07) — phrases d\'accroche appliquées mot pour mot. RESTE, bloqué sur un document manquant de la direction : P138 tarif « Devenir créateur » (référence visuelle non fournie) · P139 CGV complètes (nouveau texte annoncé, non transmis). VOLONTAIREMENT PAS FAIT : P140 « Mentions légales » → « CGU » page unique — fusionner 5 pages légales en une seule touche du contenu réglementaire ; même sans changer un mot, restructurer la présentation de textes juridiques demande une validation, pas une initiative solo.'),
+  F(22,'VIT-6',8,'part','P187 FAIT (21/07). P192/P193 FAITS (22/07) — phrases d\'accroche appliquées mot pour mot. RESTE, bloqué sur un document manquant de la direction : P138 tarif « Devenir créateur » (référence visuelle non fournie) · P139 CGV complètes (nouveau texte annoncé, non transmis). P140 FAIT (22/07) après accord explicite du chef : la demande littérale (fusionner 5 pages légales en une) était dépassée — la barre latérale livrée en Pt 121 fait déjà naviguer les 11 pages sans rechargement. Seule la part encore valable a été appliquée : « Mentions légales » retirée de la liste (sa route redirigeait déjà vers CGU, l\'entrée ne menait nulle part), CGU remontée en tête, code mort supprimé. AUCUN mot du texte réglementaire touché.'),
 
 
 
@@ -267,7 +268,10 @@ const ITEMS = [
   F(55,'PHOTO-3b',3,'done','DÉJÀ FAIT — statut périmé, vérifié le 22/07 : compte à rebours des 24h + action « retoucher légèrement » (recadrage/ajustements) déjà en place côté admin, réévalué chaque minute.'),
   F(56,'PHOTO-7',3,'done','DÉJÀ FAIT — statut périmé, vérifié le 22/07 : l\'original n\'est jamais écrasé par une retouche (`retouche_path` distinct de `path`), et toute nouvelle retouche repart de l\'original pour ne pas empiler les dégradations.'),
   F(57,'équipe-aide',14,'done','FAIT (22/07) — un patron choisissait un rôle d\'équipe (assistant/membre) sans savoir ce qu\'il accordait ; la seule mention affichée (« Création & archivage ») était devenue FAUSSE après l\'élargissement des droits de l\'assistant le 20/07. Aide contextuelle ajoutée (« i » → fenêtre) listant les droits accordés ET refusés, lus au serveur atelier par atelier — jamais un texte écrit à la main qui dériverait de nouveau.'),
-  F(58,'garde-fou-ecrans',14,'done','FAIT (22/07) — « Mes Réalisations » inatteignable (ci-dessus) est le défaut le plus fréquent du projet : fonctionnalité complète, aucun chemin pour l\'atteindre. Garde-fou de construction ajouté sur les 2 branches : refuse la construction si une page est importée sans route, ou si une route n\'a aucun lien qui y mène.')
+  F(58,'garde-fou-ecrans',14,'done','FAIT (22/07) — « Mes Réalisations » inatteignable (ci-dessus) est le défaut le plus fréquent du projet : fonctionnalité complète, aucun chemin pour l\'atteindre. Garde-fou de construction ajouté sur les 2 branches : refuse la construction si une page est importée sans route, ou si une route n\'a aucun lien qui y mène.'),
+
+  // ---------- Administration : mise en forme ----------
+  F(60,'admin-kit',15,'done','FAIT (22/07) — signalé par le chef : la fenêtre des plans d\'abonnement était « coupée », impossible d\'atteindre le haut du formulaire ; un premier élargissement (512 → 896 px, 2 colonnes) n\'avait rien changé. VRAIE CAUSE : la fenêtre n\'avait ni hauteur plafonnée ni défilement interne, elle comptait sur le défilement de la page combiné à un centrage vertical — le début d\'un contenu centré plus haut que l\'écran devient alors inatteignable. Plutôt que rustiner cette page seule, les briques sont centralisées (esprit Filament, mais maison — aucune bibliothèque ajoutée, le sur-mesure est voulu) : fenêtre, champs texte / liste / nombre (bouton ∞ conservé) / interrupteur, sections et grilles. Les 5 écrans qui codaient chacun leur propre fenêtre et redéfinissaient leurs propres styles les utilisent (Plans, Offres, Codes promo, Liste noire, Transactions) : 437 lignes retirées pour 303. Le défaut de découpe ne peut plus revenir sur un écran qui passe par la fenêtre commune. Périmètre STRICTEMENT administration — rien touché côté espace professionnel, et aucun champ, contrôle de saisie ni appel serveur modifié : seule la mise en forme bouge. RESTE : une dizaine d\'écrans admin en pleine page dupliquent encore leurs styles (pas de fenêtre, donc pas de défaut) — à reprendre au fil de l\'eau, quand on les retouchera pour une autre raison, pas en une réécriture de masse.')
 ];
 
 let state = { checked:{}, code:null, editing:false, filter:'all', owner:'all', q:'' };
