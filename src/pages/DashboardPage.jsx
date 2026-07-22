@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import BandeAnnonces from '@/components/layout/BandeAnnonces'
+import BandeInfosGextimo from '@/components/layout/BandeInfosGextimo'
 import { useNavigate } from 'react-router-dom'
 import { Plus, UserPlus, Wallet, ClipboardList, ChevronRight, ChevronDown, CheckCircle2, CircleUser, Sun, Moon, Store, X, Layers, Users2, Star, FileText, Crown, Bell, ShoppingBag, Truck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -160,7 +160,7 @@ function CarteSalutation({ user, sousTitre, navigate }) {
       </div>
       <button type="button" onClick={() => navigate('/parametres/profil')}
               className="shrink-0" aria-label={t('nav.profil')}>
-        <Avatar nom={user?.nom} photo_url={user?.avatar} size="lg" />
+        <Avatar nom={user?.nom} photo_url={user?.photo_url} size="lg" />
       </button>
     </div>
   )
@@ -217,7 +217,7 @@ function SoldeDuJour({ montant, fmt, navigate }) {
 function CommandesRecentes({ commandes, fmt, navigate }) {
   const { t } = useTranslation()
   const recentes = [...commandes]
-    .sort((a, b) => new Date(b.created_at ?? 0) - new Date(a.created_at ?? 0))
+    .sort((a, b) => new Date(b.created_at ?? b.date_commande ?? 0) - new Date(a.created_at ?? a.date_commande ?? 0))
     .slice(0, 3)
 
   if (recentes.length === 0) return null
@@ -251,7 +251,9 @@ function CommandesRecentes({ commandes, fmt, navigate }) {
               <p className="text-[14px] font-semibold text-ink truncate">
                 {c.reference ?? c.vetement_nom ?? t('nav.commandes')}
               </p>
-              <p className="text-[11.5px] text-ghost">{formatDate(c.created_at)}</p>
+              {/* La base LOCALE (hors ligne) ne porte pas toujours `created_at` :
+                  on retombe sur la date de commande plutôt que d'afficher « — ». */}
+              <p className="text-[11.5px] text-ghost">{formatDate(c.created_at ?? c.date_commande)}</p>
             </div>
             <div className="shrink-0 text-right">
               <span className={'text-[10.5px] font-bold px-2 py-0.5 rounded-full ' + (TON[c.statut] ?? TON.annule)}>
@@ -664,11 +666,10 @@ export default function DashboardPage() {
       <div className="bg-card lg:hidden sticky top-0 z-20">
         <EnteteMarque navigate={navigate} nbNotifs={nbNotifs} />
       </div>
-
-      {/* ANN-8 — bande d'annonces, entre l'en-tête et les indicateurs. Elle
-          vivait dans AppLayout, tout en haut : sur cet écran l'en-tête mobile
-          est masqué (noMobileHeader), donc elle passait sous la barre système. */}
-      <BandeAnnonces />
+      {/* Les annonces des CRÉATEURS sont parties sur la vitrine publique : les
+          montrer ici revenait à afficher les promos des concurrents dans
+          l'espace de travail. À leur place, les communications de Gextimo. */}
+      <BandeInfosGextimo />
 
       <div className="p-4 space-y-4 pb-safe">
 

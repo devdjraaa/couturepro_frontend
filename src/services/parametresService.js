@@ -37,6 +37,25 @@ export const parametresService = {
     return data
   },
 
+  /**
+   * Photo de profil. Elle n'existait pas : le propriétaire restait sur ses
+   * initiales sans aucun moyen d'y remédier, alors que les clients, eux,
+   * avaient une photo depuis toujours.
+   */
+  async envoyerPhotoProfil(fichier) {
+    const form = new FormData()
+    form.append('photo', fichier)
+    const { data } = await api.post('/parametres/profil/photo', form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+    return data
+  },
+
+  async supprimerPhotoProfil() {
+    const { data } = await api.delete('/parametres/profil/photo')
+    return data
+  },
+
   async getAtelier() {
     if (isMock()) {
       await delay()

@@ -10,6 +10,7 @@ import { usePageMeta } from '@/hooks/usePageMeta'
 import { useDevise } from './vitrineCurrency'
 import { useFavoris } from './useFavoris'
 import { SkeletonCreatorCard, SkeletonGalleryCard } from './VitrineSkeletons'
+import BandeAnnonces from '@/components/layout/BandeAnnonces'
 
 const btnPrimary = 'vt-btn-primary inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl bg-primary text-inverse hover:bg-primary-600'
 const btnOutline = 'vt-btn-ghost inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl border border-edge text-ink hover:border-primary hover:text-primary'
@@ -168,6 +169,11 @@ export default function VitrineHome() {
 
   return (
     <VitrineShell>
+      {/* ANN-8 — annonces des créateurs, EN HAUT DE LA VITRINE. Elles n'étaient
+          affichées que dans le tableau de bord PRO : un créateur payait un Boost
+          pour être vu par ses concurrents, jamais par le public. */}
+      <BandeAnnonces />
+
       {/* HERO */}
       <section className="relative overflow-hidden min-h-[calc(100dvh-6.5rem)] flex flex-col items-center justify-center pt-10 pb-10 text-center isolate">
         {/* ── Fond animé multicouche — ambiance défilé ── */}
