@@ -1557,9 +1557,9 @@
     "err_generic": "La mise en vente a échoué. Réessayez."
   },
   "vitrine": {
-    "promo": "Nouveau : la vitrine Gextimo connecte les créateurs de mode africaine à toute l'Afrique de l'Ouest.",
-    "promo_a": "Nouveau : la vitrine",
-    "promo_b": "connecte les créateurs de mode africaine à toute l'Afrique de l'Ouest.",
+    "promo": "Nouveau — Gextimo, la vitrine qui fait rayonner la mode africaine au-delà des frontières.",
+    "promo_a": "Nouveau — ",
+    "promo_b": ", la vitrine qui fait rayonner la mode africaine au-delà des frontières.",
     "online": "● En ligne",
     "loading": "Chargement…",
     "indicatif": "* Prix indicatifs, convertis à titre informatif.",
@@ -1889,7 +1889,7 @@
       ],
       "rights": "© 2026 Gextimo. Tous droits réservés.",
       "pricing": "Tarifs",
-      "solution_novafriq": "Une solution Novafriq"
+      "solution_novafriq": "Une solution NovafriQ"
     },
     "createurs_page": {
       "tri": {
@@ -2069,7 +2069,8 @@
         "Transparence et confiance",
         "Simplicité et accessibilité"
       ],
-      "novafrique": "Gextimo est une solution Novafriq."
+      "novafrique": "Gextimo est une solution NovafriQ.",
+      "baseline": "Gextimo est né en Afrique, pour le monde."
     },
     "aide": {
       "eyebrow": "Aide",

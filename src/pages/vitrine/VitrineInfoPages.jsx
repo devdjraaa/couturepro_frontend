@@ -25,6 +25,9 @@ export function QuiSommesNousPage() {
           <p className="text-ink leading-relaxed mb-4">{t('vitrine.about.p1')}</p>
           <p className="text-dim leading-relaxed mb-8">{t('vitrine.about.p2')}</p>
 
+          {/* P193 : phrase de marque courte, en clôture du récit de mission. */}
+          <p className="font-display text-lg text-primary font-semibold mb-10">{t('vitrine.about.baseline')}</p>
+
           <h2 className="font-display text-xl text-ink mb-4">{t('vitrine.about.values_title')}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
             {(Array.isArray(values) ? values : []).map((v) => (

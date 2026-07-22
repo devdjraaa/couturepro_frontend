@@ -1557,9 +1557,9 @@
     "err_generic": "Putting on sale failed. Please try again."
   },
   "vitrine": {
-    "promo": "New: the Gextimo showcase connects African fashion designers across West Africa.",
-    "promo_a": "New: the",
-    "promo_b": "showcase connects African fashion designers across West Africa.",
+    "promo": "New — Gextimo, the showcase that lets African fashion shine beyond borders.",
+    "promo_a": "New — ",
+    "promo_b": ", the showcase that lets African fashion shine beyond borders.",
     "online": "● Online",
     "loading": "Loading…",
     "indicatif": "* Indicative prices, converted for information only.",
@@ -1889,7 +1889,7 @@
       ],
       "rights": "© 2026 Gextimo. All rights reserved.",
       "pricing": "Pricing",
-      "solution_novafriq": "A Novafriq solution"
+      "solution_novafriq": "A NovafriQ solution"
     },
     "createurs_page": {
       "tri": {
@@ -2069,7 +2069,8 @@
         "Transparency and trust",
         "Simplicity and accessibility"
       ],
-      "novafrique": "Gextimo is a Novafriq solution."
+      "novafrique": "Gextimo is a NovafriQ solution.",
+      "baseline": "Gextimo was born in Africa, for the world."
     },
     "aide": {
       "eyebrow": "Help",
