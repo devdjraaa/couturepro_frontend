@@ -146,8 +146,11 @@ function CarteSalutation({ user, sousTitre, navigate }) {
     <div className="bg-card border border-edge rounded-2xl p-4 flex items-center justify-between gap-3">
       <div className="min-w-0">
         <h1 className="text-[19px] font-bold text-ink leading-tight">
-          {salut}, {prenom} !
-          <Hand size={18} className="inline-block ml-1.5 align-[-0.15em] text-accent" aria-hidden="true" />
+          {salut}, {prenom} !{' '}
+          {/* Seul emoji autorisé ici avec celui des confettis (accord direction) :
+              la main de salutation, comme sur la maquette. Partout ailleurs on
+              reste sur les icônes lucide. */}
+          <span role="img" aria-label="salutation">👋</span>
         </h1>
         <p className="text-[13px] text-dim mt-0.5">
           {sousTitre ?? t('dashboard.resume_du_jour')}
