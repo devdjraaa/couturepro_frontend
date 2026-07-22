@@ -354,9 +354,6 @@ export default function VitrineHome() {
       {/* Strip confiance — juste sous le hero (VIT-2) */}
       <TrustStrip />
 
-      {/* Corps de page — motif rondelles or (hors hero et footer) */}
-      <div className="vt-page-motif">
-
       {/* ONBOARDING client / créateur (VIT-1) */}
       <OnboardingSection />
 
@@ -572,8 +569,6 @@ export default function VitrineHome() {
           </div>
         </div>
       </section>
-
-      </div>{/* fin vt-page-motif */}
 
     </VitrineShell>
   )

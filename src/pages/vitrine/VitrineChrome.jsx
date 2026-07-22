@@ -726,7 +726,7 @@ export default function VitrineShell({ children }) {
     <div className="min-h-dvh bg-app text-ink font-sans">
       <EvenementCelebration />
       <VitrineNavbar />
-      <main key={pathname} className="gx-page-enter">{children}</main>
+      <main key={pathname} className="gx-page-enter vt-page-motif">{children}</main>
       <VitrineFooter />
       <VitrineCookies />
       <WelcomePopup />
