@@ -1,10 +1,14 @@
-// Veille opportunités (n8n + IA locale) : les résultats hebdo arrivent ici — l'e-mail du
-// lundi n'est plus qu'une notification courte. Sélection IA en tête (rang + raison), le
-// reste des résultats bruts est replié.
+// Veille opportunités : le relevé QUOTIDIEN arrive ici. La collecte est faite par
+// `veille:opportunites` sur une trentaine de sources centrées sur le Bénin, puis triée
+// par Makila ; n8n n'en envoie plus que le digest, à 7h30.
+//
+// Sélection de Makila en tête (rang + raison), le reste des remontées est replié. Les
+// termes de recherche s'enrichissent depuis cette page — ils étaient jusqu'ici modifiables
+// « en base », donc par personne.
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExternalLink, Radar, ChevronDown, ChevronRight, Sparkles } from 'lucide-react'
-import { AdminLayout } from '@/components/admin'
+import { AdminLayout, ConfigVeille } from '@/components/admin'
 import adminApi from '@/services/adminApi'
 import { cn } from '@/utils/cn'
 
@@ -28,6 +32,10 @@ export default function VeillePage() {
   return (
     <AdminLayout title={t('admin.veille.titre')}>
       <p className="text-sm text-dim mb-5">{t('admin.veille.sous_titre')}</p>
+
+      {/* Les termes de recherche étaient éditables « en base » — donc par
+          personne. La direction les enrichit elle-même ici. */}
+      <ConfigVeille />
 
       {semaines === null && <p className="text-dim text-sm">{t('commun.chargement')}</p>}
 

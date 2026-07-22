@@ -367,7 +367,8 @@
     "retirer": "Retirer",
     "contacter_support": "Contacter le support",
     "enregistre": "Enregistré",
-    "verifier": "Vérifier"
+    "verifier": "Vérifier",
+    "enregistrement": "Enregistrement…"
   },
   "erreurs": {
     "reseau": "Erreur de connexion. Vérifiez votre réseau.",
@@ -4463,7 +4464,27 @@
       "derniere": "Dernière",
       "compteur": "{{sel}} sélection(s) IA / {{total}} résultats",
       "aucune_selection": "L'IA n'a rien retenu cette semaine (voir les résultats bruts ci-dessous).",
-      "autres": "Voir les {{n}} autres résultats bruts"
+      "autres": "Voir les {{n}} autres résultats bruts",
+      "config": {
+        "titre": "Enrichir la recherche",
+        "sous_titre": "Ajoutez vos propres termes : la veille les prend en compte dès le relevé suivant, sans intervention technique.",
+        "recherches": "Termes recherchés",
+        "recherches_aide": "Ce qui est interrogé chaque nuit sur la presse béninoise et les sources officielles. Un terme par entrée, comme dans un moteur de recherche.",
+        "axe_benin": "Ancrage béninois",
+        "axe_benin_aide": "Villes, régions, gentilés, sites industriels. C'est l'axe qui pèse le plus : un article sans lien avec le Bénin ne remonte pas.",
+        "axe_metier": "Vocabulaire du métier",
+        "axe_metier_aide": "Matières, savoir-faire, professions. Un article béninois sans rapport avec le métier est écarté.",
+        "axe_occasion": "Occasions à saisir",
+        "axe_occasion_aide": "Salons, concours, financements, formations. Facultatif : ces mots font remonter un article dans le classement.",
+        "ajouter": "Ajouter",
+        "ajouter_placeholder": "Saisir un terme puis Entrée",
+        "retirer": "Retirer {{terme}}",
+        "liste_vide": "Aucun terme pour l'instant.",
+        "compteur_termes": "{{n}} terme(s)",
+        "enregistre": "Enregistré.",
+        "echec": "Enregistrement impossible.",
+        "prise_en_compte": "Les modifications s'appliquent au relevé de la nuit suivante, à 4h30."
+      }
     },
     "pages": {
       "titre": "Pages légales",

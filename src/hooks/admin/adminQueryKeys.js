@@ -15,6 +15,7 @@ export const ADMIN_KEYS = {
   moderationContenu: ['admin', 'moderation-contenu'],
   partenaires:      ['admin', 'partenaires'],
   banniere:         ['admin', 'banniere'],
+  veilleConfig:     ['admin', 'veille', 'config'],
   sponsorisation:   ['admin', 'sponsorisation'],
   audit:            ['admin', 'audit'],
   admins:           ['admin', 'admins'],

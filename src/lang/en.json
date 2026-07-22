@@ -367,7 +367,8 @@
     "retirer": "Remove",
     "contacter_support": "Contact support",
     "enregistre": "Saved",
-    "verifier": "Verify"
+    "verifier": "Verify",
+    "enregistrement": "Saving…"
   },
   "erreurs": {
     "reseau": "Connection error. Check your network.",
@@ -4450,7 +4451,27 @@
       "derniere": "Latest",
       "compteur": "{{sel}} AI pick(s) / {{total}} results",
       "aucune_selection": "The AI selected nothing this week (see raw results below).",
-      "autres": "Show the {{n}} other raw results"
+      "autres": "Show the {{n}} other raw results",
+      "config": {
+        "titre": "Broaden the search",
+        "sous_titre": "Add your own terms: the watch takes them into account from the next report on, with no technical work.",
+        "recherches": "Search terms",
+        "recherches_aide": "What is queried every night across the Beninese press and official sources. One term per entry, as in a search engine.",
+        "axe_benin": "Benin relevance",
+        "axe_benin_aide": "Cities, regions, demonyms, industrial sites. This axis weighs the most: an article unrelated to Benin is not kept.",
+        "axe_metier": "Trade vocabulary",
+        "axe_metier_aide": "Materials, know-how, occupations. A Beninese article unrelated to the trade is discarded.",
+        "axe_occasion": "Opportunities",
+        "axe_occasion_aide": "Trade shows, contests, funding, training. Optional: these words push an article up the ranking.",
+        "ajouter": "Add",
+        "ajouter_placeholder": "Type a term then Enter",
+        "retirer": "Remove {{terme}}",
+        "liste_vide": "No term yet.",
+        "compteur_termes": "{{n}} term(s)",
+        "enregistre": "Saved.",
+        "echec": "Could not save.",
+        "prise_en_compte": "Changes apply to the next night's report, at 4:30 am."
+      }
     },
     "pages": {
       "titre": "Legal pages",
