@@ -6,74 +6,14 @@ import VitrineShell from './VitrineChrome'
 import { getPlans, getTarification } from './vitrineApi'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { cn } from '@/utils/cn'
+import { featuresFromConfig } from '@/utils/planFeatures'
 
 const TIER_ICONS = [Star, Zap, Crown]
 
-/**
- * Les fonctionnalités qui n'ont de sens que pour un compte Designer.
- *
- * Les plans sont volontairement PARTAGÉS entre les deux types de compte : mêmes
- * paliers, mêmes prix. Ce qui diffère, c'est ce dont on se sert — un artisan ne
- * publie pas de vitrine et ne gère pas plusieurs ateliers. Afficher ces lignes
- * à un artisan lui ferait payer, dans sa tête, des fonctions qu'il n'utilisera
- * jamais.
- */
-const RESERVE_DESIGNER = new Set(['creations', 'galerie', 'multi'])
-
-// Normalise le config (peut arriver double-encodé depuis le seed).
-function parseConfig(config) {
-  if (!config) return {}
-  if (typeof config === 'string') {
-    try { return JSON.parse(config) } catch { return {} }
-  }
-  return config
-}
-
-/**
- * Bullets lisibles dérivés du config du plan.
- *
- * Config-driven : éditer un quota en admin met à jour la page sans toucher au
- * code. Chaque ligne porte sa clé pour pouvoir être filtrée par type de compte.
- */
-function featuresFromConfig(config, t, type) {
-  const c = parseConfig(config)
-  const f = []
-  const push = (cle, texte) => {
-    if (type === 'artisan' && RESERVE_DESIGNER.has(cle)) return
-    f.push({ cle, texte })
-  }
-
-  /**
-   * « Illimité » a sa PROPRE phrase, il ne s'injecte plus à la place du nombre.
-   * Avant, une limite absente produisait « illimité créations en vitrine » :
-   * le mot était interpolé là où un chiffre est attendu, d'où l'adjectif collé
-   * devant le nom et sans accord.
-   */
-  const ligneQuota = (cleBase, valeur) =>
-    valeur === null || valeur === undefined
-      ? t(`premium.feat.${cleBase}_illimite`)
-      : t(`premium.feat.${cleBase}`, { n: valeur, count: Number(valeur) })
-
-  if (c.max_creations_vitrine !== undefined) push('creations', ligneQuota('creations', c.max_creations_vitrine))
-  push('galerie', c.visible_galerie ? t('premium.feat.galerie_oui') : t('premium.feat.galerie_non'))
-  if (c.max_clients_par_mois !== undefined) push('clients', ligneQuota('clients', c.max_clients_par_mois))
-  if (c.max_membres) push('equipe', t('premium.feat.equipe', { n: c.max_membres, count: Number(c.max_membres) }))
-  if (c.export_pdf) push('pdf', t('premium.feat.pdf'))
-  // Les quotas réels valent mieux qu'un intitulé creux : « Photos VIP » ne dit
-  // rien, « 15 photos mises en avant par mois » se comprend sans explication.
-  if (c.photos_vip) {
-    push('photos_vip', c.max_photos_vip_par_mois
-      ? t('premium.feat.photos_vip_quota', { n: c.max_photos_vip_par_mois, count: Number(c.max_photos_vip_par_mois) })
-      : t('premium.feat.photos_vip'))
-  }
-  if (c.module_caisse) push('caisse', t('premium.feat.caisse'))
-  if (c.multi_ateliers) {
-    push('multi', c.max_sous_ateliers
-      ? t('premium.feat.multi_quota', { n: c.max_sous_ateliers, count: Number(c.max_sous_ateliers) })
-      : t('premium.feat.multi'))
-  }
-  return f
-}
+// Les plans sont volontairement PARTAGÉS entre les deux types de compte : mêmes
+// paliers, mêmes prix. Ce qui diffère, c'est ce dont on se sert — un artisan ne
+// publie pas de vitrine et ne gère pas plusieurs ateliers. Le tri des lignes
+// vit dans `planFeatures`, partagé avec l'offre d'abonnement de l'application.
 
 // Regroupe les plans actifs par palier (free / atelier / master), avec leurs
 // variantes mensuel / annuel.

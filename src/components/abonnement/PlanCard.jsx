@@ -1,17 +1,17 @@
-import { Check, X } from 'lucide-react'
+import { Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/cn'
 import { Button } from '@/components/ui'
 import { formatCurrency } from '@/utils/formatCurrency'
+import { featuresFromConfig } from '@/utils/planFeatures'
 
-function FeatureRow({ label, value, count }) {
-  const included = value && count !== 0
+// Les lignes non incluses ne sont plus rendues barrées : `featuresFromConfig`
+// n'émet que ce que le plan contient réellement.
+function FeatureRow({ label }) {
   return (
-    <li className={cn('flex items-center gap-2 text-xs', included ? 'text-ink' : 'text-dim line-through')}>
-      {included
-        ? <Check size={11} className="text-success shrink-0" />
-        : <X size={11} className="text-dim shrink-0" />}
-      <span>{count != null && included ? `${count === null ? '∞' : count} ` : ''}{label}</span>
+    <li className="flex items-start gap-2 text-xs text-ink">
+      <Check size={11} className="text-success shrink-0 mt-0.5" />
+      <span>{label}</span>
     </li>
   )
 }
@@ -29,23 +29,7 @@ export default function PlanCard({ plan, isCurrent, abonnementStatut, onUpgrade,
 
   const planName = t(`plans.${plan.cle}`, { defaultValue: plan.label })
 
-  const cfg = typeof plan.config === 'string'
-    ? JSON.parse(plan.config)
-    : (plan.config ?? {})
-
-  const illimite = t('plans.illimite')
-
-  const clientsCount = cfg.max_clients_par_mois === null || cfg.max_clients_par_mois === -1
-    ? illimite
-    : cfg.max_clients_par_mois === 0 ? null : String(cfg.max_clients_par_mois)
-
-  const membresCount = cfg.max_membres === null || cfg.max_membres === -1
-    ? illimite
-    : cfg.max_membres === 0 ? null : String(cfg.max_membres)
-
-  const sousAteliersCount = cfg.max_sous_ateliers === null || cfg.max_sous_ateliers === -1
-    ? illimite
-    : cfg.max_sous_ateliers === 0 ? null : String(cfg.max_sous_ateliers)
+  const features = featuresFromConfig(plan.config, t)
 
   // P46/SUG-23 : valoriser les cartes — plan mis en avant + équivalent mensuel & économie sur l'annuel.
   const estAnnuel = plan.duree_jours >= 365
@@ -103,44 +87,16 @@ export default function PlanCard({ plan, isCurrent, abonnementStatut, onUpgrade,
         )}
       </div>
 
-      {/* Fonctionnalités */}
-      {Object.keys(cfg).length > 0 && (
+      {/* Fonctionnalités — dérivées de la config du plan par la MÊME fonction que
+          la page de tarifs publique. Cet écran tenait sa propre liste, écrite à
+          la main et dans un autre vocabulaire : un même plan ne se lisait pas
+          pareil ici et sur la vitrine, et un quota modifié en administration
+          n'apparaissait pas forcément. Désormais le texte découle de la valeur. */}
+      {features.length > 0 && (
         <ul className="space-y-1.5 border-t border-border pt-3">
-          <FeatureRow
-            label={t('plans.clients_mois')}
-            value={clientsCount !== null}
-            count={clientsCount}
-          />
-          <FeatureRow
-            label={t('plans.membres_equipe')}
-            value={membresCount !== null}
-            count={membresCount}
-          />
-          <FeatureRow
-            label={t('plans.sous_ateliers')}
-            value={sousAteliersCount !== null}
-            count={sousAteliersCount}
-          />
-          {cfg.photos_vip ? (
-            <FeatureRow
-              label={cfg.max_photos_vip_par_mois === null ? t('plans.photos_vip') : t('plans.photos_vip_mois')}
-              value={true}
-              count={cfg.max_photos_vip_par_mois === null ? illimite : cfg.max_photos_vip_par_mois}
-            />
-          ) : (
-            <FeatureRow label={t('plans.photos_vip')} value={false} />
-          )}
-          {cfg.facture_whatsapp ? (
-            <FeatureRow
-              label={cfg.max_factures_par_mois === null ? t('plans.factures_wa') : t('plans.factures_wa_mois')}
-              value={true}
-              count={cfg.max_factures_par_mois === null ? illimite : cfg.max_factures_par_mois}
-            />
-          ) : (
-            <FeatureRow label={t('plans.factures_wa')} value={false} />
-          )}
-          <FeatureRow label={t('plans.sauvegarde_auto')} value={!!cfg.sauvegarde_auto} />
-          <FeatureRow label={t('plans.module_caisse')}   value={!!cfg.module_caisse}   />
+          {features.map((f) => (
+            <FeatureRow key={f.cle} label={f.texte} />
+          ))}
         </ul>
       )}
 

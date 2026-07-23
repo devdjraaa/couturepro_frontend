@@ -86,7 +86,12 @@
       "clients_other": "{{n}} clients par mois",
       "clients_illimite": "Clients illimités",
       "equipe_one": "Équipe jusqu'à {{n}} membre",
-      "equipe_other": "Équipe jusqu'à {{n}} membres"
+      "equipe_other": "Équipe jusqu'à {{n}} membres",
+      "equipe_illimite": "Membres d'équipe illimités",
+      "factures_wa": "Envoi des factures par WhatsApp",
+      "factures_wa_quota_one": "{{n}} facture par WhatsApp / mois",
+      "factures_wa_quota_other": "{{n}} factures par WhatsApp / mois",
+      "dgi": "Facture normalisée DGI"
     },
     "faq": [
       {
