@@ -623,7 +623,7 @@ export function VitrineFooter() {
       <div className="relative z-10 max-w-[1180px] mx-auto px-5">
         {/* cols = [Platform, Company, Legal, Rules] */}
         <div className="vt-reveal grid grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr_1.1fr_1.1fr] gap-x-5 gap-y-5 pb-5 border-b border-edge">
-          <div className="col-span-2 md:col-span-1">
+          <div className="col-span-2 md:col-span-1 order-last md:order-first">
             <VitrineLogo onDark />
             <p className="text-[13px] mt-2 max-w-[280px] text-dim">{t('vitrine.footer.tagline')}</p>
           </div>
