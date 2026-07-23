@@ -1,0 +1,20 @@
+{
+  "appId": "com.couturepro.admin",
+  "appName": "Gextimo Admin",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https",
+    "allowNavigation": [
+      "gextimoapi.novafriq.africa",
+      "*.fedapay.com",
+      "fedapay.com",
+      "*.ngrok-free.app",
+      "*.ngrok.io",
+      "*.ngrok.app"
+    ]
+  },
+  "plugins": {
+    "Network": {},
+    "Preferences": {}
+  }
+}
