@@ -64,7 +64,7 @@
     "par_mois": "/ mois",
     "commencer_gratuit": "Commencer gratuitement",
     "choisir": "Choisir {{plan}}",
-    "essai": "Pas encore convaincu ? Le plan Free est gratuit, sans carte bancaire.",
+    "essai": "Pas encore convaincu ? Le plan Gratuit reste gratuit sans limite de durée, sans carte bancaire.",
     "essai_cta": "Démarrer →",
     "faq_titre": "Questions fréquentes",
     "feat": {
@@ -94,8 +94,8 @@
         "r": "Oui, vous pouvez passer à un plan supérieur ou inférieur à tout moment. La différence est calculée au prorata."
       },
       {
-        "q": "Le plan Free est-il vraiment gratuit ?",
-        "r": "Oui, le plan Free est gratuit et sans engagement, sans carte bancaire. Vous passez à un plan payant uniquement quand vous le souhaitez."
+        "q": "Le plan Gratuit est-il vraiment gratuit ?",
+        "r": "Oui. Après vos jours d'essai offerts, si vous ne payez rien, le compte bascule sur le plan Gratuit et y reste sans limite de durée. Aucune carte bancaire n'est demandée, et vous passez à un plan payant seulement si vous le décidez."
       },
       {
         "q": "Comment fonctionne la facturation annuelle ?",
