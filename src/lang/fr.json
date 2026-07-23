@@ -399,7 +399,8 @@
     "introuvable_description": "Cet élément n'existe pas ou n'est plus accessible.",
     "generique_description": "L'application a rencontré un problème. Rien de ce que vous avez enregistré n'est perdu.",
     "reessayer": "Réessayer",
-    "generique_description_natif": "L'application a rencontré un problème. Vos données enregistrées sur cet appareil sont conservées."
+    "generique_description_natif": "L'application a rencontré un problème. Vos données enregistrées sur cet appareil sont conservées.",
+    "export_echec": "Le téléchargement a échoué. Réessayez."
   },
   "auth": {
     "social": {

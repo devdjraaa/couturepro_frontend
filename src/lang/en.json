@@ -399,7 +399,8 @@
     "introuvable_description": "This item does not exist or is no longer available.",
     "generique_description": "The app ran into a problem. Nothing you saved has been lost.",
     "reessayer": "Try again",
-    "generique_description_natif": "The app ran into a problem. The data saved on this device is safe."
+    "generique_description_natif": "The app ran into a problem. The data saved on this device is safe.",
+    "export_echec": "Download failed. Please try again."
   },
   "auth": {
     "social": {

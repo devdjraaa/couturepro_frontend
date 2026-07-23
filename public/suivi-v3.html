@@ -223,9 +223,9 @@ const ITEMS = [
   I(14,'GX-6',2,'GX','moi','part',
     'Facturation : aperçu avant émission et gabarits par atelier',
     'Le module et la normalisation DGI sont livrés et fonctionnent. Restent la prévisualisation et les gabarits avancés par atelier.'),
-  I(15,'GX-7',2,'GX','moi','part',
+  I(15,'GX-7',2,'GX','moi','done',
     'Export des mesures en CSV — cas individuel',
-    'Le partage WhatsApp est en place et testé, l\'export groupé aussi. Seul l\'export d\'une fiche isolée n\'a pas été confirmé à l\'écran.'),
+    'FAIT (23/07). En le vérifiant, DEUX bugs invisibles au build : le bouton pointait vers un &lt;a href download&gt; qui n\'envoie PAS le jeton — la route étant protégée, le téléchargement recevait un 401 ; et l\'URL était construite par une méthode async, donc href valait [object Promise]. Le CSV ne se téléchargeait tout simplement pas. Corrigé : le fichier est récupéré via le client authentifié (jeton joint) puis sauvé. Message d\'erreur dédié plutôt qu\'un échec muet. 4 tests serveur verrouillent le contrat : 401 sans jeton, CSV correct avec BOM UTF-8 et nom d\'après le client, isolation entre ateliers, et un client sans mesure donne un fichier à en-têtes seules plutôt qu\'une erreur.'),
 
   I(42,'VEI-12',2,'GX','moi','done',
     'Surveiller que le pré-rendu reste actif',

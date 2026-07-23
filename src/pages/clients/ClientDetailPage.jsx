@@ -233,14 +233,20 @@ export default function ClientDetailPage() {
                   <Button variant="secondary" className="flex-1" onClick={() => setEditingMesures(true)}>
                     {t('clients.detail.modifier_mesures')}
                   </Button>
-                  <a
-                    href={mesureService.exportCsvUrl(clientId)}
-                    download
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      try {
+                        await mesureService.telechargerCsv(clientId)
+                      } catch {
+                        toast.error(t('erreurs.export_echec'))
+                      }
+                    }}
                     className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-edge bg-subtle text-sm font-medium text-ghost hover:text-ink transition-colors"
                   >
                     <Download size={14} />
                     CSV
-                  </a>
+                  </button>
                   <button
                     type="button"
                     onClick={async () => {
