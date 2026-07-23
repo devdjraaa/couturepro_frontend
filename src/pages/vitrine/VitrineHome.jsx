@@ -99,7 +99,7 @@ function HeroSearch({ creators }) {
   }
 
   return (
-    <div className="relative max-w-[540px] mx-auto mb-6 text-left">
+    <div className="relative w-full max-w-[540px] mx-auto mb-6 text-left">
       <div className="flex items-center rounded-xl border border-edge bg-card focus-within:ring-2 focus-within:ring-primary/30 overflow-hidden">
         <Search size={15} className="ml-3.5 shrink-0 text-ghost pointer-events-none" />
         <input
@@ -107,14 +107,18 @@ function HeroSearch({ creators }) {
           onChange={(e) => setQ(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
           placeholder={t('vitrine.search.placeholder')}
-          className="flex-1 px-3 py-3 text-sm text-ink placeholder:text-ghost bg-transparent focus:outline-none"
+          className="flex-1 min-w-0 px-3 py-3 text-sm text-ink placeholder:text-ghost bg-transparent focus:outline-none"
         />
         <button
           type="button"
           onClick={handleSearch}
-          className="m-1.5 shrink-0 px-4 py-2 rounded-[10px] bg-primary text-inverse font-semibold text-sm hover:bg-primary-600 transition whitespace-nowrap"
+          className="m-1.5 shrink-0 rounded-[10px] bg-primary text-inverse font-semibold text-sm hover:bg-primary-600 transition"
+          aria-label={t('vitrine.search.cta')}
         >
-          {t('vitrine.search.cta')}
+          <span className="hidden sm:block px-4 py-2">{t('vitrine.search.cta')}</span>
+          <span className="sm:hidden flex items-center justify-center w-9 h-9" aria-hidden="true">
+            <Search size={16} />
+          </span>
         </button>
       </div>
       {query && (
