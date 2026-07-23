@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, Heart, Search, Star, MapPin, Check, Scissors, ShieldCheck, Headphones, Sparkles as SparklesIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import VitrineShell, { VitrineLogo } from './VitrineChrome'
+import VitrineShell from './VitrineChrome'
 import PartenairesBanner from './PartenairesBanner'
 import { getCreators, getCreations, demoModels, categories } from './vitrineApi'
 import GarmentVisual from './GarmentVisual'
@@ -322,9 +322,6 @@ export default function VitrineHome() {
         </div>
 
         <div className="vt-stagger max-w-[1180px] mx-auto px-5 relative">
-          <div className="vt-item flex justify-center mb-8">
-            <VitrineLogo />
-          </div>
           <div className="vt-item text-[12px] font-bold tracking-[0.14em] uppercase text-primary">{t('vitrine.hero.eyebrow')}</div>
           <h1 className="vt-item font-display font-extrabold mx-auto max-w-[880px] my-3.5 text-[clamp(34px,6vw,60px)] leading-[1.08] text-ink">
             {t('vitrine.hero.title_pre')}<span className="text-primary">{t('vitrine.hero.title_hl')}</span>{t('vitrine.hero.title_post')}
