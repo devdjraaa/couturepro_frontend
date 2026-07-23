@@ -231,6 +231,14 @@ const ITEMS = [
     'Surveiller que le pré-rendu reste actif',
     'FAIT (23/07) — réponse au cahier des charges de veille SEO, en une commande au lieu d\'un pipeline en six phases. Le défaut corrigé aujourd\'hui peut revenir au prochain déploiement, et il est SILENCIEUX : rien ne casse à l\'écran et Google indexe une page vide pendant des semaines. Le contrôle est binaire — le titre servi à un robot doit DIFFÉRER de celui servi à un navigateur. VOLONTAIREMENT SANS MODÈLE DE LANGAGE, contrairement au cahier des charges : deux titres sont égaux ou ils ne le sont pas, un modèle n\'apporte rien sur une comparaison binaire et y ajoute un mode de défaillance ; le document le concède lui-même en exigeant une règle déterministe à côté, donc la règle seule suffit. ET DANS LARAVEL, PAS DANS n8n — l\'automate a déjà tourné six jours à l\'arrêt sans que rien ne le signale, c\'est la raison qui avait fait rapatrier la veille. Toutes les 6 h, pas une fois par semaine. Chien de garde du chien de garde : la vérification quotidienne alerte si le contrôle n\'a plus tourné depuis 24 h. 6 tests, chacun vérifiant la détection DANS LES DEUX SENS, plus un essai réel contre une page sans pré-rendu.'),
 
+  I(45,'COR1',2,'GX','moi','done',
+    'Page de tarification — 9 corrections',
+    'FAIT (23/07). Sélecteur Artisan/Designer avant les prix ; le plan gratuit affiche son PRIX (0 FCFA) et non « Gratuit » une seconde fois ; « soit » et « i.e. » retirés ; accroches sur deux lignes de hauteur réservée (sur une seule elles se chevauchaient dès que la fenêtre rétrécissait, et sans hauteur fixe les prix ne s\'alignaient plus) ; UN SEUL badge « Plan populaire » — avant, l\'accroche de chaque plan s\'affichait en pastille, et trois badges ne mettent rien en avant ; note sous la grille ; encart des options complémentaires avec « Contacter le service ». TOUT est éditable en administration : plan mis en avant, badge, note, encart, libellés du sélecteur. Aucun prix dans cet écran — les tarifs restent dans les plans. DEUX défauts trouvés en mesurant : les pluriels ne se faisaient pas (« 5 création », « 1 membre(s) ») car les clés suivaient l\'ancien format d\'i18next et étaient ignorées en silence depuis la montée de version ; et l\'en-tête de la vitrine DÉBORDAIT de 144 px entre 1024 et 1150 px. Mesuré à 11 largeurs de 360 à 1920 px : aucun débordement, aucun chevauchement.'),
+
+  I(46,'COR1-b',2,'GX','moi','done',
+    'Noms des plans traduisibles',
+    'FAIT (23/07). Le vrai défaut de la version anglaise n\'était pas dans les traductions : les noms et accroches des plans viennent de la BASE et n\'avaient aucune version anglaise — la page restait à moitié française une fois la langue basculée. Deux champs ajoutés dans l\'écran des plans, vides par défaut : tant qu\'aucune traduction n\'est saisie, le français est servi, ce qui vaut mieux qu\'un blanc sur une page de tarifs. Traductions de départ posées, à relire par la direction (voir DIR-16).'),
+
   // ───────── 3. Gextimo — re-tests appareil ─────────
   I(20,'QA-5',3,'GX','moi','part',
     'Bouton « déjà inscrit » sur l\'écran d\'inscription',
@@ -331,6 +339,22 @@ const ITEMS = [
   I(77,'DIR-15',8,'GX','dir','todo',
     'Fournir les clés externes le jour d\'une campagne payante',
     'GA4, Pixel Meta, Clarity, accès Search Console. FACULTATIF : l\'analytique interne tourne déjà sans elles et l\'écran /admin/analytique est alimenté depuis le 16/07.'),
+
+  I(78,'DIR-16',7,'GX','dir','todo',
+    'ARBITRAGE — les tarifs doivent-ils différer entre Artisan et Designer ?',
+    'Le cahier des charges COR 1 part du principe que « les plans et leurs fonctionnalités sont différents ». Ce n\'est pas le cas aujourd\'hui : les trois paliers, les prix et la configuration sont IDENTIQUES pour les deux types de compte — c\'était une décision assumée (plans partagés). Le sélecteur est en place et masque à l\'artisan les lignes qui ne le concernent pas (vitrine, galerie, multi-ateliers), mais les MONTANTS restent les mêmes. Deux options : soit on assume des tarifs identiques et le sélecteur ne sert qu\'à clarifier les fonctions utiles — c\'est l\'état actuel et il est cohérent ; soit on veut de vrais tarifs par type de compte, et c\'est un chantier à part (nouveaux plans, migration des abonnements en cours, règles de bascule). Rien ne se décide côté technique.'),
+
+  I(79,'DIR-17',8,'GX','dir','todo',
+    'Relire les traductions anglaises des plans',
+    'Les noms et accroches des plans sont désormais bilingues et éditables dans Administration → Plans. J\'ai posé des traductions de départ pour que la page ne soit plus à moitié française, mais ce sont des textes COMMERCIAUX : la formulation vous revient. Champs « Nom (anglais) » et « Accroche (anglais) » sur chaque plan.'),
+
+  I(80,'DIR-18',8,'GX','dir','todo',
+    'Choisir le plan mis en avant et relire les textes de la page de tarifs',
+    'Administration → Réglages vitrine → Tarification. Vous y choisissez le plan qui porte le badge « Plan populaire » (Atelier par défaut, celui du milieu), et vous éditez la note de bas de grille ainsi que l\'encart des options complémentaires — titre, texte, bouton, lien. Les textes que j\'ai posés sont fonctionnels mais génériques : ce sont des arguments de vente, ils gagneront à être les vôtres.'),
+
+  I(81,'DIR-19',8,'GX','dir','todo',
+    'Décider du sort des packs complémentaires',
+    'L\'encart annonce pour l\'instant que des options existent et renvoie vers le support. Deux suites possibles, à trancher : soit les packs sont finalisés (membres supplémentaires, quotas augmentés, extensions) et on les affiche vraiment avec leurs prix ; soit on garde le simple contact. Le cahier des charges évoquait aussi de passer l\'information par le module Messages après inscription plutôt que sur la page — c\'est faisable, dites-moi. L\'encart se désactive d\'un interrupteur si vous préférez ne rien afficher pour l\'instant.'),
 
   // ───────── 9. Tiers ─────────
   I(90,'T-1',9,'GX','tiers','bloq',
