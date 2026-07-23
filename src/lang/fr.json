@@ -1558,8 +1558,8 @@
     "err_generic": "La mise en vente a échoué. Réessayez."
   },
   "vitrine": {
-    "promo": "Nouveau — Gextimo, la vitrine qui fait rayonner la mode africaine au-delà des frontières.",
-    "promo_a": "Nouveau — ",
+    "promo": "Nouveau · Gextimo, la vitrine qui fait rayonner la mode africaine au-delà des frontières.",
+    "promo_a": "Nouveau ·",
     "promo_b": ", la vitrine qui fait rayonner la mode africaine au-delà des frontières.",
     "online": "● En ligne",
     "loading": "Chargement…",
@@ -1586,7 +1586,7 @@
       "eyebrow": "Gextimo",
       "title": "Votre vitrine de création africaine vous attend",
       "subtitle": "Créez votre espace en 2 minutes, depuis votre navigateur.",
-      "body": "Votre espace est accessible depuis le web dès votre inscription. Pour aller plus loin — gérer vos commandes en mobilité, recevoir des notifications et accéder aux fonctionnalités avancées — téléchargez l'application mobile.",
+      "body": "Votre espace est accessible depuis le web dès votre inscription. Pour aller plus loin, gérez vos commandes en mobilité, recevez des notifications et accédez aux fonctionnalités avancées : téléchargez l'application mobile.",
       "cta": "Télécharger l'application",
       "have_account": "Déjà un compte ?",
       "login": "Se connecter",
@@ -3797,7 +3797,7 @@
       "tarifs": {
         "plans": {
           "label": "Nos formules",
-          "desc": "De gratuit à Premium — comparez et choisissez"
+          "desc": "De gratuit à Premium, comparez et choisissez"
         },
         "boost": {
           "label": "Mise en avant",

@@ -1558,8 +1558,8 @@
     "err_generic": "Putting on sale failed. Please try again."
   },
   "vitrine": {
-    "promo": "New — Gextimo, the showcase that lets African fashion shine beyond borders.",
-    "promo_a": "New — ",
+    "promo": "New · Gextimo, the showcase that lets African fashion shine beyond borders.",
+    "promo_a": "New ·",
     "promo_b": ", the showcase that lets African fashion shine beyond borders.",
     "online": "● Online",
     "loading": "Loading…",
@@ -1586,7 +1586,7 @@
       "eyebrow": "Gextimo",
       "title": "Your African design showcase is waiting",
       "subtitle": "Create your space in 2 minutes, from your browser.",
-      "body": "Your space is available on the web as soon as you sign up. To go further — manage orders on the move, get notifications and reach advanced features — download the mobile app.",
+      "body": "Your space is available on the web as soon as you sign up. To go further, manage orders on the move, get notifications and access advanced features: download the mobile app.",
       "cta": "Download the app",
       "have_account": "Already have an account?",
       "login": "Log in",
@@ -3784,7 +3784,7 @@
       "tarifs": {
         "plans": {
           "label": "Our plans",
-          "desc": "From free to Premium — compare and choose"
+          "desc": "From free to Premium, compare and choose"
         },
         "boost": {
           "label": "Boost listing",

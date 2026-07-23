@@ -321,12 +321,12 @@ export default function VitrineHome() {
           <div className="vt-hero-lame" />
         </div>
 
-        <div className="vt-stagger max-w-[1180px] mx-auto px-5 relative">
+        <div className="vt-stagger w-full max-w-[1180px] mx-auto px-5 relative">
           <div className="vt-item flex justify-center mb-7">
             <img src="/logoforlogin.png" alt="Gextimo" className="h-16 w-auto select-none" draggable="false" />
           </div>
           <div className="vt-item text-[12px] font-bold tracking-[0.14em] uppercase text-primary">{t('vitrine.hero.eyebrow')}</div>
-          <h1 className="vt-item font-display font-extrabold mx-auto max-w-[880px] my-3.5 text-[clamp(34px,6vw,60px)] leading-[1.08] text-ink">
+          <h1 className="vt-item font-display font-extrabold mx-auto max-w-[880px] w-full my-3.5 text-[clamp(28px,6vw,60px)] leading-[1.1] text-ink">
             {t('vitrine.hero.title_pre')}<span className="text-primary">{t('vitrine.hero.title_hl')}</span>{t('vitrine.hero.title_post')}
           </h1>
           <div className="vt-item h-7 mb-6 text-dim text-[clamp(15px,2vw,19px)] font-medium">
