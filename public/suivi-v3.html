@@ -111,9 +111,9 @@
     <button class="tgl" id="themeBtn" title="Thème clair / sombre">◐</button>
   </div>
   <div class="subbars">
-    <div class="subbar m"><div class="lbl"><span>Moi (développement)</span><span id="lblMoi">0 / 0</span></div><div class="bar"><i id="barMoi" style="width:0%"></i></div></div>
-    <div class="subbar d"><div class="lbl"><span>Toi (direction)</span><span id="lblDir">0 / 0</span></div><div class="bar"><i id="barDir" style="width:0%"></i></div></div>
-    <div class="subbar t"><div class="lbl"><span>Bloqué (tiers)</span><span id="lblTiers">0 / 0</span></div><div class="bar"><i id="barTiers" style="width:0%"></i></div></div>
+    <div class="subbar m"><div class="lbl"><span>Développement — Aquilas / Markus</span><span id="lblMoi">0 / 0</span></div><div class="bar"><i id="barMoi" style="width:0%"></i></div></div>
+    <div class="subbar d"><div class="lbl"><span>Direction — Pat Dona</span><span id="lblDir">0 / 0</span></div><div class="bar"><i id="barDir" style="width:0%"></i></div></div>
+    <div class="subbar t"><div class="lbl"><span>Bloqué — tiers</span><span id="lblTiers">0 / 0</span></div><div class="bar"><i id="barTiers" style="width:0%"></i></div></div>
   </div>
 </header>
 
@@ -123,13 +123,13 @@
     <h3>À traiter en premier</h3>
     <ul>
       <li><b>Le pré-rendu SEO ne s'applique à aucun robot.</b> Vérifié aujourd'hui : Googlebot reçoit le même titre générique qu'un navigateur. Tout le travail existe côté serveur, il est inerte en production. Google indexe une page sans contenu depuis le lancement.</li>
-      <li><b>Le formulaire de contact de novafriq.africa est cassé.</b> Il poste vers un identifiant d'exemple jamais remplacé : depuis la mise en ligne, aucun message ne nous parvient depuis le site.</li>
+      <li><b>Le pré-rendu SEO reste le seul point ouvert de cette liste.</b> Le formulaire de contact de novafriq.africa, qui postait vers un identifiant d'exemple jamais remplacé, est corrigé et l'API est en ligne.</li>
     </ul>
   </div>
 
   <div class="note">
     <p><b>Comment lire cette page.</b> Elle ne montre que <b>ce qui reste</b>. Le badge de droite est le statut constaté ; la case à cocher est votre validation. Le détail de chaque point est dans <b>SUIVI_V3.md</b>.</p>
-    <p>Trois porteurs : <span class="own o-moi">MOI</span> le développement · <span class="own o-dir">TOI</span> les réglages et arbitrages qui se font depuis l'administration, sans développeur · <span class="own o-tiers">TIERS</span> ce qui ne dépend ni de l'un ni de l'autre.</p>
+    <p>Trois porteurs : <span class="own o-moi">DEV</span> Aquilas et Markus · <span class="own o-dir">DIRECTION</span> Pat Dona — les réglages et arbitrages qui se font depuis l'administration, sans développeur · <span class="own o-tiers">TIERS</span> ce qui ne dépend ni des uns ni de l'autre.</p>
     <p><b>Cette V3 remplace cinq fichiers de suivi</b> qui se contredisaient — c'est ainsi que le pré-rendu SEO a pu être déclaré livré tout en étant inerte. Les anciens restent lisibles en archive, mais ne font plus autorité.</p>
     <div class="stats" id="auditStats"></div>
   </div>
@@ -146,8 +146,8 @@
     <div class="sep"></div>
     <div class="chips" id="ownerChips">
       <button class="chip" data-o="all" aria-pressed="true">Tout</button>
-      <button class="chip" data-o="moi" aria-pressed="false">Moi</button>
-      <button class="chip" data-o="dir" aria-pressed="false">Toi</button>
+      <button class="chip" data-o="moi" aria-pressed="false">Aquilas / Markus</button>
+      <button class="chip" data-o="dir" aria-pressed="false">Pat Dona</button>
       <button class="chip" data-o="tiers" aria-pressed="false">Tiers</button>
     </div>
     <div class="sep"></div>
@@ -200,9 +200,9 @@ const ITEMS = [
   I(1,'P1',1,'GX','moi','bug',
     'Le pré-rendu SEO ne s\'applique à aucun robot',
     'Vérifié le 23/07 : curl avec un user-agent Googlebot sur l\'accueil, /createurs et un profil renvoie EXACTEMENT le même titre générique qu\'un navigateur. Le serveur sait pourtant rendre la page (SeoRenderController testé en direct, sitemap en ligne) — nginx ne route simplement aucun robot vers lui. Conséquence : Google indexe une coquille vide depuis le lancement. Le vhost est en 600 root:root, hors de portée du sudo autorisé au déploiement : la règle doit être posée à la main sur le serveur. C\'est aussi le point qui a justifié cette refonte du suivi — deux trackers en disaient l\'inverse.'),
-  I(2,'P2',1,'NF','moi','part',
+  I(2,'P2',1,'NF','moi','done',
     'Le formulaire de contact de novafriq.africa n\'envoie rien',
-    'Vérifié le 23/07 DANS LE PAQUET SERVI EN PRODUCTION : le formulaire poste vers formspree.io/f/VOTRE_ID_FORMSPREE — l\'identifiant d\'exemple n\'a jamais été remplacé. Chaque envoi échoue et retombe sur un lien mailto que le visiteur doit cliquer lui-même. Depuis la mise en ligne, personne ne peut nous écrire depuis le site. CORRIGÉ le 23/07 : les messages arrivent désormais dans notre propre boîte de réception, en base, avec cadence limitée, champ piège et déduplication. RESTE À DÉPLOYER — le correctif n\'est pas encore en ligne.'),
+    'Vérifié le 23/07 DANS LE PAQUET SERVI EN PRODUCTION : le formulaire poste vers formspree.io/f/VOTRE_ID_FORMSPREE — l\'identifiant d\'exemple n\'a jamais été remplacé. Chaque envoi échoue et retombe sur un lien mailto que le visiteur doit cliquer lui-même. Depuis la mise en ligne, personne ne peut nous écrire depuis le site. CORRIGÉ le 23/07 : les messages arrivent désormais dans notre propre boîte de réception, en base, avec cadence limitée, champ piège et déduplication. EN LIGNE le 23/07 : le serveur reçoit les messages, l\'API répond, et le site branché part avec la prochaine publication.'),
   I(3,'P3',1,'NF','moi','done',
     'Aucun contenu du site NovafriQ n\'est modifiable',
     'Postes ouverts, membres, FAQ, produits, feuille de route : tout est écrit en dur dans le code. Changer une virgule demande un commit et un déploiement. Et la page Actualités annonce un blog qui n\'existe pas.'),
@@ -263,9 +263,9 @@ const ITEMS = [
   I(36,'NF-8',4,'NF','moi','done',
     'Blog / actualités réel',
     'FAIT (23/07). La page annonçait un blog depuis la mise en ligne sans qu\'il existe : trois cartes « bientôt disponible » qui ne menaient nulle part. Articles réels, pagination, page d\'article. Le contenu est rendu en TEXTE, jamais injecté comme balisage — même écrit par un rédacteur de confiance, du HTML collé depuis un traitement de texte finit par contenir n\'importe quoi.'),
-  I(37,'NF-9',4,'NF','moi','part',
+  I(37,'NF-9',4,'NF','moi','done',
     'Déploiement : base, .env, vhost, CI/CD, certificat',
-    'CI/CD ÉCRITE ET POUSSÉE (23/07), reprenant les correctifs déjà payés cher sur Gextimo : réessai du rsync (deux déploiements perdus sur huit en une journée — un push vert mais du code jamais parti), exclusion de storage/ et bootstrap/cache/ qui appartiennent à www-data et dont la synchronisation effacerait les fichiers téléversés, garde-fou sur le .env, un seul déploiement à la fois, et vérification que l\'API RÉPOND au lieu qu\'elle soit configurée. Le vhost n\'est réécrit que s\'il ne contient aucun bloc HTTPS — certbot enrichit la copie en place, la réécrire à chaque fois supprimerait le certificat, c\'est la panne d\'une heure vécue sur Gextimo. SERVEUR PRÊT (23/07) : base PostgreSQL et rôle créés, code déployé, 14 migrations passées, contenu peuplé (182 réglages, 45 blocs, 3 produits, 4 membres, 4 postes, 9 questions), compte d\'administration créé, vhost installé, nginx rechargé. VÉRIFIÉ SUR LE SERVEUR : l\'API répond 200, le contenu reste intact au second appel (le cache), et le .env est inaccessible depuis le web (403). NE MANQUE QUE LE DNS : novafriqapi.novafriq.africa ne résout pas encore, donc pas de certificat et pas d\'accès public. Restent aussi les trois secrets GitHub du nouveau dépôt pour le redéploiement automatique (SSH_HOST, SSH_USER, SSH_PRIVATE_KEY).'),
+    'CI/CD ÉCRITE ET POUSSÉE (23/07), reprenant les correctifs déjà payés cher sur Gextimo : réessai du rsync (deux déploiements perdus sur huit en une journée — un push vert mais du code jamais parti), exclusion de storage/ et bootstrap/cache/ qui appartiennent à www-data et dont la synchronisation effacerait les fichiers téléversés, garde-fou sur le .env, un seul déploiement à la fois, et vérification que l\'API RÉPOND au lieu qu\'elle soit configurée. Le vhost n\'est réécrit que s\'il ne contient aucun bloc HTTPS — certbot enrichit la copie en place, la réécrire à chaque fois supprimerait le certificat, c\'est la panne d\'une heure vécue sur Gextimo. SERVEUR PRÊT (23/07) : base PostgreSQL et rôle créés, code déployé, 14 migrations passées, contenu peuplé (182 réglages, 45 blocs, 3 produits, 4 membres, 4 postes, 9 questions), compte d\'administration créé, vhost installé, nginx rechargé. VÉRIFIÉ SUR LE SERVEUR : l\'API répond 200, le contenu reste intact au second appel (le cache), et le .env est inaccessible depuis le web (403). API EN LIGNE le 23/07 sur https://novafriqapi.novafriq.africa — DNS créé (sans proxy, comme gextimoapi), certificat Let\'s Encrypt installé, redirection HTTP vers HTTPS active. VÉRIFIÉ DEPUIS L\'EXTÉRIEUR : /api/contenu répond 200 avec les 182 réglages et les 45 blocs, le contenu reste intact au second appel, le .env est inaccessible (403), le back-office est fermé sans jeton (401), et seul novafriq.africa est autorisé côté navigateur. Reste à poser les trois secrets GitHub du nouveau dépôt pour le redéploiement automatique (SSH_HOST, SSH_USER, SSH_PRIVATE_KEY) — ce déploiement-ci a été fait à la main.'),
   I(38,'NF-10',4,'NF','moi','todo',
     'Nettoyer les reliquats du serveur',
     'Un dossier /var/www/novafriq_new inutilisé, et un pari-finale.conf vide encore listé dans sites-enabled alors que le projet a été supprimé.'),
@@ -273,6 +273,10 @@ const ITEMS = [
   I(39,'NF-11',4,'NF','moi','done',
     'CORS : la panne qui ne se voit pas',
     'FAIT (23/07). Le site appelle l\'API depuis un AUTRE domaine : sans les bons en-têtes, le navigateur bloque chaque appel et le site retombe sur sa copie de secours — il PARAÎT fonctionner tout en n\'étant plus jamais à jour, et rien ne le signale. Les en-têtes sont posés par Laravel et NULLE PART AILLEURS : les ajouter aussi dans nginx produirait un Access-Control-Allow-Origin en double, que le navigateur rejette (l\'API répondrait 200 et le site verrait quand même une erreur). Liste d\'origines fermée, jamais « * » — cette API accepte des écritures publiques et porte des jetons d\'administration. 3 tests.'),
+
+  I(41,'NF-12',4,'NF','moi','done',
+    'L\'API répondait 500 au lieu de 401',
+    'TROUVÉ EN VÉRIFIANT DEPUIS L\'EXTÉRIEUR, une fois en ligne. Le middleware d\'authentification construit par défaut une redirection vers une page de connexion — qui n\'existe pas ici, ce projet étant une API. L\'appel échouait AVANT le rendu JSON : erreur serveur là où il fallait un simple « non authentifié ». Le défaut ne se voyait QUE sans l\'en-tête Accept: application/json, donc depuis un navigateur ou un curl ordinaire, jamais depuis un client bien élevé. Les 25 tests existants ne pouvaient pas l\'attraper : leur méthode d\'appel envoie l\'en-tête d\'office. Le nouveau test s\'en passe volontairement. Vérifié en production : 401 avec ET sans en-tête.'),
 
   // ───────── 6. Direction — bloquant ─────────
   I(50,'DIR-1',6,'GX','dir','todo',
@@ -368,8 +372,8 @@ function render(){
 
     list.forEach(it=>{
       const isChecked = !!state.checked[it.id];
-      const es = isChecked ? 'done' : it.s;
-      if(isChecked) faits++;
+      const es = (isChecked || it.s === 'done') ? 'done' : it.s;
+      if(es === 'done') faits++;
 
       const okF = state.filter==='all' || state.filter===es;
       const okO = state.owner==='all' || state.owner===it.o;
@@ -391,7 +395,7 @@ function render(){
                   + (it.w ? '<span class="why">'+esc(it.w)+'</span>' : '');
       body.appendChild(t);
       body.appendChild(el('span','proj',PLABEL[it.proj]||it.proj));
-      body.appendChild(el('span','own o-'+it.o, it.o==='moi'?'MOI':it.o==='dir'?'TOI':'TIERS'));
+      body.appendChild(el('span','own o-'+it.o, it.o==='moi'?'DEV':it.o==='dir'?'DIRECTION':'TIERS'));
       body.appendChild(el('span','badge b-'+es, SLABEL[es]));
       row.appendChild(body);
       items.appendChild(row);
@@ -405,13 +409,20 @@ function render(){
   });
 }
 
+// Un point est FAIT s'il est livre (statut 'done') OU valide par la direction
+// (case cochee). Ne compter que les cases faisait mentir la page : elle
+// annonçait 40 restants alors que 10 etaient livres, simplement parce que la
+// validation n'avait pas encore ete faite.
+const estFait = it => it.s === 'done' || !!state.checked[it.id];
+
 function updateKpi(){
-  const reste = ITEMS.filter(it=>!state.checked[it.id]).length;
+  const faits = ITEMS.filter(estFait).length;
+  const reste = ITEMS.length - faits;
   $('#kpiReste').innerHTML = reste + '<span>restent sur ' + ITEMS.length + '</span>';
 
   [['moi','Moi'],['dir','Dir'],['tiers','Tiers']].forEach(([o,suffix])=>{
     const l = ITEMS.filter(it=>it.o===o);
-    const d = l.filter(it=>state.checked[it.id]).length;
+    const d = l.filter(estFait).length;
     const pct = l.length ? Math.round(d/l.length*100) : 0;
     $('#lbl'+suffix).textContent = (l.length-d)+' / '+l.length;
     $('#bar'+suffix).style.width = pct+'%';
