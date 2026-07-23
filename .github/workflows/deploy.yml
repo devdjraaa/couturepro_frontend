@@ -42,16 +42,12 @@ jobs:
           ssh-keyscan -T 10 -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
 
       - name: Deploy Nginx
-        timeout-minutes: 5
+        timeout-minutes: 8
         run: |
-          ssh -i ~/.ssh/id_ed25519 \
-              -o StrictHostKeyChecking=no \
-              -o ConnectionAttempts=5 \
-              -o ConnectTimeout=45 \
-              -o ServerAliveInterval=15 \
-              -o ServerAliveCountMax=4 \
-              -o BatchMode=yes \
-              ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} bash << 'ENGNX'
+          # Le script distant part dans un FICHIER avant d'etre joue : un
+          # heredoc est consomme a la premiere tentative, on ne pourrait pas le
+          # rejouer.
+          cat > /tmp/deploy-nginx.sh << 'ENGNX'
           set -uo pipefail
 
           DOMAIN=gextimo.novafriq.africa
@@ -222,6 +218,26 @@ jobs:
           echo "✅ https://$DOMAIN répond ($CODE)."
           ENGNX
 
+          # Reessai : la connexion SSH depuis les runners GitHub tombe par
+          # intermittence. Cette etape porte 180 lignes derriere UNE connexion et
+          # tourne AVANT le rsync : sans reessai, une coupure faisait echouer
+          # tout le deploiement sans que le code parte, et il fallait relancer a
+          # la main. Constate plusieurs fois d'affilee le 23/07.
+          #
+          # L'etape est IDEMPOTENTE — elle compare la configuration avant de la
+          # reecrire et restaure la precedente si le site ne repond plus : la
+          # rejouer est sans risque.
+          for essai in 1 2 3; do
+            ssh -i ~/.ssh/id_ed25519 \
+                -o StrictHostKeyChecking=no -o BatchMode=yes \
+                -o ConnectionAttempts=5 -o ConnectTimeout=45 \
+                -o ServerAliveInterval=15 -o ServerAliveCountMax=4 \
+                ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} bash -s < /tmp/deploy-nginx.sh && exit 0
+            echo "::warning::Deploy Nginx a échoué (tentative $essai/3) — nouvelle tentative dans 15 s"
+            [ "$essai" = 3 ] && exit 1
+            sleep 15
+          done
+
 
       - name: Deploy dist to VPS
         timeout-minutes: 6
@@ -245,12 +261,18 @@ jobs:
 
       - name: Reload Nginx
         run: |
-          ssh -i ~/.ssh/id_ed25519 \
-              -o StrictHostKeyChecking=no \
-              -o ConnectionAttempts=5 \
-              -o ConnectTimeout=45 \
-              -o ServerAliveInterval=15 \
-              -o ServerAliveCountMax=4 \
-              -o BatchMode=yes \
-              ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-              "sudo systemctl reload nginx && echo '✅ Frontend déployé'"
+          # Dernier maillon : le code est deja sur le serveur, mais sans ce
+          # rechargement nginx peut continuer de servir l'ancienne
+          # configuration. Un echec ici laisserait croire le deploiement rate
+          # alors qu'il est fait aux trois quarts.
+          for essai in 1 2 3; do
+            ssh -i ~/.ssh/id_ed25519 \
+                -o StrictHostKeyChecking=no -o BatchMode=yes \
+                -o ConnectionAttempts=5 -o ConnectTimeout=45 \
+                -o ServerAliveInterval=15 -o ServerAliveCountMax=4 \
+                ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+                "sudo systemctl reload nginx && echo '✅ Frontend déployé'" && exit 0
+            echo "::warning::Reload Nginx a échoué (tentative $essai/3)"
+            sleep 10
+          done
+          exit 1
