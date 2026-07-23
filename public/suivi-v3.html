@@ -282,6 +282,14 @@ const ITEMS = [
     'L\'API répondait 500 au lieu de 401',
     'TROUVÉ EN VÉRIFIANT DEPUIS L\'EXTÉRIEUR, une fois en ligne. Le middleware d\'authentification construit par défaut une redirection vers une page de connexion — qui n\'existe pas ici, ce projet étant une API. L\'appel échouait AVANT le rendu JSON : erreur serveur là où il fallait un simple « non authentifié ». Le défaut ne se voyait QUE sans l\'en-tête Accept: application/json, donc depuis un navigateur ou un curl ordinaire, jamais depuis un client bien élevé. Les 25 tests existants ne pouvaient pas l\'attraper : leur méthode d\'appel envoie l\'en-tête d\'office. Le nouveau test s\'en passe volontairement. Vérifié en production : 401 avec ET sans en-tête.'),
 
+  I(43,'NF-13',4,'NF','moi','done',
+    'Être prévenu quand un message arrive',
+    'FAIT (23/07). Les messages atterrissaient en base sans que personne ne le sache — le défaut le plus fréquent du projet, une règle serveur complète que rien ne vient lire — et la page Contact promet « nous répondons à chaque message ». L\'avis part à l\'adresse RÉGLÉE en administration, jamais écrite dans le code, et répondre à l\'avis écrit directement à la personne. L\'envoi ne peut jamais faire échouer la réception : le message est déjà enregistré, et une messagerie indisponible ne doit pas laisser croire au visiteur que son envoi a raté — il recommencerait. Vérifié par un test qui simule la panne. Un doublon ne prévient pas deux fois. Relais Brevo configuré, domaine déjà authentifié.'),
+
+  I(44,'NF-14',4,'NF','moi','done',
+    'Déploiement automatique du backend NovafriQ',
+    'FAIT (23/07) — les trois secrets posés par le chef, et VÉRIFIÉ EN RÉEL : un push a déployé le code sur le serveur en moins d\'une minute, sans intervention. Le workflow reprend les correctifs déjà payés cher sur Gextimo (réessai du rsync, exclusion de storage/, garde-fou sur le .env, un seul déploiement à la fois, contrôle que l\'API répond).'),
+
   // ───────── 6. Direction — bloquant ─────────
   I(50,'DIR-1',6,'GX','dir','todo',
     'Recalibrer le programme de fidélité',
