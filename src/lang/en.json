@@ -4504,7 +4504,13 @@
       "duree_permanente": "Permanent",
       "form_type": "Who this plan is for",
       "form_visible_vitrine": "Visible on the public showcase",
-      "form_visible_app": "Visible in the app"
+      "form_visible_app": "Visible in the app",
+      "libelles_titre": "Feature line texts (showcase and app)",
+      "libelles_aide": "These texts are shared by all plans: they are a line template, not a plan value. The {n} token is replaced by the displayed plan's value — “Up to {n} workshops” becomes “Up to 7 workshops” on a plan allowing 7. The same text feeds the public pricing page and the in-app subscription offer. Left empty, the shipped text is used.",
+      "libelles_enregistres": "Texts saved.",
+      "cle_brute_titre": "Add a technical key (development only)",
+      "cle_brute_aide": "Not needed in normal use: features known to the server already appear above on their own. This field only forces a key the server does not recognise yet.",
+      "cle_brute_ajouter": "+ Add key"
     },
     "veille": {
       "titre": "Opportunity watch",

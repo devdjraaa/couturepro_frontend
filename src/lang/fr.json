@@ -4517,7 +4517,13 @@
       "duree_permanente": "Permanent",
       "form_type": "À qui s'adresse ce plan",
       "form_visible_vitrine": "Visible sur la vitrine publique",
-      "form_visible_app": "Visible dans l'application"
+      "form_visible_app": "Visible dans l'application",
+      "libelles_titre": "Textes des lignes de fonctionnalité (vitrine et application)",
+      "libelles_aide": "Ces textes sont communs à tous les plans : c'est le gabarit d'une ligne, pas une valeur de plan. Le jeton {n} est remplacé par la valeur du plan affiché — « Jusqu'à {n} ateliers » devient « Jusqu'à 7 ateliers » sur un plan qui en autorise 7. Le même texte alimente la page de tarifs publique et l'offre d'abonnement dans l'application. Laissé vide, le texte livré est utilisé.",
+      "libelles_enregistres": "Textes enregistrés.",
+      "cle_brute_titre": "Ajouter une clé technique (réservé au développement)",
+      "cle_brute_aide": "Inutile dans l'usage courant : les fonctionnalités connues du serveur apparaissent déjà toutes seules ci-dessus. Ce champ ne sert qu'à forcer une clé que le serveur ne reconnaît pas encore.",
+      "cle_brute_ajouter": "+ Ajouter la clé"
     },
     "veille": {
       "titre": "Veille opportunités",

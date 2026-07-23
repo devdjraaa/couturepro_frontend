@@ -7,6 +7,7 @@ import {
   ADMIN_INPUT,
 } from '@/components/admin'
 import { useAdminPlans, useCreatePlan, useUpdatePlan, useTogglePlan, useFonctionnalites } from '@/hooks/admin/usePlans'
+import { useTarificationAdmin, useUpdateTarification } from '@/hooks/admin/useTarificationAdmin'
 import { cn } from '@/utils/cn'
 
 const DEFAULT_CONFIG = {
@@ -61,7 +62,10 @@ function PlanModal({ initial, onClose, onSubmit, isLoading }) {
   const [form, setForm] = useState(() => {
     if (!initial) return { ...EMPTY_FORM, config: { ...DEFAULT_CONFIG } }
     const cfg = typeof initial.config === 'string' ? JSON.parse(initial.config) : (initial.config ?? {})
-    return { ...initial, config: { ...DEFAULT_CONFIG, ...cfg } }
+    // Le formulaire par défaut sert de socle : un plan servi sans les réglages
+    // récents (public, visibilités) laisserait sinon le menu déroulant et les
+    // interrupteurs sans valeur, donc non contrôlés par React.
+    return { ...EMPTY_FORM, ...initial, config: { ...DEFAULT_CONFIG, ...cfg } }
   })
 
   const isEdit   = !!initial?.id
@@ -217,14 +221,107 @@ function PlanModal({ initial, onClose, onSubmit, isLoading }) {
                 <button type="button" onClick={() => removeCfg(k)} className="text-ghost hover:text-danger text-sm px-1" title={t('commun.retirer')}><X size={13} aria-hidden="true" /></button>
               </div>
             ))}
-            <div className="flex gap-2 mt-2">
-              <input value={newKey} onChange={e => setNewKey(e.target.value)} placeholder="nouvelle_cle" className={ADMIN_INPUT + ' max-w-[200px]'} />
-              <button type="button" onClick={addKey} className="text-sm font-medium text-primary whitespace-nowrap">+ Ajouter</button>
+            {/* Trappe technique. Le référentiel des fonctionnalités est servi
+                par le serveur : une clé ajoutée par une migration apparaît déjà
+                toute seule au-dessus. Ce champ ne sert donc qu'à forcer une clé
+                que le serveur ne connaît pas encore — cas rare et réservé au
+                développement. Sans cette explication, il n'était qu'un champ
+                muet en bas d'un formulaire. */}
+            <div className="mt-3 pt-3 border-t border-edge">
+              <p className="text-xs font-medium text-dim">{t('admin.plans.cle_brute_titre')}</p>
+              <p className="text-2xs text-ghost mt-0.5 mb-2">{t('admin.plans.cle_brute_aide')}</p>
+              <div className="flex gap-2">
+                <input value={newKey} onChange={e => setNewKey(e.target.value)} placeholder="ex : max_videos" className={ADMIN_INPUT + ' max-w-[220px]'} />
+                <button type="button" onClick={addKey} className="text-sm font-medium text-primary whitespace-nowrap">{t('admin.plans.cle_brute_ajouter')}</button>
+              </div>
             </div>
           </AdminFormSection>
         </div>
       </form>
     </AdminModal>
+  )
+}
+
+
+/**
+ * Textes des lignes de fonctionnalité.
+ *
+ * Ils sont COMMUNS à tous les plans — c'est le gabarit d'une ligne, pas une
+ * valeur de plan — d'où leur place ici et non dans le modal d'un plan. Le
+ * jeton {n} est remplacé par la valeur du plan affiché : « Jusqu'à {n}
+ * ateliers » devient « Jusqu'à 7 ateliers » sur un plan qui en autorise 7.
+ *
+ * Le même texte alimente la page de tarifs publique ET l'offre d'abonnement
+ * dans l'application : il n'y a plus qu'un endroit à corriger.
+ */
+function LibellesFonctionnalites() {
+  const { t } = useTranslation()
+  const { data: reglages, isLoading } = useTarificationAdmin()
+  const enregistrer = useUpdateTarification()
+  const [ouvert, setOuvert] = useState(false)
+  const [brouillon, setBrouillon] = useState(null)
+
+  const libelles = brouillon ?? reglages?.libelles ?? {}
+  const setLigne = (cle, langue, valeur) =>
+    setBrouillon({ ...libelles, [cle]: { ...(libelles[cle] ?? {}), [langue]: valeur } })
+
+  const soumettre = () => {
+    // On renvoie les interrupteurs requis par le serveur, et la fusion côté
+    // serveur préserve tout ce qui n'est pas édité ici.
+    enregistrer.mutate({
+      types_actif: reglages?.types_actif ?? true,
+      note_actif:  reglages?.note_actif ?? true,
+      packs_actif: reglages?.packs_actif ?? true,
+      libelles,
+    }, { onSuccess: () => setBrouillon(null) })
+  }
+
+  return (
+    <div className="mb-4 bg-card border border-edge rounded-2xl overflow-hidden">
+      <button onClick={() => setOuvert((v) => !v)}
+              className="w-full flex items-center justify-between px-4 py-3 text-left">
+        <span className="text-sm font-semibold text-ink">{t('admin.plans.libelles_titre')}</span>
+        <span className="text-xs text-ghost">{ouvert ? '−' : '+'}</span>
+      </button>
+
+      {ouvert && (
+        <div className="px-4 pb-4 border-t border-edge pt-3">
+          <p className="text-xs text-ghost mb-3">{t('admin.plans.libelles_aide')}</p>
+
+          {isLoading ? (
+            <p className="text-sm text-ghost">{t('admin.commun.chargement')}</p>
+          ) : (
+            <>
+              <div className="space-y-3 max-h-[420px] overflow-y-auto pr-1">
+                {Object.keys(libelles).map((cle) => (
+                  <div key={cle} className="grid grid-cols-1 md:grid-cols-[160px_1fr_1fr] gap-2 items-center">
+                    <span className="font-mono text-xs text-ghost">{cle}</span>
+                    <input className={ADMIN_INPUT} value={libelles[cle]?.fr ?? ''}
+                           placeholder="Français"
+                           onChange={(e) => setLigne(cle, 'fr', e.target.value)} />
+                    <input className={ADMIN_INPUT} value={libelles[cle]?.en ?? ''}
+                           placeholder="English"
+                           onChange={(e) => setLigne(cle, 'en', e.target.value)} />
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex justify-end gap-2 mt-4">
+                {brouillon && (
+                  <button onClick={() => setBrouillon(null)} className="text-sm text-ghost hover:text-ink">
+                    {t('commun.annuler')}
+                  </button>
+                )}
+                <button onClick={soumettre} disabled={!brouillon || enregistrer.isPending}
+                        className="bg-primary text-inverse text-sm font-medium px-4 py-2 rounded-xl disabled:opacity-50">
+                  {t('commun.enregistrer')}
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -300,6 +397,8 @@ export default function PlansPage() {
           <Plus size={14} /> {t('admin.plans.nouveau')}
         </button>
       </div>
+
+      <LibellesFonctionnalites />
 
       {isLoading ? (
         <p className="text-sm text-ghost">{t('admin.commun.chargement')}</p>
