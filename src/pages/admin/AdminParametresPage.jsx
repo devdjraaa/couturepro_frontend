@@ -112,7 +112,7 @@ function SecuriteSection() {
       setSuccess(true)
       setForm({ ancien: '', nouveau: '', confirmation: '' })
     } catch (err) {
-      setError(err?.response?.data?.message || t('admin.parametres.erreur_changement'))
+      setError(err?.message || t('admin.parametres.erreur_changement'))
     } finally {
       setLoading(false)
     }

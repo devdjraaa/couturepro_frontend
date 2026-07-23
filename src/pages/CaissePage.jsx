@@ -85,7 +85,7 @@ function CaisseContent() {
       const data = await caisseService.getRapportMensuel(mois)
       await exportRapportMensuelPdf(data)
     } catch (e) {
-      toast.error(e?.response?.data?.message || t('caisse.rapport_mensuel_erreur'))
+      toast.error(e?.message || t('caisse.rapport_mensuel_erreur'))
     } finally {
       setRapportLoading(false)
     }

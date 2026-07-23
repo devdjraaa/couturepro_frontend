@@ -46,7 +46,7 @@ export default function AdminReseauxPage() {
       setForm((f) => ({ ...f, token: '' }))   // on ne garde pas le jeton à l'écran
       await charger()
     } catch (err) {
-      setErreur(err?.response?.data?.message || T('echec'))
+      setErreur(err?.message || T('echec'))
     } finally { setEnvoi(false) }
   }
 
@@ -57,14 +57,14 @@ export default function AdminReseauxPage() {
       setMessage(r?.message || T('collecte_ok'))
       await charger()
     } catch (err) {
-      setErreur(err?.response?.data?.message || T('echec'))
+      setErreur(err?.message || T('echec'))
     } finally { setCollecte(false) }
   }
 
   const voirRapport = async () => {
     setErreur(null)
     try { setRapport(await reseauxAdminService.rapport({ top: 5 })) }
-    catch (err) { setErreur(err?.response?.data?.message || T('echec')) }
+    catch (err) { setErreur(err?.message || T('echec')) }
   }
 
   const fb = statut?.facebook

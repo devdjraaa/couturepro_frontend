@@ -521,7 +521,7 @@ export default function NouvelleCommandeGroupeePage() {
       })
       navigate(`/commandes/groupes/${groupe.id}`, { replace: true })
     } catch (err) {
-      const rep = err?.response?.data
+      const rep = err?.data
       toast.error(rep?.message || Object.values(rep?.errors || {})[0]?.[0] || t('commandes.groupe_form.err_envoi'))
     }
   }

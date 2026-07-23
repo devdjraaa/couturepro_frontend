@@ -1109,7 +1109,8 @@
     },
     "permissions_titre": "Permissions",
     "acces_assistant": "Accès assistant",
-    "membres_non_inclus": "Membres d'équipe non inclus"
+    "membres_non_inclus": "Membres d'équipe non inclus",
+    "limite_atteinte": "Vous avez atteint la limite de {{max}} membres de votre plan. Passez à un plan supérieur pour en ajouter d'autres."
   },
   "points": {
     "titre": "Points de fidélité",

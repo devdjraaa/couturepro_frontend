@@ -40,7 +40,7 @@ function ListeAttenteTab({ t }) {
       setForm({ nom: '', telephone: '', note: '' })
       load()
     } catch (err) {
-      toast.error(err?.response?.data?.message || t('studio.erreur'))
+      toast.error(err?.message || t('studio.erreur'))
     } finally { setSaving(false) }
   }
 
@@ -180,7 +180,7 @@ function VideosTab({ t }) {
       if (champFichier.current) champFichier.current.value = ''
       load()
     } catch (err) {
-      toast.error(err?.response?.data?.message || t('studio.erreur'))
+      toast.error(err?.message || t('studio.erreur'))
     } finally { setSaving(false) }
   }
 

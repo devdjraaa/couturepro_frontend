@@ -201,7 +201,7 @@ function EditeurRealisation({ initial, maxPhotos, onClose, onSaved }) {
       setRea(saved)
       return saved
     } catch (e) {
-      setErr(e?.response?.data?.message || t('realisations.erreur_enregistrement'))
+      setErr(e?.message || t('realisations.erreur_enregistrement'))
       return null
     } finally { setBusy(false) }
   }
@@ -228,7 +228,7 @@ function EditeurRealisation({ initial, maxPhotos, onClose, onSaved }) {
         ? { avertissements: derniere.avertissements }
         : { ok: true })
     } catch (e2) {
-      const d = e2?.response?.data
+      const d = e2?.data
 
       // Refus du contrôle automatique : retour PUREMENT VISUEL, sans phrase.
       // Le message brut du serveur ne disait pas au créateur ce qu'il devait
@@ -244,7 +244,7 @@ function EditeurRealisation({ initial, maxPhotos, onClose, onSaved }) {
   const retirerPhoto = async (path) => {
     setBusy(true)
     try { setRea(await realisationService.removePhoto(rea.id, path)) }
-    catch (e) { setErr(e?.response?.data?.message || t('realisations.erreur_photo')) }
+    catch (e) { setErr(e?.message || t('realisations.erreur_photo')) }
     finally { setBusy(false) }
   }
 
@@ -258,7 +258,7 @@ function EditeurRealisation({ initial, maxPhotos, onClose, onSaved }) {
       await realisationService.submit(saved.id)
       onSaved()
     } catch (e) {
-      setErr(e?.response?.data?.message || t('realisations.erreur_soumission'))
+      setErr(e?.message || t('realisations.erreur_soumission'))
     } finally { setBusy(false) }
   }
 

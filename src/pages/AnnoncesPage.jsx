@@ -78,7 +78,7 @@ function ModaleBoost({ annonce, boost, onClose }) {
       if (checkout_url) window.location.href = checkout_url
       else toast.error(t('erreurs.generique_titre'))
     } catch (e) {
-      toast.error(e?.response?.data?.message || t('erreurs.generique_titre'))
+      toast.error(e?.message || t('erreurs.generique_titre'))
     } finally { setEnvoi(false) }
   }
 
@@ -184,7 +184,7 @@ export default function AnnoncesPage() {
       setFichier(null)
       if (champFichier.current) champFichier.current.value = ''
     } catch (e2) {
-      toast.error(e2?.response?.data?.message || t('erreurs.generique_titre'))
+      toast.error(e2?.message || t('erreurs.generique_titre'))
     }
   }
 

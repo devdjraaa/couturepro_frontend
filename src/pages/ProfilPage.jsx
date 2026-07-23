@@ -33,7 +33,7 @@ function PhotoProfil({ photoUrl, nom }) {
       rafraichir()
       toast.success(t('profil.photo_enregistree'))
     } catch (err) {
-      toast.error(err?.response?.data?.message || t('erreurs.inconnu'))
+      toast.error(err?.message || t('erreurs.inconnu'))
     } finally {
       setEnvoi(false)
       if (champ.current) champ.current.value = ''
@@ -46,7 +46,7 @@ function PhotoProfil({ photoUrl, nom }) {
       await parametresService.supprimerPhotoProfil()
       rafraichir()
     } catch (err) {
-      toast.error(err?.response?.data?.message || t('erreurs.inconnu'))
+      toast.error(err?.message || t('erreurs.inconnu'))
     } finally { setEnvoi(false) }
   }
 

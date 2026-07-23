@@ -183,8 +183,8 @@ function FormulaireModal({ onClose, onCreated }) {
       onClose()
     } catch (e) {
       // 403 = quota/plan (ex. clients facturés en offre gratuite) : le serveur explique quoi faire.
-      setErr(e?.response?.status === 403 && e.response.data?.message
-        ? e.response.data.message
+      setErr(e?.status === 403 && e?.data?.message
+        ? e.data.message
         : t('facturation.modal.err_creation'))
     } finally {
       setSaving(false)
@@ -442,7 +442,7 @@ function DocCard({ doc, onStatutChange, onDgiUploaded, onDelete }) {
       const updated = await factureService.normaliser(doc.id)
       onDgiUploaded(updated)
     } catch (e) {
-      setNormErr(e?.response?.data?.message || t('facturation.doc.normaliser_err'))
+      setNormErr(e?.message || t('facturation.doc.normaliser_err'))
     } finally { setNormalisant(false) }
   }
 

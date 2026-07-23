@@ -63,7 +63,10 @@ export default function EquipePage() {
   const { data: membres = [], isLoading } = useEquipe()
   const inviter = useInviterMembre()
   const remove  = useRemoveMembre()
-  const { max } = usePlanLimit('max_membres', membres.length)
+  // `allowed` était calculé par le hook mais jamais lu : à 3/3 le bouton d'ajout
+  // restait proposé, on remplissait tout le formulaire pour se faire refuser par
+  // le serveur. Le plafond se dit maintenant AVANT la saisie.
+  const { max, allowed } = usePlanLimit('max_membres', membres.length)
 
   const set = key => e => setForm(f => ({ ...f, [key]: e.target.value }))
 
@@ -76,7 +79,7 @@ export default function EquipePage() {
       setForm({ nom: '', prenom: '', telephone: '', role: 'assistant' })
       setNewMembre(created)
     } catch (err) {
-      setApiError(err?.response?.data?.message ?? 'Une erreur est survenue.')
+      setApiError(err?.message ?? t('erreurs.inconnu'))
     }
   }
 
@@ -94,7 +97,7 @@ export default function EquipePage() {
       title={t('equipe.titre')}
       showBack
       rightAction={
-        activeTab === 'membres' && can('equipe.manage') && max !== 0 ? (
+        activeTab === 'membres' && can('equipe.manage') && max !== 0 && allowed ? (
           <button onClick={() => setShowInvite(true)} className="p-2 text-dim">
             <UserPlus size={18} />
           </button>
@@ -153,6 +156,14 @@ export default function EquipePage() {
             {max !== null && max > 0 && membres.length > 0 && (
               <p className="text-xs text-content-secondary text-center pt-2">
                 {membres.length} / {max} membre{max > 1 ? 's' : ''}
+              </p>
+            )}
+
+            {/* Plafond atteint : le dire, sinon le bouton d'ajout disparaît sans
+                raison visible et l'utilisateur croit à un bug. */}
+            {!allowed && max !== null && max > 0 && (
+              <p className="text-xs text-warning text-center px-6 pt-1">
+                {t('equipe.limite_atteinte', { max })}
               </p>
             )}
           </>

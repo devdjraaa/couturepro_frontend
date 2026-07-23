@@ -135,7 +135,7 @@ export default function RecadrageBanniere({ url, cadrageInitial, onEnregistrer, 
       })
       onFermer()
     } catch (e) {
-      setErreur(e?.response?.data?.message || T('echec'))
+      setErreur(e?.message || T('echec'))
     } finally {
       setEnvoi(false)
     }

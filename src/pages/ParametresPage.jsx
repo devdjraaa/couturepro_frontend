@@ -59,7 +59,7 @@ function PhotoProfil({ photoUrl, nom }) {
       rafraichir()
       toast.success(t('profil.photo_enregistree'))
     } catch (err) {
-      toast.error(err?.response?.data?.message || t('erreurs.inconnu'))
+      toast.error(err?.message || t('erreurs.inconnu'))
     } finally {
       setEnvoi(false)
       if (champ.current) champ.current.value = ''
@@ -72,7 +72,7 @@ function PhotoProfil({ photoUrl, nom }) {
       await parametresService.supprimerPhotoProfil()
       rafraichir()
     } catch (err) {
-      toast.error(err?.response?.data?.message || t('erreurs.inconnu'))
+      toast.error(err?.message || t('erreurs.inconnu'))
     } finally { setEnvoi(false) }
   }
 
@@ -566,7 +566,7 @@ function AbonnementTab() {
         toast.success(t('parametres.abonnement.downgrade.programme'))
         rafraichir()
       } catch (e) {
-        toast.error(e?.response?.data?.message || t('parametres.abonnement.downgrade.erreur'))
+        toast.error(e?.message || t('parametres.abonnement.downgrade.erreur'))
       } finally { setDowngradeBusy(false) }
       return
     }
@@ -801,7 +801,7 @@ function MesAteliersTab() {
       setShowForm(false)
       setForm({ nom: '', ville: '' })
     } catch (err) {
-      setApiError(err?.response?.data?.message ?? t('erreurs.inconnu'))
+      setApiError(err?.message ?? t('erreurs.inconnu'))
     }
   }
 

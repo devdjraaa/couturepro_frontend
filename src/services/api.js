@@ -76,15 +76,22 @@ function normalizeError(error) {
   if (!error.response) return { code: 'reseau', message: tErr('reseau') }
   const { status, data } = error.response
   const msg = typeof data?.message === 'string' ? data.message : null
-  if (status === 401) return { code: 'session_expiree', message: msg || tErr('session_expiree') }
+  // `status` et `data` sont CONSERVÉS : en ne renvoyant que { code, message }, on
+  // jetait la charge utile du serveur alors que des écrans en dépendent — le
+  // détail des problèmes de qualité, les erreurs de validation champ par champ,
+  // le statut HTTP. Comme l'objet rejeté n'a plus de `.response`, tout écran qui
+  // lisait `err.response.data.*` recevait `undefined` et retombait sur un message
+  // générique : le quota d'équipe atteint s'affichait « Une erreur est survenue ».
+  const base = { status, data }
+  if (status === 401) return { ...base, code: 'session_expiree', message: msg || tErr('session_expiree') }
   // serverCode : code sémantique optionnel fourni par le backend (ex. telephone_non_verifie) — sans écraser le code HTTP.
-  if (status === 403) return { code: 'non_autorise', serverCode: typeof data?.code === 'string' ? data.code : undefined, message: msg || tErr('non_autorise') }
-  if (status === 404) return { code: 'non_trouve', message: msg || tErr('non_trouve') }
-  if (status === 422) return { code: 'validation', errors: data?.errors, message: msg || tErr('format_invalide') }
-  if (status === 429) return { code: 'quota_depasse', message: msg || tErr('quota_depasse') }
+  if (status === 403) return { ...base, code: 'non_autorise', serverCode: typeof data?.code === 'string' ? data.code : undefined, message: msg || tErr('non_autorise') }
+  if (status === 404) return { ...base, code: 'non_trouve', message: msg || tErr('non_trouve') }
+  if (status === 422) return { ...base, code: 'validation', errors: data?.errors, message: msg || tErr('format_invalide') }
+  if (status === 429) return { ...base, code: 'quota_depasse', message: msg || tErr('quota_depasse') }
   // 500+ : Laravel renvoie « Server Error » (technique) en prod → on force un message convivial.
-  if (status >= 500) return { code: 'serveur', message: tErr('serveur') }
-  return { code: 'inconnu', message: msg || tErr('inconnu') }
+  if (status >= 500) return { ...base, code: 'serveur', message: tErr('serveur') }
+  return { ...base, code: 'inconnu', message: msg || tErr('inconnu') }
 }
 
 export default api

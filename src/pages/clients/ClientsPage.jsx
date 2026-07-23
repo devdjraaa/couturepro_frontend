@@ -251,7 +251,7 @@ export default function ClientsPage() {
       const slug = (atelier?.nom ?? 'atelier').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
       await shareOrSaveText(csv, `mesures-${slug || 'atelier'}.csv`, 'text/csv')
     } catch (e) {
-      toast.error(e?.response?.data?.message || t('clients.export_groupe.erreur'))
+      toast.error(e?.message || t('clients.export_groupe.erreur'))
     } finally {
       setExportingMesures(false)
     }

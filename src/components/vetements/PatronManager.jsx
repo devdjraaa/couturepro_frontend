@@ -42,7 +42,7 @@ export default function PatronManager({ vetement }) {
       setTitre(''); setPrix(''); setFichier(null)
       await charger()
     } catch (e) {
-      setError(e?.response?.data?.message || t('patron.err_generic'))
+      setError(e?.message || t('patron.err_generic'))
     } finally {
       setBusy(false)
     }

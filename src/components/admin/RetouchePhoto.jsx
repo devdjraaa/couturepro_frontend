@@ -251,7 +251,7 @@ export default function RetouchePhoto({ chargerImage, onFermer, onEnregistrer })
     } catch (e) {
       // Le modérateur doit savoir que rien n'a été enregistré : sans message,
       // il croirait la retouche appliquée et publierait l'original.
-      setErreur(e?.response?.data?.message || T('echec'))
+      setErreur(e?.message || T('echec'))
     } finally {
       setEnvoi(false)
     }

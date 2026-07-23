@@ -31,12 +31,15 @@ adminApi.interceptors.response.use(
 function normalizeAdminError(error) {
   if (!error.response) return { code: 'reseau', message: error.message }
   const { status, data } = error.response
-  if (status === 401) return { code: 'session_expiree', message: data?.message }
-  if (status === 403) return { code: 'non_autorise', message: data?.message }
-  if (status === 404) return { code: 'non_trouve', message: data?.message }
-  if (status === 422) return { code: 'validation', errors: data?.errors, message: data?.message }
-  if (status >= 500) return { code: 'serveur', message: data?.message }
-  return { code: 'inconnu', message: data?.message || error.message }
+  // Même correctif que le client pro : on garde `status` et `data`, sinon les
+  // écrans qui lisaient `err.response.data.*` n'avaient plus rien à lire.
+  const base = { status, data }
+  if (status === 401) return { ...base, code: 'session_expiree', message: data?.message }
+  if (status === 403) return { ...base, code: 'non_autorise', message: data?.message }
+  if (status === 404) return { ...base, code: 'non_trouve', message: data?.message }
+  if (status === 422) return { ...base, code: 'validation', errors: data?.errors, message: data?.message }
+  if (status >= 500) return { ...base, code: 'serveur', message: data?.message }
+  return { ...base, code: 'inconnu', message: data?.message || error.message }
 }
 
 export default adminApi

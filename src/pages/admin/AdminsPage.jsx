@@ -110,9 +110,12 @@ export default function AdminsPage() {
       setShowForm(false)
       setForm(EMPTY_FORM)
     } catch (err) {
-      setApiError(err?.response?.data?.message ?? err?.response?.data?.errors
-        ? Object.values(err.response.data.errors).flat().join(' ')
-        : t('admin.admins.erreur'))
+      const champs = err?.errors ?? err?.data?.errors
+      setApiError(
+        err?.message
+        || (champs ? Object.values(champs).flat().join(' ') : null)
+        || t('admin.admins.erreur'),
+      )
     }
   }
 
