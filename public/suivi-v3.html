@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex,nofollow" />
+<title>NovafriQ — Suivi v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --rouge:#D00B0B; --bordeaux:#0D0D0D;
+    --page:#F8F5F0; --card:#FFFFFF; --ink:#171310; --gris:#8A7F79; --edge:#E7E0D8; --inset:#F3EEE7;
+    --done:#1FA855; --done-bg:#E6F5EC;
+    --part:#C98A00; --part-bg:#FBF1D9;
+    --bug:#E4571B;  --bug-bg:#FCE9DF;
+    --todo:#6B6259; --todo-bg:#EFEAE3;
+    --bloq:#7A6BB5; --bloq-bg:#EDE9F8;
+    --info:#5B6470; --info-bg:#ECEEF1;
+    --moi:#0F766E;  --moi-bg:#DCF2EF;
+    --dir:#B45309;  --dir-bg:#FDF0DC;
+    --tiers:#6B7280;--tiers-bg:#EDEFF2;
+  }
+  :root[data-theme="dark"]{
+    --page:#12100E; --card:#1B1815; --ink:#F2EDE6; --gris:#9C9186; --edge:#2E2822; --inset:#221E1A;
+    --done-bg:#12301F; --part-bg:#332708; --bug-bg:#331B0F; --todo-bg:#26221E;
+    --bloq-bg:#1E1932; --info-bg:#20242A; --moi-bg:#0C2422; --dir-bg:#2A1C08; --tiers-bg:#212429;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--page);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:14px;line-height:1.55}
+  .wrap{max-width:980px;margin:0 auto;padding:0 16px 70px}
+
+  header.top{position:sticky;top:0;z-index:20;background:var(--bordeaux);color:#fff;padding:14px 16px;box-shadow:0 2px 14px rgba(0,0,0,.18)}
+  header.top .in{max-width:980px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  header.top h1{font-family:'Playfair Display',serif;font-size:19px;margin:0;font-weight:800;flex:1;min-width:190px}
+  header.top h1 small{display:block;font-family:Inter,sans-serif;font-size:11px;font-weight:500;opacity:.65;letter-spacing:.3px;margin-top:2px}
+  .kpi{text-align:right;min-width:120px}
+  .kpi .n{font-size:22px;font-weight:800;line-height:1.1}
+  .kpi .n span{font-size:11px;opacity:.6;font-weight:500;display:block;letter-spacing:.4px;text-transform:uppercase}
+  .subbars{display:flex;gap:12px;max-width:980px;margin:11px auto 0;flex-wrap:wrap}
+  .subbar{flex:1;min-width:145px}
+  .subbar .lbl{font-size:10.5px;opacity:.72;display:flex;justify-content:space-between;margin-bottom:3px}
+  .bar{height:5px;background:rgba(255,255,255,.16);border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;border-radius:99px;transition:width .25s;background:#4BC08A}
+  .subbar.d .bar i{background:#E0A33C}
+  .subbar.t .bar i{background:#9AA1AC}
+  .tgl{background:rgba(255,255,255,.12);border:0;color:#fff;border-radius:9px;padding:7px 10px;cursor:pointer;font-size:15px;line-height:1}
+
+  .note{background:var(--card);border:1px solid var(--edge);border-left:3px solid var(--rouge);border-radius:11px;padding:14px 16px;margin:18px 0 14px}
+  .note p{margin:0 0 8px} .note p:last-child{margin:0}
+  .stats{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}
+
+  .urgent{background:var(--bug-bg);border:1px solid var(--bug);border-radius:11px;padding:13px 16px;margin:14px 0}
+  .urgent h3{margin:0 0 7px;font-size:13px;font-weight:800;color:var(--bug);letter-spacing:.3px;text-transform:uppercase}
+  .urgent ul{margin:0;padding-left:19px} .urgent li{margin-bottom:5px}
+  .urgent li:last-child{margin-bottom:0}
+
+  .toolbar{position:sticky;top:66px;z-index:15;background:var(--page);padding:10px 0;display:flex;gap:8px;flex-wrap:wrap;align-items:center;border-bottom:1px solid var(--edge)}
+  input[type=search],input[type=password]{background:var(--card);border:1px solid var(--edge);border-radius:9px;padding:8px 11px;font:inherit;color:var(--ink);outline:none}
+  input[type=search]{flex:1;min-width:165px}
+  input:focus{border-color:var(--rouge)}
+  .chips{display:flex;gap:5px;flex-wrap:wrap}
+  .chip{background:var(--card);border:1px solid var(--edge);border-radius:99px;padding:5px 11px;font-size:12px;font-weight:600;color:var(--gris);cursor:pointer}
+  .chip[aria-pressed="true"]{background:var(--ink);color:var(--page);border-color:var(--ink)}
+  .sep{width:1px;height:22px;background:var(--edge)}
+  button.act{background:var(--rouge);border:0;color:#fff;border-radius:9px;padding:8px 13px;font:inherit;font-weight:700;cursor:pointer}
+  .saved{font-size:11.5px;color:var(--gris);min-width:110px}
+
+  .block{background:var(--card);border:1px solid var(--edge);border-radius:13px;margin-top:14px;overflow:hidden}
+  .block > header{display:flex;align-items:center;gap:11px;padding:13px 15px;cursor:pointer;user-select:none}
+  .block > header h2{font-family:'Playfair Display',serif;font-size:16px;margin:0;flex:1;font-weight:700}
+  .block > header .meta{font-size:11.5px;color:var(--gris);white-space:nowrap}
+  .block > header .mini{width:50px;height:4px;background:var(--inset);border-radius:99px;overflow:hidden;flex:none}
+  .block > header .mini i{display:block;height:100%;background:var(--done);border-radius:99px}
+  .block.collapsed .items{display:none}
+  .items{border-top:1px solid var(--edge)}
+  .item{display:flex;gap:11px;padding:12px 15px;border-bottom:1px solid var(--inset);align-items:flex-start}
+  .item:last-child{border-bottom:0}
+  .item.hide{display:none}
+  .item.done .t{opacity:.5}
+  .item.done .t b{text-decoration:line-through}
+  .cb{flex:none;padding-top:2px}
+  .cb input{width:17px;height:17px;accent-color:var(--done);cursor:pointer}
+  .cb input:disabled{cursor:default;opacity:.55}
+  .body{flex:1;min-width:0;display:flex;gap:9px;align-items:flex-start;flex-wrap:wrap}
+  .t{flex:1;min-width:180px}
+  .t b{font-weight:700}
+  .t .why{display:block;color:var(--gris);font-size:12.5px;margin-top:3px}
+  .t .id{display:inline-block;font-size:10.5px;font-weight:700;color:var(--gris);background:var(--inset);border-radius:5px;padding:1px 6px;margin-right:7px;vertical-align:1px}
+  .badge{font-size:10.5px;font-weight:700;border-radius:99px;padding:3px 9px;white-space:nowrap}
+  .b-done{color:var(--done);background:var(--done-bg)} .b-part{color:var(--part);background:var(--part-bg)}
+  .b-bug{color:var(--bug);background:var(--bug-bg)}   .b-todo{color:var(--todo);background:var(--todo-bg)}
+  .b-bloq{color:var(--bloq);background:var(--bloq-bg)} .b-info{color:var(--info);background:var(--info-bg)}
+  .own{font-size:10px;font-weight:800;border-radius:5px;padding:2px 7px;letter-spacing:.3px;white-space:nowrap}
+  .o-moi{color:var(--moi);background:var(--moi-bg)}
+  .o-dir{color:var(--dir);background:var(--dir-bg)}
+  .o-tiers{color:var(--tiers);background:var(--tiers-bg)}
+  .proj{font-size:10px;font-weight:700;color:var(--gris);border:1px solid var(--edge);border-radius:5px;padding:2px 6px;white-space:nowrap}
+  .foot{text-align:center;color:var(--gris);font-size:11.5px;margin-top:24px;line-height:1.7}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="in">
+    <h1>NovafriQ — Suivi v3<small>Un seul tableau · Gextimo · NovafriQ · HerboQuiz · 23 juillet 2026</small></h1>
+    <div class="kpi">
+      <div class="n" id="kpiReste">0<span>restent</span></div>
+    </div>
+    <button class="tgl" id="themeBtn" title="Thème clair / sombre">◐</button>
+  </div>
+  <div class="subbars">
+    <div class="subbar m"><div class="lbl"><span>Moi (développement)</span><span id="lblMoi">0 / 0</span></div><div class="bar"><i id="barMoi" style="width:0%"></i></div></div>
+    <div class="subbar d"><div class="lbl"><span>Toi (direction)</span><span id="lblDir">0 / 0</span></div><div class="bar"><i id="barDir" style="width:0%"></i></div></div>
+    <div class="subbar t"><div class="lbl"><span>Bloqué (tiers)</span><span id="lblTiers">0 / 0</span></div><div class="bar"><i id="barTiers" style="width:0%"></i></div></div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="urgent">
+    <h3>À traiter en premier</h3>
+    <ul>
+      <li><b>Le pré-rendu SEO ne s'applique à aucun robot.</b> Vérifié aujourd'hui : Googlebot reçoit le même titre générique qu'un navigateur. Tout le travail existe côté serveur, il est inerte en production. Google indexe une page sans contenu depuis le lancement.</li>
+      <li><b>Le formulaire de contact de novafriq.africa est cassé.</b> Il poste vers un identifiant d'exemple jamais remplacé : depuis la mise en ligne, aucun message ne nous parvient depuis le site.</li>
+      <li><b>HerboQuiz : le lien d'inscription n'est pas diffusé et la banque de questions est vide.</b> Clôture samedi 20h, coup d'envoi lundi 18h.</li>
+    </ul>
+  </div>
+
+  <div class="note">
+    <p><b>Comment lire cette page.</b> Elle ne montre que <b>ce qui reste</b>. Le badge de droite est le statut constaté ; la case à cocher est votre validation. Le détail de chaque point est dans <b>SUIVI_V3.md</b>.</p>
+    <p>Trois porteurs : <span class="own o-moi">MOI</span> le développement · <span class="own o-dir">TOI</span> les réglages et arbitrages qui se font depuis l'administration, sans développeur · <span class="own o-tiers">TIERS</span> ce qui ne dépend ni de l'un ni de l'autre.</p>
+    <p><b>Cette V3 remplace cinq fichiers de suivi</b> qui se contredisaient — c'est ainsi que le pré-rendu SEO a pu être déclaré livré tout en étant inerte. Les anciens restent lisibles en archive, mais ne font plus autorité.</p>
+    <div class="stats" id="auditStats"></div>
+  </div>
+
+  <div class="toolbar">
+    <input type="search" id="search" placeholder="Rechercher un point, un identifiant…" />
+    <div class="chips" id="statusChips">
+      <button class="chip" data-f="all" aria-pressed="true">Tous</button>
+      <button class="chip" data-f="bug" aria-pressed="false">Anomalie</button>
+      <button class="chip" data-f="todo" aria-pressed="false">À faire</button>
+      <button class="chip" data-f="part" aria-pressed="false">Partiel</button>
+      <button class="chip" data-f="bloq" aria-pressed="false">Bloqué</button>
+    </div>
+    <div class="sep"></div>
+    <div class="chips" id="ownerChips">
+      <button class="chip" data-o="all" aria-pressed="true">Tout</button>
+      <button class="chip" data-o="moi" aria-pressed="false">Moi</button>
+      <button class="chip" data-o="dir" aria-pressed="false">Toi</button>
+      <button class="chip" data-o="tiers" aria-pressed="false">Tiers</button>
+    </div>
+    <div class="sep"></div>
+    <div class="chips" id="projChips">
+      <button class="chip" data-p="all" aria-pressed="true">Tous projets</button>
+      <button class="chip" data-p="GX" aria-pressed="false">Gextimo</button>
+      <button class="chip" data-p="NF" aria-pressed="false">NovafriQ</button>
+      <button class="chip" data-p="HQ" aria-pressed="false">HerboQuiz</button>
+    </div>
+    <div class="sep"></div>
+    <input type="password" id="codeIn" inputmode="numeric" maxlength="6" placeholder="code" style="display:none;width:86px" />
+    <button class="act" id="editBtn">Mode édition</button>
+    <span class="saved" id="savedMsg"></span>
+  </div>
+
+  <div id="blocks"></div>
+
+  <p class="foot">
+    Statuts posés après vérification dans le code ou en production. Ce qui n'a pas été vérifié est écrit comme tel.<br>
+    Ce tableau a son propre enregistrement : cocher ici ne touche pas au suivi v2, conservé en archive.
+  </p>
+</div>
+
+<script>
+// Le tableau v3 a son PROPRE enregistrement côté serveur. Sans ce paramètre, la
+// sauvegarde remplacerait l'état de la v2 : les identifiants ne se recouvrent
+// pas, l'ancienne page serait revenue toute décochée sans que personne ne le
+// voie.
+const API = 'https://gextimoapi.novafriq.africa/api/suivi-sprints?tableau=v3';
+
+const GROUPS = {
+  1:'À traiter en premier',
+  2:'Gextimo — reliquat vitrine',
+  3:'Gextimo — à re-tester sur appareil',
+  4:'NovafriQ — back-office de contenu',
+  5:'HerboQuiz',
+  6:'Direction — bloquant',
+  7:'Direction — arbitrages à rendre',
+  8:'Direction — réglages, quand tu veux',
+  9:'Bloqué sur des tiers'
+};
+
+const SLABEL = {done:'Fait',part:'Partiel',bug:'Anomalie',todo:'À faire',bloq:'Bloqué',info:'Info'};
+const PLABEL = {GX:'Gextimo', NF:'NovafriQ', HQ:'HerboQuiz', INF:'Infra'};
+
+// Série s90 : jeu d'identifiants NEUF, distinct de la v2 (s60/s70/s80). Le
+// format `s<n>t<n>` est une contrainte du serveur, qui refuse tout le reste.
+const I = (n,ref,g,proj,own,s,titre,pourquoi)=>({id:'s90t'+n, ref, g, proj, o:own, s, t:titre, w:pourquoi||''});
+
+const ITEMS = [
+  // ───────── 1. À traiter en premier ─────────
+  I(1,'P1',1,'GX','moi','bug',
+    'Le pré-rendu SEO ne s\'applique à aucun robot',
+    'Vérifié le 23/07 : curl avec un user-agent Googlebot sur l\'accueil, /createurs et un profil renvoie EXACTEMENT le même titre générique qu\'un navigateur. Le serveur sait pourtant rendre la page (SeoRenderController testé en direct, sitemap en ligne) — nginx ne route simplement aucun robot vers lui. Conséquence : Google indexe une coquille vide depuis le lancement. Le vhost est en 600 root:root, hors de portée du sudo autorisé au déploiement : la règle doit être posée à la main sur le serveur. C\'est aussi le point qui a justifié cette refonte du suivi — deux trackers en disaient l\'inverse.'),
+  I(2,'P2',1,'NF','moi','bug',
+    'Le formulaire de contact de novafriq.africa n\'envoie rien',
+    'Vérifié le 23/07 DANS LE PAQUET SERVI EN PRODUCTION : le formulaire poste vers formspree.io/f/VOTRE_ID_FORMSPREE — l\'identifiant d\'exemple n\'a jamais été remplacé. Chaque envoi échoue et retombe sur un lien mailto que le visiteur doit cliquer lui-même. Depuis la mise en ligne, personne ne peut nous écrire depuis le site. Réparé par le back-office NovafriQ, qui recevra les messages en base au lieu de dépendre d\'un service tiers.'),
+  I(3,'P3',1,'NF','moi','todo',
+    'Aucun contenu du site NovafriQ n\'est modifiable',
+    'Postes ouverts, membres, FAQ, produits, feuille de route : tout est écrit en dur dans le code. Changer une virgule demande un commit et un déploiement. Et la page Actualités annonce un blog qui n\'existe pas.'),
+
+  // ───────── 2. Gextimo — reliquat vitrine ─────────
+  I(10,'GX-2',2,'GX','moi','todo',
+    'Bouton « S\'inscrire » invisible sous 1024 px',
+    'Le lien existe bien dans le menu déroulant mobile ; c\'est le bouton de la barre du haut qui porte hidden lg:inline-flex. Le remonter dans la barre est un choix visuel à confirmer, pas un correctif évident.'),
+  I(11,'GX-3',2,'GX','moi','todo',
+    'Ordre des rubriques dans Paramètres',
+    'Jamais vérifié à l\'écran, faute d\'une spec assez précise pour savoir ce qui est attendu.'),
+  I(12,'GX-4',2,'GX','moi','todo',
+    'Mention « Bientôt » sur les modules non prêts',
+    'Même situation : demandé, jamais spécifié assez précisément pour être appliqué sans se tromper.'),
+  I(13,'GX-5',2,'GX','moi','todo',
+    'Recommandation par catégorie',
+    'La reco v1 tourne (créateurs favoris en tête de galerie). La version par catégorie suppose d\'abord de CATÉGORISER les créations : c\'est un chantier de données, pas d\'affichage.'),
+  I(14,'GX-6',2,'GX','moi','part',
+    'Facturation : aperçu avant émission et gabarits par atelier',
+    'Le module et la normalisation DGI sont livrés et fonctionnent. Restent la prévisualisation et les gabarits avancés par atelier.'),
+  I(15,'GX-7',2,'GX','moi','part',
+    'Export des mesures en CSV — cas individuel',
+    'Le partage WhatsApp est en place et testé, l\'export groupé aussi. Seul l\'export d\'une fiche isolée n\'a pas été confirmé à l\'écran.'),
+
+  // ───────── 3. Gextimo — re-tests appareil ─────────
+  I(20,'QA-5',3,'GX','moi','part',
+    'Bouton « déjà inscrit » sur l\'écran d\'inscription',
+    'Codé, jamais revu sur le téléphone depuis la correction.'),
+  I(21,'QA-6',3,'GX','moi','part',
+    'Repli de la barre latérale en icônes seules',
+    'Implémenté avec mémorisation de la préférence, mais NON vérifié à l\'écran : la barre est réservée au grand écran, il faut un poste pour la voir.'),
+  I(22,'QA-7',3,'GX','moi','part',
+    'Quotas des plans annuels — assistants, sous-ateliers, cumul d\'essai',
+    'Anciens constats de la direction sur les plans annuels. Le socle a beaucoup changé depuis : à re-tester avant de conclure quoi que ce soit.'),
+  I(23,'QA-8',3,'GX','moi','part',
+    'Événements dynamiques : campagne réelle de 3-4 jours',
+    'Les quatre exigences sont vérifiées présentes dans le code (dates de naissance sur les deux branches, quatre animations, mémorisation locale, ordre de priorité). Ce qui manque ne peut se faire qu\'à l\'usage, sur plusieurs jours.'),
+
+  // ───────── 4. NovafriQ — back-office ─────────
+  I(30,'NF-1',4,'NF','moi','part',
+    'Backend novafriq — Laravel 13, Sanctum, PostgreSQL',
+    'Chantier ouvert le 23/07. UUID, suppressions douces, même moteur de base qu\'en production pour ne pas rejouer les bugs Postgres-contre-MySQL déjà rencontrés sur Gextimo.'),
+  I(31,'NF-2',4,'NF','moi','todo',
+    'Reprendre INTÉGRALEMENT le contenu actuel en base',
+    'Rien ne doit se perdre au passage : chaque texte, chaque membre, chaque poste, chaque entrée de feuille de route est repris tel quel avant que le site cesse de les lire depuis le code.'),
+  I(32,'NF-3',4,'NF','moi','todo',
+    'API publique et API d\'administration',
+    'Le site lit un seul appel au chargement. Les routes publiques d\'écriture (formulaire de contact) sont limitées en cadence et dédupliquées — c\'est une classe de faille déjà rencontrée deux fois sur Gextimo.'),
+  I(33,'NF-4',4,'NF','moi','todo',
+    'Kit d\'administration déclaratif, façon Filament',
+    'Ce qui fait Filament n\'est pas son apparence : c\'est qu\'on DÉCLARE une ressource — champs, table, règles — et que les écrans liste, création, édition et suppression en découlent. Ajouter un type de contenu doit coûter un fichier de déclaration, pas quatre écrans. Aucune bibliothèque tierce, comme sur Gextimo.'),
+  I(34,'NF-5',4,'NF','moi','todo',
+    'Déclarer les ressources',
+    'Produits, membres, postes, partenaires, FAQ, les cinq listes illustrées, articles, messages reçus, réglages et référencement.'),
+  I(35,'NF-6',4,'NF','moi','todo',
+    'Brancher le site sur l\'API, avec copie de secours',
+    'Publication immédiate, et une copie du contenu intégrée au build : si l\'API tombe, le site s\'affiche quand même avec la dernière version connue. Il ne peut pas devenir blanc.'),
+  I(36,'NF-8',4,'NF','moi','todo',
+    'Blog / actualités réel',
+    'La page en annonce un depuis la mise en ligne. C\'est aussi ce qui donnera au site quelque chose à faire indexer.'),
+  I(37,'NF-9',4,'NF','moi','todo',
+    'Déploiement : base, .env, vhost, CI/CD, certificat',
+    'Attention : un collaborateur pousse sur main et le dépôt se déploie tout seul. Toujours récupérer ses commits avant de toucher au site.'),
+  I(38,'NF-10',4,'NF','moi','todo',
+    'Nettoyer les reliquats du serveur',
+    'Un dossier /var/www/novafriq_new inutilisé, et un pari-finale.conf vide encore listé dans sites-enabled alors que le projet a été supprimé.'),
+
+  // ───────── 5. HerboQuiz ─────────
+  I(40,'HQ-D1',5,'HQ','dir','todo',
+    'Diffuser le lien d\'inscription dans le groupe',
+    'herboquiz.novafriq.africa/inscription — bloque tout le reste : sans liste fermée, le format du tournoi ne peut pas être calculé. Clôture prévue samedi 25/07 à 20h.'),
+  I(41,'HQ-D2',5,'HQ','dir','todo',
+    'Préparer et importer les questions',
+    'Format « question | réponse », une par ligne ; le point-virgule et la tabulation marchent aussi pour un copier-coller depuis un tableur. L\'écran indique AVANT l\'import quelles lignes seront écartées. La banque est vide à ce jour.'),
+  I(42,'HQ-2',5,'HQ','moi','part',
+    'Écran d\'animation jamais vu en conditions réelles',
+    'Les données qui le traversent sont testées de bout en bout ; le rendu, lui, n\'a jamais été observé pendant une vraie partie. À dire plutôt qu\'à supposer acquis.'),
+  I(43,'HQ-3',5,'HQ','moi','todo',
+    'Corriger « Lundi 27 juillet 2026 a 18h00 »',
+    'Accent manquant, reste d\'une valeur par défaut. Se corrige dans les réglages, sans déploiement.'),
+
+  // ───────── 6. Direction — bloquant ─────────
+  I(50,'DIR-1',6,'GX','dir','todo',
+    'Recalibrer le programme de fidélité',
+    'Réglages vitrine → Programme de fidélité. Le programme est MATHÉMATIQUEMENT INATTEIGNABLE : les ateliers génèrent bien trop peu de points face au premier palier, personne ne convertira jamais. Deux leviers au choix : baisser les paliers, ou augmenter les gains par action. Repère : un palier doit s\'atteindre en quelques SEMAINES pour un atelier actif, pas en années.'),
+  I(51,'DIR-2',6,'GX','dir','todo',
+    'Saisir l\'identité légale (RCCM, IFU, APDP, dates)',
+    'Réglages vitrine → Identité légale. Tant qu\'un champ est vide, toute phrase qui le mentionne DISPARAÎT des onze pages juridiques — choix assumé : mieux vaut une mention absente qu\'un « à compléter » affiché publiquement.'),
+
+  // ───────── 7. Direction — arbitrages ─────────
+  I(60,'DIR-12',7,'GX','dir','todo',
+    'Arbitrage — messagerie client ↔ créateur',
+    'Module entier, non commencé. Qui écrit à qui ? La conversation est-elle rattachée à une commande ? Que se passe-t-il en cas d\'abus ? Rien ne peut être chiffré ni commencé tant que ce n\'est pas tranché.'),
+  I(61,'DIR-13',7,'GX','dir','todo',
+    'Arbitrage — code promo côté client',
+    'Non commencé. Qui finance la remise, Gextimo ou le créateur ? Elle porte sur quoi ? Cumulable avec autre chose ?'),
+
+  // ───────── 8. Direction — réglages ─────────
+  I(70,'DIR-3',8,'GX','dir','todo',
+    'Régler le compte à rebours de lancement',
+    'ÉTEINT par défaut : rien ne s\'affiche tant qu\'il n\'est pas activé. Bande d\'approche puis chrono plein écran le jour J, textes et couleur libres. Se masque tout seul une fois la date passée.'),
+  I(71,'DIR-4',8,'GX','dir','todo',
+    'Publier le premier message « Gextimo Infos »',
+    'Ciblage possible : tous, type de compte, formule, ville, ateliers précis. L\'écran affiche le NOMBRE DE DESTINATAIRES avant l\'envoi — s\'il est à zéro, un critère est mal saisi.'),
+  I(72,'DIR-7',8,'GX','dir','todo',
+    'Vérifier les coordonnées officielles',
+    'Réglages vitrine → Coordonnées. Elles apparaissent dans les PDF et les partages WhatsApp envoyés par les ateliers à leurs propres clients.'),
+  I(73,'DIR-8',8,'GX','dir','todo',
+    'Choisir les moyens de paiement en facturation',
+    'Ne concerne NI la caisse NI les commandes, qui enregistrent comment le client a réellement payé sur place, espèces comprises.'),
+  I(74,'DIR-9',8,'GX','dir','todo',
+    'Ajuster la modération des avis',
+    'Nombre d\'avis par jour, seuil de signalements avant retrait automatique, motifs graves, mots bannis.'),
+  I(75,'DIR-10',8,'GX','dir','todo',
+    'Définir le mot de passe VASAT quand le produit sortira',
+    'Le mot de passe n\'est jamais réaffiché : champ vide = on garde l\'actuel. Tant qu\'aucun n\'est défini, l\'accès reste fermé.'),
+  I(76,'DIR-11',8,'GX','dir','todo',
+    'EN CONTINU — entretenir « Quoi de neuf »',
+    'À chaque livraison. Les mises à jour partent automatiquement, parfois plusieurs fois par jour : sans cette page, les professionnels voient l\'application changer sans savoir quoi. Quatre entrées sont déjà rédigées pour donner le ton — écrire pour un utilisateur d\'atelier, pas pour un développeur.'),
+  I(77,'DIR-15',8,'GX','dir','todo',
+    'Fournir les clés externes le jour d\'une campagne payante',
+    'GA4, Pixel Meta, Clarity, accès Search Console. FACULTATIF : l\'analytique interne tourne déjà sans elles et l\'écran /admin/analytique est alimenté depuis le 16/07.'),
+
+  // ───────── 9. Tiers ─────────
+  I(90,'T-1',9,'GX','tiers','bloq',
+    'Relecture juridique des onze pages légales',
+    'Les compléments sont rédigés et surlignés. La relecture par un juriste ne dépend ni de moi ni de toi.'),
+  I(91,'T-2',9,'GX','tiers','bloq',
+    'RCCM, IFU, numéro de délibération APDP',
+    'Dépend de l\'immatriculation. Le jour où les numéros existent, ils se saisissent en administration sans développeur (voir DIR-2).'),
+  I(92,'T-3',9,'GX','tiers','bloq',
+    'Jeton Meta',
+    'Dépend du community manager.'),
+  I(93,'T-4',9,'GX','tiers','bloq',
+    'Clés GA4 / Pixel Meta / Clarity',
+    'Utiles uniquement le jour d\'une campagne payante : retargeting et enregistrements de session. L\'analytique interne n\'en dépend pas.'),
+  I(94,'T-5',9,'GX','tiers','bloq',
+    'Search Console API (OAuth) — indexation, 404, sitemap',
+    'Vient après les clés externes.')
+];
+
+let state = { checked:{}, code:null, editing:false, filter:'all', owner:'all', proj:'all', q:'' };
+const $ = s => document.querySelector(s);
+const el = (t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;};
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function renderAuditStats(){
+  const order=['bug','todo','part','bloq','info','done'];
+  const c={}; ITEMS.forEach(it=>c[it.s]=(c[it.s]||0)+1);
+  const host=$('#auditStats'); host.innerHTML='';
+  order.forEach(k=>{ if(c[k]) host.appendChild(el('span','badge b-'+k, c[k]+' '+SLABEL[k])); });
+}
+
+function render(){
+  const host = $('#blocks'); host.innerHTML='';
+  const q = state.q.trim().toLowerCase();
+
+  Object.keys(GROUPS).forEach(gk=>{
+    const list = ITEMS.filter(it=>String(it.g)===gk);
+    if(!list.length) return;
+
+    const block = el('div','block');
+    const head = el('header');
+    head.appendChild(el('h2',null,esc(GROUPS[gk])));
+    const meta = el('span','meta');
+    const mini = el('span','mini','<i></i>');
+    head.appendChild(meta); head.appendChild(mini);
+    head.onclick = ()=> block.classList.toggle('collapsed');
+    block.appendChild(head);
+
+    const items = el('div','items');
+    let visibles = 0, faits = 0;
+
+    list.forEach(it=>{
+      const isChecked = !!state.checked[it.id];
+      const es = isChecked ? 'done' : it.s;
+      if(isChecked) faits++;
+
+      const okF = state.filter==='all' || state.filter===es;
+      const okO = state.owner==='all' || state.owner===it.o;
+      const okP = state.proj==='all'  || state.proj===it.proj;
+      const okQ = !q || it.t.toLowerCase().includes(q) || it.w.toLowerCase().includes(q) || it.ref.toLowerCase().includes(q);
+      const show = okF && okO && okP && okQ;
+      if(show) visibles++;
+
+      const row = el('div','item'+(isChecked?' done':'')+(show?'':' hide'));
+
+      const lab = el('label','cb');
+      const cb = el('input'); cb.type='checkbox'; cb.checked=isChecked; cb.disabled=!state.editing;
+      cb.onchange = ()=>{ if(cb.checked) state.checked[it.id]=true; else delete state.checked[it.id]; render(); updateKpi(); };
+      lab.appendChild(cb); row.appendChild(lab);
+
+      const body = el('div','body');
+      const t = el('div','t');
+      t.innerHTML = '<span class="id">'+esc(it.ref)+'</span><b>'+esc(it.t)+'</b>'
+                  + (it.w ? '<span class="why">'+esc(it.w)+'</span>' : '');
+      body.appendChild(t);
+      body.appendChild(el('span','proj',PLABEL[it.proj]||it.proj));
+      body.appendChild(el('span','own o-'+it.o, it.o==='moi'?'MOI':it.o==='dir'?'TOI':'TIERS'));
+      body.appendChild(el('span','badge b-'+es, SLABEL[es]));
+      row.appendChild(body);
+      items.appendChild(row);
+    });
+
+    meta.textContent = (list.length-faits)+' / '+list.length+' restent';
+    mini.querySelector('i').style.width = Math.round(faits/list.length*100)+'%';
+    if(visibles===0) block.style.display='none';
+    block.appendChild(items);
+    host.appendChild(block);
+  });
+}
+
+function updateKpi(){
+  const reste = ITEMS.filter(it=>!state.checked[it.id]).length;
+  $('#kpiReste').innerHTML = reste + '<span>restent sur ' + ITEMS.length + '</span>';
+
+  [['moi','Moi'],['dir','Dir'],['tiers','Tiers']].forEach(([o,suffix])=>{
+    const l = ITEMS.filter(it=>it.o===o);
+    const d = l.filter(it=>state.checked[it.id]).length;
+    const pct = l.length ? Math.round(d/l.length*100) : 0;
+    $('#lbl'+suffix).textContent = (l.length-d)+' / '+l.length;
+    $('#bar'+suffix).style.width = pct+'%';
+  });
+}
+
+// ─── Chargement / enregistrement ────────────────────────────────────────────
+async function load(){
+  try{
+    const r = await fetch(API, {cache:'no-store'});
+    const d = await r.json();
+    state.checked = d.checked || {};
+    if(d.updated_at){
+      $('#savedMsg').textContent = 'màj '+new Date(d.updated_at).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+    }
+  }catch(e){
+    // Une page qui ne charge pas doit le DIRE : sans ce message, on croirait
+    // que rien n'a jamais été coché.
+    $('#savedMsg').textContent = 'hors ligne — validations non chargées';
+  }
+  render(); updateKpi();
+}
+
+async function save(){
+  const code = $('#codeIn').value.trim();
+  if(!/^\d{6}$/.test(code)){ $('#savedMsg').textContent='code à 6 chiffres'; return; }
+  $('#savedMsg').textContent='enregistrement…';
+  try{
+    const r = await fetch(API, {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify({ code, checked: state.checked })
+    });
+    const d = await r.json();
+    if(!r.ok){ $('#savedMsg').textContent = d.message || 'échec'; return; }
+    state.checked = d.checked || {};
+    $('#savedMsg').textContent = 'enregistré';
+    render(); updateKpi();
+  }catch(e){ $('#savedMsg').textContent='échec réseau'; }
+}
+
+// ─── Interface ──────────────────────────────────────────────────────────────
+$('#editBtn').onclick = ()=>{
+  state.editing = !state.editing;
+  $('#codeIn').style.display = state.editing ? '' : 'none';
+  $('#editBtn').textContent = state.editing ? 'Enregistrer' : 'Mode édition';
+  if(!state.editing) save(); else $('#codeIn').focus();
+  render();
+};
+
+$('#search').oninput = e => { state.q = e.target.value; render(); };
+
+function chips(sel, key){
+  document.querySelectorAll(sel+' .chip').forEach(c=>{
+    c.onclick = ()=>{
+      document.querySelectorAll(sel+' .chip').forEach(x=>x.setAttribute('aria-pressed','false'));
+      c.setAttribute('aria-pressed','true');
+      state[key] = c.dataset.f || c.dataset.o || c.dataset.p;
+      render();
+    };
+  });
+}
+chips('#statusChips','filter');
+chips('#ownerChips','owner');
+chips('#projChips','proj');
+
+$('#themeBtn').onclick = ()=>{
+  const dark = document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme', dark?'light':'dark');
+  try{ localStorage.setItem('suivi3-theme', dark?'light':'dark'); }catch(e){}
+};
+try{
+  const th = localStorage.getItem('suivi3-theme');
+  if(th) document.documentElement.setAttribute('data-theme', th);
+  else if(matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.setAttribute('data-theme','dark');
+}catch(e){}
+
+renderAuditStats();
+load();
+</script>
+</body>
+</html>
