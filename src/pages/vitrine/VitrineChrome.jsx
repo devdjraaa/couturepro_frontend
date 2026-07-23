@@ -622,26 +622,25 @@ export function VitrineFooter() {
       </div>
       <div className="relative z-10 max-w-[1180px] mx-auto px-5">
         {/* cols = [Platform, Company, Legal, Rules] */}
-        <div className="vt-reveal grid grid-cols-2 md:grid-cols-[1.4fr_1fr_1.1fr_1.1fr] gap-x-5 gap-y-5 pb-5 border-b border-edge">
+        <div className="vt-reveal grid grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr_1.1fr_1.1fr] gap-x-5 gap-y-5 pb-5 border-b border-edge">
           <div className="col-span-2 md:col-span-1">
             <VitrineLogo onDark />
             <p className="text-[13px] mt-2 max-w-[280px] text-dim">{t('vitrine.footer.tagline')}</p>
+          </div>
+          {/* Plateforme */}
+          <div className="flex flex-col">
+            <h5 className="text-[12px] font-bold uppercase tracking-[0.1em] mb-2">{cols[0].h}</h5>
+            {cols[0].links.map((l) => <FooterLink key={l.l} to={l.to}>{l.l}</FooterLink>)}
           </div>
           {/* Entreprise */}
           <div className="flex flex-col">
             <h5 className="text-[12px] font-bold uppercase tracking-[0.1em] mb-2">{cols[1].h}</h5>
             {cols[1].links.map((l) => <FooterLink key={l.l} to={l.to}>{l.l}</FooterLink>)}
           </div>
-          {/* Légal + Plateforme empilés dans la même colonne */}
-          <div className="flex flex-col gap-y-5">
-            <div className="flex flex-col">
-              <h5 className="text-[12px] font-bold uppercase tracking-[0.1em] mb-2">{cols[2].h}</h5>
-              {cols[2].links.map((l) => <FooterLink key={l.l} to={l.to}>{l.l}</FooterLink>)}
-            </div>
-            <div className="flex flex-col">
-              <h5 className="text-[12px] font-bold uppercase tracking-[0.1em] mb-2">{cols[0].h}</h5>
-              {cols[0].links.map((l) => <FooterLink key={l.l} to={l.to}>{l.l}</FooterLink>)}
-            </div>
+          {/* Légal */}
+          <div className="flex flex-col">
+            <h5 className="text-[12px] font-bold uppercase tracking-[0.1em] mb-2">{cols[2].h}</h5>
+            {cols[2].links.map((l) => <FooterLink key={l.l} to={l.to}>{l.l}</FooterLink>)}
           </div>
           {/* Règles */}
           <div className="flex flex-col">
