@@ -51,15 +51,6 @@ export default function AuthLayout({ children, subtitle, className }) {
           key={location.pathname}
           className={cn('w-full max-w-sm mx-auto lg:mx-0 animate-auth-card-enter', className)}
         >
-          {/* Logo — desktop (panneau gauche masqué sur petits écrans, logo dupliqué ici) */}
-          <div className="hidden lg:flex justify-center lg:justify-start mb-7">
-            <img
-              src="/logoforlogin.png"
-              alt="Gextimo"
-              className="h-10 w-auto select-none pointer-events-none"
-              draggable="false"
-            />
-          </div>
           {subtitle && (
             <p className="text-center lg:text-left text-[15px] font-medium text-ink mt-1 mb-5">{subtitle}</p>
           )}
