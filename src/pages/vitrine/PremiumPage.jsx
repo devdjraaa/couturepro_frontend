@@ -37,21 +37,41 @@ function parseConfig(config) {
  */
 function featuresFromConfig(config, t, type) {
   const c = parseConfig(config)
-  const nb = (v) => (v === null || v === undefined ? t('premium.feat.illimite') : v)
   const f = []
   const push = (cle, texte) => {
     if (type === 'artisan' && RESERVE_DESIGNER.has(cle)) return
     f.push({ cle, texte })
   }
 
-  if (c.max_creations_vitrine !== undefined) push('creations', t('premium.feat.creations', { n: nb(c.max_creations_vitrine), count: c.max_creations_vitrine ?? 2 }))
+  /**
+   * « Illimité » a sa PROPRE phrase, il ne s'injecte plus à la place du nombre.
+   * Avant, une limite absente produisait « illimité créations en vitrine » :
+   * le mot était interpolé là où un chiffre est attendu, d'où l'adjectif collé
+   * devant le nom et sans accord.
+   */
+  const ligneQuota = (cleBase, valeur) =>
+    valeur === null || valeur === undefined
+      ? t(`premium.feat.${cleBase}_illimite`)
+      : t(`premium.feat.${cleBase}`, { n: valeur, count: Number(valeur) })
+
+  if (c.max_creations_vitrine !== undefined) push('creations', ligneQuota('creations', c.max_creations_vitrine))
   push('galerie', c.visible_galerie ? t('premium.feat.galerie_oui') : t('premium.feat.galerie_non'))
-  if (c.max_clients_par_mois !== undefined) push('clients', t('premium.feat.clients', { n: nb(c.max_clients_par_mois), count: c.max_clients_par_mois ?? 2 }))
+  if (c.max_clients_par_mois !== undefined) push('clients', ligneQuota('clients', c.max_clients_par_mois))
   if (c.max_membres) push('equipe', t('premium.feat.equipe', { n: c.max_membres, count: Number(c.max_membres) }))
   if (c.export_pdf) push('pdf', t('premium.feat.pdf'))
-  if (c.photos_vip) push('photos_vip', t('premium.feat.photos_vip'))
+  // Les quotas réels valent mieux qu'un intitulé creux : « Photos VIP » ne dit
+  // rien, « 15 photos mises en avant par mois » se comprend sans explication.
+  if (c.photos_vip) {
+    push('photos_vip', c.max_photos_vip_par_mois
+      ? t('premium.feat.photos_vip_quota', { n: c.max_photos_vip_par_mois, count: Number(c.max_photos_vip_par_mois) })
+      : t('premium.feat.photos_vip'))
+  }
   if (c.module_caisse) push('caisse', t('premium.feat.caisse'))
-  if (c.multi_ateliers) push('multi', t('premium.feat.multi'))
+  if (c.multi_ateliers) {
+    push('multi', c.max_sous_ateliers
+      ? t('premium.feat.multi_quota', { n: c.max_sous_ateliers, count: Number(c.max_sous_ateliers) })
+      : t('premium.feat.multi'))
+  }
   return f
 }
 
@@ -103,6 +123,17 @@ export default function PremiumPage() {
   const typesActif = r.types_actif !== false && !!r.type_artisan
   const planPopulaire = r.plan_populaire || ''
 
+  /**
+   * L'essai offert : l'argument de vente le plus fort, et il n'était annoncé
+   * NULLE PART. Tout nouveau compte reçoit d'emblée un plan payant pendant
+   * cette durée. Le nombre de jours vient du back-office — c'est la même
+   * valeur que celle réellement accordée à l'inscription, donc la page ne peut
+   * pas promettre autre chose que ce qui est appliqué.
+   */
+  const essaiActif = r.essai_actif !== false && Number(r.essai_jours) > 0
+  const essaiJours = Number(r.essai_jours) || 0
+  const avecJours = (v) => bi(v).replace(/\{jours\}/g, essaiJours)
+
   return (
     <VitrineShell>
       {/* Hero */}
@@ -110,6 +141,21 @@ export default function PremiumPage() {
         <div className="text-[12px] font-bold tracking-[0.14em] uppercase text-primary mb-3">{t('premium.tag')}</div>
         <h1 className="font-display font-extrabold text-[clamp(28px,4vw,44px)] text-ink">{t('premium.titre')}</h1>
         <p className="text-dim mt-2 max-w-lg mx-auto">{t('premium.sous_titre')}</p>
+
+        {/* Essai offert — annoncé AVANT les prix : un visiteur qui voit
+            « 2 500 FCFA » avant de savoir qu'il peut essayer sans payer part
+            plus vite. */}
+        {essaiActif && (
+          <div className="mt-6 inline-flex flex-col items-center gap-1.5 rounded-2xl border border-primary/30 bg-primary/5 px-5 py-3.5 max-w-lg mx-auto">
+            <span className="inline-flex items-center gap-1.5 font-display font-bold text-[15px] text-primary">
+              <Sparkles size={14} />
+              {avecJours(r.essai_titre) || t('premium.essai_titre', { count: essaiJours, n: essaiJours })}
+            </span>
+            <span className="text-[13px] text-dim leading-snug">
+              {avecJours(r.essai_texte)}
+            </span>
+          </div>
+        )}
 
         {/* Choix du type de compte AVANT les prix : les fonctions utiles
             diffèrent, et laisser le visiteur deviner lesquelles le concernent
