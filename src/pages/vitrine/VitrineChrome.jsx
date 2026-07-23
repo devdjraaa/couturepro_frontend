@@ -622,11 +622,7 @@ export function VitrineFooter() {
       </div>
       <div className="relative z-10 max-w-[1180px] mx-auto px-5">
         {/* cols = [Platform, Company, Legal, Rules] */}
-        <div className="vt-reveal grid grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr_1.1fr_1.1fr] gap-x-5 gap-y-5 pb-5 border-b border-edge">
-          <div className="col-span-2 md:col-span-1 order-last md:order-first">
-            <VitrineLogo onDark />
-            <p className="text-[13px] mt-2 max-w-[280px] text-dim">{t('vitrine.footer.tagline')}</p>
-          </div>
+        <div className="vt-reveal grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-8 pb-6 border-b border-edge">
           {/* Plateforme */}
           <div className="flex flex-col">
             <h5 className="text-[12px] font-bold uppercase tracking-[0.1em] mb-2">{cols[0].h}</h5>
@@ -646,6 +642,11 @@ export function VitrineFooter() {
           <div className="flex flex-col">
             <h5 className="text-[12px] font-bold uppercase tracking-[0.1em] mb-2">{cols[3].h}</h5>
             {cols[3].links.map((l) => <FooterLink key={l.l} to={l.to}>{l.l}</FooterLink>)}
+          </div>
+          {/* Logo + tagline — toujours en dernier (sous les colonnes de liens) */}
+          <div className="col-span-2 md:col-span-4 pt-4 border-t border-edge/40">
+            <VitrineLogo onDark />
+            <p className="text-[13px] mt-2 max-w-[340px] text-dim">{t('vitrine.footer.tagline')}</p>
           </div>
         </div>
         <div className="vt-reveal text-center pt-3 text-[12.5px] text-dim">
