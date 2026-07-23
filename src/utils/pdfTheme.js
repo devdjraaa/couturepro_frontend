@@ -73,8 +73,17 @@ export function setAccent(nom) {
  * En-tête de document : nom de l'atelier en capitales espacées, titre en
  * Bodoni, filet d'accent. C'est la signature visuelle commune aux 8 documents.
  */
-export function enTete({ atelierNom, titre, sousTitre = '', reference = '', date = null }) {
-  const d = (date ?? new Date()).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })
+export function enTete({ atelierNom, titre, sousTitre = '', reference = '', date = null, avecHeure = false }) {
+  // `date` peut arriver en chaîne ISO, en Date, ou vide. On construit l'objet
+  // ici et on vérifie qu'il est valide : une date illisible doit retomber sur
+  // aujourd'hui, jamais imprimer « Invalid Date » sur un document commercial.
+  const brute = date instanceof Date ? date : (date ? new Date(date) : new Date())
+  const quand = isNaN(brute.getTime()) ? new Date() : brute
+
+  const d = quand.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })
+    // L'heure d'émission : sur une facture, deux documents du même jour ne se
+    // distinguaient que par leur numéro.
+    + (avecHeure ? ` · ${quand.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}` : '')
 
   return `
   <header style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;

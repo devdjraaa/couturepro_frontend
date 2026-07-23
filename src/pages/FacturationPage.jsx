@@ -149,7 +149,13 @@ function FormulaireModal({ onClose, onCreated }) {
         contact: { telephone: user?.telephone, email: user?.email },
         date: new Date().toISOString(),
         client: { nom: form.client_nom, telephone: form.client_telephone },
-        lignes: form.lignes,
+        // Traduire dans le vocabulaire du document, comme le fait l'export PDF.
+        // Passées telles quelles, les lignes sortaient vides et à zéro.
+        lignes: form.lignes.map((l) => {
+          const qte = Number(l.quantite) || 1
+          const pu  = Number(l.prix_unitaire) || 0
+          return { designation: l.description, qte, pu, total: qte * pu }
+        }),
         total,
         acompte: Number(form.acompte) || 0,
         reste: restant,

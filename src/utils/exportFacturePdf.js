@@ -11,19 +11,22 @@ import { formatCurrency, deviseDe, chargerDevises } from './formatCurrency'
  */
 const formatMontant = (v, devise) => formatCurrency(Number(v) || 0, devise)
 
-const formatDate = (d) =>
-  new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })
-
 /**
  * En-tête — V2. Le mode « personnalisé » reste servi : l'atelier qui a fourni
  * son logo, son IFU et son RCCM doit continuer à les voir sur ses factures,
  * c'est une obligation légale (facture normalisée DGI), pas une décoration.
  */
-function buildHeaderHtml({ atelier, factureSettings, ref, date, titre = 'Facture' }) {
+function buildHeaderHtml({ atelier, factureSettings, contact, ref, date, titre = 'Facture' }) {
   const personnalise   = factureSettings?.format_facture === 'personnalise'
-  const atelierNom     = atelier?.nom     || factureSettings?.atelier_nom     || 'Gextimo'
+  // JAMAIS « Gextimo » en repli : la facture est émise par l'ATELIER, pas par
+  // la plateforme. Quand l'atelier n'était pas chargé, le document sortait au
+  // nom de Gextimo — un client recevait une facture de la mauvaise entreprise.
+  const atelierNom     = atelier?.nom     || factureSettings?.atelier_nom     || ''
   const atelierAdresse = atelier?.adresse || factureSettings?.atelier_adresse || ''
   const atelierVille   = atelier?.ville   || factureSettings?.atelier_ville   || ''
+  // Le numéro figure désormais EN HAUT, avec l'identité de l'atelier : c'est là
+  // qu'on cherche qui contacter, pas au bas de la dernière page.
+  const atelierTel     = contact?.telephone || atelier?.telephone || factureSettings?.atelier_telephone || ''
 
   const logo = personnalise ? factureSettings?.facture_logo_url : null
   const ifu  = personnalise ? factureSettings?.facture_ifu  : null
@@ -31,6 +34,7 @@ function buildHeaderHtml({ atelier, factureSettings, ref, date, titre = 'Facture
 
   const mentions = [
     [atelierAdresse, atelierVille].filter(Boolean).join(' · '),
+    atelierTel ? `Tél. : ${esc(atelierTel)}` : '',
     ifu  ? `IFU : ${esc(ifu)}`   : '',
     rccm ? `RCCM : ${esc(rccm)}` : '',
   ].filter(Boolean).join('<br>')
@@ -39,7 +43,11 @@ function buildHeaderHtml({ atelier, factureSettings, ref, date, titre = 'Facture
     atelierNom,
     titre,
     reference: ref,
-    date: date ? new Date(date) : null,
+    // La date est transmise BRUTE. Elle arrivait déjà formatée en français
+    // (« 23 juillet 2026 ») et était repassée dans `new Date()`, que JavaScript
+    // ne sait pas relire : le PDF imprimait « Invalid Date ».
+    date,
+    avecHeure: true,
   })
 
   const bloc = mentions
@@ -73,6 +81,28 @@ function buildClientHtml(client) {
 
 /** Lignes de facture. */
 function buildLignesHtml(lignes, devise) {
+  /**
+   * Deux vocabulaires coexistent : les exports PDF traduisent en
+   * { designation, qte, pu, total }, tandis que le formulaire de facturation
+   * manipule { description, quantite, prix_unitaire }. L'aperçu passait ses
+   * lignes SANS traduire — chaque ligne sortait donc vide, à 0, alors que le
+   * total (calculé ailleurs) restait juste : un document parfaitement crédible
+   * et entièrement faux.
+   *
+   * On accepte les deux formes ici. Sur un document qui porte de l'argent, une
+   * clé mal nommée ne doit pas se solder par un zéro silencieux.
+   */
+  const norm = (l) => {
+    const qte = Number(l.qte ?? l.quantite ?? 1) || 0
+    const pu  = Number(l.pu ?? l.prix_unitaire ?? 0) || 0
+    return {
+      designation: l.designation ?? l.description ?? '',
+      qte,
+      pu,
+      total: Number(l.total ?? qte * pu) || 0,
+    }
+  }
+
   return section('Détail') + tableau({
     colonnes: [
       { titre: 'Désignation' },
@@ -80,10 +110,9 @@ function buildLignesHtml(lignes, devise) {
       { titre: 'Prix unitaire', aligne: 'droite' },
       { titre: 'Montant', aligne: 'droite' },
     ],
-    // Structure produite par les trois appelants : { designation, qte, pu, total }
-    lignes: lignes.map(l => [
-      l.designation ?? '',
-      String(l.qte ?? 1),
+    lignes: lignes.map(norm).map(l => [
+      l.designation,
+      String(l.qte),
       formatMontant(l.pu, devise),
       formatMontant(l.total, devise),
     ]),
@@ -184,7 +213,7 @@ function buildFactureHtml({ atelier, factureSettings, ref, contact, date, client
   const devise = deviseDe(atelier)
 
   return [
-    buildHeaderHtml({ atelier, factureSettings, ref, date, titre }),
+    buildHeaderHtml({ atelier, factureSettings, contact, ref, date, titre }),
     buildClientHtml(client),
     buildLignesHtml(lignes, devise),
     buildTotauxHtml({ total, acompte, reste, devise }),
@@ -235,7 +264,7 @@ export async function exportFacturePdf({ commande, items = [], client, atelier, 
 
   const html = buildFactureHtml({
     atelier, factureSettings, ref, contact,
-    date: formatDate(commande.date_commande ?? new Date()),
+    date: commande.date_commande ?? new Date(),
     client: c, lignes, total, acompte, reste,
     note: commande.description,
   })
@@ -263,7 +292,7 @@ export async function exportFactureGroupePdf({ groupe, atelier, factureSettings,
 
   const html = buildFactureHtml({
     atelier, factureSettings, ref, contact,
-    date: formatDate(groupe.created_at ?? new Date()),
+    date: groupe.created_at ?? new Date(),
     client, lignes, total, acompte, reste,
     note: groupe.note,
   })
@@ -291,7 +320,7 @@ export async function exportFactureDocPdf({ facture, atelier, factureSettings, c
   const html = buildFactureHtml({
     atelier, factureSettings, contact,
     ref: facture?.numero ?? '',
-    date: formatDate(facture?.date_emission ?? new Date()),
+    date: facture?.date_emission ?? new Date(),
     client: { nom: facture?.client_nom, telephone: facture?.client_telephone },
     lignes, total, acompte, reste,
     note: facture?.notes,
