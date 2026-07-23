@@ -316,6 +316,24 @@ export default function RegisterPage() {
           {t('auth.inscription.creer_compte')}
         </Button>
 
+        {/* Attribution reCAPTCHA. Le badge flottant de Google est masque en CSS
+            (il debordait derriere la barre de navigation basse, cf. index.css) ;
+            ses conditions imposent alors d'afficher cette mention. Uniquement si
+            une cle est reellement configuree : sans elle, rien n'est charge. */}
+        {recaptchaSiteKey && (
+          <p className="text-center text-2xs text-dim leading-snug">
+            <Trans
+              i18nKey="auth.inscription.recaptcha_mention"
+              components={{
+                gp: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer"
+                       className="underline underline-offset-2" />,
+                tos: <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer"
+                        className="underline underline-offset-2" />,
+              }}
+            />
+          </p>
+        )}
+
         <p className="text-center text-sm text-dim pt-1">
           {t('auth.inscription.deja_inscrit')}{' '}
           <Link to="/login" className="font-semibold underline underline-offset-2" style={{ color: 'var(--color-gold)' }}>

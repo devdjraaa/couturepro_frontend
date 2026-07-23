@@ -471,7 +471,8 @@
       "accepter_cgu_debut": "J'accepte les",
       "accepter_cgu_lien": "conditions d'utilisation",
       "cgu_requis": "Vous devez accepter les Conditions Générales d'Utilisation et la Politique de confidentialité pour continuer.",
-      "accepter_legal": "J'accepte les <cgu>Conditions Générales d'Utilisation</cgu> et la <conf>Politique de confidentialité</conf>."
+      "accepter_legal": "J'accepte les <cgu>Conditions Générales d'Utilisation</cgu> et la <conf>Politique de confidentialité</conf>.",
+      "recaptcha_mention": "Ce site est protégé par reCAPTCHA : la <gp>politique de confidentialité</gp> et les <tos>conditions d'utilisation</tos> de Google s'appliquent."
     },
     "otp": {
       "titre": "Vérification",

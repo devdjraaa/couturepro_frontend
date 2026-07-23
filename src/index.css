@@ -334,6 +334,21 @@ button, a, [role="button"], label, select, input[type="checkbox"], input[type="r
   height: var(--bottom-nav-height);
 }
 
+/* Badge reCAPTCHA v3.
+ *
+ * Google l'injecte en `position: fixed; bottom: 14px; right: -186px` : large de
+ * 256 px pour 360 px de viewport, il se glisse DERRIERE la barre de navigation
+ * basse (z-index auto contre z-30). Le `backdrop-blur(18px)` de la barre etalait
+ * alors son ombre grise en un voile diagonal clair dans le coin bas droit — on
+ * croyait a un degrade rate.
+ *
+ * Google autorise a masquer le badge A CONDITION d'afficher l'attribution
+ * ailleurs : c'est fait sous le formulaire d'inscription, la seule page qui
+ * charge reCAPTCHA (auth.inscription.recaptcha_mention). */
+.grecaptcha-badge {
+  visibility: hidden;
+}
+
 /* Scrollbars */
 .scrollbar-thin {
   scrollbar-width: thin;
