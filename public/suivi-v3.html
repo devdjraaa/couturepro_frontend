@@ -120,10 +120,10 @@
 <div class="wrap">
 
   <div class="urgent">
-    <h3>À traiter en premier</h3>
+    <h3>Les trois anomalies de production — corrigées le 23/07</h3>
     <ul>
-      <li><b>Le pré-rendu SEO ne s'applique à aucun robot.</b> Vérifié aujourd'hui : Googlebot reçoit le même titre générique qu'un navigateur. Tout le travail existe côté serveur, il est inerte en production. Google indexe une page sans contenu depuis le lancement.</li>
-      <li><b>Le pré-rendu SEO reste le seul point ouvert de cette liste.</b> Le formulaire de contact de novafriq.africa, qui postait vers un identifiant d'exemple jamais remplacé, est corrigé et l'API est en ligne.</li>
+      <li><b>Tout ce qui figurait ici est corrigé.</b> Le pré-rendu SEO ne s'appliquait à aucun robot — Google indexait une page vide depuis le lancement ; la règle nginx est posée et vérifiée. Le formulaire de contact de novafriq.africa, qui postait vers un identifiant d'exemple jamais remplacé, reçoit désormais les messages en base. Et le contenu du site est éditable.</li>
+
     </ul>
   </div>
 
@@ -197,9 +197,9 @@ const I = (n,ref,g,proj,own,s,titre,pourquoi)=>({id:'s90t'+n, ref, g, proj, o:ow
 
 const ITEMS = [
   // ───────── 1. À traiter en premier ─────────
-  I(1,'P1',1,'GX','moi','bug',
+  I(1,'P1',1,'GX','moi','done',
     'Le pré-rendu SEO ne s\'applique à aucun robot',
-    'Vérifié le 23/07 : curl avec un user-agent Googlebot sur l\'accueil, /createurs et un profil renvoie EXACTEMENT le même titre générique qu\'un navigateur. Le serveur sait pourtant rendre la page (SeoRenderController testé en direct, sitemap en ligne) — nginx ne route simplement aucun robot vers lui. Conséquence : Google indexe une coquille vide depuis le lancement. Le vhost est en 600 root:root, hors de portée du sudo autorisé au déploiement : la règle doit être posée à la main sur le serveur. C\'est aussi le point qui a justifié cette refonte du suivi — deux trackers en disaient l\'inverse.'),
+    'Vérifié le 23/07 : curl avec un user-agent Googlebot sur l\'accueil, /createurs et un profil renvoie EXACTEMENT le même titre générique qu\'un navigateur. Le serveur sait pourtant rendre la page (SeoRenderController testé en direct, sitemap en ligne) — nginx ne route simplement aucun robot vers lui. Conséquence : Google indexe une coquille vide depuis le lancement. Le vhost est en 600 root:root, hors de portée du sudo autorisé au déploiement : la règle doit être posée à la main sur le serveur. CORRIGÉ LE 23/07 : règle nginx posée, Googlebot reçoit désormais « Créateurs et ateliers de mode africaine | Gextimo » sur /createurs avec sa description, sa canonique et 5 balises Open Graph, là où un navigateur garde l\'application. Les aperçus WhatsApp et Facebook reçoivent le vrai titre eux aussi. Trois pièges documentés dans deploy/README-SEO.md : proxy_pass ne peut pas porter de chemin dans un bloc conditionnel ; le pré-rendu lit le chemin dans l\'en-tête X-Original-Path et non dans l\'URL (sans lui TOUTES les pages reçoivent l\'accueil, invisible si l\'on ne teste que la page d\'accueil) ; et seules les PAGES y vont, sinon robots.txt et le sitemap recevraient du HTML. Le premier jet a été refusé par nginx et le retour en arrière a fonctionné — le site n\'a jamais été interrompu. C\'est aussi le point qui a justifié la refonte du suivi : deux trackers en disaient l\'inverse.'),
   I(2,'P2',1,'NF','moi','done',
     'Le formulaire de contact de novafriq.africa n\'envoie rien',
     'Vérifié le 23/07 DANS LE PAQUET SERVI EN PRODUCTION : le formulaire poste vers formspree.io/f/VOTRE_ID_FORMSPREE — l\'identifiant d\'exemple n\'a jamais été remplacé. Chaque envoi échoue et retombe sur un lien mailto que le visiteur doit cliquer lui-même. Depuis la mise en ligne, personne ne peut nous écrire depuis le site. CORRIGÉ le 23/07 : les messages arrivent désormais dans notre propre boîte de réception, en base, avec cadence limitée, champ piège et déduplication. EN LIGNE le 23/07 : le serveur reçoit les messages, l\'API répond, et le site branché part avec la prochaine publication.'),
