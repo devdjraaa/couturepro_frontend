@@ -155,6 +155,31 @@ function buildFooterHtml(factureSettings, { atelier, contact } = {}) {
  * levait « buildFactureHtml is not defined ». Le build ne dit rien de ce genre
  * de manque — seul `no-undef` le voyait, et il n'était pas contrôlé.
  */
+/**
+ * Aperçu HTML d'une facture AVANT émission.
+ *
+ * Réutilise `buildFactureHtml` — le MÊME rendu que le PDF final. Un aperçu qui
+ * dessinerait le document autrement mentirait : on verrait une chose, on
+ * émettrait l'autre. Les devises sont chargées d'abord, sinon le premier aperçu
+ * d'une session sortirait au symbole de repli.
+ *
+ * `enveloppe` place le fragment dans une page A4 blanche, pour un rendu fidèle
+ * dans une iframe d'aperçu.
+ */
+export async function apercuFactureHtml({ atelier, factureSettings, contact, date, client, lignes, total, acompte, reste, note, titre }) {
+  await pret()
+  const corps = buildFactureHtml({
+    atelier, factureSettings, ref: '—', contact, date,
+    client, lignes, total, acompte, reste, note, titre,
+  })
+  return `<!doctype html><html><head><meta charset="utf-8">
+    <style>
+      *{box-sizing:border-box}
+      body{margin:0;background:#f3f4f6;font-family:Inter,system-ui,sans-serif;padding:16px}
+      .page{background:#fff;max-width:780px;margin:0 auto;padding:32px;box-shadow:0 2px 16px rgba(0,0,0,.08);border-radius:8px}
+    </style></head><body><div class="page">${corps}</div></body></html>`
+}
+
 function buildFactureHtml({ atelier, factureSettings, ref, contact, date, client, lignes, total, acompte, reste, note, titre = 'Facture' }) {
   const devise = deviseDe(atelier)
 

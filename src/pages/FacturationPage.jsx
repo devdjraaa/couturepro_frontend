@@ -8,7 +8,7 @@ import {
 import { useTranslation } from 'react-i18next'
 import QRCode from 'qrcode'
 import { partagerFactureHabillee } from '@/utils/imprimerFactureHabillee'
-import { exportFactureDocPdf, shareOrDownloadPdf } from '@/utils/exportFacturePdf'
+import { exportFactureDocPdf, shareOrDownloadPdf, apercuFactureHtml } from '@/utils/exportFacturePdf'
 import { AppLayout } from '@/components/layout'
 import { BottomSheet } from '@/components/ui'
 import { useAuth } from '@/contexts'
@@ -93,9 +93,15 @@ function FormulaireModal({ onClose, onCreated }) {
   const fmt = useFormatCurrency()
   const { t } = useTranslation()
   const { moyens, defaut } = useMoyensPaiement()
+  const { atelier, user } = useAuth()
+  const { data: factureSettings } = useFactureSettings()
   const [form, setForm] = useState(EMPTY_FORM)
   const [saving, setSaving] = useState(false)
   const [err, setErr] = useState('')
+  // HTML de l'aperçu, ou null. On construit à la demande, jamais en continu :
+  // rendre le document à chaque frappe alourdirait la saisie pour rien.
+  const [apercu, setApercu] = useState(null)
+  const [apercuBusy, setApercuBusy] = useState(false)
 
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }))
 
@@ -123,6 +129,40 @@ function FormulaireModal({ onClose, onCreated }) {
 
   const total = calcTotal(form.lignes)
   const restant = total - (Number(form.acompte) || 0)
+
+  /**
+   * Aperçu avant émission.
+   *
+   * Le document est rendu avec le MÊME code que le PDF final
+   * (apercuFactureHtml), à partir du formulaire en cours — donc du gabarit et du
+   * logo réglés par l'atelier. Ce qu'on voit est ce qui sera émis.
+   */
+  const ouvrirApercu = async () => {
+    if (!form.client_nom.trim()) { setErr(t('facturation.modal.err_client')); return }
+    if (form.lignes.length === 0) { setErr(t('facturation.modal.err_ligne')); return }
+    setErr('')
+    setApercuBusy(true)
+    try {
+      const html = await apercuFactureHtml({
+        atelier,
+        factureSettings: { ...factureSettings, format_facture: form.gabarit },
+        contact: { telephone: user?.telephone, email: user?.email },
+        date: new Date().toISOString(),
+        client: { nom: form.client_nom, telephone: form.client_telephone },
+        lignes: form.lignes,
+        total,
+        acompte: Number(form.acompte) || 0,
+        reste: restant,
+        note: form.notes,
+        titre: t(`facturation.types.${form.type}`, form.type === 'facture' ? 'Facture' : 'Devis'),
+      })
+      setApercu(html)
+    } catch {
+      setErr(t('facturation.modal.err_apercu'))
+    } finally {
+      setApercuBusy(false)
+    }
+  }
 
   const submit = async () => {
     if (!form.client_nom.trim()) { setErr(t('facturation.modal.err_client')); return }
@@ -158,8 +198,14 @@ function FormulaireModal({ onClose, onCreated }) {
       title={t('facturation.modal.titre')}
       footer={
         <div className="flex gap-2">
-          <button onClick={onClose} className="flex-1 px-4 py-2.5 rounded-xl border border-edge text-sm font-semibold text-dim hover:text-ink transition">
+          <button onClick={onClose} className="px-4 py-2.5 rounded-xl border border-edge text-sm font-semibold text-dim hover:text-ink transition">
             {t('commun.annuler')}
+          </button>
+          {/* Aperçu avant émission : voir le document tel qu'il sera émis, avec
+              le gabarit et le logo de l'atelier, avant de le créer. */}
+          <button onClick={ouvrirApercu} disabled={apercuBusy || saving}
+                  className="px-4 py-2.5 rounded-xl border border-primary text-sm font-semibold text-primary hover:bg-primary/5 transition disabled:opacity-60">
+            {apercuBusy ? t('facturation.modal.apercu_chargement') : t('facturation.modal.apercu')}
           </button>
           <button onClick={submit} disabled={saving}
                   className="flex-1 px-5 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-600 transition disabled:opacity-60">
@@ -287,7 +333,39 @@ function FormulaireModal({ onClose, onCreated }) {
           {err && <p className="text-xs text-danger font-medium">{err}</p>}
         </div>
 
+      {apercu && (
+        <ApercuFacture html={apercu} onClose={() => setApercu(null)} />
+      )}
     </BottomSheet>
+  )
+}
+
+/**
+ * Panneau d'aperçu plein écran.
+ *
+ * Le document est rendu dans une iframe en `sandbox` sans droits : c'est de
+ * l'HTML que l'on compose nous-mêmes, mais l'isoler coûte une ligne et ferme la
+ * porte à tout script qui s'y glisserait un jour (une note de facture est du
+ * texte libre saisi par l'utilisateur).
+ */
+function ApercuFacture({ html, onClose }) {
+  const { t } = useTranslation()
+  return (
+    <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex flex-col" onClick={onClose}>
+      <div className="flex items-center justify-between px-4 py-3 bg-card border-b border-edge shrink-0" onClick={(e) => e.stopPropagation()}>
+        <span className="text-sm font-semibold text-ink">{t('facturation.modal.apercu_titre')}</span>
+        <button onClick={onClose} className="w-8 h-8 grid place-items-center rounded-lg text-ghost hover:text-ink hover:bg-subtle transition" aria-label={t('commun.fermer')}>
+          <X size={18} />
+        </button>
+      </div>
+      <iframe
+        title={t('facturation.modal.apercu_titre')}
+        srcDoc={html}
+        sandbox=""
+        className="flex-1 w-full bg-white"
+        onClick={(e) => e.stopPropagation()}
+      />
+    </div>
   )
 }
 

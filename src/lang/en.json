@@ -272,7 +272,11 @@
       "err_client": "Client name is required.",
       "err_ligne": "Add at least one line.",
       "err_desc": "Each line must have a description.",
-      "err_creation": "Creation failed. Please try again."
+      "err_creation": "Creation failed. Please try again.",
+      "apercu": "Preview",
+      "apercu_chargement": "Preview…",
+      "apercu_titre": "Document preview",
+      "err_apercu": "The preview could not be generated."
     },
     "doc": {
       "total": "Total",

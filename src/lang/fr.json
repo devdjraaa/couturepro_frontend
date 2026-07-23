@@ -272,7 +272,11 @@
       "err_client": "Le nom du client est requis.",
       "err_ligne": "Ajoutez au moins une ligne.",
       "err_desc": "Chaque ligne doit avoir une description.",
-      "err_creation": "Erreur lors de la création. Réessayez."
+      "err_creation": "Erreur lors de la création. Réessayez.",
+      "apercu": "Aperçu",
+      "apercu_chargement": "Aperçu…",
+      "apercu_titre": "Aperçu du document",
+      "err_apercu": "L'aperçu n'a pas pu être généré."
     },
     "doc": {
       "total": "Total",
