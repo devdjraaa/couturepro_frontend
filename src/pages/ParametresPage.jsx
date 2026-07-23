@@ -979,17 +979,23 @@ export default function ParametresPage() {
   const { t } = useTranslation()
   const { isDesigner } = useAccountType()
 
+  // Ordre ALIGNÉ SUR LE MOBILE (spec pt 84 : « ordre Web identique à l'ordre
+  // Mobile »). Le mobile groupe en trois blocs — Compte, Facturation, Application
+  // — et le web les enchaîne dans le même ordre : Profil, Atelier, [Mes
+  // ateliers], Sécurité, puis Facture, Abonnement, puis Préférences en dernier.
+  // Avant, Préférences et Sécurité étaient intervertis, et les deux plateformes
+  // divergeaient.
   const TABS = [
     { key: 'profil',       label: t('parametres.onglets.profil')       },
     { key: 'atelier',      label: t('parametres.onglets.atelier')      },
     // « Mes ateliers » (multi-ateliers) = designer uniquement.
     ...(isDesigner ? [{ key: 'ateliers', label: t('parametres.onglets.ateliers') }] : []),
-    { key: 'preferences',  label: t('parametres.onglets.preferences')  },
-    { key: 'facture',      label: t('parametres.onglets.facture')      },
-    { key: 'abonnement',   label: t('parametres.onglets.abonnement')   },
     // « Type de compte » retiré du user : mutation artisan↔designer réservée à l'admin
     // (évite qu'un artisan se change en designer pour contourner l'offre). Voir feature admin.
     { key: 'securite',     label: t('parametres.onglets.securite')     },
+    { key: 'facture',      label: t('parametres.onglets.facture')      },
+    { key: 'abonnement',   label: t('parametres.onglets.abonnement')   },
+    { key: 'preferences',  label: t('parametres.onglets.preferences')  },
   ]
 
   const location = useLocation()
