@@ -4,6 +4,8 @@ import { cn } from '@/utils/cn'
 import { Button } from '@/components/ui'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { featuresFromConfig } from '@/utils/planFeatures'
+import { useLibellesPlans } from '@/hooks/useLibellesPlans'
+import i18n from '@/lang/i18n'
 
 // Les lignes non incluses ne sont plus rendues barrées : `featuresFromConfig`
 // n'émet que ce que le plan contient réellement.
@@ -29,7 +31,11 @@ export default function PlanCard({ plan, isCurrent, abonnementStatut, onUpgrade,
 
   const planName = t(`plans.${plan.cle}`, { defaultValue: plan.label })
 
-  const features = featuresFromConfig(plan.config, t)
+  const libelles = useLibellesPlans()
+  const features = featuresFromConfig(plan.config, t, undefined, {
+    libelles,
+    langue: (i18n.language || 'fr').startsWith('en') ? 'en' : 'fr',
+  })
 
   // P46/SUG-23 : valoriser les cartes — plan mis en avant + équivalent mensuel & économie sur l'annuel.
   const estAnnuel = plan.duree_jours >= 365

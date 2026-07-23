@@ -4496,7 +4496,15 @@
       "seuil_conversion": "Conversion threshold (pts → days)",
       "section_avancee": "Advanced settings",
       "form_label_en": "Name (English)",
-      "form_description_en": "Tagline (English)"
+      "form_description_en": "Tagline (English)",
+      "col_type": "Audience",
+      "type_tous": "All",
+      "type_artisan": "Artisan",
+      "type_designer": "Designer",
+      "duree_permanente": "Permanent",
+      "form_type": "Who this plan is for",
+      "form_visible_vitrine": "Visible on the public showcase",
+      "form_visible_app": "Visible in the app"
     },
     "veille": {
       "titre": "Opportunity watch",

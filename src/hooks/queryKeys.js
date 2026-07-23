@@ -12,6 +12,7 @@ export const QUERY_KEYS = {
   mesures:              (clientId) => ['mesures', clientId],
   vetements:            ['vetements'],
   abonnement:           ['abonnement'],
+  libellesPlans:        ['plans', 'libelles'],
   abonnementHistory:    ['abonnement', 'historique'],
   paiements:            ['paiements'],
   equipe:               ['equipe'],

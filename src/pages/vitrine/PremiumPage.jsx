@@ -6,7 +6,7 @@ import VitrineShell from './VitrineChrome'
 import { getPlans, getTarification } from './vitrineApi'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { cn } from '@/utils/cn'
-import { featuresFromConfig } from '@/utils/planFeatures'
+import { featuresFromConfig, planPourType } from '@/utils/planFeatures'
 
 const TIER_ICONS = [Star, Zap, Crown]
 
@@ -50,7 +50,11 @@ export default function PremiumPage() {
     getTarification().then(setReglages).catch(() => setReglages({}))
   }, [])
 
-  const tiers = useMemo(() => groupTiers(plans || []), [plans])
+  // Un artisan ne doit pas voir les plans réservés aux designers.
+  const tiers = useMemo(
+    () => groupTiers((plans || []).filter((p) => planPourType(p, type))),
+    [plans, type],
+  )
   const hasAnnuel = useMemo(() => tiers.some((ti) => ti.variants.annuel), [tiers])
   const faq = t('premium.faq', { returnObjects: true })
 
@@ -164,7 +168,7 @@ export default function PremiumPage() {
               const isFree = prix === 0
               const populaire = planPopulaire && ti.tier === planPopulaire
               const suffix = (plan.duree_jours >= 300) ? t('premium.par_an') : t('premium.par_mois')
-              const features = featuresFromConfig(plan.config, t, type)
+              const features = featuresFromConfig(plan.config, t, type, { libelles: r.libelles, langue: enAnglais ? 'en' : 'fr' })
 
               const nom = (enAnglais && ti.labelEn) ? ti.labelEn : ti.label
               const accroche = enAnglais

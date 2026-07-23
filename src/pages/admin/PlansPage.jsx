@@ -49,7 +49,8 @@ function parseConfigVal(v) {
 }
 
 const EMPTY_FORM = {
-  cle: '', label: '', label_en: '', duree_jours: '', prix_xof: '', description_courte: '', description_courte_en: '',
+  cle: '', label: '', label_en: '', type_compte: 'tous', visible_vitrine: true, visible_app: true,
+  duree_jours: '', prix_xof: '', description_courte: '', description_courte_en: '',
   config: { ...DEFAULT_CONFIG },
 }
 
@@ -111,6 +112,21 @@ function PlanModal({ initial, onClose, onSubmit, isLoading }) {
           <AdminField label={t('admin.plans.form_label_en')} value={form.label_en ?? ''} onChange={setField('label_en')} />
           <AdminFormGrid cols={2}>
             <AdminField label={t('admin.plans.form_duree')} type="number" min="1" value={form.duree_jours} onChange={setField('duree_jours')} required />
+            {/* À qui s'adresse ce plan, et où il apparaît. Sans ces trois
+                réglages, créer un plan réservé aux artisans ou le retirer de la
+                vitrine demandait un développeur. */}
+            <div className="mb-2">
+              <label className="block text-xs font-medium text-dim mb-1">{t('admin.plans.form_type')}</label>
+              <select value={form.type_compte} onChange={setField('type_compte')} className={ADMIN_INPUT}>
+                <option value="tous">{t('admin.plans.type_tous')}</option>
+                <option value="artisan">{t('admin.plans.type_artisan')}</option>
+                <option value="designer">{t('admin.plans.type_designer')}</option>
+              </select>
+            </div>
+            <AdminToggle label={t('admin.plans.form_visible_vitrine')} name="visible_vitrine"
+                         value={form.visible_vitrine} onChange={(n, v) => setForm(f => ({ ...f, [n]: v }))} />
+            <AdminToggle label={t('admin.plans.form_visible_app')} name="visible_app"
+                         value={form.visible_app} onChange={(n, v) => setForm(f => ({ ...f, [n]: v }))} />
             <AdminField label={t('admin.plans.form_prix')}  type="number" min="0" value={form.prix_xof}    onChange={setField('prix_xof')}    required />
           </AdminFormGrid>
           <AdminField label={t('admin.plans.form_description')} value={form.description_courte ?? ''} onChange={setField('description_courte')} />
@@ -231,7 +247,12 @@ export default function PlansPage() {
       render: r => <span className="font-mono text-xs text-ink">{r.cle}</span>,
     },
     { key: 'label', label: t('admin.plans.col_label') },
-    { key: 'duree_jours', label: t('admin.plans.col_duree'), render: r => `${r.duree_jours} j` },
+    // Au-delà de 1000 jours, le plan est « permanent » (convention serveur) :
+    // afficher « 32000 j » n'apprend rien et donne l'impression d'une erreur.
+    { key: 'duree_jours', label: t('admin.plans.col_duree'),
+      render: r => (Number(r.duree_jours) >= 1000 ? t('admin.plans.duree_permanente') : `${r.duree_jours} j`) },
+    { key: 'type_compte', label: t('admin.plans.col_type'),
+      render: r => t(`admin.plans.type_${r.type_compte || 'tous'}`) },
     {
       key: 'prix_xof',
       label: t('admin.plans.col_prix'),

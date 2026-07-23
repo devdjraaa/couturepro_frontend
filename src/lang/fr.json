@@ -4509,7 +4509,15 @@
       "seuil_conversion": "Seuil conversion (pts → jours)",
       "section_avancee": "Réglages avancés",
       "form_label_en": "Nom (anglais)",
-      "form_description_en": "Accroche (anglais)"
+      "form_description_en": "Accroche (anglais)",
+      "col_type": "Public",
+      "type_tous": "Tous",
+      "type_artisan": "Artisan",
+      "type_designer": "Designer",
+      "duree_permanente": "Permanent",
+      "form_type": "À qui s'adresse ce plan",
+      "form_visible_vitrine": "Visible sur la vitrine publique",
+      "form_visible_app": "Visible dans l'application"
     },
     "veille": {
       "titre": "Veille opportunités",
