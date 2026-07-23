@@ -62,7 +62,6 @@
     "fcfa": "FCFA",
     "par_an": "/ year",
     "par_mois": "/ month",
-    "soit_mois": "i.e. {{x}} FCFA / month",
     "commencer_gratuit": "Start for free",
     "choisir": "Choose {{plan}}",
     "essai": "Not convinced yet? The Free plan is free, no credit card required.",
@@ -70,17 +69,18 @@
     "faq_titre": "Frequently asked questions",
     "feat": {
       "illimite": "unlimited",
-      "creations": "{{n}} showcase creation",
       "galerie_oui": "Visible in the public gallery",
       "galerie_non": "Profile accessible by direct link",
-      "clients": "{{n}} client / month",
-      "equipe": "Team up to {{n}} member(s)",
       "pdf": "PDF invoices & quotes",
       "photos_vip": "VIP photos",
       "caisse": "Cash Register module",
       "multi": "Multi-workshops",
-      "creations_plural": "{{n}} showcase creations",
-      "clients_plural": "{{n}} clients / month"
+      "creations_one": "{{n}} showcase creation",
+      "creations_other": "{{n}} showcase creations",
+      "clients_one": "{{n}} client / month",
+      "clients_other": "{{n}} clients / month",
+      "equipe_one": "Team up to {{n}} member",
+      "equipe_other": "Team up to {{n}} members"
     },
     "faq": [
       {
@@ -99,7 +99,10 @@
         "q": "Is my data secure?",
         "r": "Yes, your data is encrypted and backed up daily."
       }
-    ]
+    ],
+    "populaire": "Most popular",
+    "type_aria": "Account type",
+    "packs_bouton": "Contact us"
   },
   "ma_vitrine": {
     "espace_public": "Public space",
@@ -4470,7 +4473,9 @@
       "pts_commande": "Pts / order",
       "pts_activation": "Pts activation",
       "seuil_conversion": "Conversion threshold (pts → days)",
-      "section_avancee": "Advanced settings"
+      "section_avancee": "Advanced settings",
+      "form_label_en": "Name (English)",
+      "form_description_en": "Tagline (English)"
     },
     "veille": {
       "titre": "Opportunity watch",

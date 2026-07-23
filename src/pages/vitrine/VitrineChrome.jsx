@@ -468,7 +468,7 @@ export function VitrineNavbar() {
           <Link to="/" aria-label="Gextimo"><VitrineLogo /></Link>
 
           {/* Nav centré — dropdowns Solutions/Tarifs/Docs + liens directs (VIT-1) */}
-          <nav className="hidden lg:flex items-center justify-center gap-5">
+          <nav className="hidden xl:flex items-center justify-center gap-5">
             <NavDropdown label={t('vitrine.nav.solutions')} items={solutionsItems} />
             <NavDropdown label={t('vitrine.nav.tarifs')}    items={tarifsItems} />
             <NavDropdown label={t('vitrine.nav.docs')}      items={docsItems} />
@@ -489,15 +489,15 @@ export function VitrineNavbar() {
             </Link>
             <ThemeToggle />
             <LocaleMenu />
-            <div className="hidden lg:block h-5 w-px bg-edge mx-1.5" />
+            <div className="hidden xl:block h-5 w-px bg-edge mx-1.5" />
             {/* « S'inscrire » reste visible sur mobile (P131) : c'est l'action
                 qui fait vivre la vitrine, et l'enterrer dans le menu déroulant
                 revenait à ne pas la proposer. Compact sous 1024 px pour ne pas
                 faire déborder la barre — vérifié à 360, 390 et 430 px. */}
-            <Link to="/inscription" className="vt-btn-primary inline-flex lg:hidden items-center justify-center font-semibold text-[12px] h-8 px-2.5 rounded-[9px] border border-transparent bg-primary text-inverse whitespace-nowrap shrink-0">{t('vitrine.nav.signup')}</Link>
-            <Link to="/inscription" className="vt-btn-ghost hidden lg:inline-flex items-center justify-center font-semibold text-[13px] h-9 px-4 rounded-[10px] border border-edge text-ink hover:border-primary hover:text-primary whitespace-nowrap shrink-0">{t('vitrine.nav.signup')}</Link>
-            <Link to="/login" className="vt-btn-primary hidden lg:inline-flex items-center justify-center font-semibold text-[13px] h-9 px-4 rounded-[10px] border border-transparent bg-primary text-inverse hover:bg-primary-600 whitespace-nowrap shrink-0">{t('vitrine.nav.login')}</Link>
-            <div className="lg:hidden mr-0.5">
+            <Link to="/inscription" className="vt-btn-primary inline-flex xl:hidden items-center justify-center font-semibold text-[12px] h-8 px-2.5 rounded-[9px] border border-transparent bg-primary text-inverse whitespace-nowrap shrink-0">{t('vitrine.nav.signup')}</Link>
+            <Link to="/inscription" className="vt-btn-ghost hidden xl:inline-flex items-center justify-center font-semibold text-[13px] h-9 px-4 rounded-[10px] border border-edge text-ink hover:border-primary hover:text-primary whitespace-nowrap shrink-0">{t('vitrine.nav.signup')}</Link>
+            <Link to="/login" className="vt-btn-primary hidden xl:inline-flex items-center justify-center font-semibold text-[13px] h-9 px-4 rounded-[10px] border border-transparent bg-primary text-inverse hover:bg-primary-600 whitespace-nowrap shrink-0">{t('vitrine.nav.login')}</Link>
+            <div className="xl:hidden mr-0.5">
               <NavMenu />
             </div>
           </div>

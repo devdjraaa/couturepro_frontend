@@ -49,7 +49,7 @@ function parseConfigVal(v) {
 }
 
 const EMPTY_FORM = {
-  cle: '', label: '', duree_jours: '', prix_xof: '', description_courte: '',
+  cle: '', label: '', label_en: '', duree_jours: '', prix_xof: '', description_courte: '', description_courte_en: '',
   config: { ...DEFAULT_CONFIG },
 }
 
@@ -104,11 +104,17 @@ function PlanModal({ initial, onClose, onSubmit, isLoading }) {
             <AdminField label={t('admin.plans.form_cle')} value={form.cle} onChange={setField('cle')} required placeholder="ex: premium_mensuel" />
           )}
           <AdminField label={t('admin.plans.form_label')} value={form.label} onChange={setField('label')} required />
+          {/* Le nom et l'accroche viennent de la BASE, pas des traductions :
+              sans version anglaise, la page de tarifs restait a moitie en
+              francais une fois la langue basculee. Laisse vide, le francais
+              est servi — mieux qu'un champ vide sur une page de tarifs. */}
+          <AdminField label={t('admin.plans.form_label_en')} value={form.label_en ?? ''} onChange={setField('label_en')} />
           <AdminFormGrid cols={2}>
             <AdminField label={t('admin.plans.form_duree')} type="number" min="1" value={form.duree_jours} onChange={setField('duree_jours')} required />
             <AdminField label={t('admin.plans.form_prix')}  type="number" min="0" value={form.prix_xof}    onChange={setField('prix_xof')}    required />
           </AdminFormGrid>
           <AdminField label={t('admin.plans.form_description')} value={form.description_courte ?? ''} onChange={setField('description_courte')} />
+          <AdminField label={t('admin.plans.form_description_en')} value={form.description_courte_en ?? ''} onChange={setField('description_courte_en')} />
 
           <AdminFormSection title={t('admin.plans.section_limites')} cols={2}>
             <AdminNumberField label={t('admin.plans.clients_mois')}    name="max_clients_par_mois"    value={form.config.max_clients_par_mois}    onChange={setCfg} />

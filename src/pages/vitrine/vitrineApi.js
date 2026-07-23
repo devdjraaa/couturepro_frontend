@@ -197,6 +197,18 @@ export async function getPlans() {
   return safe('/vitrine/plans')
 }
 
+/**
+ * Presentation de la page de tarifs : plan mis en avant, note de bas de grille,
+ * encart des options complementaires.
+ *
+ * Aucun prix ici — les tarifs restent dans les plans. Cet appel ne rapporte que
+ * la mise en scene, entierement editable depuis l'administration.
+ */
+export async function getTarification() {
+  const d = await safe('/vitrine/tarification')
+  return d ?? {}
+}
+
 export async function getSponsorisation() {
   const d = await safe('/vitrine/sponsorisation')
   return d ?? { actif: false, offres: [] }

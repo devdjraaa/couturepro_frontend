@@ -62,7 +62,6 @@
     "fcfa": "FCFA",
     "par_an": "/ an",
     "par_mois": "/ mois",
-    "soit_mois": "soit {{x}} FCFA / mois",
     "commencer_gratuit": "Commencer gratuitement",
     "choisir": "Choisir {{plan}}",
     "essai": "Pas encore convaincu ? Le plan Free est gratuit, sans carte bancaire.",
@@ -70,17 +69,18 @@
     "faq_titre": "Questions fréquentes",
     "feat": {
       "illimite": "illimité",
-      "creations": "{{n}} création en vitrine",
       "galerie_oui": "Visible dans la galerie publique",
       "galerie_non": "Profil accessible par lien direct",
-      "clients": "{{n}} client / mois",
-      "equipe": "Équipe jusqu'à {{n}} membre(s)",
       "pdf": "Factures & devis PDF",
       "photos_vip": "Photos VIP",
       "caisse": "Module Caisse",
       "multi": "Multi-ateliers",
-      "creations_plural": "{{n}} créations en vitrine",
-      "clients_plural": "{{n}} clients / mois"
+      "creations_one": "{{n}} création en vitrine",
+      "creations_other": "{{n}} créations en vitrine",
+      "clients_one": "{{n}} client / mois",
+      "clients_other": "{{n}} clients / mois",
+      "equipe_one": "Équipe jusqu'à {{n}} membre",
+      "equipe_other": "Équipe jusqu'à {{n}} membres"
     },
     "faq": [
       {
@@ -99,7 +99,10 @@
         "q": "Mes données sont-elles sécurisées ?",
         "r": "Oui, vos données sont chiffrées et sauvegardées quotidiennement."
       }
-    ]
+    ],
+    "populaire": "Plan populaire",
+    "type_aria": "Type de compte",
+    "packs_bouton": "Contacter le service"
   },
   "ma_vitrine": {
     "espace_public": "Espace public",
@@ -4483,7 +4486,9 @@
       "pts_commande": "Pts / commande",
       "pts_activation": "Pts activation",
       "seuil_conversion": "Seuil conversion (pts → jours)",
-      "section_avancee": "Réglages avancés"
+      "section_avancee": "Réglages avancés",
+      "form_label_en": "Nom (anglais)",
+      "form_description_en": "Accroche (anglais)"
     },
     "veille": {
       "titre": "Veille opportunités",
