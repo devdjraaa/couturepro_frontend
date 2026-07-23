@@ -227,6 +227,10 @@ const ITEMS = [
     'Export des mesures en CSV — cas individuel',
     'Le partage WhatsApp est en place et testé, l\'export groupé aussi. Seul l\'export d\'une fiche isolée n\'a pas été confirmé à l\'écran.'),
 
+  I(42,'VEI-12',2,'GX','moi','done',
+    'Surveiller que le pré-rendu reste actif',
+    'FAIT (23/07) — réponse au cahier des charges de veille SEO, en une commande au lieu d\'un pipeline en six phases. Le défaut corrigé aujourd\'hui peut revenir au prochain déploiement, et il est SILENCIEUX : rien ne casse à l\'écran et Google indexe une page vide pendant des semaines. Le contrôle est binaire — le titre servi à un robot doit DIFFÉRER de celui servi à un navigateur. VOLONTAIREMENT SANS MODÈLE DE LANGAGE, contrairement au cahier des charges : deux titres sont égaux ou ils ne le sont pas, un modèle n\'apporte rien sur une comparaison binaire et y ajoute un mode de défaillance ; le document le concède lui-même en exigeant une règle déterministe à côté, donc la règle seule suffit. ET DANS LARAVEL, PAS DANS n8n — l\'automate a déjà tourné six jours à l\'arrêt sans que rien ne le signale, c\'est la raison qui avait fait rapatrier la veille. Toutes les 6 h, pas une fois par semaine. Chien de garde du chien de garde : la vérification quotidienne alerte si le contrôle n\'a plus tourné depuis 24 h. 6 tests, chacun vérifiant la détection DANS LES DEUX SENS, plus un essai réel contre une page sans pré-rendu.'),
+
   // ───────── 3. Gextimo — re-tests appareil ─────────
   I(20,'QA-5',3,'GX','moi','part',
     'Bouton « déjà inscrit » sur l\'écran d\'inscription',
