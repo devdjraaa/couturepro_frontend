@@ -64,7 +64,7 @@
     "par_mois": "/ mois",
     "commencer_gratuit": "Commencer gratuitement",
     "choisir": "Choisir {{plan}}",
-    "essai": "Pas encore convaincu ? Le plan Gratuit reste gratuit sans limite de durée, sans carte bancaire.",
+    "essai": "Pas encore convaincu ? Le plan Gratuit reste gratuit sans limite de durée, sans rien payer.",
     "essai_cta": "Démarrer →",
     "faq_titre": "Questions fréquentes",
     "feat": {
@@ -95,7 +95,7 @@
       },
       {
         "q": "Le plan Gratuit est-il vraiment gratuit ?",
-        "r": "Oui. Après vos jours d'essai offerts, si vous ne payez rien, le compte bascule sur le plan Gratuit et y reste sans limite de durée. Aucune carte bancaire n'est demandée, et vous passez à un plan payant seulement si vous le décidez."
+        "r": "Oui. Après vos jours d'essai offerts, si vous ne payez rien, le compte bascule sur le plan Gratuit et y reste sans limite de durée. Aucun moyen de paiement n'est demandé pour démarrer, et vous passez à un plan payant seulement si vous le décidez — par mobile money."
       },
       {
         "q": "Comment fonctionne la facturation annuelle ?",

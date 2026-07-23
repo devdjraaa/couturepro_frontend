@@ -64,7 +64,7 @@
     "par_mois": "/ month",
     "commencer_gratuit": "Start for free",
     "choisir": "Choose {{plan}}",
-    "essai": "Not convinced yet? The Free plan stays free with no time limit, no credit card.",
+    "essai": "Not convinced yet? The Free plan stays free with no time limit, with nothing to pay.",
     "essai_cta": "Get started →",
     "faq_titre": "Frequently asked questions",
     "feat": {
@@ -95,7 +95,7 @@
       },
       {
         "q": "Is the Free plan really free?",
-        "r": "Yes. After your free trial days, if you pay nothing the account moves to the Free plan and stays there with no time limit. No credit card is required, and you upgrade only if you choose to."
+        "r": "Yes. After your free trial days, if you pay nothing the account moves to the Free plan and stays there with no time limit. No payment details are required to start, and you upgrade only if you choose to — by mobile money."
       },
       {
         "q": "How does yearly billing work?",

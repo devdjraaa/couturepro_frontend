@@ -56,8 +56,14 @@ export default function BandeAnnonces() {
   const suite = [...annonces, ...annonces]
 
   return (
-    <div className="gx-marquee border-b border-edge bg-primary/[0.06]"
+    // Le fond doit être OPAQUE. Il valait `bg-primary/[0.06]`, soit 6 %
+    // d'opacité : la bande étant collante en haut de page, tout le contenu
+    // défilait par-dessous et transparaissait au travers — illisible et sale.
+    // La teinte rouge est conservée, mais posée en calque au-dessus d'un fond
+    // plein, et non plus obtenue en laissant voir la page.
+    <div className="gx-marquee relative isolate border-b border-edge bg-card"
          role="region" aria-label={t('annonces.bande_titre')}>
+      <div className="absolute inset-0 -z-10 bg-primary/[0.06]" aria-hidden="true" />
       <div className="gx-marquee__track py-1.5">
         {suite.map((a, i) => (
           <span key={`${a.id}-${i}`} className="flex items-center gap-2 px-6 shrink-0 text-[13px]">
