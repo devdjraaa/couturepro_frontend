@@ -1742,7 +1742,8 @@
       "menu_avis": "Donner un avis",
       "modal_avis": "Votre avis compte. Utilisez les pouces sous chaque réponse de Makila AI pour nous dire si elle vous a aidé : cela nous permet de l'améliorer en continu.",
       "equipe_hors_ligne": "Notre équipe est hors ligne",
-      "equipe_reprise": "Makila vous répond tout de suite, 24h/24, un membre de l'équipe prend le relais dès {{heure}}h."
+      "equipe_reprise": "Makila vous répond tout de suite, 24h/24, un membre de l'équipe prend le relais dès {{heure}}h.",
+      "editeur": "Une solution NovafriQ"
     },
     "hero": {
       "eyebrow": "Plateforme des créateurs de mode",

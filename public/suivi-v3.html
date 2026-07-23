@@ -226,6 +226,12 @@ const ITEMS = [
   I(15,'GX-7',2,'GX','moi','done',
     'Export des mesures en CSV — cas individuel',
     'FAIT (23/07). En le vérifiant, DEUX bugs invisibles au build : le bouton pointait vers un &lt;a href download&gt; qui n\'envoie PAS le jeton — la route étant protégée, le téléchargement recevait un 401 ; et l\'URL était construite par une méthode async, donc href valait [object Promise]. Le CSV ne se téléchargeait tout simplement pas. Corrigé : le fichier est récupéré via le client authentifié (jeton joint) puis sauvé. Message d\'erreur dédié plutôt qu\'un échec muet. 4 tests serveur verrouillent le contrat : 401 sans jeton, CSV correct avec BOM UTF-8 et nom d\'après le client, isolation entre ateliers, et un client sans mesure donne un fichier à en-têtes seules plutôt qu\'une erreur.'),
+  I(16,'GX-8',2,'GX','moi','done',
+    'Bulle Makila « hors ligne » plantée en bas à droite',
+    'FAIT (23/07). La bulle « Notre équipe est hors ligne » n\'avait AUCUN minuteur : dès que l\'équipe passait hors ligne et le chat fermé, elle restait plantée en permanence dans le coin, chevauchant même le bandeau « Installer Gextimo ». Désormais elle s\'affiche brièvement puis s\'efface d\'elle-même (6 s), une croix permet de la chasser tout de suite, et une fois vue ou fermée elle ne revient plus de la session. VÉRIFIÉ À L\'ÉCRAN (widget piloté au navigateur).'),
+  I(17,'GX-9',2,'GX','moi','done',
+    'Mention « Une solution NovafriQ » absente du widget Makila',
+    'FAIT (23/07). Le pied de page de la vitrine porte bien « Une solution NovafriQ », mais le widget Makila AI — l\'élément le plus visible, présent sur CHAQUE page — n\'affichait aucun crédit éditeur. Ligne d\'attribution ajoutée en bas du chat (le « propulsé par » du widget, pas le pied de page), cliquable vers novafriq.africa. Textes fr/en éditables (clé i18n), URL en configuration — zéro valeur en dur. VÉRIFIÉ À L\'ÉCRAN : « Une solution NovafriQ » → https://novafriq.africa.'),
 
   I(42,'VEI-12',2,'GX','moi','done',
     'Surveiller que le pré-rendu reste actif',

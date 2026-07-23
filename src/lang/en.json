@@ -1742,7 +1742,8 @@
       "menu_avis": "Give feedback",
       "modal_avis": "Your opinion matters. Use the thumbs under each Makila AI answer to tell us whether it helped: this lets us improve continuously.",
       "equipe_hors_ligne": "Our team is offline",
-      "equipe_reprise": "Makila answers you right away, 24/7, a team member takes over from {{heure}}:00."
+      "equipe_reprise": "Makila answers you right away, 24/7, a team member takes over from {{heure}}:00.",
+      "editeur": "A NovafriQ solution"
     },
     "hero": {
       "eyebrow": "The fashion designers platform",

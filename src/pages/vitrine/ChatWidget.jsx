@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { MessageCircle, X, Send, ThumbsUp, ThumbsDown, Menu, Info } from 'lucide-react'
-import { API_BASE_URL } from '@/constants/config'
+import { API_BASE_URL, NOVAFRIQ_URL } from '@/constants/config'
 import { getClientToken } from './espaceClientApi'
 
 function sessionId() {
@@ -137,6 +137,24 @@ export default function ChatWidget() {
       .catch(() => setEquipe(null))
   }, [])
 
+  // La bulle « équipe hors ligne » RESTAIT plantée en bas à droite tant que le
+  // chat était fermé : aucun minuteur, elle chevauchait le bandeau d'install.
+  // Désormais elle s'affiche brièvement, disparaît d'elle-même, et une fois
+  // vue (ou fermée à la croix) elle ne revient plus de la session.
+  const [badgeFerme, setBadgeFerme] = useState(() => {
+    try { return sessionStorage.getItem('gx_badge_hl') === '1' } catch { return false }
+  })
+  const fermerBadge = () => {
+    setBadgeFerme(true)
+    try { sessionStorage.setItem('gx_badge_hl', '1') } catch { /* indisponible */ }
+  }
+  const badgeVisible = !open && !badgeFerme && equipe && equipe.equipe_en_ligne === false
+  useEffect(() => {
+    if (!badgeVisible) return
+    const minuteur = setTimeout(fermerBadge, 6000)
+    return () => clearTimeout(minuteur)
+  }, [badgeVisible])
+
   const MENU = [
     { cle: 'apropos', lien: '/qui-sommes-nous' },
     { cle: 'confidentialite', lien: '/confidentialite' },
@@ -147,10 +165,15 @@ export default function ChatWidget() {
   return (
     <>
       {/* Badge « équipe hors ligne » (20/07) : informatif seulement — le chat
-          reste ouvert et Makila répond normalement. */}
-      {!open && equipe && equipe.equipe_en_ligne === false && (
-        <div className="fixed bottom-21 right-5 z-[89] max-w-[240px] rounded-2xl rounded-br-sm bg-card border border-edge shadow-lg px-3.5 py-2.5">
-          <p className="text-xs font-semibold text-ink flex items-center gap-1.5">
+          reste ouvert et Makila répond normalement. S'efface tout seul au bout
+          de quelques secondes ; croix pour le chasser tout de suite. */}
+      {badgeVisible && (
+        <div className="fixed bottom-21 right-5 z-[89] max-w-[240px] rounded-2xl rounded-br-sm bg-card border border-edge shadow-lg px-3.5 py-2.5 animate-fade-in">
+          <button onClick={fermerBadge} aria-label={t('commun.fermer')}
+                  className="absolute top-1.5 right-1.5 p-0.5 rounded text-ghost hover:text-ink transition">
+            <X size={13} />
+          </button>
+          <p className="text-xs font-semibold text-ink flex items-center gap-1.5 pr-4">
             <span className="w-2 h-2 rounded-full bg-warning inline-block" />
             {t('vitrine.chatbot.equipe_hors_ligne')}
           </p>
@@ -240,6 +263,13 @@ export default function ChatWidget() {
               <Send size={16} />
             </button>
           </div>
+
+          {/* Attribution éditeur : Makila est une solution NovafriQ. Discret, mais
+              présent — c'est le « propulsé par » du widget, pas le pied de page. */}
+          <a href={NOVAFRIQ_URL} target="_blank" rel="noopener noreferrer"
+             className="block text-center text-2xs text-ghost hover:text-primary pb-1.5 -mt-1 transition">
+            {t('vitrine.chatbot.editeur')}
+          </a>
 
           {/* Fenêtres légères */}
           {modale === 'infos' && (
