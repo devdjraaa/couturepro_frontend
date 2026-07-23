@@ -298,6 +298,18 @@ const ITEMS = [
     'Déploiement automatique du backend NovafriQ',
     'FAIT (23/07) — les trois secrets posés par le chef, et VÉRIFIÉ EN RÉEL : un push a déployé le code sur le serveur en moins d\'une minute, sans intervention. Le workflow reprend les correctifs déjà payés cher sur Gextimo (réessai du rsync, exclusion de storage/, garde-fou sur le .env, un seul déploiement à la fois, contrôle que l\'API répond).'),
 
+  I(47,'NF-15',4,'NF','moi','done',
+    'Le back-office se déconnectait tout seul',
+    'CORRIGÉ (23/07), signalé par le chef. La connexion supprimait TOUS les jetons précédents : deux onglets ouverts, deux personnes sur le même compte, ou simplement une reconnexion ailleurs, et la session en cours mourait sans un mot — l\'écran repartait sur la page de connexion en pleine saisie. Huit jetons créés dans la journée pour un seul compte, chacun tuant le précédent : mes propres connexions de test déconnectaient le chef pendant qu\'il naviguait. On ne révoque plus à la connexion — un back-office s\'ouvre normalement depuis un poste ET un téléphone ; on élague seulement les jetons inutilisés depuis 60 jours et au-delà de 8 sessions. La révocation part là où elle sert : changer son mot de passe ferme les AUTRES sessions, désactiver un compte ferme les siennes sur-le-champ (sans quoi la personne restait connectée jusqu\'à fermer son navigateur, et la désactivation ne protégeait de rien). Vérifié en production : deux sessions coexistent.'),
+
+  I(48,'NF-16',4,'NF','moi','done',
+    'Le compte administrateur avait le rôle « éditeur »',
+    'CORRIGÉ (23/07). Le compte de production se voyait refuser l\'écran des comptes sur son propre back-office. Corrigé en base. Cause de fond traitée : le semis lisait env() alors qu\'une fois la configuration mise en cache — ce que fait CHAQUE déploiement — env() renvoie null hors des fichiers de config ; le semis se serait exécuté sans rien créer, en silence, et personne n\'aurait pu entrer. Il lit désormais la configuration, RELIT ce qu\'il vient d\'écrire et crie si le rôle n\'est pas celui demandé. ⚠️ Le test qui couvrait ce cloisonnement MENTAIT : il utilisait un raccourci qui court-circuite tout le chemin du jeton, il passait alors que l\'API répondait 403 en production. Les nouveaux tests passent par la vraie connexion et purgent l\'identité entre deux requêtes — sans quoi Laravel garde l\'utilisateur en cache et l\'assertion porte sur la mauvaise personne.'),
+
+  I(49,'NF-17',4,'NF','moi','done',
+    'Deux photos du site n\'étaient pas éditables',
+    'CORRIGÉ (23/07), sur question du chef : « tous les endroits qui demandent une photo, on peut les mettre depuis le back-office ? » Vérification faite, la réponse était NON — la photo du fondateur et le visuel de la page Vision affichaient un cadre réservé qu\'aucun écran ne permettait de remplir. Les autres l\'étaient déjà (produit, membre, partenaire, couverture d\'article). L\'écran des textes sait désormais afficher un sélecteur d\'image : le type existait dans le modèle depuis le début mais aucun écran ne le rendait — le défaut récurrent du projet, une règle serveur que rien ne vient lire. Les identifiants de média sont résolus en adresses côté serveur, une fois ; une clé sans image affiche l\'emplacement réservé, jamais une image cassée.'),
+
   // ───────── 6. Direction — bloquant ─────────
   I(50,'DIR-1',6,'GX','dir','todo',
     'Recalibrer le programme de fidélité',
@@ -336,6 +348,10 @@ const ITEMS = [
   I(76,'DIR-11',8,'GX','dir','todo',
     'EN CONTINU — entretenir « Quoi de neuf »',
     'À chaque livraison. Les mises à jour partent automatiquement, parfois plusieurs fois par jour : sans cette page, les professionnels voient l\'application changer sans savoir quoi. Quatre entrées sont déjà rédigées pour donner le ton — écrire pour un utilisateur d\'atelier, pas pour un développeur.'),
+  I(82,'DIR-20',6,'NF','dir','todo',
+    'Changer le mot de passe du back-office NovafriQ',
+    'BLOQUANT tant que ce n\'est pas fait. Le mot de passe du compte direction@novafriq.africa a été GÉNÉRÉ par le développeur, il est écrit en clair dans le fichier de configuration du serveur et il a transité par une conversation. Le changer depuis le back-office : il n\'est jamais réaffiché ensuite, et le changement ferme automatiquement les autres sessions. Pensez aussi à créer un compte « éditeur » pour qui doit modifier du contenu sans toucher aux réglages ni aux comptes — le cloisonnement est appliqué côté serveur, pas seulement en masquant des boutons.'),
+
   I(77,'DIR-15',8,'GX','dir','todo',
     'Fournir les clés externes le jour d\'une campagne payante',
     'GA4, Pixel Meta, Clarity, accès Search Console. FACULTATIF : l\'analytique interne tourne déjà sans elles et l\'écran /admin/analytique est alimenté depuis le 16/07.'),
