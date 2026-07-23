@@ -106,7 +106,7 @@
   <div class="in">
     <h1>NovafriQ — Suivi v3<small>Un seul tableau · Gextimo · NovafriQ · 23 juillet 2026</small></h1>
     <div class="kpi">
-      <div class="n" id="kpiReste">0<span>restent</span></div>
+      <div class="n" id="kpiReste">0<span>faits</span></div>
     </div>
     <button class="tgl" id="themeBtn" title="Thème clair / sombre">◐</button>
   </div>
@@ -453,7 +453,7 @@ function render(){
       items.appendChild(row);
     });
 
-    meta.textContent = (list.length-faits)+' / '+list.length+' restent';
+    meta.textContent = faits+' / '+list.length+' faits';
     mini.querySelector('i').style.width = Math.round(faits/list.length*100)+'%';
     if(visibles===0) block.style.display='none';
     block.appendChild(items);
@@ -469,14 +469,18 @@ const estFait = it => it.s === 'done' || !!state.checked[it.id];
 
 function updateKpi(){
   const faits = ITEMS.filter(estFait).length;
-  const reste = ITEMS.length - faits;
-  $('#kpiReste').innerHTML = reste + '<span>restent sur ' + ITEMS.length + '</span>';
+  // On compte ce qui est FAIT partout — meme sens que les barres, qui se
+  // remplissent selon les points faits. Melanger « faits » et « restants »
+  // rendait la lecture ambigue (barre pleine a gauche, chiffre des restants a
+  // droite).
+  $('#kpiReste').innerHTML = faits + '<span>faits sur ' + ITEMS.length + '</span>';
 
   [['moi','Moi'],['dir','Dir'],['tiers','Tiers']].forEach(([o,suffix])=>{
     const l = ITEMS.filter(it=>it.o===o);
     const d = l.filter(estFait).length;
     const pct = l.length ? Math.round(d/l.length*100) : 0;
-    $('#lbl'+suffix).textContent = (l.length-d)+' / '+l.length;
+    // « faits / total », dans le meme sens que la barre.
+    $('#lbl'+suffix).textContent = d+' / '+l.length+' faits';
     $('#bar'+suffix).style.width = pct+'%';
   });
 }
