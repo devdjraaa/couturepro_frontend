@@ -104,7 +104,7 @@
 
 <header class="top">
   <div class="in">
-    <h1>NovafriQ — Suivi v3<small>Un seul tableau · Gextimo · NovafriQ · HerboQuiz · 23 juillet 2026</small></h1>
+    <h1>NovafriQ — Suivi v3<small>Un seul tableau · Gextimo · NovafriQ · 23 juillet 2026</small></h1>
     <div class="kpi">
       <div class="n" id="kpiReste">0<span>restent</span></div>
     </div>
@@ -124,7 +124,6 @@
     <ul>
       <li><b>Le pré-rendu SEO ne s'applique à aucun robot.</b> Vérifié aujourd'hui : Googlebot reçoit le même titre générique qu'un navigateur. Tout le travail existe côté serveur, il est inerte en production. Google indexe une page sans contenu depuis le lancement.</li>
       <li><b>Le formulaire de contact de novafriq.africa est cassé.</b> Il poste vers un identifiant d'exemple jamais remplacé : depuis la mise en ligne, aucun message ne nous parvient depuis le site.</li>
-      <li><b>HerboQuiz : le lien d'inscription n'est pas diffusé et la banque de questions est vide.</b> Clôture samedi 20h, coup d'envoi lundi 18h.</li>
     </ul>
   </div>
 
@@ -156,7 +155,6 @@
       <button class="chip" data-p="all" aria-pressed="true">Tous projets</button>
       <button class="chip" data-p="GX" aria-pressed="false">Gextimo</button>
       <button class="chip" data-p="NF" aria-pressed="false">NovafriQ</button>
-      <button class="chip" data-p="HQ" aria-pressed="false">HerboQuiz</button>
     </div>
     <div class="sep"></div>
     <input type="password" id="codeIn" inputmode="numeric" maxlength="6" placeholder="code" style="display:none;width:86px" />
@@ -184,7 +182,6 @@ const GROUPS = {
   2:'Gextimo — reliquat vitrine',
   3:'Gextimo — à re-tester sur appareil',
   4:'NovafriQ — back-office de contenu',
-  5:'HerboQuiz',
   6:'Direction — bloquant',
   7:'Direction — arbitrages à rendre',
   8:'Direction — réglages, quand tu veux',
@@ -192,7 +189,7 @@ const GROUPS = {
 };
 
 const SLABEL = {done:'Fait',part:'Partiel',bug:'Anomalie',todo:'À faire',bloq:'Bloqué',info:'Info'};
-const PLABEL = {GX:'Gextimo', NF:'NovafriQ', HQ:'HerboQuiz', INF:'Infra'};
+const PLABEL = {GX:'Gextimo', NF:'NovafriQ', INF:'Infra'};
 
 // Série s90 : jeu d'identifiants NEUF, distinct de la v2 (s60/s70/s80). Le
 // format `s<n>t<n>` est une contrainte du serveur, qui refuse tout le reste.
@@ -245,12 +242,12 @@ const ITEMS = [
     'Les quatre exigences sont vérifiées présentes dans le code (dates de naissance sur les deux branches, quatre animations, mémorisation locale, ordre de priorité). Ce qui manque ne peut se faire qu\'à l\'usage, sur plusieurs jours.'),
 
   // ───────── 4. NovafriQ — back-office ─────────
-  I(30,'NF-1',4,'NF','moi','part',
+  I(30,'NF-1',4,'NF','moi','done',
     'Backend novafriq — Laravel 13, Sanctum, PostgreSQL',
-    'Chantier ouvert le 23/07. UUID, suppressions douces, même moteur de base qu\'en production pour ne pas rejouer les bugs Postgres-contre-MySQL déjà rencontrés sur Gextimo.'),
-  I(31,'NF-2',4,'NF','moi','todo',
-    'Reprendre INTÉGRALEMENT le contenu actuel en base',
-    'Rien ne doit se perdre au passage : chaque texte, chaque membre, chaque poste, chaque entrée de feuille de route est repris tel quel avant que le site cesse de les lire depuis le code.'),
+    'FAIT (23/07). Onze tables, UUID, suppressions douces, même moteur de base qu\'en production pour ne pas rejouer les bugs Postgres-contre-MySQL déjà rencontrés sur Gextimo. Deux pièges connus traités d\'emblée : Sanctum crée sa table en identifiants ENTIERS alors que tous les modèles sont en UUID (aucun jeton n\'aurait pu être rattaché à son propriétaire), et les huit listes illustrées du site partagent une seule table discriminée plutôt que huit tables jumelles — ajouter une neuvième liste ne demandera aucune migration.'),
+  I(31,'NF-2',4,'NF','moi','done',
+    'Contenu du site repris INTÉGRALEMENT en base',
+    'FAIT (23/07) — et VÉRIFIÉ, pas supposé. 182 réglages, 45 éléments de liste, 3 produits, 4 membres, 4 postes, 9 questions, 3 rubriques d\'articles. La reprise a été confrontée automatiquement au code source : sur 152 chaînes longues extraites du JSX, toutes se retrouvent en base sauf trois oublis réels, comblés aussitôt (page « introuvable », libellés du formulaire de contact, indice du champ message) ; les autres écarts signalés étaient des tracés SVG et des coupures de mon extraction sur les apostrophes. Trois écarts VOLONTAIRES : le texte « en attendant l\'ouverture du blog » est remplacé puisque le blog existera ; les partenaires ne sont pas semés, le site annonçant que les emplacements seront complétés au fil des partenariats officialisés ; et le semis ne remplace JAMAIS une valeur déjà modifiée en administration — sinon chaque déploiement effacerait le travail de l\'éditeur, sans erreur et sans témoin.'),
   I(32,'NF-3',4,'NF','moi','todo',
     'API publique et API d\'administration',
     'Le site lit un seul appel au chargement. Les routes publiques d\'écriture (formulaire de contact) sont limitées en cadence et dédupliquées — c\'est une classe de faille déjà rencontrée deux fois sur Gextimo.'),
@@ -272,20 +269,6 @@ const ITEMS = [
   I(38,'NF-10',4,'NF','moi','todo',
     'Nettoyer les reliquats du serveur',
     'Un dossier /var/www/novafriq_new inutilisé, et un pari-finale.conf vide encore listé dans sites-enabled alors que le projet a été supprimé.'),
-
-  // ───────── 5. HerboQuiz ─────────
-  I(40,'HQ-D1',5,'HQ','dir','todo',
-    'Diffuser le lien d\'inscription dans le groupe',
-    'herboquiz.novafriq.africa/inscription — bloque tout le reste : sans liste fermée, le format du tournoi ne peut pas être calculé. Clôture prévue samedi 25/07 à 20h.'),
-  I(41,'HQ-D2',5,'HQ','dir','todo',
-    'Préparer et importer les questions',
-    'Format « question | réponse », une par ligne ; le point-virgule et la tabulation marchent aussi pour un copier-coller depuis un tableur. L\'écran indique AVANT l\'import quelles lignes seront écartées. La banque est vide à ce jour.'),
-  I(42,'HQ-2',5,'HQ','moi','part',
-    'Écran d\'animation jamais vu en conditions réelles',
-    'Les données qui le traversent sont testées de bout en bout ; le rendu, lui, n\'a jamais été observé pendant une vraie partie. À dire plutôt qu\'à supposer acquis.'),
-  I(43,'HQ-3',5,'HQ','moi','todo',
-    'Corriger « Lundi 27 juillet 2026 a 18h00 »',
-    'Accent manquant, reste d\'une valeur par défaut. Se corrige dans les réglages, sans déploiement.'),
 
   // ───────── 6. Direction — bloquant ─────────
   I(50,'DIR-1',6,'GX','dir','todo',
